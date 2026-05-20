@@ -32,7 +32,7 @@ claude /login
 # Web App: claude.ai/code (browser-based)
 ```
 
-**System Requirements:** 4 GB RAM (8 GB empfohlen), Node.js 18+, Git for Windows (auf Windows zwingend)
+**System Requirements:** 4 GB RAM (8 GB recommended), Node.js 18+, Git for Windows (mandatory on Windows)
 
 ---
 
@@ -252,14 +252,14 @@ claude auto-mode defaults         # Print auto-mode classifier rules
 
 ## Bundled Skills
 
-Bundled Skills sind prompt-basierte Playbooks, die in jeder Session verfuegbar sind (anders als Built-in Commands, die fixe Logik ausfuehren).
+Bundled Skills are prompt-based playbooks available in every session (unlike Built-in Commands, which execute fixed logic).
 
 | Skill | What it does | Example |
 |-------|-------------|---------|
-| `/batch <instruction>` | Parallele Codebase-Aenderungen via Worktrees | `/batch migrate src/ from Solid to React` |
-| `/claude-api` | Laedt API-Referenz + Agent SDK Doku | `/claude-api` |
-| `/debug [description]` | Debug-Logging aktivieren und Log analysieren | `/debug failing mcp auth` |
-| `/loop [interval] <prompt>` | Prompt periodisch ausfuehren | `/loop 5m check deploy status` |
+| `/batch <instruction>` | Parallel codebase changes via worktrees | `/batch migrate src/ from Solid to React` |
+| `/claude-api` | Loads API reference + Agent SDK docs | `/claude-api` |
+| `/debug [description]` | Enable debug logging and analyze log | `/debug failing mcp auth` |
+| `/loop [interval] <prompt>` | Run prompt periodically | `/loop 5m check deploy status` |
 | `/simplify [focus]` | Parallel-Reviews + Fixes auf changed files | `/simplify focus on perf` |
 | `/run [skill-name]` | Launch & verify your app (v2.1.145+) | `/run dev-server` |
 | `/verify` | Verify recent changes by running the app (v2.1.145+) | `/verify` |
@@ -270,7 +270,7 @@ Bundled Skills sind prompt-basierte Playbooks, die in jeder Session verfuegbar s
 
 ## Built-in Tools
 
-Tool-Namen sind die Strings fuer Permission Rules, Hook Matcher und Subagent Tool-Listen.
+Tool names are the strings used for permission rules, hook matchers, and subagent tool lists.
 
 | Tool | Function | Permission required? |
 |------|----------|---------------------|
@@ -301,6 +301,8 @@ Tool-Namen sind die Strings fuer Permission Rules, Hook Matcher und Subagent Too
 
 ## Models & Context
 
+> Quick-ref snapshot. → see Module 1.5 (Cost Engineering) for the full strategy, effort multipliers, and Plan/Implement/Review pipeline.
+
 | Model | Context Window | Best for | API Price ($/MTok) |
 |-------|---------------|----------|-------------------|
 | **Claude Opus 4.7** | 1M tokens | Default in Claude Code since 2026-04-16 (GA). Complex tasks, architecture, deep reasoning. | In: ~5 / Out: ~25 |
@@ -320,7 +322,7 @@ Tool-Namen sind die Strings fuer Permission Rules, Hook Matcher und Subagent Too
 |--------|--------------|
 | Average cost per dev/day | ~$6 (Sonnet 4.6) |
 | Monthly per dev | $100-200 (varies heavily) |
-| Token reduction strategies | Skills statt CLAUDE.md-Bloat, Subagents, `/compact`, Sonnet fuer Routine |
+| Token reduction strategies | Skills instead of CLAUDE.md bloat, subagents, `/compact`, Sonnet for routine work |
 
 ---
 
@@ -496,7 +498,7 @@ Hook config in `settings.json`:
 ```
 
 ### Circuit Breaker Pattern
-Hook erkennt wenn ein Agent denselben Befehl 3x mit gleichem Fehler ausfuehrt, stoppt den Prozess und fordert Strategiewechsel. Verhindert Token-Verschwendung durch Halluzinations-Loops.
+Hook detects when an agent runs the same command 3x with the same error, stops the process, and forces a strategy change. Prevents token waste from hallucination loops.
 
 ---
 
@@ -681,23 +683,19 @@ Uses `TeamCreate`/`SendMessage` tools. Each teammate runs as separate session wi
 
 ---
 
-## Security Analogies
+## Security Analogies (Quick Reference)
+
+> Full mapping in `resources/security-analogies.md` — the single source of truth. Below are the 7 most-used analogies for quick lookup during the workshop.
 
 | Concept | Security Analogy |
 |---------|------------------|
-| **Context Window** | Security zone — limits exposure radius |
-| **Hooks** | Alarm sensors — detect and block threats |
-| **Sandboxing** | Security airlock — isolate untrusted code |
-| **Devil's Advocate** | Penetration test — find vulnerabilities |
-| **CLAUDE.md** | Access policy — controls agent permissions |
-| **Plugins** | Security modules — verify before loading |
-| **MCP** | External integrations — authenticate connections |
-| **Agents** | Specialized teams — compartmentalize responsibilities |
-| **Memory** | Incident log — track what happened when |
-| **Quality Gate** | Compliance check — validate before deployment |
-| **Permissions** | Least privilege — only grant what's needed |
 | **Permission Modes** | Security levels — from visitor badge to master key |
-| **Circuit Breaker** | Deadman switch — stop runaway processes |
+| **Permissions (allow/deny)** | Least privilege — only grant what's needed |
+| **Hooks** | Alarm sensors — detect and block threats |
+| **Sandboxing / Worktrees** | Security airlock — isolate untrusted code |
+| **Devil's Advocate / Codex Review** | Penetration test — adversarial verification |
+| **CLAUDE.md** | Access policy — controls agent behavior |
+| **Agents** | Specialized teams — compartmentalize responsibilities |
 
 ---
 

@@ -221,6 +221,13 @@ Remember that I prefer German for communication but all code and file names must
 **Talking point to close:**
 > "CLAUDE.md is your access policy. It lives with the project. Write the rules once. Claude follows every session."
 
+### Recovery Notes
+
+- **If Auto-Memory shows no entries after restart:** Try `cat ~/.claude/projects/<project-hash>/memory/MEMORY.md` manually. Auto-Memory needs ~1 turn before writing.
+- **If `claude` restart doesn't reload CLAUDE.md:** Verify the file is in the working directory or `~/.claude/CLAUDE.md`. Use `claude --verbose` to see what was loaded.
+- **If memory item drift visible:** Acknowledge as teaching moment — "this is exactly why we need to inspect Auto-Memory periodically (see Module 3.7)."
+- **If Claude doesn't remember the conventions in Step 4:** Confirm `CLAUDE.md` exists in cwd with `ls -la CLAUDE.md`, then restart Claude Code and try again — the file may have been written to a different directory.
+
 ---
 
 ## Demo 1.3: Good vs Bad Prompting
@@ -307,6 +314,13 @@ Write or display this:
 
 **Closing talking point:**
 > "This is the highest-leverage skill in this workshop. Not the git integration, not the memory system — just this. Write prompts like work orders. Specific. Scoped. With success criteria. The tool rewards precision."
+
+### Recovery Notes
+
+- **If Claude asks clarifying questions instead of guessing on the bad prompt:** Acknowledge as positive behavior, redirect: "this is good behavior — Claude refused to guess. But in production it might have just picked an interpretation."
+- **If Claude reads files unexpectedly:** Normal for newer versions. Continue and discuss in retro why context-grabbing happens.
+- **If the IPv4 validator doesn't pass tests:** Show the failing output as a teaching moment — "see, even with a good prompt, you need to verify."
+- **If Claude refuses to run the bad prompt at all:** Skip the bad-prompt step, narrate what *would* have happened, and pivot directly to the good prompt — the contrast still lands.
 
 ---
 
@@ -442,6 +456,13 @@ What worktrees do we have now?
 ### Closing Talking Point for Demo 1.4
 
 > "Branch, implement, test, commit, log. All in conversation. Git becomes something you think about, not something you manage manually. And worktrees give you the test-lab model you already know from physical security: isolated environment, real equipment, no risk to production."
+
+### Recovery Notes
+
+- **If `git worktree add` fails with existing branch:** Remove with `git worktree remove ../<dir>` and retry. If the branch already exists, drop the `-b` flag and let git reuse it.
+- **If `gh pr create` fails (auth):** Skip the PR step, demonstrate via `git push` only. Mention "gh auth needed for PR-creation — `gh auth login` before the workshop."
+- **If `pytest` not available:** Mention as setup-issue, continue without test-step. Or run via `python -m pytest` as fallback.
+- **If `git status` shows unexpected files:** Stage only the validators-related paths explicitly (`git add validators.py tests/`) — don't `git add -A`.
 
 ---
 

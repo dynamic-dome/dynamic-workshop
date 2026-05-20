@@ -70,3 +70,39 @@ These vulnerabilities are scoped to live demos. Do NOT fix them in this playgrou
 ### Windows Note
 
 `backup_database()` uses Unix `cp` command. On Windows workshop machines, run live demos from Git Bash or WSL.
+
+## OSDP Frame Decoder (C) — Embedded Domain Playground
+
+`osdp_frame_decoder.c` is a second playground specifically for Embedded / Physical Security
+contexts. It simulates an OSDP (Open Supervised Device Protocol) frame decoder — the kind
+of code you'd find on a real access-control panel.
+
+### Intentional Vulnerabilities (do NOT fix)
+
+| # | Vulnerability | Location | Why it matters |
+|---:|---|---|---|
+| 1 | Buffer Overflow | `decode_data_payload()` ~line 50 | Classic embedded vuln — unvalidated `length` field from wire data |
+| 2 | Integer Overflow | `compute_crc()` ~line 85 | `length * 3` not checked; combined with V1 is a chain exploit |
+| 3 | Format String | `log_frame()` ~line 110 | Attacker-controlled `cmd_name` as format string |
+| 4 | Off-by-one (bonus) | `parse_address()` ~line 135 | Reads past end of input buffer |
+
+### Build & Test
+
+```bash
+cd workshop-playground/
+make                  # Build
+make static-check     # Static analysis with clang
+make scan-build       # Deeper static analysis with scan-build (if installed)
+```
+
+### Use in Demos
+
+- **Block 3.3 Demo (Devil's Advocate Swarm):** Run swarm against `osdp_frame_decoder.c`
+  alongside `access_control.py`. Compare findings on C-code vs Python-code patterns.
+- **Block 3.7 Demo (Troubleshooting):** Use static-analysis output as input for /debug
+  conversations.
+
+### Cross-Compile Note
+
+For real Embedded targets, add `make cortex-m` (requires `arm-none-eabi-gcc` toolchain).
+The workshop-playground does not require cross-compilation to demonstrate the patterns.

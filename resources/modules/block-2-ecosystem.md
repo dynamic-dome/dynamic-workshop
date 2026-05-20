@@ -8,6 +8,11 @@
 
 ## Module 2.1: Skills & Commands
 
+**Learning Objectives:** After this module, you can:
+- Author a SKILL.md with the right frontmatter fields (`name`, `description`, `when_to_use`, `arguments`, `disable-model-invocation`, `paths`) so Claude picks it up reliably or only on manual invocation.
+- Use dynamic context injection (`` !`<command>` ``) and argument substitution (`$1`, `$mode`, `${CLAUDE_SESSION_ID}`) to turn static skills into living prompts.
+- Distinguish bundled skills (`/batch`, `/debug`, `/loop`, `/simplify`, `/verify`, `/run`, `/run-skill-generator`, `/fewer-permission-prompts`) and know which problem each one solves.
+
 ### The Core Idea
 
 When you work with Claude Code repeatedly, you notice patterns: you always start sessions the same way, you always ask for commits in the same format, you always want tests written before implementation. Writing these instructions from scratch every time is wasteful and error-prone.
@@ -298,6 +303,37 @@ Claude Code ships with **bundled skills** — prompt-based playbooks available i
 
 **Security analogy:** Bundled skills are like the standard operating procedures that come pre-installed with a security system. The `/batch` skill is like running a firmware update across all door controllers simultaneously — each in its own isolated worktree so a failure in one doesn't brick the others. `/verify` is the equivalent of physically opening the door after replacing the lock — it isn't fixed until you've actually used it.
 
+### Authoring Skills with `/run-skill-generator`
+
+The fastest way to create a new project-specific skill is the bundled `/run-skill-generator`:
+
+```
+/run-skill-generator
+```
+
+It interviews you ("What kind of repeated task do you have? What inputs? What outputs?") and
+generates a `SKILL.md` skeleton in `.claude/skills/<skill-name>/SKILL.md` — pre-filled with:
+- Sensible `description` and `when_to_use` for trigger detection
+- `arguments` placeholders if your task takes inputs
+- A starter template with `$ARGUMENTS` substitution
+- Recommended `model` and `effort` based on the task type
+
+**Use this when:**
+- You've identified a task you do 3+ times per week
+- You want to commit the skill into the team repo (`.claude/skills/` is git-tracked)
+
+**Don't use this when:**
+- The task is one-off — just write the prompt inline
+- You need a deeply custom skill with hooks and tool restrictions — write it by hand
+
+After generation, refine the description (most-important for trigger detection) and test:
+
+```
+/<your-new-skill-name>
+```
+
+If it doesn't trigger as expected, see Module 3.7 (Troubleshooting) for diagnosis steps.
+
 ### Skill Live-Reload
 
 Files in `~/.claude/skills/` and `.claude/skills/` are picked up live — **no Claude Code restart needed**. Edit a `SKILL.md`, save, invoke the skill again. The new content is loaded immediately. This makes skill authoring iterative and fast: edit, test, edit, test.
@@ -333,6 +369,11 @@ Use `/skills` in any session to see all available skills — bundled, user, proj
 ---
 
 ## Module 2.2: Hooks
+
+**Learning Objectives:** After this module, you can:
+- Map the 11 most-used hook events (PreToolUse, PostToolUse, Stop, SessionStart/End, UserPromptSubmit, PreCompact, SubagentStart/Stop, FileChanged, InstructionsLoaded, Notification) to concrete use cases.
+- Write a hook entry in `settings.json` with the right matcher syntax (literal vs. regex), the `if` permission-rule filter, and one of the 5 execution types (command / http / prompt / agent / mcp_tool).
+- Use advanced hook outputs (`updatedToolOutput`, `continueOnBlock`, `terminalSequence`) and `$CLAUDE_EFFORT` to build effort-aware, soft-blocking, redaction-capable hooks.
 
 ### The Core Idea
 
@@ -480,7 +521,7 @@ When Claude tries to run `rm -rf /tmp/build`, this hook fires, prints the warnin
 5. **Automate workflows** — after a successful test run, automatically open a PR draft
 6. **Security scanning** — check for secrets, API keys, or `innerHTML` assignments before committing
 
-Hooks are the mechanism that turns Claude Code from a helpful assistant into an **automated, policy-enforced development environment**.
+Hooks add **automated guards** to Claude Code — shell scripts that fire on specific lifecycle events. They are **best-effort** (a malformed matcher, missing executable bit, or hook timeout silently disables them), not a hard security boundary. Pair Hooks with proper permission rules and sandboxing for real isolation.
 
 ### Hook Execution Types
 
@@ -613,6 +654,12 @@ esac
 
 ### Circuit Breaker Pattern
 
+> **Note:** Circuit Breaker is a *pattern* (not a built-in Claude Code feature).
+> You implement it by writing a hook that tracks repeated identical tool calls.
+> The example below shows the pattern; you'd need to write the actual hook script
+> (a small shell or Python script that persists call counts in `~/.claude/state/`,
+> matches on identical tool + arguments + exit code, and blocks once the threshold is crossed).
+
 A critical hook pattern for preventing runaway token costs. When an agent executes the same command 3 times with the same error result, the hook detects the loop, stops the process, and asks the user for a strategy change.
 
 **Security analogy:** A deadman switch in an alarm system. If the patrol guard stops checking in, the system escalates automatically. The circuit breaker prevents Claude from getting stuck in an "exploration trap" — endlessly retrying the same failing approach.
@@ -622,6 +669,11 @@ This is especially important when running autonomous loops or multi-agent workfl
 ---
 
 ## Module 2.3: Plugins
+
+**Learning Objectives:** After this module, you can:
+- Scaffold a plugin with the correct directory layout (`.claude-plugin/plugin.json`, `skills/`, `commands/`, `agents/`, `hooks/hooks.json`, `.mcp.json`) and validate it with `claude plugin validate`.
+- Choose the right plugin scope (user / project / local / managed) for a given distribution scenario and use `claude plugin install/enable/disable/uninstall/prune` to manage the lifecycle.
+- Identify supply-chain risks of third-party plugins and apply mitigations (review code, pin versions, project scope for team plugins, inspect via `/plugin`).
 
 ### The Core Idea
 
@@ -811,6 +863,11 @@ Real supply chain risks:
 ---
 
 ## Module 2.4: MCP (Model Context Protocol)
+
+**Learning Objectives:** After this module, you can:
+- Choose the right MCP transport (HTTP / stdio / SSE) and scope (local / project / user) for a given integration and configure it via `claude mcp add` or `.mcp.json`.
+- Configure OAuth-enabled MCP servers with `--callback-port`, `--client-id`, `--client-secret` and use `${VAR:-default}` env-var expansion for safe team-shared `.mcp.json` files.
+- Recognize MCP-specific risks (prompt injection from untrusted content, token theft, output flooding) and apply mitigations (output limits, permission rules, trusted-server policy).
 
 ### The Core Idea
 
@@ -1043,9 +1100,83 @@ With MCP: Claude becomes an **orchestrator** that can:
 
 The boundary between "AI assistant" and "automated agent" blurs significantly with MCP. This is why hooks and guardrails (Module 2.2) matter more when MCP is involved.
 
+### Build Your Own MCP Server
+
+When existing MCP servers don't cover your needs (internal APIs, custom databases, proprietary
+tools), you write your own. Here's a minimal Python MCP server skeleton using `fastmcp`:
+
+```python
+# my_mcp_server.py
+from fastmcp import FastMCP
+
+mcp = FastMCP("my-tools")
+
+@mcp.tool()
+def get_user_count(date: str) -> int:
+    """Return the number of registered users on a given date."""
+    # Your custom logic here — query DB, call API, etc.
+    import sqlite3
+    conn = sqlite3.connect("users.db")
+    cur = conn.execute("SELECT COUNT(*) FROM users WHERE date(created_at) = ?", (date,))
+    return cur.fetchone()[0]
+
+@mcp.tool()
+def list_active_features() -> list[str]:
+    """Return active feature flags."""
+    # Read from your config / feature-flag service
+    return ["new_dashboard", "experimental_search"]
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")
+```
+
+Add to `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "my-tools": {
+      "command": "python3",
+      "args": ["my_mcp_server.py"]
+    }
+  }
+}
+```
+
+Now Claude Code can call `get_user_count` and `list_active_features` as tools. The same pattern
+works in Node.js (`@modelcontextprotocol/sdk`) or any language with an MCP SDK.
+
+**For HTTP MCP servers** (recommended for shared team services): swap `transport="stdio"` for
+`transport="http"` and run as a regular HTTPS service. Then in `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "my-team-tools": {
+      "type": "http",
+      "url": "https://mcp.corp.example/tools"
+    }
+  }
+}
+```
+
+**Common patterns to expose via MCP:**
+- Internal API gateways (Jira, ServiceNow, internal Wiki)
+- Database queries (PostgreSQL, Snowflake, ClickHouse)
+- Build/CI status (Jenkins, ArgoCD)
+- Monitoring (Prometheus, Grafana, Datadog)
+- Custom protocol parsers (OSDP, BACnet, Modbus — relevant for Physical Security)
+
+The MCP server becomes the **shared knowledge layer** for your team's Claude Code workflows.
+
 ---
 
 ## Module 2.5: RAG & NotebookLM
+
+**Learning Objectives:** After this module, you can:
+- Explain when RAG beats general-knowledge LLM answers (training cutoff, internal docs, niche domains) and when it doesn't (chunk-boundary issues, retrieval-rank failures).
+- Build a NotebookLM-backed knowledge source end-to-end (`notebooklm create` / `add-source` / `use` / `ask`) and route Claude Code queries to it.
+- Decide whether a given codebase is suitable for NotebookLM (Google-hosted, source content leaves your perimeter) or whether a local RAG alternative is required.
 
 ### The Problem: Training Cutoff and Niche Knowledge
 
@@ -1073,6 +1204,18 @@ Building a RAG system from scratch requires: embedding model, vector database, c
 2. Add sources: URLs, PDFs, YouTube videos, text pastes, Google Docs
 3. NotebookLM indexes and embeds everything
 4. Query it via the web UI or API
+
+> **Data Flow Disclosure:** NotebookLM is hosted by Google. Any source you add to a notebook
+> (URLs, PDFs, text pastes, code snippets) is uploaded to Google's servers and indexed by their
+> embedding pipeline. Depending on your account type:
+> - **Personal NotebookLM (free):** Standard Google data policies apply
+> - **Workspace NotebookLM:** Enterprise data policies apply
+>
+> **Implications for source-code projects:**
+> - Do NOT add proprietary source code to a NotebookLM notebook unless your company allows
+>   sharing with Google Workspace
+> - For sensitive code, use local RAG alternatives (e.g., custom MCP server with local vector DB)
+> - For documentation, regulatory texts, or public references — NotebookLM is appropriate
 
 > **Custom Component:** The `notebooklm` user skill shown below is a **custom-built wrapper**,
 > not part of the official Claude Code installation. It demonstrates how RAG can be integrated
@@ -1142,7 +1285,19 @@ If you're building anything non-trivial with Claude Code, you will eventually hi
 2. Build a notebook with those sources
 3. Configure Claude Code to check the notebook before answering questions in that domain
 
-This transforms Claude from "smart generalist" to "expert in our specific stack and context" — without fine-tuning, without retraining, without any ML infrastructure.
+This grounds Claude's answers in **your actual documentation** — Claude cites specific sources, you can verify them, and reduce hallucinations on your stack-specific questions. It is not "expertise upgrade" in the deep-learning sense — it is **document retrieval + citation**, with all the limitations that come with it (see below).
+
+### RAG Limitations
+
+NotebookLM (and any RAG system) has known failure modes:
+
+- **Chunk boundary problems:** A relevant answer may be split across two chunks; retrieval misses one
+- **Embedding drift:** As the source corpus grows, the most-relevant chunks may shift in surprising ways
+- **Citation hallucination:** Claude may cite a real source but paraphrase incorrectly — always click through to verify
+- **Stale indexing:** A new source isn't queryable until indexing completes (can take minutes)
+- **Retrieval rank failures:** A vital source ranks low and isn't included in the top-K retrieved chunks
+
+For high-stakes answers: ask Claude to **always cite** the specific source page, then verify manually.
 
 ---
 

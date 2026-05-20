@@ -133,13 +133,15 @@ gh auth login
 
 ## Step 7: Clone the Workshop Repository
 
-```bash
-# Navigate to your workspace
-cd ~/Desktop
+The workshop playground is a subfolder inside the main workshop repository.
 
-# Clone the workshop playground (demo repo with intentional vulnerabilities)
-git clone <workshop-playground-url>
-cd workshop-playground
+```bash
+# Variant A: Clone the workshop repo (this contains the playground)
+mkdir -p ~/cc-workshop
+git clone https://github.com/dynamic-dome/dynamic-workshop.git ~/cc-workshop/dynamic-workshop
+cd ~/cc-workshop/dynamic-workshop/workshop-playground
+
+# Variant B: If your workshop moderator provided a different path/URL, use that one instead.
 
 # Install Python dependencies
 pip3 install -r requirements.txt
@@ -206,23 +208,41 @@ This checks your environment and reports issues.
 
 ## Workshop-Specific Plugins & Skills
 
+> **About these plugins:** The plugins listed below (`agentic-os`, `devil-advocate-swarms`,
+> `multi-model-orchestrator`) and the `notebooklm` user-skill are **workshop-custom plugins**
+> built specifically for this workshop. They are not part of the official Claude Code
+> installation, not in the public Anthropic marketplaces, and not maintained by Anthropic.
+>
+> Block 1 and Block 2 (Modules 2.1, 2.2, 2.3, 2.4) work without these plugins.
+> Only Block 3 Demos 3.3, 3.4, 3.5 reference them — and observation/web-UI alternatives
+> exist for self-learners (see each demo's recovery notes).
+
 Several demos require custom plugins or user-skills that are not part of the default Claude Code installation. Install these **before Session 2** (Block 2 onwards).
 
-### Custom Plugins
+### Workshop-Custom Plugins
 
-These plugins are referenced in demos in Block 2 and 3. Install via:
+Several Block 3 demos reference custom plugins built specifically for this workshop:
+`agentic-os`, `devil-advocate-swarms`, `multi-model-orchestrator`.
 
-```bash
-# Marketplace-add and install
-claude plugin marketplace add agentic-os/agentic-os-marketplace
-claude plugin install agentic-os --scope user
+**These are workshop-author plugins, not part of any official marketplace.**
 
-claude plugin marketplace add devil-advocate-swarms/devil-advocate-swarms-marketplace
-claude plugin install devil-advocate-swarms --scope user
+Three options:
 
-claude plugin marketplace add multi-model-orchestrator/multi-model-orchestrator-marketplace
-claude plugin install multi-model-orchestrator --scope user
-```
+**Option A (recommended for live workshops): Get them from your workshop moderator.**
+The moderator will provide a tarball or shared Drive/Git link with the plugin sources.
+Extract each into `~/.claude/plugins/` and run `/reload-plugins` in Claude Code.
+
+**Option B (self-learners): Observation mode only.**
+You can read about these plugins in the modules and watch the demos in recorded video form.
+The patterns they demonstrate (adversarial swarms, multi-model pipelines, self-improve loops)
+are conceptually transferable to plugins you build yourself.
+
+**Option C: Build minimal replacements.**
+After completing Modules 2.1 (Skills) and 2.3 (Plugins), you can build your own simplified
+versions of these patterns. The workshop modules walk through the structure.
+
+**These plugins are NOT required to complete Block 1 or Block 2.**
+Only Block 3 Demos 3.3 (Devil's Advocate), 3.4 (Self-Improve), and 3.5 (Inception) use them.
 
 Used in:
 - `agentic-os` — Demo 2.3 (Plugin Anatomy), Demo 3.4 (Self-Improve Loop)
@@ -231,16 +251,24 @@ Used in:
 
 ### Custom User-Skills
 
-The `notebooklm` skill is used in Demo 2.5 and Exercise 2.5. Install:
+The `notebooklm` user-skill is a workshop-custom skill (not part of official Claude Code).
+It is used in Demo 2.5 and Exercise 2.5.
+
+Two options:
+
+**Option A: Get the skill from your workshop moderator.**
+The moderator will provide a tarball or local copy. Extract into `~/.claude/skills/notebooklm/`.
 
 ```bash
-# Clone the skill into your user skills directory
 mkdir -p ~/.claude/skills
-# (Replace with actual source — placeholder until upstream URL)
-git clone <notebooklm-skill-repo> ~/.claude/skills/notebooklm
+# Then place the moderator-provided skill folder at ~/.claude/skills/notebooklm
 ```
 
-Verify with `/skills` — `notebooklm` should appear in the list.
+**Option B: Use the official NotebookLM web UI (notebooklm.google.com) instead.**
+In this case, you'll use the web interface for Demo 2.5 and Exercise 2.5 instead of the
+CLI commands. Recovery steps are documented in the demos.
+
+Verify Option A with `/skills` — `notebooklm` should appear in the list.
 
 ### Prepared Hook Files
 
@@ -300,13 +328,24 @@ Alternatively use the NotebookLM web UI: notebooklm.google.com → Create notebo
 
 ### Codex CLI (optional, for Demo 3.2)
 
-Demo 3.2 (Codex Swarm) optionally requires the OpenAI Codex CLI. Install if you want to follow the live demo hands-on:
+OpenAI Codex CLI is **optional** — required only for Demo 3.2 (Codex Swarm).
+If you want to follow Demo 3.2 hands-on:
+
+**Method 1: Official OpenAI Codex CLI (if available in your region)**
+
+See: https://platform.openai.com/docs/codex
+Install via your package manager or from GitHub releases.
+
+**Method 2: Skip the install**
+
+Demo 3.2 is also marked as "Nice-to-have, demo-only" in the exercise priority guide.
+You can observe the moderator's demo without running it yourself.
+
+**Verify your install (if you went with Method 1):**
 
 ```bash
-# Install Codex CLI (replace with actual install command for your system)
-# Check codex --version after install
 codex --version
-codex auth status   # ensure authenticated
+codex auth status   # ensure authenticated to your OpenAI account
 ```
 
 If Codex is not installed, the demo can still be observed but not replicated locally.
@@ -316,11 +355,15 @@ If Codex is not installed, the demo can still be observed but not replicated loc
 After all installs, run a quick verification:
 
 ```bash
-claude plugin list                      # should show 3 plugins
-/skills                                 # should show notebooklm
+claude plugin list                      # shows installed plugins (0–3 depending on which option you chose)
+/skills                                 # should show notebooklm (only if you went with Option A above)
 ls ~/.claude/hooks/security-check.sh    # should exist + be executable
-notebooklm list                         # should show claude-code-docs
+notebooklm list                         # should show claude-code-docs (only if you used CLI variant)
 ```
+
+Note: The plugin/skill/notebooklm CLI lines are only relevant if you installed the
+optional workshop-custom plugins, the notebooklm user-skill, or the notebooklm CLI.
+Block 1 and most of Block 2 work without any of these.
 
 ---
 

@@ -1,7 +1,7 @@
 # Block 1: Exercises
 
 **Audience:** Experienced programmers. Security analogies used throughout.
-**Time budget:** ~40 minutes total for all Block 1 exercises
+**Time budget:** ~85-90 minutes total for all Block 1 exercises (1.5 optional; without it ~60-65 min)
 **Format:** Work individually or in pairs. Facilitator available for questions.
 
 ---
@@ -22,7 +22,7 @@ The exercises are designed to be short and hands-on. You are not building a prod
 
 **Goal:** Get comfortable with the core Claude Code loop — describe, implement, run, extend, explain. Build a small tool from scratch without writing any code yourself.
 
-**Time:** ~8 minutes
+**Time:** ~12-15 minutes
 
 ---
 
@@ -32,7 +32,7 @@ The exercises are designed to be short and hands-on. You are not building a prod
 
 In your terminal:
 ```
-mkdir ~/cc-exercise-1 && cd ~/cc-exercise-1
+mkdir -p ~/cc-workshop/exercises/exercise-1.1 && cd ~/cc-workshop/exercises/exercise-1.1
 claude
 ```
 
@@ -106,7 +106,7 @@ Then show me the diff.
 
 **Goal:** Create a CLAUDE.md for your actual work domain. Test that it persists across a session restart. Create a personal memory item.
 
-**Time:** ~10 minutes
+**Time:** ~15 minutes
 
 ---
 
@@ -117,7 +117,7 @@ Then show me the diff.
 Pick a directory that represents a real (or realistic) project from your work. It can be empty — we just need a home for CLAUDE.md.
 
 ```
-mkdir ~/my-access-control-project && cd ~/my-access-control-project
+mkdir -p ~/cc-workshop/exercises/exercise-1.2 && cd ~/cc-workshop/exercises/exercise-1.2
 git init
 claude
 ```
@@ -210,7 +210,7 @@ Exit and restart again. Ask Claude: "What door ID format should I use in this pr
 
 **Goal:** Experience firsthand the difference between vague and specific prompts. Same task, two rounds, compare quality. There is no cheating — the point is to feel the contrast.
 
-**Time:** ~10 minutes
+**Time:** ~15 minutes
 
 **Note:** Do Round 1 and Round 2 in the same session.
 
@@ -325,7 +325,7 @@ Think about or discuss with your neighbor:
 
 **Goal:** Complete a branch → implement → commit → log cycle using only Claude Code conversation. No manual git commands. Bonus: create a worktree.
 
-**Time:** ~12 minutes
+**Time:** ~18-20 minutes
 
 ---
 
@@ -333,7 +333,7 @@ Think about or discuss with your neighbor:
 
 Use the project from Exercise 1.2, or create a new one:
 ```
-mkdir ~/cc-git-exercise && cd ~/cc-git-exercise
+mkdir -p ~/cc-workshop/exercises/exercise-1.4-git && cd ~/cc-workshop/exercises/exercise-1.4-git
 git init
 echo "# Access Control Utilities" > README.md
 git add README.md
@@ -470,13 +470,13 @@ You do not have to implement it now. Understanding the model is the goal.
 
 ---
 
-## Exercise 1.5: Get Your Daily Workflow Under $5 (Should-Do, ~20 Min)
+## Exercise 1.5: Get Your Daily Workflow Under $5 (Should-Do, ~25 Min)
 
 **Priority:** Should-do — valuable, but optional if time is short.
 
 **Goal:** Define a cost-optimal Claude Code configuration for three workflows you actually run. Stop treating model and effort as defaults — pick them deliberately.
 
-**Time:** ~20 minutes
+**Time:** ~25 minutes
 
 ---
 

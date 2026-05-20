@@ -21,6 +21,6 @@ If mode is `learn`: activate interactive tutor mode for the specified module.
 If only a module ID is given without mode: default to `learn`.
 
 Valid module IDs:
-- Block 1 (Foundations): 1.1, 1.2, 1.3, 1.4 (or "block-1" for all)
+- Block 1 (Foundations): 1.1, 1.2, 1.3, 1.4, 1.5 (or "block-1" for all)
 - Block 2 (Ecosystem): 2.1, 2.2, 2.3, 2.4, 2.5 (or "block-2" for all)
-- Block 3 (Advanced): 3.1, 3.2, 3.3, 3.4, 3.5 (or "block-3" for all)
+- Block 3 (Advanced): 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7 (or "block-3" for all)

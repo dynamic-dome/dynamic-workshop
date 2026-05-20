@@ -1,118 +1,53 @@
-# Workshop-Einfuehrung
+# Workshop-Einführung
 
-Dieses Repository ist ein praxisnaher Claude-Code-Workshop mit drei aufeinander aufbauenden Sessions. Es richtet sich an Leute, die programmieren koennen, aber noch keine Routine mit Coding Agents wie Claude Code oder Codex haben.
+> Dieses Repository ist ein praxisnaher Claude-Code-Workshop für erfahrene Entwickler.
+> 3 Sessions à ~3h, 17 Module, demo-lastig mit optionalen Hands-on-Exercises.
 
-Die wichtigste Einordnung vorab:
+## Wie nutze ich dieses Repo?
 
-- Der Kern des Workshops liegt in `resources/`.
-- Das eigentliche Uebungsprojekt liegt in `workshop-playground/`.
-- `commands/`, `skills/`, `agents/` und `.claude-plugin/` enthalten die workshop-spezifischen Erweiterungen fuer Claude Code.
-- Einige Dateien und Ordner sind Arbeitsartefakte aus der Erstellung und nicht zwingend fuer den Versand gedacht.
+**Als Selbstlerner:**
+1. Lies zuerst `resources/prerequisites.md` (Setup)
+2. Dann `resources/workshop-guide.md` (Orientierung)
+3. Arbeite Block für Block durch — `resources/modules/`, `resources/demos/`, `resources/exercises/`
+4. Nutze `resources/cheatsheet.md` und `resources/quick-reference.md` als Referenz
 
-## So nutzt du das Repo
+**Als Workshop-Moderator:**
+1. Lies `resources/session-plan.md` für Zeitplan
+2. Prüfe `resources/prerequisites.md` und schicke an Teilnehmer min. 1 Woche vorher
+3. Demos vorher proben (siehe Recovery-Notes in `resources/demos/`)
+4. Nutze `resources/troubleshooting.md` als Notfall-Referenz
 
-Wenn du den Workshop nachvollziehen oder selbst durcharbeiten willst, starte in dieser Reihenfolge:
+## Verzeichnisstruktur
 
-1. `resources/prerequisites.md`
-2. `resources/session-plan.md`
-3. `resources/workshop-guide.md`
-4. den passenden Block unter `resources/modules/`
-5. die zugehoerigen Demos und Exercises
+| Ordner / Datei | Zweck |
+|---|---|
+| `resources/modules/` | Lehrmaterial pro Block (Block 1/2/3) |
+| `resources/demos/` | Demo-Scripts mit Recovery-Notes |
+| `resources/exercises/` | Hands-on-Übungen |
+| `resources/cheatsheet.md` | Vollständige Schnellreferenz (~800 Zeilen) |
+| `resources/quick-reference.md` | 1-Pager Quick-Reference (druckbar) |
+| `resources/glossary.md` | Begriffsdefinitionen |
+| `resources/faq.md` | Häufige Fragen |
+| `resources/troubleshooting.md` | Top-Probleme + Lösungen |
+| `resources/security-analogies.md` | Single-Source Physical-Security-Mappings |
+| `resources/session-plan.md` | Zeitplan pro Session |
+| `resources/prerequisites.md` | Setup vor Workshop |
+| `workshop-playground/` | Übungsprojekt mit absichtlichen Vulnerabilities |
+| `.claude-plugin/` | Plugin-Manifest |
+| `agents/workshop-mentor.md` | Mentor-Agent für Fragen |
+| `commands/workshop.md` | `/workshop`-Command |
+| `skills/workshop/SKILL.md` | Workshop-Skill (guide/learn Modi) |
 
-Wenn du verstehen willst, welche workshop-spezifischen Extras es gibt, lies danach `resources/workshop-specials.md`.
+## Block-Übersicht
 
-## Inhaltsverzeichnis des Projekts
+- **Block 1 — Foundations** (5 Module): What is Claude Code, Context & Memory, Effective Prompting, Git Integration & Worktrees, Cost Engineering
+- **Block 2 — Ecosystem** (5 Module): Skills & Commands, Hooks, Plugins, MCP, RAG & NotebookLM
+- **Block 3 — Advanced** (7 Module): Agents & Multi-Agent, Multi-Model Pipelines, Security & Adversarial Testing, Scheduled Tasks, Telegram/Inception/Worktrees, CI/CD & Headless Mode, Troubleshooting & Debugging
 
-### Kernmaterial
+## Empfehlung für verschiedene Leser
 
-- `README.md`
-  Kurzer Projektueberblick fuer Moderator und Maintainer.
-- `resources/`
-  Zentrale Workshop-Materialien. Hier liegt alles, was inhaltlich den eigentlichen Kurs ausmacht.
-- `workshop-playground/`
-  Kleines Demo- und Uebungsprojekt fuer Live-Demos, Tests und Security-/Agenten-Beispiele.
+- **Moderator / Maintainer:** `README.md`, `resources/session-plan.md`, `resources/prerequisites.md`, `resources/troubleshooting.md`
+- **Teilnehmer:** `resources/prerequisites.md`, `resources/workshop-guide.md`, `resources/cheatsheet.md`, `resources/quick-reference.md`
+- **Selbstlerner ohne Workshop:** `resources/workshop-guide.md`, dann blockweise `modules/`, `demos/`, `exercises/`
 
-### Workshop-Erweiterungen fuer Claude Code
-
-- `commands/`
-  Enthaeelt den Custom Command `/workshop`.
-- `skills/`
-  Enthaeelt das Workshop-Skill, das Guide- und Learn-Logik kapselt.
-- `agents/`
-  Enthaeelt den Spezial-Agent `workshop-mentor`.
-- `.claude-plugin/`
-  Plugin-Manifest, das Command, Skill und Agent zusammenbindet.
-
-### Zusatz- und Hintergrundmaterial
-
-- `docs/`
-  Aktuell keine tragende Teilnehmer-Doku; eher Ablage fuer zusaetzliche oder noch nicht integrierte Arbeitsbereiche.
-- `files/`
-  Aeltere oder alternative Workshop-Dokumente, die inhaltlich relevant sein koennen, aber nicht die Hauptstruktur des aktuellen Pakets bilden.
-- `deep-research-report.md`
-  Umfangreiches Hintergrund- und Recherchematerial.
-- `Claude Code_ Skills, Use Cases, Einfuehrung.md`
-  Einzelnes Referenzdokument mit zusaetzlichem Hintergrundwissen.
-- `workshop-dashboard.html`
-  HTML-Dashboard fuer Uebersicht/Tracking ausserhalb des Kernmaterials.
-
-### Lokale und technische Artefakte
-
-- `.agent-memory/`
-  Lokale Agent-Memory und Arbeitskontext. Nicht Teil des eigentlichen Workshop-Inhalts.
-- `.idea/`
-  IDE-spezifische Projektdateien.
-- `Last_session.txt`
-  Lokale Sitzungsnotiz.
-- `dynamic_workshop.txt`
-  Vermutlich Export-, Sammel- oder Zwischenstandsdatei.
-- `bash.exe.stackdump`
-  Crash-/Fehlerartefakt.
-
-## Was sich in `resources/` befindet
-
-`resources/` ist der wichtigste Ordner im Repository:
-
-- `resources/modules/`
-  Die eigentlichen Lehrinhalte, gegliedert nach Block 1 bis 3.
-- `resources/demos/`
-  Demo-Skripte und Vorfuehrablaeufe passend zu den Blocks.
-- `resources/exercises/`
-  Hands-on-Uebungen fuer Teilnehmer.
-- `resources/prerequisites.md`
-  Setup- und Vorbereitungsanleitung.
-- `resources/session-plan.md`
-  Zeitlicher Ablauf und didaktischer Aufbau ueber alle Sessions.
-- `resources/cheatsheet.md`
-  Schnelle Referenz fuer waehrend oder nach dem Workshop.
-- `resources/workshop-guide.md`
-  Begleitdokument fuer Selbststudium und Einordnung des Aufbaus.
-- `resources/workshop-specials.md`
-  Erklaert die workshop-spezifischen Command-/Skill-/Agent-Komponenten.
-- `resources/zip-cleanup-checklist.md`
-  Konservative Liste fuer das Aussortieren von Nebenartefakten vor dem Versand.
-
-Weitere Dateien in `resources/` wie Analyseberichte, Dashboards oder Deep-Research-Abgleiche sind eher Begleit- oder Maintainer-Material als Pflichtlektuere fuer Teilnehmer.
-
-## Was sich in `workshop-playground/` befindet
-
-Der Playground ist das Uebungsprojekt fuer praktische Teile des Workshops:
-
-- `access_control.py`
-  Beispielcode fuer Demos und Uebungen.
-- `test_access_control.py`
-  Tests fuer den Playground.
-- `requirements.txt`
-  Python-Abhaengigkeiten.
-- `CLAUDE.md`
-  Projektinstruktionen fuer Claude Code im Playground-Kontext.
-
-## Empfehlung fuer verschiedene Leser
-
-- Moderator oder Maintainer:
-  `README.md`, `resources/session-plan.md`, `resources/workshop-specials.md`
-- Teilnehmer:
-  `resources/prerequisites.md`, `resources/workshop-guide.md`, `resources/cheatsheet.md`
-- Selbstlerner ohne Workshop:
-  `WORKSHOP_EINFUEHRUNG.md`, `resources/workshop-guide.md`, dann blockweise `modules/`, `demos/`, `exercises/`
-
+Stand: 2026-05-20.

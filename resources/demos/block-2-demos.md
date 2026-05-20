@@ -241,6 +241,13 @@ Say: *"Normal doors open normally. Only the protected zones are locked. Least pr
 ### Talking Point
 *"In your access control world, you have zones. Some doors are always open (lobby), some require a badge (offices), some are permanently locked without explicit authorization (vault). This hook is the vault policy for your code."*
 
+### Recovery Notes
+
+- **If the hook bash-quoting breaks live:** Have a pre-prepared `secure-diff-gate.sh` file ready (in `~/.claude/hooks/`) as fallback. Reference it via `command: bash ~/.claude/hooks/secure-diff-gate.sh`.
+- **If `jq` not installed (Windows):** Use a Python alternative: `python3 -c "import sys,json; d=json.load(sys.stdin); ..."` — note that prerequisites.md should list `jq` or `python3` requirement.
+- **If the hook fires but doesn't block (exit 0 instead of 1):** Check the bash conditional — `grep -qE` must match. Test the regex outside Claude with `echo ".env" | grep -qE "(\.env|\.pem)"; echo $?`.
+- **If `settings.json` parse fails:** Common cause is unescaped quotes in the bash inline command. Move the script to its own file and reference by path.
+
 ---
 
 ## Demo 2.3: Plugin Anatomy (~5 minutes)
@@ -302,6 +309,13 @@ Say: *"Agents are like specialized team members — each has a role, a set of re
 - "Install once, available everywhere. Update via git pull."
 - "Disable without deleting: rename plugin.json to plugin.json.disabled."
 - "Your team can build plugins for your specific workflows and distribute them internally."
+
+### Recovery Notes
+
+- **If agentic-os plugin not installed:** Any installed plugin works. Run `claude plugin list` to find one, then `cat ~/.claude/plugins/cache/<plugin-name>/.claude-plugin/plugin.json`.
+- **If no plugins installed at all:** Live-clone the workshop-mentor plugin from this repo: `cp -r .claude-plugin/ /tmp/demo-plugin/.claude-plugin/` and inspect.
+- **If the plugin's cache path differs (newer Claude Code versions):** Try `~/.claude/plugins/installed/<plugin-name>/` or run `claude plugin path <plugin-name>` to locate.
+- **If `plugin.json` is in `.claude-plugin/` subdirectory:** That's the newer schema — show `~/.claude/plugins/cache/<plugin>/.claude-plugin/plugin.json` instead of the root.
 
 ---
 

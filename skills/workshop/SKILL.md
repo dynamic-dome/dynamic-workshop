@@ -53,6 +53,7 @@ When called without arguments, display the full workshop map using box-drawing c
 ║  │  1.2  Context & Memory            Windows, CLAUDE.md, .md files    │   ║
 ║  │  1.3  Effective Prompting         Patterns, traps, best practices  │   ║
 ║  │  1.4  Git Integration & Worktrees Parallel branches, isolation     │   ║
+║  │  1.5  Cost Engineering            /cost, /usage, effort as $-lever │   ║
 ║  └─────────────────────────────────────────────────────────────────────┘   ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║  BLOCK 2 · ECOSYSTEM                               Session 2  ~3h           ║
@@ -65,14 +66,16 @@ When called without arguments, display the full workshop map using box-drawing c
 ║  │  2.5  RAG & NotebookLM            Knowledge bases, retrieval      │   ║
 ║  └─────────────────────────────────────────────────────────────────────┘   ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  BLOCK 3 · ADVANCED & MIND-BLOWING                 Session 3  ~3h           ║
+║  BLOCK 3 · ADVANCED & MULTI-AGENT                  Session 3  ~3h           ║
 ║  "Figure out what works best for you."                                      ║
 ║  ┌─────────────────────────────────────────────────────────────────────┐   ║
 ║  │  3.1  Agents & Multi-Agent Orchestration   Swarms, delegation      │   ║
 ║  │  3.2  Nested Orchestration                 Claude→Codex→Claude     │   ║
 ║  │  3.3  Security & Adversarial Testing       Devil's Advocate        │   ║
 ║  │  3.4  Scheduled Tasks, Loops & Automation  Cron, self-improve      │   ║
-║  │  3.5  Telegram Bridge, Inception & Worktree Isolation              │   ║
+║  │  3.6  CI/CD & Headless Mode                claude -p, JSON, budget │   ║
+║  │  3.7  Troubleshooting & Debugging          /debug, /doctor, layers │   ║
+║  │  3.5  Telegram Bridge, Inception & Worktree Isolation (Capstone)   │   ║
 ║  └─────────────────────────────────────────────────────────────────────┘   ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║  USAGE                                                                       ║
@@ -201,21 +204,10 @@ Stay in character as the **interactive tutor** throughout the session. Pace your
 
 ---
 
-## Security Analogies Reference Table
+## Security Analogies Reference
 
-Use these mappings throughout both Guide and Learn modes to make concepts concrete for audiences from the physical security industry.
+Use security analogies throughout both Guide and Learn modes to make concepts concrete for audiences from the physical security industry.
 
-| Claude Code Concept | Security Analogy |
-|---|---|
-| Context Window | Security zone — what Claude is allowed to see |
-| Hooks | Alarm sensors — trigger on specific events |
-| Sandboxing / Worktrees | Security airlocks — isolated areas |
-| Devil's Advocate | Penetration testing — adversarial verification |
-| CLAUDE.md | Access policy — defines what's permitted |
-| Plugins | Security modules — extend the base system |
-| MCP Servers | External integrations — connecting to other systems |
-| Agents | Specialized teams — specialized units for specific tasks |
-| Memory System | Incident log — persistent knowledge across shifts |
-| Quality Gate | Compliance check — must pass before deployment |
+> **Single source of truth: `resources/security-analogies.md`** — full mapping, rationale, and usage guidance. Pull the relevant analogy from there when introducing a concept.
 
 When introducing a new concept, lead with the security analogy before the technical definition. This audience understands layered defense, access control, and event-driven responses — lean into that vocabulary.

@@ -45,6 +45,13 @@ One team is mapping the building layout, the other is checking for hazards.
 They report back independently — we get both reports in parallel, not sequentially.
 This is exactly how a well-run SOC operates."
 
+### Recovery Notes
+
+- **If Claude does NOT spawn subagents (sequential response):** Re-prompt: "Use SEPARATE agents running IN PARALLEL for each part. This is important — I want to see Agent 1 and Agent 2 outputs separately."
+- **If only one agent spawns:** Tasks may not be truly independent. Reformulate to make them clearly independent (no shared state, no ordering dependency).
+- **If output is too verbose to follow live:** Pre-narrate "expect to see something like..." and skim outputs.
+- **If `/agent-orchestrator` is not installed:** Skip Step 2, narrate the pattern instead — "with the orchestrator plugin, you'd be able to assign different models to each agent. Today we just have parallel same-model agents."
+
 ---
 
 ## Demo 3.2: Codex Swarm
@@ -94,6 +101,13 @@ Claude Opus designed the spec.
 Codex agents built the components in parallel — like contractors installing readers on different floors at the same time.
 Claude Opus is now inspecting each component before sign-off.
 Three different intelligence profiles.  One pipeline.  The result is better than any one of them alone."
+
+### Recovery Notes
+
+- **If Codex CLI not installed:** Skip the live run, show recording / screenshot from prep. Discuss the pattern instead.
+- **If multi-model-orchestrator plugin not installed:** Show the plugin's GitHub README or replace with manual prompt to Claude: "Pretend you're a Codex swarm with N agents. Show what each would generate."
+- **If Codex auth fails:** Same as "not installed" — fall back to discussion. Mention `codex auth login` is required outside the workshop.
+- **If `--decompose` flag isn't recognized:** Older plugin versions may not support it — drop the flag and let Claude decompose manually first, then spawn agents.
 
 ---
 
@@ -172,6 +186,34 @@ The Fixers are your patching team.
 The entire thing just ran in under 5 minutes.
 For the CySec engineers in the room — this is your world applied to code."
 
+### Optional Step: Run Swarm Against the C Playground
+
+For Embedded / Physical-Security audiences:
+
+```
+/devil-advocate-swarms:swarm scan workshop-playground/osdp_frame_decoder.c
+```
+
+Expected findings (4 planted issues):
+- Buffer Overflow (decode_data_payload)
+- Integer Overflow (compute_crc)
+- Format String (log_frame)
+- Off-by-one (parse_address)
+
+The C playground demonstrates patterns that are domain-relevant for Physical Security:
+embedded protocols, wire-format parsing, memory-safety issues. The Python playground
+demonstrates patterns that are domain-relevant for backend services.
+
+Show both if time permits, or pick the one closest to the audience's daily work.
+
+### Recovery Notes
+
+- **If devil-advocate-swarms plugin not installed:** Show recording from prep. Discuss the 4-stage architecture (Scan → Debate → Consensus → Fix).
+- **If swarm finds wrong vulnerabilities (False Positives):** Use as teaching moment — "this is exactly why the Debate stage exists. Without it, you'd act on noise."
+- **If swarm misses one planted vulnerability:** Also a teaching moment — "automated tools have blind spots. Pair with human review."
+- **If Windows `cp` command fails during live exploit:** Already noted in the demo — use Git Bash or WSL for the live run, or stay with the static finding (which is the actual point).
+- **If the debate stage looks different in this plugin version:** Narrate the intent ("Prosecutor argues exploitability, Defender pushes back") even if stage names differ. The architecture matters more than the labels.
+
 ---
 
 ## Demo 3.3b: Permission Modes — From Visitor to Master Key (~5 minutes)
@@ -238,6 +280,13 @@ Say: *"You would never give a contractor a master key in a live building. Same r
 ### Talking Point
 *"6 clearance levels. From visitor badge to master key. You pick the right one for the situation — just like you'd never give a delivery driver the same access as the building engineer."*
 
+### Recovery Notes
+
+- **If Shift+Tab cycle doesn't work:** Use explicit `claude --permission-mode plan` to start with plan mode.
+- **If `/permissions` doesn't show the mode:** Use `claude --verbose` at startup to see the loaded permission mode. Or `cat ~/.claude/settings.json | jq .permissions`.
+- **If `acceptEdits` mode still prompts for edits:** Check `~/.claude/settings.local.json` for an override — local settings take precedence over user settings.
+- **If `claude --permission-mode plan` isn't recognized:** Older Claude Code versions may use different flag names — fall back to `/permissions` from inside a session.
+
 ---
 
 ## Demo 3.3c: CVE-Fix Pipeline — From Advisory to PR (~5 minutes)
@@ -260,7 +309,7 @@ echo "requests==2.5.0" >> requirements.txt    # CVE-2018-18074
 # echo "urllib3==1.24.0" >> requirements.txt
 ```
 
-Important: **bewusst NICHT installieren** — this demo only shows the scan + fix + PR flow, not actual exploitation. We just need the version string in the manifest so Claude can find an advisory for it.
+Important: **intentionally NOT installed** — this demo only shows the scan + fix + PR flow, not actual exploitation. We just need the version string in the manifest so Claude can find an advisory for it.
 
 **Step 1: Ask Claude to fix it (3 min)**
 
@@ -298,6 +347,13 @@ Reverting the planted line keeps the playground in its intended state for later 
 
 ### Talking Point
 *"In your world, a vulnerability in a door controller firmware means: find the advisory, identify affected units, plan the update path, test on a bench, deploy, verify. Same process here — but Claude does steps 1 through 5 automatically. You review and approve."*
+
+### Recovery Notes
+
+- **If WebSearch is blocked (Corporate Proxy / no Internet):** Skip the live search step, paste a pre-prepared CVE description manually (e.g. NVD entry for CVE-2018-18074 from clipboard).
+- **If you forget the cleanup step:** Document this as the demo's biggest risk — "always revert the planted vulnerable line after this demo." Add a calendar reminder for post-workshop cleanup.
+- **If `gh pr create` fails:** Demonstrate via `git push` + manual PR creation in browser. Or skip PR step entirely, show the diff and commit only.
+- **If `pip install` actually runs on the vulnerable version:** Stop immediately — `pip uninstall requests` and reinstall a safe version. The demo is supposed to show *scan + fix* only, never actually install the CVE.
 
 ---
 
@@ -355,66 +411,99 @@ To pull the security analogy one more time: this is a security system that ran i
 With no human involvement.
 This is what continuous security hardening looks like when applied to software."
 
+### Recovery Notes
+
+- **If agentic-os plugin not installed:** Show recording / screenshot. Discuss the pattern (Quality Gate → Improve → Re-Test) without live run.
+- **If the loop runs but introduces no fixes:** That's a valid outcome — "sometimes the project is already in good shape. The loop reports 'no improvements needed' and stops."
+- **If `--max-budget-usd` is hit early:** Use as teaching moment — "this is why we set the budget cap. Without it, this would have continued."
+- **If `/quality-gate` is unavailable:** Run `pytest` + `ruff check` manually as a stand-in baseline before the loop, so the audience sees a concrete "before" number.
+- **If the iteration log file path differs:** Check `.agent-memory/` root for the actual filename — newer versions may use `iterations/<ts>-<slug>.md` instead of numbered files.
+
 ---
 
-## Demo 3.5: The Full Stack — Architecture Discussion
+## Demo 3.5: Full-Stack Architecture & Remote Workflow
 
-**Goal:** Connect all the pieces.  Show the full vision.  Finish with the Telegram demo.
+**Teaching point:** What does a productive multi-agent workflow look like from the outside? Worktree-isolation for safety, background-sessions for long-running tasks, remote-control from the phone.
 
-### Steps
+**Duration:** ~10-12 Min
 
-**Step 1: Worktree isolation (live)**
+### Setup
+
+- `claude` (authenticated)
+- Optional: Docker (for Inception step)
+- Optional: Telegram-Bridge plugin (for Bonus step)
+
+### Step 1: Worktree-Isolation (3 Min, must-do)
+
+Show how a worktree creates an isolated working tree for risky changes:
 
 ```bash
-git worktree add ../demo-sandbox -b demo/sandbox
+git worktree add ../experiment-async-processing feature/async-experiment
+cd ../experiment-async-processing
+claude
+# Make experimental changes — the main branch stays untouched
 ```
 
-Show that `../demo-sandbox` is a clean working copy.
-Have an agent do something in the sandbox.
-Show the main directory is untouched.
-Discard it:
+When the experiment is done, discard or merge:
+
 ```bash
-git worktree remove ../demo-sandbox
+git worktree remove ../experiment-async-processing
 ```
 
-"The agent worked in a locked room.  We unlocked the door, checked the work, and locked it again."
+**Talking point:** "Worktrees are like the test-bench in the lab. You can break things without affecting production."
 
-**Step 2: Whiteboard — the full architecture diagram**
+### Step 2: Whiteboard Architecture (3-4 Min, must-do)
 
-Draw on the whiteboard (or project the ASCII diagram from the module):
-- Telegram Bridge -> Orchestrator
-- Orchestrator -> specialized agents in worktrees
-- One path leads to Devil's Advocate Swarm
-- Results aggregate back to orchestrator
-- Report sent to Telegram
+Draw or display the architecture diagram from Module 3.5. Walk through:
+- User in CLI / Web App / Mobile
+- Claude Code as orchestrator
+- Tools (Read/Write/Bash) + MCP Servers + Background Agents + Subagents
+- Worktrees as isolated working trees
 
-Walk through each node and explain what it does and what its security boundary is.
+Use the architecture diagram as a recap of everything Block 3 covered. Walk through each node and explain what it does and what its security boundary is.
 
-**Step 3: Inception (if Docker is available)**
+### Step 3: Remote-Control Built-in (3 Min, must-do)
+
+Show the official remote-workflow:
 
 ```
-/multi-model-orchestrator:inception
+/remote-control
 ```
 
-Task: "List all Python files in /workspace and count the lines of code in each."
+This generates a one-time URL — open it on your phone or laptop, then read and respond from anywhere.
 
-Show that Claude runs inside a container.  The container's filesystem is isolated from the host.
+**Or `/teleport`** to pull a web-session into the local terminal:
 
-**Step 4: Telegram demo (if configured)**
+```
+/teleport
+```
 
-Send a real message from your phone.
-Read the response aloud when it arrives.
-"I just triggered a full code analysis from my phone.
-While I was walking to the coffee machine.
-Claude is running agents, which are running tools, which are scanning files — all from that one message."
+The active web session reattaches to your terminal — useful when you started something on your phone and want to continue at your desk.
 
-### Talking Point
+**Talking point:** "This is the official way to drive Claude Code from a second device. No custom infrastructure needed — same channel Anthropic ships, same auth, same audit."
 
-"You have an always-available operations center in your pocket.
-Every workflow we built today — the multi-agent scans, the adversarial security testing, the self-improving quality checks — all of it can be triggered from a Telegram message and reported back to your phone.
-You do not need to be at a laptop.
-You do not need to be awake.
-Claude is on call."
+### Step 4 (BONUS, only if pre-configured): Telegram-Bridge Showcase (3 Min, optional)
+
+> **Setup prerequisite:** Telegram-Bot token, Bridge service deployed, workshop-custom plugin `telegram-bridge` installed. **If not pre-configured: skip this step.**
+
+Show how the workshop-custom Telegram-Bridge enables group-chat-based workflows:
+- Send a command from Telegram to your local Claude session
+- Receive responses back as Telegram messages
+- Useful for multi-user / group-coordination scenarios
+
+This is **a demonstration of the pattern**, not a recommended production setup — `/remote-control` (built-in) covers most use-cases more simply and more securely.
+
+### Recovery Notes
+
+- **Step 1 fails — worktree directory already exists:** Remove with `git worktree remove ../experiment-async-processing` or pick a different path. If the branch already exists, drop the `-b` and let git reuse it.
+- **Step 3 `/remote-control` not available:** Older Claude Code versions do not ship this slash-command. Fall back to Step 1 + Step 2 only, and mention that the feature is available in v2.1.130+.
+- **Step 3 `/teleport` says "no active web session":** Start a session in the claude.ai web UI first, then re-run `/teleport`. Or skip and demo `/remote-control` only.
+- **Step 4 bridge not running / plugin not installed:** Skip silently. Explain "in production, you'd need a deployed bridge service — see Module 3.5 for the architecture pattern."
+- **Inception (formerly Step 3) needed:** If you want to show Docker isolation as well, drop it in between Step 1 and Step 2 with `/multi-model-orchestrator:inception` and a small task like "List all Python files in /workspace and count the lines of code in each." Skip if Docker isn't installed on the workshop machine.
+
+### Closing Talking Point
+
+"You've now seen all five extension layers of Claude Code: Skills, Hooks, Plugins, MCP, RAG — plus Multi-Agent, Security, Automation, CI/CD, Troubleshooting. The Telegram-Bridge is one specific custom-built example of the 'remote-coordination' pattern. The same pattern with `claude remote-control` and Channels (MCP-push) is the future-default."
 
 ---
 

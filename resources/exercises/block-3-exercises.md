@@ -10,19 +10,19 @@
 |----------|----------|---------------|
 | **Must-do** | 3.1 Multi-Agent Task | ~15 min |
 | **Must-do** | 3.5 Architecture Discussion | ~45 min |
-| **Should-do** | 3.3 Security Audit **OR** 3.4 Automation | ~30 min / ~20 min |
-| **Should-do** | 3.6 Pre-Commit Hook with Claude | ~20 min |
-| **Should-do** | 3.7 Debug a Broken Hook | ~15 min |
+| **Should-do** | 3.3 Security Audit **OR** 3.4 Automation | ~25-30 min / ~20 min |
+| **Should-do** | 3.6 Pre-Commit Hook with Claude | ~25 min |
+| **Should-do** | 3.7 Debug a Broken Hook | ~20 min |
 | **Nice-to-have** | 3.2 Codex Swarm (demo-only) | ~15 min |
-| **Nice-to-have** | Bonus 3.8 HIPAA Hook | ~15 min |
+| **Nice-to-have** | Bonus 3.8 HIPAA Hook | ~20 min |
 
-> **Realistic total: 90–120 minutes.** Prioritize Must-do exercises first.
+> **Realistic total: 110–145 minutes.** Prioritize Must-do exercises first.
 
 ---
 
 ## Exercise 3.1: Your First Multi-Agent Task
 
-**Type:** Individual, ~10 minutes
+**Type:** Individual, ~15 minutes
 **Goal:** Experience the difference between single-instance and multi-agent Claude.
 
 ### Task
@@ -100,7 +100,7 @@ Each group shares their most interesting answer.  5 minutes total.
 
 ## Exercise 3.3: Security Audit Your Project
 
-**Type:** Individual or pair, ~20 minutes
+**Type:** Individual or pair, ~25-30 minutes
 **Goal:** Run adversarial security testing on real code and see what it finds.
 
 ### Setup
@@ -173,7 +173,7 @@ Where does it match or exceed it?
 
 ## Exercise 3.4: Set Up Automation
 
-**Type:** Individual, ~15 minutes
+**Type:** Individual, ~20 minutes
 **Goal:** Configure a real automated task that will run without your involvement.
 
 ### Task
@@ -222,7 +222,7 @@ After setting up your automation, verify it runs:
 ## Exercise 3.5: Architecture Discussion (Capstone) — Must-do, ~45 min
 
 **Priority:** Must-do — Workshop-Capstone
-**Type:** Group, ~30 minutes (Discussion) + optional Capstone-Track (Hausaufgabe oder Bonus-Zeit)
+**Type:** Group, ~30 minutes (Discussion) + optional Capstone Track (homework or bonus time)
 **Goal:** Design an ideal Claude Code workflow for a real project.
 This is the synthesis exercise — the goal of the entire workshop.
 
@@ -292,24 +292,24 @@ The workflow you sketch today should be something you can actually start buildin
 
 ### Optional: Capstone Track
 
-Wenn ihr nach der Discussion noch Zeit habt (oder als Hausaufgabe nach dem Workshop):
+If you have time after the discussion (or as homework after the workshop):
 
-**Wähle ein Heim-Projekt** (eigener Code, Side-Project, Repo das ihr regelmäßig nutzt) und baue darin **ein** konkretes Setup-Element basierend auf Workshop-Inhalt:
+**Pick a home project** (your own code, a side project, a repo you use regularly) and build **one** concrete setup element based on workshop content:
 
-- **Variante A — Skill für deinen Workflow:** Skill, der ein typisches Anliegen aus deinem Projekt abdeckt (z.B. "Code-Review für Firmware-PRs", "Generiere OSDP-Frame-Tests", "Audit Access-Control-Configs")
-- **Variante B — Hook für dein Repo:** Hook, der eine projekt-spezifische Regel durchsetzt (z.B. "Niemals direkt in main committen", "Keine Edits an firmware/secure-boot.c ohne Bestätigung")
-- **Variante C — Plugin:** Bündele 2-3 Skills/Hooks zu einem Plugin und installiere es lokal mit `claude --plugin-dir ./mein-plugin`
-- **Variante D — CI-Workflow:** GitHub-Action-YAML, die Claude Code als Reviewer einsetzt (siehe Modul 3.6)
+- **Variant A — Skill for your workflow:** A skill that addresses a typical concern in your project (e.g., "Code review for firmware PRs", "Generate OSDP frame tests", "Audit access-control configs")
+- **Variant B — Hook for your repo:** A hook that enforces a project-specific rule (e.g., "Never commit directly to main", "No edits to firmware/secure-boot.c without confirmation")
+- **Variant C — Plugin:** Bundle 2-3 skills/hooks into a plugin and install it locally with `claude --plugin-dir ./my-plugin`
+- **Variant D — CI workflow:** GitHub Action YAML that uses Claude Code as a reviewer (see Module 3.6)
 
-**Erwartung:** kein production-grade Code, sondern ein Lerntreiber. Wichtig: in deinem echten Workflow nutzen, nicht im Workshop-Sandbox.
+**Expectation:** Not production-grade code, but a learning driver. Important: use it in your real workflow, not in the workshop sandbox.
 
-**Optional teilen:** Wenn du willst, teile dein Capstone-Artefakt in der Workshop-Community (Slack/Discord/E-Mail).
+**Optional sharing:** If you want, share your capstone artifact with the workshop community (Slack/Discord/email).
 
 ---
 
 ## Exercise 3.6: Build a Claude-Backed Pre-Commit Hook
 
-**Type:** Individual, ~20 minutes
+**Type:** Individual, ~25 minutes
 **Priority:** Should-do
 **Goal:** Wire Claude Code into your local git workflow as a pre-commit lint gate — your first taste of Claude as a CLI tool in a pipeline.
 
@@ -416,8 +416,15 @@ Convert the hook to use `--output-format json` with a small `--json-schema`, and
 
 ## Bonus Exercise 3.8: HIPAA-Style Security Guardrails
 
-**Type:** Individual, ~15 minutes
+**Type:** Individual, ~20 minutes
 **Goal:** Build a hook that scans every file write for sensitive data patterns — simulating compliance guardrails.
+
+> **For Non-US Audiences:** This bonus exercise uses HIPAA as a concrete example, but the
+> pattern (preventing sensitive data from being written to insecure locations via PreToolUse
+> hooks) applies equally to GDPR (EU personal data), PCI-DSS (payment cards), and EN 50131
+> (Physical Security access logs). Adapt the regex patterns to your regulatory context —
+> the hook mechanism is the same. See Module 3.3 "Regulated Industries: Compliance Notes"
+> for the regulation-to-mechanism mapping.
 
 ### Background
 
@@ -480,7 +487,7 @@ Add to settings.json with matcher `Write|Edit`. Test by asking Claude to create 
 ## Exercise 3.7: Debug a Broken Hook
 
 **Priority:** Should-do — valuable for self-sufficient productivity. Without this skill you are blocked every time a hook misbehaves.
-**Type:** Individual, ~15 minutes (+5 min bonus)
+**Type:** Individual, ~20 minutes (+5 min bonus)
 **Goal:** Diagnose and fix a misconfigured hook using only the standard inspection tools — without reading the hook script first.
 
 ### Background

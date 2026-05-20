@@ -1,7 +1,8 @@
 # Block 2: Exercises — Ecosystem
 
 **For participants.** Each exercise has a Goal, Steps, Success Check, and Hints.
-Time estimate per exercise: 15–20 minutes. Do them in order — each builds on the last.
+Time estimate per exercise: 25-30 minutes (Exercise 2.5 with NotebookLM setup runs longer, 30-40 min).
+Do them in order — each builds on the last.
 Audience: experienced programmers. Security analogies used throughout.
 
 ---
@@ -367,8 +368,12 @@ ls ~/.claude/plugins/cache/<plugin-name>/
 
 Read the manifest:
 ```bash
-cat ~/.claude/plugins/cache/<plugin-name>/plugin.json
+cat ~/.claude/plugins/cache/<plugin-name>/.claude-plugin/plugin.json
 ```
+
+> **Note:** The plugin manifest MUST live at `.claude-plugin/plugin.json` (inside a `.claude-plugin/` subdirectory),
+> NOT in the plugin root — common mistake. If `cat` above fails, your plugin
+> may use the legacy layout; check both locations.
 
 Answer these questions (write them down):
 - What version is this plugin?
@@ -408,11 +413,12 @@ Create a minimal plugin structure for a hypothetical plugin relevant to your wor
 
 ```bash
 # Create the plugin directory
+mkdir -p ~/.claude/plugins/cache/my-mini-plugin-marketplace/.claude-plugin
 mkdir -p ~/.claude/plugins/cache/my-mini-plugin-marketplace/skills/my-skill
 mkdir -p ~/.claude/plugins/cache/my-mini-plugin-marketplace/commands
 
-# Create the manifest
-cat > ~/.claude/plugins/cache/my-mini-plugin-marketplace/plugin.json << 'EOF'
+# Create the manifest at .claude-plugin/plugin.json (NOT in the plugin root)
+cat > ~/.claude/plugins/cache/my-mini-plugin-marketplace/.claude-plugin/plugin.json << 'EOF'
 {
   "name": "my-mini-plugin",
   "version": "0.1.0",
@@ -425,6 +431,22 @@ cat > ~/.claude/plugins/cache/my-mini-plugin-marketplace/plugin.json << 'EOF'
 }
 EOF
 ```
+
+The resulting layout:
+
+```
+my-mini-plugin-marketplace/
+  .claude-plugin/
+    plugin.json
+  skills/
+    my-skill/
+      SKILL.md
+  commands/
+    my-command.md
+```
+
+> **Important:** The manifest MUST live at `.claude-plugin/plugin.json`, not in the plugin root.
+> Module 2.3 covers why — Claude Code's loader only looks at `.claude-plugin/plugin.json`.
 
 Create a skill:
 ```bash
@@ -471,14 +493,14 @@ Look for your new command in the list. Try invoking it.
 
 - [ ] You can navigate the agentic-os plugin structure from the command line
 - [ ] You've answered the questions about skill anatomy and agent anatomy
-- [ ] `~/.claude/plugins/cache/my-mini-plugin-marketplace/` exists with valid `plugin.json`
+- [ ] `~/.claude/plugins/cache/my-mini-plugin-marketplace/.claude-plugin/plugin.json` exists and is valid JSON
 - [ ] Your mini plugin has at least one skill and one command
 - [ ] (Stretch) Your new command appears in `/help` and can be invoked
 
 ### Hints
 
 **If the plugin doesn't appear after restart:**
-Check that `plugin.json` is valid JSON (`python3 -m json.tool plugin.json`), and that `"enabled": true` is set.
+Check that `.claude-plugin/plugin.json` is valid JSON (`python3 -m json.tool .claude-plugin/plugin.json`), and that `"enabled": true` is set. The single most common reason a plugin is silently skipped: the manifest sits in the plugin root instead of under `.claude-plugin/`.
 
 **What makes a good plugin?**
 Cohesion. A plugin should do one thing well. Don't put your commit workflow and your documentation generator in the same plugin — make two plugins. This way you can enable/disable them independently.
@@ -488,9 +510,9 @@ Once you have a working plugin, share it by zipping the directory or putting it 
 
 **Disabling without deleting:**
 ```bash
-mv plugin.json plugin.json.disabled
+mv .claude-plugin/plugin.json .claude-plugin/plugin.json.disabled
 # Re-enable:
-mv plugin.json.disabled plugin.json
+mv .claude-plugin/plugin.json.disabled .claude-plugin/plugin.json
 ```
 
 ---
@@ -746,7 +768,7 @@ After the workshop, consider:
 
 ## Bonus Exercise 2.6: Token Firewall — Hook-Based Output Filtering
 
-**Type:** Individual, ~15 minutes
+**Type:** Individual, ~20 minutes
 **Goal:** Build a PreToolUse hook that filters large test outputs before Claude sees them, saving context space and money.
 
 ### Background

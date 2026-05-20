@@ -1,4 +1,4 @@
-# Block 3: Advanced & Mind-Blowing — Teaching Material
+# Block 3: Advanced & Multi-Agent — Teaching Material
 
 > **Audience:** Experienced programmers. Security analogies used throughout —
 > especially relevant for the CySec engineer in the group.
@@ -34,6 +34,11 @@
 ---
 
 ## Module 3.1: Agents & Multi-Agent Orchestration
+
+**Learning Objectives:** After this module, you can:
+- Define a custom subagent in YAML frontmatter (`name`, `description`, `tools`, `model`, `permissionMode`, `maxTurns`, `isolation`, `effort`) and explain the security restrictions that apply to plugin-shipped subagents.
+- Pick the right orchestration pattern (Fan-Out/Fan-In, Pipeline, Hierarchical) for a given multi-agent task and quantify the speed gain versus sequential execution.
+- Distinguish synchronous subagents (`Agent` tool) from background sessions (`claude --bg`, `claude agents`, `attach/logs/stop/respawn`) and know when to use each.
 
 ### What Is an Agent?
 
@@ -321,6 +326,11 @@ Plus `claude daemon status` for a quick health check of the background-session s
 
 ## Module 3.2: Nested Orchestration & Multi-Model Pipelines
 
+**Learning Objectives:** After this module, you can:
+- Map task phases (plan / implement / review) to the right model (Opus / Sonnet / Haiku / Codex) and justify the choice from cost and judgement perspectives.
+- Identify the data-flow boundary in a Claude-Codex pipeline (which provider sees which code) and choose between skip-Codex, local-model substitution, or signature-only stripping for sensitive code.
+- Use a multi-model pipeline (e.g. Codex Swarm with `--decompose`) for parallel implementation and aggregate the results via Claude review.
+
 ### Different Models, Different Strengths
 
 | Model | Strengths | Best Used For |
@@ -337,13 +347,7 @@ Using both together beats either alone.
 
 ### Cost Trade-Off — Order-of-Magnitude Multipliers
 
-Use these rough multipliers (per million tokens, relative to Sonnet = 1x) for back-of-envelope planning:
-
-| Model | In/Out (USD per MTok) | Relative Cost | When to reach for it |
-|---|---|---|---|
-| **Opus 4.7** | 5 / 25 | ~3x Sonnet | Planning, architecture review, judgment calls |
-| **Sonnet 4.6** | 3 / 15 | 1x (baseline) | Day-to-day implementation, balanced workhorse |
-| **Haiku 4.5** | 1 / 5 | ~0.2x Sonnet | Bulk reads, classification, low-stakes review |
+> Full pricing table and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth. Rough orientation for this module: Opus ~3x Sonnet, Haiku ~0.2x Sonnet (per MTok).
 
 **Mini-Strategy for a typical Claude → Codex → Claude pipeline:**
 
@@ -439,6 +443,11 @@ All 4 Codex agents run simultaneously.  Claude reviews the assembled result.
 
 ## Module 3.3: Security & Adversarial Testing
 
+**Learning Objectives:** After this module, you can:
+- Walk through the 4 stages of a Devil's Advocate pipeline (Scanners → Debate → Consensus → Fixers) and explain why overlap and adversarial debate reduce (but do not eliminate) false positives.
+- Compare the built-in review trio (`/security-review`, `/review`, `/ultrareview`) against custom adversarial pipelines and pick the right tool for a given audit scenario.
+- Apply the right combination of permission modes, protected paths, sandbox-level network hardening (`sandbox.network.deniedDomains`, `autoMode.hard_deny`), and skill-shell hardening (`disableSkillShellExecution`) for autonomous workflows.
+
 > **Note to moderator:** Frame this as automated penetration testing with a trial system.
 > Because that is literally what it is.  The CySec person will feel very at home.
 
@@ -484,9 +493,13 @@ For each finding, two agents argue:
 > The validation rejects all shell metacharacters.
 > This is not exploitable as written."
 
-This debate eliminates false positives.
-In traditional security audits, 30-50% of automated scanner findings are false positives.
-The debate stage filters them automatically — before any engineer touches them.
+The debate **reduces** false positives — it does not eliminate them.
+Traditional security tooling commonly reports 30-50% false positive rates;
+the debate stage is designed to filter many of those before any engineer
+looks at them, but the actual reduction depends on prompt quality, scanner
+choice, and codebase characteristics. We have not benchmarked it against
+a labeled dataset. Treat it as **"a useful adversarial filter, not a
+guaranteed false-positive eliminator."**
 
 The Prosecutor's job: argue every finding as if writing an exploit report for a paying client.
 The Defender's job: find every reason the finding is not actually exploitable.
@@ -521,6 +534,12 @@ For each confirmed finding, a fixer agent:
 - Fixers = patching team
 - The whole process runs autonomously, with full documentation
 
+> **Domain Note:** The workshop has two playgrounds — `access_control.py` (Python, user-management)
+> and `osdp_frame_decoder.c` (C, embedded OSDP frame parser). For Physical-Security / Embedded
+> audiences, the C playground demonstrates memory-safety vulnerabilities (buffer overflow,
+> integer overflow, format string) that are typical of firmware. The Python playground covers
+> backend-style vulnerabilities. Use whichever matches the audience.
+
 ---
 
 ### Security Audit Skill
@@ -546,7 +565,7 @@ Runs in minutes.  Integrates into CI/CD pipelines.
 
 ### Permission Modes — Going Deeper
 
-The full 6-mode table was introduced in **Module 1.1** (see that table for the at-a-glance overview). Here we dive into the dimensions that matter for autonomous and CI/CD workflows.
+> **See Module 1.1 for the 6 modes overview** — the full table (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) lives there. This module skips the recap and dives only into the **advanced modes** (`auto`, `dontAsk`, `bypassPermissions`) and their CI/CD patterns.
 
 #### `auto` Mode — Plan Availability & Restrictions
 
@@ -688,7 +707,7 @@ Claude Code has native OS-level sandboxing for shell tools:
 | Linux/WSL2 | `Bash` | bubblewrap (bwrap) | Filesystem paths, network access |
 | Windows | `PowerShell` | Native PowerShell tool — runs with the host permission system + Bash-compatible permission rules. Not a kernel sandbox, but a first-class shell path rather than a fallback. |  |
 
-Toggle with `/sandbox` in session. Applies to `Bash`/`PowerShell` + child processes only (not to Read/Write/Edit tools). Reduces permission prompts by ~84% according to Anthropic.
+Toggle with `/sandbox` in session. Applies to `Bash`/`PowerShell` + child processes only (not to Read/Write/Edit tools). Anthropic claims this reduces permission prompts by ~84% — note this is a **vendor figure, not an independent benchmark**. Your mileage will vary by workflow.
 
 **Level 1: Git Worktrees (Lightweight)**
 
@@ -727,6 +746,32 @@ export DISABLE_ERROR_REPORTING=1     # No error logging (Sentry)
 
 **Security analogy:** This is like your CCTV retention policy. Consumer = 30-day loop with opt-in archive. Enterprise = 30-day loop, no sharing. ZDR = cameras on but no recording — maximum privacy, but you lose playback capability.
 
+### Regulated Industries: Compliance Notes
+
+Different industries — and different jurisdictions — impose different rules on what you can and cannot automate. The workshop covers HIPAA (US Healthcare) as Bonus Exercise 3.8 because the *mechanism* (regex-based PreToolUse guardrails) generalizes. Here is a quick map of the regulations most relevant to this audience:
+
+| Industry / Region | Key Regulation | Implications for Claude Code |
+|---|---|---|
+| **EU Physical Security** | EN 50131 (intrusion alarms), EN 50132 (CCTV) | Autonomous firmware updates on alarm/access controllers NOT allowed — require human approval gate + audit trail. Avoid Auto-Memory drift on firmware code (Module 3.7). |
+| **EU General** | GDPR | Personal data in access logs / video metadata -> Auto-Memory may pull PII into prompts. Use `--bare` for sensitive runs. ZDR (Enterprise) for production data flows. Disclose Anthropic as a data processor in your DPA. |
+| **US Healthcare** | HIPAA | PHI must not leave your control. ZDR strongly recommended. See Bonus Exercise 3.8. BAA with Anthropic required for production PHI use. |
+| **US Financial** | PCI-DSS | Card data in test fixtures or logs -> block via PreToolUse hook (same pattern as Exercise 3.8) + `WebFetch(domain:...)` allowlist. |
+| **EU Financial** | DORA, MiFID II | Audit trail mandatory. Pair Auto-Memory + transcript export for traceable reasoning. Reject `/autofix-pr` on regulated-system PRs without human review. |
+| **EU Industrial / Critical Infrastructure** | NIS2 Directive | Critical infrastructure operators -> require human approval gates in any automation loop. Document the Claude Code data flow in your NIS2 risk assessment. |
+
+**General principles for regulated work:**
+
+1. **Disable Auto-Memory for sensitive sessions** with `--bare` (Module 3.6). No accidental PII persistence.
+2. **Use ZDR (Zero Data Retention) plans** where the regulatory text demands no retention by the processor (HIPAA + BAA, some GDPR interpretations, ZDR-bound government contracts).
+3. **Audit trail discipline** — Git commits with clear author attribution; never let `/autofix-pr` push to protected branches; archive transcripts for the regulator's retention window.
+4. **Data flow disclosure to your DPO** — Anthropic for Claude (`api.anthropic.com` or Bedrock/Vertex tenant), OpenAI for Codex if you wire it in (Module 3.2 data-flow caveat), Google for NotebookLM. Each is a separate processor relationship.
+5. **Permission rule `WebFetch(domain:...)`** — restrict outbound HTTP to approved domains. Block accidental egress to scraping-aggregator APIs.
+6. **Sandbox network with `sandbox.network.deniedDomains`** — block accidental egress at the sandbox layer (above in this module).
+
+**Caveat:** Each company's interpretation of these regulations varies, and national authorities (BfDI in DE, CNIL in FR, ICO in UK) sometimes diverge from each other. The workshop provides patterns; **your compliance officer interprets them for your context**. When in doubt, opt for the more conservative path — human approval gates, ZDR, `--bare`.
+
+---
+
 ### Known Vulnerabilities (Teaching Examples)
 
 Real CVEs relevant to understanding the security model:
@@ -758,6 +803,11 @@ This is not optional hardening — it is the default design.
 ---
 
 ## Module 3.4: Scheduled Tasks, Loops & Automation
+
+**Learning Objectives:** After this module, you can:
+- Distinguish `/loop`, `/goal`, `/schedule`, and routines and pick the right primitive for time-based vs. condition-driven vs. persistent recurring tasks.
+- Pair every autonomous loop with `--max-budget-usd` and `--max-turns` and use `--worktree` to scope scheduled tasks to a dedicated branch.
+- Explain when to reach for a self-improve loop (with safety mechanisms: quality gates, hooks, max iterations) and recognize the failure modes (cost runaway, false fixes, memory drift).
 
 ### Cronjobs with `/schedule`
 
@@ -897,9 +947,19 @@ The `/agentic-os:run-loop` skill implements **autonomous self-improvement cycles
 - `.agent-memory/quality/` — quality scores over time
 - `.agent-memory/learnings/` — patterns identified across runs
 
-**Validated results:** 7 consecutive runs with zero regressions.
-6 fixes applied in 2 iterations in one documented session.
-Later iterations were faster — the memory system prevented repeated mistakes.
+**Honest assessment:** In internal testing on small Python projects with
+clear test suites, the loop has produced incremental fixes without obvious
+regressions over several iterations — but this is anecdotal, not published
+benchmark data. Don't take it as a guaranteed productivity gain. Treat the
+Self-Improve Loop as **"experimental tool, useful when carefully bounded
+with budget caps and quality gates."**
+
+**What can go wrong with Self-Improve Loops:**
+
+- **Cost runaway** — without `--max-budget-usd`, a stuck loop can burn $50+ in an hour
+- **False fixes** — Claude can "fix" a test by removing the assertion. Pair with strict pre-commit hooks.
+- **Memory drift** — the memory system can persist wrong conclusions; periodic cleanup needed
+- **Over-confidence in small samples** — a handful of successful runs on toy code does not generalize to production
 
 **Security analogy:** Your access control system runs overnight diagnostics.
 It detects a door reader responding 300ms slower than baseline.
@@ -910,9 +970,23 @@ It logs everything.
 It continues patrol.
 No human involvement.  Full audit trail.
 
+> **Hinweis — Branchen-Realitaet:** In regulierten Physical-Security-Systemen
+> (EN 50131 fuer Einbruch-/Ueberfallmeldeanlagen) ist autonomes Firmware-Update
+> auf Tuer-Controllern **nicht** zulaessig — Change-Management mit Audit-Trail,
+> oft physische Anwesenheit eines Technikers und Replay-Tests sind Pflicht.
+> Dieses Beispiel illustriert die Self-Improve-Mechanik von Claude Code, nicht
+> die Realitaet konformer Sicherheitsanlagen. Fuer Code-Repos und CI/CD gilt
+> die Analogie weiterhin; fuer echte Hardware-Endpunkte waere ein
+> Approval-Schritt (Mechanism "Human review gates" oben) Pflicht.
+
 ---
 
 ## Module 3.5: Telegram Bridge, Inception & Worktree Isolation
+
+**Learning Objectives:** After this module, you can:
+- Decide between the built-in mobile workflow (`claude remote-control`, `/teleport`, `--teleport`) and a custom Telegram Bridge based on multi-user, audit, and surface requirements.
+- Pick the right isolation level (worktree / Docker via Inception / remote VM) for a given task and configure `worktree.baseRef` and `--tmux` for multi-agent visibility.
+- Wire up `PushNotification` and Channels (research preview) to receive task completions without polling, and explain when to reach for the official API versus a custom bridge.
 
 ### Built-in Mobile Workflow — `claude remote-control` + `/teleport`
 
@@ -941,22 +1015,23 @@ You can also invoke this from within a running session:
 
 ---
 
-### Telegram Bridge — Claude in Your Pocket (Custom)
+### Telegram Bridge — Group-Chat Coordination (Custom)
 
 > **:wrench: Custom Component:** The Telegram Bridge described below is a workshop teaching example. For most personal mobile use-cases, `claude remote-control` (above) is the simpler path.
 
 1. Send a Telegram message: "Run a security audit on the checkout service"
 2. The bridge receives it and dispatches a Claude Code task
 3. Claude executes the full workflow — can spawn multiple agents, run scans, write reports
-4. Results arrive in your Telegram chat
+4. Results arrive in the Telegram chat
 
-**Why this matters:**
-- Security incident at 2am?  Trigger a full investigation from your phone without opening a laptop
-- On call?  Claude monitors and reports while you are in transit
-- Full remote SOC access to your automated workflow — from your pocket
-- Multi-user / group-chat — multiple operators can dispatch and observe; per-user audit trail
+**When this pattern is worth the custom build:**
+- Multi-user / group-chat coordination — multiple operators can dispatch and observe, with per-user audit trail
+- On-call rotation that already lives in a Telegram channel — keep the existing surface instead of adding a second one
+- Cases where the official `remote-control` surfaces (claude.ai web, iOS app) don't fit the team's existing workflow
 
-**`PushNotification` Tool** — When your task completes, you do not need to keep checking. The built-in `PushNotification` tool sends a desktop or phone push: "Build done. 3 PRs ready for review." Pair this with long-running background agents so you find out the moment something needs attention.
+For single-user "drive my laptop from my phone" scenarios, `claude remote-control` (above) covers the same need without the bridge service.
+
+**`PushNotification` Tool** — A built-in tool that can emit a desktop or phone push when a task completes (for example, "Build done. 3 PRs ready for review."). Pair it with long-running background agents when you want a notification on completion instead of polling the session.
 
 ---
 
@@ -1031,10 +1106,10 @@ Each `--tmux` invocation drops into a labeled pane inside the current tmux windo
 ### The Full Architecture
 
 ```
-You (Phone / Telegram)
+You (CLI / claude.ai web / iOS app  --  optional: Telegram bridge)
     |
     v
-Telegram Bridge
+Channel: claude remote-control (default)  --or--  :wrench: Telegram Bridge
     |
     v
 Claude Code -- Orchestrator
@@ -1078,7 +1153,7 @@ Read-only           Read+Write       Write only
 Orchestrator aggregates all results
          |
          v
-Report sent to Telegram
+Report returned on the same channel (remote-control surface, or Telegram chat if bridged)
 ```
 
 Every piece of this architecture exists and works today — though several components
@@ -1098,7 +1173,7 @@ out-of-the-box Claude Code features.
 | Telegram Bridge | Remote SOC access from mobile device |
 | Devil's Advocate Swarms | Automated pentest with built-in tribunal |
 | Quality Gates | Compliance checklist before sign-off |
-| Self-Improve Loop | Continuous autonomous security hardening |
+| Self-Improve Loop | Continuous autonomous security hardening (note: for code/CI; in regulated PhySec systems per EN 50131 autonomous endpoint patching is not allowed) |
 | Scheduled Tasks | Automated patrol routes |
 | Hooks | Standing orders requiring authorization |
 | Agent memory | Incident logs and after-action reports |
@@ -1112,11 +1187,16 @@ It isolates risky work.
 It runs adversarial tests against itself.
 It patches confirmed findings.
 It keeps a full audit trail.
-It reports to you from your phone, at 2am, while you are asleep.
+It surfaces findings on whichever channel you have wired up — terminal, web, push notification, or a custom bridge.
 
 ---
 
 ## Module 3.6: CI/CD & Headless Mode
+
+**Learning Objectives:** After this module, you can:
+- Run Claude headlessly with `claude -p`, `--output-format json`, and `--json-schema` to build deterministic, machine-parseable pipeline stages.
+- Set up CI authentication with `claude setup-token` and combine `--max-budget-usd`, `--max-turns`, and `--bare` to bound cost and behavior for unattended runs.
+- Build a complete pre-commit hook or GitHub Actions workflow that uses Claude Code as a pipeline stage, and recognize the common CI failure patterns (token expiry, missing budget cap, interactive-mode hang).
 
 ### Overview
 
@@ -1260,6 +1340,16 @@ Workflow:
 
 > **Safety note:** Use `/autofix-pr` for **test and lint failures**, not for production-deploy failures. A failing deploy step is signal that needs human judgement, not autoreply.
 
+> **When to use `/autofix-pr`:**
+> - **Test failures, lint failures, formatting issues** — low-risk fixes
+> - **Doc typos, missing imports** — clearly mechanical
+> - **NEVER for production-deploy failures** — those need human review
+> - **NEVER for security/auth/crypto code** — even a "lint fix" could introduce a bug
+> - **NEVER in repos where main branch deploys to prod automatically**
+>
+> Pair `/autofix-pr` with branch protection rules so the auto-pushed commit still needs
+> human PR approval before merge.
+
 ---
 
 ### GitHub Actions — A Complete Pattern
@@ -1304,6 +1394,95 @@ jobs:
 ```
 
 Every building block from this module is in there: `--bare` for a clean run, JSON output for downstream parsing, budget cap and turn cap as the safety net, OAuth secret for auth.
+
+---
+
+### GitLab CI / Self-Hosted Runners
+
+Mid-sized industrial companies often run **GitLab self-hosted** with private runners
+(no direct Internet access from the runner). Here is the equivalent `.gitlab-ci.yml`
+for a Claude Code MR review:
+
+```yaml
+# .gitlab-ci.yml
+stages:
+  - review
+
+claude-review:
+  stage: review
+  image: alpine:latest
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  before_script:
+    # Setup Claude Code in a minimal container
+    - apk add --no-cache curl git bash
+    - curl -fsSL https://code.claude.com/install.sh | bash
+    - export PATH="$HOME/.claude/bin:$PATH"
+  script:
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    - git diff origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME...HEAD > /tmp/diff.patch
+    - |
+      claude --bare -p "Review this MR diff. Find bugs, security issues. Output JSON." \
+        --output-format json \
+        --max-budget-usd 0.50 \
+        --max-turns 3 \
+        < /tmp/diff.patch \
+        > /tmp/review.json
+    - cat /tmp/review.json
+  variables:
+    ANTHROPIC_API_KEY: $ANTHROPIC_API_KEY
+```
+
+Same four building blocks as the GitHub Actions example — only the surface (GitLab YAML, MR-specific env vars `CI_MERGE_REQUEST_TARGET_BRANCH_NAME`, `CI_PIPELINE_SOURCE`) changes.
+
+---
+
+### Self-Hosted Runner Without Internet
+
+If your runner has **no direct Internet access** (common in regulated industries — utilities, defense subcontractors, hospitals), `claude` cannot reach `api.anthropic.com` directly. Three patterns cover this case:
+
+**Option A: HTTP Proxy** — Configure Claude Code to use a corporate proxy:
+
+```bash
+export HTTPS_PROXY="http://proxy.corp.example:8080"
+export HTTP_PROXY="http://proxy.corp.example:8080"
+claude -p "Review this diff" < diff.patch
+```
+
+The proxy needs an outbound rule for `api.anthropic.com`. Most enterprise proxies already log all traffic — pair this with a `--metadata` tag (Module 3.6 Monitoring section) so corporate SOC can correlate Claude calls with runner jobs.
+
+**Option B: AWS Bedrock in VPC** — Use Claude via Bedrock inside your VPC:
+
+```bash
+export CLAUDE_CODE_USE_BEDROCK=1
+export AWS_REGION=eu-central-1
+export AWS_PROFILE=ci-bedrock-role
+claude -p "Review this diff" < diff.patch
+```
+
+No direct call to `api.anthropic.com` — all traffic stays in your VPC, signed with AWS SigV4. The runner needs IAM permissions for `bedrock:InvokeModel` on the Anthropic model IDs only.
+
+**Option C: Vertex AI in GCP** — Same pattern via Google Cloud Vertex AI:
+
+```bash
+export CLAUDE_CODE_USE_VERTEX=1
+export CLOUD_ML_REGION=europe-west1
+export ANTHROPIC_VERTEX_PROJECT_ID=my-corp-project
+claude -p "Review this diff" < diff.patch
+```
+
+Equivalent isolation — Claude runs inside your GCP project boundary. Pick Bedrock vs. Vertex by where the rest of your stack already lives; both bypass the public Anthropic endpoint.
+
+---
+
+### Token Rotation for Long-Lived Runners
+
+`claude setup-token` generates a 1-year OAuth token. For long-lived CI runners (build farms, on-prem GitLab runners, Jenkins agents) the rotation discipline matters:
+
+- **Rotate the token at least quarterly** — never let a runner-resident token live to its 1-year expiry undetected.
+- **Store in CI provider's secret store** (GitLab CI/CD Variables marked **Protected** + **Masked**; GitHub Actions Secrets; Jenkins Credentials with masked logging).
+- **Revoke old tokens** via `claude auth status` -> "manage tokens" — leftover tokens from previous CI integrations are a long-tail risk surface.
+- **For high-security environments:** use Bedrock or Vertex with **short-lived AWS/GCP credentials via OIDC federation**. The runner gets a 1-hour STS token from the CI provider's identity, calls Bedrock with it, never carries a long-lived Anthropic token. Token-leak blast radius drops from 1 year to 1 hour.
 
 ---
 
@@ -1370,6 +1549,11 @@ A short checklist of mistakes that look fine in a dev environment and bite hard 
 ---
 
 ## Module 3.7: Troubleshooting & Debugging Claude Code
+
+**Learning Objectives:** After this module, you can:
+- Use `/debug`, `--verbose`, and `/doctor` to diagnose Claude Code issues at the right level (investigative / descriptive / prescriptive).
+- Recognize the 4 classic hook failure patterns (overly broad matcher, non-executable script, non-zero exit interpreted as block, script hang) and the 4 classic skill failures (vague description, model-invocation disabled, paths filter mismatch, YAML parse error) and apply the diagnosis sequence for each.
+- Walk through the 8-step diagnosis checklist (CLAUDE.md → skills → plugins → hooks → MCP → permissions → `--verbose` → `/doctor`) in order without skipping steps.
 
 ### Overview
 

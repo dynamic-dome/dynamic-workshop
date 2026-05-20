@@ -13,7 +13,7 @@
 
 ## Session 1 — Foundations (~3h)
 
-**Mission:** Was ist Claude Code und warum ist es anders als ChatGPT?
+**Mission:** Was ist Claude Code, wie steuere ich es — und was kostet es?
 
 | Zeit | Komponente | Inhalt |
 |---|---|---|
@@ -22,13 +22,14 @@
 | 0:30 – 0:40 | Demo 1.1 | First Contact — Log-Parser in 3 Min |
 | 0:40 – 0:55 | Modul 1.2 | Context & Memory — CLAUDE.md, Auto-Memory, Rules |
 | 0:55 – 1:05 | Demo 1.2 | CLAUDE.md anlegen, /compact zeigen |
-| 1:05 – 1:25 | Exercises 1.1 + 1.2 | Hands-on |
-| 1:25 – 1:35 | **Pause** | |
-| 1:35 – 1:50 | Modul 1.3 | Effective Prompting — Vager vs. präziser Prompt |
-| 1:50 – 2:00 | Demo 1.3 | Good vs Bad Prompting Side-by-Side |
-| 2:00 – 2:15 | Modul 1.4 | Git Integration & Worktrees |
-| 2:15 – 2:25 | Demo 1.4 | Branch → Feature → Commit → PR Flow |
-| 2:25 – 2:50 | Exercises 1.3 + 1.4 | Hands-on |
+| 1:05 – 1:20 | Exercises 1.1 + 1.2 | Hands-on |
+| 1:20 – 1:30 | **Pause** | |
+| 1:30 – 1:45 | Modul 1.3 | Effective Prompting — Vager vs. präziser Prompt |
+| 1:45 – 1:55 | Demo 1.3 | Good vs Bad Prompting Side-by-Side |
+| 1:55 – 2:10 | Modul 1.4 | Git Integration & Worktrees |
+| 2:10 – 2:20 | Demo 1.4 | Branch → Feature → Commit → PR Flow |
+| 2:20 – 2:35 | Modul 1.5 (NEU) | Cost Engineering & Effort Management — `/cost`, `/usage`, `/insights`, Effort-Level als Kosten-Hebel |
+| 2:35 – 2:50 | Exercises 1.3 / 1.4 (pick 1) | Hands-on |
 | 2:50 – 3:00 | Q&A + Ausblick Session 2 | |
 
 ## Session 2 — Ecosystem (~3h)
@@ -102,6 +103,35 @@ Pro Session ~10-15 Min Pause nach ~90 Min. Zusätzlich: Q&A zwischen Modulen.
 | 1 | Laptop, claude installiert, GitHub-Account | `resources/prerequisites.md` durchgearbeitet |
 | 2 | Session-1-Setup + Playwright-Browser, NotebookLM-Account | Plugin-Bundle installiert (siehe `prerequisites.md` Sektion "Workshop-Plugins") |
 | 3 | Session-2-Setup + Codex-CLI (falls verfügbar) | Workshop-Playground geklont |
+
+---
+
+## Estimated Cost to Replicate
+
+If you replicate the workshop entirely (all demos + all required exercises) on your own
+Claude Code account, expect these costs per block:
+
+| Block | Activities | Estimated Cost |
+|---|---|---:|
+| Block 1 — Foundations | Demos 1.1-1.5 + 4 Exercises | $1-3 |
+| Block 2 — Ecosystem | Demos 2.1-2.5 + 2.2b + 3 Exercises | $5-15 |
+| Block 3 — Advanced | Demos 3.1-3.7 + Capstone Exercise + Self-Improve Loop | $15-50 |
+| **Workshop total** | | **$20-70** |
+
+**Drivers of the high end:**
+- Running `/agentic-os:run-loop` for multiple iterations in Demo 3.4 (Self-Improve)
+- Codex Swarm parallel agents in Demo 3.2
+- Multi-agent orchestration in Demo 3.1 + Capstone Exercise
+
+**To stay on the low end:**
+- Use `claude --bare -p` for batch demos (skip overhead)
+- Set `--max-budget-usd 0.50` and `--max-turns 5` for autonomous loops
+- Use Haiku for Demo 1.5 baseline runs
+
+**For workshop moderators:** Bring a Pro/Max account with at least $50 of budget for safe live execution.
+
+**For self-learners:** Pro plan ($20/month) is enough for non-multi-agent demos.
+A pay-as-you-go API key is recommended for Self-Improve Loop and Codex Swarm experimentation.
 
 ---
 

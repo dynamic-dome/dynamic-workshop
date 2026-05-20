@@ -1,7 +1,7 @@
 # Claude Code Workshop
 
 > Praxisnaher Workshop fuer Entwickler, die Claude Code produktiv einsetzen wollen.
-> 3 Sessions, 14 Module (4+5+5), demo-lastig mit optionalen Hands-on-Uebungen.
+> 3 Sessions, 17 Module (Block 1: 5, Block 2: 5, Block 3: 7), demo-lastig mit optionalen Hands-on-Uebungen.
 
 ---
 
@@ -50,6 +50,7 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 | **1.2** | Context & Memory | CLAUDE.md anlegen, `/compact` + `/cost` zeigen |
 | **1.3** | Effective Prompting | Vager vs. praeziser Prompt Side-by-Side |
 | **1.4** | Git Integration | Branch → Feature → Commit → PR in einem Flow |
+| **1.5** | Cost Engineering & Effort Management | `/cost`, `/usage`, `/insights` und Effort-Level als Kosten-Hebel |
 
 ### Session 2 — Ecosystem (~3h)
 
@@ -65,7 +66,7 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 
 ### Session 3 — Advanced (~3h)
 
-> "Jetzt wird's wild."
+> Multi-Agent-Workflows, Security, Automation, CI/CD und Troubleshooting.
 
 | Modul | Thema | Highlight-Demo |
 |-------|-------|----------------|
@@ -73,7 +74,9 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 | **3.2** | Multi-Model Pipelines | Codex Swarm baut CLI-Tool |
 | **3.3** | Security & Adversarial | Devil's Advocate Swarm auf vulnerablem Code |
 | **3.4** | Automation | Self-Improve Loop: Vorher/Nachher |
-| **3.5** | Full Stack Architecture | Gruppen-Discussion: Design your Workflow |
+| **3.6** | CI/CD & Headless Mode | `claude -p` mit `--output-format json` als Pipeline-Stage |
+| **3.7** | Troubleshooting & Debugging | `/debug`, `/doctor`, `claude --verbose` Layer-fuer-Layer |
+| **3.5** | Full Stack Architecture | Gruppen-Discussion: Design your Workflow (Capstone) |
 
 Jeder Block hat passende Dateien unter `resources/modules/`, `resources/demos/` und `resources/exercises/`.
 
@@ -123,7 +126,7 @@ Dieses Repo ist gleichzeitig ein Claude-Code-Plugin mit zwei Modi:
 - **`/workshop learn 1.1`** — Lern-Modus: Interaktive Erklaerungen mit Verifikation
 
 **Installation:** Repo klonen, dann in Claude Code als lokales Plugin einbinden.
-Modulnummern: `1.1`–`1.4`, `2.1`–`2.5`, `3.1`–`3.5`
+Modulnummern: `1.1`–`1.5`, `2.1`–`2.5`, `3.1`–`3.7`
 
 ---
 

@@ -8,6 +8,11 @@
 
 ## Module 1.1: What is Claude Code?
 
+**Learning Objectives:** After this module, you can:
+- Distinguish between Claude Code's surfaces (CLI, Desktop App, IDE Extension, Web App, iOS App) and pick the right one for a given workflow.
+- Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies and which restrictions cloud sessions impose.
+- Choose the right model (Opus 4.7 / Sonnet 4.6 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth.
+
 ### Overview
 
 Claude Code is not a chat interface. It is a command-line tool that gives an AI agent full, active access to your development environment. Understanding the distinction between Claude's different interfaces is the first mental model to establish.
@@ -36,9 +41,9 @@ Installed as a terminal command (`claude`). When you run it, you get an interact
 
 This is not a chat interface. This is an agent operating in your environment.
 
-**3. Desktop App & Web App**
+**3. Desktop App**
 
-Claude Code is also available as a **Desktop App** (Mac/Windows) and a **Web App** at claude.ai/code. Both provide the same agent capabilities as the CLI — file access, command execution, git integration — but with a graphical interface. Useful for people who prefer a GUI over a terminal.
+Claude Code is also available as a **Desktop App** (Mac/Windows). It provides the same agent capabilities as the CLI — file access, command execution, git integration — but with a graphical interface on top of your local machine. Useful for people who prefer a GUI over a terminal. (The cloud-hosted Web App at claude.ai/code is covered separately in surface 5.)
 
 **4. IDE Extensions (VS Code, JetBrains)**
 
@@ -82,9 +87,9 @@ Same expert, but now they have a visitor badge and an escort has walked them thr
 
 Capability: reads your files, writes your files, runs your commands, commits your code, creates your branches.
 
-**Desktop/Web App = Consultant in Your Office with a Nice Desk**
+**Desktop App = Consultant in Your Office with a Nice Desk**
 
-Same expert, same badge access, but now sitting at a proper desk with a monitor instead of standing at a terminal. The work is the same — file access, commands, git. The interface is just more comfortable. Some consultants prefer a standing desk (CLI), others prefer a chair (Desktop App).
+Same expert, same badge access, but now sitting at a proper desk with a monitor instead of standing at a terminal. The work is the same — file access, commands, git. The interface is just more comfortable. Some consultants prefer a standing desk (CLI), others prefer a chair (Desktop App). (The cloud-hosted Web App + iOS App map onto a different analogy — "Consultant Reachable from the Road" — and live on Anthropic's infrastructure.)
 
 Capability: identical to CLI — different wrapper, same engine.
 
@@ -138,7 +143,7 @@ Claude Code works through **tools** — each capability has a specific tool name
 | `LSP` | Code intelligence via Language Server | No (setup needed) |
 | `Skill` | Invoke a skill | Yes |
 | `Agent` | Spawn a subagent | No |
-| `Monitor` | Background-watch logs, PRs, or files and react in the current session | Yes |
+| `Monitor` | Background-watch logs, PRs, or files and react in the current session | No |
 | `AskUserQuestion` | Multiple-choice question UI for interactive skills/agents | No |
 | `TaskCreate` / `TaskList` / `TaskUpdate` | Task management (replaces the legacy `TodoWrite` tool) | No |
 
@@ -165,9 +170,9 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 - Check spend: `/cost` shows token usage and cost for the current session
 - Check context: `/context` visualizes how much of the context window is used
 
-**Cost guidance:** Average ~$6/dev/day with Sonnet 4.6. Roughly $100-200/month per developer (varies heavily with usage). Reduce costs with: Skills instead of long CLAUDE.md, Subagents for isolation, `/compact` proactively, Sonnet for routine work, Haiku for bulk operations.
-
 **Rule of thumb:** Start with Opus for planning and architecture. Switch to Sonnet for implementation. Use Haiku for bulk reads and simple tasks. Use `/cost` regularly to stay aware of spend.
+
+> Detailed pricing per million tokens, effort multipliers, and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth.
 
 ---
 
@@ -204,7 +209,7 @@ Claude Code has a built-in permission system that controls which tools it can us
 
 ### What Claude Code Cannot Do
 
-- **Access your screen directly**: It cannot see your GUI, your browser, your monitor display. Only what it can read from the filesystem or run as commands. *(Note: Since March 2026, Computer Use allows Claude to control the desktop on macOS — mouse, keyboard, screenshots. This is a separate feature and not enabled by default.)*
+- **Access your screen directly**: It cannot see your GUI, your browser, your monitor display. Only what it can read from the filesystem or run as commands. *(Note: Since March 2026, Computer Use allows Claude to control the desktop on macOS, Windows, and Linux — mouse, keyboard, screenshots. This is a separate feature and not enabled by default.)*
 - **Run persistent services**: It can start a server but does not maintain background processes between sessions.
 - **Access private networks without configuration**: VPN, internal APIs, on-prem systems require explicit MCP configuration or tunneling.
 - **Make production decisions without approval**: Best practice is always human approval for anything touching production. Claude Code does not push to production by itself.
@@ -226,6 +231,11 @@ Claude Code can read your controller configuration files, understand your protoc
 ---
 
 ## Module 1.2: Context & Memory
+
+**Learning Objectives:** After this module, you can:
+- Explain how the context window fills, when auto-compression triggers, and use `/context` and `/compact` to manage it deliberately.
+- Decide where each piece of project knowledge belongs across the four memory layers (`CLAUDE.md`, `CLAUDE.local.md`, `.claude/rules/`, Auto-Memory) and apply the Managed > User > Project precedence.
+- Use `@path` imports, `--add-dir`, and the `InstructionsLoaded` event to debug what is actually loaded into context at session start.
 
 ### Overview
 
@@ -324,6 +334,19 @@ Open `~/.claude/projects/<your-project-hash>/memory/MEMORY.md` in your editor. Y
 The old phrase "Remember that..." or "Note for future sessions that..." still works as an explicit hint — Claude will preserve that note with higher priority. But it is no longer required for memory to accumulate. The system runs whether you ask for it or not.
 
 To opt out of Auto-Memory for a single run, use `claude --bare` (skips Hooks, Skills, Plugins, MCP, and Auto-Memory — useful for short scripted invocations).
+
+> **Privacy Implications:** Auto-Memory persists in `~/.claude/projects/<hash>/memory/`. These
+> notes are loaded into the prompt context at session start — meaning they are sent to Anthropic
+> as part of each session.
+>
+> **What this means:**
+> - **Avoid sensitive content** in Auto-Memory: API keys, credentials, customer data
+> - **Periodically review** `~/.claude/projects/<hash>/memory/MEMORY.md` to verify what Claude
+>   has written about your work
+> - **Opt-out:** Use `claude --bare` to skip all Auto-Memory loading
+> - **Wipe a project's memory:** `claude project purge <path>` (when available)
+>
+> See Module 3.7 (Troubleshooting) for Auto-Memory drift-detection techniques.
 
 ---
 
@@ -468,6 +491,11 @@ When the context fills, Claude auto-compresses. The compression:
 ---
 
 ## Module 1.3: Effective Prompting
+
+**Learning Objectives:** After this module, you can:
+- Rewrite a vague prompt into a specific work-order-style prompt with explicit scope, context, and success criteria.
+- Apply the Explain / Propose / Refine / Execute pattern and `/plan` mode for multi-file tasks before any code is written.
+- Switch output styles and personas using `/output-styles`, `--append-system-prompt`, and `--system-prompt-file` to match the task at hand.
 
 ### Overview
 
@@ -670,6 +698,11 @@ Forces Claude to articulate its reasoning, making it easier for you to catch mis
 
 ## Module 1.4: Git Integration & Worktrees
 
+**Learning Objectives:** After this module, you can:
+- Drive a complete feature-to-PR workflow (branch, commit, push, PR) from inside a single Claude Code conversation.
+- Distinguish `/diff`, `/rewind`, `/review`, `/autofix-pr`, `/branch`, `/fork`, and `--fork-session` and pick the right one for a given review or experimentation scenario.
+- Set up a git worktree (manual or via `claude --worktree`) and configure `worktree.baseRef` for safe parallel development without stashing.
+
 ### Overview
 
 Claude Code has native git integration. This means you can manage your entire version control workflow — branching, committing, pushing, creating pull requests — without leaving the Claude Code session. This module covers the workflow and introduces git worktrees for parallel development.
@@ -721,6 +754,16 @@ Claude handles the git mechanics. You review the diff and approve.
 3. /autofix-pr      # Claude watches CI from the cloud and pushes fixes
 4. Review final state and merge.
 ```
+
+> **When to use `/autofix-pr`:**
+> - **Test failures, lint failures, formatting issues** — low-risk fixes
+> - **Doc typos, missing imports** — clearly mechanical
+> - **NEVER for production-deploy failures** — those need human review
+> - **NEVER for security/auth/crypto code** — even a "lint fix" could introduce a bug
+> - **NEVER in repos where main branch deploys to prod automatically**
+>
+> Pair `/autofix-pr` with branch protection rules so the auto-pushed commit still needs
+> human PR approval before merge.
 
 `/review` is the **local PR review** — a final sanity-check pass before merge. It differs from `/security-review` (which focuses on the security diff only, covered in Module 3.3): `/review` looks at the full PR scope — correctness, readability, missed edge cases, test coverage, commit-message hygiene. Two invocation styles:
 
@@ -883,6 +926,11 @@ If you have the commit skill installed, `/commit` triggers a structured commit w
 
 ## Module 1.5: Cost Engineering & Effort Management
 
+**Learning Objectives:** After this module, you can:
+- Read `/cost`, `/usage`, and `/insights` and interpret which workflows drive your spend.
+- Apply the Plan / Implement / Review pipeline (Opus + Sonnet + Haiku) and the right effort tier (low/medium/high/xhigh/max) per phase to balance quality and cost.
+- Set `--max-budget-usd` and `--max-turns` as hard guardrails for any unattended or autonomous Claude Code invocation.
+
 ### Overview
 
 Claude Code costs money — per session, per day, per team. If you don't know what you're spending, you don't know how to optimize. This module turns cost into a deliberate variable instead of a surprise at the end of the month.
@@ -909,7 +957,7 @@ Claude Code is the same: Opus is the specialist, Sonnet is the seasoned patrol o
 
 **Rule of thumb:** Output costs roughly 5x input. Write tight prompts with few pre-loaded files — you pay for input too. A 50 KB CLAUDE.md loaded into every session is a recurring tax on every conversation you have with Claude.
 
-(See **Module 1.1** for the full model overview.)
+(See **Module 1.1** for the qualitative model overview — context windows, strengths, use cases.)
 
 ---
 
@@ -928,6 +976,33 @@ Claude Code ships three slash commands for cost observability. Each answers a di
 | `/insights` | Optimization — which workflows are expensive and why? |
 
 A productive habit: glance at `/cost` whenever you've done something non-trivial (a multi-file refactor, a long planning session, a deep-research detour). It takes two seconds and prevents the "wait, I spent how much today?" moment at the end of the week.
+
+---
+
+### Deep Dive: `/insights`
+
+`/insights` is the analytics dashboard. It shows:
+
+| Metric | Use Case |
+|---|---|
+| **Cost per project** | Which projects are expensive? Is the team-wide budget concentrated in one repo? |
+| **Cost per model** | How much went to Opus vs Sonnet vs Haiku? Are you defaulting to Opus too often? |
+| **Cost per tool** | Which tools (Read, Bash, MCP, Subagent) are token-heavy? Often Bash and MCP are surprises. |
+| **Cost per skill** | Which skills accumulate the most cost? Often `/loop` or `/agentic-os:run-loop`. |
+| **Top expensive sessions** | Hourly histogram — when do costs spike? Is it during business hours or autonomous overnight loops? |
+
+**Weekly review pattern:**
+
+Run `/insights week` and check:
+1. Top 3 expensive projects — are they justified?
+2. Top 3 expensive sessions — were they intentional?
+3. Top 3 expensive skills — should any be moved to Haiku?
+
+This is the difference between **measured cost management** and **shocked-at-month-end** discovery.
+
+**For teams:** Many CI/CD environments don't surface `/insights` data. Use the Anthropic Console
+dashboard (https://console.anthropic.com/usage) as the team-aggregate view, and per-developer
+`/insights` for individual breakdowns.
 
 ---
 
@@ -1008,6 +1083,34 @@ The dollar figures here are rough — your numbers will depend heavily on contex
 
 ---
 
+### Prompt Caching — The Biggest Cost Lever
+
+Anthropic caches your prompts for **5 minutes**. If you make the same prompt (or very similar
+ones with the same prefix) within that window, the input tokens are **90% cheaper**.
+
+What this means:
+- Long CLAUDE.md? Loaded once at session-start, cached. Subsequent turns within 5 min hit cache.
+- Subagents spawned in sequence within 5 min reuse cached context.
+- `/loop` runs every 30s for 5 min → all input tokens at 0.1x cost.
+
+How to maximize cache hits:
+1. **Don't switch models mid-session** — each model has its own cache.
+2. **Keep CLAUDE.md stable** — every edit invalidates the cache for that session.
+3. **Group related tasks in one session** — within 5 minutes, common context is cached.
+4. **For batch CI runs:** use `--exclude-dynamic-system-prompt-sections` to maximize cache reuse
+   across runs (this flag is for scripted multi-user workloads).
+
+**What invalidates the cache:**
+- Switching model (`/model opus` ↔ `/model sonnet`)
+- Editing CLAUDE.md or a loaded skill
+- 5-minute idle window (TTL)
+- Different `--system-prompt` between runs
+
+**Order of magnitude:** A 100K-token CLAUDE.md costs $0.50 per fresh load with Sonnet. On a
+cache hit, it costs $0.05. Over 10 sessions/day, that's $4.50 vs $0.50 — meaningful.
+
+---
+
 ### Anti-Patterns
 
 - **Do not** default to Opus + `xhigh` — that's the most expensive combination, rarely justified.
@@ -1023,6 +1126,8 @@ The dollar figures here are rough — your numbers will depend heavily on contex
 - Pick the cheapest model and effort that gets the job done — escalate only when justified.
 - For demanding tasks, the Plan/Implement/Review pipeline (Opus + Sonnet + Haiku) often beats Opus-only on both cost and quality.
 - Always cap unattended sessions with `--max-budget-usd` and `--max-turns`.
+
+See `session-plan.md` for workshop-wide cost estimates.
 
 ---
 
