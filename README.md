@@ -1,7 +1,7 @@
 # Claude Code Workshop
 
 > Praxisnaher Workshop fuer Entwickler, die Claude Code produktiv einsetzen wollen.
-> 3 Sessions, 13 Module, demo-lastig mit optionalen Hands-on-Uebungen.
+> 3 Sessions, 14 Module (4+5+5), demo-lastig mit optionalen Hands-on-Uebungen.
 
 ---
 

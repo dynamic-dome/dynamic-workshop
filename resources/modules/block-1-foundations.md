@@ -42,9 +42,27 @@ Claude Code is also available as a **Desktop App** (Mac/Windows) and a **Web App
 
 **4. IDE Extensions (VS Code, JetBrains)**
 
-An IDE extension that runs Claude Code as a sidecar chat panel in your editor. It has access to your open files and project context, and can make edits directly. Think of it as a senior colleague sitting next to you who can see your screen and make changes when you ask — but it's not passively watching everything you type in real time.
+An IDE extension that runs Claude Code as a sidecar chat panel in your editor. Available as the official **VS Code extension** (installable from the marketplace) and the **JetBrains plugin** (IntelliJ, PyCharm, GoLand, WebStorm, Rider). Both surfaces expose the same agent engine as the CLI, plus a **mode-indicator UI** at the bottom of the prompt box that shows the current permission mode (default / acceptEdits / plan / auto / bypassPermissions) and lets you switch with one click instead of typing `/permissions`.
+
+The extension has access to your open files and project context, and can make edits directly. Think of it as a senior colleague sitting next to you who can see your screen and make changes when you ask — but it's not passively watching everything you type in real time.
 
 This is a pair programming interface.
+
+**5. Web App & iOS App**
+
+Claude Code is also available as a cloud-hosted surface at **claude.ai/code** (Web App) and through the **iOS App** on iPhone/iPad. Both run sessions on Anthropic's infrastructure, connected to a GitHub repository instead of your local filesystem. Useful for: status checks on long-running tasks while away from your laptop, kicking off a PR-review from your phone, and pairing with the same session from multiple devices.
+
+**Important security restriction:** Cloud sessions only support two permission modes — `acceptEdits` and `plan`. The aggressive modes `auto`, `dontAsk`, and `bypassPermissions` are **not available** in the cloud, because cloud sessions don't have a trusted-VM boundary the way your local machine does. If your workflow depends on `auto`, stay local.
+
+### Surface-Switching from Inside a Session
+
+You don't have to pick one surface and stick with it. Claude Code provides three slash commands to teleport an active session between surfaces:
+
+- `/desktop` — push the current conversation to the Desktop App
+- `/mobile` — push the current conversation to the iOS App (requires logged-in mobile session)
+- `/chrome` — open the current conversation in claude.ai/code in your default browser
+
+Use case: you start a long refactor on the CLI, switch to `/mobile` when you leave the office, check in from your phone, and `/chrome` back into the web app when you sit down at a different machine.
 
 ---
 
@@ -114,13 +132,19 @@ Claude Code works through **tools** — each capability has a specific tool name
 | `Write` | Create/overwrite files | Yes |
 | `NotebookEdit` | Edit Jupyter notebooks | Yes |
 | `Bash` | Execute shell commands | Yes |
+| `PowerShell` | Native Windows-shell (no need to wrap commands in `Bash` on Windows) | Yes |
 | `WebSearch` | Search the web | Yes |
 | `WebFetch` | Fetch URL content (isolated context) | Yes |
 | `LSP` | Code intelligence via Language Server | No (setup needed) |
 | `Skill` | Invoke a skill | Yes |
 | `Agent` | Spawn a subagent | No |
+| `Monitor` | Background-watch logs, PRs, or files and react in the current session | Yes |
+| `AskUserQuestion` | Multiple-choice question UI for interactive skills/agents | No |
+| `TaskCreate` / `TaskList` / `TaskUpdate` | Task management (replaces the legacy `TodoWrite` tool) | No |
 
 **Security analogy:** Each tool is like a specific card-access zone. `Read` is the lobby — everyone gets in. `Bash` is the server room — you need explicit clearance. When you configure permissions (allow/deny rules) or hook matchers, you use these exact tool names.
+
+**Note:** `Skill` and `Agent` are introduced here as tool names; they are explored in depth in Block 2.1 (Skills) and Block 3.1 (Agents).
 
 ---
 
@@ -130,14 +154,14 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 
 | Model | Context | Strengths | Cost |
 |-------|---------|-----------|------|
-| **Claude Opus 4.6** | 1M tokens | Deep reasoning, architecture, complex tasks | Highest |
+| **Claude Opus 4.7** (default since 2026-04-16 GA, model ID `claude-opus-4-7`) | 1M tokens | Deepest reasoning, architecture, complex tasks. New `xhigh` effort level. | Highest |
 | **Claude Sonnet 4.6** | 1M tokens (beta) | Fast, capable, everyday coding | Medium |
 | **Claude Haiku 4.5** | 200K tokens | Quick tasks, brainstorming, bulk operations | Lowest |
 
 **How to switch:**
 - At startup: `claude --model sonnet`
 - In session: `/model` command
-- Effort level: `/effort high` for deep thinking, `/effort low` for quick answers
+- Effort level: `/effort <low|medium|high|xhigh|max>` — five tiers ranging from cheap-and-fast to deepest analysis (`xhigh` and `max` unlock the deepest reasoning with Opus 4.7)
 - Check spend: `/cost` shows token usage and cost for the current session
 - Check context: `/context` visualizes how much of the context window is used
 
@@ -158,7 +182,7 @@ Claude Code has a built-in permission system that controls which tools it can us
 | **default** | Only reads allowed, everything else asks for approval | Visitor badge — lobby access only |
 | **acceptEdits** | Reads + file edits allowed, bash still asks | Maintenance badge — utility rooms too |
 | **plan** | Shows full plan upfront, approves all steps at once | Security briefing — approve the mission |
-| **auto** | ML classifier decides risk level (Team/Enterprise only) | Smart badge — system decides per door |
+| **auto** | ML classifier decides risk level (Max-Plan with Opus 4.7, plus Team/Enterprise) | Smart badge — system decides per door |
 | **dontAsk** | Never prompts — relies entirely on allow/deny rules | Automated system — rules only, no guard |
 | **bypassPermissions** | Accepts everything (DANGER — isolated VMs only!) | Master key — no locks at all |
 
@@ -273,20 +297,127 @@ You write the policy once. Claude follows it every session, without being remind
 
 ---
 
-### The Memory System
+### The Memory System: Auto-Memory (Default On)
 
-Beyond CLAUDE.md, Claude Code has a structured memory system stored in `~/.claude/projects/*/memory/`. This allows Claude to remember things you tell it explicitly across sessions.
+Beyond CLAUDE.md, Claude Code has a structured memory system stored in `~/.claude/projects/<project>/memory/`. Since **v2.1.59 this Auto-Memory feature is default on** — you don't have to ask Claude to remember anything. Claude automatically captures notes during a session and writes them to disk: build commands that worked, debugging insights, code-style preferences it observed, project-specific gotchas. The next session starts with that knowledge already in context.
 
-**Memory types:**
+**The file layout:**
+
+- `MEMORY.md` — the **index file**. The first 200 lines (or ~25 KB) are loaded at every session start, before Claude reads anything else.
+- `debugging.md`, `patterns.md`, `commands.md`, etc. — **topic-files** that the index references. These are loaded on-demand when Claude decides they are relevant (similar to how a librarian pulls a specific book off the shelf instead of carrying the entire library).
+
+This split keeps session bootstrapping fast (always-load is bounded) while still giving Claude access to a deep memory archive when needed.
+
+**Memory types Claude tends to capture automatically:**
 
 - **User preferences**: "I prefer German for communication but English for code." Stored and applied every session.
-- **Feedback**: "Last time you refactored the parser this way, it broke the alarm correlation module. Note this for future." Stored as a lesson.
+- **Feedback**: "Last time you refactored the parser this way, it broke the alarm correlation module." Stored as a lesson.
 - **Project context**: "This project uses a custom OSDP variant — see osdp-custom-spec.md for deviations." Stored as reference.
-- **Reference**: Frequently needed but session-specific information like table schemas, API endpoint lists.
+- **Working commands**: build invocations, test runners, deploy steps that succeeded.
 
-**How to create memories:**
-Say: "Remember that..." or "Note for future sessions that..."
-Claude will store this in the memory system and load it at the start of future sessions.
+**Inspect what Claude knows about you:**
+
+Open `~/.claude/projects/<your-project-hash>/memory/MEMORY.md` in your editor. You will likely find that Claude has already started taking notes for you without being told to. On Windows the project-hash directory uses the full path with slashes replaced by hyphens and `C:` rewritten as `C--`.
+
+**Manual triggers still work:**
+
+The old phrase "Remember that..." or "Note for future sessions that..." still works as an explicit hint — Claude will preserve that note with higher priority. But it is no longer required for memory to accumulate. The system runs whether you ask for it or not.
+
+To opt out of Auto-Memory for a single run, use `claude --bare` (skips Hooks, Skills, Plugins, MCP, and Auto-Memory — useful for short scripted invocations).
+
+---
+
+### `.claude/rules/` — Path-Scoped Rules
+
+A monolithic CLAUDE.md works fine for small projects. For larger codebases with different conventions per subdirectory (e.g., `src/api/` follows REST conventions, `src/firmware/` is C with embedded-style rules), Claude Code offers **path-scoped rules** as a fourth memory mechanism alongside `./CLAUDE.md`, `~/.claude/CLAUDE.md`, and Auto-Memory.
+
+Rules live in `.claude/rules/<name>.md` and use **YAML frontmatter** with a `paths` glob to declare when they apply:
+
+```markdown
+---
+paths: ["src/api/**/*.ts"]
+---
+
+# API Conventions
+
+- All endpoints use Zod for input validation.
+- Error responses follow RFC 7807 (Problem Details for HTTP APIs).
+- Never use `any` in request/response types — use `unknown` with a type guard.
+```
+
+This rule will be loaded into context **only** when Claude is working on files matching `src/api/**/*.ts`. When the active task touches `src/firmware/`, the API rules stay quiet and a different `firmware-conventions.md` rule could apply instead.
+
+**When to use rules instead of CLAUDE.md:**
+
+- Codebase >50 files with multiple distinct domains
+- Different test runners, linters, or naming conventions in different subdirectories
+- You want a rule that should *not* leak into Claude's reasoning when working elsewhere
+
+**Security analogy:** Path-scoped rules are zone-specific security policies. The rules for entering the server room are not the same as the rules for the reception lobby — and the guard at reception should not have to memorize server-room policy on every shift. Each zone has its own policy, loaded only when relevant.
+
+---
+
+### `@path` Imports and AGENTS.md Interop
+
+CLAUDE.md supports **modular includes** via the `@path` syntax. Instead of one large file, you can split your project memory across smaller documents and pull them in:
+
+```markdown
+# Project: Access Controller Firmware
+
+@./docs/architecture.md
+@./docs/coding-conventions.md
+@AGENTS.md
+```
+
+At session start, Claude expands these imports inline, so the agent sees a single concatenated document. Edits to the included files are picked up automatically on the next session.
+
+**`@AGENTS.md` is a deliberate cross-pollination feature.** AGENTS.md is the convention used by OpenAI Codex and several other AI coding tools. If your repository already has an AGENTS.md (for cross-tool compatibility), import it into CLAUDE.md with `@AGENTS.md` and both tools read the same source of truth. No copy-paste, no drift.
+
+---
+
+### CLAUDE.local.md — Personal Project Notes
+
+`CLAUDE.local.md` lives in the same directory as `CLAUDE.md` but is **gitignored by convention**. Use it for personal setup notes that should not enter the team repo: your local DB connection string, your preferred branch-naming style, a reminder that your laptop has a different Python version installed. Claude reads it together with the shared CLAUDE.md but it never gets committed.
+
+---
+
+### Managed-Policy CLAUDE.md — Enterprise Location
+
+A fourth, **managed** CLAUDE.md exists for enterprise admins who need to push unconditional policies to every Claude Code installation on a machine — security restrictions, compliance notes, mandatory escalation paths. It lives in an OS-specific system location that requires admin rights to write:
+
+| OS | Path |
+|---|---|
+| macOS | `/Library/Application Support/ClaudeCode/CLAUDE.md` |
+| Windows | `%ProgramData%\ClaudeCode\CLAUDE.md` |
+| Linux | `/etc/claude-code/CLAUDE.md` |
+
+**Precedence on conflict:** `Managed > User > Project`. If the managed policy says "never WebFetch from competitor domains" and a project CLAUDE.md tries to override it, the managed rule wins. This is by design — it gives security teams a hard floor that individual developers cannot lift.
+
+**Typical use cases:** mandatory `DISABLE_TELEMETRY=1`, blanket-deny rules for `Bash(curl *)`, compliance reminders for regulated industries (HIPAA, ISO 27001), forbidden tool-categories. The file is loaded silently on every session start, no opt-in needed.
+
+---
+
+### Multi-Project Setup with `--add-dir`
+
+When a session needs file-access to a second repository (cross-repo refactor, shared library extracted into its own repo), launch with `--add-dir`:
+
+```bash
+claude --add-dir /path/to/other/project
+```
+
+The flagged directory becomes part of Claude's allowed working area for `Read`, `Glob`, `Grep`, `Edit`, and `Write`.
+
+**Default behavior:** Claude **does not** load CLAUDE.md from `--add-dir` paths. Only file-access is granted; the contextual rules of the secondary repo are ignored. This is a deliberate isolation guard — you don't want another project's conventions silently shaping how Claude behaves in your current one.
+
+**Opt-in to CLAUDE.md discovery in additional directories:**
+
+```bash
+CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1 claude --add-dir /path/to/other/project
+```
+
+With the env var set, every `--add-dir` path also contributes its own `CLAUDE.md` (and `.claude/rules/`, AGENTS.md, etc.) to the loaded context.
+
+**Typical use cases:** refactoring a shared utility across two repos, porting a feature from one service to another, working on a frontend repo and the backend repo it consumes in one session.
 
 ---
 
@@ -413,6 +544,47 @@ For complex tasks, a four-step pattern works well:
 
 This pattern prevents the scenario where Claude writes 300 lines of code in a direction you didn't want.
 
+**Effort as a prompting lever.** Some tasks benefit from `/effort xhigh` (architecture decisions, root-cause analysis of subtle bugs, multi-file refactors with side-effects to reason about). Others are better with `/effort low` (boilerplate, typo fixes, format-only edits). Choosing the right effort level is itself part of prompting — paying for `max` reasoning on a one-line typo wastes tokens; using `low` for an architectural choice produces shallow results. Match the effort to the cognitive load of the task.
+
+---
+
+### Output Styles: Persona-Switching for Different Contexts
+
+Claude Code ships a `/output-styles` command that switches the response persona without changing the underlying model. Three built-in styles cover the common cases:
+
+- **Concise** — minimal prose, bullet points, one-line summaries. Best for brainstorming, status checks, and "just give me the answer" sessions.
+- **Detailed** — full explanations, reasoning made explicit, edge cases enumerated. Best for code review, design discussions, and learning sessions.
+- **JSON** — structured machine-readable output (paired well with `claude -p --output-format json` for scripting and CI pipelines).
+
+Switch with `/output-styles detailed`. The change persists for the rest of the session. Use Concise when you are deep in flow, Detailed when reviewing a teammate's PR, JSON when the output will be parsed by another tool.
+
+### `/voice` for Dictation
+
+For long prompts where typing is slow, `/voice [hold|tap|off]` enables voice-to-text dictation. `hold` requires holding a key while speaking, `tap` toggles on/off with a single tap. Useful when describing a multi-step refactor verbally is faster than writing it out.
+
+---
+
+### Persona-Switching via System Prompt
+
+Where `/output-styles` switches the *response shape* (Concise/Detailed/JSON), system-prompt flags let you switch the *role* itself — code-reviewer, documentation-writer, tutor, principal engineer. Two CLI flags handle this:
+
+- `--append-system-prompt "<text>"` — **additive**. Your instruction is appended to Claude Code's existing system prompt. Use this for narrow role-tuning that should layer on top of normal behavior.
+- `--system-prompt-file <path>` — **complete persona from file**. Replaces the additive section entirely with the contents of a Markdown file. Use this for fully-shaped personas with multiple paragraphs of behavioral guidance.
+
+Examples:
+
+```bash
+# Additive: code-review persona that always cites line numbers
+claude --append-system-prompt "Always cite line numbers when referring to code. Never propose changes without showing the affected lines first."
+
+# Full persona from file: tutor mode for onboarding a new teammate
+claude --system-prompt-file ~/.claude/personas/tutor.md
+```
+
+Typical persona files: `code-reviewer.md` (no opinions, only flag-and-question), `docs-writer.md` (always produce Markdown, no code unless asked), `tutor.md` (explain at junior-developer level), `architect.md` (always sketch ADR-style trade-offs before deciding).
+
+**Important — keep this out of CI.** Module 3.6 covers CI/CD scenarios where the system prompt is set programmatically per pipeline step. Don't mix interactive persona-switching with CI prompt-engineering — they live in different mental boxes and overloading the same flags causes accidents.
+
 ---
 
 ### Plan Mode
@@ -532,12 +704,46 @@ Claude handles the git mechanics. You review the diff and approve.
 |---------|-------------|
 | `/diff` | Interactive diff viewer — see all changes at a glance |
 | `/rewind` | Rewind to a checkpoint — undo multiple steps, not just the last edit |
-| `/pr-comments <nr>` | Fetch PR comments from GitHub directly into the session |
 | `/commit` (skill) | Structured commit with conventional format |
+| `/review [pr-num]` | Local PR review — sanity-check the current branch or a specific PR before merging |
+| `/autofix-pr` | Spawns a cloud session that watches your PR's CI and pushes fixes automatically |
+| `/branch` / `/fork` | Branch the *conversation* (not just the git history) — explore option A and option B in parallel without starting a new session |
 
 `/diff` is especially useful before committing — it gives you a visual overview of everything Claude changed, so you can catch issues before they enter your git history.
 
 `/rewind` is the "undo" for multi-step changes. If Claude made 5 edits and the last 3 went wrong, `/rewind` lets you go back to a specific checkpoint without manually reverting each file.
+
+`/autofix-pr` is the modern PR-workflow tool: after you run `gh pr create`, invoke `/autofix-pr` and Claude spawns a web session that monitors the CI checks. If a test fails or the linter complains, Claude pushes a fix commit directly — you don't have to babysit the PR. Example workflow:
+
+```text
+1. Implement feature locally.
+2. gh pr create --title "Add IPv4 validation"
+3. /autofix-pr      # Claude watches CI from the cloud and pushes fixes
+4. Review final state and merge.
+```
+
+`/review` is the **local PR review** — a final sanity-check pass before merge. It differs from `/security-review` (which focuses on the security diff only, covered in Module 3.3): `/review` looks at the full PR scope — correctness, readability, missed edge cases, test coverage, commit-message hygiene. Two invocation styles:
+
+```text
+/review        # reviews the current branch against its base (no PR number needed)
+/review 1234   # reviews PR #1234 explicitly, even if you're not on that branch
+```
+
+Typical placement: after `/autofix-pr` has driven CI green, run `/review` for a last human-readable sanity pass before clicking Merge. The two commands stack — `/autofix-pr` for CI, `/review` for everything CI can't catch.
+
+`/branch` and `/fork` operate on the **conversation tree**, not the git tree. They are the answer to "I want to try approach A *and* approach B without losing context." Combined with git worktrees, you can branch both the conversation and the working tree in parallel for fearless experimentation.
+
+**`--fork-session`** is the session-level sibling of `/branch`: the `claude --fork-session` flag forks the *current* session into a new session-ID, preserving the original. Use it when you want to try something experimental without losing the conversation you're in. Different from `/branch` (which creates a conversation-branch *inside* the same session) — `--fork-session` creates a fully separate session you can later attach back to.
+
+### Resuming a Session at a Specific PR
+
+The `--from-pr <num>` CLI flag resumes a session targeted at a specific pull request:
+
+```bash
+claude --from-pr 1234
+```
+
+This is useful when you come back to a PR a day later, or when a colleague needs to pick up where you left off — the session opens with the PR diff, comments, and review state already loaded as context.
 
 ---
 
@@ -597,6 +803,27 @@ git worktree add ../experiment-async-processing feature/async-experiment
 # ../experiment-async-processing   (experiment branch, isolated)
 ```
 
+### The `--worktree` CLI Flag — One-Step Worktree Sessions
+
+Claude Code can also create a worktree for you in one command, skipping the explicit `git worktree add` step:
+
+```bash
+claude --worktree feature/zone-correlation
+```
+
+This starts a fresh Claude session inside a worktree at `<repo>/.claude/worktrees/feature-zone-correlation/`. No manual directory creation, no `cd`, and the worktree is automatically grouped under the repo's `.claude/` directory so it's easy to clean up later.
+
+### `worktree.baseRef` — From Where Does the Worktree Branch?
+
+By default, `--worktree` branches from your **local HEAD**. If you've been working on something local and unpushed, that work is carried into the worktree (which may or may not be what you want).
+
+In `settings.json` you can set `worktree.baseRef` to control this:
+
+- `worktree.baseRef: "head"` (default) — branch from local HEAD, including unpushed work
+- `worktree.baseRef: "fresh"` — branch from `origin/<default-branch>`, ignoring local state
+
+The `fresh` setting is especially important for **multi-agent worktree setups** in Block 3 — each agent gets a clean starting point that matches what is on the remote, so two parallel agents are not accidentally building on top of each other's uncommitted work.
+
 ---
 
 ### Key Git Commands in Claude Code
@@ -654,6 +881,151 @@ If you have the commit skill installed, `/commit` triggers a structured commit w
 
 ---
 
+## Module 1.5: Cost Engineering & Effort Management
+
+### Overview
+
+Claude Code costs money — per session, per day, per team. If you don't know what you're spending, you don't know how to optimize. This module turns cost into a deliberate variable instead of a surprise at the end of the month.
+
+We've already seen models (Module 1.1), effort levels (Module 1.3), tools, and plan mode. Now: what does all of that actually cost in practice — and how do you keep it under control?
+
+---
+
+### Security Analogy: The Guard Roster
+
+Think of a guarding company that runs a site with mixed staff: a seasoned patrol officer, an apprentice, and a specialist for technical alarms. Each one has a different hourly rate. If you put the specialist on lobby duty all night, you burn budget. If you put the apprentice on the alarm panel during an incident, you don't have the right competence on site. The art is matching the right person to the right shift.
+
+Claude Code is the same: Opus is the specialist, Sonnet is the seasoned patrol officer, Haiku is the apprentice. The art is matching the right model to the right task — and knowing when each one is worth its hourly rate.
+
+---
+
+### Pricing Reference (as of 2026-05)
+
+| Model | Input ($/M tokens) | Output ($/M tokens) | Relative cost |
+|---|---:|---:|---|
+| Claude Opus 4.7 | $5 | $25 | 1x |
+| Claude Sonnet 4.6 | $3 | $15 | ~0.6x |
+| Claude Haiku 4.5 | $1 | $5 | ~0.2x |
+
+**Rule of thumb:** Output costs roughly 5x input. Write tight prompts with few pre-loaded files — you pay for input too. A 50 KB CLAUDE.md loaded into every session is a recurring tax on every conversation you have with Claude.
+
+(See **Module 1.1** for the full model overview.)
+
+---
+
+### Token Tracking — Three Tools
+
+Claude Code ships three slash commands for cost observability. Each answers a different question:
+
+1. **`/cost`** — current session: what have I just spent?
+2. **`/usage`** — daily/weekly view: what did I run this week?
+3. **`/insights`** — analytics: which tools, which models, which sessions were expensive?
+
+| Tool | When to use it |
+|---|---|
+| `/cost` | During a long session — am I still within budget? |
+| `/usage` | Day or week check — did I stay inside my monthly cap? |
+| `/insights` | Optimization — which workflows are expensive and why? |
+
+A productive habit: glance at `/cost` whenever you've done something non-trivial (a multi-file refactor, a long planning session, a deep-research detour). It takes two seconds and prevents the "wait, I spent how much today?" moment at the end of the week.
+
+---
+
+### Effort Levels as a Strategic Lever
+
+Effort levels are not just a quality dial — they are a cost dial. The relative cost numbers below are approximate (effort-multipliers are not officially published as exact ratios) but the order-of-magnitude is real:
+
+| Effort | Use case | Relative cost |
+|---|---|---:|
+| `low` | Typo fixes, single-line refactors, quick code reviews | 0.5x |
+| `medium` (default) | Standard coding, normal refactors | 1x |
+| `high` | Architecture decisions, multi-file refactors | 2x |
+| `xhigh` | Deep analysis, root-cause debugging (Opus 4.7 only) | 4x |
+| `max` | Edge cases, "look at everything" — use sparingly | 6x |
+
+**Best practice:** Default is `medium`. Only escalate to `high` or `xhigh` when you can clearly identify a need for deep reasoning. Otherwise you pay 4x for a 1.2x quality bump.
+
+The reverse is also true: downshifting to `low` for genuinely simple tasks is just as important as upshifting for hard ones. Paying `xhigh` for a one-line typo fix is a small but recurring leak.
+
+---
+
+### Model Choice — The Plan / Implement / Review Pipeline
+
+For demanding tasks, a three-model pipeline often beats a single-model approach on both quality and cost:
+
+| Phase | Model | Effort | Why |
+|---|---|---|---|
+| **Plan** | Opus 4.7 | xhigh | Architecture is the most expensive phase to get wrong — paying for depth here saves you from rewriting later |
+| **Implement** | Sonnet 4.6 | medium | Writing code is routine — Sonnet does it fast and solidly |
+| **Review** | Haiku 4.5 | low | Final check, fast pattern-matching, Haiku is enough |
+
+The cost shape is roughly `1x (plan) + 0.6x (implement) + 0.2x (review) ≈ 1.8x`, often producing better outcomes than Opus-only at the same total spend.
+
+When *not* to use this pipeline: small tasks where the planning phase is the trivial part. A one-file utility doesn't need an Opus architect.
+
+---
+
+### Budget Caps for Autonomous Sessions
+
+When you let Claude run for a long time without supervision (`/loop`, `/goal`, subagents, scheduled routines), cost can escape silently. Two flags act as guardrails:
+
+- `--max-budget-usd 5.00` — hard cap on dollars spent in this `-p` run
+- `--max-turns 20` — turn limit, orthogonal to the dollar cap (catches runaway loops even if each turn is cheap)
+
+Both flags are essential for CI integration and any unattended workflow. They will be revisited in **Module 3.6 (CI/CD & Headless)** in detail.
+
+Example:
+```bash
+claude --max-budget-usd 2.00 --max-turns 10 -p "/loop check deploy status"
+```
+
+If either limit is hit, Claude exits cleanly with a status code you can detect from CI.
+
+---
+
+### Cost-Reduction Tactics
+
+Eight habits that compound over the months:
+
+1. **Skills over a long CLAUDE.md** — Skills load on-demand; CLAUDE.md loads every session.
+2. **Subagents for isolation** — keeps your main context free of side-quest tokens.
+3. **`/compact` proactively** — compress *before* the context fills, with a focus hint so the right detail survives.
+4. **Sonnet for routine work** — only reach for Opus when the task actually rewards depth.
+5. **Haiku for bulk reads** — file inventory, simple filtering, "find me all files matching X."
+6. **Cache reuse** — repeated tasks often land in cache (5-minute TTL on Anthropic's side).
+7. **`--bare` mode** for simple invocations — skips Hook/Skill/Plugin/MCP overhead when you don't need them.
+8. **Tight prompts** — drop unnecessary "explain your reasoning" when the answer is obvious.
+
+---
+
+### Team Rules of Thumb
+
+- **Solo dev, active use:** $5–10 per working day is normal.
+- **Pro Plan:** know your cap, watch the monthly aggregate.
+- **Team:** make `--max-budget-usd` a default in shared scripts; review `/insights` weekly.
+
+The dollar figures here are rough — your numbers will depend heavily on context length, model mix, and how often Claude is left running unattended. The point is that there *is* a number, and you should know it.
+
+---
+
+### Anti-Patterns
+
+- **Do not** default to Opus + `xhigh` — that's the most expensive combination, rarely justified.
+- **Do not** run `/loop` or `/goal` without a budget cap — cost can multiply silently.
+- **Do not** let CLAUDE.md grow without limit — every token is paid in every session forever.
+- **Do not** rationalize ongoing spend with "I've already burned $20 today, may as well keep going." Treat the early stop signal as a feature.
+
+---
+
+### Summary: Module 1.5
+
+- Cost is a deliberate variable. `/cost`, `/usage`, `/insights` are your dashboard.
+- Pick the cheapest model and effort that gets the job done — escalate only when justified.
+- For demanding tasks, the Plan/Implement/Review pipeline (Opus + Sonnet + Haiku) often beats Opus-only on both cost and quality.
+- Always cap unattended sessions with `--max-budget-usd` and `--max-turns`.
+
+---
+
 ### Summary: Block 1 Key Takeaways
 
 1. **Claude Code is an agent, not a chat tool.** It has real access to your filesystem, your git, your commands.
@@ -661,6 +1033,7 @@ If you have the commit skill installed, `/commit` triggers a structured commit w
 3. **Specificity is everything in prompts.** Vague in → vague out. Contractor analogy: write a work order, not a wish.
 4. **Git is built in.** Branch, commit, push, PR — all from conversation.
 5. **Worktrees are your test lab.** Parallel branches, isolated environments, no stashing drama.
+6. **Cost is a deliberate variable.** Model, effort, and budget caps decide what you spend — not the calendar.
 
 ---
 

@@ -13,15 +13,23 @@
 
 | Feature | Status |
 |---------|--------|
-| Subagents (Explore, Plan, Custom) | :white_check_mark: |
+| Built-in Subagents (Explore, Plan, general-purpose) | :white_check_mark: |
+| Custom Subagents | :white_check_mark: |
+| `claude agents` CLI + Background-Sessions | :white_check_mark: |
 | Git Worktrees | :white_check_mark: |
-| `/loop`, Cron, Scheduled Tasks | :white_check_mark: |
+| `/loop`, `/goal`, `/schedule`, Routines | :white_check_mark: |
 | Permission Modes (6 levels) | :white_check_mark: |
+| Protected Paths (unconditional) | :white_check_mark: |
+| `/security-review`, `/review`, `/ultrareview` | :white_check_mark: |
 | OS-Level Sandboxing | :white_check_mark: |
+| `claude remote-control` + `/teleport` | :white_check_mark: |
+| `PushNotification` Tool | :white_check_mark: |
 | Agent Teams | :test_tube: |
+| Channels (MCP-Push) | :test_tube: |
 | Codex Swarm (`multi-model-orchestrator`) | :wrench: |
 | Devil's Advocate Debate Chain | :wrench: |
 | Self-Improve Loop (`agentic-os`) | :wrench: |
+| Telegram Bridge | :wrench: |
 
 ---
 
@@ -85,6 +93,20 @@ The orchestrating Claude stays at the top, aggregating results.
 
 ---
 
+### Built-in Subagents (Ships with Claude Code)
+
+Before defining custom subagents, Claude Code already provides three built-in ones you can invoke directly:
+
+| Built-in | What it does | Typical Use-Case |
+|---|---|---|
+| **Explore** | Read-only scout — maps codebases, finds entry points, builds dependency graphs | "Map this repo before I start refactoring" |
+| **Plan** | Strategic planner — produces multi-step implementation plans without writing code | "Plan how to migrate from Solid to React in 5 stages" |
+| **general-purpose** | Multi-purpose worker — falls back to a balanced toolset when no specialized agent matches | Catch-all when you're not sure which custom agent fits |
+
+Claude routes to these automatically when your prompt matches their job description (e.g., "explore the project structure" → Explore). You can also force one with `Agent(subagent_type="Explore", prompt=...)`. Most workshop demos focus on **custom subagents** below — but knowing the built-ins prevents you from reinventing scouts and planners.
+
+---
+
 ### Agent Definition Anatomy
 
 Agents are defined as YAML frontmatter + body text in `.md` files:
@@ -96,12 +118,14 @@ description: >
   Analyzes codebases to understand structure, dependencies, and patterns.
   Use when you need: project overview, file map, dependency graph, entry points.
   Examples: "explore this project", "what does this codebase do", "map the architecture"
-model: claude-haiku-3-5
+model: haiku
 color: cyan
-allowed_tools:
+tools:
   - Read
   - Glob
   - Grep
+permissionMode: default
+maxTurns: 20
 ---
 
 You are a code exploration specialist.  Your job is to understand, not to change.
@@ -120,10 +144,47 @@ Never modify files.  Never execute code.  Explore only.
 
 - **`description`** — This is how the orchestrator decides *when* to use this agent.
   Write it with trigger phrases and examples.  This is the routing logic.
-- **`model`** — Haiku for quick reads.  Sonnet for analysis.  Opus for architecture decisions.
-- **`allowed_tools`** — **Security through least privilege.**  An explorer has no Write.
-  A reviewer has no Bash.  Lock down to exactly what is needed.
+- **`model`** — Use shorthand `haiku` / `sonnet` / `opus`, or pin to a specific ID like
+  `claude-haiku-4-5-20251001`, `claude-sonnet-4-6`, `claude-opus-4-7`. Haiku for quick reads,
+  Sonnet for analysis, Opus for architecture decisions.
+- **`tools`** — **Security through least privilege.**  An explorer has no Write.
+  A reviewer has no Bash.  Lock down to exactly what is needed. (Field was renamed from
+  `allowed_tools` — old YAML still parses as legacy alias but `tools` is canonical.)
 - **`color`** — Visual differentiation in logs.  Matters for readability during parallel runs.
+
+#### Full Frontmatter Reference (2026 Schema)
+
+| Field | Type | Purpose |
+|---|---|---|
+| `name` | string | Unique agent identifier (used by orchestrator routing) |
+| `description` | string | Trigger description — routing logic. Include examples. |
+| `tools` | list | Allowlist of tools the agent may call |
+| `disallowedTools` | list | Denylist — alternative to `tools`. Useful when "everything except X" is shorter than the allowlist. |
+| `model` | string | `haiku` / `sonnet` / `opus` shorthand or full ID (`claude-opus-4-7`) |
+| `permissionMode` | string | `default` / `acceptEdits` / `plan` / `auto` / `dontAsk` / `bypassPermissions` |
+| `maxTurns` | int | Hard turn limit for this subagent (cost / runaway guard) |
+| `skills` | list | Preload named skills into the subagent's startup context |
+| `mcpServers` | list | Allowlist of MCP servers this subagent may connect to |
+| `hooks` | object | Component-scoped hooks — only fire while this subagent runs |
+| `memory` | string | `user` / `project` / `local` — gives the subagent its own persistent memory directory across sessions |
+| `background` | bool | Always run this subagent as a background session |
+| `isolation` | string | Set to `worktree` to spawn the subagent inside a temporary git worktree |
+| `effort` | string | `low` / `high` / `xhigh` / `max` — reasoning effort cap |
+| `color` | string | `cyan` / `magenta` / `yellow` / ... — log differentiation |
+| `initialPrompt` | string | Auto-submitted first user turn (useful for `background: true` agents) |
+
+**Plugin-Subagent Security Restriction:** Subagents shipped inside a *plugin* have **`hooks`, `mcpServers`, and `permissionMode` silently ignored**. The host system refuses to let a guest plugin escalate its own permission level, attach hooks the user did not opt into, or pull in undisclosed MCP servers. Security analogy: a contractor walking into your facility cannot set their own badge level or rewrite the standing orders. Plugin authors must request elevated capabilities through the install manifest — not through the agent frontmatter.
+
+#### Inline Subagent Definition via `--agents`
+
+For scripted CI pipelines you can skip the file system entirely and define a subagent inline as JSON:
+
+```bash
+claude --agents '[{"name":"reviewer","model":"sonnet","tools":["Read","Grep"],"permissionMode":"default"}]' \
+       -p "Review the latest diff and report any security concerns."
+```
+
+Useful when the CI runner does not own a persistent `.claude/agents/` directory or when you want to keep the subagent definition versioned alongside the workflow YAML.
 
 ---
 
@@ -182,22 +243,15 @@ Tell Claude:
 Claude will use the Agent tool to do exactly that.
 The skill `/agent-orchestrator` automates the full orchestration workflow.
 
-### `/batch` — Parallel Refactoring Across Worktrees
+### `/batch` — Multi-Agent Worktree Use-Case (Recap)
 
-The bundled skill `/batch` is the built-in way to run large-scale parallel changes:
+`/batch` was introduced in Module 2.1 as a bundled skill — fanning a task across isolated worktrees with one subagent per worktree. Here is one concrete multi-agent application:
 
 ```
-/batch migrate all src/ files from Solid to React
+/batch migrate src/components/* from Solid to React, one module per worktree
 ```
 
-What happens:
-1. Claude analyzes the scope and breaks it into independent units
-2. Each unit runs in a **separate git worktree** — isolated file state
-3. Multiple subagents work in parallel, one per worktree
-4. Tests run per worktree to validate each change independently
-5. Results are aggregated into PRs or a summary report
-
-**When to use:** Large refactors, file migrations, bulk changes across many files.
+Five files → five worktrees → five Sonnet subagents in parallel → five PRs at the end. Aggregate runtime: the slowest subagent, not the sum. See Module 2.1 for the full `/batch` mechanics; in Block 3 we treat it as one orchestration primitive among many.
 
 ### `/tasks` — Background Task Management
 
@@ -223,6 +277,48 @@ Each teammate runs as a **separate session** with its own context window. They c
 
 ---
 
+### Background Agents (`claude agents`)
+
+Since v2.1.139 Claude Code ships a dedicated subsystem for **long-running background sessions**: tasks you fire off and walk away from. Build watchers, CI monitors, generation pipelines that run for hours — your laptop lid can close, the session keeps going server-side.
+
+**Starting a background session:**
+
+```bash
+claude --bg "Generate API documentation for every public function in src/api/"
+claude --bg --from-pr 1234     # Resume an open PR review in the background
+```
+
+The `--bg` flag detaches Claude immediately and returns a session ID. You can also detach a running interactive session with `/background` (alias `/bg`).
+
+**The `claude agents` Live-View:**
+
+```bash
+claude agents      # Opens the background-sessions monitor — every active patrol on one screen
+```
+
+From inside the live-view you reach each session with these subcommands:
+
+| Subcommand | What it does |
+|---|---|
+| `claude attach <id>` | Hop into the running session as if it were yours |
+| `claude logs <id>` | Stream stdout/stderr from the session |
+| `claude stop <id>` | End the session gracefully (saves transcript) |
+| `claude respawn <id>` | Restart the session with the same prompt + context |
+| `claude rm <id>` | Remove the session record after it has stopped |
+
+Plus `claude daemon status` for a quick health check of the background-session supervisor itself (helpful when sessions appear stuck).
+
+**Security analogy:** Think of `claude agents` as the **watch-commander's shift roster**. Every patrol that is currently out is one line on the board. You can radio in to any of them (`attach`), pull their bodycam stream (`logs`), recall one (`stop`), send the same patrol out again (`respawn`), or strike a finished entry from the roster (`rm`). The board itself never sleeps — that is what `claude daemon status` checks on.
+
+**Typical use-cases:**
+- **Build watch:** `claude --bg "Watch for npm test failures and propose minimal patches"` — runs until you stop it.
+- **PR babysitter:** `claude --bg --from-pr 1234` — resumes a PR review every time CI re-runs.
+- **Doc generation:** `claude --bg "Generate JSDoc for every function in src/, commit per file"` — runs for hours, you check in via `attach` when convenient.
+
+**Comparison with subagents:** A subagent (via `Agent` tool) is *synchronous* inside one orchestrator's turn. A background agent (via `claude --bg`) is a **standalone session** that outlives your terminal. Pick subagents for fan-out within a task, background agents for "fire and forget for the next 4 hours."
+
+---
+
 ## Module 3.2: Nested Orchestration & Multi-Model Pipelines
 
 ### Different Models, Different Strengths
@@ -236,6 +332,40 @@ Each teammate runs as a **separate session** with its own context window. They c
 
 Key insight: **Codex generates code fast and cheap.  Claude Opus reviews with high judgment.**
 Using both together beats either alone.
+
+---
+
+### Cost Trade-Off — Order-of-Magnitude Multipliers
+
+Use these rough multipliers (per million tokens, relative to Sonnet = 1x) for back-of-envelope planning:
+
+| Model | In/Out (USD per MTok) | Relative Cost | When to reach for it |
+|---|---|---|---|
+| **Opus 4.7** | 5 / 25 | ~3x Sonnet | Planning, architecture review, judgment calls |
+| **Sonnet 4.6** | 3 / 15 | 1x (baseline) | Day-to-day implementation, balanced workhorse |
+| **Haiku 4.5** | 1 / 5 | ~0.2x Sonnet | Bulk reads, classification, low-stakes review |
+
+**Mini-Strategy for a typical Claude → Codex → Claude pipeline:**
+
+- **Plan with Opus** — one expensive call buys a clean spec; bad plans are 10x more costly downstream.
+- **Implement with Sonnet** (or Codex when speed beats determinism) — the bulk of the tokens flow here.
+- **Review with Haiku first**, escalate disagreements to Opus — Haiku catches 80% of issues at ~7% of Opus cost.
+
+A 1000-token spec reviewed by Opus is ~$0.025. The same review by Haiku is ~$0.005. Across 200 PRs per month, that compounds.
+
+---
+
+### Data Flow — What Goes Where?
+
+> **Important for security-sensitive audiences:** A Codex Swarm sends your source code to **OpenAI**, not Anthropic. Anthropic's data policies (Block 3.3 retention table) cover only the Claude side of the pipeline. OpenAI has its own retention and training policies, governed by your OpenAI Codex agreement.
+
+If your codebase is sensitive (customer PII, proprietary firmware, contracted exclusivity), you have three options:
+
+1. **Skip the Codex step** — let Sonnet handle the bulk implementation; cost goes up slightly, data stays inside Anthropic's contract.
+2. **Use a local model** for the Codex slot (Ollama / vLLM with a Code-Llama variant) — same role, no third party.
+3. **Strip sensitive parts before sending** — refactor the prompt so Codex only sees skeleton signatures, not identifiers or business logic.
+
+The orchestration patterns in this module are model-agnostic — the same Plan → Implement → Review pipeline works with any pair of providers.
 
 ---
 
@@ -414,36 +544,135 @@ Runs in minutes.  Integrates into CI/CD pipelines.
 
 ---
 
-### Permission Modes in Detail
+### Permission Modes — Going Deeper
 
-This is the most important security concept for autonomous workflows. The 6 modes form a spectrum from maximum control to maximum autonomy:
+The full 6-mode table was introduced in **Module 1.1** (see that table for the at-a-glance overview). Here we dive into the dimensions that matter for autonomous and CI/CD workflows.
 
-| Mode | What Claude can do without asking | Set via |
-|------|----------------------------------|---------|
-| **default** | Read files only | Default (no flag needed) |
-| **acceptEdits** | Read + edit/write files | `--permission-mode acceptEdits` |
-| **plan** | Shows full plan, user approves once for all steps | `--permission-mode plan` |
-| **auto** | ML classifier auto-approves low-risk actions | `--permission-mode auto` (Team/Enterprise only) |
-| **dontAsk** | Everything allowed by allow/deny rules, no prompts | `--permission-mode dontAsk` |
-| **bypassPermissions** | Everything. Period. | `--dangerously-skip-permissions` |
+#### `auto` Mode — Plan Availability & Restrictions
 
-**auto mode restrictions:** Only available for Team/Enterprise/API accounts, only with Sonnet/Opus 4.6, only via Anthropic API (not Bedrock/Vertex). Not available on Pro/Max consumer plans.
+`auto` is the ML-classifier-driven mode where Claude itself decides which actions to auto-approve based on per-action risk:
 
-**CI/CD pattern:** Use `dontAsk` with strict allow rules:
+- **Max plan (consumer)** — available **with Opus 4.7 only** (other models locked).
+- **Team / Enterprise** — available with Sonnet 4.6, Opus 4.6, and Opus 4.7.
+- **Transport** — Anthropic API only (not yet on Bedrock or Vertex).
+- **Version** — requires Claude Code v2.1.83 or later.
+
+Admins on Team/Enterprise can tighten or loosen `auto` via managed settings — see `autoMode.hard_deny` below for the unconditional block-list.
+
+#### `acceptEdits` — Wider Than It Looks
+
+The Block 1 table summarizes `acceptEdits` as "reads + file edits allowed, bash still asks." That is the conservative version of the truth. In current Claude Code releases, `acceptEdits` also **auto-approves the common filesystem Bash commands** that are functionally equivalent to file edits — within the working directory and any `--add-dir` paths:
+
+| Platform | Auto-approved under `acceptEdits` |
+|---|---|
+| Linux / macOS / WSL | `mkdir`, `touch`, `rm`, `rmdir`, `mv`, `cp`, `sed` (in-place) |
+| Windows (PowerShell) | `Set-Content`, `Add-Content`, `Clear-Content`, `Remove-Item` |
+
+Anything *outside* the working directory still triggers the normal prompt. Network calls (`curl`, `wget`), package managers (`npm install`, `pip`), and arbitrary shell scripts are **not** auto-approved — they still ask.
+
+**Why this matters:** When you cycle into `acceptEdits` for a long refactor, expect Claude to silently `mv` and `rm` files inside the project as part of normal work. That is by design. If your project has a directory layout that should remain stable (generated artifacts, vendored libraries), put it on the deny list explicitly.
+
+#### CI/CD pattern — Headless `dontAsk`
+
+The `dontAsk` mode is the workhorse for CI runners: Claude works through allow/deny rules without ever prompting.
+
 ```bash
-claude -p "run tests and report" \
-  --permission-mode dontAsk \
+claude --permission-mode dontAsk \
   --allowedTools "Read,Glob,Grep,Bash(npm test)" \
-  --output-format json
+  --output-format json \
+  -p "Run the test suite and emit a structured failure report."
 ```
 
-**Security analogy:** Think of it as escalating clearance levels for a building contractor:
-- **default** = Escort required everywhere (ask for each door)
-- **acceptEdits** = Badge for office floors (files ok, commands still ask)
-- **plan** = Security briefing + mission approval (approve the whole plan at once)
-- **auto** = Smart badge system (the system decides per-door based on risk)
-- **dontAsk** = Pre-approved work order (only the rooms on the list)
-- **bypass** = Master key (only inside a sealed test facility!)
+Tips for CI: pair `--permission-mode dontAsk` with `--max-budget-usd` and `--max-turns` as a hard cost/loop cap (see Module 3.4), and use a long-lived OAuth token from `claude setup-token` so the runner never prompts for re-auth.
+
+#### `bypassPermissions` — When You Actually Need It
+
+`bypassPermissions` (via `--dangerously-skip-permissions`) really does mean *everything*. Claude Code refuses to start as root/sudo on Linux/macOS outside a recognized sandbox precisely because this mode is meant for ephemeral throwaway containers. Use it inside Inception/Docker, never on a live workstation.
+
+---
+
+### Protected Paths — What Claude *Refuses* to Touch
+
+Even in `bypassPermissions` Claude Code maintains an **unconditional protection list**. These paths cannot be written to without an explicit override flag, no matter how broad the permission mode:
+
+**Protected Directories:**
+
+- `.git` — your version control state
+- `.vscode`, `.idea`, `.husky` — IDE / git-hook configurations
+- `.claude` — **except** four allowlisted sub-paths: `.claude/commands`, `.claude/agents`, `.claude/skills`, `.claude/worktrees` (these are user-authored content; the rest of `.claude/` is system state)
+
+**Protected Files:**
+
+- `.gitconfig`, `.gitmodules`
+- `.bashrc`, `.zshrc`, `.profile` — your shell startup
+- `.ripgreprc`
+- `.mcp.json`, `.claude.json` — Claude Code's own configuration
+
+**Why this exists:** Even an `auto`-mode classifier that decides "low-risk Bash command" cannot accidentally trigger a `git config` rewrite, a `.bashrc` poison-pill, or a self-modification of `.mcp.json`. The protection is hard-coded in the host process, not enforced via the permission rules.
+
+**Security analogy:** This is the **vault room the building owner cannot enter on their own keycard**. Even the master key has carve-outs for the data center, the safe deposit boxes, and the IT closet. Protected Paths are Claude Code's hardcoded carve-outs from the master-key.
+
+---
+
+### Built-in Code-Review Trio
+
+Three official slash-commands cover the common review surface — before reaching for the custom Devil's Advocate Swarms:
+
+| Command | Where it runs | What it does |
+|---|---|---|
+| **`/security-review`** | Local | Scans the current branch diff for vulnerabilities (injection, auth gaps, supply chain). Same scope as the security-audit skill, but built in. |
+| **`/review [PR]`** | Local | Pulls an open PR (or current branch) and runs a balanced quality review (correctness, style, tests). |
+| **`/ultrareview [PR]`** | Cloud | Spawns a **cloud-based multi-agent review pipeline** (Anthropic-hosted) — multiple reviewers in parallel, consensus aggregation. Anthropic's official answer to the Devil's-Advocate-Swarm pattern. |
+
+**Built-in vs. Custom — Quick comparison:**
+
+| Aspect | Built-in (`/security-review`, `/review`, `/ultrareview`) | Custom (Devil's Advocate Swarms) |
+|---|---|---|
+| Setup | Zero — ships with Claude Code | :wrench: requires custom plugin install |
+| Granularity | Anthropic-tuned defaults | Per-stage agent configuration, model choice, prompts |
+| Cost transparency | Wrapped in `/cost` | Visible per-agent in plugin logs |
+| Audit trail | Built-in transcript | Custom log files in `.agent-memory/` |
+| Best for | "Quick second opinion, low effort" | Tailored audits with domain-specific scanners |
+
+**Recommendation for the workshop audience:** Start with the built-ins (`/security-review` on every branch before merge, `/ultrareview` on high-stakes PRs). Reach for Devil's Advocate Swarms when you need a *specific* combination of scanners, a particular debate model, or domain-tuned prompts.
+
+---
+
+### Permission Rules — Beyond Allow/Deny on Bash
+
+The familiar `Bash(rm *)` pattern is only one rule family. The full permission-rule grammar covers tools, skills, agents, and outbound network reach:
+
+| Rule Pattern | Effect |
+|---|---|
+| `Bash(rm *)` | Allow/deny matching shell invocations |
+| `Skill(<name>)` | Allow or block a named skill (e.g., `Skill(commit)`) |
+| `Skill(<name> *)` | Wildcard for a skill family (`Skill(agentic-os *)`) |
+| `Agent(<agent-type>)` | Block or allow a specific subagent type — useful for managed environments that want to lock down which agents may be invoked |
+| `WebFetch(domain:example.com)` | Restrict outbound web fetches to specific domains (or block specific ones) |
+| `permissions.ask` rule | Always prompts the user — even in `auto` or `dontAsk` mode. The hard-stop override for "this one tool really should be human-confirmed." |
+
+Use these in your project `settings.json` to enforce policy without depending on the user picking the right mode at runtime.
+
+---
+
+### Sandbox-Level Network Hardening
+
+Two settings let you tighten the network surface within sandboxed bash:
+
+- **`sandbox.network.deniedDomains`** — Even if the broader allow-list permits outbound traffic, listed domains are blocked outright. Use-case: "Yes, allow network, but never reach `evil.com` or the legacy on-prem corp endpoint that should be retired."
+- **`autoMode.hard_deny`** — Unconditional block-list for `auto` mode, overrides Claude's classifier. Use-case: "`auto` mode may never touch the production database tooling, regardless of how confidently the classifier says it is safe."
+
+Both live in `settings.json` (project or managed scope) — perfect for Enterprise admins who want to restrict `auto` without disabling it entirely.
+
+---
+
+### Hardening Skill Execution — `disableSkillShellExecution`
+
+Skills support inline shell execution via `` !`command` `` (dynamic context injection — see Module 2.1). In managed/Enterprise environments this can be undesirable: an attacker who can push a skill could trigger shell commands at skill-load time.
+
+Set `disableSkillShellExecution: true` in your managed settings to **disable the `` !`...` `` syntax globally**. Skills continue to work as static prompts; they just lose the dynamic-injection capability. Pair it with `permissions.allow` for explicitly approved skills if you still want some skill autonomy.
+
+---
 
 ### Sandboxing Options
 
@@ -451,15 +680,15 @@ Claude Code offers multiple levels of isolation. Understanding these layers is c
 
 **Level 0: OS-Level Sandbox (Built-in)**
 
-Claude Code has native OS-level sandboxing for the `Bash` tool:
+Claude Code has native OS-level sandboxing for shell tools:
 
-| Platform | Technology | What it restricts |
-|----------|-----------|------------------|
-| macOS | Seatbelt profiles | Filesystem paths, network access |
-| Linux/WSL2 | bubblewrap (bwrap) | Filesystem paths, network access |
-| Windows | (limited) | Relies on permission system |
+| Platform | Tool | Technology | What it restricts |
+|----------|---|-----------|------------------|
+| macOS | `Bash` | Seatbelt profiles | Filesystem paths, network access |
+| Linux/WSL2 | `Bash` | bubblewrap (bwrap) | Filesystem paths, network access |
+| Windows | `PowerShell` | Native PowerShell tool — runs with the host permission system + Bash-compatible permission rules. Not a kernel sandbox, but a first-class shell path rather than a fallback. |  |
 
-Toggle with `/sandbox` in session. Applies to `Bash` + child processes only (not to Read/Write/Edit tools). Reduces permission prompts by ~84% according to Anthropic.
+Toggle with `/sandbox` in session. Applies to `Bash`/`PowerShell` + child processes only (not to Read/Write/Edit tools). Reduces permission prompts by ~84% according to Anthropic.
 
 **Level 1: Git Worktrees (Lightweight)**
 
@@ -503,6 +732,9 @@ export DISABLE_ERROR_REPORTING=1     # No error logging (Sentry)
 Real CVEs relevant to understanding the security model:
 
 - **CVE-2025-53110:** Path traversal in MCP server validation. The `startsWith()` check could be bypassed with `../` sequences. Fixed with strict path normalization. Lesson: never trust simple string matching for path validation.
+
+  > **Currency note (2026-05):** The CVE-2025-53110 record is no longer surfaced as a headline example in the current Claude Code docs in this exact form. The **pattern it teaches** — MCP path validation done by string prefix matching rather than canonicalization — remains directly relevant; see Module 2.4's MCP Security section.
+
 - **Supply chain risk (research paper, March 2026):** Academic analysis of agent skill marketplaces found abandoned repos that could be hijacked, injecting malicious skills into unsuspecting users' environments.
 
 These are excellent teaching examples for your security-focused audience — real-world demonstrations of why the permission system and plugin vetting matter.
@@ -513,11 +745,12 @@ These are excellent teaching examples for your security-focused audience — rea
 
 | Boundary | Mechanism | What It Prevents |
 |---|---|---|
-| Tool permissions | `allowed_tools` in agent definition | Explorer cannot modify files |
+| Tool permissions | `tools` / `disallowedTools` in agent definition | Explorer cannot modify files |
 | Filesystem | Worktree isolation | Agent cannot touch main branch |
+| Path protection | Protected Paths (hardcoded) | `.git`, shell configs, `.mcp.json` cannot be rewritten |
 | OS-level | Docker / Inception | Agent cannot reach host filesystem |
 | Process | Hooks blocking actions | Specific commands blocked entirely |
-| Network | Docker network none flag | Agent cannot make outbound connections |
+| Network | Docker network none + `sandbox.network.deniedDomains` | Agent cannot make outbound connections / cannot reach blocked domains |
 
 The principle of least privilege applies to agents exactly as it applies to user accounts.
 This is not optional hardening — it is the default design.
@@ -560,6 +793,77 @@ Runs the quality gate every 5 minutes.  Useful during active development.
 **Loops vs. Schedules:**
 - **Loops:** live in your terminal, stop when you close the session
 - **Schedules:** persist across sessions, fire even when you are offline
+
+---
+
+### `/goal` — Native Condition-Driven Loops
+
+`/goal` is the **native alternative to `/loop`** for tasks that have a clear stop-condition rather than a fixed interval. Claude works across as many turns as needed until the condition is met.
+
+```
+/goal Tests grün
+/goal All TypeScript errors resolved
+/goal No more TODO comments in src/api/
+```
+
+While running, a live overlay shows **elapsed time / turns used / tokens spent** — you can abort or adjust in flight. Useful when you want autonomous progress *up to a goal*, not just for a fixed duration.
+
+**`/goal` vs `/loop`:**
+
+| | `/loop` | `/goal` |
+|---|---|---|
+| Stop condition | Time-based (interval) or manual stop | Logical condition met |
+| Use-case | "Re-check every 5 min while I work" | "Get to green tests, then stop" |
+| Cost shape | Predictable per interval | Open-ended — pair with `--max-budget-usd` |
+
+---
+
+### Routines — Persistent Scheduled Agents
+
+For recurring tasks that must survive across sessions, **Routines** are the official `/schedule` companion (`code.claude.com/docs/en/routines`). A routine is essentially a saved `/schedule` entry with first-class lifecycle (create, list, pause, resume).
+
+**Typical routine use-cases:**
+
+- **Daily build report** — runs every morning at 06:00, summarizes overnight CI, posts to Slack via MCP.
+- **Nightly codebase audit** — Devil's Advocate Swarm on the diff merged that day.
+- **Weekly dependency review** — `npm audit` + Claude triage of new CVEs.
+
+Routines vs. ad-hoc `/schedule`: `/schedule` creates one entry; routines are the long-lived management surface around them.
+
+---
+
+### `--max-budget-usd` — Safety Net for Autonomous Loops
+
+Both `/loop` and `/agentic-os:run-loop` can burn tokens in a tight cycle if a tool keeps returning failures and Claude keeps retrying. The **hard cost cap** lives at the CLI level:
+
+```bash
+claude --max-budget-usd 5.00 -p "/loop 10m /quality-gate"
+claude --max-budget-usd 2.00 --max-turns 20 -p "/goal Tests grün"
+```
+
+When the cap is hit, Claude stops gracefully and reports the budget exhaustion. Always pair autonomous loops with a budget — it is the difference between a $5 lesson and a $500 surprise.
+
+---
+
+### Worktree-Scoped Scheduled Tasks
+
+Both `/schedule` and `/loop` accept the `--worktree` flag (see Module 3.5 for the worktree mechanics). The scheduled session then runs in its own branch directory — leaving your main working tree completely untouched.
+
+```bash
+# Nightly audit on a dedicated branch; main branch untouched
+claude --worktree audit/nightly --max-budget-usd 1.00 -p "/loop 24h /security-audit"
+
+# Routine that lives entirely on its own branch
+claude --worktree routines/daily-build-report -p "/schedule daily 06:00 ..."
+```
+
+**Use case:** Background-audit loops, scheduled refactoring experiments, or any autonomous job that writes files but should not interrupt your interactive work on `main`. The worktree gives the scheduled session a fresh ref (controlled by `worktree.baseRef`, see Module 3.5), an independent file state, and a clean merge surface.
+
+---
+
+### Channels — Official Push-Inbox into a Live Session
+
+Block 3.5 shows the **Telegram Bridge** as a :wrench: custom pattern: outside world pushes messages into a Claude session. The **official equivalent is Channels** — MCP servers can push messages directly into a running Claude Code session (research-preview status today). Same pattern, no custom bridge code, audit-logged via the MCP layer. We will treat the Telegram Bridge as a teaching example for the pattern, but in production you would reach for Channels first.
 
 ---
 
@@ -610,7 +914,36 @@ No human involvement.  Full audit trail.
 
 ## Module 3.5: Telegram Bridge, Inception & Worktree Isolation
 
-### Telegram Bridge — Claude in Your Pocket
+### Built-in Mobile Workflow — `claude remote-control` + `/teleport`
+
+Before showing the custom Telegram Bridge, look at what Claude Code already provides out-of-the-box for mobile/remote use:
+
+**`claude remote-control`** — A CLI subcommand that lets a remote surface (claude.ai web, the iOS app) **drive a session running on your local terminal**. The web session sends prompts, your local Claude executes them, the output streams back. No custom bridge code needed.
+
+You can also invoke this from within a running session:
+- **`/remote-control`** / **`/rc`** — Toggles remote control on the current session.
+- **`/teleport`** / **`/tp`** — Pulls an existing web session **into your local terminal** (the inverse direction). Useful when you started something on your phone and want to continue at your desk.
+- **`--teleport`** CLI flag — Equivalent at startup time.
+
+**Typical use-case:** You are on the train, your phone has the claude.ai app. You ping the work laptop via `remote-control`: "Run a security audit on the checkout service." The local Claude executes, results stream back to your phone. No Telegram, no bridge process — just the official channel.
+
+**Trade-off vs. Telegram Bridge:**
+
+| Aspect | `claude remote-control` (built-in) | Telegram Bridge (:wrench: custom) |
+|---|---|---|
+| Setup effort | Zero — built in | Telegram bot creation + bridge service + auth wiring |
+| Surfaces | Anthropic-hosted (claude.ai web, iOS app) | Any Telegram client |
+| Multi-user / group | Single-user (your account) | Group chats, multiple senders, audit per sender |
+| Customization | Anthropic's UX | Bot commands, role-based access, custom routing |
+| Best for | "I just want my phone to drive my laptop" | "Our team's on-call rotation messages a SOC bot" |
+
+**Recommendation:** Use `remote-control` for personal mobile workflows. Build a Telegram Bridge only when you genuinely need multi-user routing, group-chat semantics, or audit trails per sender.
+
+---
+
+### Telegram Bridge — Claude in Your Pocket (Custom)
+
+> **:wrench: Custom Component:** The Telegram Bridge described below is a workshop teaching example. For most personal mobile use-cases, `claude remote-control` (above) is the simpler path.
 
 1. Send a Telegram message: "Run a security audit on the checkout service"
 2. The bridge receives it and dispatches a Claude Code task
@@ -621,6 +954,9 @@ No human involvement.  Full audit trail.
 - Security incident at 2am?  Trigger a full investigation from your phone without opening a laptop
 - On call?  Claude monitors and reports while you are in transit
 - Full remote SOC access to your automated workflow — from your pocket
+- Multi-user / group-chat — multiple operators can dispatch and observe; per-user audit trail
+
+**`PushNotification` Tool** — When your task completes, you do not need to keep checking. The built-in `PushNotification` tool sends a desktop or phone push: "Build done. 3 PRs ready for review." Pair this with long-running background agents so you find out the moment something needs attention.
 
 ---
 
@@ -666,6 +1002,29 @@ git worktree remove ../agent-task-1  # Or discard entirely
 - Lightweight — no Docker overhead, instant setup
 - Multiple agents work in parallel on the same repo without conflicts
 - Each agent has its own branch — clean merge or clean discard
+
+#### `worktree.baseRef` — Where the Worktree Branches From
+
+The `worktree.baseRef` setting controls **which ref a new `claude --worktree` branches from**. Two options:
+
+| Value | Behavior | When to use |
+|---|---|---|
+| **`fresh`** (default) | Branches from `origin/<default>` — always the latest pushed mainline | Multi-agent fan-out where all agents must start from identical, fresh state |
+| **`head`** | Branches from your local `HEAD` — your uncommitted intent goes with it | "I'm mid-refactor, spawn a worktree to try an alternative without losing my current state" |
+
+For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in `settings.json` (project scope) or via `--worktree-base-ref` per invocation.
+
+#### `--tmux` — Multi-Agent Visibility in One Screen
+
+When you fan out several worktree subagents, `--tmux` opens each session in its own tmux pane so you can watch them all simultaneously:
+
+```bash
+claude --worktree feature/api-migration --tmux
+claude --worktree feature/db-migration --tmux
+claude --worktree feature/ui-migration --tmux
+```
+
+Each `--tmux` invocation drops into a labeled pane inside the current tmux window — your three migration agents are visible side-by-side, output streams continuously, you can switch focus with the normal tmux bindings. Without `--tmux` you would either juggle three terminals or read logs after the fact. With `--tmux`, the multi-agent run becomes a live cockpit.
 
 ---
 
@@ -754,6 +1113,488 @@ It runs adversarial tests against itself.
 It patches confirmed findings.
 It keeps a full audit trail.
 It reports to you from your phone, at 2am, while you are asleep.
+
+---
+
+## Module 3.6: CI/CD & Headless Mode
+
+### Overview
+
+Up to this point we have used Claude Code interactively — typed prompts, watched output, made decisions in the loop. **This module flips that around: Claude Code as a tool in a pipeline.** Pre-commit hooks, auto-PR reviewers, nightly audit reports, CI gatekeepers. The same model, the same skills, the same agents — but invoked headlessly by a script, with cost caps and structured output instead of a human at the keyboard.
+
+> **Mission hint:** When Claude Code is more than an editor sidekick in your daily work, it is running in CI. This module shows how.
+
+The foundation is four building blocks: **headless invocation (`claude -p`), structured output (`--output-format json`), cost caps (`--max-budget-usd`, `--max-turns`), and CI-grade auth (`claude setup-token`)**. Combine them and Claude becomes a deterministic pipeline stage.
+
+---
+
+### Security Analogy
+
+Think of a physical security operation. **Patrol officers are interactive** — they walk the building, react to what they see, make judgement calls. **The nightly audit is autonomous** — it runs on schedule, follows a fixed protocol, reports exceptions. Both are necessary. Both belong to the same SOC.
+
+Claude Code is the same dual creature: an interactive partner *and* a scriptable tool. CI/CD is the autonomous-audit side of that creature.
+
+---
+
+### Headless Mode — `claude -p`
+
+`claude -p "<prompt>"` runs Claude as a **one-shot command** instead of opening an interactive loop. Default output is plain text on stdout; exit code 0 on success, non-zero on failure.
+
+```bash
+claude -p "Review this diff and suggest improvements" < diff.patch
+```
+
+Typical use-cases:
+
+- **Pre-commit lint helper** — feed the staged diff in, fail the commit if Claude finds issues.
+- **PR description generator** — give Claude the branch diff, generate the PR body.
+- **Nightly audit report** — cron job emits a Markdown summary of changes that day.
+
+The headless mode does not load your interactive transcript — every invocation starts fresh. That is a feature, not a bug: CI runs must be reproducible.
+
+---
+
+### Structured Output — `--output-format json` + `--json-schema`
+
+A CI pipeline that parses free-form prose is brittle. The right pattern is to force Claude's output through a schema:
+
+```bash
+claude -p "Categorize this issue" \
+  --output-format json \
+  --json-schema '{
+    "type":"object",
+    "properties":{
+      "category":{"type":"string","enum":["bug","feature","docs"]},
+      "severity":{"type":"integer","minimum":1,"maximum":5}
+    }
+  }'
+```
+
+The output is JSON that matches the schema — your downstream `jq` / Python / Node script can consume it with confidence. `--output-format` also accepts `text` (default) and `stream-json` (newline-delimited JSON events, useful for live tailing).
+
+**Security analogy:** A patrol report on a clipboard form, not a free-form story. The form forces consistent fields — incident type, severity, location — so the dispatcher can aggregate across patrols.
+
+---
+
+### CI Auth — `claude setup-token`
+
+Interactive `claude` sessions authenticate through a browser OAuth flow. CI runners do not have a browser. The bridge is **`claude setup-token`**:
+
+```bash
+claude setup-token         # interactive once on a workstation
+# generates a long-lived OAuth token (1 year)
+```
+
+Store the token as a CI secret (GitHub Actions Secret, GitLab CI Variable, etc.). At runtime CI exports it as `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_TOKEN`) and `claude -p` picks it up automatically.
+
+> **Security note:** The token grants full Claude Code access for a year. Treat it like an SSH deploy key — never commit it, never log it, rotate on a schedule, revoke if a CI provider is compromised.
+
+---
+
+### Cost Caps — `--max-budget-usd` and `--max-turns`
+
+The single biggest CI risk with autonomous LLMs is a runaway loop: a tool keeps failing, Claude keeps retrying, the bill keeps climbing. Two flags neutralize that risk:
+
+- **`--max-budget-usd 0.50`** — hard dollar cap. Once spend hits the cap, the session exits with a non-zero code. CI fails cleanly instead of bleeding money.
+- **`--max-turns 10`** — turn cap. Useful when budget alone is too coarse (one turn can be a tiny tool call or an expensive reasoning step).
+
+```bash
+claude -p "Generate release notes" --max-budget-usd 0.20 --max-turns 5
+```
+
+The two caps are complementary: budget protects you from expensive *reasoning*, turns protect you from infinite *retry loops*. Set both in CI, always.
+
+**Cross-reference:** Module 3.4 (`/loop`, `/goal`) discusses the same flags as a safety net for autonomous loops in interactive sessions — the CI use-case is the strictest application of that pattern.
+
+---
+
+### `--bare` Mode — Lightweight CI
+
+By default `claude -p` still loads hooks, skills, plugins, MCP servers, and the auto-memory system. For a simple "classify this JSON" call in CI, that is pure overhead. **`--bare` disables all of it:**
+
+```bash
+# Heavy: loads everything
+claude -p "Categorize" --output-format json
+
+# Lightweight: just the model
+claude --bare -p "Categorize" --output-format json
+```
+
+`--bare` gives you:
+
+- **Faster cold-start** — no skill discovery, no MCP handshake.
+- **Deterministic behavior** — no surprise hook intervention.
+- **Lower token use** — no skill descriptions injected into the system prompt.
+
+Use `--bare` for any CI step that does not actually need your custom skills or hooks. Reach for full mode only when the pipeline genuinely depends on a plugin or MCP server.
+
+---
+
+### Persona Override — `--append-system-prompt`, `--system-prompt`, `--system-prompt-file`
+
+CI personas are different from interactive ones — terser, more structured, line-number-aware. Three flags shape that:
+
+- **`--append-system-prompt "Always respond in JSON."`** — appends a hint on top of the default system prompt. Good for small tweaks.
+- **`--system-prompt "<full text>"`** — replaces the system prompt entirely. Total control, but you lose Claude Code's defaults.
+- **`--system-prompt-file <path>`** — same as above but reads from a file. Versioning the persona in git is the recommended pattern.
+
+```bash
+claude -p "Review the diff" \
+  --system-prompt-file ci/personas/strict-reviewer.md \
+  --output-format json
+```
+
+---
+
+### `/autofix-pr` — Claude in the PR Loop
+
+`/autofix-pr` is a slash command that **spawns a background web session watching a pull request's CI**. When CI fails, the background session analyzes the failure, pushes a fix commit, and lets CI re-run.
+
+Workflow:
+
+1. Developer pushes a PR.
+2. CI fails (test broken, lint error, type error).
+3. Developer (or a hook) runs `/autofix-pr`.
+4. Anthropic-hosted session picks up the PR, analyzes the failure, pushes a fix.
+5. CI re-runs.
+
+> **Safety note:** Use `/autofix-pr` for **test and lint failures**, not for production-deploy failures. A failing deploy step is signal that needs human judgement, not autoreply.
+
+---
+
+### GitHub Actions — A Complete Pattern
+
+Putting it all together — a PR reviewer that runs on every pull request:
+
+```yaml
+# .github/workflows/claude-review.yml
+name: Claude PR Review
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Claude Code
+        run: |
+          curl -fsSL https://code.claude.com/install.sh | bash
+
+      - name: Run Review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          git diff origin/main...HEAD > /tmp/diff.patch
+          claude --bare -p "Review this diff. Find bugs, security issues, style issues. Output JSON." \
+            --output-format json \
+            --max-budget-usd 0.50 \
+            --max-turns 3 \
+            < /tmp/diff.patch \
+            > /tmp/review.json
+
+      - name: Post Review as PR Comment
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body "$(jq -r '.summary' /tmp/review.json)"
+```
+
+Every building block from this module is in there: `--bare` for a clean run, JSON output for downstream parsing, budget cap and turn cap as the safety net, OAuth secret for auth.
+
+---
+
+### Pre-Commit Hook — The Local Equivalent
+
+The same headless pattern works locally as a git pre-commit hook (`.git/hooks/pre-commit`):
+
+```bash
+#!/bin/bash
+git diff --cached | claude --bare -p \
+  "Check this staged diff for obvious bugs. Reply 'OK' or list issues." \
+  --max-budget-usd 0.10 \
+  --max-turns 2 \
+  --output-format json
+# Exit non-zero if issues found
+```
+
+Cross-reference: Module 2.2 (Hooks) covers Claude Code's *internal* hook system (PreToolUse, PostToolUse, etc.). The hook above is a **git** hook that *calls* Claude Code from the outside — same word, different layer. Both are legitimate places to invoke Claude in your workflow.
+
+---
+
+### Monitoring CI Costs
+
+`/cost` shows spend for the current interactive session — not aggregated across CI runs. For CI-wide cost visibility you have two paths:
+
+- **Anthropic Console dashboard** — aggregates API spend across all calls under your token.
+- **Custom logging** — pipe `--output-format stream-json` to a log aggregator and parse the `usage` events.
+
+**Tag your CI runs** so the aggregation is meaningful. Pass `--metadata '{"ci_run_id":"<id>","repo":"<name>"}'` and you can later slice spend by repo, by workflow, by PR.
+
+---
+
+### Common Failure Patterns
+
+Things that will go wrong in your first CI Claude integration — and how to fix them:
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `401 Unauthorized` | OAuth token expired or never set | Re-run `claude setup-token`, rotate the CI secret |
+| Unexpected `$10` spend on a single run | Loop without budget cap | Set `--max-budget-usd` and `--max-turns` on **every** CI invocation |
+| Downstream `jq` fails on output | Free-form prose, not JSON | Add `--output-format json` and `--json-schema` |
+| Inconsistent persona across runs | Default system prompt drifts with skills loaded | Use `--bare` plus `--system-prompt-file` for deterministic persona |
+| CI runner stalls waiting for input | Interactive mode invoked instead of `-p` | Always use `claude -p "..."`, never bare `claude` in CI |
+
+---
+
+### Don'ts in CI
+
+A short checklist of mistakes that look fine in a dev environment and bite hard in CI:
+
+- **Do not** use `--dangerously-skip-permissions` on shared CI runners. CI infrastructure is shared — bypassing the permission system can leak secrets across jobs or write to the runner host. Use a sandboxed runner if you need full automation.
+- **Do not** start interactive sessions in CI. `claude` without `-p` waits for stdin and hangs the job.
+- **Do not** echo the API key in CI logs. Run `set +x` before any step that touches `ANTHROPIC_API_KEY`, and mask the secret in your CI provider's UI.
+- **Do not** skip cost caps in autonomous loops. `--max-budget-usd` is one flag — write it on every line.
+
+---
+
+### Cross-References
+
+- **Module 2.2 (Hooks)** — Internal Claude Code hooks vs. external git/CI hooks calling Claude.
+- **Module 3.3 (Security)** — Permission rules and `dontAsk` mode for CI; complements this module's auth/budget story.
+- **Module 3.4 (Scheduling)** — `/loop` and `/goal` use the same `--max-budget-usd` safety net for interactive autonomous loops.
+
+---
+
+## Module 3.7: Troubleshooting & Debugging Claude Code
+
+### Overview
+
+The workshop so far has shown you how to set Claude Code up, extend it with skills, hooks, plugins, and MCP servers, and run it productively. But every real workflow has a second mode: **diagnosis when things do not behave as expected**.
+
+The skill you wrote does not trigger. The hook you registered blocks all your shell commands. The MCP server times out at first contact. The plugin says it loaded — but the skill inside it is invisible.
+
+In every tooling family this debugging phase shows up around day two. Claude Code reaches it faster than most because so much of its configuration is **distributed across files** — `settings.json`, plugin manifests, skill frontmatter, hook scripts, MCP config blocks, auto-memory directories. A single mismatched field or stale cache can make the whole pipeline behave silently wrong.
+
+This module is your **diagnostic workbench**. It does not teach new features — it teaches the **inspection tools** that turn a black box back into a glass box.
+
+### Security Analogy
+
+Think of a complex access-control installation. A door does not open. There are **five candidate layers**: the card itself, the reader, the controller, the wiring, the power supply. A good technician does not start by replacing the reader — they walk the layers in order, eliminating each one with a quick test.
+
+Claude Code has the same structure. When something does not work, the layers are: **prompt → skill → hook → plugin → permission**. The order of inspection is what separates ten minutes of debugging from two hours.
+
+This module gives you the inspection commands per layer.
+
+---
+
+### `/debug` — The Bundled Debug Skill
+
+`/debug` is a bundled skill that **activates verbose trace logging for the current session**. Once active, Claude reports — in line — which skills it considered, which trigger phrases matched, which hooks fired, which tools were invoked, and which configuration files were consulted.
+
+```
+/debug skill-not-triggering
+```
+
+The argument focuses the trace on a sub-system (here: skill matching). Other useful focuses:
+
+- `/debug hook-firing` — show every hook event and matcher result
+- `/debug mcp-handshake` — surface MCP server connect/disconnect events
+- `/debug instructions-loaded` — show which CLAUDE.md / AGENTS.md files were loaded
+
+The typical use-case: *"My skill is installed, but Claude is not picking it up. Why?"* — `/debug` will show you either the failed match (description too generic, paths filter blocked it, model invocation disabled) or that the skill never appeared in the candidate set at all (frontmatter parse error).
+
+See Module 2.1 for the skill frontmatter reference; `/debug` essentially **replays the routing decision** that Module 2.1 describes.
+
+---
+
+### `--verbose` and `/doctor`
+
+Two coarser diagnostic tools that complement `/debug`:
+
+**`claude --verbose`** — Verbose output **at session start**. Restart Claude with this flag and you see the boot sequence: which CLAUDE.md files were merged (project + user + managed + auto-memory), which plugins loaded, which skills are visible, which hooks are armed, which MCP servers responded to their handshake.
+
+Use this when the question is *"What does Claude even think is configured right now?"* — for example after editing settings.json by hand, or after a plugin update.
+
+**`/doctor`** — A **health check** of the current configuration. It walks the layers and reports concrete problems:
+
+- corrupted or unparseable `settings.json`
+- plugin manifests that point to missing skill files
+- MCP servers configured but not reachable
+- expired OAuth tokens
+- protected-path permission rules that conflict with each other
+
+`/doctor` is non-interactive — it just prints a report. Use it when *something* is broken but you do not know which layer.
+
+**When `--verbose` vs `/doctor`:**
+
+| Question | Tool |
+|---|---|
+| "What did Claude load at startup?" | `--verbose` |
+| "Is my configuration valid?" | `/doctor` |
+| "Why did this specific prompt not trigger my skill?" | `/debug` |
+| "Why did this specific hook fire / not fire?" | `/debug hook-firing` |
+
+`--verbose` is **descriptive** (what is configured), `/doctor` is **prescriptive** (what is wrong), `/debug` is **investigative** (what happened on this turn).
+
+---
+
+### Hook-Failure Diagnosis
+
+Hooks are the fastest layer to misconfigure because they are **shell scripts wired to an event matcher**, and either side can be wrong.
+
+**Four classic hook failures:**
+
+1. **Hook blocks everything.** The matcher is too broad — typically `".*"` instead of a specific tool pattern. Every `Bash` invocation triggers the hook; the hook denies; nothing in your terminal works without a prompt.
+2. **Hook script does not run at all.** File is not executable (`chmod +x` missing), shebang line absent, or the path in `settings.json` is wrong (typo, relative path that does not resolve, Windows-style backslash).
+3. **Hook script errors out.** Any non-zero exit code is interpreted as a **block** by Claude Code. Your script that just wanted to log something is now denying every operation because it has a syntax error on line 12.
+4. **Hook script hangs.** No timeout, the script waits for input that never comes, or it shells out to a slow command. Claude Code's default hook timeout is around 5 seconds — past that, the hook is killed and the operation blocked.
+
+**Diagnosis sequence:**
+
+1. **`/hooks`** — Lists active hooks with their matchers. Confirms that your hook is even registered. (Surprisingly often the issue: typo in the JSON key.)
+2. **Run the script manually.** `bash ~/.claude/hooks/security-check.sh` — does it execute at all? Does it return 0?
+3. **Simulate the JSON input.** Hook scripts receive a JSON payload on stdin. Replay it:
+
+   ```bash
+   echo '{"command":"rm -rf /","tool":"Bash"}' | bash ~/.claude/hooks/security-check.sh
+   echo $?    # 0 = allow, non-zero = block
+   ```
+
+4. **Activate `--verbose`** and re-trigger the action. The hook trace shows match attempts and exit codes inline.
+
+See Module 2.2 for the full hook frontmatter and event reference; this section uses that vocabulary to diagnose mistakes.
+
+---
+
+### "My Skill Does Not Trigger" — Diagnosis
+
+The skill is installed in the right directory, `/skills` lists it, but Claude never invokes it. **Four common causes:**
+
+1. **Description too generic.** The skill description has no concrete trigger phrases. Claude's routing cannot decide that *this* prompt belongs to *this* skill. Fix: rewrite the description with explicit example prompts.
+2. **`disable-model-invocation: true`** in frontmatter. The skill is registered but only callable manually via slash-command. Auto-invocation is off by design.
+3. **`paths:` filter.** The skill has a paths filter (e.g. `paths: ["src/**/*.py"]`) and the current conversation does not match. The skill is silently inactive.
+4. **Frontmatter parse error.** YAML is broken — missing colon, bad indentation, smart-quote that crept in from a paste. The skill loads as an empty stub. `/doctor` catches this; `/skills` may still list the skill but with no description visible.
+
+**Diagnosis sequence:**
+
+1. **`/skills`** — Is the skill in the listing at all? If no → frontmatter parse error or wrong directory.
+2. **`cat ~/.claude/skills/<name>/SKILL.md | head -20`** — Inspect the frontmatter. Look for `disable-model-invocation`, `paths`, and the description quality.
+3. **Trigger explicitly.** In the prompt write *"Use the `<skill-name>` skill to ..."*. If the skill fires now → routing problem (vague description). If not → frontmatter or path-filter problem.
+4. **`/debug`** with skill focus. Run the same prompt again; read the trace.
+
+**Note on caching:** Skills load **live**, no Claude Code restart is needed when you edit a SKILL.md file. The `/skills` listing refreshes on next invocation. If a skill seems "stuck on the old version", you most likely edited a different copy of the file (user-scope vs project-scope, different vault).
+
+---
+
+### Plugin Debugging
+
+Plugins are the next layer up — they contain skills, agents, hooks, and MCP servers. A plugin can be **installed but inert**, or **loaded but with broken contents**.
+
+**Inspection commands:**
+
+- **`claude plugin list`** — Every installed plugin, scope (user/project/local), and load state.
+- **`claude plugin validate <name>`** — Schema-checks the plugin manifest. Catches the common mistake of placing `plugin.json` at the root instead of `.claude-plugin/plugin.json` (the correct path since 2025; see Module 2.3).
+- **`/reload-plugins`** — Hot-reload after a plugin update. Mostly not necessary (plugin contents load live), but useful when changing the manifest or top-level metadata.
+
+**Common failure: plugin loads, skill inside does not.** Almost always a **relative path issue** in the manifest — the manifest references `skills/my-skill/SKILL.md` but the file actually lives at `my-skill/SKILL.md` (no `skills/` prefix). `claude plugin validate` catches this.
+
+See Module 2.3 for the full plugin layout — this section just gives you the inspection commands for it.
+
+---
+
+### MCP Server Reconnect Problems
+
+MCP servers are subprocesses with their own lifecycle, OAuth state, and timeouts. Diagnosis commands:
+
+- **`/mcp`** — Status table for every configured MCP server: connected / disconnected, OAuth state (authorized / expired / never), last error message.
+- **`claude mcp get <name>`** — Detailed configuration for one server (command line, env vars, transport).
+- **`claude mcp reset-project-choices`** — Clear the per-project approval cache. Use when Claude keeps re-asking for MCP approval even though you said yes (corrupted approval store).
+
+**Most common MCP problem:** **stale OAuth token.** The server worked yesterday, today it returns 401. Fix: open `/mcp`, find the server with expired status, follow the re-auth link. The browser flow regenerates the token and Claude reconnects.
+
+See Module 2.4 for MCP setup; this section gives you the runtime inspection surface.
+
+---
+
+### `InstructionsLoaded` Event — Inspecting Memory Drift
+
+`InstructionsLoaded` is a hook event (introduced in the 2026 hook expansion — see Module 2.2) that fires **every time Claude loads a CLAUDE.md, AGENTS.md, or auto-memory file**. The hook receives a JSON payload listing the files and (optionally) their content hashes.
+
+**Use-case:** *"I added a new rule to my CLAUDE.md. Is Claude actually loading it?"* — register a tiny logging hook on the event and find out.
+
+```bash
+# In ~/.claude/hooks/inspect-instructions.sh
+INPUT=$(cat)
+echo "$INPUT" | jq '.loadedFiles' >> ~/.claude/loaded-instructions.log
+exit 0
+```
+
+Register in `settings.json` with the `InstructionsLoaded` event matcher. Now every session start writes the loaded-files manifest into a log you can grep.
+
+This is the single most useful debug hook to keep permanently armed if you maintain a non-trivial CLAUDE.md hierarchy.
+
+---
+
+### Auto-Memory Drift — Recognize and Repair
+
+As covered in Module 1.2, Claude maintains an **auto-memory directory** per project where it records "remembered" facts on its own initiative. Most of the time this is useful — but occasionally Claude records a **false conclusion** ("the user prefers tabs" when really one file had tabs by accident), and that false conclusion then biases all future behavior.
+
+**Symptom:** Claude behaves in a way your CLAUDE.md does not authorize, but consistently across sessions.
+
+**Diagnosis:**
+
+```bash
+cat ~/.claude/projects/<hash>/memory/MEMORY.md
+# Plus any topic files in the same directory
+```
+
+**Repair:** Either delete the offending note from `MEMORY.md` directly, or prompt Claude with *"Forget that I prefer tabs — that was incorrect"*. Auto-memory updates from explicit forget-prompts and from manual edits to the directory.
+
+See Module 1.2 for the full auto-memory mechanics — this section just covers the **drift-detection** angle.
+
+---
+
+### The Diagnosis Checklist
+
+When **anything** is not behaving as expected, walk the layers in this order. Do not skip steps — most problems are found in the first three.
+
+1. **CLAUDE.md loaded?** Ask Claude *"What CLAUDE.md files do you see?"* — first reply tells you. Or use `--verbose` startup.
+2. **Skills visible?** `/skills`
+3. **Plugins active?** `claude plugin list`
+4. **Hooks armed?** `/hooks`
+5. **MCP servers connected?** `/mcp`
+6. **Permission rules OK?** `/permissions`
+7. **Read the verbose log.** Restart with `claude --verbose`, capture the boot output.
+8. **Run `/doctor`.** Final pass — catches the leftovers.
+
+If all eight checks pass and the problem persists, the issue is **prompt-shape** (Module 1.3) or **model behavior** rather than configuration.
+
+---
+
+### Anti-Patterns — Don't Do This
+
+- **Do not reinstall the skill / hook / plugin first.** The configuration is almost always the cause, not a corrupted installation. Reinstalling resets your debug state without fixing the bug.
+- **Do not "fix" things with `--dangerously-skip-permissions`.** That is symptom suppression, not root-cause analysis. You will reopen the same problem in the next session.
+- **Do not ignore the auto-memory directory.** A surprising number of "Claude is weirdly opinionated about X" problems trace back to a single stale auto-memory entry from three weeks ago.
+- **Do not edit `.claude.json` or `.mcp.json` manually as your first move.** Both are Protected Paths (see Module 3.3) — Claude refuses to write to them, and for good reason. Use the dedicated CLI commands (`claude plugin`, `claude mcp`) instead.
+
+---
+
+### The Security Analogy — Complete
+
+Your access-control installation has a problem. A door will not open. The technician's playbook is:
+
+1. **Check the card.** Is it the right card? Is it programmed? *(Prompt layer.)*
+2. **Check the reader.** Is it powered? Does the LED blink? *(Skill layer.)*
+3. **Check the controller.** Is the policy loaded? Does the audit log show a deny? *(Hook layer.)*
+4. **Check the wiring and plugins.** Are the modules talking to each other? *(Plugin / MCP layer.)*
+5. **Check power and permissions.** Is the whole site authorized for this card class? *(Permission layer.)*
+
+Claude Code's debugging surface — `/debug`, `--verbose`, `/doctor`, `/hooks`, `/mcp`, `claude plugin list`, the `InstructionsLoaded` event, the auto-memory directory — is the same playbook in software form. Use it in order, and most outages collapse in minutes.
 
 ---
 

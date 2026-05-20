@@ -470,6 +470,91 @@ You do not have to implement it now. Understanding the model is the goal.
 
 ---
 
+## Exercise 1.5: Get Your Daily Workflow Under $5 (Should-Do, ~20 Min)
+
+**Priority:** Should-do — valuable, but optional if time is short.
+
+**Goal:** Define a cost-optimal Claude Code configuration for three workflows you actually run. Stop treating model and effort as defaults — pick them deliberately.
+
+**Time:** ~20 minutes
+
+---
+
+### Steps
+
+**1. Identify three workflows from your daily work**
+
+Pick three things you do (or expect to do) with Claude Code regularly. Examples — adapt to your domain:
+
+- Code-reviewing a ~100-line pull request
+- Bug-fixing in an unfamiliar codebase
+- Writing docstrings or short documentation for a function
+- Generating a parser for a new event-log format
+- Drafting a commit message after a chunky local change
+
+**2. Per workflow, decide model + effort + flags**
+
+Fill in your own table. The columns matter more than the exact values:
+
+| Workflow | Model | Effort | Extra flags | Estimated cost / run |
+|---|---|---|---|---:|
+| Code-review (~100 lines) | ? | ? | ? | ? |
+| Bug-fix in unknown code | ? | ? | ? | ? |
+| Doc/comment writing | ? | ? | ? | ? |
+
+**3. Justify each choice**
+
+For each row, ask yourself:
+- Why this model? (Depth vs speed vs cost.)
+- Why this effort? (Cognitive load of the task.)
+- Which flags help? (Especially `--max-budget-usd` as a safety net for unattended runs.)
+
+**4. Verify with one real run**
+
+Pick one workflow from your table. Run it once with your chosen config. Open `/cost`. Does the number match what you estimated? If not — adjust.
+
+**5. Persist your config**
+
+Lock the decision in so you don't re-think it next week. Two reasonable options:
+
+Either a shell alias:
+```bash
+# ~/.bashrc or ~/.zshrc
+alias claude-review='claude --model sonnet --effort medium --max-budget-usd 0.30'
+alias claude-deep='claude --model opus --effort xhigh --max-budget-usd 2.00'
+alias claude-quick='claude --model haiku --effort low'
+```
+
+Or a small user-skill that wraps the right invocation. (Skills are covered in Block 2 — for now an alias is fine.)
+
+---
+
+### Success Check
+
+- [ ] You have a filled-in table with three workflows, each with a model + effort + cost estimate
+- [ ] You have a justification one-liner for each row (not just "felt right")
+- [ ] At least one workflow has been run live and verified with `/cost`
+- [ ] You have either an alias or a note that captures your chosen config for future runs
+
+---
+
+### Reflection
+
+- Which configuration was the cheapest per run? Was the quality acceptable?
+- Where was the biggest cost lever — model choice, effort level, or CLAUDE.md length?
+- Would you configure differently if the budget came from your employer vs. your own pocket? Why?
+- Are any of your workflows candidates for `--max-budget-usd` as a hard safety net? (Hint: anything you run unattended, in CI, or in a loop.)
+
+---
+
+### Hints
+
+- If you're new to the models: start the bug-fix row with Sonnet + medium, the code-review row with Sonnet + low, the doc-writing row with Haiku + low. Then experiment from there.
+- `--max-budget-usd` is cheap insurance — even setting it to $1.00 on a routine task catches runaway loops without affecting normal work.
+- Don't optimize prematurely. The point isn't to squeeze pennies — it's to make the choice consciously instead of accidentally always paying for Opus + xhigh.
+
+---
+
 ## Exercise Debrief Questions
 
 Use these for group discussion or personal reflection after completing the exercises:

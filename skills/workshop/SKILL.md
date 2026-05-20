@@ -7,6 +7,8 @@ description: >
   exercises, and verification. /workshop shows the full module overview.
   Trigger phrases: "workshop", "guide mode", "learn mode", "teach claude code",
   "workshop overview", "next module".
+argument-hint: "[guide|learn] [module]"
+arguments: [mode, module]
 metadata:
   author: dynamic-workshop
   version: '1.0'
@@ -41,10 +43,10 @@ When called without arguments, display the full workshop map using box-drawing c
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║               CLAUDE CODE WORKSHOP — Full-Day Program                       ║
+║               CLAUDE CODE WORKSHOP — 3 Sessions × ~3h                       ║
 ║                         Usage: /workshop [guide|learn] [module]             ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  BLOCK 1 · FOUNDATIONS                             Morning  ~2.5h           ║
+║  BLOCK 1 · FOUNDATIONS                             Session 1  ~3h           ║
 ║  "Claude Code is a power tool."                                             ║
 ║  ┌─────────────────────────────────────────────────────────────────────┐   ║
 ║  │  1.1  What is Claude Code?        CLI / claude.ai / Cowork         │   ║
@@ -53,7 +55,7 @@ When called without arguments, display the full workshop map using box-drawing c
 ║  │  1.4  Git Integration & Worktrees Parallel branches, isolation     │   ║
 ║  └─────────────────────────────────────────────────────────────────────┘   ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  BLOCK 2 · ECOSYSTEM                               Midday   ~2.5h           ║
+║  BLOCK 2 · ECOSYSTEM                               Session 2  ~3h           ║
 ║  "There's no one right way to work with it."                                ║
 ║  ┌─────────────────────────────────────────────────────────────────────┐   ║
 ║  │  2.1  Skills & Commands           /slash commands, SKILL.md        │   ║
@@ -63,7 +65,7 @@ When called without arguments, display the full workshop map using box-drawing c
 ║  │  2.5  RAG & NotebookLM            Knowledge bases, retrieval      │   ║
 ║  └─────────────────────────────────────────────────────────────────────┘   ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  BLOCK 3 · ADVANCED & MIND-BLOWING                 Afternoon ~3h            ║
+║  BLOCK 3 · ADVANCED & MIND-BLOWING                 Session 3  ~3h           ║
 ║  "Figure out what works best for you."                                      ║
 ║  ┌─────────────────────────────────────────────────────────────────────┐   ║
 ║  │  3.1  Agents & Multi-Agent Orchestration   Swarms, delegation      │   ║

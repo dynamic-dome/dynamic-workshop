@@ -52,13 +52,29 @@ claude /login
 | `claude --dangerously-skip-permissions` | Auto-accept all tool use (use with caution!) |
 | `claude --allowedTools "Edit,Read"` | Whitelist specific tools |
 | `claude --add-dir /path` | Add additional working directory |
-| `claude --fast` | Use fast output mode (same model, faster) |
 | `claude --verbose` | Show debug output |
-| `claude --worktree` / `-w` | Run in isolated git worktree |
+| `claude --debug <category>` | Filter debug output by category (more granular than `--verbose`) |
+| `claude --worktree <branch>` / `-w` | Auto-create worktree under `<repo>/.claude/worktrees/<name>` |
 | `claude --mcp-config <file>` | Load MCP servers from JSON file |
 | `claude --strict-mcp-config` | Only use MCP servers from config |
-| `claude --plugin-dir <path>` | Load local plugin directory |
-| `claude --enable-auto-mode` | Enable ML auto-classifier (Team/Enterprise only) |
+| `claude --plugin-dir <path>` | Load local plugin directory (accepts `.zip`) |
+| `claude --plugin-url <url>` | Load remote plugin from URL (v2.1.129+) |
+| `claude --bare` | Headless mode without Hooks/Skills/Plugins/MCP/AutoMemory |
+| `claude --tools <list>` | Restrict tools (different from `--allowedTools` allowlist) |
+| `claude --max-budget-usd <amount>` | Cost cap per `-p` run |
+| `claude --max-turns <int>` | Turn cap per `-p` run |
+| `claude --append-system-prompt "..."` | Add persona text to system prompt |
+| `claude --system-prompt "..."` | Full persona override |
+| `claude --system-prompt-file <path>` | Load persona from file |
+| `claude --teleport` | Pull Web-Session into local terminal |
+| `claude --bg` | Start as background-agent (use with `claude agents`) |
+| `claude --from-pr <num>` | Resume session attached to a PR |
+| `claude --fork-session` | Generate new session-ID when used with `--resume` |
+| `claude --remote-control` / `--rc` | Start remote-control session |
+| `claude --tmux` | Spawn tmux session for worktree |
+| `claude --agents '<json>'` | Inline subagent definition via JSON |
+| `claude --setting-sources <list>` | Override which settings sources to load |
+| `claude --permission-mode auto` | Auto-Mode (replaces removed `--enable-auto-mode`; also via Shift+Tab cycle) |
 
 ---
 
@@ -73,20 +89,38 @@ claude auth status         # Check auth status
 # MCP Server Management
 claude mcp add <name> -- <command>              # Add stdio MCP server
 claude mcp add --transport http <name> <url>    # Add HTTP MCP server (recommended)
+claude mcp add-json <name> '<json>'             # Add via inline JSON config
 claude mcp list                                  # List configured servers
 claude mcp get <name>                            # Show server details
 claude mcp remove <name>                         # Remove server
+claude mcp reset-project-choices                 # Reset .mcp.json approval prompts
 
 # Plugin Management
 claude plugin install <source>    # Install plugin (marketplace/git/local)
 claude plugin uninstall <name>    # Remove plugin
-claude plugin enable <name>       # Enable disabled plugin
-claude plugin disable <name>      # Disable plugin
+claude plugin enable <name>       # Enable disabled plugin (auto-pulls deps)
+claude plugin disable <name>      # Disable plugin (blocked if others depend on it)
 claude plugin update <name>       # Update plugin
+claude plugin validate            # Local pre-submission check
+claude plugin prune               # Cleanup orphaned dependencies
+claude plugin marketplace add <owner/repo>  # Add a marketplace
+
+# Background Agents (v2.1.139+)
+claude agents                      # Live view of running background sessions
+claude attach <id>                 # Attach to background session
+claude logs <id>                   # Stream logs from background session
+claude stop <id>                   # Stop a background session
+claude respawn <id>                # Respawn a stopped session
+claude rm <id>                     # Remove a session entry
 
 # Other
 claude update                     # Update Claude Code CLI
+claude install [version]          # Pin a specific version
 claude remote-control             # Start remote control session
+claude ultrareview [target]       # Cloud-based multi-agent code review
+claude setup-token                # Long-lived OAuth token for CI (~1 year)
+claude project purge [path]       # Complete reset of a project
+claude auto-mode defaults         # Print auto-mode classifier rules
 ```
 
 ---
@@ -128,7 +162,7 @@ claude remote-control             # Start remote control session
 |---------|-------------|
 | `/model <name>` | Switch model (opus, sonnet, haiku) |
 | `/fast` | Toggle fast output mode |
-| `/effort <level>` | Set effort level (high/low) — controls thinking depth |
+| `/effort <level>` | Set effort level (low/high/xhigh/max) — controls thinking depth |
 | `/context` | Visualize context window usage |
 | `/cost` | Show token usage and cost for session |
 | `/usage` | Show rate limits and subscription status |
@@ -156,8 +190,10 @@ claude remote-control             # Start remote control session
 | `/theme` | Change visual theme |
 | `/color <color>` | Change prompt bar color |
 | `/statusline` | Configure status line |
-| `/vim` | Toggle vim keybindings |
+| `/output-styles` | Switch persona/output style (Concise/Detailed/JSON) |
 | `/terminal-setup` | Optimize terminal for Claude Code |
+| `/setup-bedrock` | Cloud provider setup wizard (AWS Bedrock) |
+| `/setup-vertex` | Cloud provider setup wizard (Google Vertex) |
 
 ### Security & Diagnostics
 | Command | What it does |
@@ -184,12 +220,25 @@ claude remote-control             # Start remote control session
 ### Agents & Automation
 | Command | What it does |
 |---------|-------------|
-| `/tasks` / `/bashes` | Show background tasks |
-| `/schedule <task>` | Create cloud-scheduled task |
+| `/add-dir <path>` | Add file access to running session |
 | `/agents` | Manage subagent configuration |
-| `/pr-comments <nr>` | Fetch PR comments |
+| `/autofix-pr` | Spawn web-session that watches PR CI and pushes fixes |
+| `/background` / `/bg` | Detach session into background-agent |
+| `/bashes` / `/tasks` | Show background tasks |
+| `/focus` | Focus view |
+| `/goal [condition]` | Work across turns until condition is met (v2.1.139+) |
+| `/recap` | One-line session summary |
+| `/review [PR]` | Local PR review (vs. cloud-based `/ultrareview`) |
+| `/schedule <task>` | Create cloud-scheduled task |
+| `/team-onboarding` | Generate onboarding guide from session history |
+| `/teleport` / `/tp` | Pull web-session into local terminal |
 | `/ultraplan <prompt>` | Browser-based plan + execute |
+| `/ultrareview [PR]` | Multi-agent cloud review (vs. local `/review`) |
+| `/voice [hold\|tap\|off]` | Voice dictation mode |
+| `/web-setup` | GitHub setup for claude-code-on-the-web |
 | `/powerup` | Interactive feature lessons |
+
+> **Note:** For PR comments, ask Claude directly (e.g. "show me the PR comments") — the explicit `/pr-comments` command was removed in v2.1.91.
 
 ### Workshop-Specific Skills
 | Command | What it does |
@@ -212,6 +261,10 @@ Bundled Skills sind prompt-basierte Playbooks, die in jeder Session verfuegbar s
 | `/debug [description]` | Debug-Logging aktivieren und Log analysieren | `/debug failing mcp auth` |
 | `/loop [interval] <prompt>` | Prompt periodisch ausfuehren | `/loop 5m check deploy status` |
 | `/simplify [focus]` | Parallel-Reviews + Fixes auf changed files | `/simplify focus on perf` |
+| `/run [skill-name]` | Launch & verify your app (v2.1.145+) | `/run dev-server` |
+| `/verify` | Verify recent changes by running the app (v2.1.145+) | `/verify` |
+| `/run-skill-generator` | Generate a per-project run-skill (v2.1.145+) | `/run-skill-generator` |
+| `/fewer-permission-prompts` | Scan transcripts, generate `permissions.allow` allowlist | `/fewer-permission-prompts` |
 
 ---
 
@@ -228,13 +281,20 @@ Tool-Namen sind die Strings fuer Permission Rules, Hook Matcher und Subagent Too
 | `Write` | Create/overwrite files | Yes |
 | `NotebookEdit` | Edit Jupyter notebooks | Yes |
 | `Bash` | Execute shell commands | Yes |
+| `PowerShell` | Native Windows shell (v2.1.x+) | Yes |
 | `WebSearch` | Search the web | Yes |
 | `WebFetch` | Fetch URL content | Yes |
 | `LSP` | Code intelligence via Language Server | No (setup required) |
 | `Skill` | Invoke a skill | Yes |
-| `Agent` | Spawn a subagent | No |
+| `Agent` | Spawn a subagent (was `Task` pre-v2.1.63) | No |
+| `Monitor` | Background-watch logs/PRs/files and react in running session | No |
+| `AskUserQuestion` | Multiple-choice questions for interactive skills | No |
+| `TaskCreate` / `TaskList` / `TaskUpdate` / `TaskGet` / `TaskOutput` / `TaskStop` | Task cluster (replaces `TodoWrite`, v2.1.142) | No |
+| `EnterPlanMode` / `ExitPlanMode` | Built-in mode switch | No |
+| `EnterWorktree` / `ExitWorktree` | Built-in worktree switch | No |
+| `PushNotification` | Desktop/phone push for long-running tasks | No |
+| `ShareOnboardingGuide` | Generate team-onboarding guide from history | No |
 | `TeamCreate` / `SendMessage` | Agent Teams (experimental) | No |
-| `TaskCreate` / `TaskUpdate` / etc. | Background tasks & schedules | No |
 | `CronCreate` / `CronList` / etc. | Scheduled recurring tasks | No |
 
 ---
@@ -243,16 +303,16 @@ Tool-Namen sind die Strings fuer Permission Rules, Hook Matcher und Subagent Too
 
 | Model | Context Window | Best for | API Price ($/MTok) |
 |-------|---------------|----------|-------------------|
-| **Claude Opus 4.6** | 1M tokens | Complex tasks, architecture, deep reasoning (default) | In: 5 / Out: 25 |
+| **Claude Opus 4.7** | 1M tokens | Default in Claude Code since 2026-04-16 (GA). Complex tasks, architecture, deep reasoning. | In: ~5 / Out: ~25 |
 | **Claude Sonnet 4.6** | 1M tokens (beta) | Fast coding, everyday tasks, cost-effective | In: 3 / Out: 15 |
 | **Claude Haiku 4.5** | 200K tokens | Simple tasks, brainstorming, cheapest option | In: 1 / Out: 5 |
 
-- Claude Code defaults to **Opus 4.6** with 1M context
+- Claude Code defaults to **Opus 4.7** with 1M context (Sonnet 4.6 + Haiku 4.5 also current)
 - Switch models: `/model` in session or `claude --model sonnet` at startup
 - Use `/compact` when context gets large — compresses older messages
 - Use `/context` to visualize how much context you've used
 - Use `/cost` to track token spend during a session
-- Use `/effort high` for complex tasks, `/effort low` for simple ones
+- Effort levels: `/effort low|high|xhigh|max` — `xhigh` and `max` available on Opus 4.7
 
 ### Cost Guidance
 
@@ -291,15 +351,15 @@ Tool-Namen sind die Strings fuer Permission Rules, Hook Matcher und Subagent Too
 | Mode | Behavior | Best for |
 |------|----------|----------|
 | **default** | Only reads allowed, everything else asks | Beginners, critical systems |
-| **acceptEdits** | Reads + file edits allowed, commands still ask | Iterative development |
+| **acceptEdits** | Reads + file edits + common FS bash (mkdir, touch, rm, mv, cp, sed) auto-approved in working dir | Iterative development |
 | **plan** | Shows full plan upfront, approves all at once | Complex refactorings |
-| **auto** | ML classifier decides risk level | Power users (Team/Enterprise only) |
+| **auto** | ML classifier decides risk level | Power users (see requirements below) |
 | **dontAsk** | Never prompts — use with allow/deny rules | CI/CD pipelines |
 | **bypassPermissions** | YOLO mode — accepts everything | Sandboxed/isolated VMs only! |
 
-Set via: `claude --permission-mode plan` or `/permissions` in session.
+Set via: `claude --permission-mode plan` or `/permissions` in session. Cycle Normal -> acceptEdits -> plan via Shift+Tab.
 
-> **auto mode requirements:** Team/Enterprise/API only, Sonnet/Opus 4.6, Anthropic API (not Bedrock/Vertex)
+> **auto mode requirements:** **Max-Plan with Opus 4.7** OR Team/Enterprise (Sonnet 4.6, Opus 4.6, Opus 4.7). Anthropic API only (not Bedrock/Vertex). Claude Code v2.1.83+. Admins can lock/loosen via managed settings.
 
 ### Permission Rules
 
@@ -307,11 +367,20 @@ Configure in `settings.json`:
 ```json
 {
   "permissions": {
-    "allow": ["Read", "Glob", "Grep", "Bash(npm test)"],
-    "deny": ["Bash(rm *)", "Bash(curl*)"]
+    "allow": ["Read", "Glob", "Grep", "Bash(npm test)", "Skill(my-skill)", "Agent(reviewer)"],
+    "deny": ["Bash(rm *)", "Bash(curl*)", "WebFetch(domain:evil.com)"],
+    "ask": ["Bash(git push *)"]
   }
 }
 ```
+
+| Rule pattern | Effect |
+|--------------|--------|
+| `Bash(<cmd> *)` | Match shell commands |
+| `Skill(<name>)` | Allow/deny specific skill |
+| `Agent(<type>)` | Allow/deny specific subagent |
+| `WebFetch(domain:example.com)` | Domain-scoped WebFetch |
+| `permissions.ask` | Always prompt, even in auto/dontAsk mode |
 
 > **Security note:** For workshops and production, always use least-privilege. Only whitelist what you need.
 
@@ -344,25 +413,57 @@ Configure in `settings.json`:
 | `CLOUD_ML_REGION` | Region for Vertex AI |
 | `DISABLE_TELEMETRY` | Opt out of operational metrics |
 | `DISABLE_ERROR_REPORTING` | Opt out of error logging (Sentry) |
+| `MAX_MCP_OUTPUT_TOKENS` | Raise MCP per-tool warning threshold |
+| `CLAUDE_PROJECT_DIR` | Provided to stdio MCP servers for project resolution |
+| `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD` | Load CLAUDE.md from `--add-dir` directories |
 
 ---
 
-## Hook Types
+## Settings (settings.json)
 
-| Hook Type | When it fires | Use case |
+| Setting | Effect |
+|---------|--------|
+| `worktree.baseRef: "fresh"\|"head"` | `--worktree` branches from `origin/<default>` (fresh) or local HEAD (v2.1.133+) |
+| `autoMode.hard_deny: [<pattern>]` | Unconditional auto-mode block list (overrides user intent, v2.1.136+) |
+| `sandbox.network.deniedDomains: [...]` | Block specific domains despite allowed wildcards (v2.1.113+) |
+| `disableSkillShellExecution: true` | Disables `` !`<command>` `` in skills (useful for managed/enterprise) |
+| `claudeMdExcludes: [...]` | Glob list to exclude from CLAUDE.md auto-discovery (monorepo filter) |
+| `skillOverrides: { ... }` | Per-skill visibility: on / name-only / user-invocable-only / off |
+| `skillListingBudgetFraction: 0.1` | Token-budget fraction reserved for skill listings |
+| `maxSkillDescriptionChars: 200` | Cap description length used in listings |
+
+---
+
+## Hook Events
+
+| Hook Event | When it fires | Use case |
 |-----------|---------------|----------|
 | **PreToolUse** | Before tool execution | Block unsafe operations, validate inputs |
 | **PostToolUse** | After tool completes | Log results, aggregate data, cleanup |
 | **Stop** | Session finishes | Save session, cleanup, final reports |
+| **SessionStart** | Session begins | Pre-load context, check inventory, env warmup |
+| **SessionEnd** | Session ends (any reason) | Persist state, alert on long sessions |
+| **UserPromptSubmit** | User submits a prompt | Inject context, strip secrets, log prompts |
+| **PreCompact** | Before context compaction | Save outgoing context, snapshot session |
+| **SubagentStart** | Subagent spawns | Audit subagent launches, pass context |
+| **SubagentStop** | Subagent finishes | Capture result, aggregate output |
+| **FileChanged** | File modified by Claude | Live-lint, format-on-save, mirror to backup |
+| **InstructionsLoaded** | CLAUDE.md/rules loaded | Validate or augment instructions |
+| **Notification** | Notification is shown | Forward to desktop/phone push |
+
+> Full list with ~28 events: code.claude.com/docs/en/hooks (incl. UserPromptExpansion, PermissionRequest, PermissionDenied, PostToolUseFailure, PostToolBatch, TaskCreated, TaskCompleted, StopFailure, TeammateIdle, ConfigChange, CwdChanged, WorktreeCreate, WorktreeRemove, PostCompact, Elicitation, ElicitationResult).
 
 ### Hook Execution Types
 
 | Type | How it works |
 |------|-------------|
-| **command** | Runs a shell command (default) |
+| **command** | Runs a shell command (default; supports `args: string[]` exec form) |
 | **http** | Sends HTTP request to a URL |
 | **prompt** | Sends prompt to Claude for evaluation |
 | **agent** | Spawns a subagent for complex evaluation |
+| **mcp_tool** | Calls an MCP tool directly (v2.1.119+) |
+
+> **Matcher syntax:** Letters/digits/`_`/`|` only = exact or pipe-list. With special chars = JavaScript regex. Add `if`-field for additional filter via permission-rule syntax (e.g. `"if": "Bash(git *)"`). Hooks can also live in **Skill frontmatter** and **Subagent frontmatter** — scoped to that component.
 
 Hook config in `settings.json`:
 ```json
@@ -407,13 +508,38 @@ Hook erkennt wenn ein Agent denselben Befehl 3x mit gleichem Fehler ausfuehrt, s
 ---
 name: my-skill              # Defines the /command name
 description: What it does   # Used for auto-invocation decisions
+when_to_use: "..."          # Plain-language trigger description
+argument-hint: "[mode] [target]"  # UI hint for argument completion
+arguments: [mode, target]   # Positional named args
 disable-model-invocation: true  # Only manual start (critical actions)
 user-invocable: true        # Show in command menu (false = background knowledge)
 allowed-tools: Read Grep Bash   # Intent scoping (not hard security!)
 context: fork               # Run in isolated subagent context
 agent: haiku                # Use specific model for subagent
+model: haiku|sonnet|opus    # Preferred model for this skill
+effort: low|high|xhigh|max  # Effort level
+paths: ["src/**/*.ts"]      # Glob — skill only available when files match
+shell: powershell|bash      # Shell for command execution
+hooks:                      # Skill-scoped lifecycle hooks
+  PreToolUse:
+    - matcher: "Bash"
+      hooks: [...]
+# Workshop-Custom (NOT in official schema):
+# version, author, tags
 ---
 ```
+
+### Argument Substitution & Dynamic Context
+
+| Token | Resolves to |
+|-------|-------------|
+| `$ARGUMENTS` | Full argument string |
+| `$1`, `$N` | Positional argument N |
+| `$name` | Named argument by `arguments:` key |
+| `${CLAUDE_SESSION_ID}` | Current session ID |
+| `${CLAUDE_EFFORT}` | Current effort level |
+| `${CLAUDE_SKILL_DIR}` | Skill's own directory (for sibling files) |
+| `` !`<command>` `` | Dynamic Context Injection — runs shell command and embeds output in prompt |
 
 ### Skill Locations
 
@@ -621,13 +747,26 @@ Uses `TeamCreate`/`SendMessage` tools. Each teammate runs as separate session wi
 | **Tools Reference** | code.claude.com/docs/en/tools-reference |
 | **Skills Docs** | code.claude.com/docs/en/skills |
 | **Hooks Docs** | code.claude.com/docs/en/hooks |
+| **Plugins Reference** | code.claude.com/docs/en/plugins-reference |
 | **Plugins Guide** | code.claude.com/docs/en/plugins |
 | **MCP in Claude Code** | code.claude.com/docs/en/mcp |
+| **Subagents** | code.claude.com/docs/en/sub-agents |
 | **Permissions** | code.claude.com/docs/en/permissions |
 | **Permission Modes** | code.claude.com/docs/en/permission-modes |
+| **Auto-Mode Config** | code.claude.com/docs/en/auto-mode-config |
 | **Sandboxing** | code.claude.com/docs/en/sandboxing |
 | **Security** | code.claude.com/docs/en/security |
 | **Memory/CLAUDE.md** | code.claude.com/docs/en/memory |
+| **Auto-Memory** | code.claude.com/docs/en/memory#auto-memory |
+| **Worktrees** | code.claude.com/docs/en/worktrees |
+| **Agent-View** | code.claude.com/docs/en/agent-view |
+| **Output Styles** | code.claude.com/docs/en/output-styles |
+| **Channels** | code.claude.com/docs/en/channels |
+| **Routines** | code.claude.com/docs/en/routines |
+| **Headless** | code.claude.com/docs/en/headless |
+| **Best Practices** | code.claude.com/docs/en/best-practices |
+| **Statusline** | code.claude.com/docs/en/statusline |
+| **Changelog** | code.claude.com/docs/en/changelog |
 | **Claude Code Repo** | github.com/anthropics/claude-code |
 | **Awesome Claude Code** | github.com/anthropics/awesome-claude-code |
 | **MCP Specification** | modelcontextprotocol.io/specification |
@@ -660,4 +799,4 @@ Uses `TeamCreate`/`SendMessage` tools. Each teammate runs as separate session wi
 
 ---
 
-**Last Updated:** 2026-04-07 | **Workshop:** Claude Code Dynamic Workshop
+**Last Updated:** 2026-05-20 | **Workshop:** Claude Code Dynamic Workshop

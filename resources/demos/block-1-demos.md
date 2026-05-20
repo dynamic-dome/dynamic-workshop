@@ -11,7 +11,7 @@
 Before starting Block 1:
 
 - [ ] Terminal open, Claude Code installed and authenticated (`claude --version` to confirm)
-- [ ] Working directory set to a neutral location (e.g., `~/workshop-demos/`)
+- [ ] Working directory set to a neutral location (e.g., `~/cc-workshop/demos/`)
 - [ ] No sensitive files open or visible
 - [ ] Font size bumped up for screen visibility (terminal font size 16+)
 - [ ] `gh` (GitHub CLI) authenticated if Demo 1.4 includes PR creation
@@ -127,7 +127,7 @@ Expected: Claude runs a loop or runs the command 5 times. Shows 5 different pass
 
 In terminal (outside Claude Code, or use Claude Code's bash):
 ```
-mkdir ~/workshop-demo && cd ~/workshop-demo && git init
+mkdir -p ~/cc-workshop/demos/demo-1.2 && cd ~/cc-workshop/demos/demo-1.2 && git init
 ```
 
 Then start Claude Code in that directory:
@@ -322,7 +322,7 @@ Write or display this:
 
 ### Pre-requisites
 
-This demo builds on the `workshop-demo` directory created in Demo 1.2. Make sure it has the `validators.py` and tests from Demo 1.3, or create them fresh.
+This demo builds on the `~/cc-workshop/demos/demo-1.2` directory created in Demo 1.2. Make sure it has the `validators.py` and tests from Demo 1.3, or create them fresh.
 
 ---
 
@@ -442,6 +442,109 @@ What worktrees do we have now?
 ### Closing Talking Point for Demo 1.4
 
 > "Branch, implement, test, commit, log. All in conversation. Git becomes something you think about, not something you manage manually. And worktrees give you the test-lab model you already know from physical security: isolated environment, real equipment, no risk to production."
+
+---
+
+## Demo 1.5: Cost-Aware — Same Task, Three Models
+
+**Teaching point this demo supports:** Module 1.5 — model choice and effort levels are cost levers, not just quality levers.
+
+**Duration:** ~6 minutes
+
+**What participants see:** The same realistic coding task run three times with different model + effort combinations, with `/cost` after each one, so they can compare the dollar amounts side by side.
+
+**Setup:**
+- Terminal open in a scratch directory (`~/cost-demo/`)
+- Claude Code authenticated
+- `/cost` is available in this build (confirm before the workshop)
+
+---
+
+### Step 1: Baseline with Opus 4.7 + xhigh
+
+In Claude Code:
+```
+/model opus
+/effort xhigh
+Write a Python function that validates IPv4 addresses with proper edge case handling. Include a few tests at the bottom of the file demonstrating valid and invalid inputs.
+```
+
+**Expected behavior:** Claude produces a thorough implementation with several edge cases (leading zeros, out-of-range octets, empty strings, embedded whitespace) and a small test block.
+
+After it finishes, type:
+```
+/cost
+```
+
+**Expected output:** A session cost in the ballpark of ~$0.10–$0.20 for this single turn (numbers vary; the point is the *order of magnitude*).
+
+**Talking point:**
+> "That's the most expensive combination Claude Code offers — Opus at the deepest effort level. Look at the cost. Now let's see what we get for less."
+
+---
+
+### Step 2: Same Task with Sonnet 4.6 + medium
+
+Reset the session or just continue:
+```
+/model sonnet
+/effort medium
+Write a Python function that validates IPv4 addresses with proper edge case handling. Include a few tests at the bottom of the file demonstrating valid and invalid inputs.
+```
+
+After completion:
+```
+/cost
+```
+
+**Expected output:** Significantly lower — typically around 1/3 to 1/5 of the Opus + xhigh cost.
+
+**Talking point:**
+> "Sonnet at default effort. Same code task. Probably similar code quality. Notice how much that costs versus the first one."
+
+---
+
+### Step 3: Same Task with Haiku 4.5 + low
+
+```
+/model haiku
+/effort low
+Write a Python function that validates IPv4 addresses with proper edge case handling. Include a few tests at the bottom of the file demonstrating valid and invalid inputs.
+```
+
+```
+/cost
+```
+
+**Expected output:** Roughly one order of magnitude cheaper than the Opus baseline.
+
+**Talking point:**
+> "Haiku at low effort. The output will be a bit terser, maybe one or two fewer edge cases enumerated. But for validating an IPv4 address — a task with a well-known correct answer — Haiku is plenty."
+
+---
+
+### Step 4: Side-by-Side Comparison
+
+Open all three generated files in your editor or paste them side by side in the terminal. Ask the room:
+
+- Are all three outputs functionally correct? (Usually: yes.)
+- Where is the quality difference? (Opus tends to enumerate more edge cases; Haiku is more terse with explanation.)
+- The cost spread between cheapest and most expensive is often 10–20x.
+- For this specific task — IPv4 validation, well-defined problem, no architectural decisions — is Opus worth 15x the price? Almost never.
+
+**Talking point:**
+> "The real question to ask *before* the session is: how important is the quality here? If it's a one-shot utility, Haiku does the job. If you're designing a protocol parser that will live in firmware for ten years, pay for Opus + xhigh. The cost dial and the effort dial are part of your job."
+
+---
+
+### Closing Talking Point for Demo 1.5
+
+> "Cost isn't a sticker you get at the end of the month. It's a knob you turn every session. `/cost` shows you where you are, `/usage` shows you where you've been, `/insights` shows you what to fix. Get into the habit of checking before you scale a workflow up."
+
+**Recovery notes:**
+- If `/cost` isn't available in the participant's build (older versions): pivot to the web console at `console.anthropic.com → Usage`, which shows the aggregate. Still gets the point across.
+- If two runs return suspiciously identical cost numbers, you've probably hit cache — clear with `/clear` between runs or change the prompt slightly.
+- If a participant questions whether Haiku really produces correct code: run their counter-example live. The demo's point survives — and you've just shown adversarial debugging in passing.
 
 ---
 

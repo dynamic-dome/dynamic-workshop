@@ -11,8 +11,10 @@
 | **Must-do** | 3.1 Multi-Agent Task | ~15 min |
 | **Must-do** | 3.5 Architecture Discussion | ~45 min |
 | **Should-do** | 3.3 Security Audit **OR** 3.4 Automation | ~30 min / ~20 min |
+| **Should-do** | 3.6 Pre-Commit Hook with Claude | ~20 min |
+| **Should-do** | 3.7 Debug a Broken Hook | ~15 min |
 | **Nice-to-have** | 3.2 Codex Swarm (demo-only) | ~15 min |
-| **Nice-to-have** | Bonus 3.3 HIPAA Hook | ~15 min |
+| **Nice-to-have** | Bonus 3.8 HIPAA Hook | ~15 min |
 
 > **Realistic total: 90–120 minutes.** Prioritize Must-do exercises first.
 
@@ -103,51 +105,62 @@ Each group shares their most interesting answer.  5 minutes total.
 
 ### Setup
 
-Use a project from earlier in the workshop, or the workshop demo project.
+Use `workshop-playground/access_control.py`. It already contains three deliberately planted vulnerabilities:
+1. Command Injection in `backup_database()`
+2. Hardcoded credential `ADMIN_PASSWORD = "admin123"`
+3. Path Traversal in `read_log()`
 
-**Step 1: Plant a vulnerability (important)**
+There is also a strong chance the swarm surfaces a fourth, *unplanned* issue (Log-Injection in `log_event()`). Treat that as a bonus.
 
-This makes the exercise concrete.  Add this to a Python file in your project:
+**No vulnerability planting required** — we use the existing ones.
 
-```python
-def run_command(user_input):
-    import subprocess
-    # This code passes user input directly to a shell command — intentional vulnerability
-    result = subprocess.run("echo " + user_input, shell=True, capture_output=True, text=True)
-    return result.stdout
+**Step 1: Open the playground**
+
+```bash
+cd workshop-playground/
+ls access_control.py     # confirm you have the file
 ```
 
-Note where you added it.  We want to see if the swarm finds it.
-
-**Step 2: Run the swarm**
+**Step 2: Run the swarm against `access_control.py`**
 
 ```
-/devil-advocate-swarms:swarm
+/devil-advocate-swarms:swarm scan workshop-playground/access_control.py
 ```
-
-Point it at your project.
 
 **Step 3: Wait and watch**
 
 Do not skip ahead.  Watch each stage:
-- Scanners: what did each one identify?
+- Scanners: what did each one identify? Did they catch all three planted issues? Anything beyond?
 - Debate: which findings are being argued?  Who is winning?
 - Consensus: how many CONFIRMED vs FALSE POSITIVE?
-- Fixers: what does the fix for your planted vulnerability look like?
+- Fixers: what does the fix for each confirmed finding look like?
+
+The swarm should confirm the **three planted issues** (Command Injection, Hardcoded Credential, Path Traversal) — plus potentially find the **Log-Injection bonus** in `log_event()`.
+
+**Step 4: Pick one finding and apply its fix**
+
+Choose **one** of the three confirmed findings and let Claude implement the fix in `access_control.py`. After the fix:
+
+```bash
+pytest -v
+```
+
+The existing test suite must still pass. The fix is only acceptable if the baseline tests stay green.
 
 ### What to Report
 
-1. Did the swarm find the planted vulnerability?  At which stage was it confirmed?
-2. What else did it find?  Were there real issues you had missed?
+1. How many of the three planted vulnerabilities did the swarm confirm? At which stage?
+2. Did it find the bonus Log-Injection in `log_event()` — or anything else you had not expected?
 3. Were there false positives?  What did the Defender argue for each one?
-4. How does the fix compare to what you would have written manually?
+4. Which finding did you fix, and does the fix break any of the existing tests?
 
 ### Hints
 
 - The debate phase is the most interesting part.  Read the Prosecutor and Defender arguments.
-- Some real findings will be false positives.  The Defender should win those.
-- If the swarm misses the planted vulnerability, that is also interesting — why?
+- Some findings may end up as false positives — the Defender should win those.
+- If the swarm misses one of the three planted issues, that is also interesting — why?
 - Pay attention to the regression test the Fixer writes.  Is it testing the right thing?
+- After the fix, run `pytest -v` from the playground root to confirm the baseline still passes.
 
 ### For the CySec Engineer
 
@@ -206,9 +219,10 @@ After setting up your automation, verify it runs:
 
 ---
 
-## Exercise 3.5: Architecture Discussion (Group)
+## Exercise 3.5: Architecture Discussion (Capstone) — Must-do, ~45 min
 
-**Type:** Group, ~30 minutes
+**Priority:** Must-do — Workshop-Capstone
+**Type:** Group, ~30 minutes (Discussion) + optional Capstone-Track (Hausaufgabe oder Bonus-Zeit)
 **Goal:** Design an ideal Claude Code workflow for a real project.
 This is the synthesis exercise — the goal of the entire workshop.
 
@@ -276,9 +290,131 @@ The ability to design this workflow is what we came here for.
 You now have the vocabulary, the tools, and the mental models.
 The workflow you sketch today should be something you can actually start building tomorrow.
 
+### Optional: Capstone Track
+
+Wenn ihr nach der Discussion noch Zeit habt (oder als Hausaufgabe nach dem Workshop):
+
+**Wähle ein Heim-Projekt** (eigener Code, Side-Project, Repo das ihr regelmäßig nutzt) und baue darin **ein** konkretes Setup-Element basierend auf Workshop-Inhalt:
+
+- **Variante A — Skill für deinen Workflow:** Skill, der ein typisches Anliegen aus deinem Projekt abdeckt (z.B. "Code-Review für Firmware-PRs", "Generiere OSDP-Frame-Tests", "Audit Access-Control-Configs")
+- **Variante B — Hook für dein Repo:** Hook, der eine projekt-spezifische Regel durchsetzt (z.B. "Niemals direkt in main committen", "Keine Edits an firmware/secure-boot.c ohne Bestätigung")
+- **Variante C — Plugin:** Bündele 2-3 Skills/Hooks zu einem Plugin und installiere es lokal mit `claude --plugin-dir ./mein-plugin`
+- **Variante D — CI-Workflow:** GitHub-Action-YAML, die Claude Code als Reviewer einsetzt (siehe Modul 3.6)
+
+**Erwartung:** kein production-grade Code, sondern ein Lerntreiber. Wichtig: in deinem echten Workflow nutzen, nicht im Workshop-Sandbox.
+
+**Optional teilen:** Wenn du willst, teile dein Capstone-Artefakt in der Workshop-Community (Slack/Discord/E-Mail).
+
 ---
 
-## Bonus Exercise 3.3: HIPAA-Style Security Guardrails
+## Exercise 3.6: Build a Claude-Backed Pre-Commit Hook
+
+**Type:** Individual, ~20 minutes
+**Priority:** Should-do
+**Goal:** Wire Claude Code into your local git workflow as a pre-commit lint gate — your first taste of Claude as a CLI tool in a pipeline.
+
+### Background
+
+Module 3.6 introduced the headless mode (`claude -p`, `--bare`, `--max-budget-usd`, `--output-format`). This exercise turns those flags into a real safety net: a git pre-commit hook that blocks dirty diffs before they leave your machine.
+
+You will learn-by-doing four things at once:
+- Headless invocation in a real script.
+- A hard budget cap on a routine that runs on every commit.
+- `--bare` mode to keep the hook fast.
+- Reading Claude's structured output to decide pass/fail.
+
+**Security analogy:** Pre-commit hooks are the badge-reader at the building exit — they check what is leaving before it leaves. Adding Claude to that reader gives it a brain instead of a regex.
+
+### Steps
+
+**Step 1: Pick a test repo**
+
+Use the workshop playground or any small repo where you can experiment without worry:
+
+```bash
+cd workshop-playground
+git init       # if it is not a repo yet
+```
+
+**Step 2: Write the hook**
+
+Create `.git/hooks/pre-commit` with the following content:
+
+```bash
+#!/bin/bash
+STAGED=$(git diff --cached)
+if [ -z "$STAGED" ]; then exit 0; fi
+
+RESULT=$(echo "$STAGED" | claude --bare -p \
+  "Check this staged diff for obvious bugs, security issues, or leftover debug statements (print, console.log, debugger). Reply with 'OK' if clean, otherwise list the issues one per line." \
+  --max-budget-usd 0.10 \
+  --max-turns 2 \
+  --output-format text)
+
+if [[ "$RESULT" != "OK"* ]]; then
+  echo "Pre-commit check failed:"
+  echo "$RESULT"
+  exit 1
+fi
+exit 0
+```
+
+Notice every flag from Module 3.6 in there:
+- `--bare` so the hook starts fast and stays deterministic.
+- `--max-budget-usd 0.10` as a hard cap — the worst-case cost of a commit attempt is one dime.
+- `--max-turns 2` to prevent runaway loops.
+- `--output-format text` because we only need a yes/no answer.
+
+**Step 3: Make it executable**
+
+```bash
+chmod +x .git/hooks/pre-commit
+```
+
+(On Windows, use Git Bash or WSL — git's hook subsystem looks for executable POSIX scripts.)
+
+**Step 4: Test the happy path**
+
+Make a clean change (a comment, a typo fix, a whitespace tweak), stage it, commit. The hook should pass silently.
+
+**Step 5: Test the unhappy path**
+
+Now intentionally introduce a problem — add a `print("DEBUG")` line, a hardcoded password, or a commented-out test. Stage and try to commit. The hook should block, list the issues it found, and exit non-zero. The commit does not happen.
+
+### Bonus (~5 min): Add a Cost Trace
+
+Log each invocation to a local trace file so you can later audit how much the hook actually costs:
+
+```bash
+echo "$(date) | $(basename "$0") | budget=0.10 | result=$(echo "$RESULT" | head -1)" >> ~/.claude/precommit-trace.log
+```
+
+Add that line right before `exit 0` (and a similar one before `exit 1`). After a few commits, `tail ~/.claude/precommit-trace.log` shows you the real-world frequency and outcome of every hook run.
+
+### Reflection
+
+After 5+ commits with the hook active, answer these in your notes:
+
+1. **Cost:** Roughly how many tokens did each invocation consume? Check `/usage` in an interactive session, or your Anthropic Console dashboard. Was the $0.10 cap close to being hit, or comfortably over-budget?
+2. **Accuracy:** Did the hook catch a problem you would have committed otherwise? Did it cry wolf — false-positives that wasted your time?
+3. **Speed:** Did the hook noticeably slow down your commit workflow? If yes, what would you trade off — fewer checks, smaller prompts, a faster model via `--model haiku`?
+4. **Production-readiness:** Would you actually enable this hook in a real project? Pro/contra list with three bullets each.
+
+### Success Check
+
+- [ ] The hook is executable and lives at `.git/hooks/pre-commit`.
+- [ ] A clean commit passes silently.
+- [ ] A commit with an obvious issue is blocked with a readable message.
+- [ ] Every Module 3.6 flag (`--bare`, `--max-budget-usd`, `--max-turns`, `--output-format`) appears in your hook.
+- [ ] You have an opinion on whether to ship this in a real project.
+
+### Stretch (if time allows)
+
+Convert the hook to use `--output-format json` with a small `--json-schema`, and parse the result with `jq`. The hook decision becomes deterministic Boolean logic instead of string-prefix matching — exactly the pattern a CI runner would use.
+
+---
+
+## Bonus Exercise 3.8: HIPAA-Style Security Guardrails
 
 **Type:** Individual, ~15 minutes
 **Goal:** Build a hook that scans every file write for sensitive data patterns — simulating compliance guardrails.
@@ -338,6 +474,81 @@ Add to settings.json with matcher `Write|Edit`. Test by asking Claude to create 
 1. What sensitive data patterns exist in your actual projects?
 2. Could you run this as a PostToolUse hook instead (log but don't block)?
 3. How would you handle false positives (e.g., test data that looks like real credentials)?
+
+---
+
+## Exercise 3.7: Debug a Broken Hook
+
+**Priority:** Should-do — valuable for self-sufficient productivity. Without this skill you are blocked every time a hook misbehaves.
+**Type:** Individual, ~15 minutes (+5 min bonus)
+**Goal:** Diagnose and fix a misconfigured hook using only the standard inspection tools — without reading the hook script first.
+
+### Background
+
+The moderator has prepared a mini-setup with a hook in `~/.claude/settings.json` that **blocks every Bash command**, even the harmless ones. Symptom: every `ls`, every `cat`, every `git status` produces a permission prompt or an outright deny. The terminal feels broken.
+
+Your job is **not** to peek at the hook script. The job is to find the problem the way you would find it on a colleague's machine — using only `/hooks`, `claude --verbose`, and the diagnosis playbook from Module 3.7.
+
+**Security analogy:** A new access-control policy was deployed overnight. Every door is now denying every card. The vendor has not returned your call. You walk the layers: card → reader → controller. Same loop, software version.
+
+### Task
+
+**Step 1: Recognize the problem without reading the script**
+
+- Run `/hooks` — what does the matcher look like? Is it suspiciously broad (e.g. `".*"`, `"Bash.*"` without further restriction)?
+- Restart Claude with `claude --verbose` — what does the boot log say about the registered hook?
+
+Write down your hypothesis **before** opening the script.
+
+**Step 2: Analyze the hook script**
+
+- Open `~/.claude/hooks/<name>.sh`.
+- Read the matcher and the body. What does the matcher actually match? Is it broader than the docstring claims?
+- What does the body do? Is it logging, blocking, or both?
+
+**Step 3: Fix the script**
+
+Pick one of two approaches:
+
+- **Tighten the matcher.** Change `".*"` to a specific pattern that matches only what the hook is supposed to scrutinize (e.g. `"Bash(rm *)"` for destructive-command checks, not for `ls`).
+- **Temporarily disable the hook** in `settings.json` by removing it from the matcher list (good for unblocking yourself while you reason about the right matcher).
+
+**Step 4: Verify**
+
+- Run a harmless command like `ls` or `git status`.
+- It should run **without a permission prompt** this time.
+- Run `/hooks` again — confirm the matcher is now what you intended.
+
+### Bonus (~5 minutes)
+
+**Step 5: Write a self-inspecting hook script.**
+
+Modify the (now-fixed) hook so that on every match it appends an entry to `~/.claude/hook-trace.log`:
+
+```bash
+TIMESTAMP=$(date -Iseconds)
+ACTION=$(echo "$INPUT" | jq -r '.tool // "unknown"')
+DECISION="allow"   # or "block" depending on your hook logic
+echo "$TIMESTAMP | $ACTION | $DECISION" >> ~/.claude/hook-trace.log
+```
+
+Now you have an **audit trail** for hook activity. Later when something feels off ("did my hook fire on that command?"), you `tail -20 ~/.claude/hook-trace.log` and see immediately.
+
+This is the production-grade pattern: every hook should leave a trace, not just a silent block.
+
+### Report
+
+In the discussion afterward, share:
+
+1. **What was the root cause?** Matcher too broad? Exit code wrong? Path wrong?
+2. **How would you have found this without `/hooks` and `--verbose`?**
+   *(Honest answer: it would have been much harder. Without `/hooks` you would not even know which hook was firing. Without `--verbose` you would not know the matcher was registered too broadly. These two commands are essential.)*
+3. **What would you change in the script if it were yours to maintain long-term?**
+   *(Tighten the matcher, add the trace log, set an explicit timeout, document the matcher's intent in a comment.)*
+
+### Why This Matters
+
+Hooks are the most powerful Claude Code feature and the easiest to misconfigure. A team that uses hooks heavily will hit this exact scenario every few weeks. The 15 minutes you spent here are the difference between "Claude is broken, give up" and "30-second diagnosis, surgical fix, back to work".
 
 ---
 

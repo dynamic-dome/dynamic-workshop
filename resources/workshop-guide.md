@@ -12,7 +12,7 @@ Kurz gesagt:
 
 ## Wie der Workshop aufgebaut ist
 
-Der Workshop besteht aus drei Sessions mit insgesamt 13 Modulen:
+Der Workshop besteht aus drei Sessions mit insgesamt 14 Modulen (Block 1: 4, Block 2: 5, Block 3: 5):
 
 - Block 1: Foundations
   Was Claude Code ist, wie Kontext funktioniert, wie gutes Prompting aussieht und wie Git/Worktrees in den Workflow passen.

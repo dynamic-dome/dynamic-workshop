@@ -1,7 +1,7 @@
 {
   "name": "dynamic-workshop",
   "version": "1.0.0",
-  "description": "Interactive Claude Code workshop plugin — two modes: /workshop guide (moderator co-pilot) and /workshop learn (self-paced tutor). 13 modules across 3 blocks covering foundations, ecosystem, and advanced topics.",
+  "description": "Interactive Claude Code workshop plugin — two modes: /workshop guide (moderator co-pilot) and /workshop learn (self-paced tutor). 14 modules (4+5+5) across 3 blocks covering foundations, ecosystem, and advanced topics.",
   "commands": [
     "commands/workshop.md"
   ],

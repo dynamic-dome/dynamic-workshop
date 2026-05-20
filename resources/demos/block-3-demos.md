@@ -103,71 +103,64 @@ Three different intelligence profiles.  One pipeline.  The result is better than
 
 ### Setup
 
-Prepare a small demo project with intentional vulnerabilities.
-Create `demo_vulnerable.py`:
+You have already cloned `workshop-playground/` as part of the prerequisites (Step 7).
+We use it as-is — it ships with three deliberately planted vulnerabilities in `access_control.py`.
 
-```python
-import subprocess
-import sqlite3
+No file creation required for this demo.
 
-def run_diagnostic(device_name):
-    # Intentional vulnerability: shell injection via unvalidated input
-    result = subprocess.run(f"ping -c 1 {device_name}", shell=True, capture_output=True, text=True)
-    return result.stdout
-
-def get_device_status(device_id):
-    conn = sqlite3.connect("devices.db")
-    cursor = conn.cursor()
-    # Intentional vulnerability: SQL injection via string formatting
-    query = "SELECT * FROM devices WHERE id = " + device_id
-    cursor.execute(query)
-    return cursor.fetchall()
-
-def load_config():
-    # Intentional vulnerability: hardcoded credential
-    api_key = "sk-prod-abc123xyz789"
-    return {"api_key": api_key}
-```
+> **Windows note for moderators:** The Command Injection vulnerability lives in `backup_database()` and uses the Unix `cp` command (`access_control.py:140`). On a Windows workshop machine, the live `backup` CLI call will fail at runtime (no `cp` on Windows). The **swarm still detects the vulnerability statically** because the dangerous pattern (`subprocess.run` with `shell=True` and unvalidated input) is what matters. If you want to demonstrate live exploitation as well, open a Git Bash or WSL shell — otherwise note the limitation aloud and move on. The static finding is the point of the demo.
 
 ### Steps
 
-**Step 1: Run the swarm**
+**Step 1: Move into the playground**
+
+```bash
+cd workshop-playground/
+```
+
+**Step 2: Launch the adversarial swarm**
 
 ```
-/devil-advocate-swarms:swarm
+/devil-advocate-swarms:swarm scan workshop-playground/access_control.py
 ```
 
-Point at `demo_vulnerable.py`.
-
-**Step 2: Watch Stage 1 — Scanners**
+**Step 3: Watch Stage 1 — Scanners**
 
 Two scanners run in parallel.
 Name what each is looking for.
-Point out: they will both find the injection issues — overlap = validation.
+Point out: they will both find the planted issues — overlap = validation.
 
-**Step 3: Watch Stage 2 — Debate**
+Expected confirmed findings (three planted issues):
+- **Command Injection** in `backup_database()` (`access_control.py:~140`) — `subprocess.run(f"cp {DB_FILE} {filename}", shell=True)` with unvalidated CLI input from the `backup` command
+- **Hardcoded Credential** `ADMIN_PASSWORD = "admin123"` (`access_control.py:19`) — a literal secret at module scope
+- **Path Traversal** in `read_log()` (`access_control.py:~127`) — `open(f"logs/{log_name}")` with no sanitization, reachable via the `read-log` CLI command
+
+There is also a strong chance the scanners surface an **ungeplante bonus finding**: a **Log-Injection / Log-Forging** issue in `log_event()` (`access_control.py:105-113`). The function writes `username` and `action` straight into a line-based log file — a newline-bearing username can forge log entries. If the swarm catches this, celebrate it; if not, mention it after the demo as evidence that no scanner is exhaustive.
+
+**Step 4: Watch Stage 2 — Debate**
 
 This is the most important part.  Slow down and explain what is happening:
 - Prosecutor is arguing each finding as if writing an exploit report
 - Defender is looking for reasons it is not exploitable
 - For the hardcoded credential: Defender has no good argument.  Confirmed.
-- For the shell injection: same.  Confirmed.
+- For the command injection: same.  Confirmed.
+- For the path traversal: Defender may argue "logs/ is a controlled directory" — Prosecutor counters with the `../../etc/passwd` example. Confirmed.
 - Point out if any finding gets argued away — that is the system saving engineer time.
 
-**Step 4: Watch Stage 3 — Consensus**
+**Step 5: Watch Stage 3 — Consensus**
 
 Show the CONFIRMED vs FALSE POSITIVE split.
 Each confirmed finding has a full audit trail — the debate transcript is the evidence.
 
-**Step 5: Watch Stage 4 — Fixers**
+**Step 6: Watch Stage 4 — Fixers**
 
 Show the fixes being applied.
 Each fix is minimal and targeted.
 Each has a regression test.
 
-**Step 6: Show the planted vulnerabilities were all found**
+**Step 7: Show the planted vulnerabilities were all found**
 
-Scroll through findings.  The three planted issues should all be CONFIRMED.
+Scroll through findings. **Three confirmed planted issues + 1 bonus finding (Log-Injection)** is the expected outcome — three of the swarm's confirmations map 1:1 onto the planted vulnerabilities, the fourth (if surfaced) is the un-planted log forging issue.
 
 ### Talking Point
 
@@ -254,11 +247,22 @@ Show Claude fixing a real dependency vulnerability using web search + plan mode 
 
 ### Steps
 
-**Step 1: Set up a vulnerable dependency (before demo)**
+**Step 0: Plant a vulnerable dependency (before demo)**
 
-In the demo project's `package.json` or `requirements.txt`, include a package with a known CVE (e.g., an older version of a popular library).
+The default `workshop-playground/requirements.txt` only contains unpinned `pytest`. Before the demo, temporarily pin a known-vulnerable older library so the CVE-fix flow has real input.
 
-**Step 2: Ask Claude to fix it (3 min)**
+```bash
+# Inside workshop-playground/
+# Option A (Python, recommended):
+echo "requests==2.5.0" >> requirements.txt    # CVE-2018-18074
+
+# Option B (alternative Python CVE):
+# echo "urllib3==1.24.0" >> requirements.txt
+```
+
+Important: **bewusst NICHT installieren** — this demo only shows the scan + fix + PR flow, not actual exploitation. We just need the version string in the manifest so Claude can find an advisory for it.
+
+**Step 1: Ask Claude to fix it (3 min)**
 
 ```
 /plan Find and fix any known CVEs in our dependencies.
@@ -267,13 +271,13 @@ update the lockfile, run tests, and create a PR.
 ```
 
 Walk through what Claude does:
-1. **WebSearch** — finds the advisory on NVD/GitHub
+1. **WebSearch** — finds the advisory on NVD/GitHub for the pinned old version
 2. **Plan** — identifies the affected package, the fix version, and the migration path
-3. **Edit** — updates the version in the dependency file
-4. **Bash** — runs `npm install` / `pip install` and tests
+3. **Edit** — updates the version in `requirements.txt`
+4. **Bash** — runs `pip install` and tests (skip the install if no internet — Claude can still produce the PR)
 5. **Git** — commits and creates a PR with the CVE reference
 
-**Step 3: Show the PR description (1 min)**
+**Step 2: Show the PR description (1 min)**
 
 Point out that Claude included:
 - CVE ID and link to advisory
@@ -282,6 +286,15 @@ Point out that Claude included:
 - Test results
 
 Say: *"From 'there's a CVE' to 'here's a PR with tests' — in under 3 minutes. This is vulnerability management at machine speed."*
+
+**Step 3: Clean up after the demo**
+
+```bash
+# Remove the planted vulnerable line so the playground does not stay verwundbar by accident:
+# Open requirements.txt and delete the requests==2.5.0 (or urllib3==1.24.0) line you added in Step 0.
+```
+
+Reverting the planted line keeps the playground in its intended state for later sessions and prevents any participant from accidentally `pip install`-ing a known-vulnerable library on their machine.
 
 ### Talking Point
 *"In your world, a vulnerability in a door controller firmware means: find the advisory, identify affected units, plan the update path, test on a bench, deploy, verify. Same process here — but Claude does steps 1 through 5 automatically. You review and approve."*
@@ -402,6 +415,197 @@ Every workflow we built today — the multi-agent scans, the adversarial securit
 You do not need to be at a laptop.
 You do not need to be awake.
 Claude is on call."
+
+---
+
+## Demo 3.6: Headless Claude in 5 Minutes
+
+**Goal:** Take the interactive Claude you have used all day and prove it also runs as a one-shot CLI tool — with JSON output, cost caps, and `--bare` mode. Five minutes, four flags, one mindset shift.
+
+### Prerequisite
+
+- `claude` installed and authenticated on the moderator's workstation.
+- A small file to feed in. `workshop-playground/access_control.py` works perfectly.
+- A terminal where the audience can see both the command and its exit code.
+
+### Steps
+
+**Step 1: Headless basics — one prompt, one answer**
+
+Type at the prompt so the audience watches:
+
+```bash
+claude -p "Summarize what this repo does in one sentence."
+```
+
+When the single-line answer prints, point out three things:
+
+1. No interactive loop — the prompt returned to the shell.
+2. Output went to stdout — pipeable to any other tool.
+3. Exit code 0 — the shell would have noticed a failure.
+
+"That is the same Claude you have been talking to all day. Same model, same skills available. The only thing missing is the conversation loop."
+
+**Step 2: Structured output with a schema**
+
+```bash
+claude -p "Categorize this file" \
+  --output-format json \
+  --json-schema '{"type":"object","properties":{"category":{"type":"string"},"language":{"type":"string"}}}' \
+  < workshop-playground/access_control.py
+```
+
+When the output appears, pipe it through `jq` live to show it really is parseable:
+
+```bash
+... | jq '.category'
+```
+
+"A CI pipeline can rely on this. Free-form prose breaks parsers — a schema does not."
+
+**Step 3: Demonstrate a cost cap**
+
+```bash
+claude -p "Refactor this entire codebase from scratch with full test coverage" \
+  --max-budget-usd 0.05 \
+  --max-turns 2 \
+  < workshop-playground/access_control.py
+```
+
+Expectation: Claude starts an ambitious answer, hits the cap, exits cleanly with a budget-exhaustion message. Highlight the exit code (`echo $?`) — non-zero. CI would fail this step instead of running it forever.
+
+"Without that flag this prompt could have spent dollars. With it, the worst case is five cents."
+
+**Step 4: `--bare` mode — show the time difference**
+
+Side-by-side timing:
+
+```bash
+time claude -p "Hello"
+time claude --bare -p "Hello"
+```
+
+`--bare` should return noticeably faster — it skips skill discovery, MCP handshake, hook registration. Call out the delta out loud.
+
+"For a `Hello` you do not need plugins. For a real CI step you might. Pick the right tool."
+
+### Talking Point
+
+"We just turned Claude Code into a Unix-style tool. It takes stdin, produces stdout, returns an exit code, respects flags, and stays within a budget. That is the entry ticket to every CI system on Earth — GitHub Actions, GitLab, Jenkins, your own cron. The interactive Claude is one half of the product. This half is the other."
+
+### Recovery Note
+
+If you also want to show `claude setup-token`, do it **offline before the workshop**, not on the shared screen. The command emits a long-lived OAuth token — treating it carelessly is the same risk class as showing your SSH private key on a projector. Mention the command, point to the docs, move on.
+
+---
+
+## Demo 3.7: Diagnosing a Broken Skill
+
+**Goal:** Walk the audience through the full diagnostic playbook on a skill that fails three different ways in sequence. Each fix reveals the next problem.
+
+### Prerequisite
+
+The moderator has prepared an intentionally broken skill at `~/.claude/skills/broken-greeter/SKILL.md` with **three problems planted** in this order:
+
+1. **Description is generic** — no concrete trigger phrases (just "A skill for greeting").
+2. **`disable-model-invocation: true`** in frontmatter — skill is registered but auto-invocation is disabled.
+3. **`paths: ["never-match/**"]`** — paths filter that no real file can satisfy.
+
+The body of the skill is functional ("Reply with a friendly greeting that uses the user's name"). Only the metadata is wrong.
+
+### Steps (~7 minutes)
+
+**Step 1: Try to use the skill normally**
+
+User prompt:
+
+> "Greet the user."
+
+Watch the skill not fire. Claude answers with a generic greeting from its base behavior — no sign the skill was even considered.
+
+**Step 2: Confirm the skill is installed**
+
+```
+/skills
+```
+
+Point out: `broken-greeter` is in the list. So installation is not the problem.
+
+**Step 3: Inspect the frontmatter**
+
+```bash
+cat ~/.claude/skills/broken-greeter/SKILL.md | head -20
+```
+
+At first glance the frontmatter looks plausible. **Resist the urge to read it carefully.** Instead use the diagnostic tool — that is the lesson.
+
+**Step 4: Activate `/debug` and re-trigger**
+
+```
+/debug skill-not-triggering
+```
+
+Then repeat the prompt: *"Greet the user."*
+
+Read the trace aloud. Highlight the line:
+
+> *"Skill `broken-greeter` matched paths-filter: NO (filter: `never-match/**`, current files: ...)"*
+
+The first root cause is now visible. Audience reaction: "Oh — the paths filter is wrong."
+
+**Step 5: Fix #1 — remove the paths filter**
+
+Edit the frontmatter, delete the `paths:` line. Re-trigger the prompt. **Skill still does not fire.** Re-read the trace:
+
+> *"Skill `broken-greeter` registered but auto-invocation disabled (`disable-model-invocation: true`). Available only via explicit `/broken-greeter`."*
+
+**Step 6: Verify with manual invocation**
+
+```
+/broken-greeter
+```
+
+Skill fires — confirms the body works. The block was purely metadata.
+
+**Step 7: Fix #2 — flip `disable-model-invocation` to `false`**
+
+Edit the frontmatter, set `disable-model-invocation: false`. Re-trigger:
+
+> "Greet the user."
+
+**Skill still does not fire** — but the trace now says something different:
+
+> *"Skill `broken-greeter` description too generic for prompt — no candidate match."*
+
+**Step 8: Fix #3 — rewrite the description with trigger phrases**
+
+Edit the description from `"A skill for greeting"` to something like:
+
+```
+description: >
+  Greets the user warmly by name. Use whenever the prompt is "greet the user",
+  "say hello", "welcome me", "hi", or any opening pleasantry.
+```
+
+**Step 9: Verify full auto-invocation**
+
+```
+"Greet me"
+```
+
+Now the skill fires automatically. Three problems, three diagnostic steps, three fixes.
+
+### Talking Point
+
+"Notice that we never **guessed** what was wrong. We let `/debug` and `/skills` tell us each layer's state. We could have stared at the frontmatter for an hour and missed the `paths` filter because it *looked* reasonable. The diagnostic tools turn the black box back into a glass box.
+
+This is the **inspection-driven debugging** loop: ask the tools what they see, fix what they report, ask again. The moment you start guessing is the moment debugging stops being repeatable."
+
+### Recovery Notes
+
+- If `/debug` is not installed in your Claude Code version (older builds): use `claude --verbose` on session restart, and re-trigger the prompts. The trace is less inline but contains the same information.
+- If the audience asks "why three problems instead of one?" — the answer is: real-world skills usually have one issue at a time, but **the diagnostic loop is the same regardless of how many issues you stack**. The point is the *method*, not the volume.
+- If you want a shorter version (4 min instead of 7): plant only problems #1 and #3, skip the `disable-model-invocation` step.
 
 ---
 

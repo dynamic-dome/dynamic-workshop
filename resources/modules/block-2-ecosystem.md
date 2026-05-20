@@ -39,17 +39,125 @@ description: >
   Test-Driven Development workflow. Use when user wants to write tests first,
   implement after, or says "write tests before code", "TDD", "red-green-refactor".
   Trigger phrases: TDD, test first, write tests, red-green, failing test
+# --- Workshop-custom fields (NOT in the official skill schema) ---
 version: "1.0"
 author: your-name
 tags: [testing, workflow, tdd]
 ---
 ```
 
-Key frontmatter fields:
+Key frontmatter fields (official schema):
 - `name` — the identifier for this skill
 - `description` — **critically important**: includes trigger phrases. Claude Code uses these to auto-detect when to use this skill without the user explicitly invoking it. The description acts as a semantic matcher.
-- `version` — for tracking changes
-- `tags` — for discoverability
+
+**Workshop-custom fields** (not part of the official schema, but useful for internal bookkeeping):
+- `version` — for tracking changes (not consumed by Claude Code)
+- `author` — convenient for shared/team skills (not consumed by Claude Code)
+- `tags` — for human discoverability only
+
+### Official Frontmatter Fields (2026 Reference)
+
+Beyond `name` and `description`, the official skill schema supports a richer set of fields. These actually influence how Claude Code loads, scopes, and executes the skill:
+
+```yaml
+---
+name: tdd
+description: Test-Driven Development workflow. Use when writing tests before code.
+when_to_use: >
+  Triggers on TDD, test-first, red-green-refactor, "write tests before code"
+argument-hint: "[guide|learn] [module]"
+arguments: [mode, module]
+model: sonnet
+effort: high
+paths: ["src/**/*.ts", "tests/**/*.ts"]
+shell: powershell
+hooks:
+  PreToolUse:
+    - matcher: Bash
+      type: command
+      command: ./pre-test-check.sh
+---
+```
+
+| Field | What it does |
+|-------|--------------|
+| `argument-hint` | UI hint shown when the user types the slash command (e.g. `/tdd [guide|learn] [module]`) |
+| `arguments` | Named positional argument list. Maps to `$mode`, `$module`, ... in the body |
+| `when_to_use` | Modern alternative to stuffing trigger phrases into `description`. Read by Claude as activation signal |
+| `model` | `haiku` / `sonnet` / `opus` — which model handles the skill's forked context |
+| `effort` | `low` / `high` / `xhigh` / `max` — default thinking effort for this skill |
+| `paths` | Glob patterns. Skill is path-scoped — only auto-activates when matching files are in context |
+| `shell` | `powershell` / `bash` — override the shell used for skill-executed commands. Critical on Windows |
+| `hooks` | Component-scoped hooks. Only run while this skill is active (see Module 2.2 for hook details) |
+
+### Argument Substitution
+
+When a skill receives arguments, Claude Code substitutes them into the body at execution time. The substitutions match the `arguments:` frontmatter:
+
+| Token | Meaning |
+|-------|---------|
+| `$ARGUMENTS` | All arguments as a single string |
+| `$1`, `$2`, ..., `$N` | Positional arguments by index |
+| `$mode`, `$module`, ... | Named arguments (matches the `arguments:` frontmatter list) |
+| `${CLAUDE_SESSION_ID}` | Current session UUID |
+| `${CLAUDE_EFFORT}` | Current effort level (`low`/`high`/`xhigh`/`max`) |
+| `${CLAUDE_SKILL_DIR}` | Absolute path to this skill's directory |
+
+**Example** — combining positional and named arguments:
+
+```markdown
+---
+name: review
+description: Run a review against a target module
+argument-hint: "[mode] [module]"
+arguments: [mode, module]
+---
+
+# Review Skill
+
+You are running the **$mode** review on module **$module**.
+
+Session: ${CLAUDE_SESSION_ID}
+Effort: ${CLAUDE_EFFORT}
+
+Raw input: $ARGUMENTS
+First positional: $1
+```
+
+Invoked as `/review strict auth-service`, the body sees `$mode = strict`, `$module = auth-service`, `$1 = strict`, `$ARGUMENTS = "strict auth-service"`.
+
+### Dynamic Context Injection — Live Prompts
+
+Skills are no longer static markdown. The `` !`<command>` `` syntax runs a shell command at skill-load time and inlines the command's stdout directly into the prompt.
+
+```markdown
+# Pre-Commit Skill
+
+Current git diff:
+!`git diff HEAD`
+
+Current branch:
+!`git branch --show-current`
+
+Failing tests:
+!`pytest --tb=no -q 2>&1 | tail -20`
+
+Now review the diff and propose a commit message.
+```
+
+When Claude loads the skill, the backtick blocks are replaced by live command output **before** the prompt reaches the model. This transforms skills from static markdown into **living prompts** that auto-collect real-time context.
+
+**Security analogy:** This is like a security checkpoint that pulls fresh badge data from the directory on every scan, rather than relying on a printout from this morning. Powerful — but also a new attack surface.
+
+**Enterprise hardening:** Managed environments can disable this feature globally:
+
+```json
+{
+  "disableSkillShellExecution": true
+}
+```
+
+Set via managed settings — admins can lock skill bodies down to pure text, preventing any shell execution on skill load.
 
 **Markdown Body** (the actual instructions Claude follows):
 ```markdown
@@ -135,18 +243,42 @@ mkdir -p ~/.claude/skills/my-workflow
 
 Then in any Claude Code session, you can invoke it: `/my-workflow` or just describe what you want — Claude will match the trigger phrases in the description.
 
-### The Difference Between Skills and Commands: Summary
+### Skills vs Commands — Same Thing, Different Defaults
 
-| Aspect | Command | Skill |
-|--------|---------|-------|
-| What it is | Entry point / trigger | Instructions / procedure |
-| Who uses it | End user (types it) | Claude (reads and follows it) |
-| Where it lives | `commands/*.md` | `skills/*/SKILL.md` |
-| Analogy | Alarm button | SOP document |
-| Can contain | Arguments, short instructions | Full workflow, rules, examples |
-| Invocation | User types `/commit` | Claude loads it when triggered |
+**Important didactic clarification.** In earlier versions of Claude Code, commands and skills were two separate categories. **Since v2.x they have been merged into a single concept.**
 
-A command can load a skill. A skill can be invoked without a command (via trigger phrase matching). They work together but serve different roles.
+Both of these produce the exact same `/deploy` slash command:
+
+```
+.claude/commands/deploy.md
+.claude/skills/deploy/SKILL.md
+```
+
+They are loaded by the same machinery, support the same frontmatter, and expose the same interface to the user. The "Command vs Skill" terminology is kept alive in the docs and the community, but the **runtime treats them identically**.
+
+The relevant difference is now a single frontmatter switch:
+
+```yaml
+---
+name: deploy
+disable-model-invocation: true   # Manual /deploy only — never auto-triggered
+---
+```
+
+- `disable-model-invocation: false` (default) — behaves like a classic **skill**: Claude can auto-invoke it when the description matches user intent.
+- `disable-model-invocation: true` — behaves like a classic **command**: only fires when the user explicitly types `/deploy`.
+
+#### Conceptual mapping (legacy terminology vs. current reality)
+
+| Aspect | "Command-style" (manual) | "Skill-style" (auto-detected) |
+|--------|--------------------------|-------------------------------|
+| Frontmatter switch | `disable-model-invocation: true` | `disable-model-invocation: false` (default) |
+| Who triggers it | End user (types `/name`) | User OR Claude (via description match) |
+| Typical use | Destructive/critical actions: `/deploy`, `/commit`, `/delete` | Reusable workflows: TDD, code review, formatting |
+| Analogy | Alarm button (you must press it) | SOP document (procedure can be invoked by anyone, including by name match) |
+| Lives at | `commands/*.md` or `skills/*/SKILL.md` | `commands/*.md` or `skills/*/SKILL.md` |
+
+**Bottom line:** both names live on, but functionally they are merged. Treat `disable-model-invocation` as the real boundary, not the file path.
 
 ### Bundled Skills (Built-in, Always Available)
 
@@ -159,8 +291,16 @@ Claude Code ships with **bundled skills** — prompt-based playbooks available i
 | `/debug [description]` | Activates debug logging and analyzes the log | `/debug failing mcp auth` |
 | `/loop [interval] <prompt>` | Executes a prompt periodically | `/loop 5m check deploy status` |
 | `/simplify [focus]` | Runs parallel reviews + fixes on recently changed files | `/simplify focus on perf` |
+| `/run [skill-name]` | Launch and verify your app (added v2.1.145) | `/run dev-server` |
+| `/verify` | Verify recent changes by actually running the app, not just tests (v2.1.145) | `/verify` |
+| `/run-skill-generator` | Generate a per-project run-skill that knows how to launch this codebase (v2.1.145) | `/run-skill-generator` |
+| `/fewer-permission-prompts` | Scans your transcripts for repeated tool calls and generates a `permissions.allow` allowlist | `/fewer-permission-prompts` |
 
-**Security analogy:** Bundled skills are like the standard operating procedures that come pre-installed with a security system. The `/batch` skill is like running a firmware update across all door controllers simultaneously — each in its own isolated worktree so a failure in one doesn't brick the others.
+**Security analogy:** Bundled skills are like the standard operating procedures that come pre-installed with a security system. The `/batch` skill is like running a firmware update across all door controllers simultaneously — each in its own isolated worktree so a failure in one doesn't brick the others. `/verify` is the equivalent of physically opening the door after replacing the lock — it isn't fixed until you've actually used it.
+
+### Skill Live-Reload
+
+Files in `~/.claude/skills/` and `.claude/skills/` are picked up live — **no Claude Code restart needed**. Edit a `SKILL.md`, save, invoke the skill again. The new content is loaded immediately. This makes skill authoring iterative and fast: edit, test, edit, test.
 
 ### Advanced Skill Frontmatter
 
@@ -202,28 +342,32 @@ Think of hooks as **event listeners** for Claude's behavior. When something happ
 
 ### Hook Types
 
-**PreToolUse — Before, Can Block**
+The official docs currently list **28 lifecycle events**. We focus on the 11 you will reach for most often:
 
-Fires before Claude uses a tool (runs bash, edits a file, calls an MCP server). The hook receives information about what Claude is about to do. It can:
-- Log the action
-- Warn the user
-- **Block the action entirely** by exiting with a non-zero code
+| Event | When it fires | Typical use case |
+|-------|---------------|------------------|
+| **PreToolUse** | Before Claude uses a tool (bash, edit, MCP call). **Can block** by exiting non-zero | Prevent dangerous commands, enforce review before deploy, confirm irreversible actions |
+| **PostToolUse** | After a tool runs and the result is back. Can react, log, trigger follow-ups | Audit log of every edit, Slack notification when tests pass, dashboard updates |
+| **Stop** | Claude finishes a response and is waiting for the next user prompt | End-of-session summaries, cleanup tasks, status updates |
+| **SessionStart** | Each time a Claude Code session starts | Briefing hook: print project status, check `git status`, verify dependencies are installed |
+| **SessionEnd** | Clean exit (user runs `/exit` or closes the session) | Wrap-up hook: save session summary, archive logs, sync to wiki |
+| **UserPromptSubmit** | The user submits a prompt (before Claude sees it) | Prompt validation, auto-append context (current branch, ticket ID), redact secrets |
+| **PreCompact** | About to compress context to free tokens | Persist critical state to disk before it gets summarized away |
+| **SubagentStart** | A subagent is being spawned | Inject extra instructions, log delegation, attach observers |
+| **SubagentStop** | A subagent finishes | Capture the subagent's final report, write to audit log, trigger downstream agent |
+| **FileChanged** | A tracked file changes (external editor, git pull, watcher) | React to external edits, re-run tests, invalidate caches |
+| **InstructionsLoaded** | After CLAUDE.md / `.claude/rules/` loading finishes | Debug what was actually loaded into context, log effective instructions |
+| **Notification** | Claude emits a notification (long task done, permission required) | Push to phone via Pushover, forward to Slack, blink the lights |
 
-Use cases: prevent dangerous commands, enforce code review before deploy, require confirmation for irreversible actions.
+**Security analogy:** PreToolUse is the badge reader checking authorization *before* the door unlocks. PostToolUse is the door-open sensor logging the event *after*. SessionStart is the morning shift briefing. PreCompact is the moment before a guard hands off their notes — make sure the important details get written down before they fade.
 
-**PostToolUse — After, Can React**
+### The Three Cornerstones in Detail
 
-Fires after Claude uses a tool and receives the result. It can:
-- Log what happened
-- Trigger follow-up actions
-- Send notifications
-- Write to audit logs
+**PreToolUse — Before, Can Block.** Fires before Claude uses a tool (runs bash, edits a file, calls an MCP server). The hook receives information about what Claude is about to do. It can log the action, warn the user, or **block the action entirely** by exiting with a non-zero code.
 
-Use cases: log all file edits, send Slack notification when tests pass, update a dashboard after each tool call.
+**PostToolUse — After, Can React.** Fires after Claude uses a tool and receives the result. It can log what happened, trigger follow-up actions, send notifications, write to audit logs.
 
-**Stop — When Claude Finishes**
-
-Fires when Claude finishes a response and is waiting for the next user input. Use cases: end-of-session summaries, cleanup tasks, status updates.
+**Stop — When Claude Finishes.** Fires when Claude finishes a response and is waiting for the next user input. Use cases: end-of-session summaries, cleanup tasks, status updates.
 
 ### Security Analogy: Access Control Sensors
 
@@ -285,7 +429,22 @@ The structure:
 }
 ```
 
-The `matcher` field is a regex pattern that matches against the tool name (e.g., `"Bash"`, `"Edit"`, `".*"` for all tools).
+The `matcher` field controls which tool calls the hook reacts to. The matching logic depends on the matcher's contents:
+
+- If the matcher contains **only letters, digits, `_`, and `|`**, it is treated as an exact match or a pipe-separated list. `"Bash"` matches just the Bash tool; `"Bash|Edit|Write"` matches any of those three.
+- If the matcher contains **any other special characters**, it is treated as a JavaScript regex. `".*"` matches all tools; `"Bash|^Edit$"` is also regex once `.` or `^`/`$` appear.
+
+You can also add an `if` field for further filtering using **permission-rule syntax**, which is a much more semantic filter than tool-name regex alone:
+
+```json
+{
+  "matcher": "Bash",
+  "if": "Bash(git *)",
+  "hooks": [...]
+}
+```
+
+This hook fires only on Bash invocations that match the permission rule `Bash(git *)` — i.e., only git-related shell commands. The `if` syntax mirrors the same patterns you use in `permissions.allow` / `permissions.deny`.
 
 ### A Real Hook Example: Security Warning
 
@@ -325,7 +484,7 @@ Hooks are the mechanism that turns Claude Code from a helpful assistant into an 
 
 ### Hook Execution Types
 
-Hooks don't just run shell commands. There are four execution types:
+Hooks don't just run shell commands. There are five execution types:
 
 | Type | How it works | Best for |
 |------|-------------|----------|
@@ -333,6 +492,7 @@ Hooks don't just run shell commands. There are four execution types:
 | **http** | Sends HTTP request to a URL | Webhook notifications, external APIs |
 | **prompt** | Sends a prompt to Claude for evaluation | Complex, context-aware decisions |
 | **agent** | Spawns a subagent for evaluation | Multi-step validation logic |
+| **mcp_tool** | Invokes an MCP tool directly | Notification to Slack via MCP, push to monitoring dashboard, structured external action without shelling out |
 
 **Example: prompt hook** that evaluates whether a Bash command is safe:
 ```json
@@ -352,6 +512,104 @@ Hooks don't just run shell commands. There are four execution types:
   }
 }
 ```
+
+### Component-Scoped Hooks: Hooks in Skill and Subagent Frontmatter
+
+Hooks don't have to live in `settings.json`. They can also be **embedded in the frontmatter of a skill or subagent**, in which case they only run **while that component is active**. Outside the skill or subagent, the hook is silent.
+
+This is a major 2026 feature that lets a skill ship its own pre- and post-checks without polluting global settings.
+
+```yaml
+---
+name: deploy
+description: Deploy the current branch to staging
+disable-model-invocation: true
+hooks:
+  PreToolUse:
+    - matcher: Bash
+      type: command
+      command: ./pre-deploy-check.sh
+  PostToolUse:
+    - matcher: Bash
+      type: command
+      command: ./post-deploy-notify.sh
+---
+```
+
+The `pre-deploy-check.sh` only fires while the deploy skill's context is active. As soon as the session leaves the skill, the hook is gone — no need to add a matcher that filters by skill name in a global hook.
+
+**Security analogy:** A guard who is patrolling Zone A carries Zone-A-specific sensors. When they move to Zone B, those sensors don't come along — Zone B has its own. Component-scoped hooks are exactly that: localized, contextual, and they retire automatically.
+
+### Advanced Hook Output — Rewriting, Soft-Blocking, Terminal Feedback
+
+Beyond simply exiting 0 (allow) or non-zero (block), hooks can return a **structured JSON object** on stdout to control downstream behavior more precisely. Three fields matter in practice.
+
+#### `updatedToolOutput` — Rewrite What Claude Sees (v2.1.119+)
+
+A `PostToolUse` hook can **replace the tool's output before Claude reads it**. The original output is intercepted; Claude sees only the rewritten version.
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/redact-secrets.sh
+INPUT=$(cat)
+OUTPUT=$(echo "$INPUT" | jq -r '.toolOutput')
+REDACTED=$(echo "$OUTPUT" | sed -E 's/(sk-[a-zA-Z0-9]{20,}|AKIA[A-Z0-9]{16})/[REDACTED]/g')
+jq -n --arg out "$REDACTED" '{"hookSpecificOutput":{"updatedToolOutput":$out}}'
+exit 0
+```
+
+**Use case:** Redact API keys, tokens, or PII out of tool output before Claude embeds them into its reasoning (and potentially into future messages). The model never sees the raw secret.
+
+**Security analogy:** A redaction officer between the field operative and the briefing room — the report still reaches the analyst, but with the sensitive identifiers blacked out first.
+
+#### `continueOnBlock: true` — Soft Warnings (v2.1.121+)
+
+By default, a non-zero exit from a hook **stops Claude** in its tracks. With `continueOnBlock: true` on the hook entry, the block degrades to a **warning** — Claude is told what was blocked and why, but the turn continues.
+
+```json
+{
+  "matcher": "Bash",
+  "if": "Bash(git push *)",
+  "continueOnBlock": true,
+  "hooks": [
+    { "type": "command", "command": "./audit-log-push.sh" }
+  ]
+}
+```
+
+**Use case:** Non-fatal audit logs ("we noticed a `git push` — entry written to the audit trail") where you want the action to proceed but want the hook's signal preserved in the transcript.
+
+#### `terminalSequence` — ANSI Output to the User's Terminal (v2.1.139+)
+
+A hook can return a `terminalSequence` field whose value is written **directly to the user's terminal** as raw ANSI escape sequences — independent of the model's reasoning stream.
+
+```bash
+#!/bin/bash
+# Flash red status line when a destructive command was attempted
+jq -n '{"terminalSequence":"[41;97m  DESTRUCTIVE COMMAND BLOCKED [0m\n"}'
+exit 1
+```
+
+**Use case:** Colored warnings, status-bar updates, audible bells, anything that should reach the human operator's eyes without going through Claude's token budget.
+
+#### `$CLAUDE_EFFORT` — Effort-Aware Hooks (v2.1.119+)
+
+Every hook process gets the current effort level injected as an environment variable. This lets one hook script behave **differently depending on whether the user is on low/high/xhigh/max**.
+
+```bash
+#!/bin/bash
+# Stricter scanning when the user requested xhigh / max effort
+case "$CLAUDE_EFFORT" in
+  xhigh|max)
+    ./full-security-scan.sh
+    ;;
+  *)
+    ./quick-pattern-check.sh
+    ;;
+esac
+```
+
+**Use case:** A pre-commit hook that runs a lightweight regex scanner during fast iteration but a full SAST sweep when the user explicitly cranked effort up — without registering two separate hooks. Hooks living inside skills can also branch on the *skill's* configured effort via the same variable.
 
 ### Circuit Breaker Pattern
 
@@ -393,40 +651,71 @@ A Claude Code plugin is the same idea: install it once, and you get a coherent s
 
 ```
 ~/.claude/plugins/cache/my-plugin-marketplace/
-  plugin.json              # metadata, version, dependencies
+  .claude-plugin/
+    plugin.json            # MUST be here, not in the plugin root
   skills/
     my-skill/
       SKILL.md             # skill instructions
     another-skill/
       SKILL.md
   commands/
-    my-command.md          # command definitions
+    my-command.md          # command-style entry points (disable-model-invocation: true)
     another-command.md
   agents/
-    my-agent.md            # agent definitions
+    my-agent.md            # subagent definitions
   hooks/
-    pre-tool-use.sh        # hook scripts
+    hooks.json             # plugin-bundled hook config (JSON schema = settings.json hooks)
+  monitors/
+    monitors.json          # background-monitor definitions (poll logs, PRs, files)
+  scripts/
+    setup.sh               # install/setup scripts run on plugin install
+    teardown.sh
+  bin/                     # PATH-injected executables (HANDLE WITH CARE)
+    my-cli
+  .mcp.json                # bundled MCP servers (loaded with the plugin)
+  .lsp.json                # bundled LSP server configurations
+  settings.json            # plugin-default settings (default agent, statusline, etc.)
 ```
 
-**plugin.json** — the manifest:
+> **Correction vs. earlier versions:** The plugin manifest is **`.claude-plugin/plugin.json`**, not `plugin.json` in the plugin root. Putting `plugin.json` at the root no longer works with the current spec. If you scaffold a plugin and Claude Code "doesn't see it," check this first.
+
+> **`hooks/pre-tool-use.sh` is deprecated.** Earlier workshop materials and older plugins shipped raw shell files under `hooks/`. Current spec is `hooks/hooks.json` with the same JSON schema as the `hooks` block in `settings.json`. The shell file (if you still need one) is referenced from inside the JSON via `"command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use.sh"`.
+
+**`.claude-plugin/plugin.json`** — the manifest:
 ```json
 {
   "name": "my-plugin",
   "version": "2.1.0",
   "description": "A plugin for automated code review and security scanning",
   "author": "your-name",
-  "skills": ["my-skill", "another-skill"],
-  "commands": ["my-command", "another-command"],
-  "agents": ["my-agent"],
-  "hooks": {
-    "PreToolUse": ["hooks/pre-tool-use.sh"]
-  },
   "dependencies": [],
   "enabled": true
 }
 ```
 
-To disable a plugin without deleting it, rename `plugin.json` to `plugin.json.disabled`.
+Most fields (skills, commands, agents, hooks, MCP servers) are now **auto-discovered** from the directory layout — you don't have to repeat them in the manifest. Just put them in the right folder, name them sensibly, and the plugin loader picks them up.
+
+To disable a plugin without deleting it, use `claude plugin disable <name>` rather than renaming files manually.
+
+### Official Marketplaces
+
+Anthropic runs two first-party plugin marketplaces:
+
+- **`claude-plugins-official`** — curated by Anthropic, auto-available to every Claude Code installation. High quality bar, internally reviewed.
+- **`claude-community`** — public submissions, lower bar, broader selection. Anthropic does not vet each plugin individually.
+
+Add a marketplace once, then install plugins from it by `<name>@<marketplace>`:
+
+```bash
+# Add the community marketplace
+/plugin marketplace add anthropics/claude-plugins-community
+
+# Install a specific plugin from a specific marketplace
+/plugin install code-review@claude-plugins-official
+/plugin install some-niche-plugin@claude-community
+```
+
+**Submission flow:** To publish your own plugin, go to `claude.ai/settings/plugins/submit`. The form points to your plugin's git repository, Anthropic runs basic validation, and once approved it lands in `claude-community`. Getting into `claude-plugins-official` is a separate, higher-bar review.
 
 ### Notable Plugins in the Ecosystem
 
@@ -467,18 +756,45 @@ claude plugin install <source>        # --scope user|project
 
 # Manage installed plugins
 claude plugin list                    # Show all plugins
-claude plugin enable <name>           # Enable a disabled plugin
-claude plugin disable <name>          # Disable without removing
+claude plugin enable <name>           # Enable a disabled plugin (pulls transitive deps)
+claude plugin disable <name>          # Disable without removing (blocks if others depend on it)
 claude plugin uninstall <name>        # Remove completely
 claude plugin update <name>           # Update to latest version
+claude plugin validate <path>         # Local pre-submission schema/structure check
+claude plugin prune                   # Remove orphaned dependencies left over from uninstalls
 
 # Test local plugin during development
 claude --plugin-dir ./my-plugin       # Load from local directory
+claude --plugin-dir ./my-plugin.zip   # Load directly from a zipped plugin (v2.1.128+)
+claude --plugin-url <url>             # Load plugin from remote URL (v2.1.129+)
 
 # In-session management
 /plugin                               # Interactive plugin manager
 /reload-plugins                       # Hot-reload after changes
 ```
+
+Since v2.1.128 the `--plugin-dir` flag also accepts a `.zip` archive directly — useful for plugin authors who want to test the **packaged** artifact they will eventually submit to a marketplace, without unzipping it into a working tree first.
+
+### Pinning the Claude Code CLI Version
+
+`claude install` re-installs the CLI. Without an argument it pulls the **latest** stable build (the default behavior most users rely on). With an explicit version, it **pins** to that exact build:
+
+```bash
+claude install              # latest stable
+claude install 2.1.140      # pin to 2.1.140 exactly
+```
+
+**Use case:** Team consistency — every developer on the project runs the same CLI build, so plugin and hook behavior matches. Also valuable in CI, where an automatic upgrade between runs can silently change schema validation or hook semantics. Pin the version your CI tested against; upgrade deliberately.
+
+**Caution:** Plain `claude install` *will* upgrade you. If you specifically want today's pinned version to stay pinned, do not run `claude install` without an argument.
+
+### Plugin Dependencies
+
+Plugins can declare dependencies on other plugins via the `dependencies:` field in `.claude-plugin/plugin.json`. The CLI manages them automatically:
+
+- `claude plugin enable <name>` — pulls in transitive dependencies. Enabling a plugin that depends on `agentic-os` will enable `agentic-os` too if it isn't already.
+- `claude plugin disable <name>` — refuses to disable a plugin if other enabled plugins depend on it. You'll see a clear "blocked by: X, Y" message. Disable the dependents first, or use `--force` if you really mean it.
+- `claude plugin prune` — sweeps orphaned dependencies that were pulled in transitively but whose dependents have since been uninstalled.
 
 ### Plugin Security: Supply Chain Risks
 
@@ -551,6 +867,18 @@ MCP servers communicate with Claude Code via different transport protocols:
 | **stdio** | Local process, communicates via stdin/stdout | Local tools, custom scripts, system access | Good for development |
 | **SSE** | Server-Sent Events | (legacy) | **Deprecated** — use HTTP instead |
 
+### MCP Scopes
+
+MCP servers, like plugins, live at different scopes. **The scope names changed in 2026 — beware older documentation.**
+
+| Current name | Was called (old docs) | What it means |
+|--------------|----------------------|---------------|
+| **local** | `project` | Per-user, per-project. Stored in user config but tied to one project on this machine |
+| **project** | (new) | Shared with the team via committed `.mcp.json` in the repo |
+| **user** | `global` | Available across all of your projects |
+
+If you read older docs and see "project scope = .mcp.json" — that is now called **project**. If you see "global scope" — that is now called **user**. The mechanics are the same; only the names moved.
+
 ### MCP CLI Management
 
 ```bash
@@ -565,6 +893,12 @@ claude mcp add github -- npx -y @modelcontextprotocol/server-github
 
 # Add with environment variables
 claude mcp add --transport stdio --env GITHUB_TOKEN=xxx github -- npx -y @modelcontextprotocol/server-github
+
+# Add a complex config inline as JSON (skips per-flag bookkeeping)
+claude mcp add-json my-server '{"command":"npx","args":["-y","my-package"],"env":{"FOO":"bar"}}'
+
+# Reset stored Approve/Decline choices for project-scope .mcp.json servers
+claude mcp reset-project-choices
 
 # Manage servers
 claude mcp list                  # List all configured servers
@@ -581,7 +915,26 @@ claude --strict-mcp-config           # ONLY use servers from config (no others)
 
 ### MCP OAuth
 
-Claude Code supports OAuth flows for compatible remote MCP servers. When you connect to an OAuth-enabled server, Claude opens a browser for authentication. The callback port is fixable, and pre-configured credentials are supported for team setups.
+Claude Code supports OAuth flows for compatible remote MCP servers. When you connect to an OAuth-enabled server, Claude opens a browser for authentication and listens on a callback port.
+
+For team / enterprise setups, you usually want **pre-configured** credentials so every developer connects to the same OAuth app instead of registering a fresh one each time:
+
+```bash
+claude mcp add \
+  --transport http \
+  --callback-port 9876 \
+  --client-id "team-shared-client-id" \
+  --client-secret "team-shared-secret" \
+  notion https://mcp.notion.com/mcp
+```
+
+| Flag | Purpose |
+|------|---------|
+| `--callback-port <port>` | Pin the OAuth callback to a fixed port. Required when corporate firewalls only allow specific ports |
+| `--client-id <id>` | Reuse a pre-registered OAuth app. Important when the MCP server only knows your team's client ID |
+| `--client-secret <secret>` | The matching secret. Treat this like any other secret — pass via env var or secret manager, not in shell history |
+
+Use case: an enterprise that has a single Notion OAuth app registered for the company. Every developer's Claude Code uses the same client ID/secret pair and authenticates against that app, instead of each developer triggering a new "Authorize MyApp" dialog in Notion's admin UI.
 
 ### MCP Output Limits
 
@@ -608,7 +961,7 @@ Key risks:
 
 ### MCP Configuration (File-Based)
 
-MCP servers can also be configured in `.mcp.json` (project-level) or `~/.claude/.mcp.json` (global):
+MCP servers can also be configured in `.mcp.json` (project-level) or `~/.claude/.mcp.json` (user-level):
 
 ```json
 {
@@ -622,7 +975,7 @@ MCP servers can also be configured in `.mcp.json` (project-level) or `~/.claude/
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-slack"],
       "env": {
-        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN:-default-dev-token}",
         "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
       }
     },
@@ -630,14 +983,52 @@ MCP servers can also be configured in `.mcp.json` (project-level) or `~/.claude/
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-postgres"],
       "env": {
-        "POSTGRES_CONNECTION_STRING": "postgresql://user:pass@localhost/mydb"
+        "POSTGRES_CONNECTION_STRING": "${PG_URL:-postgresql://user:pass@localhost/mydb}"
       }
     }
   }
 }
 ```
 
+**Environment variable expansion** supports two forms:
+
+- `${VAR}` — substitutes the value of `VAR`. Fails if unset.
+- `${VAR:-default}` — substitutes the value of `VAR`, or falls back to `default` if `VAR` is unset or empty.
+
+The `:-default` form is the safe choice for shared `.mcp.json` files committed to a repo: every dev gets a sensible fallback, but production overrides via the real env var.
+
 Claude Code reads this config at startup and connects to each server. The tools then appear in Claude's available tool list automatically.
+
+### Channels (Research Preview)
+
+A traditional MCP server is **pull-only**: Claude calls a tool, the server replies. **Channels** flip that model — they let an MCP server **push** messages into a running Claude Code session asynchronously.
+
+Use cases:
+- CI server pushes "build done" into your active session
+- A Slack mention shows up as a notification in Claude Code
+- An external monitoring system tells Claude that an alert just fired
+
+Status: **research preview**. The documentation lives at `code.claude.com/docs/en/channels`. Treat it as experimental — the API may change before GA. But conceptually it is what replaces the custom "Telegram bridge" pattern many teams build by hand.
+
+### Protocol Details Worth Knowing
+
+A handful of small protocol-level features that rarely make it into headline docs but matter once you build or operate an MCP server:
+
+**`streamable-http` alias for `http`.** Inside `.mcp.json` you may see `"type": "http"` or `"type": "streamable-http"`. Both work identically; `streamable-http` is the explicit name from the MCP spec and tends to appear in official upstream documentation. Either form is fine — pick one for consistency inside a single config file.
+
+**Dynamic tool updates via `list_changed`.** A server is allowed to **add or remove tools during a running session**. After a state change (for example: the user just logged in, unlocking a new tool family) the server emits a `list_changed` notification and Claude Code refreshes the tool catalog without a restart. Useful for OAuth-gated servers that legitimately expose more capability after authentication.
+
+**Automatic reconnection with exponential backoff.** When the transport drops (flaky network, server restart, tunnel rotation), Claude Code retries with backoff: **1s, 2s, 4s, ... capped at 30s**. Calls in flight return a transient error that the model can choose to retry. The `/mcp` panel surfaces reconnect attempts in real time, so you can tell at a glance whether a server is genuinely down or just slow.
+
+**`CLAUDE_PROJECT_DIR` for stdio servers.** When Claude Code launches a stdio MCP server, the child process inherits an env var `CLAUDE_PROJECT_DIR` pointing at the current project root. Use this from inside the server to read project files via stable relative paths rather than relying on the CWD the user happened to launch from.
+
+```python
+# In a Python stdio MCP server
+project_dir = os.environ.get("CLAUDE_PROJECT_DIR")
+config_path = pathlib.Path(project_dir) / ".myteam" / "rules.yaml"
+```
+
+This is the canonical way for a server to find the project it is serving — do not parse `argv` or call `git rev-parse`; the env var is authoritative.
 
 ### What MCP Changes
 
@@ -688,29 +1079,38 @@ Building a RAG system from scratch requires: embedding model, vector database, c
 > via custom skills. Without this skill, use the NotebookLM web UI and bring results into
 > Claude Code via `@`-file includes.
 
-Claude Code has a `notebooklm` user skill that wraps the API, so you can query your notebooks directly from a Claude Code session:
+> **Setup required:** This demo uses the `notebooklm` user skill, which must be installed
+> before the demo runs. See **`prerequisites.md`** for installation instructions. If the
+> skill is not installed, the `notebooklm ...` commands below will not be recognized.
 
-```
-notebooklm use my-api-docs
-notebooklm ask "What is the authentication format for the /events endpoint?"
-```
+### Notation convention
+
+In this module we use two notations:
+
+- `notebooklm <cmd>` — calling the CLI directly. This is what you type in a terminal, or what a skill invokes via `Bash`.
+- `/notebooklm <cmd>` — invoking the user skill from within a Claude Code session. The skill internally calls the same CLI.
+
+We use the **CLI form** in the rest of this module, matching the user skill's behavior. If you prefer to invoke it as a slash command, replace `notebooklm` with `/notebooklm` mentally.
 
 ### The Full Workflow
 
+Throughout the workflow we use a single example notebook — `claude-code-docs` — so the commands chain together cleanly.
+
 **Step 1: Create a Notebook**
-```
-/notebooklm create "Anthropic Claude Code Docs"
+```bash
+notebooklm create "Claude Code Docs"
 ```
 
 **Step 2: Add Sources**
-```
-/notebooklm add-source https://docs.anthropic.com/en/docs/claude-code
-/notebooklm add-source https://docs.anthropic.com/en/docs/build-with-claude/tool-use
-# Add PDFs, internal docs, YouTube tutorial transcripts
+```bash
+notebooklm add-source claude-code-docs https://code.claude.com/docs/en/overview
+notebooklm add-source claude-code-docs https://code.claude.com/docs/en/hooks
+notebooklm add-source claude-code-docs https://code.claude.com/docs/en/skills
+# Also accepts PDFs, internal docs, YouTube tutorial transcripts
 ```
 
 **Step 3: Query from Claude Code**
-```
+```bash
 notebooklm use claude-code-docs
 notebooklm ask "What is the correct format for hook configuration in settings.json?"
 ```
