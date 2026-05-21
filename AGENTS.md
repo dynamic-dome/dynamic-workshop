@@ -1,10 +1,10 @@
-# CLAUDE.md — Dynamic Workshop
+# AGENTS.md — Dynamic Workshop
 
 ## Mission
 
-Einen praxisnahen, demo-lastigen Workshop in 3 aufeinander aufbauenden Sessions entwickeln, der erfahrenen Entwicklern aus dem Bereich Physical Security einen vollumfaenglichen Eindruck von Claude Code vermittelt — von den Grundlagen bis hin zu autonomen Multi-Agent-Systemen.
+Einen praxisnahen, demo-lastigen Workshop in 3 aufeinander aufbauenden Sessions entwickeln, der erfahrenen Entwicklern aus dem Bereich Physical Security einen vollumfaenglichen Eindruck von Codex vermittelt — von den Grundlagen bis hin zu autonomen Multi-Agent-Systemen.
 
-**Ziel:** Die Teilnehmer sollen nach dem Workshop Claude Code eigenstaendig und produktiv in ihrem Arbeitsalltag einsetzen koennen.
+**Ziel:** Die Teilnehmer sollen nach dem Workshop Codex eigenstaendig und produktiv in ihrem Arbeitsalltag einsetzen koennen.
 
 ## Workshop-Format
 

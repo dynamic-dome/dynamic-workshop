@@ -12,14 +12,14 @@ Kurz gesagt:
 
 ## Wie der Workshop aufgebaut ist
 
-Der Workshop besteht aus drei Sessions mit insgesamt 14 Modulen (Block 1: 4, Block 2: 5, Block 3: 5):
+Der Workshop besteht aus drei Sessions mit insgesamt 17 Modulen (Block 1: 5, Block 2: 5, Block 3: 7):
 
 - Block 1: Foundations
-  Was Claude Code ist, wie Kontext funktioniert, wie gutes Prompting aussieht und wie Git/Worktrees in den Workflow passen.
+  Was Claude Code ist, wie Kontext funktioniert, wie gutes Prompting aussieht, wie Git/Worktrees in den Workflow passen und wie Kosten/Effort gesteuert werden.
 - Block 2: Ecosystem
   Wie Skills, Commands, Hooks, Plugins, MCP und Knowledge-Workflows zusammenspielen.
 - Block 3: Advanced
-  Wie man Agents, Multi-Agent-Muster, Security-Pruefungen und Automatisierung sinnvoll einsetzt.
+  Wie man Agents, Multi-Agent-Muster, Security-Pruefungen, Automatisierung, Headless/CI und Troubleshooting sinnvoll einsetzt.
 
 Jeder Block folgt demselben didaktischen Muster:
 
@@ -143,4 +143,3 @@ Wenn du dabei festhaengst, ist das kein Zeichen, dass der Workshop schlecht stru
 ## Fazit
 
 Aus Sicht eines Entwicklers ohne Agent-Erfahrung ist der Workshop stark inhaltlich, aber nicht vollstaendig selbsterklaerend, wenn man nur die Dateien anliest. Genau dafuer ist dieses Guide-Dokument da: Es uebersetzt die vorhandenen Bausteine in eine klare Lernreihenfolge und macht sichtbar, was Kerninhalt, was Werkzeug und was Zusatzmaterial ist.
-

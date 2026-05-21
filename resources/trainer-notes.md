@@ -252,7 +252,7 @@ Bis bald,
 
 ## Slide-Index zu claude-code-workshop.pptx
 
-(Falls die PPT bereits existiert, hier den Slide-Index pflegen. Stand: nicht verifiziert)
+(Arbeitsstand fuer `claude-code-workshop.pptx`. Vor einer Live-Session einmal gegen das Deck pruefen.)
 
 | Modul | Slide-Nummern | Inhalt |
 |---|---|---|
@@ -276,7 +276,7 @@ Bis bald,
 | Module 3.7 | 103-108 | Troubleshooting, Debug, Diagnosis |
 | Outro | 109-112 | Capstone, Resources, Q&A |
 
-**Note:** PPT muss noch erstellt / verifiziert werden. Slide-Nummern oben sind Vorschlag.
+**Note:** Slide-Nummern sind ein Arbeitsindex. Vor der naechsten Live-Session gegen das aktuelle Deck verifizieren.
 
 ---
 

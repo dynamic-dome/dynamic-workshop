@@ -559,7 +559,7 @@ Hooks are the most powerful Claude Code feature and the easiest to misconfigure.
 
 ---
 
-## Use Case Blueprints — Inspiration for Exercise 3.4
+## Use Case Blueprints — Inspiration for Exercise 3.5
 
 These blueprints come from deep research into advanced Claude Code workflows. Use them as building blocks for your Architecture Discussion:
 
