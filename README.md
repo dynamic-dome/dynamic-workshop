@@ -3,12 +3,21 @@
 > Praxisnaher Workshop fuer Entwickler, die Claude Code produktiv einsetzen wollen.
 > 3 Sessions, 17 Module (Block 1: 5, Block 2: 5, Block 3: 7), demo-lastig mit optionalen Hands-on-Uebungen.
 
+Dieses Repository ist die Materialbasis hinter der DoMe-Dynamics-Workshop-Seite:
+
+- **Website:** https://dynamic-dome.com/workshop - kuratierter Ueberblick und Arbeitsprobe
+- **Repo:** Material, Demos, Exercises, Mentor-Agent und Playground
+- **Kontext:** Teil der DoMe-Dynamics-Werkstattlinie: Werkstatt -> DCO -> Workshop
+
+Die Website zeigt, warum der Workshop als Engineering-Arbeitsprobe zaehlt. Dieses Repo zeigt, womit er konkret funktioniert.
+
 ---
 
 ## Fuer wen ist das?
 
 - **Selbstlerner** — Du willst Claude Code eigenstaendig lernen und suchst strukturiertes Material mit Demos und Uebungen.
 - **Moderatoren** — Du willst den Workshop fuer dein Team oder deine Community halten und brauchst fertige Unterlagen.
+- **Reviewer / Tech Leads** — Du willst einschaetzen, ob hier nur Folien liegen oder ein reproduzierbarer Lernpfad mit Demos, Recovery-Notes und Playground existiert.
 
 Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding Agents noetig.
 
@@ -26,6 +35,14 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
    - `resources/exercises/block-1-exercises.md` ausprobieren
 4. `resources/cheatsheet.md` als Referenz nutzen
 5. Weiter mit Block 2 und 3
+
+### Als Reviewer
+
+1. Website-Ueberblick lesen: https://dynamic-dome.com/workshop
+2. `resources/session-plan.md` pruefen: Ablauf, Timing, Session-Logik
+3. `resources/modules/` und `resources/demos/` gegenlesen: fachliche Tiefe und Demo-Faehigkeit
+4. Playground testen: `cd workshop-playground && pip3 install -r requirements.txt && python3 -m pytest -v`
+5. `agents/workshop-mentor.md` pruefen: guide/learn-Modus und didaktische Rueckfragen
 
 ### Als Moderator
 
@@ -74,11 +91,25 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 | **3.2** | Multi-Model Pipelines | Codex Swarm baut CLI-Tool |
 | **3.3** | Security & Adversarial | Devil's Advocate Swarm auf vulnerablem Code |
 | **3.4** | Automation | Self-Improve Loop: Vorher/Nachher |
+| **3.5** | Full Stack Architecture | Gruppen-Discussion: Design your Workflow (Capstone) |
 | **3.6** | CI/CD & Headless Mode | `claude -p` mit `--output-format json` als Pipeline-Stage |
 | **3.7** | Troubleshooting & Debugging | `/debug`, `/doctor`, `claude --verbose` Layer-fuer-Layer |
-| **3.5** | Full Stack Architecture | Gruppen-Discussion: Design your Workflow (Capstone) |
 
 Jeder Block hat passende Dateien unter `resources/modules/`, `resources/demos/` und `resources/exercises/`.
+
+---
+
+## Wie das Repo in DoMe Dynamics passt
+
+Die Workshop-Seite auf DoMe Dynamics ist bewusst kein Buchungsangebot, sondern ein sichtbarer Lab-Stand. Das Repo ist der Nachweis dahinter:
+
+| Ebene | Rolle |
+|-------|-------|
+| `Werkstatt` | Erklaert, wie aus einzelnen Tools ein persoenlicher Arbeitsmodus wurde. |
+| `DCO` | Zeigt ein gebautes agentisches System mit Toolgrenzen, Dashboard und Freigaben. |
+| `dynamic_workshop` | Uebersetzt diese Praxis in ein Curriculum fuer Entwicklerteams. |
+
+Damit ist der Workshop nicht nur "Lehre ueber Claude Code", sondern eine Enablement-Schicht ueber realer Agentenpraxis.
 
 ---
 
@@ -149,6 +180,7 @@ python3 -m pytest -v
 | Alles installieren | `resources/prerequisites.md` |
 | Den Workshop verstehen | `WORKSHOP_EINFUEHRUNG.md` |
 | Selbst durcharbeiten | `resources/workshop-guide.md` |
+| Oeffentlichen Kontext sehen | https://dynamic-dome.com/workshop |
 | Schnell nachschlagen | `resources/cheatsheet.md` |
 | Live praesentieren | `claude-code-workshop.pptx` + `resources/demos/` |
 | Ueben | `resources/exercises/` + `workshop-playground/` |

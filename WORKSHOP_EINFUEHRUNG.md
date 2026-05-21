@@ -3,6 +3,16 @@
 > Dieses Repository ist ein praxisnaher Claude-Code-Workshop für erfahrene Entwickler.
 > 3 Sessions à ~3h, 17 Module, demo-lastig mit optionalen Hands-on-Exercises.
 
+## Einordnung
+
+Dieses Repo ist die Materialbasis zur DoMe-Dynamics-Seite:
+
+- Website-Ueberblick: https://dynamic-dome.com/workshop
+- Werkstatt-Kontext: https://dynamic-dome.com/werkstatt
+- DCO-Kontext: https://dynamic-dome.com/dco
+
+Die Website ist das kuratierte Schaufenster. Dieses Repository ist der Arbeitsnachweis: Module, Demos, Exercises, Mentor-Agent, Plugin-Struktur und Playground.
+
 ## Wie nutze ich dieses Repo?
 
 **Als Selbstlerner:**
@@ -16,6 +26,12 @@
 2. Prüfe `resources/prerequisites.md` und schicke an Teilnehmer min. 1 Woche vorher
 3. Demos vorher proben (siehe Recovery-Notes in `resources/demos/`)
 4. Nutze `resources/troubleshooting.md` als Notfall-Referenz
+
+**Als Reviewer / Tech Lead:**
+1. Lies zuerst die Website-Seite, um die Rolle des Workshops im Gesamtportfolio zu verstehen
+2. Pruefe dann `resources/session-plan.md`, `resources/modules/` und `resources/demos/`
+3. Fuehre den Playground-Test aus: `cd workshop-playground && python3 -m pytest -v`
+4. Pruefe `agents/workshop-mentor.md`, wenn dich der guide/learn-Modus interessiert
 
 ## Verzeichnisstruktur
 

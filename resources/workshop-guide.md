@@ -126,7 +126,7 @@ Empfehlung:
 - Dann die Specials gezielt nutzen
 - Nicht mit dem Agent oder dem Command starten, bevor die Blocklogik klar ist
 
-Die Details dazu stehen in `resources/workshop-specials.md`.
+Die Details dazu stehen in `commands/workshop.md`, `skills/workshop/SKILL.md` und `agents/workshop-mentor.md`.
 
 ## Praktische Arbeitsweise fuer Selbstlerner
 
