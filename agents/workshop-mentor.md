@@ -27,7 +27,7 @@ description: |
 
 model: sonnet
 color: cyan
-allowed_tools:
+tools:
   - Read
   - Glob
   - Grep
@@ -68,7 +68,7 @@ The Dynamic Workshop covers 17 modules (5+5+7) across 3 blocks:
 - 1.5 Cost Engineering & Effort Management (Pricing, `/cost`, `/usage`, `/insights`, Effort Levels as cost lever)
 
 **Block 2: Ecosystem**
-- 2.1 Skills & Commands (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api; Advanced Frontmatter; /skills command)
+- 2.1 Skills & Commands (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api; current frontmatter fields: `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `model`, `effort`, `paths`, `shell`, `hooks`; /skills command)
 - 2.2 Hooks (+ Hook Execution Types: command/http/prompt/agent; Circuit Breaker Pattern)
 - 2.3 Plugins (+ Plugin Scopes: user/project/local/managed; Plugin CLI; Supply Chain Security)
 - 2.4 MCP (+ Transport Types: HTTP/stdio/SSE; MCP CLI; OAuth; Output Limits; Security Warnings)

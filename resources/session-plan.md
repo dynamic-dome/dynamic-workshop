@@ -1,7 +1,7 @@
 # Workshop Session Plan
 
 > Zeitlicher Ablauf und didaktischer Aufbau über alle 3 Sessions.
-> Stand: 2026-05-20.
+> Stand: 2026-05-21.
 
 ## Format-Übersicht
 
@@ -40,7 +40,7 @@
 
 | Zeit | Komponente | Inhalt |
 |---|---|---|
-| 0:00 – 0:10 | Recap Session 1 + Intro Block 2 | |
+| 0:00 – 0:10 | Recap Session 1 + Intro Block 2 | PPT Slides 12-18 als visueller Einstieg |
 | 0:10 – 0:25 | Modul 2.1 | Skills & Commands — Skill-Authoring |
 | 0:25 – 0:35 | Demo 2.1 | TDD-Skill in Action |
 | 0:35 – 0:50 | Modul 2.2 | Hooks — Event-Listener |
@@ -61,15 +61,15 @@
 
 | Zeit | Komponente | Inhalt |
 |---|---|---|
-| 0:00 – 0:10 | Recap Session 2 + Intro Block 3 | |
+| 0:00 – 0:10 | Recap Session 2 + Intro Block 3 | PPT Slides 19-29 als visueller Einstieg |
 | 0:10 – 0:25 | Modul 3.1 | Agents & Multi-Agent + Background-Sessions |
 | 0:25 – 0:40 | Demo 3.1 | 2 parallele Agents |
 | 0:40 – 0:50 | Modul 3.2 + Demo 3.2 | Multi-Model Pipelines / Codex Swarm |
 | 0:50 – 1:10 | Modul 3.3 + Demo 3.3 | Security & Adversarial Testing |
 | 1:10 – 1:20 | **Pause** | |
 | 1:20 – 1:35 | Modul 3.4 + Demo 3.4 | Scheduled Tasks, Loops, /goal |
-| 1:35 – 1:50 | Modul 3.6 (NEU) | CI/CD & Headless Mode |
-| 1:50 – 2:05 | Modul 3.7 (NEU) | Troubleshooting & Debugging |
+| 1:35 – 1:50 | Modul 3.6 + Demo 3.6 (NEU) | CI/CD & Headless Mode |
+| 1:50 – 2:05 | Modul 3.7 + Demo 3.7 (NEU) | Troubleshooting & Debugging |
 | 2:05 – 2:20 | Modul 3.5 + Demo 3.5 | Telegram-Bridge, Inception, Worktrees |
 | 2:20 – 3:00 | Exercise 3.5 | Architecture Discussion (Capstone) |
 
@@ -135,4 +135,4 @@ A pay-as-you-go API key is recommended for Self-Improve Loop and Codex Swarm exp
 
 ---
 
-*Letzter Stand: 2026-05-20*
+*Letzter Stand: 2026-05-21*

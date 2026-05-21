@@ -57,9 +57,11 @@ Your SKILL.md needs:
 ---
 name: my-first-skill
 description: >
-  [What this skill does]. Use when [trigger conditions].
-  Trigger phrases: [list 3-5 phrases that should activate this skill]
-version: "1.0"
+  [One sentence explaining what this skill does].
+when_to_use: >
+  [List 3-5 trigger situations or phrases that should activate this skill].
+argument-hint: "[target]"
+arguments: [target]
 ---
 
 # [Skill Name]
@@ -106,7 +108,7 @@ Edit the SKILL.md to fix it. Test again. Repeat until Claude follows the SOP exa
 
 You've succeeded when:
 - [ ] `ls ~/.claude/skills/` shows your new skill directory
-- [ ] The SKILL.md has valid YAML frontmatter with trigger phrases
+- [ ] The SKILL.md has valid YAML frontmatter with `name`, `description`, and `when_to_use`
 - [ ] Claude follows your skill's instructions without you repeating them
 - [ ] You've edited the skill at least once to improve it
 - [ ] The skill works the same way in a new Claude Code session (restart and try)
@@ -454,9 +456,9 @@ cat > ~/.claude/plugins/cache/my-mini-plugin-marketplace/skills/my-skill/SKILL.m
 ---
 name: my-skill
 description: >
-  [What this skill does and when to use it].
-  Trigger phrases: [your triggers]
-version: "0.1"
+  [What this skill does].
+when_to_use: >
+  [Your trigger phrases and situations]
 ---
 
 # My Skill

@@ -43,22 +43,23 @@ name: tdd
 description: >
   Test-Driven Development workflow. Use when user wants to write tests first,
   implement after, or says "write tests before code", "TDD", "red-green-refactor".
-  Trigger phrases: TDD, test first, write tests, red-green, failing test
-# --- Workshop-custom fields (NOT in the official skill schema) ---
-version: "1.0"
-author: your-name
-tags: [testing, workflow, tdd]
+when_to_use: >
+  TDD, test first, write tests, red-green-refactor, failing test,
+  or any request where implementation should wait for a failing test.
+argument-hint: "[target]"
+arguments: [target]
+model: sonnet
+effort: high
+paths: ["src/**", "tests/**"]
 ---
 ```
 
 Key frontmatter fields (official schema):
-- `name` — the identifier for this skill
-- `description` — **critically important**: includes trigger phrases. Claude Code uses these to auto-detect when to use this skill without the user explicitly invoking it. The description acts as a semantic matcher.
-
-**Workshop-custom fields** (not part of the official schema, but useful for internal bookkeeping):
-- `version` — for tracking changes (not consumed by Claude Code)
-- `author` — convenient for shared/team skills (not consumed by Claude Code)
-- `tags` — for human discoverability only
+- `name` - the identifier for this skill
+- `description` - short summary for humans and discovery
+- `when_to_use` - explicit activation guidance. Prefer this for trigger conditions instead of overloading `description`.
+- `argument-hint` / `arguments` - user-facing hint plus named argument mapping.
+- `model`, `effort`, `paths` - execution and scoping controls.
 
 ### Official Frontmatter Fields (2026 Reference)
 

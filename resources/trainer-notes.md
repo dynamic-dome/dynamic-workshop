@@ -252,32 +252,38 @@ Bis bald,
 
 ## Slide-Index zu claude-code-workshop.pptx
 
-(Arbeitsstand fuer `claude-code-workshop.pptx`. Vor einer Live-Session einmal gegen das Deck pruefen.)
+(Gepruefter Stand fuer `claude-code-workshop.pptx` vom 2026-05-21. Das Deck hat jetzt 30 Slides und bildet den 17-Module-Stand als kompakten visuellen Einstieg ab.)
 
 | Modul | Slide-Nummern | Inhalt |
 |---|---|---|
-| Intro | 1-5 | Welcome, Agenda, Format |
-| Module 1.1 | 6-12 | Five Surfaces, Tools, Permissions, Models |
-| Module 1.2 | 13-18 | CLAUDE.md, Auto-Memory, Rules |
-| Module 1.3 | 19-24 | Prompting Patterns, Plan Mode, Effort |
-| Module 1.4 | 25-30 | Git, Worktrees, /autofix-pr |
-| Module 1.5 | 31-36 | Cost Engineering, Pricing, Effort-Strategy |
-| Module 2.1 | 37-43 | Skills, Frontmatter, Bundled Skills |
-| Module 2.2 | 44-49 | Hook Events, Execution Types |
-| Module 2.3 | 50-54 | Plugin Anatomy, Marketplaces |
-| Module 2.4 | 55-60 | MCP Transports, OAuth, Building Your Own |
-| Module 2.5 | 61-65 | RAG, NotebookLM, Limitations |
-| Module 3.1 | 66-73 | Agents, Background, Patterns |
-| Module 3.2 | 74-77 | Multi-Model, Cost Trade-Off |
-| Module 3.3 | 78-86 | Security, Permissions, Sandboxing, CVE |
-| Module 3.4 | 87-91 | Schedule, Loop, Goal, Routines |
-| Module 3.5 | 92-96 | Remote, Telegram, Inception |
-| Module 3.6 | 97-102 | CI/CD, Headless, GitHub Actions |
-| Module 3.7 | 103-108 | Troubleshooting, Debug, Diagnosis |
-| Outro | 109-112 | Capstone, Resources, Q&A |
+| Intro | 1-2 | Titel, Agenda, Workshop-Format |
+| Module 1.1 | 3-6 | Claude-Code-Surfaces, Built-in Tools, Permissions |
+| Module 1.2 | 7-8 | Context, Memory, CLAUDE.md |
+| Module 1.3 | 9 | Prompting Patterns |
+| Module 1.4 | 10 | Git, Branch, Diff, Commit, PR |
+| Module 1.5 | 11 | Cost Engineering, Effort-Strategy, Budget-Gates |
+| Block 2 Intro | 12 | Ecosystem-Uebergang |
+| Module 2.1 | 13 | Skills |
+| Module 2.2 | 14 | Hooks |
+| Module 2.3 | 15 | Plugins |
+| Module 2.4 | 16 | MCP |
+| Module 2.5 | 17 | RAG |
+| Block 2 Summary | 18 | Ecosystem-Stack |
+| Block 3 Intro | 19 | Advanced Workflow-Uebergang |
+| Module 3.1 | 20 | Agents & Multi-Agent |
+| Module 3.2 | 21 | Multi-Model Pipelines |
+| Module 3.3 | 22 | Security & Adversarial Testing |
+| Module 3.4 | 23 | Automation & Scheduled Work |
+| Module 3.6 | 24 | CI/CD & Headless Mode |
+| Module 3.7 | 25 | Troubleshooting & Debugging |
+| Module 3.5 | 26 | Capstone: Workflow Architecture |
+| Session 3 Run Sheet | 27 | Didaktische Reihenfolge fuer Block 3 |
+| Website + Repo | 28 | Schaufenster und Materialbasis |
+| Dry Run Checklist | 29 | Deck, Demos, Fallbacks |
+| Outro | 30 | Einstiegspunkte und naechste Schritte |
 
-**Note:** Slide-Nummern sind ein Arbeitsindex. Vor der naechsten Live-Session gegen das aktuelle Deck verifizieren.
+**Note:** Das Deck ist kein Vollskript. Es dient als visueller Einstieg; Details, Live-Schritte und Recovery-Notes bleiben in `resources/modules/`, `resources/demos/` und `resources/trainer-notes.md`.
 
 ---
 
-*Stand 2026-05-20. Diese Datei begleitet den Workshop fuer Trainer. Teilnehmer brauchen sie nicht.*
+*Stand 2026-05-21. Diese Datei begleitet den Workshop fuer Trainer. Teilnehmer brauchen sie nicht.*

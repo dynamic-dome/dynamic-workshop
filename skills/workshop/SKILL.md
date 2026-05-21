@@ -5,13 +5,11 @@ description: >
   activates moderator co-pilot with talking points, demo scripts, and timing.
   /workshop learn [module] activates interactive tutor with explanations,
   exercises, and verification. /workshop shows the full module overview.
-  Trigger phrases: "workshop", "guide mode", "learn mode", "teach claude code",
+when_to_use: >
+  "workshop", "guide mode", "learn mode", "teach claude code",
   "workshop overview", "next module".
 argument-hint: "[guide|learn] [module]"
 arguments: [mode, module]
-metadata:
-  author: dynamic-workshop
-  version: '1.0'
 ---
 
 # Claude Code Workshop
@@ -82,7 +80,7 @@ When called without arguments, display the full workshop map using box-drawing c
 ║  /workshop                      → this overview                             ║
 ║  /workshop guide 1.1            → moderator co-pilot for module 1.1        ║
 ║  /workshop learn 2.3            → interactive tutor for module 2.3         ║
-║  /workshop guide next           → advance to next module in guide mode     ║
+║  type "next" in guide mode      → advance to the next module               ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
