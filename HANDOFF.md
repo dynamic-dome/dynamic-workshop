@@ -1,0 +1,96 @@
+# HANDOFF — Umsetzung des Workshop-Reviews (Stand 2026-06-21)
+
+> **Für die nächste Instanz (Claude Code ODER Codex ODER ein anderer Agent).**
+> Dieses Dokument ist selbsterklärend — du brauchst keinen Kontext aus der vorigen Session.
+> Lies es ganz, bevor du etwas änderst.
+
+---
+
+## 1. Kontext (worum geht es)
+
+Dieses Repo ist der **Dynamic Workshop** — eine praxisnahe Claude-Code-Schulung (3 Sessions à ~3h,
+17 Module) für 3 erfahrene Entwickler aus Physical Security (Zutrittskontrolle, Alarmsysteme).
+Session 1 wurde am 10.04.2026 durchgeführt; Sessions 2 & 3 stehen aus. Das Repo dient auch
+Selbstlernern und ist gleichzeitig ein Claude-Code-Plugin.
+
+Am 2026-06-21 wurde der gesamte Kurs per Multi-Agent-Review aus 12 Perspektiven durchgespielt.
+Das Ergebnis liegt vollständig vor unter **`resources/review-2026-06-21/`**. Es wurde **bewusst
+noch nichts am Kursinhalt geändert** — das ist deine Aufgabe.
+
+## 2. Deine Aufgabe (Mission)
+
+Setze das priorisierte TODO-Backlog aus dem Review um — in der unten empfohlenen Reihenfolge,
+in Wellen, mit Verifikation vor jeder Änderung. Ziel: den Workshop aktueller, einsteigerfreundlicher
+und Windows-tauglich machen, ohne Inhalt zu verlieren.
+
+## 3. Wo alles steht (lies in dieser Reihenfolge)
+
+| Datei | Zweck |
+|---|---|
+| `resources/review-2026-06-21/01-executive-summary.md` | Gesamturteil, Top-Themen, Quick Wins, Roadmap |
+| `resources/review-2026-06-21/02-todo-backlog.md` | **Arbeitsliste: 87 TODOs (T-001…T-087), P0–P3, mit Datei + Akzeptanzkriterium** |
+| `resources/review-2026-06-21/03-currency-report.md` | Aktualitäts-Befunde **mit Web-Quellen** (Modelle/CLI/Ecosystem) |
+| `resources/review-2026-06-21/04b-restructuring-proposal-v2.md` | Granularer Re-Split (17 Module → 48 Lerneinheiten) — **nur nach User-Entscheidung umsetzen** |
+| `resources/review-2026-06-21/05-new-exercises.md` + `05b-…welle-2.md` | 18 neue Übungen, fertig formuliert |
+| `resources/review-2026-06-21/07-curator-addenda.md` | **Wichtig:** manuelle Korrekturen + verifizierte Bugs |
+| `resources/review-2026-06-21/06-all-findings.md` | Anhang: alle 129 Roh-Befunde nach Persona |
+| `resources/review-2026-06-21/data/todos.json` | Maschinenlesbares Backlog (falls du es programmatisch verarbeiten willst) |
+
+## 4. Empfohlene Umsetzungs-Reihenfolge (Wellen)
+
+**Welle A — Quick Wins (P0/P1, Aufwand S). Zuerst, niedrig-Risiko:**
+- `T-001` 🔴 **Blocker:** `--max-turns` aus Übung 3.6 entfernen (Flag existiert in der CLI nicht — **erst mit `claude --help` gegenprüfen**).
+- `T-004` Überschrift „The Three Interfaces" → fünf Surfaces korrigieren.
+- `T-005` `python3`/`pip3` im Haupttext um Windows-Variante (`python`/`pip`) ergänzen.
+- `T-009` `worktree.baseRef`-Default-Widerspruch (`head` vs `fresh`) vereinheitlichen.
+- `T-011` veraltete Modellversionen (z.B. Opus 4.6) korrigieren.
+- **AGENTS.md-Bug** (Addendum A): „Codex" → „Claude Code" (Zeilen 5/7) + tote Referenz `deep-research-gap-analysis.md` entfernen (Addendum B).
+
+**Welle B — Currency-Sweep (P1, meist M):**
+- `T-025` Opus 4.7 → Opus 4.8 (Default seit v2.1.154 / 2026-05-28) global.
+- `T-026` Claude Fable 5 (GA 2026-06-09) in alle Modelltabellen.
+- `T-012`/`T-013` Mentor-Agent + Effort-Default nachziehen.
+- ⚠️ **Vor dem Edit:** alle Versions-/Datumsangaben (v2.1.154, Fable-5-GA usw.) noch einmal gegen die laufende CLI und die offiziellen Docs (`code.claude.com/docs`) verifizieren — sie stammen aus Persona-Web-Recherchen.
+
+**Welle C — Windows-Tauglichkeit (Cluster `windows-compat`):**
+- `T-007` getestetes Hook-Asset (bash **und** PowerShell-Variante) ins Repo legen.
+- `T-019`/`T-021`/`T-022` Cheatsheet/Exercises/Trainer-Notes auf Windows umstellen.
+
+**Welle D — Didaktik & Einstiegshürde (Cluster `didactics-onboarding`/`structure`):**
+- `T-006` „Hello, Claude Code"-Erfolgserlebnis an den Anfang von Modul 1.1.
+- `T-017` Lernziele 1.1 vom Leichten zum Schweren sortieren.
+- `T-028` Modul 1.2 in Kern + Vertiefung splitten.
+
+**Welle E — Übungen & Demos:** neue Übungen aus `05`/`05b` einpflegen, Demo-Robustheit (`T-014`–`T-016`, `T-027`).
+
+**Welle F — Restrukturierung (nur nach User-Freigabe):** `04b` in einen neuen `session-plan.md` gießen. Offene Frage: 3 vs. 4 Termine (Block 3 → 3a/3b). **Nicht ohne User-Entscheidung starten.**
+
+## 5. Harte Randbedingungen (nicht verletzen)
+
+- **Verifikation vor Aktion:** Jede Currency-Behauptung vor dem Edit gegen Live-CLI/Docs prüfen. Nicht blind den Persona-Web-Daten vertrauen.
+- **Projektregel (`CLAUDE.md` / `AGENTS.md`):** Bei JEDER Inhaltsänderung an Modulen/Demos/Exercises auch `agents/workshop-mentor.md` aktualisieren (Modul-Map, Modellangaben).
+- **Sprache:** Deutsch für Kommunikation/Prosa, Englisch für Code/Identifier/Dateinamen. Vollständige Umlaute/Diakritika.
+- **Windows-Umgebung:** Der Maintainer arbeitet auf Windows 11 / PowerShell. Hook-Skripte, Befehle und Exercises brauchen PowerShell-taugliche Varianten (kein blindes `bash`/`jq`/`chmod`/`sed -i`).
+- **Playground-Tests:** Falls du `pytest` im `workshop-playground/` laufen lässt — die Tests dort sind harmlos (kein Production-DB-Risiko), aber prüfe das `conftest`/Setup, bevor du destruktive Test-Schritte ausführst.
+- **Git:** chirurgisch stagen (`git add <pfad>` einzeln, **kein** `git add -A`). Commit/Push nur auf ausdrückliche Anweisung des Users. Nicht auf `main` committen ohne Freigabe.
+- **Die 3 absichtlichen Vulnerabilities** in `workshop-playground/access_control.py` und die in `osdp_frame_decoder.c` sind **Lehr-Material** — NICHT „fixen" (außer ein TODO sagt explizit, eine *zusätzliche, ungeplante* Schwäche zu dokumentieren, z.B. `T-003`).
+
+## 6. Was du NICHT tun sollst
+
+- Keine großflächigen Umschreibungen ohne TODO-Bezug. Arbeite TODO für TODO, mit Akzeptanzkriterium.
+- Die Restrukturierung (`04b`) nicht eigenmächtig in `session-plan.md` umsetzen — sie braucht eine User-Entscheidung (3 vs 4 Sessions).
+- Den degenerierten `04-restructuring-proposal.md` (nur ein Redirect-Stub) nicht als Vorlage nehmen — nutze `04b`.
+
+## 7. Deliverable & Erfolgskriterien
+
+- Pro umgesetztem TODO: Änderung erfüllt das im Backlog genannte **Akzeptanzkriterium** (oft ein konkretes `grep`).
+- `agents/workshop-mentor.md` ist nach Inhaltsänderungen konsistent.
+- Playground-Tests laufen weiterhin grün.
+- Kurzer Fortschrittsbericht je Welle (welche TODO-IDs erledigt, welche verifiziert).
+
+## 8. Hinweis speziell für einen Codex-Agenten
+
+`AGENTS.md` im Root ist aktuell **fehlerhaft** (nennt „Codex" als Workshop-Thema — das ist ein Bug, siehe `T`/Addendum A; der Workshop behandelt **Claude Code**). Bis dieser Bug behoben ist: behandle **`CLAUDE.md`** als Source of Truth für Projektkontext, nicht `AGENTS.md`. Dieses `HANDOFF.md` und `resources/review-2026-06-21/` sind tool-neutral und für dich genauso gültig.
+
+---
+*Erstellt am 2026-06-21 als Abschluss der Review-Session (Workflow-Run `wf_1603866b-421`).*

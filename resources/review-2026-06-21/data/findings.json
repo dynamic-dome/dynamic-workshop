@@ -1,0 +1,1292 @@
+[
+  {
+    "title": "Modul 1.1 startet mit den schwersten Lernzielen statt den leichtesten",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "didactics-onboarding",
+    "severity": "high",
+    "evidence": "Zeile 12-14: 'Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies ... Choose the right model (Opus 4.7 / Sonnet 4.6 / Haiku 4.5) and effort level ...' — das sind die ersten beiden Lernziele des allerersten Moduls.",
+    "recommendation": "Lernziele umsortieren: erstes Lernziel sollte 'Verstehen, was ein Coding Agent ist und wie er sich von einem Chat unterscheidet' sein. Permission Modes (6 Stueck) und Modell/Effort-Wahl als spaetere/optionale Lernziele markieren oder in einen 'Vertiefung'-Block schieben. Ein Neuling braucht im ersten Modul ein mentales Grundmodell, keine 6-Modi-Taxonomie.",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Ueberschrift 'The Three Interfaces' listet fuenf Interfaces — Zaehl-Widerspruch verunsichert Neulinge",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "structure",
+    "severity": "high",
+    "evidence": "Zeile 23 Ueberschrift 'The Three Interfaces', danach nummeriert '1. claude.ai', '2. Claude Code CLI', '3. Desktop App', '4. IDE Extensions', '5. Web App & iOS App' (Zeile 24-58).",
+    "recommendation": "Ueberschrift auf 'The Surfaces' oder 'Die Claude-Code-Oberflaechen' korrigieren. Als Neuling habe ich an dieser Stelle aufgehoert dem Text zu vertrauen ('wenn schon die Ueberschrift nicht stimmt...'). Idealerweise im ersten Durchgang nur CLI vs. claude.ai-Chat zeigen und die restlichen 3 Surfaces in eine Klappbox/spaetere Sektion auslagern.",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Zu viele neue Konzepte und Slash-Commands/Flags pro Lerneinheit (kognitive Ueberlastung)",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "didactics-onboarding",
+    "severity": "high",
+    "evidence": "Allein Modul 1.2 fuehrt ein: Context-Window, Auto-Kompression, CLAUDE.md (2 Levels), CLAUDE.local.md, Managed CLAUDE.md, .claude/rules/ mit YAML-paths, Auto-Memory + MEMORY.md/topic-files, @path-Imports, @AGENTS.md-Interop, --add-dir + CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD, /context /compact /export /resume /memory /init /rewind, --bare, 'claude project purge'. Das sind ~20 neue Begriffe/Befehle in einem Modul.",
+    "recommendation": "Modul 1.2 in zwei Einheiten splitten: (a) Kern-Neulingsteil = nur Context-Window-Analogie + ./CLAUDE.md + /context + /compact; (b) 'Vertiefung Memory & Multi-Repo' = rules/, Managed-CLAUDE.md, --add-dir, @AGENTS.md, Auto-Memory-Internals. Teil (b) explizit als 'beim ersten Durchgang ueberspringbar' kennzeichnen. Das senkt die kognitive Last drastisch ohne Inhalt zu loeschen.",
+    "effort": "M",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Massive Vorgriffe auf Block 2/3 mitten in den Foundations",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "Modul 1.4 erklaert /autofix-pr (Cloud-Session watcht CI), --fork-session, worktree.baseRef 'fresh' fuer 'multi-agent worktree setups in Block 3' (Zeile 868), --from-pr. Modul 1.1 nennt Computer Use, MCP, Sub-Agents. Als Neuling ohne erste erfolgreiche Session sagen mir diese Begriffe nichts und erzeugen das Gefuehl 'das ist alles riesig, ich komme nie hinterher'.",
+    "recommendation": "Vorgriffe konsequent in 'Ausblick'-Kaesten buendeln (1-2 Zeilen + Verweis 'Details in Block 3.x') statt sie voll auszuerklaeren. Faustregel fuer Block 1: nur erklaeren, was man in der ersten Session selbst anfassen kann. Der Rest = ein Satz Teaser.",
+    "effort": "M",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Kein expliziter 'Sanfter-Einstieg' / 'Erste 5 Minuten'-Pfad vor der Theorie",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "missing-content",
+    "severity": "high",
+    "evidence": "Modul 1.1 breitet ab Zeile 16 erst die komplette Konzept-Landschaft aus (5 Surfaces, Tool-Referenz-Tabelle mit 18 Tools Zeile 131-148, 6 Permission Modes, Modell-Tabelle). Das erste tatsaechliche 'mach es selbst' (eine Datei bauen lassen) steht erst in exercises/block-1-exercises.md Exercise 1.1.",
+    "recommendation": "Ein kurzes 'Hello, Claude Code'-Kapitel GANZ an den Anfang von Modul 1.1 setzen: 3 Befehle (mkdir, claude, ein einfacher Prompt), Ergebnis sofort sichtbar. Erst nach diesem Erfolgserlebnis die Konzepte erklaeren. Das klassische didaktische 'Demo first, Theorie danach' wird im CLAUDE.md sogar gefordert ('Demos > Slides'), fehlt aber genau am Einstiegspunkt.",
+    "effort": "M",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Built-in-Tools-Referenztabelle (18 Tools) zu frueh und zu vollstaendig",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "Zeile 131-148: Tabelle mit 18 Tools inkl. NotebookEdit, LSP, Skill, Agent, Monitor, AskUserQuestion, TaskCreate/TaskList/TaskUpdate — in Modul 1.1. Direkt darunter Note (Zeile 152): 'Skill and Agent are introduced here as tool names; they are explored in depth in Block 2.1 ... Block 3.1.'",
+    "recommendation": "Im ersten Modul nur die 5-6 Tools zeigen, die ein Neuling sofort sieht (Read, Edit, Write, Bash, Grep). Die Vollreferenz mit allen 18 Tools ins cheatsheet.md verschieben und hier nur verlinken. Eine 18-Zeilen-Tabelle mit Tools, die erst in Block 2/3 relevant werden, ist reiner Ballast in der ersten Stunde.",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Modul 1.5 (Cost Engineering) als 5. Modul am ersten Tag ist fuer Neulinge zu viel",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "Modul 1.5 (Zeile 927-1130) verlangt nach ~80 Min Theorie: Pricing-Tabelle ($/M Input/Output pro Modell), Effort-Multiplikatoren (0.5x-6x), Plan/Implement/Review-Pipeline, --max-budget-usd/--max-turns, Prompt-Caching mit 5-Min-TTL und 90%-Rabatt, --exclude-dynamic-system-prompt-sections. Sehr dichtes Finanz-/Optimierungs-Thema OHNE dass der Neuling bisher ueberhaupt Geld ausgegeben oder ein Gefuehl fuer normale Spends hat.",
+    "recommendation": "Modul 1.5 auf einen 5-Minuten-Kern eindampfen ('/cost gibt es, schau gelegentlich drauf; Default-Modell ist ok') und den Rest (Pricing-Details, Pipeline, Caching, Budget-Caps) als eigenstaendiges Vertiefungs-Modul nach Session 1 oder als optionalen Anhang fuehren. Die zugehoerige Exercise 1.5 ist bereits korrekt als 'Should-do/optional' markiert (exercises Zeile 473) — das Modul sollte konsistent dazu ebenfalls als optional/spaeter gekennzeichnet sein.",
+    "effort": "M",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Modul-Header 'Audience: Experienced programmers' ignoriert die Neulings-Persona der Zielgruppe",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "Zeile 3: 'Audience: Experienced programmers. Security analogies used throughout — especially relevant for the CySec engineer in the group.' Die Zielgruppe sind laut Auftrag erfahrene Entwickler MIT NULL Agent-Erfahrung. 'Experienced programmers' wird im Material durchgehend als Lizenz genutzt, Agent-Grundlagen knapp zu halten.",
+    "recommendation": "Header schaerfen: 'Audience: Experienced programmers who are NEW to coding agents.' Das ist der entscheidende Unterschied — ich kann C, aber ich habe noch nie einem Tool eine Aufgabe delegiert. Das Material sollte Programmier-Vorwissen voraussetzen, aber Agent-Konzepte konsequent bei Null erklaeren.",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Windows-Stolperstein python3 vs python: Setup verlangt python3, Troubleshooting widerspricht erst spaeter",
+    "file": "resources/prerequisites.md",
+    "category": "windows-compat",
+    "severity": "medium",
+    "evidence": "Step 5 (Zeile 102-104) und Step 7 (Zeile 150) verwenden durchgaengig 'python3 --version' / 'python3 -m pytest'. Erst in der Troubleshooting-Tabelle am Ende (Zeile 189) steht: 'Python not found on Windows | Use python instead of python3'. Auf einer Standard-Windows-Installation ist 'python3' oft nicht vorhanden (nur 'python').",
+    "recommendation": "Bei jedem python3-Befehl im Windows-Kontext direkt einen Hinweis '(Windows: python statt python3)' setzen oder einen kurzen Hinweiskasten direkt bei Step 5. Als Windows-Embedded-Entwicklerin wuerde ich bei 'python3: command not found' in der Pre-Workshop-Checkliste haengenbleiben und das Troubleshooting am Dateiende moeglicherweise nicht finden.",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Auth-Verifikation per 'claude --print' vor erklaerter Erstnutzung — Henne-Ei fuer Neulinge",
+    "file": "resources/prerequisites.md",
+    "category": "didactics-onboarding",
+    "severity": "low",
+    "evidence": "Step 3 (Zeile 74-76): 'claude --print \"Say hello\"' zur Auth-Pruefung, und Checklist Zeile 161 'claude --print \"Hello\" returns a response'. Vorher wurde nur 'claude' + '/login' gezeigt. Als Neuling weiss ich nicht, was --print/--print-Modus bedeutet vs. interaktiv.",
+    "recommendation": "Einen Halbsatz ergaenzen: 'claude --print fuehrt einen einmaligen, nicht-interaktiven Prompt aus und beendet sich danach — gut zum Testen.' Kleinigkeit, aber genau solche unerklaerten Flags summieren sich beim Neuling zu Verunsicherung.",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Reihenfolge-Konflikt zwischen den Einstiegsdateien (prerequisites -> ? )",
+    "file": "global",
+    "category": "structure",
+    "severity": "low",
+    "evidence": "README.md Quick Start (Zeile 30-32): 'prerequisites.md -> WORKSHOP_EINFUEHRUNG.md -> Block durcharbeiten'. workshop-guide.md Lernpfad (Zeile 54-58): 'prerequisites.md -> session-plan.md -> block-1'. WORKSHOP_EINFUEHRUNG.md (Zeile 19-20): 'prerequisites.md -> workshop-guide.md'. Drei Dateien empfehlen drei leicht verschiedene Reihenfolgen.",
+    "recommendation": "Eine einzige kanonische Einstiegs-Reihenfolge festlegen und in allen drei Dokumenten identisch wiederholen (z.B. prerequisites -> WORKSHOP_EINFUEHRUNG -> workshop-guide -> session-plan -> Block 1). Als Neuling, der genau diese Orientierungsdateien zuerst liest, kosten kleine Abweichungen Vertrauen und Zeit.",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Modul 1.2 Auto-Memory-Privacy-Block ist korrekt, aber an dieser Stelle Overload",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "didactics-onboarding",
+    "severity": "low",
+    "evidence": "Zeile 338-349: ausfuehrlicher Privacy-Block zu Auto-Memory (was an Anthropic gesendet wird, Opt-out --bare, 'claude project purge', Verweis auf Modul 3.7 Drift-Detection) mitten im zweiten Foundations-Modul.",
+    "recommendation": "Privacy-Hinweis auf 2-3 Saetze kuerzen ('Auto-Memory schreibt Notizen auf Platte und sendet sie bei Sessionstart mit — keine Secrets hineinschreiben, Opt-out via --bare') und die Details (purge, Drift-Detection) in Modul 3.7 belassen. Der Neuling muss in 1.2 nur die Kernwarnung mitnehmen, nicht das volle Privacy-Regime.",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Exercise 1.2 setzt 'never-change'-Pushback-Verhalten als verlaesslich voraus",
+    "file": "resources/exercises/block-1-exercises.md",
+    "category": "exercise-quality",
+    "severity": "low",
+    "evidence": "Exercise 1.2 Step 6 (Zeile 170-177): 'Modify the legacy panel interface module' -> 'Does Claude push back? It should flag that the CLAUDE.md says not to touch it.' LLM-Verhalten ist nicht deterministisch; der Pushback kann ausbleiben, obwohl die Regel korrekt ist.",
+    "recommendation": "Erwartung entschaerfen: 'Claude sollte in der Regel darauf hinweisen ... falls nicht, ist das ein gutes Lehrbeispiel, dass CLAUDE.md-Regeln Leitplanken sind, keine harten Sperren — Hooks (Block 2.2) sind das harte Gate.' Das verhindert, dass ein Neuling bei ausbleibendem Pushback denkt, er habe etwas falsch gemacht. Der Hint Zeile 202 deutet das an, aber Step 6 selbst formuliert es zu absolut ('It should').",
+    "effort": "S",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "Zeitbudget Block-1-Exercises vs. Modul-Lesezeit unrealistisch fuer Neulinge",
+    "file": "resources/exercises/block-1-exercises.md",
+    "category": "didactics-onboarding",
+    "severity": "low",
+    "evidence": "Exercises Zeile 4: '~85-90 minutes total for all Block 1 exercises'. Modul block-1-foundations.md ist ~1145 Zeilen dichtes Material mit Header 'Duration: ~90 minutes' (Zeile 4). Zusammen mit Demos passt das nicht realistisch in eine ~3h-Session, wenn ein Neuling die Module wirklich versteht statt nur ueberfliegt.",
+    "recommendation": "Realistisches Zeitbudget fuer die Neulings-Persona ausweisen oder einen klaren 'Kern vs. Vertiefung'-Schnitt machen, damit in 3h ein Erfolgserlebnis statt Hetze entsteht. Konkret: pro Modul kennzeichnen, was Pflicht-Lesestoff (Kern) und was Nachlese ist.",
+    "effort": "M",
+    "persona": "Anna — Embedded-Entwicklerin (15 J. C/Embedded), NULL Agent-Erfahrung. Wichtigste Einstiegshuerden-Persona."
+  },
+  {
+    "title": "OSDP-Frame-Format im C-Playground ist sachlich falsch (Feld-Reihenfolge + Length-Breite)",
+    "file": "workshop-playground/osdp_frame_decoder.c",
+    "category": "accuracy-overclaim",
+    "severity": "high",
+    "evidence": "Zeile 4: 'Frame format: [SOM][LEN][ADDR][CMD][DATA...][CRC]' und Z.25-32 struct mit 'uint8_t length;' (8-bit) vor 'uint8_t address;'. Reales OSDP (SIA OSDP v2.2 / IEC 60839-11-5): Frame = SOM(0x53), ADDR, LEN_LSB, LEN_MSB (Length ist 16-bit little-endian!), Message-Control-Info, dann Daten, dann CRC-16/CCITT. Reihenfolge ADDR-vor-LEN und 16-bit-LEN sind festgelegt.",
+    "recommendation": "Frame-Format korrigieren: ADDR vor LEN, LEN als 2 Bytes (LSB/MSB). Mindestens einen Kommentar ergaenzen: 'Simplified/teaching frame — real OSDP uses ADDR before a 16-bit little-endian LEN and a CRC-16/CCITT; see SIA OSDP v2.2'. Sonst entlarvt jeder echte PhySec-Entwickler den Playground in 10 Sekunden als nicht-domaenenkundig und verliert Vertrauen in den Rest.",
+    "effort": "S",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Vulnerability-Kommentare im C-Playground: Zeilenangaben stimmen nicht, V2-Logik widerspruechlich",
+    "file": "workshop-playground/osdp_frame_decoder.c",
+    "category": "accuracy-overclaim",
+    "severity": "medium",
+    "evidence": "Header Z.8-11 verspricht 'Buffer Overflow ... line ~50', 'Integer Overflow ... line ~85', 'Format String ... line ~110', 'Off-by-one ... line ~135' — tatsaechlich liegen sie auf Z.40-44, 52-59, 65-70, 76-81. Zusaetzlich V2-Kommentar Z.46-50: 'If length == 255, byte_count == 255*3 == 765 (fine)' — dann ist es KEIN Integer-Overflow von size_t; der Kommentar gibt selbst zu, dass nichts ueberlaeuft ('fine') und schiebt den eigentlichen Bug auf V1 ab. Das ist keine saubere Integer-Overflow-Demo.",
+    "recommendation": "Zeilenangaben an den realen Code anpassen (oder ganz weglassen). V2 entweder zu einem ECHTEN Integer-Overflow umbauen (z.B. uint8_t-Arithmetik die wrap-around macht: 'frame->length + offset' in uint8_t) oder ehrlich als 'unchecked length feeds OOB read' umbenennen statt 'Integer Overflow'. Ein CySec-Teilnehmer wird den Selbstwiderspruch im Debate sofort als Defender-Argument nutzen.",
+    "effort": "M",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Off-by-one-Vuln (V4) ist als Lehrbeispiel logisch unsauber",
+    "file": "workshop-playground/osdp_frame_decoder.c",
+    "category": "exercise-quality",
+    "severity": "medium",
+    "evidence": "Z.76-81 parse_address(): Kommentar 'address is decoded from raw[2]' aber die Funktion liest 'return raw[OSDP_HEADER_LEN]' (=raw[5]), nicht raw[2]. Der Guard 'if (raw_len < OSDP_HEADER_LEN)' mit Kommentar 'should be raw_len <= OSDP_HEADER_LEN'. Bei raw_len==5 (genau HEADER_LEN) passiert der Guard und liest raw[5] — OOB. Aber die Funktion soll die ADDRESS liefern, die laut Header bei raw[2] liegt; raw[5] ist gar nicht das Adressfeld. Der Bug ist real (OOB-Read), aber die fachliche Erzaehlung ('decode address') passt nicht zum Code.",
+    "recommendation": "parse_address() so umbauen, dass die OOB-Stelle plausibel ist: z.B. CRC am Frame-Ende lesen wollen ('return raw[frame_len]' statt 'raw[frame_len-1]'). Dann ist das Off-by-one eine echte, nachvollziehbare OSDP-Parsing-Falle (CRC-Position) statt einer konstruierten raw[5]-Zugriff.",
+    "effort": "M",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Python-Playground deckt keine PhySec-spezifische Fehlerklasse ab — bleibt generisches Backend",
+    "file": "workshop-playground/access_control.py",
+    "category": "missing-content",
+    "severity": "medium",
+    "evidence": "Die 3 geplanten Vulns (Z.19 hardcoded ADMIN_PASSWORD, Z.121-128 Path-Traversal in read_log, Z.134-141 Command-Injection in backup_database) sind klassische Web/Backend-Muster. ADMIN_PASSWORD Z.19 ist laut workshop-playground/CLAUDE.md sogar 'unused in flow (intentional for demo discoverability)' — also toter Code. Fuer einen Access-Control-Kontext fehlen die domaenentypischen Logikfehler: kein Time-of-Day-Schedule-Bypass, keine fehlende Tamper/Anti-Passback-Logik, kein Default-Allow bei korrupter users.json (load_db Z.43-45 faellt auf leere Liste zurueck = fail-secure, das waere eine schoene PhySec-Diskussion, wird aber nicht thematisiert).",
+    "recommendation": "Eine domaenenspezifische Logik-Vuln ergaenzen, die ein Scanner NICHT trivial per Pattern findet, z.B. einen 'fail-open'-Pfad (bei JSON-Fehler ACCESS GRANTED statt DENIED) oder eine fehlende Schedule/Anti-Passback-Pruefung. Das zeigt den Unterschied zwischen Pattern-Scannern und echter PhySec-Domaenenkompetenz — genau der Punkt, den Exercise 3.3 'For the CySec Engineer' (block-3-exercises.md:165-170) aufwirft.",
+    "effort": "M",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Modul 3.3 fehlt die OSDP-Kernsicherheit: Secure Channel / SCBK / Replay / Tamper",
+    "file": "resources/modules/block-3-advanced.md",
+    "category": "missing-content",
+    "severity": "medium",
+    "evidence": "Modul 3.3 listet generische Checks (Z.551-561: command injection, SQL injection, hardcoded creds ...) und CVE-2025-53110 (Z.779). Der OSDP-Playground wird erwaehnt (Z.537-541), aber nirgends taucht die eigentliche OSDP-Sicherheitsschicht auf: OSDP Secure Channel (AES-128), SCBK-0/Default-Key-Problem (viele Installationen laufen mit dem Hersteller-Default-Key), Replay-Schutz, Line-Supervision/Tamper. Genau DAS ist die Security-Story, die einen PhySec-Entwickler abholt.",
+    "recommendation": "In Modul 3.3 oder im C-Playground einen kurzen OSDP-Secure-Channel-Abschnitt ergaenzen (1 Absatz + 1 Vuln-Idee: 'install_mode' bleibt aktiv / Default-SCBK wird nie rotiert). Als Demo: Devil's-Advocate-Swarm gegen einen OSDP-Handshake-Stub laufen lassen. Das hebt den Kurs von 'generisch sicher' auf 'kennt OSDP wirklich'.",
+    "effort": "L",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "sscanf-Hex-Parser im C-Playground hat einen ungeplanten Bug, der die Vuln-Trigger verfaelscht",
+    "file": "workshop-playground/osdp_frame_decoder.c",
+    "category": "demo-reliability",
+    "severity": "low",
+    "evidence": "Z.102 'for (size_t i = 0; i < hex_len - 1; i += 2)' — bei ungerader hex_len wird das letzte Nibble verschluckt; bei hex_len==0 unterlaeuft 'hex_len - 1' (size_t wrap auf SIZE_MAX) → riesige Schleife/OOB. Das ist ein vierter, UNgeplanter Memory-Bug im main(), der bei einer Live-Demo unkontrolliert feuern und die geplanten V1-V4 verdecken kann.",
+    "recommendation": "Entweder bewusst als 5. Bonus-Vuln dokumentieren (in workshop-playground/CLAUDE.md), oder haerten: 'if (hex_len == 0 || hex_len % 2) { return 1; }'. Sonst kann die Demo 3.3 unvorhersehbar abstuerzen, bevor der Swarm ueberhaupt scannt.",
+    "effort": "S",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Demo-Build des C-Playgrounds erzeugt auf Windows-Workshop-Maschinen wahrscheinlich Reibung",
+    "file": "workshop-playground/Makefile",
+    "category": "windows-compat",
+    "severity": "medium",
+    "evidence": "Makefile Z.3 'CC := gcc', Z.18-19 'static-check: clang --analyze', Z.22-23 'scan-build'. workshop-playground/CLAUDE.md sagt fuer backup_database nur 'On Windows ... run live demos from Git Bash or WSL', aber zum C-Build/clang/scan-build steht kein Windows-Hinweis. Auf einer typischen Windows-Workshop-Maschine sind weder gcc noch clang-analyzer/scan-build per Default vorhanden; 'make static-check' schlaegt fehl.",
+    "recommendation": "In workshop-playground/CLAUDE.md eine Windows-Voraussetzungs-Notiz fuer den C-Pfad ergaenzen (MSYS2/mingw oder WSL, clang-tools-extra) ODER die Demo so framen, dass der Devil's-Advocate-Swarm rein auf den C-Quelltext schaut (kein Compile/Static-Check noetig). Letzteres ist robuster fuer die Live-Demo.",
+    "effort": "S",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Analogie 'Self-Improve Loop = Access-Control naechtliche Firmware-Selbstheilung' ist fachlich irrefuehrend (teilweise abgefedert)",
+    "file": "resources/modules/block-3-advanced.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "Z.964-971: 'Your access control system runs overnight diagnostics ... It applies the update ... No human involvement. Full audit trail.' Genau dieses Szenario ist unter EN 50131 unzulaessig. Der Kurs faengt es zwar direkt danach mit dem Hinweis-Kasten Z.973-980 ab — aber die Analogie wird zuerst als positives Vorbild praesentiert und erst dann widerrufen, was didaktisch holprig ist.",
+    "recommendation": "Die Reihenfolge umdrehen: zuerst sagen 'fuer Hardware-Endpunkte NICHT zulaessig — aber als Bild fuer Code/CI-Repos:', dann die Self-Healing-Erzaehlung. So bleibt die Mechanik-Illustration, ohne dass ein PhySec-Experte erst stutzt ('das duerfen wir gar nicht') und dann beruhigt wird.",
+    "effort": "S",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Modul 3.3 ist als eine Lerneinheit kognitiv ueberladen (Adversarial + 6 Permission-Themen + Sandboxing + Retention + Compliance)",
+    "file": "resources/modules/block-3-advanced.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "Modul 3.3 (Z.444-801) packt in EINEN Block: Devil's-Advocate-4-Stufen-Pipeline, Security-Audit-Skill, 3 advanced Permission Modes, Protected Paths, Review-Trio, Permission-Rule-Grammatik, sandbox.network.deniedDomains, disableSkillShellExecution, 4 Sandbox-Level, Data-Retention-Tabelle, 6-Zeilen-Compliance-Tabelle (EN50131/GDPR/HIPAA/PCI/DORA/NIS2). Das sind ~10 eigenstaendige Konzepte unter einer Ueberschrift.",
+    "recommendation": "Modul 3.3 in zwei Lerneinheiten splitten: 3.3a 'Adversarial Testing' (Swarm + Review-Trio + Audit-Skill) und 3.3b 'Hardening & Compliance' (Permission-Modes-advanced, Protected Paths, Sandbox-Level, Retention, Regulatorik). Pro Einheit weniger Konzepte = bessere Verankerung. Die feinere Granularitaet hilft besonders dem Compliance-Teil, der fuer regulierte PhySec-Firmen der wertvollste ist.",
+    "effort": "M",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Exercise 3.3 verspricht reproduzierbar 'die drei geplanten Vulns', aber ADMIN_PASSWORD ist toter Code — Defender koennte es zu Recht abweisen",
+    "file": "resources/exercises/block-3-exercises.md",
+    "category": "exercise-quality",
+    "severity": "low",
+    "evidence": "block-3-exercises.md:108-113 + :138 'The swarm should confirm the three planted issues (Command Injection, Hardcoded Credential, Path Traversal)'. Aber laut workshop-playground/CLAUDE.md ist ADMIN_PASSWORD 'unused in flow (intentional for demo discoverability)'. In der Debate-Stufe ist genau das ein valides Defender-Argument ('nie verwendet, nicht erreichbar → kein exploitierbarer Pfad'), wodurch die Consensus-Stufe es als FALSE POSITIVE/NEEDS-INVESTIGATION einstufen koennte — entgegen der Exercise-Erwartung 'CONFIRMED'.",
+    "recommendation": "Entweder ADMIN_PASSWORD tatsaechlich in einen (unsicheren) Auth-Pfad einbinden (z.B. eine 'admin'-Subcommand, die dagegen vergleicht), oder die Exercise-Erwartung praezisieren: 'Hardcoded Credential wird gefunden, kann aber im Debate als low-severity/unreachable enden — diskutiert warum.' Letzteres ist sogar didaktisch wertvoller, untergraebt aber die jetzige 'confirm three'-Formulierung.",
+    "effort": "S",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Neue Uebungs-Idee: domaenenechte OSDP/Wiegand-Parsing-Uebung fehlt komplett",
+    "file": "resources/exercises/block-3-exercises.md",
+    "category": "new-exercise-idea",
+    "severity": "nice-to-have",
+    "evidence": "Block-3-Exercises (3.1-3.8) sind alle generisch (Multi-Agent, Codex-Swarm, Security-Audit, Automation, Pre-Commit-Hook, HIPAA, Broken-Hook). Capstone 3.5 nennt zwar 'Generate OSDP frame tests' als Skill-Variante (block-3-exercises.md:299), aber es gibt keine gefuehrte Domaenen-Uebung. Fuer 3 PhySec-Entwickler waere genau das der Aha-Moment.",
+    "recommendation": "Eine optionale 'Should-do'-Uebung 3.9 ergaenzen: 'Lass Claude einen robusten OSDP-Frame-Parser mit Bounds-Checks aus dem verwundbaren osdp_frame_decoder.c bauen + property-based tests fuer Length-Field-Fuzzing' oder 'Wiegand-26-bit-Parser (Facility-Code + Card-Number + Parity) mit TDD'. Das verbindet Multi-Agent/TDD-Inhalt mit echter Domaene und ist der staerkste moegliche Verkaufspunkt des Kurses fuer diese Zielgruppe.",
+    "effort": "M",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Log-Injection als 'Bonus'-Vuln ist real, aber im PhySec-Kontext eher Kern als Bonus (Audit-Trail-Integritaet)",
+    "file": "workshop-playground/access_control.py",
+    "category": "exercise-quality",
+    "severity": "low",
+    "evidence": "access_control.py:105-113 log_event() schreibt 'username' und 'action' ungefiltert ins Logfile (entry = f-string mit Newline am Ende). workshop-playground/CLAUDE.md und exercise 3.3:113 framen das als 'bonus ungeplante issue' / 'Treat that as a bonus'. In EN-50131/50132-Kontext ist Audit-Trail-Integritaet aber regulatorisch zentral — Log-Forging ist hier KEIN Nebenschauplatz.",
+    "recommendation": "Log-Injection vom 'Bonus' zur regulaeren, namentlich PhySec-relevanten Vuln aufwerten und mit EN 50131 Audit-Trail-Anforderung verknuepfen (Querverweis auf block-3-advanced.md:755 Compliance-Tabelle). So wird aus einem generischen OWASP-Befund eine domaenenrelevante Compliance-Geschichte.",
+    "effort": "S",
+    "persona": "Markus — Zutrittskontroll-Firmware-Entwickler, CySec-affin (echte Zielgruppe)"
+  },
+  {
+    "title": "Session-3-Timing ist unrealistisch: 7 Module + 8 Demos + 40-Min-Capstone in 3h",
+    "file": "resources/session-plan.md",
+    "category": "structure",
+    "severity": "high",
+    "evidence": "Session-3-Tabelle (Z.62-74): '0:40 – 0:50 | Modul 3.2 + Demo 3.2 | Multi-Model Pipelines / Codex Swarm' — nur 10 Min fuer Modul-Input PLUS eine Codex-Swarm-Demo. Block-3-demos.md Demo 3.2 verlangt aber: Decompose + N parallele Codex-Agents + Claude-Review (4 Schritte, Z.68-96). Auch '0:40-0:50 Modul 3.2+Demo 3.2' und '0:50-1:10 Modul 3.3+Demo 3.3' lassen pro Doppel-Slot kaum Luft fuer Modul-Teaching.",
+    "recommendation": "Session 3 in der Praxis NICHT als '7 Module live' fahren. Dem Dry-Run folgen (3.2/3.4/Telegram als optional). Konkret: Demo 3.2 Codex-Swarm aus dem Live-Pfad nehmen und durch eine vorbereitete Aufzeichnung/Screenshots ersetzen — 10 Min reichen real nicht fuer Decompose+Parallel+Review. Slot-Spalte im session-plan um eine 'Live/Recording/Discussion'-Default-Spalte ergaenzen, damit ich nicht live entscheiden muss.",
+    "effort": "M",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Session-3-Timeline hat eine ungeklaerte 10-Minuten-Luecke / Slot-Mathematik geht nicht auf",
+    "file": "resources/session-plan.md",
+    "category": "structure",
+    "severity": "medium",
+    "evidence": "Session-3-Tabelle: '0:50 – 1:10 Modul 3.3+Demo 3.3' (20 Min), dann '1:10 – 1:20 Pause', danach '1:20 – 1:35' usw. Im Dry-Run (dry-run...md Z.69-79) erscheint dieselbe Reihe aber OHNE Pause-Zeile und mit Sprung von '0:50-1:10' direkt auf '1:20-1:35' — d.h. die beiden Quelldokumente sind nicht deckungsgleich, und die Pause fehlt in der Dry-Run-Tabelle.",
+    "recommendation": "Eine einzige Master-Timeline als Source of Truth definieren (session-plan.md), Dry-Run darauf referenzieren statt eine zweite, leicht abweichende Tabelle zu fuehren. Pause-Zeile in beide aufnehmen. So vermeide ich, dass ich live zwei widerspruechliche Ablaeufe im Kopf habe.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Demo-Skript-Dauern uebersteigen die Plan-Slots in Session 1",
+    "file": "resources/session-plan.md",
+    "category": "demo-reliability",
+    "severity": "medium",
+    "evidence": "session-plan.md Z.30: 'Demo 1.4 | 2:10 – 2:20' = 10-Min-Slot. block-1-demos.md Demo 1.4 ist aber '~10 minutes' OHNE den Worktree-Bonus (Step 6) — mit Bonus deutlich mehr. Analog Demo 1.1: Plan-Slot 0:30-0:40 (10 Min), Skript sagt '~8 minutes' (Z.26), aber Modul 1.1 davor hat nur 0:15-0:30 = 15 Min fuer 'drei Interfaces, Permissions, Models'.",
+    "recommendation": "Pro Demo eine realistische 'Demo-Dauer inkl. Talking-Points' neben den Plan-Slot schreiben und Bonus-Schritte (Worktree Step 6) klar als 'nur bei Zeitueberschuss' markieren — ist im Skript schon mit 'Bonus' getan, aber im session-plan.md nicht sichtbar. Puffer von 2-3 Min pro Demo einplanen; Live-Demos laufen IMMER langsamer als das Skript.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Keine konsolidierte 'Heute live vs. Fallback'-Entscheidungs-Checkliste fuer den Sessiontag",
+    "file": "resources/trainer-notes.md",
+    "category": "demo-reliability",
+    "severity": "high",
+    "evidence": "Die Live-vs-Fallback-Logik ist auf drei Dokumente verteilt: trainer-notes.md (Failure-Tabelle Z.59-67), dry-run...md (Verdicts + Timeline), und jede Demo-Datei (Recovery-Notes). Es gibt KEINE einzelne Seite, die ich am Workshop-Morgen abhake: 'Plugin X installiert? -> Demo live. Nicht? -> Recording bereit?'",
+    "recommendation": "Eine 1-seitige 'Go/No-Go-Demo-Matrix' anlegen (z.B. in trainer-notes.md): Zeile pro Demo, Spalten 'Preflight-Check (Befehl)', 'wenn PASS -> live', 'wenn FAIL -> Fallback-Artefakt + Pfad'. Die Recovery-Notes existieren schon; sie muessen nur in eine abhakbare Matrix verdichtet werden. Das ist die wichtigste fehlende Moderatoren-Hilfe.",
+    "effort": "M",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Fragilste Demos haengen kumuliert an Auth/Plugin/Budget/Internet — Cluster-Risiko in Session 3",
+    "file": "resources/demos/block-3-demos.md",
+    "category": "demo-reliability",
+    "severity": "high",
+    "evidence": "Demo 3.2 braucht 'Codex CLI installed and authenticated' (Z.61-63) UND das multi-model-orchestrator-Plugin; Demo 3.4 braucht agentic-os-Plugin + Budget-Cap; Demo 3.3 braucht devil-advocate-swarms-Plugin; Demo 3.3c braucht WebSearch/Internet (Z.353); Demo 3.5 Step 4 braucht Telegram-Bridge. Faellt eines vor Publikum aus, kann eine Kettenreaktion entstehen ('3+ Demos in Folge', genau der trainer-notes.md-Notfall Z.71).",
+    "recommendation": "Fuer Session 3 EINEN garantiert-live-Anker festlegen, der NUR auf lokal-installiertem claude beruht: Demo 3.6 Headless (laut Dry-Run 'Should-show live, because claude is installed locally'). Den explizit als 'das laeuft sicher'-Demo markieren und als Eroeffnung von Block 3 ziehen, damit das Publikum frueh einen funktionierenden Live-Moment sieht — psychologisch wichtig, falls spaeter Plugin-Demos kippen.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Budget-Cap-Empfehlung uneinheitlich: Demo 3.6 nutzt 0.05$, Plan empfiehlt 50$-Konto, Self-Improve hat keinen Default-Cap im Skript",
+    "file": "resources/demos/block-3-demos.md",
+    "category": "demo-reliability",
+    "severity": "medium",
+    "evidence": "Demo 3.6 Step 3 setzt '--max-budget-usd 0.05 --max-turns 2' (Z.558-561). Demo 3.4 Self-Improve (Z.380-393) ruft '/agentic-os:run-loop' mit '1' Iteration, nennt aber im Step KEINEN expliziten Budget-Cap — der Cap taucht erst in den Recovery-Notes auf ('If --max-budget-usd is hit early', Z.418). session-plan.md warnt zugleich, der Self-Improve-Loop sei der Haupt-Kostentreiber ($15-50, Z.118/122).",
+    "recommendation": "In Demo 3.4 Step 2 einen expliziten Budget-Cap als Pflicht-Vorgabe vor den /run-loop-Aufruf setzen (analog Demo 3.6), nicht nur in den Recovery-Notes. Als Moderatorin will ich den Cap GESETZT haben, bevor ich Enter druecke — nicht erst reagieren, wenn er greift. Ein '/cost'-Blick vor und nach dem Loop ins Skript aufnehmen.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Demo 2.2b Inline-Hook ist live fragil (Bash/jq-Quoting auf Windows) — Fallback existiert nur als Verweis, nicht als fertige Datei",
+    "file": "resources/demos/block-2-demos.md",
+    "category": "windows-compat",
+    "severity": "high",
+    "evidence": "Demo 2.2b setzt eine lange Inline-JSON+Bash-Hook-Zeile mit verschachteltem Quoting (Z.200): 'command: \"bash -c '\\''INPUT=$(cat); FILE=$(echo ...| jq -r .file_path...'\\'' ...'. Recovery-Note Z.246 sagt 'Have a pre-prepared secure-diff-gate.sh file ready' — aber diese Datei liegt NICHT im Repo (workshop-playground/ enthaelt sie nicht). Der Dry-Run bestaetigt: 'inline JSON/bash quoting is too risky on Windows' (dry-run...md Z.49).",
+    "recommendation": "Die fertige secure-diff-gate.sh (und eine Python-Variante fuer Windows ohne jq) tatsaechlich ins Repo legen (z.B. resources/demos/assets/hooks/), damit ich sie nur kopieren muss. Das Skript sollte auf Windows-Git-Bash getestet sein. Ohne fertige Datei ist 'pre-prepared' nur eine Absichtserklaerung.",
+    "effort": "M",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Demo 3.7 'broken-greeter'-Skill muss vom Moderator selbst gebaut werden, liegt aber nicht im Repo",
+    "file": "resources/demos/block-3-demos.md",
+    "category": "demo-reliability",
+    "severity": "medium",
+    "evidence": "Demo 3.7 setzt voraus: 'The moderator has prepared an intentionally broken skill at ~/.claude/skills/broken-greeter/SKILL.md with three problems planted in this order' (Z.596-603). Diese SKILL.md liegt nirgends im Repo als kopierbares Artefakt; ich muss sie aus der Prosa-Beschreibung selbst rekonstruieren (generische Description, disable-model-invocation:true, paths:[never-match]).",
+    "recommendation": "Die fertige broken-greeter/SKILL.md als Asset ins Repo legen (resources/demos/assets/broken-greeter/SKILL.md), inkl. der drei geplanten Fehler exakt wie im Skript beschrieben. Dann ist Demo 3.7 (laut Dry-Run ein Live-Kandidat) wirklich reproduzierbar statt Bastelei am Workshop-Morgen.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Demo 3.7 setzt /debug-Trace-Ausgaben voraus, die so evtl. gar nicht existieren — Overclaim-Risiko vor Publikum",
+    "file": "resources/demos/block-3-demos.md",
+    "category": "accuracy-overclaim",
+    "severity": "medium",
+    "evidence": "Demo 3.7 zitiert woertliche Trace-Ausgaben als erwartet, z.B. 'Skill broken-greeter matched paths-filter: NO (filter: never-match/**, current files: ...)' (Z.642) und 'description too generic for prompt — no candidate match' (Z.667). Ob '/debug skill-not-triggering' real exakt solche Zeilen ausgibt, ist nicht verifiziert; Recovery-Note Z.695 raeumt ein, '/debug' sei in aelteren Builds evtl. gar nicht vorhanden.",
+    "recommendation": "Vor Session 3 auf meiner Maschine real pruefen, was '/debug' bzw. 'claude --verbose' tatsaechlich ausgibt, und die zitierten Trace-Zeilen an die echte Ausgabe anpassen ODER als 'sinngemaess, Wortlaut variiert' kennzeichnen. Sonst stehe ich vor Entwicklern, die merken, dass die versprochene Zeile nicht erscheint — Glaubwuerdigkeitsverlust.",
+    "effort": "M",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Demo 1.4 Recovery-Note referenziert 'gh pr create', das in den Demo-Schritten gar nicht vorkommt",
+    "file": "resources/demos/block-1-demos.md",
+    "category": "structure",
+    "severity": "low",
+    "evidence": "Demo 1.4 Steps 1-6 enden bei 'git log' und Worktree; ein PR-Schritt existiert nicht. Die Recovery-Notes nennen aber 'If gh pr create fails (auth): Skip the PR step, demonstrate via git push only' (Z.463). Pre-Demo-Checklist Z.17 fuehrt 'gh authenticated if Demo 1.4 includes PR creation' — der konditionale Halbsatz deutet auf eine entfernte PR-Variante.",
+    "recommendation": "Entweder einen optionalen PR-Schritt (Step 7, 'Bonus') wieder einbauen ODER die gh-pr-Recovery-Note und den gh-Checklist-Eintrag entfernen. Aktuell stiftet die Note Verwirrung: ich bereite gh-auth vor, finde dann aber keinen PR-Schritt im Skript.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Slide-Index-Diskrepanz: trainer-notes mappt Session 3 auf Slides 19-29, Outro=30; Block-3-Slide-Anzahl deckt 7 Module nur knapp",
+    "file": "resources/trainer-notes.md",
+    "category": "structure",
+    "severity": "low",
+    "evidence": "trainer-notes.md Slide-Index (Z.257-283) ordnet Session 3 elf Slides (19-29) sieben Modulen + Run Sheet + Website + Dry-Run-Checklist zu, also ~1 Slide pro Modul. deck-audit...md Z.36-37 bestaetigt '19-29 Block 3 Advanced'. final-gap-sweep...md Z.67 warnt aber, die INSTALLIERTE Plugin-Kopie melde noch '13 modules' — Laufzeit-Metadaten und Repo divergieren.",
+    "recommendation": "Vor Session 3 das lokale dynamic-workshop-Plugin neu installieren/aktualisieren (final-gap-sweep Empfehlung Z.77), damit '/workshop'-Laufzeitausgaben zur 17-Modul-Realitaet passen. Falls ich '/workshop' live zeige und es '13 modules' sagt, widerspricht das meinen Slides. Kurz: Plugin-Reinstall in die Pre-Flight-Checklist aufnehmen.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Pre-Flight-Checklist mischt POSIX-Pfade/Befehle, die auf einer Windows-Moderatorenmaschine scheitern",
+    "file": "resources/trainer-notes.md",
+    "category": "windows-compat",
+    "severity": "medium",
+    "evidence": "Pre-Flight (Z.29-55) nutzt 'python3 -m pytest -v', 'make', 'notebooklm list' und den Pfad 'cd ~/cc-workshop/dynamic-workshop'. Auf Windows ist 'python3' oft nur 'python', 'make' meist nicht installiert (im Skript selbst '(if installed)' relativiert), und der Dry-Run lief mit 'python -m pytest -v: 18 passed' (dry-run...md Z.29) — also 'python', nicht 'python3'.",
+    "recommendation": "Die Pre-Flight-Checklist mit einer Windows-Spalte/Variante versehen ('python' statt 'python3', make-Schritt klar als optional, Pfade ohne ~-Annahme). Da der Workshop laut Repo-Kontext auf Windows-Maschinen laeuft, sollte die abhakbare Liste primaer Windows-tauglich sein, nicht POSIX-first.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Demo 3.3c (CVE-Fix) plant eine verwundbare Dependency ein — Cleanup-Schritt ist als 'biggest risk' selbst markiert",
+    "file": "resources/demos/block-3-demos.md",
+    "category": "demo-reliability",
+    "severity": "medium",
+    "evidence": "Demo 3.3c Step 0 fuegt 'requests==2.5.0 (CVE-2018-18074)' in requirements.txt ein (Z.306); Recovery-Note Z.354: 'If you forget the cleanup step: Document this as the demos biggest risk — always revert the planted vulnerable line.' Step 3 Cleanup verlangt manuelles Editieren (Z.341-346).",
+    "recommendation": "Cleanup nicht der Erinnerung ueberlassen: ein fertiges Revert-Snippet/Script (z.B. git checkout -- requirements.txt) als Ein-Befehl-Cleanup ins Skript setzen, plus den Hinweis 'NIEMALS pip install auf dieser Zeile'. Als Moderatorin mit 17 Modulen im Kopf vergesse ich genau solche manuellen Nach-Demo-Schritte — ein 'git checkout' ist sicherer als 'oeffne die Datei und loesche die Zeile'.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Pausen-Logik in Session 2 unsauber: Slot 1:25-1:35 Pause, aber Module 2.3 startet erst 1:35 — der 1:25-1:35-Block fehlt im Demo-Spine des Dry-Runs",
+    "file": "resources/session-plan.md",
+    "category": "structure",
+    "severity": "low",
+    "evidence": "session-plan.md Session-2-Tabelle Z.48-50: '1:00 – 1:25 Exercises 2.1+2.2', '1:25 – 1:35 Pause', '1:35 – 1:45 Modul 2.3'. Der Dry-Run-Timeline (dry-run...md Z.50-51) springt aber von '1:00-1:25 Exercises' direkt auf '1:35-1:55 Module/Demo 2.3' — die Pause 1:25-1:35 ist dort nicht als Zeile gefuehrt, und die Modul-2.3-Zeit weicht ab (Plan 1:35-1:45 vs Dry-Run 1:35-1:55).",
+    "recommendation": "Plan und Dry-Run-Timeline fuer Session 2 angleichen (gleiche Slot-Grenzen, Pause in beiden). Das ist Teil desselben Source-of-Truth-Problems wie bei Session 3 — eine konsolidierte Timeline pro Session loest beide Befunde.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Session 3 hat 8 Demos + Capstone und keinen Live-Puffer fuer das wahrscheinliche 'Demo bricht'-Szenario",
+    "file": "resources/dry-run-session-2-3-2026-05-21.md",
+    "category": "structure",
+    "severity": "medium",
+    "evidence": "Dry-Run-Verdikt Session 3: 'YELLOW/GREEN ... too many demos depend on plugins, auth, budget, or external services' und 'Session 3 still has more possible demos than time' (Z.58, Z.121). Die Timeline (Z.69-79) fuellt 0:10-2:20 lueckenlos mit Demos, dann 2:20-3:00 Capstone — kein expliziter Recovery-Puffer, obwohl trainer-notes ein '3+ Demos brechen'-Szenario antizipiert.",
+    "recommendation": "Einen 10-Min-Recovery-Puffer fest in die Session-3-Timeline einbauen (z.B. Demo 3.2 ODER 3.4 von vornherein als Streich-Kandidat deklarieren) statt 100% verplanen. Realistisch sollte Session 3 als '5 sichere Demos + Capstone' geplant werden, mit 3.2/3.4/Telegram als reine Bonusse — genau wie der Dry-Run empfiehlt, aber im verbindlichen Plan noch nicht abgebildet.",
+    "effort": "M",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Kein Plan-B fuer ausgefallene Teilnehmer-Setups waehrend der Live-Exercises",
+    "file": "resources/session-plan.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "trainer-notes.md Failure-Tabelle Z.67 nennt 'Teilnehmer-Maschine bricht beim Setup -> Vorab ~/cc-workshop-Bundle bereithalten, USB-Stick'. session-plan.md plant aber feste Exercise-Bloecke (z.B. Z.25 'Exercises 1.1+1.2 Hands-on', Z.48 'Exercises 2.1+2.2'). Wenn bei 1 von 3 Teilnehmern das Setup bricht, blockiert das den ganzen Hands-on-Block — bei nur 3 Teilnehmern faellt ein Drittel aus.",
+    "recommendation": "Fuer die Hands-on-Bloecke eine Pairing-Fallback-Regel ins Trainer-Skript: 'Bricht ein Setup, Teilnehmer paart sich mit Nachbarn (driver/navigator), waehrend ich parallel debugge.' Bei nur 3 Personen ist ein Ausfall sonst hoch sichtbar. Dazu den USB-Stick-/Bundle-Hinweis aus der Failure-Tabelle in die Materialliste (session-plan.md Z.99-105) hochziehen, damit ich ihn vorbereite.",
+    "effort": "S",
+    "persona": "Sandra — Live-Moderatorin, haelt den Workshop live fuer ihr Team"
+  },
+  {
+    "title": "Block 3: drei widerspruechliche Reihenfolgen UND Titel fuer Modul 3.2/3.5 ueber die Navigationsdateien",
+    "file": "README.md / skills/workshop/SKILL.md / resources/session-plan.md / resources/glossary.md",
+    "category": "structure",
+    "severity": "high",
+    "evidence": "README.md Z.90-96 listet 3.5='Full Stack Architecture ... (Capstone)' und 3.2='Multi-Model Pipelines', Reihenfolge 3.1..3.5,3.6,3.7. SKILL.md Z.71-76 listet 3.2='Nested Orchestration', Reihenfolge 3.1,3.2,3.3,3.4,3.6,3.7,3.5 und 3.5='Telegram Bridge, Inception & Worktree Isolation (Capstone)'. glossary.md Z.306 'Modul: 3.5 — Telegram & Inception'. block-3-advanced.md Z.327 'Module 3.2: Nested Orchestration & Multi-Model Pipelines'.",
+    "recommendation": "Eine einzige Source-of-Truth fuer Modul-Titel und -Reihenfolge festlegen (Vorschlag: die Modul-Datei block-3-advanced.md) und README + SKILL.md + commands/workshop.md daran angleichen. Insbesondere 3.2 einheitlich 'Nested Orchestration & Multi-Model Pipelines' nennen und 3.5 einheitlich 'Telegram Bridge, Inception & Worktrees' — und entscheiden, welches Modul der Capstone ist (README sagt 3.5, das passt zu SKILL). Ein Solo-Lerner ohne Trainer kann diese Drift nicht selbst aufloesen.",
+    "effort": "M",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "Modell durchgaengig 'Opus 4.7' — wirkt am Lesedatum 2026-06-21 veraltet",
+    "file": "resources/cheatsheet.md / glossary.md / faq.md / quick-reference.md",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "cheatsheet.md Z.308 '**Claude Opus 4.7** | 1M tokens | Default in Claude Code since 2026-04-16 (GA)'; glossary.md Z.159 'Opus 4.7 (Default seit 2026-04-16 ...)'; faq.md Z.24 'Opus 4.7 fuer Architektur'. Alle Stand-Daten 2026-05-20. Die laufende Umgebung ist bereits Opus 4.8 (1M context) am 2026-06-21.",
+    "recommendation": "Modellbezeichnungen und Default-Modell pruefen und auf den aktuellen Stand bringen (Opus 4.8 falls GA), oder einen einzigen 'Stand:'-Hinweis mit dem Hinweis 'Modellnamen koennen sich aendern, /model und /release-notes pruefen' setzen, damit der Solo-Lerner die Diskrepanz zwischen Material und seiner laufenden CLI einordnen kann statt zu verunsichern. Web-Verifikation der aktuellen GA-Modelle vor dem Edit.",
+    "effort": "S",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "README Quick-Start (Selbstlerner) listet nicht dieselben Referenzdateien wie WORKSHOP_EINFUEHRUNG",
+    "file": "README.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "README.md Z.28-37 'Als Selbstlerner' nennt nur prerequisites, WORKSHOP_EINFUEHRUNG, modules/demos/exercises und cheatsheet. WORKSHOP_EINFUEHRUNG.md Z.18-23 fuegt fuer den Selbstlerner zusaetzlich quick-reference.md hinzu, und Z.66-67 nennt fuer 'Selbstlerner ohne Workshop' explizit nur workshop-guide.md+modules/demos/exercises. faq.md, glossary.md, troubleshooting.md tauchen im README-Selbstlern-Pfad gar nicht auf, obwohl sie genau die Trainer-Ersatz-Funktion liefern.",
+    "recommendation": "Den Selbstlern-Quick-Start in README um die drei Trainer-Ersatz-Dateien ergaenzen (faq.md bei Konzeptfragen, troubleshooting.md wenn etwas klemmt, glossary.md bei unklaren Begriffen) und auf workshop-guide.md als primaeren Einstieg verweisen — aktuell wird workshop-guide.md im README-Selbstlern-Block nicht als Schritt 2 genannt, obwohl die EINFUEHRUNG ihn als Hauptnavigation empfiehlt.",
+    "effort": "S",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "/workshop learn kann fehlendes Custom-Plugin-Setup nicht ersetzen — Sackgassen-Risiko in Block 3",
+    "file": "skills/workshop/SKILL.md",
+    "category": "didactics-onboarding",
+    "severity": "high",
+    "evidence": "SKILL.md Learn-Mode laedt resources/modules + resources/exercises (Z.155-159) und gibt 'YOUR TURN' mit 'what command to run' (Z.178-182) sowie 'CHECK' (Z.188-192). Es gibt aber KEINE Verzweigung fuer den Fall, dass die referenzierten Custom-Plugins (agentic-os, devil-advocate-swarms, multi-model-orchestrator) beim Solo-Lerner nicht installiert sind — laut prerequisites.md Z.235-238 ist Observation-Mode dann die einzige Option. Ein /workshop learn 3.3 wuerde den Lerner zu einer 'YOUR TURN'-Aktion fuehren, die er ohne Plugin nicht ausfuehren kann, ohne dass der Tutor das vorab prueft.",
+    "recommendation": "In Learn-Mode eine Preflight-Klausel ergaenzen: bei Block-3-Modulen, die Custom-Plugins brauchen (3.3/3.4/3.5/3.2), zuerst 'Hast du die workshop-custom Plugins installiert? Falls nein, hier ist der Observation-/Web-UI-Pfad' fragen (Verweis auf prerequisites.md Optionen A/B/C). So wird die in prerequisites dokumentierte Fallback-Logik auch im Trainer-Ersatz wirksam.",
+    "effort": "M",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "Exercise 1.1 nutzt ~/cc-workshop/exercises, prerequisites legt nur die Struktur an — und Pfade kollidieren teils",
+    "file": "resources/exercises/block-1-exercises.md / resources/prerequisites.md",
+    "category": "exercise-quality",
+    "severity": "low",
+    "evidence": "Exercise 1.1 Z.35 'mkdir -p ~/cc-workshop/exercises/exercise-1.1'. prerequisites.md Z.380-385 definiert ~/cc-workshop/{demos,exercises,workshop-playground}. Aber prerequisites.md Z.141-142 klont das Repo nach '~/cc-workshop/dynamic-workshop' und der playground liegt dann unter '~/cc-workshop/dynamic-workshop/workshop-playground', NICHT unter dem in Z.384 versprochenen '~/cc-workshop/workshop-playground'. Ein Solo-Lerner, der spaeter den Playground sucht, findet ihn am dokumentierten Ort nicht.",
+    "recommendation": "Workdir-Konvention (prerequisites.md Z.378-385) mit dem tatsaechlichen Clone-Pfad (Z.141-142) in Einklang bringen — entweder das Repo direkt nach ~/cc-workshop klonen oder den Struktur-Baum so anpassen, dass workshop-playground unter dynamic-workshop/ gezeigt wird.",
+    "effort": "S",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "prerequisites mischt 'python3/pip3' und Block-1 ist Python-frei — Reihenfolge irritiert Windows-Solo-Lerner",
+    "file": "resources/prerequisites.md",
+    "category": "windows-compat",
+    "severity": "low",
+    "evidence": "prerequisites.md Z.97 'Step 5: Install Python 3 (for Block 2+)' und Block 1 braucht laut Z.216 keine Plugins; aber Exercise 1.1/1.3/1.4 (block-1-exercises.md, z.B. Z.43 'event_log_parser.py', Z.249 'validators.py') lassen Claude Python-Code erzeugen UND ausfuehren ('Run the tests', Z.289). Auf Windows ist 'python3' oft nicht der Befehl (nur 'python'); die Troubleshooting-Zeile Z.189 erwaehnt das, aber erst ganz unten. README Z.44/51 nutzt durchgaengig 'python3 -m pytest'.",
+    "recommendation": "Fuer Windows-Solo-Lerner frueh (bei Step 5 oder im README Quick Start) den Hinweis 'auf Windows ggf. python statt python3' platzieren und klarstellen, dass schon Block-1-Exercises Python ausfuehren (also Python doch ab Block 1 noetig ist, sobald man die Exercises macht — nicht erst 'Block 2+').",
+    "effort": "S",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "Bundled-Skills-Liste in glossary widerspricht der cheatsheet-Liste",
+    "file": "resources/glossary.md / resources/cheatsheet.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "glossary.md Z.49 nennt Bundled Skills: '/batch, /loop, /run, /verify, /debug, /simplify, /claude-api, /fewer-permission-prompts, /run-skill-generator'. cheatsheet.md Z.257-267 listet zusaetzlich keine /tdd/-Bundled, aber faq/quick-reference behandeln /tdd und /commit unter 'Workshop-Specific Skills' (cheatsheet Z.243-249) — die Grenze Bundled vs. Workshop-custom ist zwischen den Dateien nicht deckungsgleich gezogen, was ein Solo-Lerner beim Nachschlagen als Widerspruch erlebt.",
+    "recommendation": "Eine kanonische Bundled-Skills-Liste definieren (am besten im Glossar) und cheatsheet darauf verweisen lassen, statt die Liste zu duplizieren. Klar trennen: offiziell-bundled vs. workshop-custom (/commit, /tdd).",
+    "effort": "S",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "Stand-Daten der Referenzdateien (2026-05-20) und prerequisites (2026-04-03) divergieren — kein zentraler Versionsanker",
+    "file": "global",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "faq.md Z.5 'Stand: 2026-05-20', glossary.md Z.5 'Stand: 2026-05-20', troubleshooting.md Z.6 'Stand: 2026-05-20', WORKSHOP_EINFUEHRUNG.md Z.69 'Stand: 2026-05-20', aber prerequisites.md Z.205 'Last Updated: 2026-04-03'. README/CLAUDE.md tragen kein Stand-Datum.",
+    "recommendation": "Einen einzigen Versions-/Stand-Anker einfuehren (z.B. eine Zeile in README oder ein VERSION-Feld) und die Einzeldateien darauf verweisen, damit ein Solo-Lerner auf einen Blick sieht, wie aktuell das Material insgesamt ist — statt acht verschiedene Stand-Zeilen zu vergleichen.",
+    "effort": "S",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "Kein durchgaengiges 'Du bist hier / fertig'-Fortschrittssignal ueber Module hinweg fuer Solo-Lerner",
+    "file": "resources/workshop-guide.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "workshop-guide.md Z.131-141 'Praktische Arbeitsweise' beschreibt eine Lernabend-Routine (Modul lesen -> Demo -> 1 Uebung -> cheatsheet), aber es gibt keine Checkliste/keinen Tracker, an dem ein Solo-Lerner abhakt, welche der 17 Module er abgeschlossen hat. Die Exercises haben ein 'Success Check' (gut), aber auf Modul-/Block-Ebene fehlt das uebergeordnete 'fertig'-Signal, das ein Trainer sonst gibt ('ihr habt Block 1 geschafft').",
+    "recommendation": "Eine einfache Fortschritts-Checkliste (17 Module mit Checkboxen, plus pro Modul ein 1-Satz-'Du kannst jetzt X'-Outcome) in workshop-guide.md oder als eigene progress.md ergaenzen. Bei jedem Modul ein klares Abschluss-Outcome (die Module haben bereits 'Learning Objectives', z.B. block-1-foundations.md Z.11-14 — diese als abhakbare Self-Check-Liste spiegeln).",
+    "effort": "M",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "SKILL.md Overview-Box listet Module in nicht-numerischer Reihenfolge (3.6/3.7 vor 3.5)",
+    "file": "skills/workshop/SKILL.md",
+    "category": "structure",
+    "severity": "low",
+    "evidence": "SKILL.md Z.71-76 zeigt in der ASCII-Box 3.1,3.2,3.3,3.4,3.6,3.7 und erst danach 3.5 ('Telegram Bridge, Inception & Worktree Isolation (Capstone)'). commands/workshop.md Z.26 listet dagegen 'Block 3 ...: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7' streng numerisch.",
+    "recommendation": "In der Overview-Box entweder strikt numerisch sortieren oder den Capstone-Charakter von 3.5 explizit kennzeichnen (z.B. '3.5 (Capstone — am Ende)'), damit der Solo-Lerner versteht, dass die Nicht-Reihenfolge Absicht ist und kein Tippfehler.",
+    "effort": "S",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "Quick-Reference fuehrt /goal, /loop, /schedule auf, aber Glossar/FAQ markieren Routine als offizielle Variante — leichte Inkonsistenz beim Selbst-Nachschlagen",
+    "file": "resources/quick-reference.md / resources/faq.md",
+    "category": "accuracy-overclaim",
+    "severity": "nice-to-have",
+    "evidence": "quick-reference.md Z.40 fuehrt '/goal /loop /schedule' als 'Hot Slash-Commands' nebeneinander. faq.md Z.119-125 differenziert sie sauber (/loop=Zeit, /goal=Condition, Routine=persistent) und glossary.md Z.236 nennt Routine 'Offizielle Variante ... (Ersatz fuer /schedule + /loop)'. Die Quick-Reference suggeriert Gleichrangigkeit, ohne den Routine-Vorrang zu zeigen.",
+    "recommendation": "In der Quick-Reference einen Mini-Hinweis '/schedule+/loop -> Routine ist die persistente offizielle Variante (s. FAQ)' ergaenzen, damit der 1-Pager nicht im Widerspruch zur FAQ steht.",
+    "effort": "S",
+    "persona": "Tom — Selbstlerner, arbeitet das Repo allein durch (kein Moderator)"
+  },
+  {
+    "title": "Direkter Default-Widerspruch: worktree.baseRef \"head\" vs. \"fresh\"",
+    "file": "resources/modules/block-1-foundations.md + block-3-advanced.md",
+    "category": "accuracy-overclaim",
+    "severity": "high",
+    "evidence": "block-1 Z865-866: \"`worktree.baseRef: \\\"head\\\"` (default) — branch from local HEAD, including unpushed work\". block-3 Z1086-1087: \"| **`fresh`** (default) | Branches from `origin/<default>` ...\". cheatsheet Z428 nennt keinen Default, listet beide. Zwei Module behaupten gegensaetzliche Defaults fuer dieselbe Einstellung.",
+    "recommendation": "Einen Default verifizieren (Doku/echtes settings.json-Verhalten) und beide Stellen + Cheatsheet angleichen. Bis zur Verifikation lieber \"Default variiert je Version, explizit setzen\" schreiben als eine falsche Behauptung. Ein Teilnehmer, der baseRef setzt, baut sonst auf der falschen Annahme.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "Zahlen-Inkonsistenz: max-Effort-Kosten 6x (Modul 1.5) vs. 5-10x (FAQ)",
+    "file": "resources/modules/block-1-foundations.md + faq.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "block-1 Z1019: \"| `max` | ... | 6x |\" (Relative cost). faq.md Z201: \"`max` kann 5-10x so lange brauchen wie `medium`\". Die FAQ vermischt zudem Kosten- und Latenz-Faktor in einer Zahl, das Modul trennt sie.",
+    "recommendation": "Da die Multiplikatoren ohnehin als unbelegt markiert sind (gut), die FAQ an die Modul-Tabelle koppeln oder explizit \"Latenz, nicht Kosten\" schreiben und auf Modul 1.5 als Single Source verweisen. Eine einzige Quelle fuer alle Multiplikatoren.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "Irrefuehrende Ueberschrift: \"The Three Interfaces\" listet fuenf Surfaces",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "structure",
+    "severity": "medium",
+    "evidence": "Lernziel Z12 nennt korrekt fuenf: \"(CLI, Desktop App, IDE Extension, Web App, iOS App)\". Direkt darunter Z22 Ueberschrift \"### The Three Interfaces\", gefolgt von nummerierten Eintraegen 1-5 (Z24 bis Z56) UND der Security-Analogie, die ebenfalls vier Modi beschreibt. Die Zahl im Header stimmt mit keinem der Inhalte ueberein.",
+    "recommendation": "Header auf \"The Five Surfaces\" (konsistent mit Lernziel und CLAUDE.md \"Einstieg immer visuell\") aendern. Reine Redaktion, aber ein Skeptiker stolpert sofort und fragt sich, ob der Rest auch nicht gegengelesen wurde.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "acceptEdits-Beschreibung widerspricht sich zwischen Block 1 und Block 3 (ohne Vorwarnung in Block 1)",
+    "file": "resources/modules/block-1-foundations.md + block-3-advanced.md",
+    "category": "accuracy-overclaim",
+    "severity": "medium",
+    "evidence": "block-1 Z188 Tabelle: \"acceptEdits | Reads + file edits allowed, bash still asks\". block-3 Z582-583 korrigiert das selbst: \"The Block 1 table summarizes acceptEdits as 'reads + file edits allowed, bash still asks.' That is the conservative version of the truth. In current Claude Code releases, acceptEdits also auto-approves the common filesystem Bash commands ... (mkdir, touch, rm, mv ...)\". Sicherheitsrelevant: ein Teilnehmer, der nur Block 1 liest, glaubt rm werde unter acceptEdits abgefragt — es wird auto-approved.",
+    "recommendation": "In Block 1 Z188 eine Fussnote/Klammer ergaenzen: \"(vereinfacht; auto-approved auch FS-Bash wie rm/mv im Workdir — Detail in Modul 3.3)\". Das cheatsheet (Z356) hat die korrekte Langform bereits, nur Block 1 selbst hinkt nach.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "Sandbox-Tabelle Windows: \"first-class shell path\" vs. cheatsheet \"(limited)\" — uneinheitliche Aussage",
+    "file": "resources/modules/block-3-advanced.md + cheatsheet.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "block-3 Z708: Windows PowerShell \"Not a kernel sandbox, but a first-class shell path rather than a fallback.\" cheatsheet Z397: \"Windows | (limited) | Relies on permission system\". Beide sagen technisch dasselbe (kein Kernel-Sandbox), aber der Ton ist gegensaetzlich (\"first-class\" vs. \"limited\"), was die Frage aufwirft, was nun gilt.",
+    "recommendation": "Eine konsistente Formulierung waehlen: faktisch ist es kein OS-Sandbox auf Windows. \"first-class shell path, aber KEIN Kernel-Sandbox (anders als Seatbelt/bwrap)\" in beide Dateien. Den Marketing-Ton (\"first-class\") nicht ohne die Einschraenkung stehen lassen.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "Unbelegte/nicht verifizierbare Hyper-Praezision bei Versionsnummern und Feature-Existenz",
+    "file": "resources/modules/block-2-ecosystem.md + block-3-advanced.md + cheatsheet.md",
+    "category": "accuracy-overclaim",
+    "severity": "medium",
+    "evidence": "Sehr viele extrem spezifische Versions-Gates (z.B. block-2 Z589 \"updatedToolOutput (v2.1.119+)\", Z607 \"continueOnBlock (v2.1.121+)\", Z624 \"terminalSequence (v2.1.139+)\", block-2 Z312 \"Since v2.1.59 this Auto-Memory feature is default on\") ohne Quelle. Daneben Hedges, die Unsicherheit verraten: block-1 Z347 \"claude project purge <path> (when available)\" und cheatsheet Z123 \"claude auto-mode defaults\". Die Mischung aus Schein-Praezision und \"(when available)\" ist genau das Muster, das ein Skeptiker als Folien-Wissen markiert.",
+    "recommendation": "Inhaltlich an die Currency-Auditoren delegieren (Verifikation gegen Changelog), aber methodisch: entweder jede Versionsnummer ist belegbar, oder sie wird durch \"recent versions\"/\"2026er Releases\" ersetzt. \"(when available)\" neben einem konkreten Befehl ist ein Widerspruch in sich — Befehl als geplant kennzeichnen oder weglassen.",
+    "effort": "M",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "Hook-Event-Anzahl uneinheitlich: \"28 lifecycle events\" vs. \"~28\"",
+    "file": "resources/modules/block-2-ecosystem.md + cheatsheet.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "block-2 Z387: \"The official docs currently list **28 lifecycle events**.\" (harte Zahl). cheatsheet Z456: \"Full list with ~28 events\" (ungefaehr). Die Modul-Aussage gibt exakte 28 vor, der Cheatsheet relativiert. Bei einer harten Zahl wuerde ein Skeptiker nachzaehlen.",
+    "recommendation": "Konsistent \"~28\" verwenden (sicherer) ODER die exakte Liste hinterlegen und 28 belegen. Da der Cheatsheet 17 Kern + 16 weitere namentlich nennt (Z456), kurz pruefen, ob die Summe wirklich 28 ergibt — die genannte Liste wirkt eher nach >28.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "\"reduces ... to 0 Tage\" ZDR vs. \"some features disabled\" — korrekt, aber Trade-off in FAQ unterschlagen",
+    "file": "resources/faq.md + block-3-advanced.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "block-3 Z737 + cheatsheet Z679 nennen korrekt \"Zero Data Retention (some features disabled)\". faq.md Z36 sagt nur: \"ZDR ... reduziert Retention auf 0 Tage.\" — ohne den Feature-Verlust zu erwaehnen. Fuer eine Compliance-Frage ist das Weglassen des Trade-offs irrefuehrend (ein Entscheider koennte ZDR waehlen und ueberrascht sein, dass Features fehlen).",
+    "recommendation": "FAQ-Antwort um den Halbsatz \"(einige Features deaktiviert)\" ergaenzen, konsistent zu Modul 3.3/Cheatsheet.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "\"context: fork / agent\" (Block 2) vs. \"context: fork + agent\" Felder — Frontmatter-Feldnamen-Drift",
+    "file": "resources/modules/block-2-ecosystem.md + cheatsheet.md",
+    "category": "accuracy-overclaim",
+    "severity": "medium",
+    "evidence": "block-2 Z352-354 nutzt Felder \"context: fork\" und \"agent: sonnet\". Die offizielle Schema-Tabelle desselben Moduls (Z88-97) listet diese Felder NICHT (dort nur model/effort/paths/shell/hooks/arguments). cheatsheet Z519-521 fuehrt \"context: fork\", \"agent: haiku\" UND \"model: haiku|sonnet|opus\" parallel — also zwei Felder (agent + model) fuer scheinbar denselben Zweck (Modellwahl der Forked-Context). Unklar, ob \"agent\" und \"model\" beide gueltig sind oder eines veraltet ist.",
+    "recommendation": "Klaeren und vereinheitlichen, welches Feld die Subagent-Modellwahl steuert (model vs. agent) und ob context:fork offiziell ist. Das ist fuer erfahrene Entwickler, die selbst Skills schreiben wollen, ein echtes Stolperfeld — widerspruechliche Frontmatter-Felder fuehren zu stillem Ladeverhalten.",
+    "effort": "M",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "FAQ-Modellpipeline-Beispiel technisch fragwuerdig (/batch mit Sonnet \"reviewn\" via Haiku)",
+    "file": "resources/faq.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "faq.md Z26: \"Pipeline-Pattern: `/plan` mit Opus, `/batch` von Subagents mit Sonnet, `/review` mit Haiku.\" — Das suggeriert, /review nutze pauschal Haiku, waehrend Modul 3.2 Z356 differenzierter sagt: \"Review with Haiku first, escalate disagreements to Opus\". Die FAQ-Verkuerzung verliert die Eskalationsstufe, die genau das Qualitaetsargument ist.",
+    "recommendation": "FAQ-Zeile um \"...mit Haiku (Eskalation strittiger Punkte an Opus)\" ergaenzen, damit die FAQ nicht die schwaechere Aussage als Faustregel etabliert.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "Tiefe stellenweise zu duenn fuer \"erfahrene Entwickler\": auto-Mode-Klassifikator bleibt Blackbox",
+    "file": "resources/modules/block-3-advanced.md",
+    "category": "missing-content",
+    "severity": "low",
+    "evidence": "block-3 Z572 beschreibt auto als \"the ML-classifier-driven mode where Claude itself decides which actions to auto-approve based on per-action risk\". Fuer ein Publikum, das beruflich Risikoklassifikation betreibt, bleibt voellig offen, WORAUF der Klassifikator entscheidet (Tool-Kategorie? Befehls-Pattern? lokales vs. Netz?). cheatsheet Z123 nennt immerhin \"claude auto-mode defaults\" zum Ausdrucken — das Modul verweist nicht darauf.",
+    "recommendation": "Einen Absatz ergaenzen, der die beobachtbaren Klassifikator-Inputs nennt (oder ehrlich sagt: \"undokumentiert, inspizierbar via `claude auto-mode defaults`\") und auf den Cheatsheet-Befehl verweist. Sonst wirkt auto wie Magie statt wie Policy.",
+    "effort": "M",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "\"Anthropic's official answer to the Devil's-Advocate-Swarm pattern\" — Overclaim ueber /ultrareview",
+    "file": "resources/modules/block-3-advanced.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "block-3 Z644: \"/ultrareview ... Anthropic's official answer to the Devil's-Advocate-Swarm pattern.\" Das ist eine interpretierende Behauptung ueber Anthropics Absicht/Positionierung, nicht eine belegbare Tatsache. Anthropic hat /ultrareview nicht zwingend als Antwort auf ein Custom-Plugin dieses Workshops positioniert.",
+    "recommendation": "Umformulieren zu einer Funktionsaussage ohne Intentions-Zuschreibung: \"/ultrareview deckt funktional einen aehnlichen Mehr-Reviewer-Konsens-Ansatz ab, ohne Custom-Plugin.\" Vermeidet eine nicht belegbare Behauptung ueber Hersteller-Strategie.",
+    "effort": "S",
+    "persona": "Dr. Reuter — skeptischer Principal Engineer (Tiefe & Korrektheit)"
+  },
+  {
+    "title": "Pflicht-Hook-Demo (Demo 2.2) laeuft auf Windows ohne Git Bash nicht",
+    "file": "resources/demos/block-2-demos.md",
+    "category": "windows-compat",
+    "severity": "critical",
+    "evidence": "block-2-demos.md:125 `\"command\": \"bash ~/.claude/hooks/security-check.sh\"` und :200 `\"command\": \"bash -c 'INPUT=$(cat); FILE=$(echo \\\"$INPUT\\\" | jq -r .file_path ...'\"`. Voraussetzung (block-2-demos.md:110) `cat ~/.claude/settings.json | jq '.hooks'`.",
+    "recommendation": "Fuer die Live-Demo eine getestete PowerShell-Variante des Hooks bereitstellen (`\"command\": \"pwsh -File C:/.../security-check.ps1\"` mit einem PS-Script, das stdin via `$input | ConvertFrom-Json` parst statt jq). Alternativ klar als Voraussetzung dokumentieren, dass Git Bash UND jq auf PATH liegen muessen, und das in prerequisites.md als Pflicht-Check aufnehmen. Aktuell scheitert der Trainer/Selbstlerner auf einer reinen Windows-Box stillschweigend.",
+    "effort": "M",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Flagship-Hook-Exercise 2.1 komplett bash/python3/chmod, keine PowerShell-Variante",
+    "file": "resources/exercises/block-2-exercises.md",
+    "category": "windows-compat",
+    "severity": "critical",
+    "evidence": "block-2-exercises.md:167 `#!/bin/bash`, :174 `python3 -c \"import sys, json; ...\"`, :206 `chmod +x ~/.claude/hooks/safety-check.sh`, :222 `\"command\": \"bash ~/.claude/hooks/safety-check.sh\"`. `chmod +x` existiert in PowerShell nicht; `bash`-Aufruf braucht Git Bash auf PATH; `python3` ist auf Windows i.d.R. `python`.",
+    "recommendation": "Komplette PowerShell-Parallelvariante anbieten: `safety-check.ps1` mit `$input | Out-String | ConvertFrom-Json`, Pattern-Match via `-match`, `exit 1`; Registrierung `\"command\": \"pwsh -File $HOME/.claude/hooks/safety-check.ps1\"`. `chmod +x`-Schritt fuer Windows als entfallend kennzeichnen. Dies ist DIE zentrale Hook-Uebung des Workshops — ohne Windows-Variante ist Block 2 fuer die Zielgruppe (Windows-Entwickler) nicht selbststaendig durchfuehrbar.",
+    "effort": "L",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Widerspruch: Exercises registrieren `bash ...`, troubleshooting.md verlangt `pwsh -File` auf Windows",
+    "file": "global",
+    "category": "windows-compat",
+    "severity": "high",
+    "evidence": "exercises/block-2-exercises.md:222 `\"command\": \"bash ~/.claude/hooks/safety-check.sh\"` vs. troubleshooting.md:48 `Auf Windows: PowerShell-Pfad richtig? Skript mit `pwsh -File` aufrufen.`",
+    "recommendation": "Einheitliche Linie ziehen: entweder durchgaengig `pwsh -File`-Variante in den Exercises ergaenzen oder in den Exercises explizit auf den Git-Bash-Pfad fuer Windows verweisen. Der Teilnehmer kann den Widerspruch sonst nicht selbst aufloesen und gibt an der ersten roten Fehlermeldung auf.",
+    "effort": "S",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "python3/pip3 als kanonische Befehle, Windows-Fix nur in Troubleshooting-Tabelle versteckt",
+    "file": "resources/prerequisites.md",
+    "category": "windows-compat",
+    "severity": "high",
+    "evidence": "prerequisites.md:103 `python3 --version`, :104 `pip3 --version`, :147 `pip3 install -r requirements.txt`, :150 `python3 -m pytest -v`, :163 Checklist `[ ] python3 --version shows 3.9+`. Erst :189 in der Troubleshooting-Tabelle: `Python not found on Windows | Use python instead of python3`.",
+    "recommendation": "Im Haupttext (Step 5, Step 7, Checkliste) `python`/`pip` als Windows-Variante direkt neben `python3`/`pip3` nennen, statt den Fix in eine Fehlertabelle am Ende auszulagern. Beispiel: `python --version  # Windows: python, nicht python3`. Sonst scheitert jeder Windows-Teilnehmer schon beim Pre-Workshop-Setup an `python3: command not found`.",
+    "effort": "S",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "MCP-Config-Beispiel nutzt `\"command\": \"python3\"` — bricht auf Windows",
+    "file": "resources/modules/block-2-ecosystem.md",
+    "category": "windows-compat",
+    "severity": "high",
+    "evidence": "block-2-ecosystem.md:1140 `\"command\": \"python3\",` im `.mcp.json`-Beispiel (`\"args\": [\"my_mcp_server.py\"]`).",
+    "recommendation": "Auf Windows gibt es i.d.R. kein `python3.exe` — der MCP-Server startet nicht. Beispiel auf `\"command\": \"python\"` umstellen oder einen Hinweis ergaenzen: `# Windows: \"python\" statt \"python3\"`. Da Teilnehmer dieses Snippet 1:1 in ihre eigene .mcp.json kopieren, ist das eine direkte Stolperfalle.",
+    "effort": "S",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Hook-Setup in prerequisites.md ist reines bash-Heredoc mit jq/chmod, keine Windows-Form",
+    "file": "resources/prerequisites.md",
+    "category": "windows-compat",
+    "severity": "high",
+    "evidence": "prerequisites.md:279-293 `cat > ~/.claude/hooks/security-check.sh << 'EOF'` ... `COMMAND=$(echo \"$INPUT\" | jq -r '.command // \"\"')` ... `chmod +x ~/.claude/hooks/security-check.sh`. Auch :263 `mkdir -p ~/.claude/skills` und :278 `mkdir -p ~/.claude/hooks`.",
+    "recommendation": "Heredoc + jq + chmod sind in PowerShell allesamt nicht verfuegbar (`mkdir -p` ebenso wenig — PS `mkdir` kennt kein `-p`, braucht `New-Item -ItemType Directory -Force`). Eine PowerShell-Block-Variante zum Anlegen der Datei (`Set-Content` mit Here-String `@'...'@`) und Verzeichnisse (`New-Item -Force`) ergaenzen. Diese Datei ist die Vorbereitung VOR der Session — wenn sie auf Windows scheitert, fehlt die Demo-Voraussetzung.",
+    "effort": "M",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "`mkdir -p ...` in fast allen Exercise-Startschritten — scheitert in PowerShell",
+    "file": "resources/exercises/block-1-exercises.md",
+    "category": "windows-compat",
+    "severity": "medium",
+    "evidence": "block-1-exercises.md:35 `mkdir -p ~/cc-workshop/exercises/exercise-1.1 && cd ...`, :120 `mkdir -p ~/cc-workshop/exercises/exercise-1.2 && cd ...`, :336 `mkdir -p ~/cc-workshop/exercises/exercise-1.4-git && cd ...`. Ebenso block-2-exercises.md:37/161/418-420 und prerequisites.md:140/375.",
+    "recommendation": "`mkdir -p` ist POSIX; PowerShells `mkdir` akzeptiert `-p` nicht (Parameter-Fehler) und `&&` funktioniert erst ab PowerShell 7. Entweder cross-platform formulieren (`New-Item -ItemType Directory -Force -Path ...; Set-Location ...`) oder eine Windows-Zeile danebenstellen. Niedrige Schwere, weil Claude Code das Verzeichnis meist selbst anlegt, aber der erste copy-paste-Schritt scheitert sichtbar.",
+    "effort": "M",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "PostToolUse-Logging-Hook (Exercise 2.1 Bonus) nutzt bash `date`/`>>`/chmod",
+    "file": "resources/exercises/block-2-exercises.md",
+    "category": "windows-compat",
+    "severity": "medium",
+    "evidence": "block-2-exercises.md:257-268 `#!/bin/bash` ... `TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')` ... `echo \"[$TIMESTAMP] BASH: $COMMAND\" >> ~/.claude/audit.log` ... `chmod +x ~/.claude/hooks/audit-log.sh`.",
+    "recommendation": "`date '+...'` (POSIX-Formatstring), `chmod` und die Shebang funktionieren auf Windows nicht. Bei der PowerShell-Variante: `Get-Date -Format 'yyyy-MM-dd HH:mm:ss'`, `Add-Content`, Shebang/chmod entfaellt. Als Bonus weniger kritisch, aber Teil derselben Pflicht-Exercise.",
+    "effort": "S",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Git-pre-commit-Hook-Exercise nur knapp mit Windows-Hinweis, Bonus-Zeile wieder bash-only",
+    "file": "resources/exercises/block-3-exercises.md",
+    "category": "windows-compat",
+    "severity": "medium",
+    "evidence": "block-3-exercises.md:344 `#!/bin/bash`, :371 `chmod +x .git/hooks/pre-commit`, :374 `(On Windows, use Git Bash or WSL — git's hook subsystem looks for executable POSIX scripts.)`, Bonus :389 `echo \"$(date) | $(basename \"$0\") | budget=0.10 | result=$(echo \"$RESULT\" | head -1)\" >> ~/.claude/precommit-trace.log`.",
+    "recommendation": "Der Windows-Hinweis :374 ist gut, aber die Bonus-Zeile :389 mit `$(date)`, `basename`, `head -1` funktioniert auch in Git Bash nur, wenn die Tools da sind — auf reiner PowerShell gar nicht. Entweder Exercise klar als 'nur in Git Bash/WSL' kennzeichnen ODER eine native PowerShell-pre-commit-Variante anbieten (git ruft auf Windows mit Git Bash, daher ggf. akzeptabel — dann aber prominent als Pflicht-Voraussetzung dokumentieren).",
+    "effort": "M",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Advanced-Hook-Beispiele in Block 3 / Block 2 durchgehend bash (sed, jq -n, case, $CLAUDE_EFFORT)",
+    "file": "resources/modules/block-2-ecosystem.md",
+    "category": "windows-compat",
+    "severity": "medium",
+    "evidence": "block-2-ecosystem.md:594-601 `sed -E 's/(sk-...)/[REDACTED]/g'` + `jq -n --arg out ...`, :628-633 `jq -n '{\"terminalSequence\":...}'`, :641-652 `case \"$CLAUDE_EFFORT\" in xhigh|max) ...`. Auch block-3-advanced.md:1494 `#!/bin/bash` und :1382/1387 `> /tmp/diff.patch`.",
+    "recommendation": "Diese sind Konzept-/Demonstrationsbeispiele, daher etwas toleranter — aber ein Windows-Leser kann KEINS davon ausprobieren. Mindestens einen Satz ergaenzen: 'Beispiele in bash; auf Windows analog mit PowerShell (`$env:CLAUDE_EFFORT`, `-replace`, `ConvertTo-Json`).' `/tmp/` existiert auf Windows nicht — fuer kopierbare CI-Snippets `$env:TEMP` bzw. plattformneutrale Pfade nennen.",
+    "effort": "M",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "`export VAR=...` als Konfigurationsmuster — kein PowerShell-Aequivalent gezeigt",
+    "file": "resources/demos/block-1-demos.md",
+    "category": "windows-compat",
+    "severity": "medium",
+    "evidence": "block-1-demos.md:591 `export TERM=xterm-256color`; modules/block-3-advanced.md:741 `export DISABLE_TELEMETRY=1`, :742 `export DISABLE_ERROR_REPORTING=1`; prerequisites.md:70 nennt nur 'set ANTHROPIC_API_KEY environment variable' ohne Syntax.",
+    "recommendation": "`export` ist kein PowerShell-Cmdlet. Fuer Env-Vars die PS-Form danebenstellen: Session `$env:DISABLE_TELEMETRY=1`, persistent `setx DISABLE_TELEMETRY 1`. Bei prerequisites.md:70 konkret `$env:ANTHROPIC_API_KEY=\"...\"` (Session) bzw. `setx ANTHROPIC_API_KEY \"...\"` (persistent) zeigen — ein Neuling weiss sonst nicht, wie er die Variable auf Windows setzt.",
+    "effort": "S",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Checklisten-Zeile `echo -e` zur Terminal-Pruefung scheitert in PowerShell",
+    "file": "resources/prerequisites.md",
+    "category": "windows-compat",
+    "severity": "low",
+    "evidence": "prerequisites.md:165 `[ ] Terminal supports Unicode and ANSI colors (try `echo -e \"\\033[32mGreen\\033[0m\"`)`.",
+    "recommendation": "PowerShells `echo` ist `Write-Output` und interpretiert `-e` nicht (gibt `-e ...` woertlich aus). Windows-Variante: `\"`e[32mGreen`e[0m\"` mit PowerShell-7-Escape oder `[char]27`. Klein, aber es ist ein Pre-Workshop-Pflicht-Check, der auf Windows verwirrend fehlschlaegt.",
+    "effort": "S",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Plugin-Exploration (Exercise 2.3) nutzt `cat ... | head -60` und Heredoc",
+    "file": "resources/exercises/block-2-exercises.md",
+    "category": "windows-compat",
+    "severity": "low",
+    "evidence": "block-2-exercises.md:405 `cat ~/.claude/plugins/cache/<plugin-name>/agents/*.md | head -60`, :423-434 `cat > ~/.claude/plugins/cache/.../plugin.json << 'EOF' ... EOF`.",
+    "recommendation": "`cat`/`ls` existieren als PS-Aliase, aber `head -60` und der `<< 'EOF'`-Heredoc nicht. PS-Aequivalente nennen: `Get-Content ... | Select-Object -First 60` und Here-String `@'...'@ | Set-Content`. Niedrig, weil die Exploration auch ohne exakten Befehl gelingt, aber der copy-paste-Pfad bricht.",
+    "effort": "S",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Cheatsheet zeigt nie die bash-Script-Hook-Form, die die Exercises voraussetzen — keine Windows-Bruecke",
+    "file": "resources/cheatsheet.md",
+    "category": "missing-content",
+    "severity": "low",
+    "evidence": "cheatsheet.md:491 zeigt nur `\"command\": \"node security-check.js\"` (cross-platform), aber nirgends den `\"command\": \"bash script.sh\"`-/`pwsh -File`-Fall, den Exercise 2.1/Demo 2.2 nutzen. Im ganzen Cheatsheet kein `pwsh`/`$env:`-Eintrag (Grep: nur die ps1-Install-Zeile :14).",
+    "recommendation": "Eine kurze 'Hooks auf Windows'-Notiz in den Cheatsheet aufnehmen: bash-Scripts brauchen Git Bash auf PATH; native Alternative `\"command\": \"pwsh -File path.ps1\"`; jq-frei via `ConvertFrom-Json`. Der Cheatsheet ist die Referenzkarte waehrend der Uebung — genau hier sucht ein blockierter Windows-Teilnehmer.",
+    "effort": "S",
+    "persona": "Kevin — Windows-11/PowerShell-Praktiker"
+  },
+  {
+    "title": "Exercise 3.6: --max-turns existiert in der aktuellen Claude CLI nicht — Hook-Skript laeuft nicht, Success-Check unerfuellbar",
+    "file": "resources/exercises/block-3-exercises.md",
+    "category": "currency",
+    "severity": "critical",
+    "evidence": "Das Hook-Skript verwendet `--max-turns 2` (Z.350) und die Success-Check verlangt zwingend: 'Every Module 3.6 flag (`--bare`, `--max-budget-usd`, `--max-turns`, `--output-format`) appears in your hook.' (Z.408). Verifikation gegen die installierte CLI: `claude --help | grep -c max-turns` ergibt 0; das Flag fehlt. Vorhanden sind nur --bare, --effort, --max-budget-usd, --output-format, --json-schema.",
+    "recommendation": "--max-turns aus Skript und Success-Check entfernen. Loop-Begrenzung uebernimmt --max-budget-usd 0.10 ohnehin. Falls eine harte Iterationsgrenze gewuenscht ist, im Modul-/Cheatsheet-Text dokumentieren, dass die CLI das nicht mehr per Flag bietet. Gilt auch fuer Exercise 1.5 (dort nicht im Alias, aber im Modultext referenziert) und das Stretch-Goal mit --json-schema (das existiert, ist also ok).",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Exercise 3.6: pre-commit-Hook landet im Eltern-Repo, nicht in einem isolierten Sandbox",
+    "file": "resources/exercises/block-3-exercises.md",
+    "category": "demo-reliability",
+    "severity": "high",
+    "evidence": "Die Uebung sagt `cd workshop-playground` + `git init` (Z.334-336) und schreibt dann nach `.git/hooks/pre-commit` (Z.341). Real geprueft: der Playground ist KEIN eigenes Repo (`ls workshop-playground/.git` -> 'No such file or directory'; alle Dateien sind im Eltern-Repo getrackt: `git ls-files workshop-playground/`). `git rev-parse --git-path hooks/pre-commit` aus dem Playground liefert `../.git/hooks/pre-commit` — also den Hook des dynamic_workshop-Repos selbst. Der Teilnehmer installiert einen claude-aufrufenden Hook in das Schulungs-Repo und blockiert dessen eigene Commits.",
+    "recommendation": "Teilnehmer in ein wirklich frisches, separates Verzeichnis schicken (z.B. `mkdir -p ~/cc-workshop/exercise-3.6 && cd ... && git init`) statt in den bereits getrackten Playground. ODER explizit warnen, dass `git init` im Playground ein No-op ist und der Hook ins Eltern-Repo schreibt. Konsistent mit Block-1-Uebungen, die alle ~/cc-workshop/... nutzen.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Fast alle Shell-Snippets sind POSIX-only und scheitern auf der Windows-PowerShell-Default-Shell",
+    "file": "resources/exercises/block-2-exercises.md",
+    "category": "windows-compat",
+    "severity": "high",
+    "evidence": "25+ Vorkommen von `mkdir -p`, `chmod +x`, `cat > ... << 'EOF'`, `>> ~/.claude/...` ueber alle drei Exercise-Dateien (z.B. 2.1 Z.36-41 `mkdir -p ~/.claude/skills/...`, 2.2 Z.207 `chmod +x`, 2.3 Z.423 `cat > ... << 'EOF'`). prerequisites.md:12+16 erlaubt explizit Windows + 'Windows Terminal' (Default-Shell = PowerShell). In PowerShell schlagen `mkdir -p`, `chmod +x`, Heredocs und `~/`-Expansion fehl. In allen drei Exercise-Dateien gibt es nur EINEN Windows-Hinweis (block-3 Z.374 'On Windows, use Git Bash or WSL').",
+    "recommendation": "Einen klaren Vorspann ergaenzen: 'Auf Windows alle Shell-Befehle in Git Bash ausfuehren, nicht in PowerShell/cmd' — prominent in jeder Exercise-Datei und in prerequisites.md. Alternativ kritische Snippets (Skill-/Hook-Anlage) zusaetzlich als PowerShell-Variante anbieten. Das ist die groesste Einstiegshuerde fuer einen Neuling auf der Workshop-Maschine.",
+    "effort": "M",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Exercise 2.3: Plugins manuell unter ~/.claude/plugins/cache/ anlegen widerspricht dem CLI-only-Plugin-Modell",
+    "file": "resources/exercises/block-2-exercises.md",
+    "category": "accuracy-overclaim",
+    "severity": "medium",
+    "evidence": "Step 4 laesst Teilnehmer per Hand Ordner + Manifest in den von der CLI verwalteten cache schreiben: `mkdir -p ~/.claude/plugins/cache/my-mini-plugin-marketplace/.claude-plugin` (Z.418) und `cat > .../plugin.json` (Z.423). Hint 'Team distribution: ... drop the directory into ~/.claude/plugins/cache/' (Z.511). Der cache-Ordner ist Claude-Code-managed; manuelles Hineinschreiben ist fragil und kann beim naechsten Plugin-Sync verschwinden. Sauberer Weg ist `claude plugin marketplace add` / `claude plugin install`.",
+    "recommendation": "Scaffolding in ein neutrales Verzeichnis legen (z.B. ~/cc-workshop/my-mini-plugin) und mit `claude --plugin-dir ./my-mini-plugin` laden (so wie es Exercise 3.5 Variant C bereits korrekt macht, Z.301). cache/ nur lesend erkunden, nicht beschreiben.",
+    "effort": "M",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Exercise 2.3: Success-Check nennt 'agentic-os plugin', Step 1 aber 'workshop-provided plugin' / <plugin-name>",
+    "file": "resources/exercises/block-2-exercises.md",
+    "category": "structure",
+    "severity": "medium",
+    "evidence": "Step 1 (Z.359-360) spricht von 'a workshop-provided plugin' und nutzt durchgehend den Platzhalter `<plugin-name>` (Z.368, 373, 390, 404). Die Success-Check Z.496 verlangt konkret: 'You can navigate the agentic-os plugin structure from the command line'. Welches Plugin der Teilnehmer real erkundet, bleibt offen — und 'agentic-os' taucht vorher nirgends als Anweisung auf.",
+    "recommendation": "Einen konkreten, garantiert vorhandenen Plugin-Namen festlegen (das Workshop-Plugin selbst unter dynamic_workshop/ ist laut Step-1-Note nutzbar) und Success-Check + Steps darauf vereinheitlichen. Platzhalter und konkreten Namen nicht mischen.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Block 2 Zeitbudgets unrealistisch durch viele Restart-Zyklen",
+    "file": "resources/exercises/block-2-exercises.md",
+    "category": "exercise-quality",
+    "severity": "medium",
+    "evidence": "Header: '25-30 minutes' pro Uebung (Z.2). Aber 2.1 verlangt mind. einen Skill-Edit + 'works the same way in a new Claude Code session (restart and try)' (Z.114); 2.2 'Restart Claude Code (hooks are read at startup)' (Z.235) plus Bonus-Hook; 2.4 fordert npx-Install + .mcp.json + 'Restart Claude Code' (Z.567) + 6 Schritte + Bonus. Jeder Claude-Neustart kostet einen Neulaeufer real 1-3 Min Orientierung, dazu npx-Erstdownload bei 2.4. 5 Hauptuebungen a realistisch 30-40 Min sprengen die ~3h-Session inkl. Teaching.",
+    "recommendation": "Zeitschaetzungen ehrlich auf 30-40 Min anheben ODER pro Uebung 'Kern (Pflicht)' vs 'Bonus (optional)' klarer trennen (wie Block 3 es mit Must/Should/Nice macht). npx-@playwright/mcp-Erstinstall in prerequisites vorziehen, damit 2.4 in der Session nicht am Download haengt.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Versteckte Abhaengigkeit: Exercise 3.3 setzt das devil-advocate-swarms-Plugin voraus, ohne Fallback in der Uebung",
+    "file": "resources/exercises/block-3-exercises.md",
+    "category": "demo-reliability",
+    "severity": "medium",
+    "evidence": "Step 2 ruft hart `/devil-advocate-swarms:swarm scan ...` (Z.127) und die gesamte Uebung (Step 3-4, 'What to Report') haengt am Swarm-Output. Ein Fallback steht nur in den Demos (block-3-demos.md:211 'If devil-advocate-swarms plugin not installed: Show recording'), nicht in der Exercise selbst. Ein Selbstlerner ohne installiertes Plugin (es ist ein Custom-Workshop-Plugin laut prerequisites.md:225/249) bleibt haengen.",
+    "recommendation": "In 3.3 einen expliziten Fallback ergaenzen: ohne Plugin stattdessen `/security-review` (built-in) oder einen normalen Audit-Prompt gegen access_control.py laufen lassen — die drei geplanten Vulns sind so oder so auffindbar. Plugin-Voraussetzung am Uebungsanfang nennen.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Block 1 nutzt durchgehend bash-Setup (mkdir -p, &&) ohne Windows-Hinweis — erste Huerde gleich in Uebung 1.1",
+    "file": "resources/exercises/block-1-exercises.md",
+    "category": "windows-compat",
+    "severity": "high",
+    "evidence": "Schon der allererste Schritt der allerersten Uebung: `mkdir -p ~/cc-workshop/exercises/exercise-1.1 && cd ... && claude` (Z.35). Dieselbe Form in 1.2 (Z.120-122), 1.4 (Z.336-341 mit `echo ... > README.md`). `mkdir -p` und die `&&`-Verkettung sind in PowerShell nicht 1:1 lauffaehig; `~/` wird in cmd gar nicht expandiert. Genau in der Einstiegsuebung darf ein Neuling nicht an der Shell scheitern.",
+    "recommendation": "Ganz oben in Block-1-Exercises (nach Z.7) einen Kasten: 'Windows-Teilnehmer: diese Befehle in Git Bash ausfuehren. PowerShell-Alternative: `mkdir ~/cc-workshop/...; cd ~/cc-workshop/...`'. Mindestens fuer 1.1 beide Varianten zeigen, danach Verweis darauf.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Kein Micro-Erfolgserlebnis vor Uebung 1.1 — Spruch direkt zur Tool-Bau-Aufgabe",
+    "file": "resources/exercises/block-1-exercises.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "1.1 startet sofort mit einem komplexen Multi-File-Auftrag: Parser + Sample-Datei + 4 Anforderungen + --door-Flag + diff-Erklaerung (Z.42-83), Zeitbudget 12-15 Min. Es gibt davor keine 2-Minuten-Mini-Uebung (z.B. 'frag Claude: was steht in diesem Verzeichnis?' oder 'lass dir den /help-Output erklaeren'), um die describe-implement-run-Schleife einmal trivial zu erleben, bevor es ernst wird.",
+    "recommendation": "Eine optionale Micro-Uebung 1.0 (~3 Min) voranstellen: Claude in leerem Ordner starten, eine triviale Frage stellen ('Erstelle eine Datei hello.txt mit dem Inhalt Hallo'), Ergebnis pruefen. Senkt die kognitive Last des Einstiegs deutlich und gibt sofort ein Erfolgserlebnis.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Exercise 1.5 setzt Modell-/Effort-Wissen voraus, das in Block 1 noch nicht sauber eingefuehrt ist",
+    "file": "resources/exercises/block-1-exercises.md",
+    "category": "didactics-onboarding",
+    "severity": "low",
+    "evidence": "1.5 verlangt pro Workflow Model + Effort + Flags zu waehlen (Tabelle Z.499-504) und nennt Aliases mit `--effort xhigh`, `--model opus/sonnet/haiku` (Z.523-525). --effort xhigh ist gegen die CLI verifiziert korrekt (low/medium/high/xhigh/max). Fuer einen kompletten Neuling ohne Vorerfahrung (Zielgruppe!) ist die bewusste Modell/Effort-Wahl am Ende der ALLERERSTEN Session aber kognitiv anspruchsvoll; die Begruendungs-Spalte 'not just felt right' (Z.536) verlangt Wissen, das erst durch Erfahrung entsteht.",
+    "recommendation": "1.5 als klar optional markieren (ist bereits 'Should-do', gut) und die Hint-Defaults (Z.552 Sonnet/medium etc.) noch staerker als sicheren Startpunkt hervorheben, damit Neulinge nicht in Analyse-Paralyse geraten. Evtl. nach Block 2/3 verschieben.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Exercise 3.3 'No vulnerability planting required' aber CLAUDE.md sagt 'Do NOT fix them' — Konfliktpotential mit Step 4",
+    "file": "resources/exercises/block-3-exercises.md",
+    "category": "exercise-quality",
+    "severity": "low",
+    "evidence": "3.3 Step 4: 'Choose one ... and let Claude implement the fix in access_control.py' + danach `pytest -v` gruen (Z.142-148). Gleichzeitig instruiert workshop-playground/CLAUDE.md:68: 'Do NOT fix them in this playground — they are the teaching target.' und Z.81 (OSDP) ebenso. Ein QA-Teilnehmer, der den Fix wie verlangt anwendet und committet, mutiert die geplante Teaching-Vorlage; beim naechsten Durchlauf fehlt die Vuln.",
+    "recommendation": "In 3.3 explizit sagen: Fix nur lokal/uncommitted anwenden und danach verwerfen (`git checkout access_control.py`) ODER in einer Kopie arbeiten. So bleibt der Playground fuer den naechsten Workshop intakt. Die CLAUDE.md-Regel und die Uebung in Einklang bringen.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Erwartung in 3.3, der read_log-Path-Traversal sei sofort demonstrierbar, ist umgebungsabhaengig",
+    "file": "workshop-playground/access_control.py",
+    "category": "demo-reliability",
+    "severity": "low",
+    "evidence": "read_log oeffnet `open(f\"logs/{log_name}\")` (access_control.py:127). Real getestet: `read_log('../../Windows/win.ini')` wirft FileNotFoundError 'logs/../../Windows/win.ini', solange das Verzeichnis logs/ noch nicht existiert (es wird erst von log_event() via os.makedirs angelegt). Auf einer frischen Checkout-Maschine ohne vorher ausgefuehrtes add/check schlaegt eine Live-Traversal-Demo also fehl, obwohl die Schwachstelle real ist.",
+    "recommendation": "Falls in 3.3/Demos eine manuelle Traversal-Vorfuehrung geplant ist: vorher einen Logeintrag erzeugen (`python access_control.py check alice`), damit logs/ existiert. Als Hinweis in trainer-notes/demo aufnehmen. Fuer die Swarm-basierte statische Analyse ist es irrelevant (sie liest den Code).",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Neue Micro-Uebung: 'CLAUDE.md-Boundary in Aktion' als sanfter Zwischenschritt vor 1.2 Step 6",
+    "file": "resources/exercises/block-1-exercises.md",
+    "category": "new-exercise-idea",
+    "severity": "nice-to-have",
+    "evidence": "1.2 springt von 'CLAUDE.md schreiben' (Step 2-3) direkt zu 'exit/restart + Persistenz testen' (Step 4-5) und dann 'never-change-Boundary' (Step 6, Z.170-177). Zwischen Anlegen und Testen fehlt ein kleiner verifizierender Zwischenschritt im selben Lauf ('Zeig mir den aktuellen Inhalt von CLAUDE.md' steht nur als Hint Z.203).",
+    "recommendation": "Vor dem Restart einen 30-Sekunden-Check einbauen: 'Frag Claude jetzt sofort: Welche Konventionen gelten? — bevor du neu startest.' So sieht der Teilnehmer den Effekt zweimal (selbe Session + nach Restart) und versteht den Unterschied Kontext-im-Lauf vs. persistiert. Kleines Zwischen-Erfolgserlebnis.",
+    "effort": "S",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Exercise 2.2/2.6: Mehrfache 'settings.json komplett ueberschreiben'-Snippets koennen vorhandene Hooks zerstoeren",
+    "file": "resources/exercises/block-2-exercises.md",
+    "category": "exercise-quality",
+    "severity": "medium",
+    "evidence": "2.2 zeigt vollstaendige settings.json-Bloecke zum Einfuegen (Z.213-229 und erneut komplett Z.273-300), 2.6 nochmal einen kompletten PostToolUse-Block (Z.813-829). Der Warnhinweis 'add the hooks section carefully — don't break the JSON structure' (Z.231) ist da, aber ein Neuling, der die Bloecke nacheinander 1:1 kopiert (2.2 PreToolUse, dann 2.6 PostToolUse, dann 3.8 Write|Edit), ueberschreibt jeweils die vorigen hooks, weil jeder Block die ganze hooks-Struktur neu definiert. Auf realen Maschinen kann das eine bestehende ~/.claude/settings.json (mit Permissions etc.) beschaedigen.",
+    "recommendation": "Statt kompletter settings.json-Bloecke ein Merge-orientiertes Vorgehen zeigen: 'fuege diesen Eintrag in das bestehende hooks.PreToolUse-Array ein' + Validierung mit `python3 -m json.tool`. Oder Teilnehmer auf eine projektlokale .claude/settings.json statt der globalen lenken, um die echte Konfiguration nicht zu gefaehrden.",
+    "effort": "M",
+    "persona": "Lena — Hands-on QA, macht jede Uebung Schritt fuer Schritt durch"
+  },
+  {
+    "title": "Opus 4.7 als default nennen, aber 4.8 ist jetzt default seit v2.1.154 (28.5.2026)",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "Zeile 14: 'Choose the right model (Opus 4.7 / Sonnet 4.6 / Haiku 4.5)'\nZeile 162: 'Claude Opus 4.7 (default since 2026-04-16 GA)'\nZeile 169: '`xhigh` and `max` unlock the deepest reasoning with Opus 4.7'\nAktuelle Realitaet (Web): 'as of v2.1.154 (May 28, 2026), Opus 4.8 is the new default with high effort by default'",
+    "recommendation": "Alle Opus-4.7-Referenzen durch Opus 4.8 ersetzen. Zeile 162 auf 'default since 2026-05-28 (v2.1.154 GA)' aendern. Das Datum 2026-04-16 ist ein frueheres GA-Datum (wahrscheinlich bei Opus 4.7 Announcement), der neue Default kam erst mit 4.8 am 28.5.",
+    "effort": "S",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Effort-Level-Verhalten fuer Opus 4.8 ungenau",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "Zeile 169: '/effort <low|medium|high|xhigh|max> — five tiers ranging from cheap-and-fast to deepest analysis (xhigh and max unlock the deepest reasoning with Opus 4.7)'\nActual (web): 'On Claude Opus 4.8, the effort parameter defaults to high on all surfaces, including the Claude API and Claude Code. Set effort explicitly to use a different level.'",
+    "recommendation": "Klarstellen: Opus 4.8 defaults zu `high` (nicht `xhigh`). Die `xhigh`/`max`-Levels existieren weiterhin, sind aber nicht mehr der Default. Satz umschreiben: '`low|medium|high|xhigh|max` — five tiers; Opus 4.8 defaults to `high` (xhigh/max unlock even deeper reasoning when explicitly set)'",
+    "effort": "S",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Claude Fable 5 vollstaendig abwesend aus Modelltabelle",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "Zeile 158-164: Tabelle nennt nur Opus 4.7, Sonnet 4.6, Haiku 4.5\nZeile 308-310 (cheatsheet.md): Nur die drei genannten Modelle\nActual (web, 2026-06-09 GA): 'Claude Fable 5 is Anthropic\\'s most capable widely released model' with pricing $10 / $50 per MTok, 1M context, available on Claude API, Bedrock, Vertex, Foundry",
+    "recommendation": "Modelltabelle erweitern: nach oder vor Opus 4.8 eine Row für Fable 5 hinzufuegen. Kopfzeile sollte Fable 5 alarmieren, dass es ein Premium-Tier ist. Sollte erwähnt werden in: Block 1.1 (Uebersicht), Cheatsheet, Mentor-Agent, Block 3.2 (Multi-Model-Pipelines).",
+    "effort": "M",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Cheatsheet veraltet: Opus 4.7 statt 4.8, keine Fable 5",
+    "file": "resources/cheatsheet.md",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "Zeile 308: 'Claude Opus 4.7 | 1M tokens | Default in Claude Code since 2026-04-16 (GA)'\nZeile 309: 'Claude Sonnet 4.6 | 1M tokens (beta)'\nZeile 310: 'Claude Haiku 4.5 | 200K tokens'\nZeile 312: 'Claude Code defaults to Opus 4.7 with 1M context'\nKeine Fable 5 erwähnt\nActual: Opus 4.8 default seit 28.5.2026, Fable 5 GA seit 9.6.2026",
+    "recommendation": "Tabelle neu schreiben: (1) Opus 4.8 als default angeben, (2) Fable 5 hinzufuegen mit Pricing/Context, (3) Datum auf 2026-05-28 aendern, (4) '(beta)' von Sonnet entfernen",
+    "effort": "S",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Modul 1.5 Preistabelle (as of 2026-05) ist noch aktuell, aber Datum sollte auf 2026-06 aendern",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Zeile 950: '### Pricing Reference (as of 2026-05)'\nZeile 954-956: Tabelle mit Opus 4.7, Sonnet, Haiku — preise korrekt\nAber: Das Datum ist vorbei, und Fable 5 fehlt",
+    "recommendation": "Datum auf '(as of 2026-06)' aendern, Fable 5-Row hinzufuegen ($10/$50), Note hinzufuegen: '(Fable 5 is a new premium tier, generally available since June 9, 2026 — see Module 1.1 for context)'",
+    "effort": "S",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Block 3.2: Modell-Staerken-Tabelle fehlt Fable 5",
+    "file": "resources/modules/block-3-advanced.md",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "Zeile 336-341: Tabelle nennt 'Claude Opus | Claude Sonnet | Claude Haiku | Codex (OpenAI)'\nZeile 343-344: 'Using both together beats either alone'\nKeine Fable 5; kein Hinweis auf Mythos-Klasse\nActual: Fable 5 uebertrifft alle genannten Claude-Modelle, ist ein separate Tier",
+    "recommendation": "Tabelle erweitern: 'Claude Fable 5' als neue Zeile hinzufuegen mit Strengths wie 'Highest reasoning, frontier performance, long-horizon agentic tasks'. Context: 'This is Anthropic\\'s new Mythos-class tier, available since June 2026. Use when maximum capability is worth the cost.' Codex-Kontext klären: 'Codex (OpenAI) remains relevant for fast, parallel implementation, though Claude Sonnet/Opus can often substitute.'",
+    "effort": "M",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Mentor-Agent nennt alte Modelle, keine Fable 5",
+    "file": "agents/workshop-mentor.md",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "Zeile 149: 'Which model should I use? Think of it like staffing (module 1.1, Model Selection): Opus is your senior architect ... Sonnet is your experienced technician ... Haiku is your assistant — cheap for simple tasks.'\nKeine Erwähnung Fable 5, alte Modell-Generationen",
+    "recommendation": "Antwort aendern: 'Opus 4.8 is your senior architect. Fable 5 (new, since June 2026) is your principal engineer — highest capability, premium cost. Sonnet is your experienced technician. Haiku is your assistant.'",
+    "effort": "S",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Haiku Kontext 200K vs 1M fuer Opus 4.8 nicht erklauert",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Zeile 164: 'Claude Haiku 4.5 | 200K tokens'\nZeile 162: 'Claude Opus 4.7 | 1M tokens'\nDie Implication (1M vs 200K) ist offensichtlich, aber kein expliziter Hinweis auf Konsequenzen (z.B. Haiku kann weniger Dateien auf einmal lesen)",
+    "recommendation": "Footnote hinzufuegen: '200K context limits bulk-read tasks — use Haiku for small/focused reads, Opus for whole-codebase analysis.' Nicht essentiell fuer Anfaenger, aber hilft bei Troubleshooting.",
+    "effort": "S",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Mentor-Agent Module Map hat veraltete Block-Struktur: 'model: sonnet' statt Fable 5 / Opus 4.8 als Beispiel",
+    "file": "agents/workshop-mentor.md",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Zeile 28: 'model: sonnet' — OK fuer Read-Only Agent, aber wenn der Mentor kuenftig komplexere Fragen beantworten soll (z.B. Entscheidungslogik fuer Modell-Wahl), sollte er Zugriff auf Opus/Fable haben",
+    "recommendation": "Nicht dringend. Optional: auf 'model: opus' aendern, wenn der Mentor in Zukunft tiefere Reasoning-Faehigkeiten braucht. Jetzt: Notiz hinzufuegen '(Can be upgraded to Opus 4.8 or Fable 5 if future versions require deeper reasoning.)'",
+    "effort": "S",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Veraltete CLI-Version in Struktur-Kontext",
+    "file": "global",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Repo-Header erwaehnt: 'mutmasslich veraltet — pruefe gegen aktuelle Claude-Code-Releases und die aktuelle Modell-/Preis-Liste' und nennt 'v2.1.146 als CLI-Version (Stand 2026-05)'\nAktual (web): v2.1.170+ (Juni 2026), mit Fable 5 Support, dynamischen Workflows, etc.",
+    "recommendation": "Nicht im Workshop-Content selbst erwaehnt, aber der Setup-Guide / Prerequisites sollte klarstellen: 'Update to Claude Code v2.1.170+ (June 2026 or later) for Fable 5 support and latest features. Run `claude update` to get the latest version.'",
+    "effort": "S",
+    "persona": "Currency-Auditor: Modelle, Preise, Effort-Stufen"
+  },
+  {
+    "title": "Modellgeneration veraltet: Opus 4.7 ist nicht länger Default",
+    "file": "resources/modules/block-1-foundations.md, block-1-foundations.md:162",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "Zeile 162: 'Claude Opus 4.7** (default since 2026-04-16 GA, model ID `claude-opus-4-7`)' | WebFetch Changelog (2026-06-20): 'Version: 2.1.185 (Released June 20, 2026)' + 'Claude Opus 4.8 (Latest Opus) Released as the primary model in version 2.1.154 (May 28, 2026)' | WebSearch (dev.classmethod.jp): 'Claude Code v2.1.154 was released on May 28, 2026, as a major update centered around the introduction of the new top-tier model Claude Opus 4.8'.",
+    "recommendation": "Alle Referenzen auf 'Opus 4.7 ist Default' korrigieren zu 'Opus 4.8 ist Default seit v2.1.154 (2026-05-28)'. Tabellen in block-1-foundations.md Zeile 162 und cheatsheet.md Zeile 308 aktualisieren.",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Claude Fable 5 komplett fehlt – neue Modellgeneration nicht dokumentiert",
+    "file": "resources/modules/block-1-foundations.md, block-2-ecosystem.md, block-3-advanced.md, cheatsheet.md, quick-reference.md",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "WebFetch Changelog (2026-06-20): 'Fable 5 (Mythos-class): Introduced in v2.1.170 (June 9, 2026) as a general-use model with capabilities exceeding all previously available models' | WebSearch (dev.classmethod.jp): 'v2.1.170 released Claude Fable 5 (/model fable) — a new model tier above Opus 4.8' | Platform.anthropic.com: Fable pricing $10 input / $50 output, 1M token context, released June 2026. Workshop enthält KEIN Kapitel zu Fable 5.",
+    "recommendation": "Neues Unterkapitel in Module 1.1 (Model Selection) einfuegen: 'Claude Fable 5 — Mythos-Class (ab v2.1.170)'. Schnellvergleich-Tabelle: Fable 5 ($10/$50), Opus 4.8 ($5/$25), Sonnet 4.6 ($3/$15), Haiku 4.5 ($1/$5). Wann Fable sinnvoll ist: lang-horizon-reasoning, komplexe Refactors, Vision-Tasks (Screenshot→Code). Command: `/model fable` oder `/model claude-fable-5`.",
+    "effort": "M",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Lean System Prompt nicht erwähnt – neue Default-Optimierung seit v2.1.154",
+    "file": "resources/modules/block-1-foundations.md, resources/cheatsheet.md",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "WebFetch Changelog (2026-06-20): 'Lean system prompt: Now the default for all models except Haiku, Sonnet, and Opus 4.7 and earlier' | WebSearch (dev.classmethod.jp/blog 2026-05-29): 'Opus 4.8 operates with high effort (high thinking capacity) by default, and /effort xhigh can also be selected'.",
+    "recommendation": "In Module 1.1 (Model Selection & Cost Awareness) hinzufuegen: 'Lean System Prompt: Seit v2.1.154 ist das System-Prompt komprimiert (Opus 4.8+ nur), was Context-Overhead spart und Latenz reduziert. Transparenz fuer Benutzer: `--append-system-prompt` oder `--system-prompt` koennen das uebersteuern, falls noetig.'",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Opus 4.8 Effort-Default unklar – xhigh vs. high Differenzierung fehlt",
+    "file": "resources/modules/block-1-foundations.md:169, cheatsheet.md:317, faq.md:201",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "Workshop-Text (block-1-foundations.md:169): 'five tiers ranging from cheap-and-fast to deepest analysis (`xhigh` and `max` unlock the deepest reasoning with Opus 4.7)' | WebFetch Changelog: 'Opus 4.8 Now defaults to high effort (`/effort xhigh`)' | Block-1-demos.md:484: 'Baseline with Opus 4.7 + xhigh'. Verwirrend: Haelt der Kurs noch fest, dass nur Opus 4.7 xhigh/max kann, aber Opus 4.8 laeuft jetzt auf xhigh-Default.",
+    "recommendation": "Tabelle in block-1-foundations.md:162 praezisuieren: Zeile fuer Opus 4.8: 'Deepest reasoning, fast 2x-mode. Default effort=high, can use xhigh. New default since v2.1.154.' FAQ entry (faq.md:201) aktualisieren, dass xhigh auf Opus 4.8 (und Fable 5) verfuegbar ist, nicht nur 4.7.",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "/fast flag / /model fast fehlinterpretiert – kostet 3x weniger, nicht 2x weniger",
+    "file": "resources/cheatsheet.md (implizit), quick-reference.md (implizit)",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "WebSearch: 'A new Fast mode runs at 2.5x the speed of standard for $10/$50 per million tokens, three times cheaper than previous Fast tiers' | WebSearch (a2a-mcp.org): 'The fast-mode default since v2.1.142 is the latest Opus model'. Workshop sagt nichts explizit zu Fast-Pricing.",
+    "recommendation": "In cheatsheet.md und quick-reference.md unter 'Flags' einen Fast-Mode-Eintrag hinzufuegen: '`claude --fast` oder `--model fast` (seit v2.1.142) — Opus 4.8 mit 2.5x Geschwindigkeit bei 1/3 der Kosten. Nicht fuer Max-Plan-Features nutzbar (auto-mode deaktiviert bei --fast).'",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "/model fable command nicht dokumentiert",
+    "file": "resources/cheatsheet.md (Zeile 46 Model-Section), quick-reference.md (Zeile 18-20)",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "WebSearch (a2a-mcp.org & apidog.com): '/model claude-fable-5 or /model fable (alias)' | WebFetch: 'You can use either the fable alias or the full model name claude-fable-5'. Workshop-Cheatsheet Zeile 46 (cheatsheet.md) listet nur 'claude \"task\"' statt Model-Startup-Flag; interaktives `/model opus|sonnet|haiku` wird erwähnt (Zeile 161), aber nicht Fable.",
+    "recommendation": "Cheatsheet.md erweitern: CLI-Flags Section (Zeile 39-77): '`claude --model fable` (Fable 5, seit v2.1.170)' hinzufuegen. Slash-Commands (Zeile 161): '/model <name>' erweitern zu '/model <opus|sonnet|haiku|fable>', mit Hinweis dass Fable v2.1.170+ braucht.",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Dynamic Workflows / /workflows nicht erwaehnt – neue Parallel-Agenten-Orchestrierung (v2.1.154)",
+    "file": "resources/modules/block-3-advanced.md",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "WebSearch (dev.classmethod.jp): 'v2.1.154 introduced Claude Opus 4.8 (current flagship), dynamic workflows + ultracode (research preview), /workflows' | WebFetch Changelog: 'Dynamic Workflows in Claude Code lets the same model coordinate hundreds of parallel subagents'. Workshop Module 3.1-3.4 decken Agents/Orchestrierung ab, erwaehnen aber nicht `/workflows` oder die Kapazitaet fuer 'hundreds of parallel subagents' (bisherig: Fan-Out/Fan-In auf ~5-10 Agenten illustriert).",
+    "recommendation": "In Module 3.1 (Agents & Orchestration) neues Unter-Kapitel: 'Dynamic Workflows (v2.1.154+)' — Erklaerung dass ein einzelner Opus 4.8 hunderte Subagents koordinieren kann; Command `/workflows` zur Verwaltung; Performance-Vergleich: sequenziell vs. fan-out (alt) vs. dynamic workflows (neu). Didaktisch relevant fuer Session 3, aber zeitlich knapp.",
+    "effort": "M",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Ultracode nicht erwähnt – Research-Preview Feature (v2.1.154)",
+    "file": "resources/modules/block-2-ecosystem.md, block-3-advanced.md",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "WebSearch (dev.classmethod.jp): 'dynamic workflows + ultracode (research preview)' seit v2.1.154 (2026-05-28). Workshop erwaehnt `/ultraplan` und `/ultrareview` (beide GA), aber nicht `ultracode`.",
+    "recommendation": "Optional in Module 3 als Research-Preview Fussnote erwaehnen; kein voller Unterricht noetig, da noch experimental. Relevanz fuer den Kurs niedrig, da Teilnehmer damit erst in Zukunft rechnen.",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Opus 4.6 historisch-falsch als parallel-aktuell dargestellt",
+    "file": "resources/modules/block-1-foundations.md:190, cheatsheet.md:364, glossary.md:159",
+    "category": "accuracy-overclaim",
+    "severity": "medium",
+    "evidence": "Workshop (block-1-foundations.md:190): '`auto` | ML classifier decides risk level (Max-Plan with Opus 4.7, plus Team/Enterprise)' | Workshop (cheatsheet.md:364): 'Team/Enterprise (Sonnet 4.6, Opus 4.6, Opus 4.7)'. Aber Opus 4.6 wurde durch 4.8 verdraengt (Mai 2026). WebFetch Changelog: 'Claude Opus 4.8 (Latest Opus) Released as the primary model in version 2.1.154 (May 28, 2026)'.",
+    "recommendation": "Alle Referenzen auf 'Opus 4.6' korrigieren zu 'Opus 4.8' (oder entfernen als historical if appropriate). Zeile 190 + 364 + 159 in Glossar aktualisieren: '...Sonnet 4.6, Opus 4.8 (default), Fable 5 (enterprise)'.",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Version v2.1.146 als aktuell dargestellt — jetzt v2.1.185",
+    "file": "global (Repo README, CLAUDE.md)",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Keine explizite Nennung von v2.1.146 in den gelesenen Modulen, aber Kontext-Beschreibung erwähnte 'v2.1.146 als CLI-Version (Stand 2026-05)'. WebFetch Changelog: 'Version: 2.1.185 (Released June 20, 2026)'.",
+    "recommendation": "Wenn Version in README oder Einführungsdokumenten angegeben: auf v2.1.185+ aktualisieren. Oder generisch formulieren: '(aktuelle Version finden Sie mit `claude --version`)'.",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Lean System Prompt + Opus 4.8 Default Combination verursacht Einstiegsverwirrung",
+    "file": "resources/modules/block-1-foundations.md",
+    "category": "didactics-onboarding",
+    "severity": "medium",
+    "evidence": "Ein Teilnehmer startet `claude` ohne Flags und bekommt Opus 4.8 mit lean system prompt (auto-default seit v2.1.154), liest aber in Modul 1.1, dass 'Opus 4.7' default ist und full system prompt. Kontextfenster-Vorhersagen und Kosten-Beispiele aus dem Workshop passen dann nicht zur tatsächlichen Session. Subtiles, aber real verwirrend.",
+    "recommendation": "In Modul 1.1 frühzeitig klarstellen: 'Beim Starten eines Claude-Code-Session (nach v2.1.154) sehen Sie automatisch Opus 4.8. Dieses Skript wurde mit Opus 4.7 geschrieben — die Commands sind identisch, aber Modell-Effizienzen und Context-Overhead unterscheiden sich. `/model opus-4-7` kann Sie zur Vorgaenger-Version wechseln, um die Beispiele zu replizieren.'",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Fable 5 Vision Capabilities unerwähnt – kritisch für Physical-Security-Use-Cases",
+    "file": "resources/modules/block-3-advanced.md",
+    "category": "missing-content",
+    "severity": "medium",
+    "evidence": "Workshop zielt auf Physical Security Engineers; Fable 5 ist 'state-of-the-art für Vision-Tasks, including reconstructing web apps from screenshots and reading numerical values from scientific charts' (WebSearch). Aber Vision wird in Block 3 überhaupt nicht als eigenständiges Kapitel erwähnt. Fable 5 könnte für CCTV-Analyse, Access-Log-Vision-OCR relevant sein.",
+    "recommendation": "Optionales Unterkapitel in Module 3.3 (Security & Compliance) oder neue Exercise 3.7 (Vision Use-Case): 'Fable 5 for Physical Security Analytics — Screenshots von Zutrittskontroll-Interfaces parsen, CCTV-Logs auslesen, Raumplan-Visualisierungen verstehen'. Didaktisch wertvoll für Zielgruppe, zeitlich aber straff.",
+    "effort": "M",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Auto-Mode Requirements — Fable 5 update fehlt",
+    "file": "resources/modules/block-1-foundations.md:190, cheatsheet.md:364, troubleshooting.md:114",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Workshop (block-1-foundations.md:190): '`auto` | ML classifier decides risk level (Max-Plan with Opus 4.7, plus Team/Enterprise)'. Da Fable 5 eine neue Capability-Tier ist, sollte es explizit aufgelistet sein wenn Auto-Mode Fable 5 unterstuetzt.",
+    "recommendation": "Zeile 190 aktualisieren zu: '`auto` | ML classifier decides risk level (Max-Plan with Opus 4.8/Fable 5, plus Team/Enterprise)'.",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Modell-Pricing in Tabellen nicht aktualisiert für Fable 5",
+    "file": "resources/modules/block-1-foundations.md:954-956, cheatsheet.md:308-310",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Block-1-foundations.md Zeile 954-956 listet nur Opus/Sonnet/Haiku, keine Fable. Cheatsheet.md Zeile 308-310 gleich. Fable 5 kostet $10 input/$50 output — doppelt so viel wie Opus 4.8.",
+    "recommendation": "Tabelle um Fable-5-Reihe erweitern: '| **Claude Fable 5** | 1M tokens | Mythos-class: Complex reasoning, vision, long-horizon tasks. | In: $10 / Out: $50 |'",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Workshopoben Code v2.1.x-Features ohne Explicit Version-Gate – Backward Compatibility unklar",
+    "file": "resources/modules/block-2-ecosystem.md:821, cheatsheet.md:61, modules:",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Mehrere Features sind mit Version-Gates versehen (e.g. `--plugin-dir` v2.1.128+, `--plugin-url` v2.1.129+), aber nicht alle. Wenn Teilnehmer v2.1.100 (alt) installiert haben, wissen sie nicht, welche Commands fehlen.",
+    "recommendation": "Pre-Requisites in workshop-guide.md oder session-plan.md explizit machen: 'Mindestens Claude Code v2.1.150+ erforderlich. Update mit `claude update` oder pruefen mit `claude --version`. Einige Advanced-Features brauchen v2.1.170+ (Fable 5, Dynamic Workflows).'",
+    "effort": "S",
+    "persona": "Currency-Auditor: CLI, Flags, Commands, Versionen"
+  },
+  {
+    "title": "Hook Event Count: 28 Events ungenau/veraltet",
+    "file": "block-2-ecosystem.md",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "Zeile 388: 'The official docs currently list **28 lifecycle events**.' WebSearch zeigt: 'The full event list includes: SessionStart, Setup, SessionEnd, UserPromptSubmit, UserPromptExpansion, Stop, StopFailure, PreToolUse, PostToolUse, PostToolUseFailure, PostToolBatch, PermissionRequest, PermissionDenied, SubagentStart, SubagentStop, TeammateIdle, TaskCreated, TaskCompleted, FileChanged, CwdChanged, ConfigChange, InstructionsLoaded, WorktreeCreate, WorktreeRemove, and Notification.' Das sind ~25 (ohne Setup ist es 24), nicht 28. WebFetch https://code.claude.com/docs/en/hooks-guide bestätigt variierende Counts.",
+    "recommendation": "Zahl auf ~24-25 korrigieren oder entfernen und explizite Liste der aktuellen Events hinzufügen. Alternative: Vague Formulierung 'over 20 lifecycle events' nutzen, da sich die genaue Zahl zwischen Releases verschiebt.",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "Claude-Modell-Defaults veraltet: Opus 4.7 → Opus 4.8 / Neue Fable 5",
+    "file": "block-3-advanced.md",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "Workshop nennt durchgaengig Opus 4.7 als Standard (z.B. Zeile 155 'claude-opus-4-7', Zeile 574 'Opus 4.7 only'). WebSearch (06/2026) zeigt: 'Claude Opus 4.8 is recommended for the most complex tasks' und 'Claude Fable 5 is generally available on the Claude API ... beginning June 9, 2026 — Anthropic's first publicly available Mythos-class model'. Fable 5 ist NEU und teurer, sollte in Agent-Modellwahl (Module 3.2) als Option eingebunden werden.",
+    "recommendation": "(1) Opus 4.7 → Opus 4.8 in allen Agent-Definition-Beispielen (z.B. Zeile 155). (2) Fable 5 in Module 3.2 (Nested Orchestration, Cost Trade-Off Tabelle) erwähnen als höchste Tier mit 10x Kosten vs Haiku, zur Cost-Engineering Strategie. (3) Preis-Tabelle in Block 1.5 updaten falls nicht aktualisiert.",
+    "effort": "M",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "SSE MCP Transport: Deprecated seit früh 2026, nicht erwähnt",
+    "file": "block-2-ecosystem.md",
+    "category": "currency",
+    "severity": "high",
+    "evidence": "Module 2.4, Zeile 926: Tabelle nennt 'SSE (Server-Sent Events) | (legacy)' und Zeile 926: '| SSE | Server-Sent Events | (legacy) | **Deprecated** — use HTTP instead |'. WebSearch (06/2026) bestätigt: 'The MCP specification has deprecated SSE in favor of Streamable HTTP. If you\\'re building a new remote MCP server, don\\'t use SSE.' Workshop dokumentiert Deprecation richtig, aber nennt nur 'legacy', nicht explizit dass dies **Anfang 2026 passiert ist** und warum (Streamable HTTP besseres Handling).",
+    "recommendation": "Kontext erweitern: 'SSE is deprecated as of Q1 2026 in favor of Streamable HTTP. Streamable HTTP offers better resource efficiency and doesn\\'t require HTTP/2.' Kurzer 1-Satz unter Tabelle: warum der Wechsel geschah (nicht nur Legacy-Label).",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "MCP Scope-Namen: Alte Docs (project/global) vs aktuell (local/project/user)",
+    "file": "block-2-ecosystem.md",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "Zeile 933-939: Tabelle nennt korrekt 'local (was called project)', 'project (new)', 'user (was called global)'. ABER diese Umbennung ist 2025-Werk. Workshop dokumentiert den Wechsel didaktisch gut ('Beware older documentation'). WebSearch bestätigt: 'three scopes are: 1. Local Scope (Default)...' = korrekt. Material ist aktuell genug, aber Warnung könnte stärker sein, da veraltete Blogs (2024) noch alt-Nomen benutzen.",
+    "recommendation": "Warnung verschieben vor die Tabelle und fettdruck: 'NAMING CHANGE (2025): Old docs refer to \"project scope\" and \"global scope\". These were renamed. The new names (local/project/user) are the current standard. If you read 2024 documentation, translate accordingly.' Aktuelle docs nutzen richtig die neuen Namen.",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "CLI Version veraltet: v2.1.146 (Mai 2026) vs aktuell Juni 2026",
+    "file": "CLAUDE.md (project), modules-header",
+    "category": "currency",
+    "severity": "medium",
+    "evidence": "Workshop-CLAUDE.md nennt 'v2.1.146' als Stand (Mai 2026). Session heute ist 2026-06-21 (Juni). Es ist sehr wahrscheinlich dass z.B. v2.1.147+ existiert, aber kein WebSearch-Treffer für exakte Version Juni 2026. Jedoch: keine breaking changes zwischen 2.1.x erwartet auf Basis der Upgrade-Philosophie. Kann als 'aktuell genug' durchgehen, aber sollte Refresh-Note haben.",
+    "recommendation": "In Block 1 (Foundations) oder Prerequisites: 'This workshop was prepared with Claude Code v2.1.146+ (May-June 2026). If you\\'re running an older version, some features (particularly v2.1.145+ additions like `/run`, `/verify`) may not be available. Use `claude --version` to check.' Optional: Link zur Download-Seite.",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "Auto-Memory System: Keine Erwähnung von neuem `inference_cache` Feature (falls 2026-neu)",
+    "file": "block-1 oder 2",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Recherche zeigt keine Breaking News zu Prompt Caching in Claude Code selbst (nur in API). Module 1.2 (Context & Memory) erwähnt auto-memory.md Persistenz richtig. Das ist aktuell genug. Könnte aber Cache-Effizienz für long-running Agenten (Block 3) thematisiert werden.",
+    "recommendation": "Optional Enhancement: In Module 3.4 (Self-Improve Loops): 'Large cached CLAUDE.md files can use prompt-caching to reduce repeated token costs across iterations. Configure via --inference-cache in CI pipelines if using Claude API directly.' Aber dies ist niche und kann auch stehen bleiben wie ist.",
+    "effort": "L",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "NotebookLM Vorsicht: Custom Skill, nicht offizielle Claude-Code-Komponente",
+    "file": "block-2-ecosystem.md",
+    "category": "accuracy-overclaim",
+    "severity": "medium",
+    "evidence": "Zeile 1220-1228: '> **Custom Component:** The notebooklm user skill shown below is a **custom-built wrapper**, not part of the official Claude Code installation.' Text erwähnt diesen Disclaimer. ABER dann wird die Skill-Nutzung als '### Notation convention' (Zeile 1230) präsentiert, als würde sie zum Standard gehören. Der Disclaimer ist klein und könnte übersehen werden von Anfängern.",
+    "recommendation": "Disclaimer-Box (callout) erweitern: 'The `notebooklm` skill below requires separate installation (see prerequisites.md). Without it, use the NotebookLM web UI and copy results into Claude Code via @-file-includes. The pattern is real; the CLI tool is custom.' Oder im prerequisites.md explizit 'notebooklm CLI' Installation dokumentieren.",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "Block 3: Custom Plugins marked :wrench: aber nicht Setup-Zeit dokumentiert",
+    "file": "block-3-advanced.md",
+    "category": "didactics-onboarding",
+    "severity": "low",
+    "evidence": "Multiple :wrench: Marker fuer 'multi-model-orchestrator', 'agentic-os', 'devil-advocate-swarms', 'inception'. Diese sind Workshop-spezifisch und nicht out-of-box. Zielgruppe versteht Marker gut (Fußnote definiert Symbol), aber Setup-Zeit ist nicht quantifiziert. 'Wie lange dauert es, diese zu installiern?' bleibt offen.",
+    "recommendation": "In Module 3.1 oder vor dem ersten :wrench: Plugin ein Hinweis: 'Custom plugins (marked :wrench:) are not part of standard Claude Code. Setup time: ~10-15 minutes per plugin (clone repo, install, verify). For hands-on workshop: aim to have plugins ready before Session 3 begins.'",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "Module 2.3: Plugin Marketplace Namen korrekt, aber Submission Process veraltet?",
+    "file": "block-2-ecosystem.md",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Zeile 771: 'To publish your own plugin, go to `claude.ai/settings/plugins/submit`.' Dies ist korrekt Submission-URL, aber Process könnte sich geändert haben (2026). WebSearch zeigt kein aktualisiertes Submission-System, also wahrscheinlich korrekt, aber schwer zu verifizieren.",
+    "recommendation": "Optional: Link zu offiziellem Submission-Guide hinzufügen (wenn online). Alternative: Hinweis 'Submission process subject to change — check claude.ai/settings for current instructions.'",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "Skill Frontmatter: 'disable-model-invocation' richtig, aber alte Alias erwähnt",
+    "file": "block-2-ecosystem.md",
+    "category": "currency",
+    "severity": "low",
+    "evidence": "Zeile 272: 'disable-model-invocation: true   # Manual /deploy only — never auto-triggered'. Korrekt. Zeile 157: '(Field was renamed from `allowed_tools` — old YAML still parses as legacy alias but `tools` is canonical.)' Richtig. No breakage, aktuell korrekt.",
+    "recommendation": "Keine Action nötig, aber kann hervorgehoben werden: Alte Projekte mit `allowed_tools` werden still parsed. Neue Skill-Scaffolds nutzen `tools`. Dokumentation ist korrekt.",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  },
+  {
+    "title": "RAG/NotebookLM: Data Retention Disclosure ist stark, aber Google vs Workspace Policies unterspezifiziert",
+    "file": "block-2-ecosystem.md",
+    "category": "accuracy-overclaim",
+    "severity": "low",
+    "evidence": "Zeile 1209-1220: Disclaimer about Google Workspace Data Policies ist vorhanden, aber konkrete Unterschiede zwischen Personal/Workspace nicht quantifiziert. 'Enterprise data policies apply' ist vage. Für regulated Industry (Physical Security, GDPR) könnte das kritisch sein.",
+    "recommendation": "In Info-Box: 'Workspace NotebookLM: governed by Google Workspace Data Governance (typically stricter, includes contract-level controls). Personal: governed by Google Terms of Service. Check with your compliance officer before adding proprietary code.' Optional Link zu Google-Docs.",
+    "effort": "S",
+    "persona": "Currency-Auditor: Skills, Hooks, Plugins, MCP, RAG — Ecosystem-Stack Aktualität (Juni 2026)"
+  }
+]
