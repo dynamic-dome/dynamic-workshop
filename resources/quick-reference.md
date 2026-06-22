@@ -23,7 +23,6 @@
 | `/usage` | Tagessumme |
 | `/insights` | Analytics |
 | `--max-budget-usd 0.50` | Kosten-Cap |
-| `--max-turns 10` | Turn-Cap |
 
 ## Permissions
 | Mode | Was |

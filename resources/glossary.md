@@ -85,7 +85,7 @@ Die maximale Token-Menge, die Claude in einer Session "im Kopf" behalten kann. F
 - **Modul:** 1.2 — Context & Memory
 
 ### Cost-Cap
-Maximaler USD-Betrag fuer einen `claude -p`-Run. CLI-Flag `--max-budget-usd <amount>`. Schutz vor Endlos-Loops in CI/Automatisierung. Kombiniert sich gut mit `--max-turns`.
+Maximaler USD-Betrag fuer einen `claude -p`-Run. CLI-Flag `--max-budget-usd <amount>`. Schutz vor Endlos-Loops in CI/Automatisierung. Die aktuelle CLI bietet keine harte Turn-Grenze per Flag mehr — `--max-budget-usd` kappt Endlos-Loops/Runaway-Kosten.
 - **Verwandt:** Headless Mode, Routine
 - **Modul:** 3.6 (geplant) — CI/CD
 

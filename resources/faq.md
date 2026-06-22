@@ -168,7 +168,7 @@ Faustregel: kleines Projekt (<50 Files) -> CLAUDE.md reicht. Grosses Projekt ode
 
 ### Kann ich Claude in GitHub Actions laufen lassen?
 
-Ja — Modul 3.6 (geplant) zeigt das im Detail. Kern: `claude setup-token` einmalig fuer langlebigen OAuth-Token (~1 Jahr), `claude -p "task" --output-format json` als Befehl, `--max-budget-usd 0.50` als Sicherheitsnetz, `--max-turns 10` als Limit.
+Ja — Modul 3.6 (geplant) zeigt das im Detail. Kern: `claude setup-token` einmalig fuer langlebigen OAuth-Token (~1 Jahr), `claude -p "task" --output-format json` als Befehl, `--max-budget-usd 0.50` als Sicherheitsnetz. Die aktuelle CLI bietet keine harte Turn-Grenze per Flag mehr — `--max-budget-usd` kappt Endlos-Loops/Runaway-Kosten.
 
 ### Was kostet ein Claude-PR-Reviewer im CI?
 

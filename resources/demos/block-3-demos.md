@@ -557,7 +557,6 @@ When the output appears, pipe it through `jq` live to show it really is parseabl
 ```bash
 claude -p "Refactor this entire codebase from scratch with full test coverage" \
   --max-budget-usd 0.05 \
-  --max-turns 2 \
   < workshop-playground/access_control.py
 ```
 

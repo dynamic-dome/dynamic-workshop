@@ -384,7 +384,7 @@ Think of hooks as **event listeners** for Claude's behavior. When something happ
 
 ### Hook Types
 
-The official docs currently list **28 lifecycle events**. We focus on the 11 you will reach for most often:
+The official docs currently list **a couple dozen lifecycle events**. We focus on the 11 you will reach for most often:
 
 | Event | When it fires | Typical use case |
 |-------|---------------|------------------|

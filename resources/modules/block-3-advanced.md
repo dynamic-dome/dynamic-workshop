@@ -602,7 +602,7 @@ claude --permission-mode dontAsk \
   -p "Run the test suite and emit a structured failure report."
 ```
 
-Tips for CI: pair `--permission-mode dontAsk` with `--max-budget-usd` and `--max-turns` as a hard cost/loop cap (see Module 3.4), and use a long-lived OAuth token from `claude setup-token` so the runner never prompts for re-auth.
+Tips for CI: pair `--permission-mode dontAsk` with `--max-budget-usd` as a hard cost/loop cap (see Module 3.4) — the current CLI has no hard turn-limit flag anymore, so the budget cap is what bounds runaway loops — and use a long-lived OAuth token from `claude setup-token` so the runner never prompts for re-auth.
 
 #### `bypassPermissions` — When You Actually Need It
 
@@ -806,7 +806,7 @@ This is not optional hardening — it is the default design.
 
 **Learning Objectives:** After this module, you can:
 - Distinguish `/loop`, `/goal`, `/schedule`, and routines and pick the right primitive for time-based vs. condition-driven vs. persistent recurring tasks.
-- Pair every autonomous loop with `--max-budget-usd` and `--max-turns` and use `--worktree` to scope scheduled tasks to a dedicated branch.
+- Pair every autonomous loop with `--max-budget-usd` and use `--worktree` to scope scheduled tasks to a dedicated branch.
 - Explain when to reach for a self-improve loop (with safety mechanisms: quality gates, hooks, max iterations) and recognize the failure modes (cost runaway, false fixes, memory drift).
 
 ### Cronjobs with `/schedule`
@@ -888,7 +888,7 @@ Both `/loop` and `/agentic-os:run-loop` can burn tokens in a tight cycle if a to
 
 ```bash
 claude --max-budget-usd 5.00 -p "/loop 10m /quality-gate"
-claude --max-budget-usd 2.00 --max-turns 20 -p "/goal Tests grün"
+claude --max-budget-usd 2.00 -p "/goal Tests grün"
 ```
 
 When the cap is hit, Claude stops gracefully and reports the budget exhaustion. Always pair autonomous loops with a budget — it is the difference between a $5 lesson and a $500 surprise.
@@ -1195,7 +1195,7 @@ It surfaces findings on whichever channel you have wired up — terminal, web, p
 
 **Learning Objectives:** After this module, you can:
 - Run Claude headlessly with `claude -p`, `--output-format json`, and `--json-schema` to build deterministic, machine-parseable pipeline stages.
-- Set up CI authentication with `claude setup-token` and combine `--max-budget-usd`, `--max-turns`, and `--bare` to bound cost and behavior for unattended runs.
+- Set up CI authentication with `claude setup-token` and combine `--max-budget-usd` and `--bare` to bound cost and behavior for unattended runs.
 - Build a complete pre-commit hook or GitHub Actions workflow that uses Claude Code as a pipeline stage, and recognize the common CI failure patterns (token expiry, missing budget cap, interactive-mode hang).
 
 ### Overview
@@ -1204,7 +1204,7 @@ Up to this point we have used Claude Code interactively — typed prompts, watch
 
 > **Mission hint:** When Claude Code is more than an editor sidekick in your daily work, it is running in CI. This module shows how.
 
-The foundation is four building blocks: **headless invocation (`claude -p`), structured output (`--output-format json`), cost caps (`--max-budget-usd`, `--max-turns`), and CI-grade auth (`claude setup-token`)**. Combine them and Claude becomes a deterministic pipeline stage.
+The foundation is four building blocks: **headless invocation (`claude -p`), structured output (`--output-format json`), cost caps (`--max-budget-usd`), and CI-grade auth (`claude setup-token`)**. Combine them and Claude becomes a deterministic pipeline stage.
 
 ---
 
@@ -1271,20 +1271,21 @@ Store the token as a CI secret (GitHub Actions Secret, GitLab CI Variable, etc.)
 
 ---
 
-### Cost Caps — `--max-budget-usd` and `--max-turns`
+### Cost Caps — `--max-budget-usd`
 
-The single biggest CI risk with autonomous LLMs is a runaway loop: a tool keeps failing, Claude keeps retrying, the bill keeps climbing. Two flags neutralize that risk:
+The single biggest CI risk with autonomous LLMs is a runaway loop: a tool keeps failing, Claude keeps retrying, the bill keeps climbing. The budget flag neutralizes that risk:
 
 - **`--max-budget-usd 0.50`** — hard dollar cap. Once spend hits the cap, the session exits with a non-zero code. CI fails cleanly instead of bleeding money.
-- **`--max-turns 10`** — turn cap. Useful when budget alone is too coarse (one turn can be a tiny tool call or an expensive reasoning step).
+
+The current CLI offers no hard turn-limit flag anymore — `--max-budget-usd` is the cap that bounds runaway retry loops and runaway reasoning cost alike.
 
 ```bash
-claude -p "Generate release notes" --max-budget-usd 0.20 --max-turns 5
+claude -p "Generate release notes" --max-budget-usd 0.20
 ```
 
-The two caps are complementary: budget protects you from expensive *reasoning*, turns protect you from infinite *retry loops*. Set both in CI, always.
+Set the budget cap in CI, always.
 
-**Cross-reference:** Module 3.4 (`/loop`, `/goal`) discusses the same flags as a safety net for autonomous loops in interactive sessions — the CI use-case is the strictest application of that pattern.
+**Cross-reference:** Module 3.4 (`/loop`, `/goal`) discusses the same flag as a safety net for autonomous loops in interactive sessions — the CI use-case is the strictest application of that pattern.
 
 ---
 
@@ -1383,7 +1384,6 @@ jobs:
           claude --bare -p "Review this diff. Find bugs, security issues, style issues. Output JSON." \
             --output-format json \
             --max-budget-usd 0.50 \
-            --max-turns 3 \
             < /tmp/diff.patch \
             > /tmp/review.json
 
@@ -1425,7 +1425,6 @@ claude-review:
       claude --bare -p "Review this MR diff. Find bugs, security issues. Output JSON." \
         --output-format json \
         --max-budget-usd 0.50 \
-        --max-turns 3 \
         < /tmp/diff.patch \
         > /tmp/review.json
     - cat /tmp/review.json
@@ -1495,7 +1494,6 @@ The same headless pattern works locally as a git pre-commit hook (`.git/hooks/pr
 git diff --cached | claude --bare -p \
   "Check this staged diff for obvious bugs. Reply 'OK' or list issues." \
   --max-budget-usd 0.10 \
-  --max-turns 2 \
   --output-format json
 # Exit non-zero if issues found
 ```
@@ -1522,7 +1520,7 @@ Things that will go wrong in your first CI Claude integration — and how to fix
 | Symptom | Cause | Fix |
 |---|---|---|
 | `401 Unauthorized` | OAuth token expired or never set | Re-run `claude setup-token`, rotate the CI secret |
-| Unexpected `$10` spend on a single run | Loop without budget cap | Set `--max-budget-usd` and `--max-turns` on **every** CI invocation |
+| Unexpected `$10` spend on a single run | Loop without budget cap | Set `--max-budget-usd` on **every** CI invocation |
 | Downstream `jq` fails on output | Free-form prose, not JSON | Add `--output-format json` and `--json-schema` |
 | Inconsistent persona across runs | Default system prompt drifts with skills loaded | Use `--bare` plus `--system-prompt-file` for deterministic persona |
 | CI runner stalls waiting for input | Interactive mode invoked instead of `-p` | Always use `claude -p "..."`, never bare `claude` in CI |

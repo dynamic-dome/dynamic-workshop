@@ -930,7 +930,7 @@ If you have the commit skill installed, `/commit` triggers a structured commit w
 **Learning Objectives:** After this module, you can:
 - Read `/cost`, `/usage`, and `/insights` and interpret which workflows drive your spend.
 - Apply the Plan / Implement / Review pipeline (Opus + Sonnet + Haiku) and the right effort tier (low/medium/high/xhigh/max) per phase to balance quality and cost.
-- Set `--max-budget-usd` and `--max-turns` as hard guardrails for any unattended or autonomous Claude Code invocation.
+- Set `--max-budget-usd` as a hard guardrail for any unattended or autonomous Claude Code invocation.
 
 ### Overview
 
@@ -1044,19 +1044,18 @@ When *not* to use this pipeline: small tasks where the planning phase is the tri
 
 ### Budget Caps for Autonomous Sessions
 
-When you let Claude run for a long time without supervision (`/loop`, `/goal`, subagents, scheduled routines), cost can escape silently. Two flags act as guardrails:
+When you let Claude run for a long time without supervision (`/loop`, `/goal`, subagents, scheduled routines), cost can escape silently. One flag acts as the guardrail:
 
 - `--max-budget-usd 5.00` — hard cap on dollars spent in this `-p` run
-- `--max-turns 20` — turn limit, orthogonal to the dollar cap (catches runaway loops even if each turn is cheap)
 
-Both flags are essential for CI integration and any unattended workflow. They will be revisited in **Module 3.6 (CI/CD & Headless)** in detail.
+The current CLI offers no hard turn-limit flag anymore — `--max-budget-usd` is what caps runaway loops and runaway cost. This flag is essential for CI integration and any unattended workflow. It will be revisited in **Module 3.6 (CI/CD & Headless)** in detail.
 
 Example:
 ```bash
-claude --max-budget-usd 2.00 --max-turns 10 -p "/loop check deploy status"
+claude --max-budget-usd 2.00 -p "/loop check deploy status"
 ```
 
-If either limit is hit, Claude exits cleanly with a status code you can detect from CI.
+If the limit is hit, Claude exits cleanly with a status code you can detect from CI.
 
 ---
 
@@ -1127,7 +1126,7 @@ cache hit, it costs $0.05. Over 10 sessions/day, that's $4.50 vs $0.50 — meani
 - Cost is a deliberate variable. `/cost`, `/usage`, `/insights` are your dashboard.
 - Pick the cheapest model and effort that gets the job done — escalate only when justified.
 - For demanding tasks, the Plan/Implement/Review pipeline (Opus + Sonnet + Haiku) often beats Opus-only on both cost and quality.
-- Always cap unattended sessions with `--max-budget-usd` and `--max-turns`.
+- Always cap unattended sessions with `--max-budget-usd`.
 
 See `session-plan.md` for workshop-wide cost estimates.
 

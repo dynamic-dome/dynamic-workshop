@@ -127,7 +127,7 @@ Pattern in `allow:` zu eng. Beispiel: `Bash(npm test)` matched nicht `npm test -
 - Subagents reduzieren, wo nicht noetig
 
 ### 20. `claude -p` laeuft endlos
-Cost-Cap setzen: `--max-budget-usd 0.50 --max-turns 10`. Bei Endless-Loop in CI: Pre-flight Check, dass beide Flags gesetzt sind. Bei Routines/Loops: zusaetzlich `autoMode.hard_deny` fuer riskante Patterns.
+Cost-Cap setzen: `--max-budget-usd 0.50`. Die aktuelle CLI bietet keine harte Turn-Grenze per Flag mehr — `--max-budget-usd` kappt Endlos-Loops/Runaway-Kosten. Bei Endless-Loop in CI: Pre-flight Check, dass das Flag gesetzt ist. Bei Routines/Loops: zusaetzlich `autoMode.hard_deny` fuer riskante Patterns.
 
 ---
 

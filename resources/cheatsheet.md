@@ -62,7 +62,6 @@ claude /login
 | `claude --bare` | Headless mode without Hooks/Skills/Plugins/MCP/AutoMemory |
 | `claude --tools <list>` | Restrict tools (different from `--allowedTools` allowlist) |
 | `claude --max-budget-usd <amount>` | Cost cap per `-p` run |
-| `claude --max-turns <int>` | Turn cap per `-p` run |
 | `claude --append-system-prompt "..."` | Add persona text to system prompt |
 | `claude --system-prompt "..."` | Full persona override |
 | `claude --system-prompt-file <path>` | Load persona from file |
