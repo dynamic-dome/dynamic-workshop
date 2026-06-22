@@ -69,7 +69,8 @@ When called without arguments, display the full workshop map using box-drawing c
 ║  ┌─────────────────────────────────────────────────────────────────────┐   ║
 ║  │  3.1  Agents & Multi-Agent Orchestration   Swarms, delegation      │   ║
 ║  │  3.2  Nested Orchestration                 Claude→Codex→Claude     │   ║
-║  │  3.3  Security & Adversarial Testing       Devil's Advocate        │   ║
+║  │  3.3a Adversarial Testing                  Devil's Advocate swarm  │   ║
+║  │  3.3b Hardening & Compliance               Permissions, sandbox    │   ║
 ║  │  3.4  Scheduled Tasks, Loops & Automation  Cron, self-improve      │   ║
 ║  │  3.6  CI/CD & Headless Mode                claude -p, JSON, budget │   ║
 ║  │  3.7  Troubleshooting & Debugging          /debug, /doctor, layers │   ║

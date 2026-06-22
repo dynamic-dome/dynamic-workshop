@@ -65,7 +65,7 @@
 | 0:10 – 0:25 | Modul 3.1 | Agents & Multi-Agent + Background-Sessions |
 | 0:25 – 0:40 | Demo 3.1 | 2 parallele Agents |
 | 0:40 – 0:50 | Modul 3.2 + Demo 3.2 | Multi-Model Pipelines / Codex Swarm |
-| 0:50 – 1:10 | Modul 3.3 + Demo 3.3 | Security & Adversarial Testing |
+| 0:50 – 1:10 | Modul 3.3a + 3.3b + Demo 3.3 | Adversarial Testing (3.3a) + Hardening & Compliance (3.3b) |
 | 1:10 – 1:20 | **Pause** | |
 | 1:20 – 1:35 | Modul 3.4 + Demo 3.4 | Scheduled Tasks, Loops, /goal |
 | 1:35 – 1:50 | Modul 3.6 + Demo 3.6 (NEU) | CI/CD & Headless Mode |
@@ -93,7 +93,7 @@ Pro Session ~10-15 Min Pause nach ~90 Min. Zusätzlich: Q&A zwischen Modulen.
 
 **Optional je nach Zeit:**
 - Bonus-Exercises (markiert)
-- Sub-Demos (2.2b, 3.3b, 3.3c)
+- Sub-Demos (Demo 2.2b, Demo 3.3b, Demo 3.3c — Demo-IDs, nicht die Modul-Einheiten 3.3a/3.3b)
 - Advanced-Themen aus Module 3.5 (Telegram/Inception/Channels)
 
 ## Materialien pro Session
