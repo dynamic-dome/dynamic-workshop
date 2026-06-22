@@ -8,7 +8,15 @@
 
 ## 0. FORTSCHRITT — START HIER (Stand: 2026-06-22)
 
-**Wellen A + B sind erledigt und committet. NÄCHSTER EINSTIEG: Welle C (Windows-Tauglichkeit).**
+**Wellen A + B + C sind erledigt und committet. NÄCHSTER EINSTIEG: Welle D (Didaktik & Einstiegshürde).**
+
+- **`d02b046` — Welle C (Windows-Tauglichkeit, kompletter `windows-compat`-Cluster + T-019):** T-007 (getestete Hook-Assets `resources/demos/assets/hooks/secure-diff-gate.{sh,py}` — block .env/.pem/secrets/credentials=exit 1, normal=exit 0, .py jq-frei; `.gitattributes` erzwingt LF für `*.sh`), T-036 (Exercise 2.1 safety-check + audit-log mit PowerShell-`.ps1`-Variante neben bash, live gegen powershell.exe getestet), T-021 (bash-vs-pwsh-Widerspruch aufgelöst), T-035 (prerequisites Hook-Setup PowerShell-Block), T-022 (trainer-notes Pre-Flight Windows-first), T-019 (Cheatsheet „Hooks on Windows"-Box), T-061 (MCP-Config `python`), T-072 (Windows-Vorspann in allen 3 Exercise-Dateien + Exercise 1.1 bash+pwsh), T-073 (API-Key/export/echo-e PS-Formen, CI-`/tmp/` als Linux-Runner klargestellt), T-083 (C-Playground compile-frei geframed). Mentor-Agent um Windows-Referenz + FAQ ergänzt. Playground-Tests 18/18 grün.
+
+→ **Weiter mit Welle D** (siehe Abschnitt 4): `T-006` („Hello, Claude Code"-Erfolgserlebnis an den Anfang von Modul 1.1), `T-017` (Lernziele 1.1 vom Leichten zum Schweren), `T-028` (Modul 1.2 Kern+Vertiefung splitten) und der weitere `didactics-onboarding`-Cluster (T-046/047/048/049/050/051/052/065/066/067/068/029). **Welle F (Restrukturierung / 48 Lerneinheiten) bleibt gated** auf die User-Entscheidung „3 vs. 4 Sessions".
+
+---
+
+### Frühere Wellen (erledigt)
 
 Erledigt (3 Commits auf `main`, **nicht gepusht** — Push = User):
 - **`4dca782` — Welle A (Quick Wins):** T-001 (`--max-turns` aus Exercise 3.6, Flag existiert nicht in CLI v2.1.185), T-004 („Three Interfaces"→„Five Surfaces"), T-005 (python3/pip3 + Windows-Variante), T-009 (worktree.baseRef-Widerspruch vereinheitlicht → „versionsabhängig, explizit setzen"), T-011 („Opus 4.6" entfernt), AGENTS.md-Bug („Codex"→„Claude Code" + tote Ref `deep-research-gap-analysis.md` aus AGENTS.md **und** CLAUDE.md).
@@ -19,7 +27,7 @@ Erledigt (3 Commits auf `main`, **nicht gepusht** — Push = User):
 
 **Wichtig:** `resources/review-2026-06-21/` ist das **historische Review-Archiv** — NIE editieren (auch wenn grep dort alte Begriffe wie „Opus 4.7"/„--max-turns" findet). Das sind die Befunde selbst, kein Kursinhalt.
 
-→ **Weiter mit Welle C** (siehe Abschnitt 4 unten). Empfehlung: mit den `windows-compat`-TODOs T-007 (getestetes Hook-Asset bash+pwsh), T-021, T-022, T-035, T-036, T-072, T-073 + Cheatsheet-Notiz T-019. **Welle F (Restrukturierung / 48 Lerneinheiten) bleibt gated** auf die User-Entscheidung „3 vs. 4 Sessions" — nicht ohne Freigabe starten.
+(Der `windows-compat`-Cluster wurde in Welle C abgeschlossen — siehe oben.) **Welle F (Restrukturierung / 48 Lerneinheiten) bleibt gated** auf die User-Entscheidung „3 vs. 4 Sessions" — nicht ohne Freigabe starten.
 
 ---
 
