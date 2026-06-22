@@ -64,7 +64,7 @@ notebooklm list             # if CLI available
 | Internet bricht | Switch zu `--bare` / offline-Demos (Modul 1.5 Cost zeigt Pattern) |
 | `/cost` zeigt nichts | API-Console oeffnen (console.anthropic.com/usage) |
 | Auto-Memory zeigt drift | Live debuggen mit Modul 3.7-Patterns — wird zur unplanned Modul-3.7-Demo |
-| Teilnehmer-Maschine bricht beim Setup | Vorab `~/cc-workshop`-Bundle bereithalten, USB-Stick |
+| Teilnehmer-Maschine bricht beim Setup | **Pairing-Fallback:** Teilnehmer paart sich sofort mit dem Nachbarn (driver/navigator), waehrend du parallel debuggst — bei nur 3 Teilnehmern blockiert ein totes Setup sonst ein Drittel des Hands-on-Blocks. Zusaetzlich vorab `~/cc-workshop`-Bundle auf USB-Stick bereithalten (steht in der Materialliste, `session-plan.md`). |
 
 ### If Everything Is On Fire — 5-Minute Improvisation
 

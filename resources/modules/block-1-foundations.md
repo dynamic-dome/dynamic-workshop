@@ -1,6 +1,6 @@
 # Block 1: Foundations — Teaching Content
 
-**Audience:** Experienced programmers. Security analogies used throughout — especially relevant for the CySec engineer in the group.
+**Audience:** Experienced programmers who are **new to coding agents**. We assume strong programming background and explain agent concepts from zero. Security analogies used throughout — especially relevant for the CySec engineer in the group.
 **Duration:** ~90 minutes
 **Goal:** Participants understand what Claude Code is, how context and memory work, how to write effective prompts, and how to use git integration.
 
@@ -9,13 +9,45 @@
 ## Module 1.1: What is Claude Code?
 
 **Learning Objectives:** After this module, you can:
-- Distinguish between Claude Code's surfaces (CLI, Desktop App, IDE Extension, Web App, iOS App) and pick the right one for a given workflow.
-- Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies and which restrictions cloud sessions impose.
-- Choose the right model (Fable 5 / Opus 4.8 / Sonnet 4.6 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth.
+- **Explain what a coding agent is and how it differs from a chat assistant** — the core mental model everything else builds on.
+- Distinguish between Claude Code's five surfaces (CLI, Desktop App, IDE Extension, Web App, iOS App) and pick the right one for a given workflow.
+- *(Deeper dive — fine to skip on a first pass)* Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies and which restrictions cloud sessions impose.
+- *(Deeper dive — fine to skip on a first pass)* Choose the right model (Fable 5 / Opus 4.8 / Sonnet 4.6 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth.
+
+---
+
+### First: Hello, Claude Code (do this now — ~5 minutes)
+
+Before any theory, get one success under your belt. Three commands, a visible result:
+
+```bash
+# macOS / Linux / Git Bash
+mkdir -p ~/cc-workshop/hello && cd ~/cc-workshop/hello
+claude
+```
+
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\hello" | Out-Null
+Set-Location "$HOME\cc-workshop\hello"
+claude
+```
+
+Once Claude Code starts, type a plain-language request and hit enter:
+
+```
+Create a file hello.py that prints "Hello from Claude Code" and run it.
+```
+
+Watch what happens: Claude proposes the file, asks permission to write it, creates it, then runs it and shows you the output. **That loop — you describe, it acts, you see the result — is the whole game.** Everything in the rest of this module just explains the mechanics behind what you just did.
+
+> New to agents? The key thing you just saw: Claude didn't *tell you how* to write the file — it *wrote and ran it itself*. That's the difference between a chat assistant and a coding agent. We unpack it next.
+
+---
 
 ### Overview
 
-Claude Code is not a chat interface. It is a command-line tool that gives an AI agent full, active access to your development environment. Understanding the distinction between Claude's different interfaces is the first mental model to establish.
+Claude Code is not a chat interface. It is a command-line tool that gives an AI agent full, active access to your development environment. A chat assistant answers your question and leaves the doing to you; an **agent** takes actions on your behalf — it reads and writes files, runs commands, and checks the results — inside a permission system you control. Understanding that distinction, and the different surfaces Claude Code runs on, is the first mental model to establish.
 
 ---
 
@@ -128,6 +160,8 @@ Compare this to a circular saw: the manual tells you how the blade works, the sa
 
 Claude Code works through **tools** — each capability has a specific tool name. These names matter for permissions, hooks, and agent configuration:
 
+These are the tools you'll actually see in your first sessions — the everyday core:
+
 | Tool | What it does | Needs permission? |
 |------|-------------|-------------------|
 | `Read` | Read files | No |
@@ -135,21 +169,11 @@ Claude Code works through **tools** — each capability has a specific tool name
 | `Grep` | Search file contents | No |
 | `Edit` | Modify files (targeted replacement) | Yes |
 | `Write` | Create/overwrite files | Yes |
-| `NotebookEdit` | Edit Jupyter notebooks | Yes |
 | `Bash` | Execute shell commands | Yes |
-| `PowerShell` | Native Windows-shell (no need to wrap commands in `Bash` on Windows) | Yes |
-| `WebSearch` | Search the web | Yes |
-| `WebFetch` | Fetch URL content (isolated context) | Yes |
-| `LSP` | Code intelligence via Language Server | No (setup needed) |
-| `Skill` | Invoke a skill | Yes |
-| `Agent` | Spawn a subagent | No |
-| `Monitor` | Background-watch logs, PRs, or files and react in the current session | No |
-| `AskUserQuestion` | Multiple-choice question UI for interactive skills/agents | No |
-| `TaskCreate` / `TaskList` / `TaskUpdate` | Task management (replaces the legacy `TodoWrite` tool) | No |
 
 **Security analogy:** Each tool is like a specific card-access zone. `Read` is the lobby — everyone gets in. `Bash` is the server room — you need explicit clearance. When you configure permissions (allow/deny rules) or hook matchers, you use these exact tool names.
 
-**Note:** `Skill` and `Agent` are introduced here as tool names; they are explored in depth in Block 2.1 (Skills) and Block 3.1 (Agents).
+> **Full tool reference** — `WebSearch`, `WebFetch`, `LSP`, `Skill`, `Agent`, `Monitor`, `AskUserQuestion`, `TaskCreate`/`TaskList`/`TaskUpdate`, `NotebookEdit`, `PowerShell`, and the rest — lives in [`resources/cheatsheet.md`](../cheatsheet.md#built-in-tools). You don't need them on day one; `Skill` and `Agent` are explored in depth in Block 2.1 (Skills) and Block 3.1 (Agents).
 
 ---
 
@@ -310,6 +334,12 @@ You write the policy once. Claude follows it every session, without being remind
 
 ---
 
+> ### ⏩ Deepening — skippable on a first pass
+>
+> **Core so far:** the context window fills and auto-compresses, and `./CLAUDE.md` is the standing policy Claude reads every session. That's enough to work productively. If this is your first pass, **jump ahead to "Context Compression" below** (the `/context` and `/compact` commands) and come back to the memory mechanisms here later.
+>
+> The next sections cover the *advanced* memory machinery — Auto-Memory internals, path-scoped rules, `@path` imports, `CLAUDE.local.md`, managed enterprise policy, and multi-repo `--add-dir`. Useful, but not needed for your first sessions.
+
 ### The Memory System: Auto-Memory (Default On)
 
 Beyond CLAUDE.md, Claude Code has a structured memory system stored in `~/.claude/projects/<project>/memory/`. Since **v2.1.59 this Auto-Memory feature is default on** — you don't have to ask Claude to remember anything. Claude automatically captures notes during a session and writes them to disk: build commands that worked, debugging insights, code-style preferences it observed, project-specific gotchas. The next session starts with that knowledge already in context.
@@ -338,18 +368,12 @@ The old phrase "Remember that..." or "Note for future sessions that..." still wo
 
 To opt out of Auto-Memory for a single run, use `claude --bare` (skips Hooks, Skills, Plugins, MCP, and Auto-Memory — useful for short scripted invocations).
 
-> **Privacy Implications:** Auto-Memory persists in `~/.claude/projects/<hash>/memory/`. These
-> notes are loaded into the prompt context at session start — meaning they are sent to Anthropic
-> as part of each session.
+> **Privacy — the one thing to remember now:** Auto-Memory writes notes to disk and sends them
+> to Anthropic as part of each session's context. **Never let secrets (API keys, credentials,
+> customer data) end up in it.** Opt out of a single run with `claude --bare`.
 >
-> **What this means:**
-> - **Avoid sensitive content** in Auto-Memory: API keys, credentials, customer data
-> - **Periodically review** `~/.claude/projects/<hash>/memory/MEMORY.md` to verify what Claude
->   has written about your work
-> - **Opt-out:** Use `claude --bare` to skip all Auto-Memory loading
-> - **Wipe a project's memory:** `claude project purge <path>` (when available)
->
-> See Module 3.7 (Troubleshooting) for Auto-Memory drift-detection techniques.
+> The full privacy regime — periodic `MEMORY.md` review, `claude project purge`, and drift-detection
+> — is covered in Module 3.7 (Troubleshooting).
 
 ---
 
@@ -446,6 +470,10 @@ With the env var set, every `--add-dir` path also contributes its own `CLAUDE.md
 **Typical use cases:** refactoring a shared utility across two repos, porting a feature from one service to another, working on a frontend repo and the backend repo it consumes in one session.
 
 ---
+
+> ### ⏩ End of deepening — back to the core
+>
+> The rest of the module is core again: how compression behaves and the everyday context commands.
 
 ### Context Compression: Why It Happens and How to Handle It
 
@@ -749,6 +777,8 @@ Claude handles the git mechanics. You review the diff and approve.
 
 `/rewind` is the "undo" for multi-step changes. If Claude made 5 edits and the last 3 went wrong, `/rewind` lets you go back to a specific checkpoint without manually reverting each file.
 
+> **🔭 Outlook — first-pass readers can skim the next three.** `/autofix-pr`, `--fork-session`, and `--from-pr` are *cloud and multi-session* workflows. You don't need them to get value from git integration today — you'll actually drive them in Block 3 (Cloud Sessions & Multi-Agent). Read them now as a preview of where this goes, not as something to master in session 1.
+
 `/autofix-pr` is the modern PR-workflow tool: after you run `gh pr create`, invoke `/autofix-pr` and Claude spawns a web session that monitors the CI checks. If a test fails or the linter complains, Claude pushes a fix commit directly — you don't have to babysit the PR. Example workflow:
 
 ```text
@@ -926,6 +956,14 @@ If you have the commit skill installed, `/commit` triggers a structured commit w
 ---
 
 ## Module 1.5: Cost Engineering & Effort Management
+
+> **⏩ Optional / deepening module.** This is the 5th module of day one, on a topic that only
+> matters once you've actually spent something. It's marked optional — exactly like its hands-on
+> Exercise 1.5. **The 5-minute core:** `/cost` shows your current-session spend (glance at it
+> occasionally); the default model (Opus 4.8) is a fine starting point; for anything unattended,
+> cap it with `--max-budget-usd`. That's all you need on day one. Everything below — the pricing
+> table, the Plan/Implement/Review pipeline, prompt caching, effort multipliers — is depth for
+> when cost becomes a real lever (revisit after Session 1).
 
 **Learning Objectives:** After this module, you can:
 - Read `/cost`, `/usage`, and `/insights` and interpret which workflows drive your spend.

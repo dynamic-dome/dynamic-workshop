@@ -20,6 +20,43 @@ The exercises are designed to be short and hands-on. You are not building a prod
 
 ---
 
+## Exercise 1.0: Warm-Up — One Tiny Win (optional, ~3 minutes)
+
+**Goal:** Feel the describe → implement → run loop once on something trivial, before the first real task. If you already did the "Hello, Claude Code" block in Module 1.1, this is the same idea — do it yourself this time.
+
+### Steps
+
+1. Open Claude Code in an empty folder:
+
+   ```bash
+   # macOS / Linux / Git Bash
+   mkdir -p ~/cc-workshop/exercises/exercise-1.0 && cd ~/cc-workshop/exercises/exercise-1.0
+   claude
+   ```
+   ```powershell
+   # Windows PowerShell
+   New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\exercises\exercise-1.0" | Out-Null
+   Set-Location "$HOME\cc-workshop\exercises\exercise-1.0"
+   claude
+   ```
+
+2. Give it one trivial request:
+
+   ```
+   Create a file hello.txt containing the line "Hallo".
+   ```
+
+3. Approve the write when Claude asks.
+
+### Success check
+
+- [ ] `hello.txt` exists and contains `Hallo`.
+- [ ] You saw the permission prompt and approved it — that's the agent acting on your behalf, under your control.
+
+That's the whole loop. Now do something real in Exercise 1.1.
+
+---
+
 ## Exercise 1.1: Your First Claude Code Project
 
 **Goal:** Get comfortable with the core Claude Code loop — describe, implement, run, extend, explain. Build a small tool from scratch without writing any code yourself.

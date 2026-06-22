@@ -158,6 +158,24 @@ Read the module content from:
 
 If a file does not exist, proceed with built-in knowledge and note that the resource file was not found.
 
+### Preflight for plugin-dependent Block-3 modules
+
+Modules **3.2, 3.3, 3.4, and 3.5** assume the workshop-custom plugins are installed
+(e.g. `agentic-os`, `devil-advocate-swarms`, `multi-model-orchestrator`). A solo learner
+may not have them — and without them, the "YOUR TURN" action cannot be run.
+
+**Before the LIVE EXAMPLE / YOUR TURN steps for any of 3.2/3.3/3.4/3.5, check first:**
+
+> "This module uses custom plugins. Do you have the workshop-custom plugins installed?
+> Run `claude plugin list` to check. If they're **not** there, we'll switch to the
+> **Observation path** (I demonstrate, you watch) or the **Web-UI path** — see the
+> three options (A/B/C) in `resources/prerequisites.md`."
+
+If the learner confirms the plugins are missing, do **not** push them into a YOUR-TURN
+action they cannot perform. Switch to Observation mode (walk through a realistic transcript)
+and point them to the prerequisites fallback options. For Blocks 1 and 2 and the
+plugin-free Block-3 modules, no preflight is needed — proceed normally.
+
 ### Learn Output Format
 
 Work through the following structure for the requested module:

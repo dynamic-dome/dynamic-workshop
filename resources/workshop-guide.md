@@ -140,6 +140,35 @@ Eine gute Routine fuer einen Lernabend sieht so aus:
 
 Wenn du dabei festhaengst, ist das kein Zeichen, dass der Workshop schlecht strukturiert ist. Meistens fehlt dann entweder praktischer Claude-Code-Kontext oder die Uebung wurde ohne den vorigen Block begonnen.
 
+## Fortschritts-Checkliste (17 Module)
+
+Hake ab, was du durch hast. Jede Zeile nennt das konkrete "Du kannst jetzt X"-Ergebnis — das ist dein Erfolgssignal, wenn kein Moderator dir sagt "Block geschafft".
+
+**Block 1 — Foundations**
+- [ ] **1.1 What is Claude Code?** — Du kannst erklaeren, wie ein Coding Agent sich von einem Chat unterscheidet, und die fuenf Surfaces auseinanderhalten.
+- [ ] **1.2 Context & Memory** — Du kannst den Kontext mit `/context` und `/compact` steuern und weisst, wofuer `./CLAUDE.md` da ist.
+- [ ] **1.3 Effective Prompting** — Du kannst eine Aufgabe so framen, dass Claude sie zuverlaessig umsetzt, und Plan Mode einsetzen.
+- [ ] **1.4 Git Integration & Worktrees** — Du kannst Claudes Aenderungen reviewen (`/diff`, `/review`) und einen Worktree fuer parallele Arbeit aufsetzen.
+- [ ] **1.5 Cost Engineering** *(optional)* — Du kannst mit `/cost` deinen Spend lesen und mit `--max-budget-usd` deckeln.
+
+**Block 2 — Ecosystem**
+- [ ] **2.1 Skills & Commands** — Du kannst einen eigenen Skill schreiben und ueber `/<name>` aufrufen.
+- [ ] **2.2 Hooks** — Du kannst einen PreToolUse-Hook bauen, der eine gefaehrliche Aktion blockt (bash oder PowerShell).
+- [ ] **2.3 Plugins** — Du kannst ein Plugin installieren, seine Struktur lesen und Scopes unterscheiden.
+- [ ] **2.4 MCP** — Du kannst einen MCP-Server an Claude Code anbinden und die Transport-Typen unterscheiden.
+- [ ] **2.5 RAG & NotebookLM** — Du kannst eine externe Wissensquelle als Kontext nutzen.
+
+**Block 3 — Advanced & Multi-Agent**
+- [ ] **3.1 Agents & Multi-Agent Orchestration** — Du kannst einen Subagenten/ein Team fuer eine mehrstufige Aufgabe einsetzen.
+- [ ] **3.2 Nested Orchestration** — Du verstehst das Claude→Codex→Claude-Muster und wann es sich lohnt.
+- [ ] **3.3 Security & Adversarial Testing** — Du kannst (a) einen Adversarial-Swarm gegen Code laufen lassen und (b) Permission Modes / Sandboxing / Compliance einordnen. *(in zwei Teilen: 3.3a Adversarial Testing, 3.3b Hardening & Compliance)*
+- [ ] **3.4 Scheduled Tasks, Loops & Automation** — Du kannst eine wiederkehrende/automatisierte Claude-Code-Aufgabe einrichten.
+- [ ] **3.5 Telegram Bridge, Inception & Worktree Isolation** *(Capstone)* — Du kannst die Bausteine zu einem autonomen Workflow zusammensetzen.
+- [ ] **3.6 CI/CD & Headless Mode** — Du kannst `claude -p` headless in einer CI-Pipeline aufrufen.
+- [ ] **3.7 Troubleshooting & Debugging** — Du kannst mit `/debug`, `/doctor` und `--verbose` Schicht fuer Schicht eingrenzen, was klemmt.
+
+**Minimalpfad** (wenn die Zeit knapp ist): alle Block-1-Module, aus Block 2 mindestens 2.1/2.2/2.4, aus Block 3 mindestens 3.1/3.3.
+
 ## Fazit
 
 Aus Sicht eines Entwicklers ohne Agent-Erfahrung ist der Workshop stark inhaltlich, aber nicht vollstaendig selbsterklaerend, wenn man nur die Dateien anliest. Genau dafuer ist dieses Guide-Dokument da: Es uebersetzt die vorhandenen Bausteine in eine klare Lernreihenfolge und macht sichtbar, was Kerninhalt, was Werkzeug und was Zusatzmaterial ist.

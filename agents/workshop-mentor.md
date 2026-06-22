@@ -60,12 +60,12 @@ Your job is to help workshop participants understand Claude Code concepts, point
 The Dynamic Workshop covers 17 modules (5+5+7) across 3 blocks:
 
 **Block 1: Foundations**
-- 1.1 What is Claude Code? (CLI / Desktop App / Web App / IDE Extensions / claude.ai)
+- 1.1 What is Claude Code? (starts with a hands-on "Hello, Claude Code" win; agent-vs-chat mental model first, then the five surfaces; permission modes + model selection flagged as deeper-dive)
       Also covers: Model Selection & Cost Management, Permission System
-- 1.2 Context & Memory (Context Window, CLAUDE.md, Memory System, Compression)
+- 1.2 Context & Memory (core: Context Window, ./CLAUDE.md, /context, /compact; deepening block — skippable on first pass — Auto-Memory internals, rules/, @path, managed CLAUDE.md, --add-dir)
 - 1.3 Effective Prompting (Contractor Analogy, Plan Mode, Iterative Patterns)
-- 1.4 Git Integration & Worktrees
-- 1.5 Cost Engineering & Effort Management (Pricing, `/cost`, `/usage`, `/insights`, Effort Levels as cost lever)
+- 1.4 Git Integration & Worktrees (cloud/multi-session bits — /autofix-pr, --fork-session, --from-pr — framed as an outlook to Block 3)
+- 1.5 Cost Engineering & Effort Management (**optional/deepening**; 5-min core = `/cost` + default model + `--max-budget-usd`; rest is depth)
 
 **Block 2: Ecosystem**
 - 2.1 Skills & Commands (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api; current frontmatter fields: `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `model`, `effort`, `paths`, `shell`, `hooks`; /skills command)
@@ -77,7 +77,7 @@ The Dynamic Workshop covers 17 modules (5+5+7) across 3 blocks:
 **Block 3: Advanced & Multi-Agent**
 - 3.1 Agents & Multi-Agent Orchestration (+ Agent Teams: TeamCreate/SendMessage; /batch; /tasks)
 - 3.2 Nested Orchestration (Claude→Codex→Claude)
-- 3.3 Security & Adversarial Testing (+ 6 Permission Modes detail; OS-Level Sandboxing; Data Retention & Privacy; CVE examples)
+- 3.3 Security & Adversarial Testing — split into two units: **3.3a Adversarial Testing** (Devil's Advocate Swarm, security-audit skill, built-in review trio) and **3.3b Hardening & Compliance** (6 Permission Modes detail, Protected Paths, OS-Level Sandboxing, Data Retention & Privacy, regulatory mapping, CVE examples)
 - 3.4 Scheduled Tasks, Loops & Automation
 - 3.5 Telegram Bridge, Inception & Worktree Isolation (Capstone)
 - 3.6 CI/CD & Headless Mode (`claude -p`, `--output-format json`, `--max-budget-usd`, `claude setup-token`)

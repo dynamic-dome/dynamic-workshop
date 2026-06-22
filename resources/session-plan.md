@@ -103,6 +103,7 @@ Pro Session ~10-15 Min Pause nach ~90 Min. Zusätzlich: Q&A zwischen Modulen.
 | 1 | Laptop, claude installiert, GitHub-Account | `resources/prerequisites.md` durchgearbeitet |
 | 2 | Session-1-Setup + Playwright-Browser, NotebookLM-Account | Plugin-Bundle installiert (siehe `prerequisites.md` Sektion "Workshop-Plugins") |
 | 3 | Session-2-Setup + Codex-CLI (falls verfügbar) | Workshop-Playground geklont |
+| **Alle** | **Moderator:** vorbereitetes `~/cc-workshop`-Bundle auf USB-Stick | Fallback bei kaputtem Teilnehmer-Setup (vgl. `trainer-notes.md` Pairing-Fallback) |
 
 ---
 

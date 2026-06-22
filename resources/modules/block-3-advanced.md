@@ -441,12 +441,16 @@ All 4 Codex agents run simultaneously.  Claude reviews the assembled result.
 
 ---
 
-## Module 3.3: Security & Adversarial Testing
+## Module 3.3a: Adversarial Testing
 
-**Learning Objectives:** After this module, you can:
+> Module 3.3 is split into two learning units. **3.3a (this one)** is offensive: finding issues
+> with adversarial swarms and review tooling. **3.3b (next)** is defensive: hardening and
+> compliance. Do 3.3a first.
+
+**Learning Objectives:** After this unit, you can:
 - Walk through the 4 stages of a Devil's Advocate pipeline (Scanners → Debate → Consensus → Fixers) and explain why overlap and adversarial debate reduce (but do not eliminate) false positives.
+- Use the security-audit skill against real code.
 - Compare the built-in review trio (`/security-review`, `/review`, `/ultrareview`) against custom adversarial pipelines and pick the right tool for a given audit scenario.
-- Apply the right combination of permission modes, protected paths, sandbox-level network hardening (`sandbox.network.deniedDomains`, `autoMode.hard_deny`), and skill-shell hardening (`disableSkillShellExecution`) for autonomous workflows.
 
 > **Note to moderator:** Frame this as automated penetration testing with a trial system.
 > Because that is literally what it is.  The CySec person will feel very at home.
@@ -563,6 +567,40 @@ Runs in minutes.  Integrates into CI/CD pipelines.
 
 ---
 
+### Built-in Code-Review Trio
+
+Three official slash-commands cover the common review surface — before reaching for the custom Devil's Advocate Swarms:
+
+| Command | Where it runs | What it does |
+|---|---|---|
+| **`/security-review`** | Local | Scans the current branch diff for vulnerabilities (injection, auth gaps, supply chain). Same scope as the security-audit skill, but built in. |
+| **`/review [PR]`** | Local | Pulls an open PR (or current branch) and runs a balanced quality review (correctness, style, tests). |
+| **`/ultrareview [PR]`** | Cloud | Spawns a **cloud-based multi-agent review pipeline** (Anthropic-hosted) — multiple reviewers in parallel, consensus aggregation. Anthropic's official answer to the Devil's-Advocate-Swarm pattern. |
+
+**Built-in vs. Custom — Quick comparison:**
+
+| Aspect | Built-in (`/security-review`, `/review`, `/ultrareview`) | Custom (Devil's Advocate Swarms) |
+|---|---|---|
+| Setup | Zero — ships with Claude Code | :wrench: requires custom plugin install |
+| Granularity | Anthropic-tuned defaults | Per-stage agent configuration, model choice, prompts |
+| Cost transparency | Wrapped in `/cost` | Visible per-agent in plugin logs |
+| Audit trail | Built-in transcript | Custom log files in `.agent-memory/` |
+| Best for | "Quick second opinion, low effort" | Tailored audits with domain-specific scanners |
+
+**Recommendation for the workshop audience:** Start with the built-ins (`/security-review` on every branch before merge, `/ultrareview` on high-stakes PRs). Reach for Devil's Advocate Swarms when you need a *specific* combination of scanners, a particular debate model, or domain-tuned prompts.
+
+---
+
+## Module 3.3b: Hardening & Compliance
+
+> The defensive half of Module 3.3. Where 3.3a *found* problems, 3.3b *locks down* the agent:
+> advanced permission modes, protected paths, sandboxing, data retention, and the regulatory
+> picture that matters most for regulated PhySec firms.
+
+**Learning Objectives:** After this unit, you can:
+- Apply the right combination of permission modes, protected paths, permission-rule grammar, sandbox-level network hardening (`sandbox.network.deniedDomains`, `autoMode.hard_deny`), and skill-shell hardening (`disableSkillShellExecution`) for autonomous workflows.
+- Read the data-retention tiers and map the workshop's controls onto the compliance regimes (EN 50131, GDPR, HIPAA, PCI, DORA, NIS2) relevant to your industry.
+
 ### Permission Modes — Going Deeper
 
 > **See Module 1.1 for the 6 modes overview** — the full table (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) lives there. This module skips the recap and dives only into the **advanced modes** (`auto`, `dontAsk`, `bypassPermissions`) and their CI/CD patterns.
@@ -630,30 +668,6 @@ Even in `bypassPermissions` Claude Code maintains an **unconditional protection 
 **Why this exists:** Even an `auto`-mode classifier that decides "low-risk Bash command" cannot accidentally trigger a `git config` rewrite, a `.bashrc` poison-pill, or a self-modification of `.mcp.json`. The protection is hard-coded in the host process, not enforced via the permission rules.
 
 **Security analogy:** This is the **vault room the building owner cannot enter on their own keycard**. Even the master key has carve-outs for the data center, the safe deposit boxes, and the IT closet. Protected Paths are Claude Code's hardcoded carve-outs from the master-key.
-
----
-
-### Built-in Code-Review Trio
-
-Three official slash-commands cover the common review surface — before reaching for the custom Devil's Advocate Swarms:
-
-| Command | Where it runs | What it does |
-|---|---|---|
-| **`/security-review`** | Local | Scans the current branch diff for vulnerabilities (injection, auth gaps, supply chain). Same scope as the security-audit skill, but built in. |
-| **`/review [PR]`** | Local | Pulls an open PR (or current branch) and runs a balanced quality review (correctness, style, tests). |
-| **`/ultrareview [PR]`** | Cloud | Spawns a **cloud-based multi-agent review pipeline** (Anthropic-hosted) — multiple reviewers in parallel, consensus aggregation. Anthropic's official answer to the Devil's-Advocate-Swarm pattern. |
-
-**Built-in vs. Custom — Quick comparison:**
-
-| Aspect | Built-in (`/security-review`, `/review`, `/ultrareview`) | Custom (Devil's Advocate Swarms) |
-|---|---|---|
-| Setup | Zero — ships with Claude Code | :wrench: requires custom plugin install |
-| Granularity | Anthropic-tuned defaults | Per-stage agent configuration, model choice, prompts |
-| Cost transparency | Wrapped in `/cost` | Visible per-agent in plugin logs |
-| Audit trail | Built-in transcript | Custom log files in `.agent-memory/` |
-| Best for | "Quick second opinion, low effort" | Tailored audits with domain-specific scanners |
-
-**Recommendation for the workshop audience:** Start with the built-ins (`/security-review` on every branch before merge, `/ultrareview` on high-stakes PRs). Reach for Devil's Advocate Swarms when you need a *specific* combination of scanners, a particular debate model, or domain-tuned prompts.
 
 ---
 
