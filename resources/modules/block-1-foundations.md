@@ -251,7 +251,7 @@ Claude Code has a built-in permission system that controls which tools it can us
 | Mode | Behavior | Analogy |
 |------|----------|---------|
 | **default** | Only reads allowed, everything else asks for approval | Visitor badge — lobby access only |
-| **acceptEdits** | Reads + file edits allowed, bash still asks | Maintenance badge — utility rooms too |
+| **acceptEdits** | Reads + file edits allowed; bash still asks — **but** common filesystem Bash in the workdir (`mkdir`/`touch`/`rm`/`mv`) is also auto-approved (⚠️ incl. destructive `rm`/`mv`; detail in Modul 3.3) | Maintenance badge — utility rooms too |
 | **plan** | Shows full plan upfront, approves all steps at once | Security briefing — approve the mission |
 | **auto** | ML classifier decides risk level (Max-Plan with Opus 4.8, plus Team/Enterprise) | Smart badge — system decides per door |
 | **dontAsk** | Never prompts — relies entirely on allow/deny rules | Automated system — rules only, no guard |

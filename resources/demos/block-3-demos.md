@@ -661,6 +661,12 @@ The body of the skill is functional ("Reply with a friendly greeting that uses t
 
 ### Steps (~7 minutes)
 
+> ⚠️ **Trace-Ausgaben sind sinngemäß, nicht wörtlich.** Die unten zitierten `/debug`-Zeilen
+> illustrieren *welche Information* erscheint — der **exakte Wortlaut variiert je Claude-Code-Version**.
+> Verifiziere vor der Session auf der Moderations-Maschine, was `/debug` bzw. `claude --verbose`
+> real ausgibt (vgl. Recovery Notes zur `/debug`-Verfügbarkeit), und lies die echten Zeilen vor —
+> nicht diese als garantierten Output versprechen.
+
 **Step 1: Try to use the skill normally**
 
 User prompt:
@@ -693,7 +699,7 @@ At first glance the frontmatter looks plausible. **Resist the urge to read it ca
 
 Then repeat the prompt: *"Greet the user."*
 
-Read the trace aloud. Highlight the line:
+Read the trace aloud. Look for a line **to the effect of** (exact wording varies):
 
 > *"Skill `broken-greeter` matched paths-filter: NO (filter: `never-match/**`, current files: ...)"*
 
@@ -701,7 +707,7 @@ The first root cause is now visible. Audience reaction: "Oh — the paths filter
 
 **Step 5: Fix #1 — remove the paths filter**
 
-Edit the frontmatter, delete the `paths:` line. Re-trigger the prompt. **Skill still does not fire.** Re-read the trace:
+Edit the frontmatter, delete the `paths:` line. Re-trigger the prompt. **Skill still does not fire.** Re-read the trace — look for something **like** (wording varies):
 
 > *"Skill `broken-greeter` registered but auto-invocation disabled (`disable-model-invocation: true`). Available only via explicit `/broken-greeter`."*
 
@@ -719,7 +725,7 @@ Edit the frontmatter, set `disable-model-invocation: false`. Re-trigger:
 
 > "Greet the user."
 
-**Skill still does not fire** — but the trace now says something different:
+**Skill still does not fire** — but the trace now says something different (sinngemäß):
 
 > *"Skill `broken-greeter` description too generic for prompt — no candidate match."*
 

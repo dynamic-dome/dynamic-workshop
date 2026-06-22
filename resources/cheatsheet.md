@@ -531,8 +531,8 @@ disable-model-invocation: true  # Only manual start (critical actions)
 user-invocable: true        # Show in command menu (false = background knowledge)
 allowed-tools: Read Grep Bash   # Intent scoping (not hard security!)
 context: fork               # Run in isolated subagent context
-agent: haiku                # Use specific model for subagent
-model: haiku|sonnet|opus    # Preferred model for this skill
+agent: Explore              # Subagent TYPE for context:fork (Explore/Plan/general-purpose/custom) — NOT a model
+model: haiku|sonnet|opus    # Model for this skill (incl. the forked context)
 effort: low|high|xhigh|max  # Effort level
 paths: ["src/**/*.ts"]      # Glob — skill only available when files match
 shell: powershell|bash      # Shell for command execution

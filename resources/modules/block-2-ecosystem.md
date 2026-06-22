@@ -125,6 +125,8 @@ hooks:
 | `paths` | Glob patterns. Skill is path-scoped — only auto-activates when matching files are in context |
 | `shell` | `powershell` / `bash` — override the shell used for skill-executed commands. Critical on Windows |
 | `hooks` | Component-scoped hooks. Only run while this skill is active (see Module 2.2 for hook details) |
+| `context` | `fork` runs the skill in an isolated subagent context (own system prompt + tools) |
+| `agent` | With `context: fork`: which subagent **type** runs it (`Explore` / `Plan` / `general-purpose` / a custom agent name) — a type, not a model |
 
 ### Argument Substitution
 
@@ -379,8 +381,9 @@ name: deploy
 description: Deploy the current branch to staging
 disable-model-invocation: true    # ONLY manual /deploy — never auto-triggered
 allowed-tools: Read Grep Bash     # Intent scoping (not hard security!)
-context: fork                     # Run in isolated subagent context
-agent: sonnet                     # Use Sonnet model for the subagent
+context: fork                     # Run in an isolated subagent context (official skill field)
+agent: Explore                    # WHICH subagent TYPE runs the fork (Explore/Plan/general-purpose/custom) — not a model
+model: sonnet                     # Model for this skill, incl. the forked context
 user-invocable: true              # Show in /skills list (false = background knowledge)
 ---
 ```
@@ -389,8 +392,9 @@ user-invocable: true              # Show in /skills list (false = background kno
 |-------|--------|-------------|
 | `disable-model-invocation` | Only manual trigger, never auto-detected | Critical actions: deploy, commit, delete |
 | `allowed-tools` | Suggests which tools this skill needs | Scoping intent (not a hard security boundary!) |
-| `context: fork` | Runs in a separate subagent context | Isolate the skill's context from your main session |
-| `agent: <model>` | Specifies which model to use for the forked context | Cost control: use haiku for simple skills |
+| `context: fork` | Runs the skill in a separate subagent context | Isolate the skill's context from your main session |
+| `agent: <type>` | With `context: fork`: which subagent **type** runs it (`Explore`/`Plan`/`general-purpose`/custom) — a type, **not** a model | Pick the runner for a forked skill |
+| `model: <model>` | Which model handles the skill (incl. its forked context) | Cost control: `haiku` for simple skills |
 | `user-invocable: false` | Hides from command list, only auto-triggered | Background knowledge skills that Claude loads silently |
 
 ### Skill Discovery: `/skills`
