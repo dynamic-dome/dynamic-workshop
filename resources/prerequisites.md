@@ -94,14 +94,14 @@ git --version   # Should show 2.30+
 
 ---
 
-## Step 5: Install Python 3 (for Block 2+)
+## Step 5: Install Python 3 (for Block 1+)
 
-Required for the workshop-playground demo repo (pytest tests, vulnerability demos).
+Required from the very first Block 1 exercise onward (the `event_log_parser.py` task) and for the workshop-playground demo repo (pytest tests, vulnerability demos). Install it before Session 1, not just before Block 2.
 
-**Check if installed:**
+**Check if installed** (on Windows the commands are `python`/`pip`, on macOS/Linux `python3`/`pip3`):
 ```bash
-python3 --version   # Should show 3.9+
-pip3 --version
+python3 --version   # Windows: python --version    (should show 3.9+)
+pip3 --version      # Windows: pip --version
 ```
 
 **Install if needed:**
@@ -143,10 +143,10 @@ cd ~/cc-workshop/dynamic-workshop/workshop-playground
 
 # Variant B: If your workshop moderator provided a different path/URL, use that one instead.
 
-# Install Python dependencies
+# Install Python dependencies   (Windows: use pip instead of pip3)
 pip3 install -r requirements.txt
 
-# Verify tests run
+# Verify tests run   (Windows: use python instead of python3)
 python3 -m pytest -v
 ```
 
@@ -160,7 +160,7 @@ Run through this checklist to make sure everything works:
 - [ ] `claude --version` shows current version
 - [ ] `claude --print "Hello"` returns a response (authentication works)
 - [ ] `git --version` shows 2.30+
-- [ ] `python3 --version` shows 3.9+
+- [ ] `python3 --version` (Windows: `python --version`) shows 3.9+
 - [ ] Workshop playground repo cloned and tests pass
 - [ ] Terminal supports Unicode and ANSI colors (try `echo -e "\033[32mGreen\033[0m"`)
 

@@ -32,7 +32,6 @@ Einen praxisnahen, demo-lastigen Workshop in 3 aufeinander aufbauenden Sessions 
 - `resources/prerequisites.md` — Setup-Anleitung
 - `resources/session-plan.md` — Zeitplan alle 3 Sessions
 - `workshop-playground/` — Demo-Repo mit 3 geplanteten Vulnerabilities
-- `resources/deep-research-gap-analysis.md` — Abgleich Deep Research vs Workshop
 - `agents/workshop-mentor.md` — Mentor-Agent fuer guide/learn Modi
 
 ## Deep Research Integration (2026-04-05)

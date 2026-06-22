@@ -325,7 +325,7 @@ Git-Feature: zusaetzlicher Working-Tree auf demselben Repository, andere Branch.
 - **Modul:** 1.4 — Git Integration & Worktrees
 
 ### Worktree Base Ref
-Settings-Wert in `worktree.baseRef`: `fresh` (`--worktree` branched von `origin/<default>`) oder `head` (vom lokalen HEAD). Default seit v2.1.133: `fresh`. Wichtig fuer Multi-Agent-Setups, wo der Base-Branch sauber sein soll.
+Settings-Wert in `worktree.baseRef`: `fresh` (`--worktree` branched von `origin/<default>`) oder `head` (vom lokalen HEAD). Der Default hat sich zwischen CLI-Versionen geaendert (fruehe Versionen `head`, neuere `fresh`) — explizit setzen statt auf den Default verlassen. Wichtig fuer Multi-Agent-Setups, wo der Base-Branch sauber sein soll.
 - **Verwandt:** Worktree, Settings
 - **Modul:** 1.4, 3.5
 

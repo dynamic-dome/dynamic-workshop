@@ -19,7 +19,7 @@ Claude Code is not a chat interface. It is a command-line tool that gives an AI 
 
 ---
 
-### The Three Interfaces
+### The Five Surfaces
 
 **1. claude.ai (Web Chat)**
 
@@ -858,11 +858,9 @@ This starts a fresh Claude session inside a worktree at `<repo>/.claude/worktree
 
 ### `worktree.baseRef` — From Where Does the Worktree Branch?
 
-By default, `--worktree` branches from your **local HEAD**. If you've been working on something local and unpushed, that work is carried into the worktree (which may or may not be what you want).
+Where `--worktree` branches from is controlled by `worktree.baseRef` — and the **default changed between CLI versions** (early versions branched from local `head`, newer ones default to `fresh`). Don't rely on the default; set it explicitly in `settings.json`:
 
-In `settings.json` you can set `worktree.baseRef` to control this:
-
-- `worktree.baseRef: "head"` (default) — branch from local HEAD, including unpushed work
+- `worktree.baseRef: "head"` — branch from local HEAD, including unpushed work
 - `worktree.baseRef: "fresh"` — branch from `origin/<default-branch>`, ignoring local state
 
 The `fresh` setting is especially important for **multi-agent worktree setups** in Block 3 — each agent gets a clean starting point that matches what is on the remote, so two parallel agents are not accidentally building on top of each other's uncommitted work.

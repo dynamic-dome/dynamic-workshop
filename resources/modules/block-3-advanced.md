@@ -572,7 +572,7 @@ Runs in minutes.  Integrates into CI/CD pipelines.
 `auto` is the ML-classifier-driven mode where Claude itself decides which actions to auto-approve based on per-action risk:
 
 - **Max plan (consumer)** — available **with Opus 4.7 only** (other models locked).
-- **Team / Enterprise** — available with Sonnet 4.6, Opus 4.6, and Opus 4.7.
+- **Team / Enterprise** — available with Sonnet 4.6 and Opus 4.7.
 - **Transport** — Anthropic API only (not yet on Bedrock or Vertex).
 - **Version** — requires Claude Code v2.1.83 or later.
 
@@ -1084,10 +1084,10 @@ The `worktree.baseRef` setting controls **which ref a new `claude --worktree` br
 
 | Value | Behavior | When to use |
 |---|---|---|
-| **`fresh`** (default) | Branches from `origin/<default>` — always the latest pushed mainline | Multi-agent fan-out where all agents must start from identical, fresh state |
+| **`fresh`** | Branches from `origin/<default>` — always the latest pushed mainline | Multi-agent fan-out where all agents must start from identical, fresh state |
 | **`head`** | Branches from your local `HEAD` — your uncommitted intent goes with it | "I'm mid-refactor, spawn a worktree to try an alternative without losing my current state" |
 
-For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in `settings.json` (project scope) or via `--worktree-base-ref` per invocation.
+The default for `worktree.baseRef` changed across CLI versions, so set it explicitly rather than relying on it. For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in `settings.json` (project scope) or via `--worktree-base-ref` per invocation.
 
 #### `--tmux` — Multi-Agent Visibility in One Screen
 

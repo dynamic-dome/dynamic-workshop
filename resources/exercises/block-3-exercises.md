@@ -348,7 +348,6 @@ if [ -z "$STAGED" ]; then exit 0; fi
 RESULT=$(echo "$STAGED" | claude --bare -p \
   "Check this staged diff for obvious bugs, security issues, or leftover debug statements (print, console.log, debugger). Reply with 'OK' if clean, otherwise list the issues one per line." \
   --max-budget-usd 0.10 \
-  --max-turns 2 \
   --output-format text)
 
 if [[ "$RESULT" != "OK"* ]]; then
@@ -361,8 +360,7 @@ exit 0
 
 Notice every flag from Module 3.6 in there:
 - `--bare` so the hook starts fast and stays deterministic.
-- `--max-budget-usd 0.10` as a hard cap — the worst-case cost of a commit attempt is one dime.
-- `--max-turns 2` to prevent runaway loops.
+- `--max-budget-usd 0.10` as a hard cap — the worst-case cost of a commit attempt is one dime, and it doubles as the runaway-loop guard (the current CLI has no separate turn-limit flag).
 - `--output-format text` because we only need a yes/no answer.
 
 **Step 3: Make it executable**
@@ -405,7 +403,7 @@ After 5+ commits with the hook active, answer these in your notes:
 - [ ] The hook is executable and lives at `.git/hooks/pre-commit`.
 - [ ] A clean commit passes silently.
 - [ ] A commit with an obvious issue is blocked with a readable message.
-- [ ] Every Module 3.6 flag (`--bare`, `--max-budget-usd`, `--max-turns`, `--output-format`) appears in your hook.
+- [ ] Every Module 3.6 flag (`--bare`, `--max-budget-usd`, `--output-format`) appears in your hook.
 - [ ] You have an opinion on whether to ship this in a real project.
 
 ### Stretch (if time allows)

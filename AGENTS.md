@@ -2,9 +2,9 @@
 
 ## Mission
 
-Einen praxisnahen, demo-lastigen Workshop in 3 aufeinander aufbauenden Sessions entwickeln, der erfahrenen Entwicklern aus dem Bereich Physical Security einen vollumfaenglichen Eindruck von Codex vermittelt — von den Grundlagen bis hin zu autonomen Multi-Agent-Systemen.
+Einen praxisnahen, demo-lastigen Workshop in 3 aufeinander aufbauenden Sessions entwickeln, der erfahrenen Entwicklern aus dem Bereich Physical Security einen vollumfaenglichen Eindruck von Claude Code vermittelt — von den Grundlagen bis hin zu autonomen Multi-Agent-Systemen.
 
-**Ziel:** Die Teilnehmer sollen nach dem Workshop Codex eigenstaendig und produktiv in ihrem Arbeitsalltag einsetzen koennen.
+**Ziel:** Die Teilnehmer sollen nach dem Workshop Claude Code eigenstaendig und produktiv in ihrem Arbeitsalltag einsetzen koennen.
 
 ## Workshop-Format
 
@@ -32,7 +32,6 @@ Einen praxisnahen, demo-lastigen Workshop in 3 aufeinander aufbauenden Sessions 
 - `resources/prerequisites.md` — Setup-Anleitung
 - `resources/session-plan.md` — Zeitplan alle 3 Sessions
 - `workshop-playground/` — Demo-Repo mit 3 geplanteten Vulnerabilities
-- `resources/deep-research-gap-analysis.md` — Abgleich Deep Research vs Workshop
 - `agents/workshop-mentor.md` — Mentor-Agent fuer guide/learn Modi
 
 ## Deep Research Integration (2026-04-05)

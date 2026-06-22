@@ -41,14 +41,14 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 1. Website-Ueberblick lesen: https://dynamic-dome.com/workshop
 2. `resources/session-plan.md` pruefen: Ablauf, Timing, Session-Logik
 3. `resources/modules/` und `resources/demos/` gegenlesen: fachliche Tiefe und Demo-Faehigkeit
-4. Playground testen: `cd workshop-playground && pip3 install -r requirements.txt && python3 -m pytest -v`
+4. Playground testen: `cd workshop-playground && pip3 install -r requirements.txt && python3 -m pytest -v` (Windows: `pip`/`python` statt `pip3`/`python3`)
 5. `agents/workshop-mentor.md` pruefen: guide/learn-Modus und didaktische Rueckfragen
 
 ### Als Moderator
 
 1. `resources/prerequisites.md` **vorab an Teilnehmer schicken** (min. 1 Woche vorher)
-2. Eigene Installation pruefen: `claude --version`, `python3 --version`, `git --version`
-3. Playground testen: `cd workshop-playground && pip3 install -r requirements.txt && python3 -m pytest -v`
+2. Eigene Installation pruefen: `claude --version`, `python3 --version` (Windows: `python --version`), `git --version`
+3. Playground testen: `cd workshop-playground && pip3 install -r requirements.txt && python3 -m pytest -v` (Windows: `pip`/`python` statt `pip3`/`python3`)
 4. Optional — Workshop-Plugin installieren und `/workshop guide 1.1` testen
 5. Praesentationsfolien: `claude-code-workshop.pptx` als visuellen Einstieg nutzen
 6. Pro Session: Folien → Demos vorführen → Teilnehmer ueben lassen → Q&A
@@ -167,8 +167,8 @@ Das Verzeichnis `workshop-playground/` enthaelt ein kleines Python-Projekt mit *
 
 ```bash
 cd workshop-playground
-pip3 install -r requirements.txt
-python3 -m pytest -v
+pip3 install -r requirements.txt   # Windows: pip install -r requirements.txt
+python3 -m pytest -v               # Windows: python -m pytest -v
 ```
 
 ---

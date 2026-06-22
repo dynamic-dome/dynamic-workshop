@@ -361,7 +361,7 @@ Tool names are the strings used for permission rules, hook matchers, and subagen
 
 Set via: `claude --permission-mode plan` or `/permissions` in session. Cycle Normal -> acceptEdits -> plan via Shift+Tab.
 
-> **auto mode requirements:** **Max-Plan with Opus 4.7** OR Team/Enterprise (Sonnet 4.6, Opus 4.6, Opus 4.7). Anthropic API only (not Bedrock/Vertex). Claude Code v2.1.83+. Admins can lock/loosen via managed settings.
+> **auto mode requirements:** **Max-Plan with Opus 4.7** OR Team/Enterprise (Sonnet 4.6, Opus 4.7). Anthropic API only (not Bedrock/Vertex). Claude Code v2.1.83+. Admins can lock/loosen via managed settings.
 
 ### Permission Rules
 
@@ -425,7 +425,7 @@ Configure in `settings.json`:
 
 | Setting | Effect |
 |---------|--------|
-| `worktree.baseRef: "fresh"\|"head"` | `--worktree` branches from `origin/<default>` (fresh) or local HEAD (v2.1.133+) |
+| `worktree.baseRef: "fresh"\|"head"` | `--worktree` branches from `origin/<default>` (fresh) or local HEAD; default changed across CLI versions — set it explicitly (v2.1.133+) |
 | `autoMode.hard_deny: [<pattern>]` | Unconditional auto-mode block list (overrides user intent, v2.1.136+) |
 | `sandbox.network.deniedDomains: [...]` | Block specific domains despite allowed wildcards (v2.1.113+) |
 | `disableSkillShellExecution: true` | Disables `` !`<command>` `` in skills (useful for managed/enterprise) |
