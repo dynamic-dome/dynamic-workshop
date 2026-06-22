@@ -8,7 +8,7 @@
 
 ## Lerneinheiten-Landkarte (Welle F — Session 1)
 
-> Dieser Block speist **Session 1** des 4-Session-/48-LE-Plans (`session-plan.md`). Jede LE ist hier
+> Dieser Block speist **Session 1** des 4-Session-/65-LE-Plans (`session-plan.md`). Jede LE ist hier
 > auf ihre Quell-Abschnitte und ihr Level abgebildet — adressierbar für den `workshop-mentor`-Agent
 > und das `/workshop`-Command. Reihenfolge = Lehr-Reihenfolge laut session-plan, nicht Datei-Reihenfolge.
 

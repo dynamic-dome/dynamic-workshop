@@ -35,7 +35,7 @@
 
 ## Lerneinheiten-Landkarte (Welle F — Session 3 + Session 4)
 
-> Block 3 speist **zwei** Termine des 4-Session-/48-LE-Plans (`session-plan.md`): **Session 3** (Advanced Kern —
+> Block 3 speist **zwei** Termine des 4-Session-/65-LE-Plans (`session-plan.md`): **Session 3** (Advanced Kern —
 > Agents, Security, Automation) und **Session 4** (Advanced Bonus — Multi-Model, CI/CD, Capstone, Troubleshooting).
 > Jede LE ist auf ihre Quell-Abschnitte und ihr Level abgebildet — adressierbar für `workshop-mentor` & `/workshop`.
 

@@ -8,7 +8,7 @@
 
 ## Lerneinheiten-Landkarte (Welle F — Session 2)
 
-> Dieser Block speist **Session 2** des 4-Session-/48-LE-Plans (`session-plan.md`). Jede LE ist auf ihre
+> Dieser Block speist **Session 2** des 4-Session-/65-LE-Plans (`session-plan.md`). Jede LE ist auf ihre
 > Quell-Abschnitte und ihr Level abgebildet — adressierbar für den `workshop-mentor`-Agent und `/workshop`.
 
 | LE | Level | Titel | Quell-Abschnitt(e) in diesem Modul |

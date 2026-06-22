@@ -12,7 +12,7 @@ Kurz gesagt:
 
 ## Wie der Workshop aufgebaut ist
 
-Der Workshop besteht aus **vier Sessions** und deckt 17 Module ab, die in **48 kleine Lerneinheiten (LE)**
+Der Workshop besteht aus **vier Sessions** und deckt 17 Module ab, die in **65 kleine Lerneinheiten (LE)**
 zerlegt sind (je 10-25 Min, Level `core`/`deep-dive`/`bonus`). Block 3 ist dabei auf zwei Sessions verteilt —
 den Pflicht-Kern und einen Bonus-Track. Die genaue LE-Landkarte steht in `session-plan.md` und am Kopf jeder
 `modules/block-*.md`:

@@ -41,7 +41,7 @@ When called without arguments, display the full workshop map using box-drawing c
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║          CLAUDE CODE WORKSHOP — 4 Sessions × ~3h · 48 Lerneinheiten         ║
+║          CLAUDE CODE WORKSHOP — 4 Sessions × ~3h · 65 Lerneinheiten         ║
 ║                         Usage: /workshop [guide|learn] [module]             ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║  BLOCK 1 · FOUNDATIONS                             Session 1  ~3h           ║

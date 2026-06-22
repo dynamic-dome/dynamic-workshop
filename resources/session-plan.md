@@ -1,15 +1,15 @@
 # Workshop Session Plan
 
 > Zeitlicher Ablauf und didaktischer Aufbau über **4 Sessions** (Welle-F-Restrukturierung).
-> Die 17 Module sind in **48 kleine Lerneinheiten (LE)** zerlegt — jede 10–25 Min, mit 1–3 klaren
-> Lernzielen und einer natürlichen „ich kann jetzt X"-Grenze.
+> Die 17 Module sind in **65 kleine Lerneinheiten (LE)** zerlegt (inkl. je einem Hands-on-Puffer pro
+> Block) — jede 10–25 Min, mit 1–3 klaren Lernzielen und einer natürlichen „ich kann jetzt X"-Grenze.
 > Stand: 2026-06-23. Vorgänger-Fassung (3 Sessions, Modul-Ebene) siehe Git-Historie.
 
 ## Drei-Schicht-Modell (gilt für jede LE)
 
 | Level | Bedeutung | Im Live-Workshop |
 |---|---|---|
-| `[core]` | Pflichtpfad. Was jeder Teilnehmer können muss. | Immer gefahren. Der Core-Pfad einer Session zielt auf ≤150 Min. |
+| `[core]` | Pflichtpfad. Was jeder Teilnehmer können muss. | Immer gefahren — aber die Roh-Lehrzeit der core-LEs liegt je Session **über** dem, was ein 180-Min-Termin netto fasst (~140–150 Min nach PPT/Pause/Q&A). Der Trainer kürzt Demo-Puffer und behandelt die weichsten core-LEs flexibel (siehe Realismus-Hinweis je Session). |
 | `[deep-dive]` | Optionale Vertiefung **desselben** Themas. | **„Wenn Zeit, dann zeigen"** — eingeplant, wird gefahren solange das Zeitbudget reicht; sonst Lesestoff/Cheatsheet. |
 | `[bonus]` | Kür/Showcase, oft `🔧`-Custom-Komponenten & experimentelle Features. | Nur bei Zeitüberschuss oder auf Nachfrage. |
 
@@ -18,16 +18,24 @@
 
 ## Format-Übersicht
 
-| Session | Thema | Level-Fokus | Core-Dauer | Termin |
-|---|---|---|---|---|
-| 1 | Erste Schritte mit dem Agenten (sanfter Einstieg) | Foundations | ~160 Min Core | 10. April 2026 (Erstfassung durchgeführt) |
-| 2 | Das Ecosystem (Skills, Hooks, Plugins, MCP, RAG) | Ecosystem | ~145 Min Core | TBD |
-| 3 | Advanced Kern (Agents, Security, Automation) | Advanced-Kern | ~148 Min Core | TBD |
-| 4 | Advanced Bonus (Multi-Model, CI/CD, Capstone, Troubleshooting) | Advanced-Bonus | ~163 Min | TBD |
+> Die „Core (roh)"-Spalte ist die **Summe aller core-LE-Minuten** der Session — bewusst die ehrliche
+> Roh-Zahl, nicht eine schöngerechnete. Ein 180-Min-Termin fasst netto ~140–150 Min Lehrzeit; die
+> Differenz fängt der Trainer durch Straffen von Demo-Puffer/Hands-on und flexible core-LEs ab.
+
+| Session | Thema | Level-Fokus | Core (roh) | Termin |
+|---|---|---|---:|---|
+| 1 | Erste Schritte mit dem Agenten (sanfter Einstieg) | Foundations | 213 Min | 10. April 2026 (Erstfassung durchgeführt) |
+| 2 | Das Ecosystem (Skills, Hooks, Plugins, MCP, RAG) | Ecosystem | 177 Min | TBD |
+| 3 | Advanced Kern (Agents, Security, Automation) | Advanced-Kern | 157 Min | TBD |
+| 4 | Advanced Bonus (Multi-Model, CI/CD, Capstone, Troubleshooting) | Advanced-Bonus | 163 Min (voller Track) | TBD |
 
 > **Warum 4 Sessions?** Block 3 hatte faktisch ~270 Min Inhalt in einem 180-Min-Termin. Der ehrliche
 > Schnitt trennt den Pflicht-Kern (Session 3: Agents + Security + Automation) vom Überlauf
 > (Session 4: Multi-Model + CI/CD + Capstone + Troubleshooting) in zwei vollwertige Termine.
+>
+> ⚠️ **Session 1 ist mit 213 Min Roh-Core über-voll** (weil S1.6 = alle 6 Permission Modes auf
+> Audience-Wunsch `[core]` ist). Realistisch muss der Trainer hier am stärksten straffen: Demo-Puffer
+> S1.20 kurz halten, S1.9 straffen, ggf. S1.4 mit S1.3 bündeln — die 6 Modi NICHT opfern.
 
 ---
 
@@ -44,7 +52,7 @@
 | S1.4 | Built-in Tools & die Tool-Namen | core | 12 | 1.1 Built-in Tools Reference |
 | S1.5 | Permissions Grundlagen: default & acceptEdits | core | 15 | 1.1 Permission System (Alltags-Modi) |
 | **S1.6** | **Permission Modes komplett (6 Modi + Cloud)** | **core** ⭐ | 15 | 1.1 Permission System (auto/dontAsk/bypass) |
-| S1.7 | Modellwahl & Effort-Level | core | 15 | 1.1 Model Selection + 1.3 Effort-Hebel |
+| S1.7 | Modellwahl & Effort-Level | core | 15 | 1.1 Model Selection + 1.5 Effort Levels as a Strategic Lever |
 | S1.8 | Kontextfenster verstehen | core | 15 | 1.2 Context Window + Control-Room-Analogie |
 | S1.9 | `/compact`, `/rewind` & Kontext steuern | core | 12 | 1.2 How-to-handle-it + Key Context Commands + Demo 1.2 |
 | S1.10 | CLAUDE.md: die Projekt-Standing-Orders | core | 15 | 1.2 CLAUDE.md + Analogien + Demo 1.2 |
@@ -59,13 +67,14 @@
 | S1.19 | Kosten im Blick: /cost, /usage & Budget-Cap | core | 15 | 1.5 Token Tracking (core) + Budget Caps |
 | S1.20 | Demo + Hands-on Puffer (Exercise 1.x — pick 1) | core | 15 | Exercises 1.1–1.4 |
 
-**Session 1 Core:** S1.1–S1.10, S1.13, S1.14, S1.16, S1.19, S1.20 → **~160 Min** (fullster Termin).
+**Session 1 Core:** S1.1–S1.10, S1.13, S1.14, S1.16, S1.19, S1.20 = 15 core-LEs → **213 Min roh** (der vollste Termin; muss aktiv gestrafft werden, siehe ⚠️ unten).
 **deep-dive (wenn Zeit):** S1.11 (18) + S1.12 (12) + S1.15 (12) + S1.17 (15) + S1.18 (15) = **72 Min**.
 
 > **⭐ Audience-Fit-Entscheidung:** S1.6 (alle 6 Permission Modes) ist **`[core]`**, nicht deep-dive —
-> die Zielgruppe (Physical-Security-Profis) will Clearance-Level früh vollständig sehen. Dadurch ist
-> Session 1 der vollste Termin (~160 Min Core). Wenn es eng wird: S1.20-Puffer auf 12 Min kürzen
-> ODER eine der weichen Core-LEs (S1.9) straffen — die 6 Modi NICHT opfern.
+> die Zielgruppe (Physical-Security-Profis) will Clearance-Level früh vollständig sehen. Das macht
+> Session 1 mit **213 Min Roh-Core** zum vollsten Termin — deutlich über den ~140–150 netto fahrbaren
+> Minuten. Realistisch: S1.20-Puffer auf ~10 Min, S1.9 straffen, ggf. S1.4 in S1.3 bündeln; die
+> deep-dives (72 Min) entfallen hier fast immer. **Die 6 Modi NICHT opfern.**
 
 ---
 
@@ -96,7 +105,7 @@
 | S2.19 | RAG-Grenzen & Datenschutz-Abwägung | deep-dive | 10 | 2.5 RAG Limitations + Data-Flow-Disclosure |
 | S2.20 | Hands-on Puffer (Exercise 2.x — pick 2–3) | core | 18 | Exercises 2.1–2.6 |
 
-**Session 2 Core:** S2.1–S2.4, S2.6–S2.8, S2.11, S2.14, S2.15, S2.18, S2.20 → **~145 Min**.
+**Session 2 Core:** S2.1–S2.4, S2.6–S2.8, S2.11, S2.14, S2.15, S2.18, S2.20 = 12 core-LEs → **177 Min roh** (auf ~145 fahrbar: S2.2 und der S2.20-Puffer sind die elastischen Posten).
 **deep-dive (wenn Zeit):** S2.5 (15) + S2.9 (15) + S2.10 (15) + S2.12 (15) + S2.13 (10) + S2.16 (15) + S2.17 (18) + S2.19 (10) = **113 Min**.
 
 ---
@@ -123,7 +132,7 @@
 | S3.14 | Self-Improve Loop (Showcase + Grenzen) | bonus | 15 | 3.4 Self-Improve Loops (inkl. Branchen-Realität) |
 | S3.15 | Hands-on Puffer (Exercise 3.x — pick 1) | core | 15 | Exercises 3.1–3.3 |
 
-**Session 3 Core:** S3.1–S3.4, S3.6–S3.9, S3.12, S3.13, S3.15 → **~148 Min**.
+**Session 3 Core:** S3.1–S3.4, S3.6–S3.9, S3.12, S3.13, S3.15 = 11 core-LEs → **157 Min roh** (auf ~145 fahrbar: S3.3 und der S3.15-Puffer sind elastisch).
 **deep-dive/bonus (wenn Zeit):** S3.5 (15) + S3.10 (12) + S3.11 (15) + S3.14 (15) = **57 Min**.
 
 > **⚓ Live-Anker beibehalten:** Session 3 öffnet nach dem Recap mit **Demo 3.6 Step 1** (`claude -p …`)
@@ -251,4 +260,4 @@ A pay-as-you-go API key is recommended for the Self-Improve Loop and Codex Swarm
 
 ---
 
-*Letzter Stand: 2026-06-23 — Welle F (Restrukturierung), 4 Sessions / 48 Lerneinheiten.*
+*Letzter Stand: 2026-06-23 — Welle F (Restrukturierung), 4 Sessions / 65 Lerneinheiten.*
