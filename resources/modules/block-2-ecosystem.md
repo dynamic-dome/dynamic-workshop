@@ -602,7 +602,7 @@ exit 0
 
 **Use case:** Redact API keys, tokens, or PII out of tool output before Claude embeds them into its reasoning (and potentially into future messages). The model never sees the raw secret.
 
-> **Windows:** the hook examples in this section are written in bash (`jq`, `sed`, `case`). On Windows run them via Git Bash, or port them to a `.ps1` (parse stdin with `$input | Out-String | ConvertFrom-Json`, emit JSON with `ConvertTo-Json`) and register with `pwsh -File ...`. See the "Hooks on Windows" box in the cheatsheet and the bash+PowerShell pair in Exercise 2.1.
+> **Windows:** the hook examples in this section are written in bash (`jq`, `sed`, `case`). On Windows run them via Git Bash, or port them to a `.ps1` (parse stdin with `$input | Out-String | ConvertFrom-Json`, emit JSON with `ConvertTo-Json`) and register with `pwsh -File ...`. See the "Hooks on Windows" box in the cheatsheet and the bash+PowerShell pair in Exercise 2.2.
 
 **Security analogy:** A redaction officer between the field operative and the briefing room — the report still reaches the analyst, but with the sensitive identifiers blacked out first.
 

@@ -509,7 +509,7 @@ The `command` of a hook runs in whatever shell the script needs — script files
 
 - Read stdin in PowerShell with `$input | Out-String | ConvertFrom-Json`; match with `-match` (case-insensitive by default); `exit 1` blocks, `exit 0` allows.
 - `pwsh` = PowerShell 7; fall back to `powershell -File ...` for Windows PowerShell 5.1.
-- No `jq` on Windows? Parse JSON with `python` (`json.load(sys.stdin)`) instead — see the tested assets in `resources/demos/assets/hooks/` and the bash+PowerShell pair in Exercise 2.1.
+- No `jq` on Windows? Parse JSON with `python` (`json.load(sys.stdin)`) instead — see the tested assets in `resources/demos/assets/hooks/` and the bash+PowerShell pair in Exercise 2.2.
 
 ### Circuit Breaker Pattern
 Hook detects when an agent runs the same command 3x with the same error, stops the process, and forces a strategy change. Prevents token waste from hallucination loops.

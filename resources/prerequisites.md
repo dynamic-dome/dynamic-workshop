@@ -393,7 +393,8 @@ After all installs, run a quick verification:
 ```bash
 claude plugin list                      # shows installed plugins (0–3 depending on which option you chose)
 /skills                                 # should show notebooklm (only if you went with Option A above)
-ls ~/.claude/hooks/security-check.sh    # should exist + be executable
+ls ~/.claude/hooks/security-check.sh    # macOS/Linux/Git Bash — the hook file should exist
+# Windows PowerShell: Test-Path "$HOME/.claude/hooks/security-check.ps1"   # should print True
 notebooklm list                         # should show claude-code-docs (only if you used CLI variant)
 ```
 

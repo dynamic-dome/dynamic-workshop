@@ -123,7 +123,7 @@ Read, Glob, Grep (no permission) | Edit, Write, NotebookEdit, Bash, WebSearch, W
 ### Windows / PowerShell (the workshop runs on Windows boxes)
 - Shell snippets in the modules/exercises are POSIX-first. On Windows: run them in **Git Bash**, or translate to PowerShell (`New-Item -ItemType Directory -Force` for `mkdir -p`, `;` for `&&`, `$HOME` for `~`, `$env:VAR`/`setx` for `export`, `$env:TEMP` for `/tmp/`, no `chmod`).
 - **Use `python`, not `python3`, on Windows** (incl. the `.mcp.json` `command`).
-- **Hooks are not cross-platform script files.** Each hook exercise/demo ships both forms: a bash `.sh` (run via `bash ...`, needs `chmod +x`) and a PowerShell `.ps1` (registered as `pwsh -File ...` — or `powershell -File ...` for PS 5.1 — no `chmod`). Exercise 2.1 shows both side by side; the cheatsheet has a "Hooks on Windows" box.
+- **Hooks are not cross-platform script files.** Each hook exercise/demo ships both forms: a bash `.sh` (run via `bash ...`, needs `chmod +x`) and a PowerShell `.ps1` (registered as `pwsh -File ...` — or `powershell -File ...` for PS 5.1 — no `chmod`). Exercise 2.2 (Build a Safety Hook) shows both side by side; the cheatsheet has a "Hooks on Windows" box.
 - **Tested fallback hook assets live in `resources/demos/assets/hooks/`**: `secure-diff-gate.sh` (Git Bash) and a jq-free `secure-diff-gate.py` (Windows). Both block writes to `.env`/`*.pem`/`secrets/`/`credentials` and pass normal writes.
 - The C playground (`osdp_frame_decoder.c`) needs **no compiler** — the swarm reviews the source directly, which is the recommended path on Windows (no gcc/clang).
 
@@ -173,7 +173,7 @@ A: Agents (module 3.1) are specialized teams that can think, plan, and make deci
 
 **Q: The setup/exercise commands fail on my Windows machine — what do I do?**
 
-A: The snippets are POSIX-first. The simplest fix is to run them in **Git Bash** (ships with Git for Windows), where `mkdir -p`, `&&`, heredocs and `~/` all work. If you stay in **PowerShell**, use the PowerShell forms: `New-Item -ItemType Directory -Force` instead of `mkdir -p`, `;` instead of `&&`, `$HOME` instead of `~`, `$env:VAR`/`setx` instead of `export`, and `python` instead of `python3`. For **hooks**, register the `.ps1` variant with `pwsh -File ...` (no `chmod` needed) — Exercise 2.1 shows the bash and PowerShell versions side by side, and tested fallback hook scripts live in `resources/demos/assets/hooks/`.
+A: The snippets are POSIX-first. The simplest fix is to run them in **Git Bash** (ships with Git for Windows), where `mkdir -p`, `&&`, heredocs and `~/` all work. If you stay in **PowerShell**, use the PowerShell forms: `New-Item -ItemType Directory -Force` instead of `mkdir -p`, `;` instead of `&&`, `$HOME` instead of `~`, `$env:VAR`/`setx` instead of `export`, and `python` instead of `python3`. For **hooks**, register the `.ps1` variant with `pwsh -File ...` (no `chmod` needed) — Exercise 2.2 (Build a Safety Hook) shows the bash and PowerShell versions side by side, and tested fallback hook scripts live in `resources/demos/assets/hooks/`.
 
 ---
 
