@@ -158,24 +158,30 @@ The swarm will surface the **three planted issues** (Command Injection, Hardcode
 > clean CONFIRMED. That disagreement *is* the lesson: **reachability changes severity.** Discuss why —
 > a hardcoded secret in unreachable code is a real smell but not an exploitable path today.
 
-**Step 4: Pick one finding and apply its fix**
+**Step 4: Pick one finding and apply its fix (temporary — you'll revert it)**
+
+> 📌 **This is a deliberate, sanctioned exception — and you undo it.** `workshop-playground/CLAUDE.md`
+> says *"Do NOT fix them — they are the teaching target,"* and that rule holds: the planted vulns must
+> survive for the next run of this workshop. For **this one step** you make a **controlled, temporary
+> exception** so you can watch a fix land and prove it doesn't break the tests — then you restore the
+> original. **Never commit the fix.** (No real contradiction: the rule says don't *keep* fixes; here you
+> apply one, verify, and revert.)
 
 Choose **one** of the three confirmed findings and let Claude implement the fix in `access_control.py`. After the fix:
 
 ```bash
-pytest -v
+pytest -v   # run from the playground root — the baseline must stay green
 ```
 
-The existing test suite must still pass. The fix is only acceptable if the baseline tests stay green.
+The fix is only acceptable if the existing test suite stays green. Then **restore the teaching target**:
 
-> ⚠️ **Do NOT commit this fix.** `access_control.py` is the intentional teaching target — the planted
-> vulnerabilities must survive for the next run of this workshop. Apply the fix **locally only**,
-> confirm the tests, then **revert it**:
-> ```bash
-> git checkout -- access_control.py
-> ```
-> (Or work on a throwaway copy and delete it.) This keeps the exercise reusable and matches the
-> playground's own rule in `workshop-playground/CLAUDE.md`: *"Do NOT fix them — they are the teaching target."*
+```bash
+git checkout -- access_control.py
+```
+
+> Prefer not to touch the original at all? Copy it first (`cp access_control.py /tmp/fix-try.py`) and
+> have Claude fix the copy — you just won't be able to run the existing `pytest` against it, since the
+> tests import `access_control`.
 
 ### What to Report
 
@@ -561,7 +567,7 @@ Write down your hypothesis **before** opening the script.
 Pick one of two approaches:
 
 - **Tighten the matcher.** Change `".*"` to a specific pattern that matches only what the hook is supposed to scrutinize (e.g. `"Bash(rm *)"` for destructive-command checks, not for `ls`).
-- **Temporarily disable the hook** in `settings.json` by removing it from the matcher list (good for unblocking yourself while you reason about the right matcher).
+- **Temporarily disable the hook** in `settings.json` by removing it from the matcher list (good for unblocking yourself while you reason about the right matcher). After any manual edit, re-validate the file with `python -m json.tool ~/.claude/settings.json` — a stray comma here is its own kind of "broken Claude".
 
 **Step 4: Verify**
 
