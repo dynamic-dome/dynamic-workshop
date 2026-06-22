@@ -1,14 +1,21 @@
 /*
  * OSDP Frame Decoder - Workshop Playground (C Version)
  *
- * Simplified decoder for OSDP (Open Supervised Device Protocol) frames.
- * Frame format: [SOM][LEN][ADDR][CMD][DATA...][CRC]
+ * Simplified TEACHING decoder for OSDP (Open Supervised Device Protocol) frames.
  *
- * INTENTIONAL VULNERABILITIES (do NOT fix in this playground - they are teaching targets):
- *   1. Buffer Overflow in decode_data_payload() - line ~50
- *   2. Integer Overflow in compute_crc() - line ~85
- *   3. Format String Vulnerability in log_frame() - line ~110
- *   4. (Bonus) Off-by-one in parse_address() - line ~135
+ * NOTE ON FRAME FORMAT: A real OSDP frame (SIA OSDP v2.2 / IEC 60839-11-5) is
+ *   [SOM=0x53][ADDR][LEN_LSB][LEN_MSB][CTRL][DATA...][CRC-16/CCITT]
+ *   -- i.e. ADDR comes BEFORE a 16-bit little-endian LEN, and the trailer is a
+ *   CRC-16/CCITT. The struct below uses a SIMPLIFIED single-byte layout for
+ *   teaching only; it is intentionally NOT wire-accurate. Do not use as a
+ *   reference implementation.
+ *
+ * INTENTIONAL VULNERABILITIES (do NOT fix in this playground - they are teaching targets;
+ * referenced by function name so the targets survive future edits):
+ *   1. Buffer Overflow   in decode_data_payload()
+ *   2. Integer Overflow  in compute_crc()      (uint8_t arithmetic wraps around)
+ *   3. Format String     in log_frame()
+ *   4. (Bonus) Off-by-one in read_frame_crc()  (reads the CRC one byte past frame end)
  *
  * For Block 3.3 (Devil's Advocate Swarm) and Block 3.7 (Troubleshooting).
  */
@@ -22,6 +29,7 @@
 #define OSDP_MAX_FRAME_LEN 256
 #define OSDP_HEADER_LEN    5
 
+/* Simplified teaching layout -- real OSDP puts ADDR before a 16-bit LEN (see header note). */
 typedef struct {
     uint8_t som;
     uint8_t length;
@@ -44,15 +52,17 @@ int decode_data_payload(osdp_frame_t *frame, const uint8_t *raw, size_t data_len
 }
 
 /* VULNERABILITY 2: Integer Overflow
- * `length` is uint8_t, but we multiply by stride (3) and store in size_t.
- * If length == 255, byte_count == 255*3 == 765 (fine), but the for-loop iterates
- * `byte_count` times and accesses frame->data[i] - already overflowed (see V1).
- * Combined V1+V2 is a classic chain.
+ * `byte_count` is computed in uint8_t. For length values above ~251 the
+ * addition wraps around (e.g. 255 + 4 == 259, which is 3 in a uint8_t), so the
+ * CRC loop runs over a far smaller range than the real frame. The CRC is then
+ * computed over the wrong bounds -- a genuine integrity bug driven purely by the
+ * wrap-around (real OSDP integrity uses CRC-16/CCITT over the full frame).
  */
 uint16_t compute_crc(const osdp_frame_t *frame) {
-    size_t byte_count = frame->length * 3;  /* INTENTIONAL: no overflow check */
+    /* INTENTIONAL: uint8_t arithmetic wraps for large length (no widening) */
+    uint8_t byte_count = (uint8_t)(frame->length + 4);  /* +4 for header+CRC bytes */
     uint16_t crc = 0;
-    for (size_t i = 0; i < byte_count; i++) {
+    for (uint8_t i = 0; i < byte_count; i++) {
         crc = (crc << 8) ^ frame->data[i];
     }
     return crc;
@@ -69,15 +79,18 @@ void log_frame(const osdp_frame_t *frame, const char *cmd_name) {
     printf(" length=%d\n", frame->length);
 }
 
-/* VULNERABILITY 4 (BONUS): Off-by-one
- * `address` is decoded from raw[2], but we read up to raw[5] for the header.
- * If raw[] is exactly 5 bytes (minimum), accessing raw[5] reads past the end.
+/* VULNERABILITY 4 (BONUS): Off-by-one at the frame tail
+ * The CRC trailer sits at the END of an OSDP frame. For a frame of `frame_len`
+ * bytes the valid indices are raw[0 .. frame_len-1], so the last (CRC) byte is
+ * raw[frame_len - 1]. This reads raw[frame_len] -- one byte past the end, a
+ * classic off-by-one when locating the CRC. The guard still lets frame_len equal
+ * the buffer length through, so a minimum-size frame triggers the OOB read.
  */
-int parse_address(const uint8_t *raw, size_t raw_len) {
-    if (raw_len < OSDP_HEADER_LEN) {  /* should be raw_len <= OSDP_HEADER_LEN */
+int read_frame_crc(const uint8_t *raw, size_t frame_len) {
+    if (frame_len < OSDP_HEADER_LEN) {
         return -1;
     }
-    return raw[OSDP_HEADER_LEN];  /* off-by-one: should be raw[OSDP_HEADER_LEN - 1] */
+    return raw[frame_len];  /* off-by-one: last valid byte is raw[frame_len - 1] */
 }
 
 int main(int argc, char *argv[]) {
@@ -96,10 +109,19 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    /* Validate hex input: must be non-empty and even-length.
+     * Hardened against a size_t underflow on empty input (hex_len - 1 wrapping to
+     * SIZE_MAX) and a silently dropped final nibble on odd input. This is an
+     * unplanned robustness fix in main(), NOT one of the four teaching vulns. */
+    if (hex_len == 0 || hex_len % 2 != 0) {
+        fprintf(stderr, "Invalid hex length (must be non-empty and even)\n");
+        return 1;
+    }
+
     /* Convert hex string to bytes (simplified) */
     uint8_t buf[OSDP_MAX_FRAME_LEN];
     size_t buf_len = 0;
-    for (size_t i = 0; i < hex_len - 1; i += 2) {
+    for (size_t i = 0; i < hex_len; i += 2) {
         sscanf(&hex[i], "%2hhx", &buf[buf_len++]);
     }
 
@@ -123,8 +145,8 @@ int main(int argc, char *argv[]) {
     log_frame(&frame, (const char *)&buf[3]);
 
     /* Trigger V4 */
-    int addr = parse_address(buf, buf_len);
-    printf("Address decoded: %d\n", addr);
+    int crc_tail = read_frame_crc(buf, buf_len);
+    printf("CRC tail byte: %d\n", crc_tail);
 
     return 0;
 }

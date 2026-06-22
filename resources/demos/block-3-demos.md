@@ -209,9 +209,9 @@ For Embedded / Physical-Security audiences:
 
 Expected findings (4 planted issues):
 - Buffer Overflow (decode_data_payload)
-- Integer Overflow (compute_crc)
+- Integer Overflow (compute_crc — `uint8_t` arithmetic wraps)
 - Format String (log_frame)
-- Off-by-one (parse_address)
+- Off-by-one (read_frame_crc — reads the CRC one byte past the frame end)
 
 The C playground demonstrates patterns that are domain-relevant for Physical Security:
 embedded protocols, wire-format parsing, memory-safety issues. The Python playground
