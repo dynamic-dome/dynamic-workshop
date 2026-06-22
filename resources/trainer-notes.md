@@ -54,6 +54,24 @@ notebooklm list             # if CLI available
 /usage                      # day-aggregate
 ```
 
+### Go/No-Go Demo-Matrix (Session 3 — abhaken am Morgen)
+
+Eine Zeile pro Live-Demo. Führe den Preflight-Befehl aus; bei PASS live zeigen, bei FAIL auf den Fallback wechseln. Demo 3.6 ist der garantierte Anker (nur lokales `claude`) — **damit Block 3 eröffnen.**
+
+| Demo | Preflight-Check | PASS → live | FAIL → Fallback |
+|---|---|---|---|
+| **3.6 Headless** ⚓ | `claude --version` (nur lokales claude) | Immer live — Block-3-Opener (Step 1) + voller Lauf im Slot | (kann praktisch nicht failen; sonst ist die ganze Session blockiert) |
+| **3.1 Multi-Agent** | `claude --version` (Agent-Tool ist built-in) | Live | Recording / Transcript vorlesen, 2-Agent-Architektur diskutieren |
+| **3.2 Codex Swarm** | `codex --version` **und** `claude plugin list \| grep multi-model-orchestrator` | Live | Recording; Claude→Codex→Claude-Pipeline an der Tafel erklären |
+| **3.3 Devil's Advocate** | `claude plugin list \| grep devil-advocate-swarms` | Live-Swarm | **Built-in:** `/security-review` gegen `access_control.py` (findet dieselben 3 Vulns) ODER Recording |
+| **3.3b Permission Modes** | `claude --version` (built-in) | Live | — (built-in, kein Plugin) |
+| **3.3c CVE-Fix** | Internet/WebSearch erreichbar (`curl -sI https://nvd.nist.gov`) | Live | Vorbereitete CVE-Beschreibung (NVD CVE-2018-18074) aus Zwischenablage einfügen |
+| **3.4 Self-Improve** | `claude plugin list \| grep agentic-os` + Budget-Cap gesetzt | Live (mit `--max-budget-usd`!) | Recording; Loop-Architektur + Circuit-Breaker diskutieren |
+| **3.5 Architecture/Remote** | Telegram-Bridge läuft (Bridge-Status prüfen) | Live | Remote-Step skippen, lokale Architektur-Diskussion (= Capstone-Vorlauf) |
+| **3.7 Broken Skill** | `broken-greeter` kopiert (`ls ~/.claude/skills/broken-greeter/SKILL.md`) + `/debug` verfügbar | Live | `claude --verbose` statt `/debug`; Asset liegt in `resources/demos/assets/broken-greeter/` |
+
+> Plugin-/Asset-Pfade: `devil-advocate-swarms`/`agentic-os`/`multi-model-orchestrator` siehe `prerequisites.md`; `broken-greeter`-Asset siehe `resources/demos/assets/`. Block-1/2-Demos brauchen i.d.R. nur lokales `claude` + ggf. das jeweilige Plugin/MCP (vgl. die Recovery-Notes in den Demo-Dateien).
+
 ### Common Live-Failure Modes (and Recovery)
 
 | Problem | Schnell-Recovery |

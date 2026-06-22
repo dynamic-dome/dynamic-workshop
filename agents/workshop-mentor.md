@@ -77,7 +77,7 @@ The Dynamic Workshop covers 17 modules (5+5+7) across 3 blocks:
 **Block 3: Advanced & Multi-Agent**
 - 3.1 Agents & Multi-Agent Orchestration (+ Agent Teams: TeamCreate/SendMessage; /batch; /tasks)
 - 3.2 Nested Orchestration (Claude→Codex→Claude)
-- 3.3 Security & Adversarial Testing — split into two units: **3.3a Adversarial Testing** (Devil's Advocate Swarm, security-audit skill, built-in review trio) and **3.3b Hardening & Compliance** (6 Permission Modes detail, Protected Paths, OS-Level Sandboxing, Data Retention & Privacy, regulatory mapping, CVE examples)
+- 3.3 Security & Adversarial Testing — split into two units: **3.3a Adversarial Testing** (Devil's Advocate Swarm, security-audit skill, built-in review trio) and **3.3b Hardening & Compliance** (6 Permission Modes detail, Protected Paths, OS-Level Sandboxing, Data Retention & Privacy, regulatory mapping, CVE examples). *No `devil-advocate-swarms` plugin? Exercise 3.3 is fully doable with the built-in `/security-review` — same three vulns, just without the Debate/Consensus stages.*
 - 3.4 Scheduled Tasks, Loops & Automation
 - 3.5 Telegram Bridge, Inception & Worktree Isolation (Capstone)
 - 3.6 CI/CD & Headless Mode (`claude -p`, `--output-format json`, `--max-budget-usd`, `claude setup-token`)

@@ -3,6 +3,19 @@
 > Live demos for the afternoon advanced block.
 > Each demo has a clear talking point — the security analogy that ties it to the audience's world.
 
+> ## ⚓ Open Block 3 with the guaranteed-live anchor
+>
+> Most Block-3 demos depend on something external (custom plugins, Codex CLI, Internet, the
+> Telegram bridge). If one fails in front of the audience early, it sets a fragile tone. So
+> **open Block 3 with a demo that only needs the locally-installed `claude`** — it cannot fail
+> on a missing plugin.
+>
+> **Anchor = Demo 3.6, Step 1** (`claude -p "Summarize what this repo does in one sentence."`).
+> Run just that one headless command first — 60 seconds, guaranteed to work — so the room sees a
+> working live moment before any plugin-dependent demo. Then proceed with Demo 3.1 onward, and do
+> the full Demo 3.6 in its normal slot later. If a later plugin demo dies, you have already banked
+> one clean live success.
+
 ---
 
 ## Demo 3.1: Multi-Agent Orchestration
@@ -336,14 +349,25 @@ Point out that Claude included:
 
 Say: *"From 'there's a CVE' to 'here's a PR with tests' — in under 3 minutes. This is vulnerability management at machine speed."*
 
-**Step 3: Clean up after the demo**
+**Step 3: Clean up after the demo — one command**
+
+Don't hand-edit the file (easy to forget with 17 modules in your head). One revert resets
+`requirements.txt` to its committed state, discarding both the planted line from Step 0 **and**
+any edit Claude made during the demo:
 
 ```bash
-# Remove the planted vulnerable line so the playground does not stay verwundbar by accident:
-# Open requirements.txt and delete the requests==2.5.0 (or urllib3==1.24.0) line you added in Step 0.
+# from the repo root:
+git checkout -- workshop-playground/requirements.txt
+
+# verify the planted line is gone (expect 0):
+grep -c "requests==2.5.0" workshop-playground/requirements.txt
 ```
 
-Reverting the planted line keeps the playground in its intended state for later sessions and prevents any participant from accidentally `pip install`-ing a known-vulnerable library on their machine.
+> **⚠️ NEVER run `pip install` on the planted line.** The whole demo is scan + fix + PR — the
+> vulnerable version must never actually be installed on anyone's machine. If you committed Claude's
+> fix to a branch during the demo, also discard that branch so the playground stays pristine.
+
+Reverting keeps the playground in its intended state for later sessions and prevents any participant from accidentally installing a known-vulnerable library.
 
 ### Talking Point
 *"In your world, a vulnerability in a door controller firmware means: find the advisory, identify affected units, plan the update path, test on a bench, deploy, verify. Same process here — but Claude does steps 1 through 5 automatically. You review and approve."*
@@ -373,8 +397,18 @@ The workshop demo project works well.
 Run the quality gate first so the audience sees the baseline:
 ```
 /quality-gate
+/cost          # baseline spend — note this number, you'll compare after the loop
 ```
 Note the score and any failures.
+
+> **⚠️ Set the budget cap BEFORE the loop — this is the most expensive demo of the day.**
+> An uncapped self-improve loop is the single biggest cost driver (~$15–50, see `session-plan.md`).
+> Start this demo in a session launched with a hard cap, e.g.:
+> ```bash
+> claude --max-budget-usd 1.00
+> ```
+> and keep the loop to **1 iteration** (Step 2). The cap is the runaway guard; 1 iteration keeps it
+> demo-sized. Do not press enter on `/run-loop` until the cap is in place.
 
 **Step 2: Start the self-improve loop for 1 iteration**
 
@@ -401,7 +435,12 @@ Walk through the log: what it analyzed, what it decided, what it changed, what i
 
 **Step 4: Run the quality gate again**
 
-Show the score improved.
+```
+/quality-gate
+/cost          # compare against the Step 1 baseline — show the audience what one iteration cost
+```
+
+Show the score improved, and point at the delta in `/cost` so the room sees the real price of one autonomous iteration (well under the $1.00 cap).
 
 ### Talking Point
 
@@ -509,6 +548,11 @@ This is **a demonstration of the pattern**, not a recommended production setup �
 
 ## Demo 3.6: Headless Claude in 5 Minutes
 
+> **⚓ This is the guaranteed-live anchor for Block 3.** It needs only the locally-installed
+> `claude` — no plugin, no Codex, no Internet, no bridge. Step 1 is also used as the 60-second
+> Block-3 opener (see the anchor note at the top of this file). If everything else is on fire,
+> this demo still runs.
+
 **Goal:** Take the interactive Claude you have used all day and prove it also runs as a one-shot CLI tool — with JSON output, cost caps, and `--bare` mode. Five minutes, four flags, one mindset shift.
 
 ### Prerequisite
@@ -593,9 +637,23 @@ If you also want to show `claude setup-token`, do it **offline before the worksh
 
 ### Prerequisite
 
-The moderator has prepared an intentionally broken skill at `~/.claude/skills/broken-greeter/SKILL.md` with **three problems planted** in this order:
+A ready-made broken skill ships with this repo at
+[`resources/demos/assets/broken-greeter/SKILL.md`](./assets/broken-greeter/SKILL.md) — no
+morning reconstruction needed. Copy it into place before the demo:
 
-1. **Description is generic** — no concrete trigger phrases (just "A skill for greeting").
+```bash
+mkdir -p ~/.claude/skills/broken-greeter
+cp resources/demos/assets/broken-greeter/SKILL.md ~/.claude/skills/broken-greeter/SKILL.md
+```
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force -Path "$HOME\.claude\skills\broken-greeter" | Out-Null
+Copy-Item resources\demos\assets\broken-greeter\SKILL.md "$HOME\.claude\skills\broken-greeter\SKILL.md"
+```
+
+It has **three problems planted** in this order:
+
+1. **Description is generic** — no concrete trigger phrases (just "A skill for greeting.").
 2. **`disable-model-invocation: true`** in frontmatter — skill is registered but auto-invocation is disabled.
 3. **`paths: ["never-match/**"]`** — paths filter that no real file can satisfy.
 

@@ -116,6 +116,19 @@ There is also a strong chance the swarm surfaces a fourth, *unplanned* issue (Lo
 
 **No vulnerability planting required** — we use the existing ones.
 
+> **Plugin prerequisite + fallback.** Step 2 uses the **custom** `devil-advocate-swarms` plugin
+> (a workshop add-on — see `prerequisites.md`). If you don't have it installed (`claude plugin
+> list` to check), **don't get stuck** — use the built-in path instead and skip to Step 3:
+>
+> ```
+> /security-review
+> ```
+> …run from inside `workshop-playground/`, or just ask Claude directly:
+> *"Audit access_control.py for security vulnerabilities — injection, hardcoded secrets, path
+> traversal — and explain each with severity."* All three planted issues (Command Injection,
+> Hardcoded Credential, Path Traversal) are findable this way too; you just won't see the
+> multi-agent Debate/Consensus stages. The rest of the exercise (report, fix, `pytest`) is identical.
+
 **Step 1: Open the playground**
 
 ```bash
@@ -329,14 +342,29 @@ You will learn-by-doing four things at once:
 
 ### Steps
 
-**Step 1: Pick a test repo**
+**Step 1: Create a throwaway sandbox repo**
 
-Use the workshop playground or any small repo where you can experiment without worry:
+> ⚠️ **Do NOT run this inside `workshop-playground/`.** The playground is *not* its own git
+> repo — it's tracked by the workshop repo itself. `git init` there is either a no-op or creates
+> a confusing nested repo, and the `pre-commit` hook you install in the next step could end up
+> blocking commits in the workshop repo. Use a fresh, separate directory instead — same
+> convention as the Block-1 exercises.
 
 ```bash
-cd workshop-playground
-git init       # if it is not a repo yet
+# macOS / Linux / Git Bash
+mkdir -p ~/cc-workshop/exercise-3.6 && cd ~/cc-workshop/exercise-3.6
+git init
+echo "print('hello')" > app.py        # a file to commit later
 ```
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\exercise-3.6" | Out-Null
+Set-Location "$HOME\cc-workshop\exercise-3.6"
+git init
+"print('hello')" | Set-Content app.py
+```
+
+This sandbox is disposable — nothing you do here can touch the workshop materials.
 
 **Step 2: Write the hook**
 

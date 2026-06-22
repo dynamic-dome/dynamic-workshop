@@ -61,7 +61,7 @@
 
 | Zeit | Komponente | Inhalt |
 |---|---|---|
-| 0:00 – 0:10 | Recap Session 2 + Intro Block 3 | PPT Slides 19-29 als visueller Einstieg |
+| 0:00 – 0:10 | Recap Session 2 + Intro Block 3 + **⚓ Live-Anker** | PPT Slides 19-29; dann **Demo 3.6 Step 1** (`claude -p ...`) als garantiert-lokaler 60-Sek-Live-Moment VOR den Plugin-Demos (nur lokales `claude` nötig — siehe Anker-Notiz in `demos/block-3-demos.md`) |
 | 0:10 – 0:25 | Modul 3.1 | Agents & Multi-Agent + Background-Sessions |
 | 0:25 – 0:40 | Demo 3.1 | 2 parallele Agents |
 | 0:40 – 0:50 | Modul 3.2 + Demo 3.2 | Multi-Model Pipelines / Codex Swarm |
@@ -72,6 +72,10 @@
 | 1:50 – 2:05 | Modul 3.7 + Demo 3.7 (NEU) | Troubleshooting & Debugging |
 | 2:05 – 2:20 | Modul 3.5 + Demo 3.5 | Telegram-Bridge, Inception, Worktrees |
 | 2:20 – 3:00 | Exercise 3.5 | Architecture Discussion (Capstone) |
+
+> **⏱️ Demo-Zeiten realistisch lesen.** Jeder Demo-Slot oben ist als **Demo + Talking-Points + 2–3 Min Puffer** gedacht — Live-Demos laufen IMMER langsamer als das Skript (Tippen, Rückfragen, Wartezeiten). Faustregel: Die im Demo-Skript genannte Dauer (z.B. „~8 minutes") meint den reinen Ablauf OHNE Publikum; plane real ~1,5× ein.
+>
+> **Bonus-Schritte sind optional — nur bei Zeitüberschuss.** Schritte, die in den Demo-/Exercise-Skripten als „Bonus" / „Stretch" / „(if time allows)" markiert sind (z.B. Demo 1.4 Worktree Step 6, Demo 3.6 Cost-Trace, die 3.x-Stretch-Aufgaben), zählen NICHT zur Slot-Zeit. Wenn der Slot knapp wird, zuerst die Bonus-Schritte streichen — der Kern-Ablauf jeder Demo passt in den Slot, die Boni nicht. Lieber eine Demo sauber + ein gebankter Live-Erfolg als drei gehetzte.
 
 ## Didaktischer Aufbau
 
