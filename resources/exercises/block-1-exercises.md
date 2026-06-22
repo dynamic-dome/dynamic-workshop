@@ -638,4 +638,81 @@ Use these for group discussion or personal reflection after completing the exerc
 
 ---
 
+## Extra Exercises — Warmups & Wild Formats (optional pool)
+
+> **Optional, fast, low-pressure** drills from the wild-exercise set. Slot a micro-warmup in before/after
+> the matching core exercise; the pair/group formats are for energy or advanced groups. Nothing here is homework.
+
+### ⚡ W1 — 60-Second Hello  `[micro-warmup, 60–90 sec | easy]` · before Module 1.1
+
+**Goal:** First contact with the CLI — zero code, zero fear.
+**Analogy:** The CLI is a consultant *with badge access* — this is them walking into the building for the first time.
+
+1. Run `claude` in an empty directory.
+2. Prompt: `Introduce yourself in one sentence and tell me which directory we're in.`
+3. Thumbs up. You've talked to the agent — that's the whole win.
+
+### ⏪ W2 — The Undo Reflex  `[micro-warmup, 2–3 min | easy]` · after Module 1.1
+
+**Goal:** Build the "I'm in control" reflex before any real work — Claude creates, *you* discard.
+**Analogy:** A dry run of the door release on the test bench (a worktree is your test lab).
+
+1. `Create junk.txt containing the word OOPS.`
+2. `Show me its contents.`
+3. `Delete junk.txt and confirm it's gone.`
+4. Takeaway: nothing the agent does is irreversible if you watch and verify.
+
+### 🔤 W4 — One-Word Diff  `[micro-warmup, 2 min | easy]` · before Exercise 1.4 (Git)
+
+**Goal:** Isolate the git `diff → commit` loop on the smallest possible change before the heavier Git exercise.
+**Analogy:** Logging a single door-open event in the shift book (a PostToolUse hook is the door-open log).
+
+1. Make a repo with a one-line `README.md`.
+2. Change exactly one word.
+3. `Show me git diff`, then `commit it with a clear message`, then `git log --oneline`.
+4. Takeaway: a commit is just a labeled snapshot — small and cheap.
+
+### 🔮 The Oracle Game  `[micro-warmup, ~3 min | easy]` · between Modules 1.1 and 1.3
+
+**Goal:** Provoke Claude's *clarifying* behavior — see when it asks vs. when it guesses. Bridge to 1.3.
+**Analogy:** The guard who does **not** wave through an unclear badge, but asks.
+
+1. In an empty dir, deliberately under-specify: `Build me the parser.` (nothing else).
+2. Don't answer — just count how many assumptions Claude makes.
+3. Now flip it: `Build NOTHING. Ask me exactly 3 questions you'd need to build an OSDP frame parser.`
+4. Read the 3 questions aloud. Aha: those are exactly the things to put in your prompt next time.
+
+### 🎯 Tab-Complete Bingo  `[micro-warmup, group, ~5 min | easy]` · before Module 1.1
+
+**Goal:** Discover that slash-commands exist and are safe to poke at. Kill the fear of the empty prompt.
+**Analogy:** A new operator learning the control-room console before the first alarm.
+
+1. Each person gets a card with 6 cells: `/help`, `/cost`, `/hooks`, `/clear`, "a slash-command none of you know", and "a command that prints a number".
+2. 5-minute timer — tick each cell by actually typing it and noting in one sentence what it does.
+3. For the unknown cell: read `/help`, find one command you've never seen, try it.
+4. First to 6 yells "Bingo" and explains the most obscure command. One-sentence debrief: "Which command will save my day most often?"
+
+### ✂️ The Context Strike-List  `[micro-warmup, ~4 min | easy]` · after Module 1.2
+
+**Goal:** Make "context" concrete — the same prompt gets visibly better after `@file`. Preps RAG (Block 2) and agent isolation (Block 3).
+**Analogy:** The control room with limited monitors — what's not on screen doesn't exist for the decision.
+
+1. In the workshop-playground, ask without a file ref: `Which three vulnerabilities are in the access control?`
+2. Note the answer (guessy? concrete?).
+3. Fill context: `@access_control.py Which vulnerabilities are in here, with line numbers?` — watch it get specific.
+4. `/clear`, then ask again without `@`. The context was *gone*. **You** fill and empty the window, not chance.
+
+### 🔒 Blind Vault — Spec Dictation  `[pair, ~20 min | hard]` · deepens Module 1.3
+
+**Goal:** Precise work-order prompting under hard mode — the prompter can't see the screen and must produce a correct implementation by language alone.
+**Analogy:** An operator directing an unseen technician through the vault wiring over radio — every ambiguity costs.
+
+1. Pairs: "Speaker" and "Typist". The Speaker turns **away** from the screen and may not look.
+2. Target (only the Speaker has the spec, on a slip): a function `is_valid_access_window(now, start, end)` that checks whether a timestamp falls in an allowed window — **including the midnight wrap** (22:00–06:00).
+3. The Speaker dictates *only prompts*; the Typist types verbatim and may not "help" or correct.
+4. When Claude makes an assumption that contradicts the spec, the Speaker must hear it in Claude's reply and fix it with a follow-up prompt — still blind.
+5. Run the tests (the midnight case is the trap). Only when green may the Speaker look. Debrief: which unspoken assumption nearly sank it?
+
+---
+
 *End of Block 1 Exercises*

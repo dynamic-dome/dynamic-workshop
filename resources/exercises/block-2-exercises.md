@@ -951,3 +951,52 @@ These are not toys. They are infrastructure. Each one you build compounds — yo
 The security professionals in this room already think in systems: sensors, procedures, team roles, integrated platforms. You have exactly the mental model needed to build powerful Claude Code setups. The only difference is that the "facility" you're protecting and optimizing is your development workflow.
 
 **Next step:** Block 3 — Building Agents and Multi-Agent Systems.
+
+---
+
+## Extra Exercises — Domain Drills & Wild Formats (optional pool)
+
+> **Optional** deepening drills from the wild-exercise set. Slot them next to the matching core exercise.
+> ⚠️ All hook exercises here use a **project-local** `.claude/settings.json` (never your global config).
+
+### 🍯 Hook-Honeypot  `[~25 min | hard]` · deepens 2.2 (Hooks)
+
+**Goal:** Build hooks as *detectors*, then break them — exposing the weakness of naive pattern hooks.
+**Analogy:** A honeypot sensor on the vault door; an intruder slips past pattern-matching sensors (Protected Paths are the vault rooms).
+
+1. Write a **PostToolUse** honeypot that logs every attempt to edit `osdp_frame_decoder.c`, and a **PreToolUse** hook that blocks `rm`. Use a **project-local** `.claude/settings.json`.
+2. Now try to bypass the `rm` block: double space (`rm  -rf`), split flags (`rm -r -f`), via a variable, via a subshell. Which get through?
+3. Takeaway: a regex hook is a *speed bump*, not a wall. Tighten the matcher, then discuss what a real guard (Protected Paths / permission mode) adds on top.
+
+### 🔎 OSDP Cop — Frame Forensics vs. the Real Spec  `[~25 min | medium]` · deepens 2.5 (RAG/NotebookLM)
+
+**Goal:** Feel the difference between a hallucinated answer and a *grounded* one, on real frame bytes.
+**Analogy:** Deciding from the building blueprints, not from gut (NotebookLM = building blueprints).
+
+1. Create a notebook "OSDP Frame Reference" (`/notebooklm create` or web UI) with 2–3 sources on the OSDP frame format (SOM `0x53`, ADDR, LEN, CRC — matching `osdp_frame_decoder.c`).
+2. **Without** the notebook: `What does the first byte 0x53 mean in an OSDP frame, and where is the CRC?` — note the answer.
+3. **With** the notebook: same question. Compare the cited answer to the gut answer — was the gut right?
+4. Forensics: paste a hex frame (e.g. from the decoder's `main()`) and ask: `Is this frame valid per the spec? Where's the length check the C code forgets?`
+5. Bridge: that missing length check **is** buffer-overflow V1 in `osdp_frame_decoder.c` — RAG explained the security hole straight from the spec.
+
+### 🔁 The Panel-Migration Diff  `[~25 min | medium]` · deepens 2.1 (Skills)
+
+**Goal:** Write a skill that captures a recurring, error-prone config transformation (Panel-A → Panel-B format) — a real SOP, not a checklist.
+**Analogy:** A standard operating procedure for the controller swap — every tech applies it identically (a skill is a SOP).
+
+1. Provide two mini configs: `panel_old.json` (door IDs `D01`, time profiles in **minutes**) and target `panel_new.json` (door IDs `DOOR-01`, time profiles in **seconds**).
+2. First prompt it by hand: `Convert panel_old.json to the new format.` — watch which rule Claude gets wrong (minutes→seconds? ID padding?).
+3. Make the rules explicit and save them as `~/.claude/skills/panel-migrate/SKILL.md` — the conversion rules as non-negotiable steps.
+4. Test the skill on a **second**, slightly different `panel_old_2.json` — does it hold the rules?
+5. Bonus: add an edge case (missing time profile) and check the skill *reports* it instead of silently mis-converting. Takeaway: what costs you at 200 doors is now a deterministic SOP.
+
+### 🕵️ Saboteur on Shift  `[pair, ~20 min | wild]` · deepens 2.2 + 3.7 (Hook Forensics)
+
+**Goal:** Hook diagnosis under pressure — against a *human* saboteur, not a machine. Trains the 3.7 diagnosis loop as a race.
+**Analogy:** An insider tampered with the access policy overnight; the day operator must walk the layers: card → reader → controller.
+
+1. Pairs. Person A steps out of the room.
+2. Person B sabotages the **project-local** `.claude/settings.json` with exactly **one** nasty change: matcher too broad (`".*"`), a bent hook-script path, an inverted exit code, or a second silent hook. (Project-local, not global — the Honeypot lesson.)
+3. A returns; stopwatch runs. Allowed tools: **only** `/hooks`, `claude --verbose`, and reading logs — open the script *last*.
+4. A must say the hypothesis out loud **before** opening the script (3.7 discipline).
+5. Swap roles. Fastest clean diagnosis wins. Debrief: which of the four sabotages was hardest, and why was `/hooks` + `--verbose` the decisive lever?

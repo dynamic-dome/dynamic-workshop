@@ -708,4 +708,73 @@ These blueprints come from deep research into advanced Claude Code workflows. Us
 
 ---
 
+## Extra Exercises — Domain Drills & Wild Formats (optional pool)
+
+> **Optional** competitive / domain / team formats from the wild-exercise set. Great for energy after a
+> dense module. ⚠️ Same rule as Exercise 3.3: the playground vulns are teaching targets — **don't commit fixes**.
+
+### 🏴 Capture-the-Vulnerability CTF  `[~20 min | wild]` · around Exercise 3.3
+
+**Goal:** Adversarial analysis as a timed game — human judgment vs. agent scan.
+**Analogy:** An internal pentest on the access system (the Devil's-Advocate swarm is the adversarial pentest team).
+
+1. **Round 1 (no Claude):** teams list every vuln they can find by eye in `access_control.py` + `osdp_frame_decoder.c`. Score 1 flag each.
+2. **Round 2 (with Claude / the swarm):** score the *new* ones you missed.
+3. **Round 3 (double points):** explain the off-by-one in `read_frame_crc()` — *why* reading `raw[frame_len]` is one byte past the end — **and** find the fail-open in `check_access_resilient()` (the one a scanner usually misses). Don't fix anything (playground rule).
+
+### ⚖️ Devil's-Advocate Duel  `[~15 min | wild]` · deepens 3.3 (Debate)
+
+**Goal:** Train the Prosecutor/Defender/severity judgment that the swarm's Debate stage automates.
+**Analogy:** An audit finding negotiated between pentester and owner (`/security-review` is the routine audit).
+
+1. The case: `ADMIN_PASSWORD = "admin123"` — a hardcoded secret that is **dead code** (never reached).
+2. **Player A (Prosecutor):** 90 seconds for why it's CONFIRMED, high severity.
+3. **Player B (Defender):** 90 seconds for false-positive / unreachable / low-severity.
+4. Claude is the judge: ask it to rule with a severity rating and justification. Aha: reachability *changes* severity — the exact lesson from Exercise 3.3.
+
+### 📋 Audit-Trail Integrity (EN 50131)  `[~20 min | medium]` · deepens 3.3 (Log-Injection)
+
+**Goal:** Exploit, then fix, the log-forging issue — with the compliance story attached.
+**Analogy:** Forging the audit trail breaks the chain of evidence (Auto-Memory is the patrol log auto-recording).
+
+1. On a **copy** of `access_control.py`: `add` a user whose name contains a newline plus a forged log line. Confirm `access.log` now has a fake admin entry (`log_event` writes `username`/`action` unfiltered).
+2. Explain the **EN 50131** angle: audit-trail integrity is a regulatory requirement, not a nicety (see the compliance table in Module 3.3b).
+3. Fix: sanitize newlines in `log_event`. Prove it with a test (`pytest` green on the copy).
+4. Bonus: a PostToolUse hook that flags log lines which don't match the expected `timestamp | action | user | status` shape.
+
+### 📡 Alarm-Storm Correlator  `[~25 min | medium]` · domain variant of 3.1 (Multi-Agent)
+
+**Goal:** Real fan-out on independent data shards, then a correlation step that shows where fan-out ends and synthesis begins.
+**Analogy:** During an alarm storm, three patrols cover three zones in parallel; the control room merges the reports (Agent Teams = patrol roster).
+
+1. Create three small logs — `door_events.log`, `motion_sensors.log`, `card_reader.log` — with timestamps; a single incident (door forced at 02:14) is scattered across all three.
+2. Fan out explicitly: `Use three parallel agents. Agent 1 summarizes door_events.log, Agent 2 motion_sensors.log, Agent 3 card_reader.log. Each sees only its file.`
+3. Note: each agent has its own context, none sees the others' logs.
+4. Correlate in the orchestrator: `Merge the three reports into one timeline. Is there an event that appears in all three?`
+5. Aha: only the synthesis reveals the coordinated incident no single agent could see. Discuss: when is a task fan-out, when a pipeline?
+
+### ☎️ Telephone Game with Agents  `[~15 min | wild]` · playful 3.1 (Agent Isolation)
+
+**Goal:** Make subagent context-isolation and information drift unforgettable — "Telephone", with agents as the chain.
+**Analogy:** A radio message passed through three patrols and distorted — why each team needs its own full briefing.
+
+1. Provide a deliberately detailed "original message" — e.g. an OSDP frame spec in 4 sentences with concrete byte values.
+2. `Start a chain of 3 subagents. Agent 1 gets this message and summarizes it in ONE sentence. Agent 2 gets ONLY Agent 1's sentence and summarizes again. Agent 3 likewise.` — each sees only the previous output.
+3. Compare Agent 3's final sentence to the original — what's lost, what's distorted?
+4. Repeat, but give every agent the **full** original. Compare: no drift.
+5. Takeaway (and the laugh): subagents don't inherit your head. Sloppy briefing → Telephone. Bridge to the `subagent-briefing` principle.
+
+### 🚪 The Wrong-Door Heist — Permission Red-Team  `[~25 min | wild]` · 3.3 + Permission Modes
+
+**Goal:** Understand permission modes and protected paths by *attacking* them, then hardening until the attack fails.
+**Analogy:** A red team trying a side door into the vault; each successful break leads to a harder door (permission modes = clearance levels, Protected Paths = uncrackable vault rooms).
+
+1. Protect target: `osdp_frame_decoder.c` and `access_control.py` must **not** be modified (the "vault rooms" — see CLAUDE.md "do NOT fix").
+2. **Attack round (Team Red):** get Claude to edit those files — directly, via a detour ("just reformat the comments"), or via another tool path. Note every successful breach.
+3. **Defense round (Team Blue):** build the wall in three layers — (a) a CLAUDE.md rule "Never modify these files", (b) a PreToolUse hook with matcher `Edit|Write` blocking exactly those paths, (c) a deliberately *restrictive* permission mode (not `bypassPermissions`).
+4. Re-attack the hardened wall. Which layer stopped which attack?
+5. Debrief: which layer was most robust — language (CLAUDE.md), mechanism (hook), or authorization (mode)? Lesson: protection needs defense-in-depth; no single layer is enough.
+
+---
+
 *End of Block 3 Exercises*
