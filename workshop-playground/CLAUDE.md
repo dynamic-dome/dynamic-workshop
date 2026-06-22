@@ -65,6 +65,13 @@ Plus a bonus ungeplante issue:
    - Writes `username` and `action` unfiltered into log file
    - Newline-injection can create forged log lines
 
+And one **domain-logic** vulnerability that a pattern scanner will *not* trivially find:
+
+5. **Fail-OPEN access check** — `check_access_resilient()` in `access_control.py`
+   - When `users.json` is missing or corrupt, it returns `True` (ACCESS GRANTED) instead of failing secure
+   - No injection / no secret / no traversal — only a physical-security reviewer spots it. Reachable via the `door-check` subcommand: `python access_control.py door-check eve` grants access with no database present.
+   - Teaching point: **fail-secure vs. fail-open** — contrast it with `check_access()` / `load_db()`, which deny on error. This is the *scanner vs. domain expertise* lesson of Exercise 3.3.
+
 These vulnerabilities are scoped to live demos. Do NOT fix them in this playground — they are the teaching target.
 
 ### Windows Note

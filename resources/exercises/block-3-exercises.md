@@ -205,6 +205,15 @@ Are the attack scenarios in the debate plausible?  Would you write a CVE this wa
 Where does the automated analysis fall short of human expert judgment?
 Where does it match or exceed it?
 
+> 🎯 **Scanner vs. domain expertise — the planted challenge.** `access_control.py` contains a fifth,
+> *domain-logic* vulnerability the pattern scanners will most likely **miss**: `check_access_resilient()`
+> (the `door-check` path) is **fail-OPEN** — when `users.json` is missing or corrupt it returns
+> ACCESS GRANTED instead of failing secure. There's no injection, no secret, no traversal for a
+> regex to latch onto — only a physical-security reviewer recognizes that "keep the door working
+> during an outage" is exactly backwards. **Did the swarm flag it? If not, that's the lesson:** an
+> automated scan finds *patterns*; fail-open/fail-secure is *domain judgment*. Try it: run
+> `python access_control.py door-check eve` in an empty directory (no `users.json`) and watch it grant access.
+
 ---
 
 ## Exercise 3.4: Set Up Automation

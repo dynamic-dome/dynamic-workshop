@@ -93,6 +93,33 @@ def check_access(username: str) -> bool:
     return result
 
 
+# ------------------------------------------------------------------ #
+# VULNERABILITY 5 (domain logic): Fail-OPEN access check             #
+# A pattern scanner won't flag this — there's no injection, no        #
+# hardcoded secret, no path traversal. It is a LOGIC flaw only a      #
+# physical-security reviewer catches: when the user database is       #
+# missing or corrupt, this "resilient" check GRANTS access            #
+# (fail-OPEN) so the door "keeps working" during an outage. The       #
+# correct behavior for access control is fail-SECURE — DENY on any    #
+# error. On a real panel, a corrupted users.json would unlock every   #
+# door. Contrast with check_access()/load_db(), which fail secure.    #
+# ------------------------------------------------------------------ #
+def check_access_resilient(username: str) -> bool:
+    """
+    'Resilient' door check used by the panel's online path.
+    VULNERABILITY (fail-open): returns True (ACCESS GRANTED) when the database
+    is missing or unreadable, instead of failing secure (ACCESS DENIED).
+    """
+    if not os.path.exists(DB_FILE):
+        return True  # fail-open: "don't lock people out if the DB is gone" (WRONG)
+    try:
+        with open(DB_FILE, "r", encoding="utf-8") as f:
+            db = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return True  # fail-open: grant on a corrupt DB (WRONG — should DENY)
+    return username in db.get("users", [])
+
+
 def list_users() -> list:
     """Return the current list of users."""
     return load_db().get("users", [])
@@ -168,6 +195,9 @@ def build_parser() -> argparse.ArgumentParser:
     log_p = sub.add_parser("read-log", help="Read a log file")
     log_p.add_argument("log_name", help="Log filename (within logs/ directory)")
 
+    door_p = sub.add_parser("door-check", help="Resilient door check (panel online path)")
+    door_p.add_argument("username", help="Username to check at the door")
+
     return parser
 
 
@@ -197,6 +227,12 @@ def main() -> int:
         status = "ACCESS GRANTED" if has_access else "ACCESS DENIED"
         print(f"{args.username}: {status}")
         return 0 if has_access else 1
+
+    elif args.command == "door-check":
+        granted = check_access_resilient(args.username)
+        status = "ACCESS GRANTED" if granted else "ACCESS DENIED"
+        print(f"{args.username}: {status}")
+        return 0 if granted else 1
 
     elif args.command == "backup":
         backup_database(args.filename)
