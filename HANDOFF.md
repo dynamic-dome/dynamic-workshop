@@ -6,6 +6,23 @@
 
 ---
 
+## 0. FORTSCHRITT — START HIER (Stand: 2026-06-22)
+
+**Wellen A + B sind erledigt und committet. NÄCHSTER EINSTIEG: Welle C (Windows-Tauglichkeit).**
+
+Erledigt (3 Commits auf `main`, **nicht gepusht** — Push = User):
+- **`4dca782` — Welle A (Quick Wins):** T-001 (`--max-turns` aus Exercise 3.6, Flag existiert nicht in CLI v2.1.185), T-004 („Three Interfaces"→„Five Surfaces"), T-005 (python3/pip3 + Windows-Variante), T-009 (worktree.baseRef-Widerspruch vereinheitlicht → „versionsabhängig, explizit setzen"), T-011 („Opus 4.6" entfernt), AGENTS.md-Bug („Codex"→„Claude Code" + tote Ref `deep-research-gap-analysis.md` aus AGENTS.md **und** CLAUDE.md).
+- **`e5346f5` — Welle B/1 (Modell-Currency):** T-025 (Opus 4.7→**4.8** als Default), T-026 (**Fable 5** GA 2026-06-09, `claude-fable-5`, $10/$50 in allen Modelltabellen), T-013 (Effort-Default = **`high`** auf Opus 4.8; `xhigh`/`max` auf 4.7/4.8/Fable 5), T-040 (`/model fable` + Fast Mode `/fast`), T-012 (Mentor-Agent). **Alles gegen platform.claude.com-Docs + Live-CLI verifiziert.**
+- **`b42a762` — Welle B/2:** `--max-turns` workshop-weit entfernt (existiert nicht in der CLI; ersetzt durch ehrlichen Hinweis „`--max-budget-usd` cappt Loops"), T-041 (28 lifecycle events → vage), HTML-Dashboard „Opus 4.6"→„4.8".
+
+**Verifizierte Fakten für künftige Currency-Arbeit** (nicht neu recherchieren): aktuelles Lineup = Fable 5 / Opus 4.8 (Default) / Opus 4.7 / Sonnet 4.6 / Haiku 4.5; Effort-Default `high` auf Opus 4.8; Fast Mode `/fast` (Opus 4.8/4.7). Live-CLI = **v2.1.185**.
+
+**Wichtig:** `resources/review-2026-06-21/` ist das **historische Review-Archiv** — NIE editieren (auch wenn grep dort alte Begriffe wie „Opus 4.7"/„--max-turns" findet). Das sind die Befunde selbst, kein Kursinhalt.
+
+→ **Weiter mit Welle C** (siehe Abschnitt 4 unten). Empfehlung: mit den `windows-compat`-TODOs T-007 (getestetes Hook-Asset bash+pwsh), T-021, T-022, T-035, T-036, T-072, T-073 + Cheatsheet-Notiz T-019. **Welle F (Restrukturierung / 48 Lerneinheiten) bleibt gated** auf die User-Entscheidung „3 vs. 4 Sessions" — nicht ohne Freigabe starten.
+
+---
+
 ## 1. Kontext (worum geht es)
 
 Dieses Repo ist der **Dynamic Workshop** — eine praxisnahe Claude-Code-Schulung (3 Sessions à ~3h,
