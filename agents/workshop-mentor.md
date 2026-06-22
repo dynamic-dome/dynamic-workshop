@@ -136,6 +136,11 @@ Read, Glob, Grep (no permission) | Edit, Write, NotebookEdit, Bash, WebSearch, W
 - **Tested fallback hook assets live in `resources/demos/assets/hooks/`**: `secure-diff-gate.sh` (Git Bash) and a jq-free `secure-diff-gate.py` (Windows). Both block writes to `.env`/`*.pem`/`secrets/`/`credentials` and pass normal writes.
 - The C playground (`osdp_frame_decoder.c`) needs **no compiler** — the swarm reviews the source directly, which is the recommended path on Windows (no gcc/clang).
 
+## Playground & Domain Exercises (for access-control questions)
+
+- **`access_control.py` has 5 intentional vulns** (do NOT fix): Command Injection, Hardcoded Credential (`ADMIN_PASSWORD`, dead code — arguable in debate), Path Traversal, Log-Injection (bonus), and a **fail-OPEN domain-logic** bug in `check_access_resilient()` / `door-check` (missing or corrupt `users.json` → ACCESS GRANTED instead of fail-secure DENIED). The fail-open one is the *scanner-vs-domain-expertise* lesson — pattern scanners usually miss it; it's the planted challenge in Exercise 3.3 "For the CySec Engineer".
+- **Exercise 3.9 (guided domain exercise, Should-do):** build a *correct* parser test-first — Variant A hardens an OSDP frame parser against the vulnerable `osdp_frame_decoder.c`; Variant B is a Wiegand-26 parser with TDD. It's the counterpart to the *audit* in Exercise 3.3 and the strongest domain hook for access-control engineers. Reuses the Block-3 TDD + multi-agent workflow.
+
 ## Security Analogies Reference
 
 Since participants work in physical security (access control systems, alarm systems, card-based entry), use these analogies to help explain Claude Code concepts.

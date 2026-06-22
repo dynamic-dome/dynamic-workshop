@@ -15,10 +15,12 @@
 | **Should-do** | 3.3 Security Audit **OR** 3.4 Automation | ~25-30 min / ~20 min |
 | **Should-do** | 3.6 Pre-Commit Hook with Claude | ~25 min |
 | **Should-do** | 3.7 Debug a Broken Hook | ~20 min |
+| **Should-do** | 3.9 Build a Domain Parser (OSDP/Wiegand, TDD) | ~25-30 min |
 | **Nice-to-have** | 3.2 Codex Swarm (demo-only) | ~15 min |
 | **Nice-to-have** | Bonus 3.8 HIPAA Hook | ~20 min |
 
-> **Realistic total: 110–145 minutes.** Prioritize Must-do exercises first.
+> **Realistic total: 110–145 minutes** (core path). Prioritize Must-do exercises first.
+> **3.9** is the strongest pick for access-control engineers — swap it in for 3.6/3.7 if the room is domain-heavy.
 
 ---
 
@@ -112,7 +114,7 @@ Use `workshop-playground/access_control.py`. It already contains three deliberat
 2. Hardcoded credential `ADMIN_PASSWORD = "admin123"` — note: **dead code**, never used in a reachable auth path (intentional; this matters in Step 3)
 3. Path Traversal in `read_log()`
 
-There is also a strong chance the swarm surfaces a fourth, *unplanned* issue (Log-Injection in `log_event()`). Treat that as a bonus.
+The swarm often surfaces a fourth issue the planters didn't pre-list: **Log-Injection / log-forging** in `log_event()` (unsanitized `username`/`action` with a newline forges fake log lines). **Don't wave it off as a "bonus"** — in a physical-security system this is an **audit-trail integrity** failure, and audit-trail tampering is squarely in scope of **EN 50131** (intrusion-alarm standard). See the compliance mapping in Module 3.3b (EN 50131 → "require … audit trail"). Exercise idea: forge an admin line in `access.log`, then have Claude sanitize newlines and prove it with a test.
 
 **No vulnerability planting required** — we use the existing ones.
 
@@ -150,7 +152,7 @@ Do not skip ahead.  Watch each stage:
 - Consensus: how many CONFIRMED vs FALSE POSITIVE?
 - Fixers: what does the fix for each confirmed finding look like?
 
-The swarm will surface the **three planted issues** (Command Injection, Hardcoded Credential, Path Traversal) — plus potentially the **Log-Injection bonus** in `log_event()`.
+The swarm will surface the **three planted issues** (Command Injection, Hardcoded Credential, Path Traversal) — plus, very likely, the **Log-Injection / audit-trail-forging** issue in `log_event()` (a regular EN-50131-relevant finding, not just a "bonus").
 
 > ⚠️ **Don't expect a clean "3/3 CONFIRMED".** `ADMIN_PASSWORD` is dead code — never reached by any
 > auth path. A good Defender will argue exactly that in the Debate stage, so the Hardcoded Credential
@@ -186,7 +188,7 @@ git checkout -- access_control.py
 ### What to Report
 
 1. How many of the three planted vulnerabilities did the swarm confirm? At which stage?
-2. Did it find the bonus Log-Injection in `log_event()` — or anything else you had not expected?
+2. Did it find the Log-Injection / audit-trail-forging issue in `log_event()` (EN-50131-relevant) — or anything else you had not expected?
 3. Were there false positives?  What did the Defender argue for each one?
 4. Which finding did you fix, and does the fix break any of the existing tests?
 
@@ -341,7 +343,7 @@ If you have time after the discussion (or as homework after the workshop):
 
 **Pick a home project** (your own code, a side project, a repo you use regularly) and build **one** concrete setup element based on workshop content:
 
-- **Variant A — Skill for your workflow:** A skill that addresses a typical concern in your project (e.g., "Code review for firmware PRs", "Generate OSDP frame tests", "Audit access-control configs")
+- **Variant A — Skill for your workflow:** A skill that addresses a typical concern in your project (e.g., "Code review for firmware PRs", "Generate OSDP frame tests", "Audit access-control configs") — for a full guided OSDP/Wiegand parser build, see **Exercise 3.9**
 - **Variant B — Hook for your repo:** A hook that enforces a project-specific rule (e.g., "Never commit directly to main", "No edits to firmware/secure-boot.c without confirmation")
 - **Variant C — Plugin:** Bundle 2-3 skills/hooks into a plugin and install it locally with `claude --plugin-dir ./my-plugin`
 - **Variant D — CI workflow:** GitHub Action YAML that uses Claude Code as a reviewer (see Module 3.6)
@@ -614,6 +616,76 @@ In the discussion afterward, share:
 ### Why This Matters
 
 Hooks are the most powerful Claude Code feature and the easiest to misconfigure. A team that uses hooks heavily will hit this exact scenario every few weeks. The 15 minutes you spent here are the difference between "Claude is broken, give up" and "30-second diagnosis, surgical fix, back to work".
+
+---
+
+## Exercise 3.9: Build a Domain Parser the Right Way (OSDP / Wiegand) — Should-do, ~25-30 min
+
+**Type:** Individual or pair, ~25-30 minutes
+**Priority:** Should-do (optional — but the single highest-value exercise for access-control engineers)
+**Goal:** Use the TDD + multi-agent workflow from this block to build a *correct, bounds-checked* physical-security parser — the real-world counterpart to the vulnerable `workshop-playground/osdp_frame_decoder.c` you audited in Exercise 3.3.
+
+### Background
+
+In Exercise 3.3 you let a swarm *find* the planted memory-safety bugs in `osdp_frame_decoder.c`
+(buffer overflow, integer overflow, off-by-one, fail-open). This exercise flips it around: instead of
+finding bugs in someone else's parser, you **build one safely from scratch, test-first**. This is where
+the abstract TDD / multi-agent material from Block 3 meets your actual domain.
+
+Pick **one** variant — both reuse the same Red → Green → Refactor loop.
+
+**Security analogy:** A reader-to-controller parser is the lock cylinder of the whole system — if it
+mis-reads a frame, the wrong person walks through the wrong door. You don't "mostly" parse a credential.
+
+#### Variant A — Harden the OSDP frame decoder
+
+**Goal:** Produce a bounds-checked OSDP frame parser the Exercise-3.3 swarm can no longer break.
+
+1. **Red — tests first.** Have Claude write (or write yourself, then have Claude extend) a test suite
+   against the *real* OSDP frame shape from the header of `workshop-playground/osdp_frame_decoder.c`
+   (SOM `0x53`, ADDR before a 16-bit little-endian LEN, CRC-16/CCITT). Cover: a valid minimum frame; a
+   `LEN` larger than the buffer (the V1 buffer-overflow case); empty / odd-length hex input (the hardened
+   `main()` case); a frame whose CRC sits at the last byte (the off-by-one case). Run against a fresh
+   parser → they fail (red).
+   ```
+   /plan  Build a bounds-checked OSDP frame parser in osdp_safe.c that passes these tests,
+          rejecting malformed frames instead of reading out of bounds.
+   ```
+2. **Green.** Let Claude implement `osdp_safe.c` until the tests pass. Insist on explicit length
+   validation before every `memcpy` / index.
+3. **Refactor / adversarial check.** Run the Devil's-Advocate swarm (or `/security-review`) against your
+   new `osdp_safe.c`. A clean parser should survive the same swarm that tore the original apart.
+4. **Property-based fuzzing (bonus).** Ask Claude to add a property test that fuzzes `LEN` across
+   `0..65535` and asserts the parser never reads past the input — the test the original would have failed.
+
+#### Variant B — Wiegand-26 parser with TDD
+
+**Goal:** Parse a 26-bit Wiegand credential test-first: 1 leading even-parity bit, 8-bit facility code,
+16-bit card number, 1 trailing odd-parity bit.
+
+1. **Red.** Tests first: even parity over the first 13 bits, odd parity over the last 13 bits, facility
+   `0..255`, card `0..65535`, and explicit error cases (bad parity, wrong bit length). Run → red.
+2. **Green.** Implement `parse_wiegand26(bits)` until green. **Reject** on a parity mismatch — don't
+   "best-effort" it: a mis-parsed parity bit means the wrong credential, i.e. the wrong person at the door.
+3. **Refactor.** Ask Claude to simplify, then re-run the suite.
+4. **Inject a bug (bonus).** Have Claude flip the parity check (`even`↔`odd`) and confirm your test catches
+   it. If it doesn't, your tests aren't strong enough yet — that's the lesson.
+
+### Success Check
+
+- [ ] You wrote the tests **before** the implementation (red first, then green).
+- [ ] The parser **rejects** malformed input (oversized `LEN` / bad parity / wrong length) instead of reading past the end or guessing.
+- [ ] (Variant A) The adversarial swarm / `/security-review` finds nothing in your hardened parser.
+- [ ] (Bonus) A deliberately injected bug is caught by your existing tests.
+
+### Hints
+
+- The vulnerable reference is `workshop-playground/osdp_frame_decoder.c` — read its header note for the
+  *real* OSDP frame shape (the struct itself is a deliberately simplified teaching layout).
+- Keep the new parser and tests in a throwaway file (`osdp_safe.c` / `wiegand.py`); you are **adding**
+  clean code next to the playground, not fixing the intentional vulns in place.
+- The point isn't a perfect parser in 25 minutes — it's feeling the difference between "Claude wrote some
+  code" and "Claude wrote code that passes a domain-aware test suite *you specified first*".
 
 ---
 

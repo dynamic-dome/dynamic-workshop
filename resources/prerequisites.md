@@ -362,6 +362,20 @@ notebooklm add-source https://code.claude.com/docs/en/hooks --notebook claude-co
 
 Alternatively use the NotebookLM web UI: notebooklm.google.com → Create notebook → "claude-code-docs" → Add web sources.
 
+### Pre-pull the Playwright MCP (for Exercise 2.4 / Demo 2.4)
+
+Exercise 2.4 adds the Playwright MCP server, which runs via `npx @playwright/mcp`. On first use, `npx`
+downloads the package **and** Playwright downloads a browser binary — that can stall the live session
+for a minute or more. Warm the cache **before Session 2** so nothing downloads on stage:
+
+```bash
+# Pre-download the MCP package + its browser into the npx/Playwright cache:
+npx -y @playwright/mcp@latest --help   # pulls the package
+npx -y playwright install chromium     # pulls the browser binary
+```
+
+After this, the `claude mcp add` step in Exercise 2.4 starts the server from cache — no live download.
+
 ### Codex CLI (optional, for Demo 3.2)
 
 OpenAI Codex CLI is **optional** — required only for Demo 3.2 (Codex Swarm).

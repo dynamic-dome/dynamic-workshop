@@ -1,7 +1,10 @@
 # Block 2: Exercises — Ecosystem
 
 **For participants.** Each exercise has a Goal, Steps, Success Check, and Hints.
-Time estimate per exercise: 25-30 minutes (Exercise 2.5 with NotebookLM setup runs longer, 30-40 min).
+**Realistic time per exercise: 30–40 minutes** once you count the restart that each hook/MCP exercise needs
+(hooks and MCP servers are read at startup) and first-time `npx` downloads. The **core** steps fit in
+~20–25 min; the **Bonus/Stretch** steps are optional — skip them when the room is tight. Pre-pull the
+Playwright MCP before Session 2 (see `prerequisites.md`) so Exercise 2.4 doesn't stall on a live download.
 Do them in order — each builds on the last.
 Audience: experienced programmers. Security analogies used throughout.
 

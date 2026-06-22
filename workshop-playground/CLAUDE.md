@@ -59,11 +59,11 @@ This playground contains three deliberately planted vulnerabilities used in work
 3. **Path Traversal** — `read_log()` in `access_control.py:~127`
    - `open(f"logs/{log_name}")` with unvalidated CLI input from `read-log` command
 
-Plus a bonus ungeplante issue:
+Plus a fourth issue the swarm surfaces on its own — and in a physical-security context it is **not** a throwaway bonus:
 
-4. **Log-Injection / Log-Forging** — `log_event()` in `access_control.py:105-113`
-   - Writes `username` and `action` unfiltered into log file
-   - Newline-injection can create forged log lines
+4. **Log-Injection / Log-Forging (audit-trail integrity)** — `log_event()` in `access_control.py:105-113`
+   - Writes `username` and `action` unfiltered into the log file; a newline forges fake log lines
+   - **Compliance angle:** forging the access/audit log violates **EN 50131** audit-trail requirements (see the compliance table in `resources/modules/block-3-advanced.md`, Module 3.3b "Regulated Industries"). A real PhySec finding, not a curiosity.
 
 And one **domain-logic** vulnerability that a pattern scanner will *not* trivially find:
 
