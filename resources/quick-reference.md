@@ -16,8 +16,9 @@
 ## Models & Cost
 | Command | Was |
 |---|---|
-| `/model opus\|sonnet\|haiku` | Model wechseln |
-| `/effort low\|medium\|high\|xhigh\|max` | Effort-Level |
+| `/model fable\|opus\|sonnet\|haiku` | Model wechseln (Default: Opus 4.8; Fable 5 = Premium-Tier) |
+| `/fast` | Fast Mode an/aus (Opus 4.8/4.7, ~2.5x Output-Speed, Premium-Preis) |
+| `/effort low\|medium\|high\|xhigh\|max` | Effort-Level (Default `high` auf Opus 4.8) |
 | `/cost` | Aktuelle Session |
 | `/usage` | Tagessumme |
 | `/insights` | Analytics |

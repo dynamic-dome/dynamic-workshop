@@ -11,7 +11,7 @@
 **Learning Objectives:** After this module, you can:
 - Distinguish between Claude Code's surfaces (CLI, Desktop App, IDE Extension, Web App, iOS App) and pick the right one for a given workflow.
 - Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies and which restrictions cloud sessions impose.
-- Choose the right model (Opus 4.7 / Sonnet 4.6 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth.
+- Choose the right model (Fable 5 / Opus 4.8 / Sonnet 4.6 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth.
 
 ### Overview
 
@@ -159,14 +159,17 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 
 | Model | Context | Strengths | Cost |
 |-------|---------|-----------|------|
-| **Claude Opus 4.7** (default since 2026-04-16 GA, model ID `claude-opus-4-7`) | 1M tokens | Deepest reasoning, architecture, complex tasks. New `xhigh` effort level. | Highest |
-| **Claude Sonnet 4.6** | 1M tokens (beta) | Fast, capable, everyday coding | Medium |
+| **Claude Fable 5** (`claude-fable-5`, GA 2026-06-09) | 1M tokens | Anthropic's most capable model — hardest reasoning, long-horizon agentic work. Premium tier. | Premium |
+| **Claude Opus 4.8** (current default, model ID `claude-opus-4-8`) | 1M tokens | Deepest Opus-tier reasoning, architecture, complex tasks. Effort defaults to `high`. | High |
+| **Claude Sonnet 4.6** | 1M tokens | Fast, capable, everyday coding | Medium |
 | **Claude Haiku 4.5** | 200K tokens | Quick tasks, brainstorming, bulk operations | Lowest |
+
+> Model names move fast. The script was written against Opus 4.8 (current default since ~May 2026); Fable 5 went GA on 2026-06-09. Run `/model` to see what your CLI actually offers, and `/release-notes` for the latest.
 
 **How to switch:**
 - At startup: `claude --model sonnet`
 - In session: `/model` command
-- Effort level: `/effort <low|medium|high|xhigh|max>` — five tiers ranging from cheap-and-fast to deepest analysis (`xhigh` and `max` unlock the deepest reasoning with Opus 4.7)
+- Effort level: `/effort <low|medium|high|xhigh|max>` — five tiers from cheap-and-fast to deepest analysis. On Opus 4.8 the default is `high`; `xhigh` and `max` (available on Opus 4.7, Opus 4.8, and Fable 5) unlock even deeper reasoning when set explicitly
 - Check spend: `/cost` shows token usage and cost for the current session
 - Check context: `/context` visualizes how much of the context window is used
 
@@ -187,7 +190,7 @@ Claude Code has a built-in permission system that controls which tools it can us
 | **default** | Only reads allowed, everything else asks for approval | Visitor badge — lobby access only |
 | **acceptEdits** | Reads + file edits allowed, bash still asks | Maintenance badge — utility rooms too |
 | **plan** | Shows full plan upfront, approves all steps at once | Security briefing — approve the mission |
-| **auto** | ML classifier decides risk level (Max-Plan with Opus 4.7, plus Team/Enterprise) | Smart badge — system decides per door |
+| **auto** | ML classifier decides risk level (Max-Plan with Opus 4.8, plus Team/Enterprise) | Smart badge — system decides per door |
 | **dontAsk** | Never prompts — relies entirely on allow/deny rules | Automated system — rules only, no guard |
 | **bypassPermissions** | Accepts everything (DANGER — isolated VMs only!) | Master key — no locks at all |
 
@@ -945,11 +948,12 @@ Claude Code is the same: Opus is the specialist, Sonnet is the seasoned patrol o
 
 ---
 
-### Pricing Reference (as of 2026-05)
+### Pricing Reference (as of 2026-06)
 
 | Model | Input ($/M tokens) | Output ($/M tokens) | Relative cost |
 |---|---:|---:|---|
-| Claude Opus 4.7 | $5 | $25 | 1x |
+| Claude Fable 5 | $10 | $50 | ~2x |
+| Claude Opus 4.8 | $5 | $25 | 1x |
 | Claude Sonnet 4.6 | $3 | $15 | ~0.6x |
 | Claude Haiku 4.5 | $1 | $5 | ~0.2x |
 
@@ -1011,12 +1015,12 @@ Effort levels are not just a quality dial — they are a cost dial. The relative
 | Effort | Use case | Relative cost |
 |---|---|---:|
 | `low` | Typo fixes, single-line refactors, quick code reviews | 0.5x |
-| `medium` (default) | Standard coding, normal refactors | 1x |
-| `high` | Architecture decisions, multi-file refactors | 2x |
-| `xhigh` | Deep analysis, root-cause debugging (Opus 4.7 only) | 4x |
+| `medium` | Standard coding, normal refactors | 1x |
+| `high` (default on Opus 4.8) | Architecture decisions, multi-file refactors | 2x |
+| `xhigh` | Deep analysis, root-cause debugging (Opus 4.7 / 4.8 / Fable 5) | 4x |
 | `max` | Edge cases, "look at everything" — use sparingly | 6x |
 
-**Best practice:** Default is `medium`. Only escalate to `high` or `xhigh` when you can clearly identify a need for deep reasoning. Otherwise you pay 4x for a 1.2x quality bump.
+**Best practice:** On Opus 4.8 the default is `high`. Downshift to `low`/`medium` for genuinely simple tasks (just as important as upshifting), and escalate to `xhigh`/`max` only when you can clearly identify a need for deep reasoning — otherwise you pay 4x for a 1.2x quality bump.
 
 The reverse is also true: downshifting to `low` for genuinely simple tasks is just as important as upshifting for hard ones. Paying `xhigh` for a one-line typo fix is a small but recurring leak.
 
@@ -1028,7 +1032,7 @@ For demanding tasks, a three-model pipeline often beats a single-model approach 
 
 | Phase | Model | Effort | Why |
 |---|---|---|---|
-| **Plan** | Opus 4.7 | xhigh | Architecture is the most expensive phase to get wrong — paying for depth here saves you from rewriting later |
+| **Plan** | Opus 4.8 | xhigh | Architecture is the most expensive phase to get wrong — paying for depth here saves you from rewriting later |
 | **Implement** | Sonnet 4.6 | medium | Writing code is routine — Sonnet does it fast and solidly |
 | **Review** | Haiku 4.5 | low | Final check, fast pattern-matching, Haiku is enough |
 

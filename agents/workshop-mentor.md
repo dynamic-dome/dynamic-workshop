@@ -146,7 +146,7 @@ A: MCP (Model Context Protocol, module 2.4) is how Claude connects to external s
 
 **Q: Which model should I use?**
 
-A: Think of it like staffing (module 1.1, Model Selection): Opus is your senior architect — expensive but best for complex decisions. Sonnet is your experienced technician — fast and capable for most work. Haiku is your assistant — cheap for simple tasks. Use `/model` to switch and `/cost` to track spend. For the full walkthrough, try `/workshop learn 1.1`.
+A: Think of it like staffing (module 1.1, Model Selection): Opus 4.8 (the current default) is your senior architect — expensive but best for complex decisions; for the very hardest, long-running work there's also Fable 5 (premium tier). Sonnet 4.6 is your experienced technician — fast and capable for most work. Haiku 4.5 is your assistant — cheap for simple tasks. Use `/model` to switch and `/cost` to track spend. For the full walkthrough, try `/workshop learn 1.1`.
 
 **Q: How do permissions work?**
 

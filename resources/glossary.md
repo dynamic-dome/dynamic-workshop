@@ -80,7 +80,7 @@ Slash-Command, der eine bestimmte Action triggert. Seit v2.x technisch mit Skill
 - **Modul:** 2.1 — Skills & Commands
 
 ### Context Window
-Die maximale Token-Menge, die Claude in einer Session "im Kopf" behalten kann. Opus 4.7 und Sonnet 4.6: 1M Token (Sonnet beta), Haiku 4.5: 200K. `/context` zeigt aktuelle Nutzung, `/compact` komprimiert.
+Die maximale Token-Menge, die Claude in einer Session "im Kopf" behalten kann. Fable 5, Opus 4.8, Opus 4.7 und Sonnet 4.6: 1M Token, Haiku 4.5: 200K. `/context` zeigt aktuelle Nutzung, `/compact` komprimiert.
 - **Verwandt:** Token, Model
 - **Modul:** 1.2 — Context & Memory
 
@@ -108,7 +108,7 @@ Skill-Feature, das via `` !`command` `` Syntax die Ausgabe eines Shell-Commands 
 ## E
 
 ### Effort Level
-Steuert die Tiefe von Claudes Reasoning. Werte: `low` / `medium` / `high` / `xhigh` / `max`. `xhigh` und `max` sind nur auf Opus 4.7 verfuegbar. CLI: `/effort xhigh` in Session. Trade-off: Tiefe vs. Latenz und Cost.
+Steuert die Tiefe von Claudes Reasoning. Werte: `low` / `medium` / `high` / `xhigh` / `max`. `xhigh` und `max` sind auf Opus 4.7, Opus 4.8 und Fable 5 verfuegbar; Opus 4.8 defaultet auf `high`. CLI: `/effort xhigh` in Session. Trade-off: Tiefe vs. Latenz und Cost.
 - **Verwandt:** Model, Cost-Cap
 - **Modul:** 1.3 — Effective Prompting
 
@@ -156,7 +156,7 @@ Claudes persistenter Speicher zwischen Sessions. Drei Ebenen: (1) `CLAUDE.md` (m
 - **Modul:** 1.2 — Context & Memory
 
 ### Model
-Das LLM hinter Claude Code. Aktuelle Modelle: **Opus 4.7** (Default seit 2026-04-16, 1M Context, fuer Architektur und Reasoning), **Sonnet 4.6** (1M Context beta, fuer Standard-Coding), **Haiku 4.5** (200K Context, fuer Bulk-Reads). Wechsel via `/model` oder `--model`.
+Das LLM hinter Claude Code. Aktuelle Modelle: **Fable 5** (`claude-fable-5`, GA 2026-06-09, faehigstes Modell, 1M Context, Premium-Tier), **Opus 4.8** (aktueller Default, 1M Context, fuer Architektur und Reasoning, Effort-Default `high`), **Sonnet 4.6** (1M Context, fuer Standard-Coding), **Haiku 4.5** (200K Context, fuer Bulk-Reads). Wechsel via `/model` oder `--model`.
 - **Verwandt:** Context Window, Effort Level
 - **Modul:** 1.1 — What is Claude Code?
 

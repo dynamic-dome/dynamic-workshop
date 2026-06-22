@@ -21,7 +21,7 @@ Vertiefung: Modul 2.1 (Skills & Commands), 2.2 (Hooks), 3.1 (Agents).
 
 ### Welches Model wann?
 
-Opus 4.7 fuer Architektur, Planning, Root-Cause-Analysis. Sonnet 4.6 fuer Standard-Coding und Refactors. Haiku 4.5 fuer Bulk-Reads, einfache Suchen, Routine-Reviews.
+Opus 4.8 (oder Fable 5 fuer die haertesten, langlaufenden Aufgaben) fuer Architektur, Planning, Root-Cause-Analysis. Sonnet 4.6 fuer Standard-Coding und Refactors. Haiku 4.5 fuer Bulk-Reads, einfache Suchen, Routine-Reviews.
 
 Pipeline-Pattern: `/plan` mit Opus, `/batch` von Subagents mit Sonnet, `/review` mit Haiku.
 
@@ -198,7 +198,7 @@ Headless ohne Hooks, Skills, Plugins, MCP, Auto-Memory. Maximal schnell, maximal
 
 ### Was ist Effort-Level und wann nutze ich was?
 
-`low` fuer triviale Aufgaben (kommentar-fix, einfache Lookups). `medium` (Default) fuer Standard-Coding. `high` fuer Refactors und schwierigere Bugs. `xhigh` und `max` (nur Opus 4.7) fuer Architektur-Entscheidungen und komplexe Root-Cause-Analyse. Trade-off: Tiefe vs. Latenz/Cost — `max` kann 5-10x so lange brauchen wie `medium`.
+`low` fuer triviale Aufgaben (kommentar-fix, einfache Lookups). `medium` fuer Standard-Coding. `high` (Default auf Opus 4.8) fuer Refactors und schwierigere Bugs. `xhigh` und `max` (auf Opus 4.7, Opus 4.8 und Fable 5) fuer Architektur-Entscheidungen und komplexe Root-Cause-Analyse. Trade-off: Tiefe vs. Latenz/Cost — `max` kann 5-10x so lange brauchen wie `medium`.
 
 ---
 

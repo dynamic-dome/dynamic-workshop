@@ -150,7 +150,7 @@ Never modify files.  Never execute code.  Explore only.
 - **`description`** — This is how the orchestrator decides *when* to use this agent.
   Write it with trigger phrases and examples.  This is the routing logic.
 - **`model`** — Use shorthand `haiku` / `sonnet` / `opus`, or pin to a specific ID like
-  `claude-haiku-4-5-20251001`, `claude-sonnet-4-6`, `claude-opus-4-7`. Haiku for quick reads,
+  `claude-haiku-4-5-20251001`, `claude-sonnet-4-6`, `claude-opus-4-8`. Haiku for quick reads,
   Sonnet for analysis, Opus for architecture decisions.
 - **`tools`** — **Security through least privilege.**  An explorer has no Write.
   A reviewer has no Bash.  Lock down to exactly what is needed. (Field was renamed from
@@ -571,8 +571,8 @@ Runs in minutes.  Integrates into CI/CD pipelines.
 
 `auto` is the ML-classifier-driven mode where Claude itself decides which actions to auto-approve based on per-action risk:
 
-- **Max plan (consumer)** — available **with Opus 4.7 only** (other models locked).
-- **Team / Enterprise** — available with Sonnet 4.6 and Opus 4.7.
+- **Max plan (consumer)** — available **with the current Opus (4.8) only** (other models locked).
+- **Team / Enterprise** — available with Sonnet 4.6 and Opus 4.8.
 - **Transport** — Anthropic API only (not yet on Bedrock or Vertex).
 - **Version** — requires Claude Code v2.1.83 or later.
 

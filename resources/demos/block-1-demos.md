@@ -481,7 +481,7 @@ What worktrees do we have now?
 
 ---
 
-### Step 1: Baseline with Opus 4.7 + xhigh
+### Step 1: Baseline with Opus 4.8 + xhigh
 
 In Claude Code:
 ```
