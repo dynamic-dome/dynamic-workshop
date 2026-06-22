@@ -416,10 +416,15 @@ Inside, this structure:
 
 ```
 ~/cc-workshop/
-├── demos/              # Live demo workdirs (one per demo: demo-1.1, demo-1.2, ...)
-├── exercises/          # Exercise workdirs (one per exercise: exercise-1.1, ...)
-└── workshop-playground/   # Cloned from the workshop repo
+├── dynamic-workshop/          # git clone of the workshop repo (see clone step above)
+│   └── workshop-playground/   #   ← the playground lives HERE: ~/cc-workshop/dynamic-workshop/workshop-playground
+├── demos/                     # Live demo workdirs (one per demo: demo-1.1, demo-1.2, ...)
+└── exercises/                 # Exercise workdirs (one per exercise: exercise-1.1, ...)
 ```
+
+> The playground is **inside the cloned repo** (`dynamic-workshop/workshop-playground`), not directly
+> under `~/cc-workshop/`. Exercises that reference it use that path; the `demos/` and `exercises/`
+> folders above are just scratch workdirs you create by hand.
 
 This way:
 - All workshop artifacts in one place

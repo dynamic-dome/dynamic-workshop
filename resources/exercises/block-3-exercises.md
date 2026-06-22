@@ -109,7 +109,7 @@ Each group shares their most interesting answer.  5 minutes total.
 
 Use `workshop-playground/access_control.py`. It already contains three deliberately planted vulnerabilities:
 1. Command Injection in `backup_database()`
-2. Hardcoded credential `ADMIN_PASSWORD = "admin123"`
+2. Hardcoded credential `ADMIN_PASSWORD = "admin123"` — note: **dead code**, never used in a reachable auth path (intentional; this matters in Step 3)
 3. Path Traversal in `read_log()`
 
 There is also a strong chance the swarm surfaces a fourth, *unplanned* issue (Log-Injection in `log_event()`). Treat that as a bonus.
@@ -150,7 +150,13 @@ Do not skip ahead.  Watch each stage:
 - Consensus: how many CONFIRMED vs FALSE POSITIVE?
 - Fixers: what does the fix for each confirmed finding look like?
 
-The swarm should confirm the **three planted issues** (Command Injection, Hardcoded Credential, Path Traversal) — plus potentially find the **Log-Injection bonus** in `log_event()`.
+The swarm will surface the **three planted issues** (Command Injection, Hardcoded Credential, Path Traversal) — plus potentially the **Log-Injection bonus** in `log_event()`.
+
+> ⚠️ **Don't expect a clean "3/3 CONFIRMED".** `ADMIN_PASSWORD` is dead code — never reached by any
+> auth path. A good Defender will argue exactly that in the Debate stage, so the Hardcoded Credential
+> can legitimately end up **CONFIRMED-but-low-severity** or even **NEEDS-INVESTIGATION** instead of a
+> clean CONFIRMED. That disagreement *is* the lesson: **reachability changes severity.** Discuss why —
+> a hardcoded secret in unreachable code is a real smell but not an exploitable path today.
 
 **Step 4: Pick one finding and apply its fix**
 
@@ -161,6 +167,15 @@ pytest -v
 ```
 
 The existing test suite must still pass. The fix is only acceptable if the baseline tests stay green.
+
+> ⚠️ **Do NOT commit this fix.** `access_control.py` is the intentional teaching target — the planted
+> vulnerabilities must survive for the next run of this workshop. Apply the fix **locally only**,
+> confirm the tests, then **revert it**:
+> ```bash
+> git checkout -- access_control.py
+> ```
+> (Or work on a throwaway copy and delete it.) This keeps the exercise reusable and matches the
+> playground's own rule in `workshop-playground/CLAUDE.md`: *"Do NOT fix them — they are the teaching target."*
 
 ### What to Report
 
@@ -495,7 +510,7 @@ exit 0
 
 **Step 3: Register and test**
 
-Add to settings.json with matcher `Write|Edit`. Test by asking Claude to create a config file with a hardcoded API key.
+Add this hook under a `Write|Edit` matcher — **merge** it into your existing `hooks` structure (don't overwrite the whole block), then validate with `python -m json.tool ~/.claude/settings.json`. Prefer a project-local `.claude/settings.json` so your global config stays untouched. Test by asking Claude to create a config file with a hardcoded API key.
 
 ### Success Check
 

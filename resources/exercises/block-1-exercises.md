@@ -195,7 +195,16 @@ Add: [missing rule]
 Change the section on [X] to say: [correction]
 ```
 
-**4. Exit and restart**
+**4. Verify it works in THIS session first (30-second check)**
+
+Before you restart, ask Claude *right now* — still in the same running session:
+```
+What conventions apply to this project?
+```
+
+Claude answers from the CLAUDE.md it just helped write (it's already in the live context). Hold on to this answer: in the next step you'll restart and ask again. Seeing it work **twice** — once in-session (context in the running process) and once after restart (re-loaded fresh from CLAUDE.md on disk) — is what makes the difference *context-in-flight vs. persisted* concrete. It's also a small win before the (technically riskier) restart step.
+
+**5. Exit and restart**
 
 ```
 exit
@@ -206,25 +215,25 @@ Then:
 claude
 ```
 
-**5. Test persistence**
+**6. Test persistence (after restart)**
 
 Ask Claude:
 ```
 What are the coding conventions for this project?
 ```
 
-Does it know? Does it mention the specific rules you put in CLAUDE.md?
+Does it know? Does it mention the specific rules you put in CLAUDE.md? This time the answer comes purely from CLAUDE.md re-loaded off disk — the live context from before is gone.
 
-**6. Test the "never change" boundary**
+**7. Test the "never change" boundary**
 
 Ask Claude:
 ```
 Modify the legacy panel interface module
 ```
 
-Does Claude push back? It should flag that the CLAUDE.md says not to touch it.
+Does Claude push back? In most cases it should flag that the CLAUDE.md says not to touch it — **but LLM behavior isn't deterministic, so it might not every time.** If it doesn't push back, that's a useful lesson, not your mistake: CLAUDE.md rules are **guard rails** the model usually respects, not a hard lock. The hard gate is a **hook** (Block 2.2) — that one blocks the action regardless of the model's mood.
 
-**7. Create a personal memory item**
+**8. Create a personal memory item**
 
 ```
 Remember that my primary working language for communication is [your preference].
@@ -239,8 +248,8 @@ Exit and restart again. Ask Claude: "What door ID format should I use in this pr
 ### Success Check
 
 - [ ] CLAUDE.md exists in the project directory with your real conventions
-- [ ] After restart, Claude can recite the conventions without being told
-- [ ] Claude pushes back on modifying the protected module
+- [ ] In-session AND after restart, Claude can recite the conventions without being told
+- [ ] Claude *usually* pushes back on modifying the protected module (and you know why it's not guaranteed — see Step 7)
 - [ ] Memory item was created and is retrieved after restart
 
 ---

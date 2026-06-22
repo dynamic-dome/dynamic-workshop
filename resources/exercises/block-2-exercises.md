@@ -145,15 +145,22 @@ This is one of the highest-value exercises in the workshop. Once configured, thi
 
 **Step 1: Locate or create your settings.json**
 
-```bash
-# Global settings (applies to all projects):
-cat ~/.claude/settings.json
+> ⚠️ **Protect your real config.** You have two safe choices:
+> - **Project-local (recommended for this exercise):** put the hook in a `.claude/settings.json` inside a throwaway project directory. It only applies there, so your global config is never at risk.
+> - **Global (`~/.claude/settings.json`):** the safety hook then fires in *every* session — useful, but **back it up first** and only ever **merge** into it (never overwrite the whole file).
 
-# If it doesn't exist, create it:
-echo '{}' > ~/.claude/settings.json
+```bash
+# Back up your global settings before touching them:
+cp ~/.claude/settings.json ~/.claude/settings.json.bak 2>/dev/null || true
+
+# View current settings (global shown here; use ./.claude/settings.json if you go project-local):
+cat ~/.claude/settings.json 2>/dev/null || echo '(none yet)'
+
+# Create ONLY if it does not exist — never blind-overwrite an existing file with '{}':
+[ -f ~/.claude/settings.json ] || echo '{}' > ~/.claude/settings.json
 ```
 
-Check if there's already a `hooks` section. If so, you'll add to it. If not, you'll create it.
+Check if there's already a `hooks` section. If so, you'll **merge** into it (don't replace it). If not, you'll create it.
 
 **Step 2: Create the hook script**
 
@@ -374,6 +381,8 @@ Add to settings.json:
   }
 }
 ```
+
+> The block above is the **merged result** — both hooks living in one structure. **Merge** the `PostToolUse` entry into your existing file (don't paste this whole block over it), then re-validate with `python -m json.tool ~/.claude/settings.json`.
 
 After running some Claude commands, inspect the log:
 ```bash
