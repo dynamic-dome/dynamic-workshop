@@ -1,7 +1,7 @@
 # Workshop-Einführung
 
 > Dieses Repository ist ein praxisnaher Claude-Code-Workshop für erfahrene Entwickler.
-> 3 Sessions à ~3h, 17 Module, demo-lastig mit optionalen Hands-on-Exercises.
+> 4 Sessions à ~3h, 17 Module → 48 Lerneinheiten (Block 3 auf Session 3+4 verteilt), demo-lastig mit optionalen Hands-on-Exercises.
 
 ## Einordnung
 

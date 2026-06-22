@@ -6,6 +6,36 @@
 
 ---
 
+## Lerneinheiten-Landkarte (Welle F — Session 2)
+
+> Dieser Block speist **Session 2** des 4-Session-/48-LE-Plans (`session-plan.md`). Jede LE ist auf ihre
+> Quell-Abschnitte und ihr Level abgebildet — adressierbar für den `workshop-mentor`-Agent und `/workshop`.
+
+| LE | Level | Titel | Quell-Abschnitt(e) in diesem Modul |
+|---|---|---|---|
+| S2.1 | core | Skills = SOPs, Commands = Buttons | 2.1 → *The Core Idea*, *SOPs and Alarm Buttons* |
+| S2.2 | core | Eine SKILL.md schreiben (Frontmatter-Basics) | 2.1 → *Anatomy of a Skill*, *Official Frontmatter Fields* |
+| S2.3 | core | Skills vs Commands & disable-model-invocation | 2.1 → *Skills vs Commands — Same Thing, Different Defaults*, *Anatomy of a Command* |
+| S2.4 | core | Bundled Skills (/batch /debug /loop /verify …) | 2.1 → *Bundled Skills*, *Authoring with /run-skill-generator*, *Skill Discovery: /skills* |
+| S2.5 | deep-dive | Living Prompts: dynamische Injection & Argumente | 2.1 → *Argument Substitution*, *Dynamic Context Injection*, *Advanced Skill Frontmatter*, *Skill Live-Reload* |
+| S2.6 | core | Hooks = Event-Listener (die 3 Eckpfeiler) | 2.2 → *The Core Idea*, *The Three Cornerstones in Detail*, *Access Control Sensors* |
+| S2.7 | core | Die wichtigsten Hook-Events landkarten | 2.2 → *Hook Types* (11er-Tabelle) |
+| S2.8 | core | Einen Hook konfigurieren (settings.json, matcher, if) | 2.2 → *Hook Configuration*, *A Real Hook Example*, *What Hooks Can Do* |
+| S2.9 | deep-dive | Hook-Exec-Typen & component-scoped Hooks | 2.2 → *Hook Execution Types*, *Component-Scoped Hooks* |
+| S2.10 | deep-dive | Advanced Hook-Outputs + Secure Diff Gate | 2.2 → *Advanced Hook Output*, *Circuit Breaker Pattern* (+ Demo 2.2b) |
+| S2.11 | core | Plugins: ein Bundle schnüren | 2.3 → *The Core Idea*, *Security Module*, *Plugin Structure* |
+| S2.12 | deep-dive | Plugin-Lifecycle, Scopes & Marketplaces | 2.3 → *Official Marketplaces*, *Plugin Scopes*, *Plugin CLI Management*, *Pinning*, *Plugin Dependencies* |
+| S2.13 | deep-dive | Plugin-Supply-Chain-Risiken | 2.3 → *Notable Plugins in the Ecosystem*, *Plugin Security: Supply Chain Risks* |
+| S2.14 | core | MCP: der Integrations-Stecker | 2.4 → *The Core Idea*, *Integrated Building Management*, *Available MCP Servers* |
+| S2.15 | core | MCP konfigurieren: Transports, Scopes, CLI | 2.4 → *MCP Transport Types*, *MCP Scopes*, *MCP CLI Management*, *MCP Configuration (File-Based)* |
+| S2.16 | deep-dive | MCP OAuth, Output-Limits & Protokoll-Details | 2.4 → *MCP OAuth*, *MCP Output Limits*, *Protocol Details Worth Knowing* |
+| S2.17 | deep-dive | MCP-Security & eigenen Server bauen | 2.4 → *MCP Security*, *Channels*, *Build Your Own MCP Server*, *What MCP Changes* |
+| S2.18 | core | RAG & NotebookLM: dem Agenten Blueprints geben | 2.5 → *The Problem*, *Building Blueprints vs. General Knowledge*, *NotebookLM*, *The Full Workflow*, *Use Cases* |
+| S2.19 | deep-dive | RAG-Grenzen & Datenschutz-Abwägung | 2.5 → *Why This Matters*, *RAG Limitations* |
+| S2.20 | core | Hands-on Puffer (Exercise 2.x — pick 2–3) | `exercises/block-2-exercises.md` |
+
+---
+
 ## Module 2.1: Skills & Commands
 
 **Learning Objectives:** After this module, you can:

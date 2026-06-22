@@ -2,16 +2,17 @@
 
 ## Mission
 
-Einen praxisnahen, demo-lastigen Workshop in 3 aufeinander aufbauenden Sessions entwickeln, der erfahrenen Entwicklern aus dem Bereich Physical Security einen vollumfaenglichen Eindruck von Claude Code vermittelt — von den Grundlagen bis hin zu autonomen Multi-Agent-Systemen.
+Einen praxisnahen, demo-lastigen Workshop in 4 aufeinander aufbauenden Sessions entwickeln, der erfahrenen Entwicklern aus dem Bereich Physical Security einen vollumfaenglichen Eindruck von Claude Code vermittelt — von den Grundlagen bis hin zu autonomen Multi-Agent-Systemen.
 
 **Ziel:** Die Teilnehmer sollen nach dem Workshop Claude Code eigenstaendig und produktiv in ihrem Arbeitsalltag einsetzen koennen.
 
 ## Workshop-Format
 
-- **3 Sessions à ~3h**, jeweils Teaching + Live Demos + optionale Exercises
-- **Session 1 — Foundations:** CLI, Context, Prompting, Git (Termin: 10. April 2026)
+- **4 Sessions à ~3h** (Welle-F-Restrukturierung: 17 Module → 48 Lerneinheiten), jeweils Teaching + Live Demos + optionale Exercises
+- **Session 1 — Foundations:** CLI, Context, Prompting, Git, Cost-Basics (Termin: 10. April 2026)
 - **Session 2 — Ecosystem:** Skills, Hooks, Plugins, MCP, RAG
-- **Session 3 — Advanced:** Agents, Multi-Model, Security, Automation
+- **Session 3 — Advanced Kern:** Agents, adversariale Security, Hardening/Compliance, Automation
+- **Session 4 — Advanced Bonus:** Multi-Model, CI/CD & Headless, Capstone-Architektur, Troubleshooting
 - Zielgruppe: 3 erfahrene Entwickler aus Physical Security (Zutrittskontrolle, Alarmsysteme)
 - Durchgaengige Security-Analogien als didaktisches Mittel
 - **Einstieg immer visuell:** Sessions mit PowerPoint-Praesentation (claude-code-workshop.pptx) starten, dann in Text-Module vertiefen. Teilnehmer wollen sich zuerst ein Bild machen, nicht gleich mit Text ueberflutet werden.
@@ -30,7 +31,7 @@ Einen praxisnahen, demo-lastigen Workshop in 3 aufeinander aufbauenden Sessions 
 - `resources/exercises/` — Hands-on Uebungen
 - `resources/cheatsheet.md` — Referenz-Karte fuer Teilnehmer
 - `resources/prerequisites.md` — Setup-Anleitung
-- `resources/session-plan.md` — Zeitplan alle 3 Sessions
+- `resources/session-plan.md` — Zeitplan alle 4 Sessions + 48-LE-Landkarte
 - `workshop-playground/` — Demo-Repo mit 3 geplanteten Vulnerabilities
 - `agents/workshop-mentor.md` — Mentor-Agent fuer guide/learn Modi
 

@@ -12,14 +12,19 @@ Kurz gesagt:
 
 ## Wie der Workshop aufgebaut ist
 
-Der Workshop besteht aus drei Sessions mit insgesamt 17 Modulen (Block 1: 5, Block 2: 5, Block 3: 7):
+Der Workshop besteht aus **vier Sessions** und deckt 17 Module ab, die in **48 kleine Lerneinheiten (LE)**
+zerlegt sind (je 10-25 Min, Level `core`/`deep-dive`/`bonus`). Block 3 ist dabei auf zwei Sessions verteilt —
+den Pflicht-Kern und einen Bonus-Track. Die genaue LE-Landkarte steht in `session-plan.md` und am Kopf jeder
+`modules/block-*.md`:
 
-- Block 1: Foundations
-  Was Claude Code ist, wie Kontext funktioniert, wie gutes Prompting aussieht, wie Git/Worktrees in den Workflow passen und wie Kosten/Effort gesteuert werden.
-- Block 2: Ecosystem
+- Session 1 — Block 1: Foundations (LEs S1.1-S1.20)
+  Was Claude Code ist, wie Kontext funktioniert, wie gutes Prompting aussieht, wie Git/Worktrees in den Workflow passen und wie Kosten gesteuert werden (Cost-Vertiefung wandert nach Session 4).
+- Session 2 — Block 2: Ecosystem (LEs S2.1-S2.20)
   Wie Skills, Commands, Hooks, Plugins, MCP und Knowledge-Workflows zusammenspielen.
-- Block 3: Advanced
-  Wie man Agents, Multi-Agent-Muster, Security-Pruefungen, Automatisierung, Headless/CI und Troubleshooting sinnvoll einsetzt.
+- Session 3 — Block 3 Advanced Kern (LEs S3.1-S3.15)
+  Agents, Multi-Agent-Muster, adversariale Security-Pruefung, Hardening/Compliance und sichere Automatisierung.
+- Session 4 — Block 3 Advanced Bonus (LEs S4.1-S4.10)
+  Multi-Model-Pipelines, Headless/CI-CD, die volle Architektur (Capstone) und Troubleshooting.
 
 Jeder Block folgt demselben didaktischen Muster:
 

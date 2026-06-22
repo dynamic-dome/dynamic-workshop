@@ -1,7 +1,7 @@
 # Claude Code Workshop
 
 > Praxisnaher Workshop fuer Entwickler, die Claude Code produktiv einsetzen wollen.
-> 3 Sessions, 17 Module (Block 1: 5, Block 2: 5, Block 3: 7), demo-lastig mit optionalen Hands-on-Uebungen.
+> 4 Sessions, 17 Module → 48 Lerneinheiten (Block 1: 5, Block 2: 5, Block 3: 7; Block 3 auf Session 3+4 verteilt), demo-lastig mit optionalen Hands-on-Uebungen.
 
 Dieses Repository ist die Materialbasis hinter der DoMe-Dynamics-Workshop-Seite:
 

@@ -41,7 +41,7 @@ When called without arguments, display the full workshop map using box-drawing c
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║               CLAUDE CODE WORKSHOP — 3 Sessions × ~3h                       ║
+║          CLAUDE CODE WORKSHOP — 4 Sessions × ~3h · 48 Lerneinheiten         ║
 ║                         Usage: /workshop [guide|learn] [module]             ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║  BLOCK 1 · FOUNDATIONS                             Session 1  ~3h           ║
@@ -64,17 +64,22 @@ When called without arguments, display the full workshop map using box-drawing c
 ║  │  2.5  RAG & NotebookLM            Knowledge bases, retrieval      │   ║
 ║  └─────────────────────────────────────────────────────────────────────┘   ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  BLOCK 3 · ADVANCED & MULTI-AGENT                  Session 3  ~3h           ║
+║  BLOCK 3 · ADVANCED — KERN                         Session 3  ~3h           ║
 ║  "Figure out what works best for you."                                      ║
 ║  ┌─────────────────────────────────────────────────────────────────────┐   ║
 ║  │  3.1  Agents & Multi-Agent Orchestration   Swarms, delegation      │   ║
-║  │  3.2  Nested Orchestration                 Claude→Codex→Claude     │   ║
 ║  │  3.3a Adversarial Testing                  Devil's Advocate swarm  │   ║
 ║  │  3.3b Hardening & Compliance               Permissions, sandbox    │   ║
 ║  │  3.4  Scheduled Tasks, Loops & Automation  Cron, self-improve      │   ║
+║  └─────────────────────────────────────────────────────────────────────┘   ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  BLOCK 3 · ADVANCED — BONUS                        Session 4  ~3h           ║
+║  "Figure out what works best for you."                                      ║
+║  ┌─────────────────────────────────────────────────────────────────────┐   ║
+║  │  3.2  Nested Orchestration                 Claude→Codex→Claude     │   ║
 ║  │  3.6  CI/CD & Headless Mode                claude -p, JSON, budget │   ║
+║  │  3.5  Telegram/Inception/Worktree          Architecture (Capstone) │   ║
 ║  │  3.7  Troubleshooting & Debugging          /debug, /doctor, layers │   ║
-║  │  3.5  Telegram Bridge, Inception & Worktree Isolation (Capstone)   │   ║
 ║  └─────────────────────────────────────────────────────────────────────┘   ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║  USAGE                                                                       ║

@@ -33,6 +33,52 @@
 
 ---
 
+## Lerneinheiten-Landkarte (Welle F — Session 3 + Session 4)
+
+> Block 3 speist **zwei** Termine des 4-Session-/48-LE-Plans (`session-plan.md`): **Session 3** (Advanced Kern —
+> Agents, Security, Automation) und **Session 4** (Advanced Bonus — Multi-Model, CI/CD, Capstone, Troubleshooting).
+> Jede LE ist auf ihre Quell-Abschnitte und ihr Level abgebildet — adressierbar für `workshop-mentor` & `/workshop`.
+
+### Session 3 — Advanced Kern
+
+| LE | Level | Titel | Quell-Abschnitt(e) |
+|---|---|---|---|
+| S3.1 | core | Was ist ein Agent? (Spezialisierung) | 3.1 → *What Is an Agent?*, *Why Specialization Matters*, *The Agent Tool* |
+| S3.2 | core | Built-in Subagents nutzen | 3.1 → *Built-in Subagents (Ships with Claude Code)* |
+| S3.3 | core | Einen Custom Subagent definieren | 3.1 → *Agent Definition Anatomy*, *Full Frontmatter Reference*, *Inline Subagent via --agents* |
+| S3.4 | core | Orchestrierungs-Muster (Fan-Out/Pipeline/Hierarchie) | 3.1 → *Orchestration Patterns* (1–3), *Quick-Start*, *`/batch` Recap* |
+| S3.5 | deep-dive | Background-Sessions & Agent Teams | 3.1 → *`/tasks`*, *Agent Teams (Experimental)*, *Background Agents* |
+| S3.6 | core | Devil's Advocate: adversariale Security-Pipeline | 3.3a → *The Devil's Advocate Swarms Pipeline* (Stages 1–4) |
+| S3.7 | core | Built-in Review-Trio | 3.3a → *Security Audit Skill*, *Built-in Code-Review Trio* |
+| S3.8 | core | Permissions für Autonomie (advanced modes) | 3.3b → *Permission Modes — Going Deeper*, *Permission Rules — Beyond Allow/Deny* |
+| S3.9 | core | Protected Paths & Sandboxing-Stufen | 3.3b → *Protected Paths*, *Sandboxing Options*, *Trust Boundaries in Practice* |
+| S3.10 | deep-dive | Netzwerk-/Skill-Hardening | 3.3b → *Sandbox-Level Network Hardening*, *Hardening Skill Execution* |
+| S3.11 | deep-dive | Datenschutz, Retention & regulierte Branchen | 3.3b → *Data Retention & Privacy*, *Regulated Industries*, *Known Vulnerabilities* |
+| S3.12 | core | Scheduling: /loop, /goal, /schedule, Routines | 3.4 → *Cronjobs with /schedule*, *Loops with /loop*, *`/goal`*, *Routines* |
+| S3.13 | core | Autonome Loops absichern (Budget + Worktree) | 3.4 → *`--max-budget-usd`*, *Worktree-Scoped Scheduled Tasks*, *Channels* |
+| S3.14 | bonus | Self-Improve Loop (Showcase + Grenzen) | 3.4 → *Self-Improve Loops* |
+| S3.15 | core | Hands-on Puffer (Exercise 3.x — pick 1) | `exercises/block-3-exercises.md` |
+
+### Session 4 — Advanced Bonus
+
+| LE | Level | Titel | Quell-Abschnitt(e) |
+|---|---|---|---|
+| S4.1 | deep-dive | Multi-Model: das richtige Modell pro Phase | 3.2 → *Different Models, Different Strengths*, *Cost Trade-Off*, *The Claude → Codex → Claude Pipeline* |
+| S4.2 | bonus | Codex Swarm & Daten-Fluss-Grenze | 3.2 → *Data Flow — What Goes Where?*, *Codex Swarm*, *Practical Example* |
+| S4.3 | deep-dive | Headless Mode: `claude -p` als Pipeline-Stufe | 3.6 → *Headless Mode*, *Structured Output* |
+| S4.4 | deep-dive | CI-Auth, Cost-Caps & **Cost-Engineering-Vertiefung** | 3.6 → *CI Auth*, *Cost Caps*, *`--bare` Mode*, *Persona Override* **+ verschobenes Modul 1.5** (Pricing, /insights, Pipeline, Cost-Reduction Tactics, Prompt Caching, Anti-Patterns — Text in `block-1-foundations.md`) |
+| S4.5 | deep-dive | CI-Pipelines bauen (GitHub Actions / GitLab) | 3.6 → *`/autofix-pr`*, *GitHub Actions*, *GitLab CI*, *Self-Hosted Runner*, *Token Rotation*, *Pre-Commit Hook*, *Monitoring CI Costs*, *Common Failure Patterns*, *Don'ts* |
+| S4.6 | bonus | Mobile/Remote: remote-control & /teleport | 3.5 → *Built-in Mobile Workflow*, *Telegram Bridge* |
+| S4.7 | bonus | Inception (Docker) & Worktree-Isolation tief | 3.5 → *Inception*, *Worktree Isolation*, *worktree.baseRef*, *`--tmux`* |
+| S4.8 | bonus | Die volle Architektur (Capstone-Diskussion) | 3.5 → *The Full Architecture*, *The Security Analogy — Complete Picture* (+ Exercise 3.5 Capstone) |
+| S4.9 | core* | Troubleshooting: /debug, --verbose, /doctor | 3.7 → *`/debug`*, *`--verbose` and `/doctor`* |
+| S4.10 | core* | Diagnose-Sequenzen (Hook/Skill/Plugin/MCP) | 3.7 → *Hook-Failure*, *Skill Does Not Trigger*, *Plugin*, *MCP Reconnect*, *InstructionsLoaded*, *Auto-Memory Drift*, *The Diagnosis Checklist* |
+
+> **`core*`** = innerhalb Session 4 Pflicht; Troubleshooting ist der einzige „jeder braucht es"-Teil von Session 4.
+> **Fallback ohne 4. Termin:** S4.9 + S4.10 ans Ende von Session 3 hängen, Session-3-deep-dives streichen, Rest = Selbststudium.
+
+---
+
 ## Module 3.1: Agents & Multi-Agent Orchestration
 
 **Learning Objectives:** After this module, you can:

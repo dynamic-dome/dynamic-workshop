@@ -300,7 +300,7 @@ Tool names are the strings used for permission rules, hook matchers, and subagen
 
 ## Models & Context
 
-> Quick-ref snapshot. → see Module 1.5 (Cost Engineering) for the full strategy, effort multipliers, and Plan/Implement/Review pipeline.
+> Quick-ref snapshot. **Session 1 (LE S1.19)** covers the basics: `/cost`, `/usage`, `--max-budget-usd`. The full cost strategy — effort multipliers, Plan/Implement/Review pipeline, prompt caching, cost-reduction tactics — is taught in **Session 4 (LE S4.4)** alongside CI budget caps (the text still lives in Module 1.5 of `block-1-foundations.md` for reference).
 
 | Model | Context Window | Best for | API Price ($/MTok) |
 |-------|---------------|----------|-------------------|

@@ -8,8 +8,9 @@
 
 ## 0. FORTSCHRITT — START HIER (Stand: 2026-06-22)
 
-**Wellen A + B + C + D + E sind erledigt und committet. NÄCHSTER EINSTIEG: Playground-Korrektheit & Übungs-Qualität.**
+**Wellen A + B + C + D + E + F sind erledigt und committet. NÄCHSTER EINSTIEG: Playground-Korrektheit & Übungs-Qualität.**
 
+- **Welle F (Restrukturierung, `restructuring`-Cluster) — User-Entscheidung 2026-06-23: 4 Sessions.** Die 17 Module sind jetzt auf **48 Lerneinheiten (LE)** über **4 Sessions** abgebildet (Block 3 → Session 3 Kern + Session 4 Bonus). Umgesetzt: `session-plan.md` komplett neu (4-Session-/48-LE-Landkarte, core/deep-dive/bonus, Core-Minuten-Summen, Exercise-Mapping); LE-Navigationsblock am Kopf jeder `modules/block-*.md` (LE↔Section↔Level, robust statt fragiler Inline-Anker); `workshop-mentor.md` auf LE-Granularität + 4-Session-Map; Cost-Verschiebung (S1.19 Basics in S1, Rest → S4.4 bei CI) in cheatsheet + quick-reference gespiegelt; nutzerseitige Struktur-Refs auf 4 Sessions (`CLAUDE.md`, `AGENTS.md`, `README.md`, `WORKSHOP_EINFUEHRUNG.md`, `workshop-guide.md`, `skills/workshop/SKILL.md`-Banner). **User-Entscheidungen:** S1.6 (alle 6 Permission Modes) = `[core]` (Audience-Fit, ggü. Vorschlag), Cost verschieben (nicht nur degradieren), deep-dives „wenn Zeit, zeigen", 48 feine LEs. **Bewusst NICHT angefasst:** `video-scripts.md` („drei Sessions" = Transkript bereits aufgenommener Videos → keine Recording-Drift). Playground-Tests 18/18 grün.
 - **`aee9a76` — Welle E (Demo-Robustheit & Live-Sicherheit, `demo-reliability`-Cluster):** T-016 (broken-greeter/SKILL.md als fertiges Asset unter `resources/demos/assets/broken-greeter/` + Copy-Befehl in Demo 3.7), T-014 (Demo 3.6 als garantierter Live-Anker + 60-Sek-Block-3-Opener), T-015 (Exercise 3.3 built-in-`/security-review`-Fallback ohne Plugin), T-002 (Exercise 3.6 in isoliertes `~/cc-workshop/exercise-3.6`-Sandbox-Repo statt git-init-im-Playground; T-001 `--max-turns` war schon in A/B raus), T-027 (Go/No-Go-Demo-Matrix in trainer-notes), T-044 (Demo 3.4 Budget-Cap vor `/run-loop` + `/cost`), T-045 (Demo 3.3c Ein-Befehl-`git checkout`-Cleanup + pip-Warnung), T-078 (Demo-Zeit-Hinweis + Bonus-Markierung session-plan). Mentor nachgezogen. Tests 18/18 grün. **Codex-Verifier auf Welle D** (`aa58d28`): 3.3-Split-Downstream-Drift in session-plan + SKILL.md-Overview-Box gefixt.
 - **`d22d051` — Welle D (Didaktik & Einstiegshürde, `didactics-onboarding`-Cluster):** T-006 (Hello-Claude-Code-Hands-on vor Overview von Modul 1.1), T-017 (Lernziele 1.1 leicht→schwer), T-047 (Tools-Tabelle auf 6 Kern-Tools), T-048 (Header "NEW to coding agents"), T-028 (Modul 1.2 Kern/Vertiefung via Deepening-Banner), T-046 (Privacy-Block gekürzt), T-065 (Block-2/3-Vorgriffe als Outlook-Teaser), T-066 (Modul 1.5 optional, 5-Min-Kern), T-067 (Modul 3.3 → 3.3a Adversarial / 3.3b Hardening&Compliance gesplittet), T-029 (SKILL.md Learn-Mode-Preflight für Plugin-Module), T-050 (README Selbstlern-Pfad), T-068 (17-Modul-Fortschritts-Checkliste in workshop-guide), T-051 (Micro-Übung 1.0), T-052 (Pairing-Fallback). T-049 war schon durch Welle B. Mentor-Modul-Map nachgezogen. Tests 18/18 grün. **Codex-Verifier auf Welle C** (`28ec8f7`): fand Exercise-Numerierungsversatz (Hook-Übung=2.2 nicht 2.1, aus Backlog geerbt) → 5 Cross-Refs + prereq-check gefixt.
 - **`d02b046` — Welle C (Windows-Tauglichkeit, kompletter `windows-compat`-Cluster + T-019):** T-007 (getestete Hook-Assets `resources/demos/assets/hooks/secure-diff-gate.{sh,py}` — block .env/.pem/secrets/credentials=exit 1, normal=exit 0, .py jq-frei; `.gitattributes` erzwingt LF für `*.sh`), T-036 (Exercise 2.1 safety-check + audit-log mit PowerShell-`.ps1`-Variante neben bash, live gegen powershell.exe getestet), T-021 (bash-vs-pwsh-Widerspruch aufgelöst), T-035 (prerequisites Hook-Setup PowerShell-Block), T-022 (trainer-notes Pre-Flight Windows-first), T-019 (Cheatsheet „Hooks on Windows"-Box), T-061 (MCP-Config `python`), T-072 (Windows-Vorspann in allen 3 Exercise-Dateien + Exercise 1.1 bash+pwsh), T-073 (API-Key/export/echo-e PS-Formen, CI-`/tmp/` als Linux-Runner klargestellt), T-083 (C-Playground compile-frei geframed). Mentor-Agent um Windows-Referenz + FAQ ergänzt. Playground-Tests 18/18 grün.
@@ -20,7 +21,7 @@
 - **`missing-content`/`new-exercise-idea`:** neue Übungen aus `resources/review-2026-06-21/05-new-exercises.md` + `05b`, `T-031` (fail-open PhySec-Vuln), `T-032` (OSDP/Wiegand-Domänen-Übung 3.9).
 - **Currency-Reste:** `T-040/042/043/063/076/077/085`.
 
-**Welle F (Restrukturierung / 48 Lerneinheiten) bleibt gated** auf die User-Entscheidung „3 vs. 4 Sessions".
+**Welle F (Restrukturierung / 48 Lerneinheiten) ist erledigt** (User-Entscheidung 2026-06-23: 4 Sessions — siehe oberster Bullet).
 
 ⚠️ **Playground-Tests vor/nach OSDP-C-Änderungen:** Die 3 absichtlichen Vulns sind Lehr-Material — NICHT „fixen" (außer ein TODO sagt explizit härten/dokumentieren, z.B. T-003). `python -m pytest -q` in `workshop-playground/` muss grün bleiben (18 Tests, harmlos, kein Prod-DB-Risiko).
 
@@ -37,15 +38,15 @@ Erledigt (3 Commits auf `main`, **nicht gepusht** — Push = User):
 
 **Wichtig:** `resources/review-2026-06-21/` ist das **historische Review-Archiv** — NIE editieren (auch wenn grep dort alte Begriffe wie „Opus 4.7"/„--max-turns" findet). Das sind die Befunde selbst, kein Kursinhalt.
 
-(Der `windows-compat`-Cluster wurde in Welle C abgeschlossen — siehe oben.) **Welle F (Restrukturierung / 48 Lerneinheiten) bleibt gated** auf die User-Entscheidung „3 vs. 4 Sessions" — nicht ohne Freigabe starten.
+(Der `windows-compat`-Cluster wurde in Welle C abgeschlossen — siehe oben.) **Welle F (Restrukturierung / 48 Lerneinheiten) ist erledigt** (User-Entscheidung 2026-06-23: 4 Sessions).
 
 ---
 
 ## 1. Kontext (worum geht es)
 
-Dieses Repo ist der **Dynamic Workshop** — eine praxisnahe Claude-Code-Schulung (3 Sessions à ~3h,
-17 Module) für 3 erfahrene Entwickler aus Physical Security (Zutrittskontrolle, Alarmsysteme).
-Session 1 wurde am 10.04.2026 durchgeführt; Sessions 2 & 3 stehen aus. Das Repo dient auch
+Dieses Repo ist der **Dynamic Workshop** — eine praxisnahe Claude-Code-Schulung (4 Sessions à ~3h,
+17 Module → 48 Lerneinheiten) für 3 erfahrene Entwickler aus Physical Security (Zutrittskontrolle, Alarmsysteme).
+Session 1 wurde am 10.04.2026 durchgeführt; Sessions 2–4 stehen aus. Das Repo dient auch
 Selbstlernern und ist gleichzeitig ein Claude-Code-Plugin.
 
 Am 2026-06-21 wurde der gesamte Kurs per Multi-Agent-Review aus 12 Perspektiven durchgespielt.
@@ -98,7 +99,7 @@ und Windows-tauglich machen, ohne Inhalt zu verlieren.
 
 **Welle E — Übungen & Demos:** neue Übungen aus `05`/`05b` einpflegen, Demo-Robustheit (`T-014`–`T-016`, `T-027`).
 
-**Welle F — Restrukturierung (nur nach User-Freigabe):** `04b` in einen neuen `session-plan.md` gießen. Offene Frage: 3 vs. 4 Termine (Block 3 → 3a/3b). **Nicht ohne User-Entscheidung starten.**
+**Welle F — Restrukturierung: ERLEDIGT (2026-06-23, 4 Sessions).** `04b` ist in den neuen `session-plan.md` (4 Sessions / 48 LE) gegossen; Details siehe Abschnitt 0 (oberster Bullet).
 
 ## 5. Harte Randbedingungen (nicht verletzen)
 

@@ -6,13 +6,52 @@
 
 ---
 
+## Lerneinheiten-Landkarte (Welle F — Session 1)
+
+> Dieser Block speist **Session 1** des 4-Session-/48-LE-Plans (`session-plan.md`). Jede LE ist hier
+> auf ihre Quell-Abschnitte und ihr Level abgebildet — adressierbar für den `workshop-mentor`-Agent
+> und das `/workshop`-Command. Reihenfolge = Lehr-Reihenfolge laut session-plan, nicht Datei-Reihenfolge.
+
+| LE | Level | Titel | Quell-Abschnitt(e) in diesem Modul |
+|---|---|---|---|
+| S1.1 | core | Coding Agent vs. Chat — mentales Modell | Module 1.1 → *Overview*, *The Three Consultant Modes*, *Boris Cherny's Philosophy* |
+| S1.2 | core | First Contact: bau sofort eine Datei | 1.1 → *First: Hello, Claude Code*, *What Claude Code Can Do*, *What Claude Code Cannot Do* |
+| S1.3 | core | Die Oberflächen (CLI/Desktop/IDE/Web/iOS) | 1.1 → *The Five Surfaces*, *Surface-Switching from Inside a Session* |
+| S1.4 | core | Built-in Tools & Tool-Namen | 1.1 → *Built-in Tools Reference* |
+| S1.5 | core | Permissions Grundlagen: default & acceptEdits | 1.1 → *Permission System* (Alltags-Modi default/acceptEdits/plan + allow/deny) |
+| S1.6 | **core** ⭐ | Permission Modes komplett (6 Modi + Cloud) | 1.1 → *Permission System* (auto/dontAsk/bypass + Cloud-2-Modi-Restriktion) |
+| S1.7 | core | Modellwahl & Effort-Level | 1.1 → *Model Selection & Cost Awareness*; 1.5 → *Effort Levels as a Strategic Lever* |
+| S1.8 | core | Kontextfenster verstehen | 1.2 → *The Context Window*, *The Control Room with Limited Monitors*, *Context Compression* |
+| S1.9 | core | `/compact`, `/rewind` & Kontext steuern | 1.2 → *Context Compression: How to Handle It*, *Key Context Commands* |
+| S1.10 | core | CLAUDE.md: Projekt-Standing-Orders | 1.2 → *CLAUDE.md: Your Project Access Policy*, *CLAUDE.md as Access Policy* |
+| S1.11 | deep-dive | Memory-Layer komplett | 1.2 → *Auto-Memory*, *.claude/rules/*, *CLAUDE.local.md*, *Managed-Policy CLAUDE.md* |
+| S1.12 | deep-dive | `@path`-Imports, `--add-dir`, AGENTS.md | 1.2 → *@path Imports and AGENTS.md Interop*, *Multi-Project Setup with --add-dir* |
+| S1.13 | core | Vager vs. präziser Prompt | 1.3 → *Clarity Over Cleverness*, *The Contractor Analogy*, *Scope Control* |
+| S1.14 | core | Plan Mode & Explain/Propose/Refine/Execute | 1.3 → *Iterative Work Pattern*, *Plan Mode*, *Effective Prompting Patterns*, *Bad vs Good*, *What Not to Do* |
+| S1.15 | deep-dive | Output Styles & Personas | 1.3 → *Output Styles*, *`/voice` for Dictation*, *Persona-Switching via System Prompt* |
+| S1.16 | core | Git in einem Flow: branch → commit → PR | 1.4 → *Built-in Git Capabilities*, *The Full PR Workflow in One Flow*, *Key Git Commands* |
+| S1.17 | deep-dive | Git-Slash-Commands | 1.4 → *Git-Related Slash Commands*, *Resuming a Session at a Specific PR* |
+| S1.18 | deep-dive | Worktrees als Test-Labor | 1.4 → *Git Worktrees*, *Worktree as Test Lab*, *The --worktree CLI Flag*, *worktree.baseRef*, *Worktrees in Practice* |
+| S1.19 | core | Kosten im Blick: /cost, /usage & Budget-Cap | 1.5 → *Token Tracking — Three Tools*, *Budget Caps for Autonomous Sessions* |
+| S1.20 | core | Hands-on Puffer (Exercise 1.x — pick 1) | `exercises/block-1-exercises.md` |
+
+> **💸 Verschoben nach Session 4 (S4.4):** Der Rest von Modul 1.5 — *Pricing Reference*, *Deep Dive: /insights*,
+> *Model Choice (Plan/Implement/Review Pipeline)*, *Cost-Reduction Tactics*, *Team Rules of Thumb*,
+> *Prompt Caching*, *Anti-Patterns* — wird im Live-Workshop **nicht** in Session 1 gefahren, sondern bei den
+> CI-Budget-Caps in **S4.4** praktisch wieder aufgegriffen. Der Text bleibt hier als Referenz/Selbststudium stehen.
+>
+> **⭐ S1.6 ist `[core]`** (nicht deep-dive): Die Zielgruppe (Physical-Security-Profis) will die vollen 6
+> Permission Modes / Clearance-Level früh sehen. Die Lernziele unten sind entsprechend angepasst.
+
+---
+
 ## Module 1.1: What is Claude Code?
 
 **Learning Objectives:** After this module, you can:
 - **Explain what a coding agent is and how it differs from a chat assistant** — the core mental model everything else builds on.
 - Distinguish between Claude Code's five surfaces (CLI, Desktop App, IDE Extension, Web App, iOS App) and pick the right one for a given workflow.
-- *(Deeper dive — fine to skip on a first pass)* Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies and which restrictions cloud sessions impose.
-- *(Deeper dive — fine to skip on a first pass)* Choose the right model (Fable 5 / Opus 4.8 / Sonnet 4.6 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth.
+- *(Comes later in the session — builds on the basics above)* Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies and which restrictions cloud sessions impose. **Core for this security-focused audience** (LE S1.6).
+- *(Comes later in the session — builds on the basics above)* Choose the right model (Fable 5 / Opus 4.8 / Sonnet 4.6 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth (LE S1.7).
 
 ---
 
