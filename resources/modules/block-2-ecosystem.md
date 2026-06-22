@@ -620,7 +620,7 @@ The `pre-deploy-check.sh` only fires while the deploy skill's context is active.
 
 Beyond simply exiting 0 (allow) or non-zero (block), hooks can return a **structured JSON object** on stdout to control downstream behavior more precisely. Three fields matter in practice.
 
-#### `updatedToolOutput` — Rewrite What Claude Sees (v2.1.119+)
+#### `updatedToolOutput` — Rewrite What Claude Sees (recent versions)
 
 A `PostToolUse` hook can **replace the tool's output before Claude reads it**. The original output is intercepted; Claude sees only the rewritten version.
 
@@ -640,7 +640,7 @@ exit 0
 
 **Security analogy:** A redaction officer between the field operative and the briefing room — the report still reaches the analyst, but with the sensitive identifiers blacked out first.
 
-#### `continueOnBlock: true` — Soft Warnings (v2.1.121+)
+#### `continueOnBlock: true` — Soft Warnings (recent versions)
 
 By default, a non-zero exit from a hook **stops Claude** in its tracks. With `continueOnBlock: true` on the hook entry, the block degrades to a **warning** — Claude is told what was blocked and why, but the turn continues.
 
@@ -657,7 +657,7 @@ By default, a non-zero exit from a hook **stops Claude** in its tracks. With `co
 
 **Use case:** Non-fatal audit logs ("we noticed a `git push` — entry written to the audit trail") where you want the action to proceed but want the hook's signal preserved in the transcript.
 
-#### `terminalSequence` — ANSI Output to the User's Terminal (v2.1.139+)
+#### `terminalSequence` — ANSI Output to the User's Terminal (recent versions)
 
 A hook can return a `terminalSequence` field whose value is written **directly to the user's terminal** as raw ANSI escape sequences — independent of the model's reasoning stream.
 
@@ -670,7 +670,7 @@ exit 1
 
 **Use case:** Colored warnings, status-bar updates, audible bells, anything that should reach the human operator's eyes without going through Claude's token budget.
 
-#### `$CLAUDE_EFFORT` — Effort-Aware Hooks (v2.1.119+)
+#### `$CLAUDE_EFFORT` — Effort-Aware Hooks (recent versions)
 
 Every hook process gets the current effort level injected as an environment variable (`$CLAUDE_EFFORT` in bash, `$env:CLAUDE_EFFORT` in PowerShell). This lets one hook script behave **differently depending on whether the user is on low/high/xhigh/max**.
 
@@ -960,6 +960,8 @@ MCP servers communicate with Claude Code via different transport protocols:
 | **HTTP** | Remote server over HTTPS | Cloud services, shared team servers | **Recommended** |
 | **stdio** | Local process, communicates via stdin/stdout | Local tools, custom scripts, system access | Good for development |
 | **SSE** | Server-Sent Events | (legacy) | **Deprecated** — use HTTP instead |
+
+> **Why SSE is out:** SSE was deprecated in early 2026 in favor of **Streamable HTTP**, which is more resource-efficient and doesn't require HTTP/2. New servers should use `http` (a.k.a. `streamable-http`); keep SSE only for an old server that hasn't migrated yet.
 
 ### MCP Scopes
 

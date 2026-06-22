@@ -228,6 +228,8 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 | **Claude Haiku 4.5** | 200K tokens | Quick tasks, brainstorming, bulk operations | Lowest |
 
 > Model names move fast. The script was written against Opus 4.8 (current default since ~May 2026); Fable 5 went GA on 2026-06-09. Run `/model` to see what your CLI actually offers, and `/release-notes` for the latest.
+>
+> **Mind Haiku's 200K context** (vs. 1M on the others): it caps *bulk-read* tasks. Use Haiku for small, focused reads and Opus/Fable for whole-codebase analysis — if Haiku seems to "forget" the start of a large file, the 200K limit is why.
 
 **How to switch:**
 - At startup: `claude --model sonnet`
@@ -237,6 +239,8 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 - Check context: `/context` visualizes how much of the context window is used
 
 **Rule of thumb:** Start with Opus for planning and architecture. Switch to Sonnet for implementation. Use Haiku for bulk reads and simple tasks. Use `/cost` regularly to stay aware of spend.
+
+> **Lean System Prompt (recent default).** On current Opus-4.8+ builds Claude Code ships a **leaner system prompt** by default — less fixed overhead in your context window, so more room for your actual code. You rarely need to touch it; if you want to override or extend it, use `--append-system-prompt` (add to it) or `--system-prompt` / `--system-prompt-file` (replace it).
 
 > Detailed pricing per million tokens, effort multipliers, and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth.
 
@@ -381,7 +385,7 @@ You write the policy once. Claude follows it every session, without being remind
 
 ### The Memory System: Auto-Memory (Default On)
 
-Beyond CLAUDE.md, Claude Code has a structured memory system stored in `~/.claude/projects/<project>/memory/`. Since **v2.1.59 this Auto-Memory feature is default on** — you don't have to ask Claude to remember anything. Claude automatically captures notes during a session and writes them to disk: build commands that worked, debugging insights, code-style preferences it observed, project-specific gotchas. The next session starts with that knowledge already in context.
+Beyond CLAUDE.md, Claude Code has a structured memory system stored in `~/.claude/projects/<project>/memory/`. Since **recent releases this Auto-Memory feature is default on** — you don't have to ask Claude to remember anything. Claude automatically captures notes during a session and writes them to disk: build commands that worked, debugging insights, code-style preferences it observed, project-specific gotchas. The next session starts with that knowledge already in context.
 
 **The file layout:**
 

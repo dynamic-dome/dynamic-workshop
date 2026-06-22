@@ -43,7 +43,12 @@ npm install -g @anthropic-ai/claude-code
 
 # Verify installation
 claude --version
+
+# Already installed? Update to a recent build:
+claude update
 ```
+
+> **Use a recent version.** Several workshop features are gated on newer releases (Fable 5, Dynamic Workflows, some hook outputs). There's no hard minimum just to start, but if an advanced feature seems missing, your CLI is probably behind — run `claude update` and re-check `claude --version`. Always trust `claude --version` and `/release-notes` over any version number printed in this material.
 
 **Alternative — without global install:**
 ```bash
@@ -215,7 +220,7 @@ This checks your environment and reports issues.
 
 **Questions?** Contact the workshop organizer before the session.
 
-**Last Updated:** 2026-04-03 | **Workshop:** Claude Code Dynamic Workshop
+**Last Updated:** 2026-06-23 | **Workshop:** Claude Code Dynamic Workshop (zentraler Stand-Anker: README → „Stand & Versionen")
 
 ---
 

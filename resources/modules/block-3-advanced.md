@@ -282,6 +282,15 @@ Master Orchestrator
 
 **Use when:** Problem requires decomposition at multiple levels.  Enterprise-scale codebases.
 
+#### Beyond hand-rolled fan-out: Dynamic Workflows *(optional, recent releases)*
+
+The patterns above are what you orchestrate **by hand** — typically 5–10 agents. Recent Claude Code
+releases add **Dynamic Workflows**: a single Opus-4.8-class model can plan and coordinate *hundreds* of
+parallel subagents programmatically, via the `/workflows` command (and a scripting layer). Treat the
+hand-rolled patterns as the teaching model and Dynamic Workflows as the production-scale version of the
+same idea — fan-out, pipeline, and hierarchy, but at a scale you wouldn't wire up by hand. Optional depth
+for Session 3; check availability with `/help` and `/release-notes` on your CLI.
+
 ---
 
 ### Quick-Start: Triggering Multi-Agent Work
@@ -330,7 +339,7 @@ Each teammate runs as a **separate session** with its own context window. They c
 
 ### Background Agents (`claude agents`)
 
-Since v2.1.139 Claude Code ships a dedicated subsystem for **long-running background sessions**: tasks you fire off and walk away from. Build watchers, CI monitors, generation pipelines that run for hours — your laptop lid can close, the session keeps going server-side.
+Recent Claude Code releases ship a dedicated subsystem for **long-running background sessions**: tasks you fire off and walk away from. Build watchers, CI monitors, generation pipelines that run for hours — your laptop lid can close, the session keeps going server-side.
 
 **Starting a background session:**
 
@@ -635,6 +644,8 @@ Three official slash-commands cover the common review surface — before reachin
 
 **Recommendation for the workshop audience:** Start with the built-ins (`/security-review` on every branch before merge, `/ultrareview` on high-stakes PRs). Reach for Devil's Advocate Swarms when you need a *specific* combination of scanners, a particular debate model, or domain-tuned prompts.
 
+> **Footnote — `ultracode` (research preview).** Alongside `/ultraplan` and `/ultrareview`, recent builds expose an experimental **ultracode** mode (deep multi-agent coding in the cloud). It's a research preview and may change — noted here only so the name isn't a surprise; not part of the core workshop path.
+
 ---
 
 ## Module 3.3b: Hardening & Compliance
@@ -658,7 +669,7 @@ Three official slash-commands cover the common review surface — before reachin
 - **Max plan (consumer)** — available **with the current Opus (4.8) only** (other models locked).
 - **Team / Enterprise** — available with Sonnet 4.6 and Opus 4.8.
 - **Transport** — Anthropic API only (not yet on Bedrock or Vertex).
-- **Version** — requires Claude Code v2.1.83 or later.
+- **Version** — requires a recent Claude Code version (check `claude --version`).
 
 Admins on Team/Enterprise can tighten or loosen `auto` via managed settings — see `autoMode.hard_deny` below for the unconditional block-list.
 

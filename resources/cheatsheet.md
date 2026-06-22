@@ -47,7 +47,7 @@ claude /login
 | `claude -p "prompt"` / `--print` | Non-interactive mode, stdout only (CI/scripts) |
 | `claude --output-format json` | JSON output (pairs with --print) |
 | `claude --json-schema <schema>` | Validated JSON output (structured outputs) |
-| `claude --model sonnet` | Use a specific model (opus, sonnet, haiku) |
+| `claude --model sonnet` | Use a specific model (opus, sonnet, haiku, fable) |
 | `claude --permission-mode <mode>` | Set permission mode (see Permission System) |
 | `claude --dangerously-skip-permissions` | Auto-accept all tool use (use with caution!) |
 | `claude --allowedTools "Edit,Read"` | Whitelist specific tools |
@@ -159,8 +159,8 @@ claude auto-mode defaults         # Print auto-mode classifier rules
 ### Models & Context
 | Command | What it does |
 |---------|-------------|
-| `/model <name>` | Switch model (opus, sonnet, haiku) |
-| `/fast` | Toggle fast output mode |
+| `/model <name>` | Switch model (opus, sonnet, haiku, fable) |
+| `/fast` | Toggle Fast Mode (Opus 4.8/4.7, ~2.5× output speed) |
 | `/effort <level>` | Set effort level (low/high/xhigh/max) — controls thinking depth |
 | `/context` | Visualize context window usage |
 | `/cost` | Show token usage and cost for session |

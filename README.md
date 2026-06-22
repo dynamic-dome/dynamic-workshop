@@ -11,6 +11,8 @@ Dieses Repository ist die Materialbasis hinter der DoMe-Dynamics-Workshop-Seite:
 
 Die Website zeigt, warum der Workshop als Engineering-Arbeitsprobe zaehlt. Dieses Repo zeigt, womit er konkret funktioniert.
 
+> **📌 Stand & Versionen (zentraler Anker).** Material-Stand: **2026-06-23** (4 Sessions / 65 Lerneinheiten). Getestet gegen eine aktuelle Claude-Code-CLI; Modell-Lineup: Fable 5 · Opus 4.8 *(Default)* · Opus 4.7 · Sonnet 4.6 · Haiku 4.5. **Modellnamen, CLI-Flags und Versionsnummern ändern sich laufend** — im Zweifel `/model`, `/release-notes` und `claude --version` gegen dein Material prüfen, statt den hier genannten Zahlen blind zu vertrauen. Einzelne Dateien tragen eigene „Stand"-Zeilen; diese hier ist die maßgebliche Referenz.
+
 ---
 
 ## Fuer wen ist das?
