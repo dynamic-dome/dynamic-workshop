@@ -738,8 +738,12 @@ Understanding data handling is essential for enterprise deployment and complianc
 
 **Telemetry opt-out:**
 ```bash
-export DISABLE_TELEMETRY=1           # No operational metrics (Statsig)
+export DISABLE_TELEMETRY=1           # No operational metrics (Statsig)   — macOS/Linux/Git Bash
 export DISABLE_ERROR_REPORTING=1     # No error logging (Sentry)
+```
+```powershell
+$env:DISABLE_TELEMETRY = "1"         # Windows PowerShell (session); persist with setx
+$env:DISABLE_ERROR_REPORTING = "1"
 ```
 
 **Network:** Prompts and outputs are transmitted via TLS. According to docs, data is "not encrypted at rest."
@@ -1395,6 +1399,8 @@ jobs:
 
 Every building block from this module is in there: `--bare` for a clean run, JSON output for downstream parsing, budget cap and turn cap as the safety net, OAuth secret for auth.
 
+> **Note on shell syntax:** these CI examples run on **Linux runners** (`runs-on: ubuntu-latest`, GitLab shell runners), so the POSIX form (`export`, `/tmp/`, `#!/bin/bash`) is correct *there* — you do not translate it to PowerShell. If you reproduce one of these snippets **locally on Windows**, use `$env:VAR` for env vars and `$env:TEMP` instead of `/tmp/`.
+
 ---
 
 ### GitLab CI / Self-Hosted Runners
@@ -1497,6 +1503,8 @@ git diff --cached | claude --bare -p \
   --output-format json
 # Exit non-zero if issues found
 ```
+
+> On **Windows**, git runs hooks through the bundled Git Bash, so a `#!/bin/bash` pre-commit hook works as-is (no `.ps1` needed). If you'd rather drive it from PowerShell, replace the body with `git diff --cached | claude --bare -p "..." --output-format json`.
 
 Cross-reference: Module 2.2 (Hooks) covers Claude Code's *internal* hook system (PreToolUse, PostToolUse, etc.). The hook above is a **git** hook that *calls* Claude Code from the outside — same word, different layer. Both are legitimate places to invoke Claude in your workflow.
 

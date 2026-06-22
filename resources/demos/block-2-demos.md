@@ -243,8 +243,8 @@ Say: *"Normal doors open normally. Only the protected zones are locked. Least pr
 
 ### Recovery Notes
 
-- **If the hook bash-quoting breaks live:** Have a pre-prepared `secure-diff-gate.sh` file ready (in `~/.claude/hooks/`) as fallback. Reference it via `command: bash ~/.claude/hooks/secure-diff-gate.sh`.
-- **If `jq` not installed (Windows):** Use a Python alternative: `python3 -c "import sys,json; d=json.load(sys.stdin); ..."` — note that prerequisites.md should list `jq` or `python3` requirement.
+- **If the hook bash-quoting breaks live:** Use the pre-prepared, tested fallback script that ships with this repo: [`resources/demos/assets/hooks/secure-diff-gate.sh`](./assets/hooks/secure-diff-gate.sh). Copy it to `~/.claude/hooks/` and reference it via `command: bash ~/.claude/hooks/secure-diff-gate.sh`. Same block/allow behaviour, no inline quoting to get wrong.
+- **If `jq` not installed (Windows without Git Bash):** Use the jq-free Python variant [`resources/demos/assets/hooks/secure-diff-gate.py`](./assets/hooks/secure-diff-gate.py) (reads stdin via `json.load`, no external deps). Register it as `command: python %USERPROFILE%\.claude\hooks\secure-diff-gate.py` (use `python`, not `python3`, on Windows). Both scripts are verified to block writes to `.env`/`*.pem`/`secrets/`/`credentials` (exit 1) and pass normal writes through (exit 0).
 - **If the hook fires but doesn't block (exit 0 instead of 1):** Check the bash conditional — `grep -qE` must match. Test the regex outside Claude with `echo ".env" | grep -qE "(\.env|\.pem)"; echo $?`.
 - **If `settings.json` parse fails:** Common cause is unescaped quotes in the bash inline command. Move the script to its own file and reference by path.
 

@@ -5,6 +5,8 @@ Time estimate per exercise: 25-30 minutes (Exercise 2.5 with NotebookLM setup ru
 Do them in order — each builds on the last.
 Audience: experienced programmers. Security analogies used throughout.
 
+> **⊞ Running on Windows?** Block 2 hook exercises ship in two forms: a **bash** script (`#!/bin/bash`, `chmod +x`, run via Git Bash) and a **PowerShell** parallel (`.ps1`, no `chmod`, registered as `pwsh -File ...`). Use whichever matches your shell — the central hook exercise (2.1) shows both side by side. For plain shell snippets (`mkdir -p`, `&&`, heredocs), Git Bash runs them as written; in PowerShell use `New-Item -ItemType Directory -Force`, `;`, and here-strings (`@'...'@`).
+
 ---
 
 ## Exercise 2.1: Build Your First Skill
@@ -206,6 +208,44 @@ exit 0
 chmod +x ~/.claude/hooks/safety-check.sh
 ```
 
+**Windows / PowerShell variant**
+
+On a pure Windows box there is no `chmod`, `bash` needs Git Bash on `PATH`, and `python3` is usually just `python`. Use this PowerShell parallel instead. Create `~/.claude/hooks/safety-check.ps1`:
+
+```powershell
+# Read the tool input from stdin (Claude passes it as JSON)
+$raw = $input | Out-String
+try { $data = $raw | ConvertFrom-Json } catch { exit 0 }
+$command = [string]$data.command
+
+# Define dangerous patterns to check (same set as the bash version)
+$dangerous = @(
+  'rm\s+-rf',
+  'git push.*--force',
+  'git push.*-f\b',
+  'DROP TABLE',
+  'truncate.*--yes',
+  'mkfs\.',
+  'dd\s+if=.*of=/dev/',
+  '> /dev/sd'
+)
+
+foreach ($pattern in $dangerous) {
+  # -match is case-insensitive by default (like grep -i)
+  if ($command -match $pattern) {
+    [Console]::Error.WriteLine("SAFETY HOOK: Potentially destructive command detected!")
+    [Console]::Error.WriteLine("Command: $command")
+    [Console]::Error.WriteLine("Pattern matched: $pattern")
+    [Console]::Error.WriteLine("Hook blocked execution. Review and run manually if intended.")
+    exit 1   # Exit 1 to BLOCK the command
+  }
+}
+
+exit 0   # All checks passed — allow the command
+```
+
+No `chmod` step is needed on Windows — PowerShell does not use the executable bit. (If `pwsh` is not installed, `powershell` — Windows PowerShell 5.1 — works too; this script is compatible with both.)
+
 **Step 3: Register the hook in settings.json**
 
 Edit `~/.claude/settings.json` to add the hook:
@@ -228,7 +268,29 @@ Edit `~/.claude/settings.json` to add the hook:
 }
 ```
 
-If settings.json already has content, add the `hooks` section carefully — don't break the JSON structure.
+On **Windows**, register the PowerShell script instead (point the command at the `.ps1`):
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -File $HOME/.claude/hooks/safety-check.ps1"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+(If you only have Windows PowerShell 5.1, use `powershell -File ...` instead of `pwsh -File ...`.)
+
+If settings.json already has content, **merge** the new entry into the existing `hooks.PreToolUse` array — don't paste a whole new `hooks` block over your existing one (that would wipe other hooks/permissions). Validate afterwards with `python -m json.tool ~/.claude/settings.json` (`python3` on macOS/Linux).
 
 **Step 4: Test it**
 
@@ -267,6 +329,20 @@ exit 0
 ```bash
 chmod +x ~/.claude/hooks/audit-log.sh
 ```
+
+**Windows / PowerShell variant** — create `~/.claude/hooks/audit-log.ps1` (no `chmod` needed):
+
+```powershell
+$raw = $input | Out-String
+try { $data = $raw | ConvertFrom-Json } catch { $data = $null }
+$command = if ($data) { [string]$data.command } else { "unknown" }
+$timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+
+Add-Content -Path "$HOME/.claude/audit.log" -Value "[$timestamp] BASH: $command"
+exit 0
+```
+
+Register it with `"command": "pwsh -File $HOME/.claude/hooks/audit-log.ps1"` (or `powershell -File ...`).
 
 Add to settings.json:
 
@@ -307,8 +383,8 @@ cat ~/.claude/audit.log
 ### Success Check
 
 You've succeeded when:
-- [ ] `~/.claude/hooks/safety-check.sh` exists and is executable (`chmod +x`)
-- [ ] `~/.claude/settings.json` has a valid `hooks.PreToolUse` section pointing to your script
+- [ ] `~/.claude/hooks/safety-check.sh` exists and is executable (`chmod +x`) — **or** on Windows, `~/.claude/hooks/safety-check.ps1` exists (no `chmod` needed)
+- [ ] `~/.claude/settings.json` has a valid `hooks.PreToolUse` section pointing to your script (`bash …safety-check.sh` or `pwsh -File …safety-check.ps1`)
 - [ ] Asking Claude to run `rm -rf` is blocked by your hook
 - [ ] Asking Claude to run `echo "hello"` succeeds without any hook warning
 - [ ] (Bonus) `~/.claude/audit.log` grows with entries as Claude runs commands

@@ -4,6 +4,8 @@
 **Time budget:** ~85-90 minutes total for all Block 1 exercises (1.5 optional; without it ~60-65 min)
 **Format:** Work individually or in pairs. Facilitator available for questions.
 
+> **⊞ Running on Windows?** The shell snippets below use POSIX syntax (`mkdir -p`, `&&`, `~/`, `chmod`). The easiest path is to run them in **Git Bash**, where they work as written. If you prefer **PowerShell**, use the PowerShell form shown alongside the first command (and remember: `New-Item -ItemType Directory -Force -Path ...` instead of `mkdir -p`, `;` instead of `&&`, `$HOME` instead of `~`, no `chmod`). Claude Code itself often creates directories for you, so the main place this bites is the very first copy-paste of an exercise.
+
 ---
 
 ## How These Exercises Work
@@ -31,8 +33,17 @@ The exercises are designed to be short and hands-on. You are not building a prod
 **1. Open Claude Code in a clean directory**
 
 In your terminal:
-```
+
+```bash
+# macOS / Linux / Git Bash
 mkdir -p ~/cc-workshop/exercises/exercise-1.1 && cd ~/cc-workshop/exercises/exercise-1.1
+claude
+```
+
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\exercises\exercise-1.1" | Out-Null
+Set-Location "$HOME\cc-workshop\exercises\exercise-1.1"
 claude
 ```
 

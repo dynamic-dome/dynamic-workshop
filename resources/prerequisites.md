@@ -67,7 +67,18 @@ claude
 
 You need one of:
 - **Claude Pro/Max subscription** (recommended for workshop)
-- **Anthropic API key** (set `ANTHROPIC_API_KEY` environment variable)
+- **Anthropic API key** — set the `ANTHROPIC_API_KEY` environment variable:
+  ```powershell
+  # Windows PowerShell — current session only:
+  $env:ANTHROPIC_API_KEY = "sk-ant-..."
+  # Windows — persist across sessions (re-open the terminal afterwards):
+  setx ANTHROPIC_API_KEY "sk-ant-..."
+  ```
+  ```bash
+  # macOS / Linux / Git Bash:
+  export ANTHROPIC_API_KEY="sk-ant-..."        # current session
+  echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.bashrc   # persist
+  ```
 - **AWS Bedrock** or **Google Vertex** credentials (enterprise setups)
 
 **Verify authentication works:**
@@ -162,7 +173,9 @@ Run through this checklist to make sure everything works:
 - [ ] `git --version` shows 2.30+
 - [ ] `python3 --version` (Windows: `python --version`) shows 3.9+
 - [ ] Workshop playground repo cloned and tests pass
-- [ ] Terminal supports Unicode and ANSI colors (try `echo -e "\033[32mGreen\033[0m"`)
+- [ ] Terminal supports Unicode and ANSI colors
+  - macOS / Linux / Git Bash: `echo -e "\033[32mGreen\033[0m"`
+  - Windows PowerShell 7+: `Write-Host "`e[32mGreen`e[0m"` (or `"$([char]27)[32mGreen$([char]27)[0m"` in PowerShell 5.1)
 
 ---
 
@@ -274,6 +287,8 @@ Verify Option A with `/skills` — `notebooklm` should appear in the list.
 
 Demo 2.2 (Hooks — The Alarm System) uses a pre-prepared hook file at `~/.claude/hooks/security-check.sh`. Create it before the demo:
 
+**macOS / Linux / Git Bash** (needs `jq` — see the prerequisites checklist):
+
 ```bash
 mkdir -p ~/.claude/hooks
 cat > ~/.claude/hooks/security-check.sh << 'EOF'
@@ -293,7 +308,26 @@ EOF
 chmod +x ~/.claude/hooks/security-check.sh
 ```
 
-Reference this hook in your `~/.claude/settings.json`:
+**Windows / PowerShell** (no `jq`, no `chmod`, no heredoc — uses `New-Item -Force` and a here-string):
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$HOME/.claude/hooks" | Out-Null
+
+@'
+# Workshop demo hook: blocks rm -rf and force-pushes
+$raw = $input | Out-String
+try { $data = $raw | ConvertFrom-Json } catch { exit 0 }
+$command = [string]$data.command
+if ($command -match 'rm\s+-rf|git push.*--force|DROP TABLE|truncate') {
+  [Console]::Error.WriteLine("WARNING: Potentially destructive command detected: $command")
+  [Console]::Error.WriteLine("Pausing for confirmation...")
+  exit 1
+}
+exit 0
+'@ | Set-Content -Path "$HOME/.claude/hooks/security-check.ps1" -Encoding utf8
+```
+
+Reference this hook in your `~/.claude/settings.json`. Use the `command` that matches the script you created:
 
 ```json
 {
@@ -309,6 +343,8 @@ Reference this hook in your `~/.claude/settings.json`:
   }
 }
 ```
+
+> **Windows:** replace the `command` value with `"pwsh -File $HOME/.claude/hooks/security-check.ps1"` (or `powershell -File ...` for Windows PowerShell 5.1). If you prefer the bash variant, install **Git Bash + jq** (see the prerequisites checklist) and keep the `bash ...` command.
 
 ### Prepared NotebookLM Notebook
 

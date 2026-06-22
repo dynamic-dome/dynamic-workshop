@@ -4,6 +4,8 @@
 > The final exercise — Architecture Discussion — is the goal of the entire workshop.
 > Leave enough time for it.
 
+> **⊞ Running on Windows?** Shell snippets below use POSIX syntax (`mkdir -p`, `&&`, `~/`, `chmod`, `/tmp/`). Run them in **Git Bash** for least friction, or translate to PowerShell (`New-Item -ItemType Directory -Force`, `;`, `$HOME`, no `chmod`, `$env:TEMP` instead of `/tmp/`). See the Windows note at the top of the Block 1 exercises for the full mapping.
+
 ### Exercise Priority Guide
 
 | Priority | Exercise | Realistic Time |

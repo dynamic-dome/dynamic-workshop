@@ -88,12 +88,23 @@ of code you'd find on a real access-control panel.
 
 ### Build & Test
 
+**The Block 3.3 demo does not need a compiler.** The Devil's-Advocate swarm reviews the
+C **source** (`osdp_frame_decoder.c`) directly — no build or static-analysis run is
+required to demonstrate the vulnerability patterns. This is the recommended path on a
+typical **Windows** workshop machine, where `gcc`/`clang`/`scan-build` are usually absent.
+
+The build targets below are **optional** and assume a POSIX toolchain (macOS/Linux, or
+Windows via WSL / MSYS2-mingw + `clang-tools-extra`):
+
 ```bash
 cd workshop-playground/
-make                  # Build
-make static-check     # Static analysis with clang
-make scan-build       # Deeper static analysis with scan-build (if installed)
+make                  # Build (needs gcc)
+make static-check     # Static analysis (needs clang)
+make scan-build       # Deeper static analysis (needs scan-build, if installed)
 ```
+
+> On Windows without WSL/MSYS2: skip `make` entirely and run the swarm against the source
+> file — `make static-check` will fail with "command not found" and that is expected.
 
 ### Use in Demos
 

@@ -42,10 +42,10 @@ Description zu breit, Trigger-Phrases zu generisch. Loesung: praeziser machen, o
 Matcher zu breit (`".*"` oder nichts gesetzt). Engeren Pattern waehlen, z.B. `"Bash"` nur, oder `"Write|Edit"` fuer File-Mods. Letters/digits/`_`/`|` = exact-match oder Pipe-Liste. Mit Sonderzeichen = JS-Regex.
 
 ### 5. Hook-Script laeuft nicht
-- `chmod +x` vergessen?
+- `chmod +x` vergessen? (nur bash/Git-Bash; auf Windows-PowerShell **kein** `chmod` noetig)
 - Shebang fehlt? (`#!/bin/bash` oder `#!/usr/bin/env node`)
 - Pfad in `settings.json` falsch (relative vs. absolute)?
-- Auf Windows: PowerShell-Pfad richtig? Skript mit `pwsh -File` aufrufen.
+- **Auf Windows:** Registriere die PowerShell-Variante (`.ps1`) mit `"command": "pwsh -File $HOME/.claude/hooks/<script>.ps1"` (oder `powershell -File ...` fuer Windows PowerShell 5.1) — **nicht** `bash ...`, wenn keine Git Bash auf dem PATH liegt. Genau so zeigt es Exercise 2.1.
 - `/hooks` zeigt registrierte Hooks; `/doctor` macht Health-Check.
 
 ### 6. Hook haengt

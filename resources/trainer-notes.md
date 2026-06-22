@@ -24,21 +24,21 @@
 
 ### Pre-Flight Checklist (am Workshop-Tag)
 
-Vor der Session 30 Min vorher:
+Vor der Session 30 Min vorher. Der Workshop laeuft i.d.R. auf **Windows** — die Befehle unten sind Windows-first (`python`, kein `~`-Pfad); macOS/Linux-Alternativen stehen als Kommentar daneben.
 
-```bash
+```powershell
 # 1. Claude Code funktioniert
 claude --version
 claude /doctor
 
-# 2. Workshop-Repo aktuell
-cd ~/cc-workshop/dynamic-workshop
+# 2. Workshop-Repo aktuell  (Windows-Pfad anpassen; macOS/Linux: cd ~/cc-workshop/dynamic-workshop)
+cd $HOME\cc-workshop\dynamic-workshop
 git pull
 
 # 3. Playground baut
-cd workshop-playground/
-python3 -m pytest -v       # Python playground
-make                        # C playground (if installed)
+cd workshop-playground
+python -m pytest -v         # Python playground   (macOS/Linux: python3 -m pytest -v)
+# make                      # C playground — OPTIONAL, nur wenn gcc/make installiert (auf Windows meist nicht; Demo 3.3 reviewt den C-Quelltext auch ohne Compile)
 
 # 4. Plugins geladen
 claude plugin list

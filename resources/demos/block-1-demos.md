@@ -587,8 +587,11 @@ Keep talking through the concepts while waiting. "While Claude is thinking, let 
 
 **Terminal output is hard to read on screen:**
 Before demoing:
+```bash
+export TERM=xterm-256color          # macOS / Linux / Git Bash
 ```
-export TERM=xterm-256color
+```powershell
+$env:TERM = "xterm-256color"        # Windows PowerShell
 ```
 And bump font size. If still hard: narrate what's happening and move on.
 

@@ -602,6 +602,8 @@ exit 0
 
 **Use case:** Redact API keys, tokens, or PII out of tool output before Claude embeds them into its reasoning (and potentially into future messages). The model never sees the raw secret.
 
+> **Windows:** the hook examples in this section are written in bash (`jq`, `sed`, `case`). On Windows run them via Git Bash, or port them to a `.ps1` (parse stdin with `$input | Out-String | ConvertFrom-Json`, emit JSON with `ConvertTo-Json`) and register with `pwsh -File ...`. See the "Hooks on Windows" box in the cheatsheet and the bash+PowerShell pair in Exercise 2.1.
+
 **Security analogy:** A redaction officer between the field operative and the briefing room — the report still reaches the analyst, but with the sensitive identifiers blacked out first.
 
 #### `continueOnBlock: true` — Soft Warnings (v2.1.121+)
@@ -636,7 +638,7 @@ exit 1
 
 #### `$CLAUDE_EFFORT` — Effort-Aware Hooks (v2.1.119+)
 
-Every hook process gets the current effort level injected as an environment variable. This lets one hook script behave **differently depending on whether the user is on low/high/xhigh/max**.
+Every hook process gets the current effort level injected as an environment variable (`$CLAUDE_EFFORT` in bash, `$env:CLAUDE_EFFORT` in PowerShell). This lets one hook script behave **differently depending on whether the user is on low/high/xhigh/max**.
 
 ```bash
 #!/bin/bash
@@ -1137,12 +1139,14 @@ Add to `.mcp.json`:
 {
   "mcpServers": {
     "my-tools": {
-      "command": "python3",
+      "command": "python",
       "args": ["my_mcp_server.py"]
     }
   }
 }
 ```
+
+> On Windows use `"python"` (there is usually no `python3.exe`); on macOS/Linux use `"python3"`. Picking the wrong one makes the MCP server fail to start silently.
 
 Now Claude Code can call `get_user_count` and `list_active_features` as tools. The same pattern
 works in Node.js (`@modelcontextprotocol/sdk`) or any language with an MCP SDK.
