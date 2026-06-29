@@ -30,17 +30,18 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 ### Als Selbstlerner
 
 1. `resources/prerequisites.md` durcharbeiten (Installation, Auth, Tools)
-2. `resources/workshop-guide.md` als **Haupt-Navigation** und Lern-Routine nutzen (ersetzt den Moderator); `WORKSHOP_EINFUEHRUNG.md` gibt die Kurz-Orientierung
-3. Block fuer Block durcharbeiten:
+2. `resources/cloud-code-workshop-ui.html` im Browser oeffnen: interaktive 48-Section-Route mit 65-LE-Gesamtkarte, Folien, Uebungen, Bewertung und Quiz
+3. `resources/workshop-guide.md` als **Haupt-Navigation** und Lern-Routine nutzen (ersetzt den Moderator); `WORKSHOP_EINFUEHRUNG.md` gibt die Kurz-Orientierung
+4. Block fuer Block durcharbeiten:
    - `resources/modules/block-1-foundations.md` lesen
    - `resources/demos/block-1-demos.md` nachvollziehen
    - `resources/exercises/block-1-exercises.md` ausprobieren
-4. Trainer-Ersatz-Ressourcen (wenn du allein arbeitest und niemand zum Fragen da ist):
+5. Trainer-Ersatz-Ressourcen (wenn du allein arbeitest und niemand zum Fragen da ist):
    - `resources/faq.md` — Konzeptfragen ("warum/wann nutze ich X?")
    - `resources/troubleshooting.md` — wenn etwas klemmt (Fehlermeldungen, Hooks, Plugins)
    - `resources/glossary.md` — unklare Begriffe nachschlagen
    - `resources/cheatsheet.md` + `resources/quick-reference.md` — Referenz / Schnellzugriff
-5. Weiter mit Block 2 und 3
+6. Weiter mit Session 2, 3 und 4
 
 ### Als Reviewer
 
