@@ -754,6 +754,67 @@
       text-align: center;
     }
 
+    .resource-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .resource-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--cyan);
+      background: var(--blue-soft);
+      border: 1px solid #c3e4f5;
+      border-radius: 5px;
+      padding: 3px 8px;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+
+    .resource-links a:hover {
+      background: #c3e4f5;
+    }
+
+    .kbd-hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .kbd-hint kbd {
+      font-family: var(--mono);
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-size: 10px;
+    }
+
+    .reset-row {
+      padding: 8px 0 0;
+      border-top: 1px solid var(--soft-line);
+      margin-top: 8px;
+      text-align: right;
+    }
+
+    .reset-row button {
+      font-size: 11px;
+      color: var(--muted);
+      background: none;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .reset-row button:hover {
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
     @media (max-width: 1180px) {
       .app {
         grid-template-columns: 240px minmax(0, 1fr);
@@ -826,6 +887,8 @@
           <div class="eyeline" id="metaLine"></div>
           <h2 id="title"></h2>
           <p class="source" id="source"></p>
+          <div id="resourceLinks" class="resource-links"></div>
+          <p class="kbd-hint"><kbd>←</kbd> <kbd>→</kbd> navigieren &nbsp;·&nbsp; <kbd>m</kbd> erledigt markieren</p>
         </div>
         <div class="toolbar">
           <button class="tool-btn" id="prevBtn" type="button" title="Vorherige Section">Prev</button>
@@ -907,6 +970,9 @@
           <div class="stat"><strong id="doneStat">0</strong><span>Done</span></div>
           <div class="stat"><strong id="scoreStat">0</strong><span>Ø Score</span></div>
           <div class="stat"><strong id="quizStat">0</strong><span>Quiz OK</span></div>
+        </div>
+        <div class="reset-row">
+          <button id="resetBtn" type="button" title="Alle Fortschritte loeschen">Fortschritt zuruecksetzen</button>
         </div>
       </section>
 
@@ -1215,6 +1281,12 @@
         <span class="pill">${routeText}</span>`;
       $("title").textContent = `${s.id}: ${s.title}`;
       $("source").textContent = `Quelle: ${s.source}`;
+      const block = s.session <= 2 ? s.session : 3;
+      $("resourceLinks").innerHTML = [
+        [`modules/block-${block}-${["","foundations","ecosystem","advanced"][block]}.md`, "Modul"],
+        [`demos/block-${block}-demos.md`, "Demo"],
+        [`exercises/block-${block}-exercises.md`, "Exercise"]
+      ].map(([href, label]) => `<a href="${href}" target="_blank">↗ ${label}</a>`).join("");
       $("routeNote").textContent = routeMode === "48" ? "Durcharbeitungsroute" : "Gesamtkarte";
       $("conceptLead").textContent = c.concept;
       $("analogy").textContent = c.analogy;
@@ -1271,7 +1343,7 @@
       $("answer").value = saved;
       const prev = state.exercise[s.id];
       $("exerciseFeedback").className = "feedback" + (prev ? " show " + feedbackClass(prev.score) : "");
-      $("exerciseFeedback").innerHTML = prev ? feedbackText(prev.score, prev.hits, keywordsFor(s)) : "";
+      $("exerciseFeedback").innerHTML = prev ? feedbackText(prev.score, prev.foundKeys || [], keywordsFor(s)) : "";
     }
 
     function gradeExercise() {
@@ -1281,12 +1353,13 @@
       const checks = [...document.querySelectorAll("#taskList input:checked")].map(el => Number(el.dataset.task));
       const lower = answer.toLowerCase();
       const keys = keywordsFor(s);
-      const hits = keys.filter(k => lower.includes(k)).length;
+      const foundKeys = keys.filter(k => lower.includes(k));
+      const hits = foundKeys.length;
       const keywordScore = Math.min(42, hits * 7);
       const lengthScore = Math.min(28, Math.floor(answer.length / 18));
       const checkScore = checks.length * 10;
       const score = Math.max(0, Math.min(100, keywordScore + lengthScore + checkScore));
-      state.exercise[s.id] = { score, hits, checks, at: Date.now() };
+      state.exercise[s.id] = { score, hits, foundKeys, checks, at: Date.now() };
       if (score >= 70) state.done[s.id] = true;
       saveState();
       renderAll();
@@ -1298,14 +1371,19 @@
       return "";
     }
 
-    function feedbackText(score, hits, keys) {
-      const found = hits ? `${hits} passende Begriffe erkannt` : "Noch keine Fachanker erkannt";
+    function feedbackText(score, foundKeys, keys) {
+      const hits = foundKeys.length;
+      const foundStr = hits
+        ? `Erkannte Anker: <b>${foundKeys.join(", ")}</b>`
+        : "Noch keine Fachanker erkannt";
+      const missing = keys.filter(k => !foundKeys.includes(k)).slice(0, 4);
+      const missingStr = missing.length ? ` — fehlend: ${missing.join(", ")}` : "";
       const hint = score >= 78
         ? "Stark: Antwort ist konkret, risikobewusst und pruefbar."
         : score >= 48
           ? "Solide Basis. Schaerfe noch einen konkreten Pruefschritt oder eine klare Grenze nach."
           : "Zu duenn. Ergaenze Nutzen, Risiko und eine konkrete Verifikation.";
-      return `<b>${score}/100</b> · ${found}. ${hint}<br><span>Erwartete Anker: ${keys.slice(0, 6).join(", ")}</span>`;
+      return `<b>${score}/100</b> · ${hint}<br><span>${foundStr}${missingStr}</span>`;
     }
 
     function renderCumulativeQuiz(s) {
@@ -1490,6 +1568,24 @@
     });
     $("gradeFinal").addEventListener("click", gradeFinalQuiz);
     $("reshuffleFinal").addEventListener("click", reshuffleFinalQuiz);
+
+    $("resetBtn").addEventListener("click", () => {
+      if (confirm("Alle Fortschritte, Antworten und Quiz-Ergebnisse loeschen?")) {
+        localStorage.removeItem("ccWorkshopUiState");
+        location.reload();
+      }
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+      if (e.key === "ArrowLeft")  { e.preventDefault(); move(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); move(1); }
+      if (e.key === "m" || e.key === "M") {
+        state.done[activeId] = !state.done[activeId];
+        saveState();
+        renderAll();
+      }
+    });
 
     if (sections.filter(s => s.route48).length !== 48) {
       console.warn("48 route count drift", sections.filter(s => s.route48).length);
