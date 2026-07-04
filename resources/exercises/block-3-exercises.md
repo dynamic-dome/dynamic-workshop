@@ -696,7 +696,7 @@ These blueprints come from deep research into advanced Claude Code workflows. Us
 | # | Blueprint | Components | Security Relevance |
 |---|-----------|-----------|-------------------|
 | 1 | **Secure Diff Gate** — Block writes to `.env`, secrets, credentials | PreToolUse Hook + matcher `Write\|Edit` | Prevent accidental secret exposure |
-| 2 | **Token Firewall** — Filter noisy test/build output | PreToolUse Hook on Bash + filter script | Cost control, context management |
+| 2 | **Token Firewall** — Suppress noisy test/build output and send a compact summary | PostToolUse Hook on Bash + `suppressOutput` JSON | Cost control, context management |
 | 3 | **Circuit Breaker** — Stop agents stuck in retry loops | PostToolUse Hook detecting 3x same error | Prevent runaway token costs |
 | 4 | **CVE-Fix Pipeline** — From advisory to PR automatically | WebSearch + Plan Mode + Bash + Git | Vulnerability management |
 | 5 | **CI-Locked Agent** — Claude as CI worker with strict rules | `dontAsk` mode + allow rules + `--json-schema` | Deterministic pipeline integration |

@@ -859,11 +859,11 @@ After the workshop, consider:
 ## Bonus Exercise 2.6: Token Firewall — Hook-Based Output Filtering
 
 **Type:** Individual, ~20 minutes
-**Goal:** Build a PreToolUse hook that filters large test outputs before Claude sees them, saving context space and money.
+**Goal:** Build a PostToolUse hook that suppresses large test outputs and sends Claude a filtered summary, saving context space and money.
 
 ### Background
 
-When Claude runs `npm test` or `pytest` on a large project, the full output can be thousands of lines. Most of that is passing tests — only the failures matter. A "Token Firewall" hook intercepts the Bash output and filters it down to just the failure lines.
+When Claude runs `npm test` or `pytest` on a large project, the full output can be thousands of lines. Most of that is passing tests — only the failures matter. A "Token Firewall" hook receives the completed Bash result, hides the noisy original output from the transcript, and sends Claude a compact failure summary.
 
 This is the equivalent of a CCTV system that only records when motion is detected — instead of recording 24/7 of empty hallways.
 
@@ -878,14 +878,21 @@ Create `~/.claude/hooks/test-filter.sh`:
 # The hook receives the tool result as JSON on stdin.
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""')
-OUTPUT=$(echo "$INPUT" | jq -r '.output // ""')
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .tool_input.input // .command // ""')
+OUTPUT=$(echo "$INPUT" | jq -r '.tool_response.output // .tool_response.content // .output // ""')
 
-# Only filter test command output
-if echo "$OUTPUT" | grep -qE '(npm test|pytest|jest|mocha)'; then
-  # Show only failures and summary, suppress verbose passing tests
+# Only filter test command output.
+if [ "$TOOL_NAME" = "Bash" ] && echo "$COMMAND" | grep -qE '(npm test|pytest|jest|mocha)'; then
   FILTERED=$(echo "$OUTPUT" | grep -E '(FAIL|ERROR|AssertionError|✗|✘|FAILED|Summary|passed|failed)' | head -50)
-  echo "$FILTERED"
-  echo "--- [Token Firewall: full output filtered, showing failures only] ---"
+  MESSAGE="${FILTERED}
+--- [Token Firewall: original output suppressed; showing failures/summary only] ---"
+  jq -n --arg msg "$MESSAGE" '{
+    continue: true,
+    suppressOutput: true,
+    systemMessage: $msg
+  }'
+else
+  jq -n '{continue: true, suppressOutput: false}'
 fi
 
 exit 0
@@ -893,7 +900,9 @@ exit 0
 
 > **Important:** This is a **PostToolUse** hook, not PreToolUse. A PreToolUse hook cannot
 > filter tool output — it can only block or allow execution. PostToolUse receives the
-> completed tool result and can process it.
+> completed tool result. Plain stdout from an exit-0 hook is shown in the transcript;
+> to save tokens, return JSON with `suppressOutput: true` and put the compact summary
+> in `systemMessage`.
 
 **Step 2: Register the hook**
 
@@ -923,7 +932,8 @@ Ask Claude to run the test suite. Compare the context consumed with and without 
 ### Success Check
 
 - [ ] The hook fires when Claude runs test commands
-- [ ] Only failure lines + summary are shown to Claude
+- [ ] Test-command output is suppressed with `suppressOutput: true`
+- [ ] Only failure lines + summary are sent to Claude via `systemMessage`
 - [ ] Non-test commands are unaffected
 - [ ] You measured or estimated the token savings
 

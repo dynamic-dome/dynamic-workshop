@@ -74,7 +74,7 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 
 **Block 2: Ecosystem → Session 2 (LEs S2.1–S2.20)**
 - 2.1 Skills & Commands → S2.1–S2.5 (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api; current frontmatter fields: `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `model`, `effort`, `paths`, `shell`, `hooks`; /skills command)
-- 2.2 Hooks → S2.6–S2.10 (+ Hook Execution Types: command/http/mcp_tool/prompt/agent; Circuit Breaker Pattern)
+- 2.2 Hooks → S2.6–S2.10 (+ Hook Execution Types: command/http/mcp_tool/prompt/agent; Circuit Breaker Pattern; Bonus Token Firewall uses PostToolUse JSON with `suppressOutput`, not PreToolUse)
 - 2.3 Plugins → S2.11–S2.13 (+ Plugin Scopes: user/project/local/managed; Plugin CLI; Supply Chain Security)
 - 2.4 MCP → S2.14–S2.17 (+ Transport Types: HTTP/stdio/SSE; MCP CLI; OAuth; Output Limits; Security Warnings)
 - 2.5 RAG & NotebookLM → S2.18–S2.19

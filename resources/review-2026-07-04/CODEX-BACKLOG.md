@@ -276,6 +276,9 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 
 # TIER 4 — Inhaltliche Korrektheit (Module / Demos / Exercises)
 
+> **STATUS 2026-07-04 (Codex):**
+> - **WP-17 ✅ ERLEDIGT** — Exercise 2.6 nutzt jetzt PostToolUse statt PreToolUse; Filter-Script gibt JSON mit `suppressOutput: true` und gefiltertem `systemMessage` aus, statt stdout additiv zu drucken. Blueprint #2 in Block 3 und Mentor-Hook-Landkarte sind synchronisiert. context7: Exit-0-stdout wird angezeigt; Suppression braucht Hook-JSON.
+
 ## WP-17 · [P2] Exercise 2.6 „Token Firewall" funktioniert mechanisch nicht + Hook-Typ-Fehletikett
 **Dateien:** `resources/exercises/block-2-exercises.md` (862/888/926), `block-3-exercises.md:699`
 **Problem (context7-verifiziert):** Ein PostToolUse-Hook mit `echo …; exit 0` **ersetzt** die Tool-Ausgabe nicht (stdout wird *zusätzlich* gezeigt) → verspricht Token-Ersparnis, liefert das Gegenteil. Zudem: Goal nennt „PreToolUse", Body korrigiert auf PostToolUse; Blueprint #2 wiederholt den Fehler.
