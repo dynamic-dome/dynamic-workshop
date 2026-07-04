@@ -14,8 +14,8 @@
 
 | LE | Level | Titel | Quell-Abschnitt(e) in diesem Modul |
 |---|---|---|---|
-| S1.1 | core | Coding Agent vs. Chat — mentales Modell | Module 1.1 → *Overview*, *The Three Consultant Modes*, *Boris Cherny's Philosophy* |
-| S1.2 | core | First Contact: bau sofort eine Datei | 1.1 → *First: Hello, Claude Code*, *What Claude Code Can Do*, *What Claude Code Cannot Do* |
+| S1.1 | core | First Contact: bau sofort eine Datei | 1.1 → *First: Hello, Claude Code*, *What Claude Code Can Do*, *What Claude Code Cannot Do* |
+| S1.2 | core | Coding Agent vs. Chat — mentales Modell | Module 1.1 → *Overview*, *The Three Consultant Modes*, *Boris Cherny's Philosophy* |
 | S1.3 | core | Die Oberflächen (CLI/Desktop/IDE/Web/iOS) | 1.1 → *The Five Surfaces*, *Surface-Switching from Inside a Session* |
 | S1.4 | core | Built-in Tools & Tool-Namen | 1.1 → *Built-in Tools Reference* |
 | S1.5 | core | Permissions Grundlagen: default & acceptEdits | 1.1 → *Permission System* (Alltags-Modi default/acceptEdits/plan + allow/deny) |
@@ -50,12 +50,10 @@
 **Learning Objectives:** After this module, you can:
 - **Explain what a coding agent is and how it differs from a chat assistant** — the core mental model everything else builds on.
 - Distinguish between Claude Code's five surfaces (CLI, Desktop App, IDE Extension, Web App, iOS App) and pick the right one for a given workflow.
-- *(Comes later in the session — builds on the basics above)* Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies and which restrictions cloud sessions impose. **Core for this security-focused audience** (LE S1.6).
-- *(Comes later in the session — builds on the basics above)* Choose the right model (Fable 5 / Opus 4.8 / Sonnet 5 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth (LE S1.7).
 
 ---
 
-<!-- LE: S1.2 -->
+<!-- LE: S1.1 -->
 > **Ich kann jetzt:** Claude Code starten, eine kleine Datei bauen lassen und das Agenten-Feedback beobachten.
 
 ### First: Hello, Claude Code (do this now — ~5 minutes)
@@ -85,9 +83,13 @@ Watch what happens: Claude proposes the file, asks permission to write it, creat
 
 > New to agents? The key thing you just saw: Claude didn't *tell you how* to write the file — it *wrote and ran it itself*. That's the difference between a chat assistant and a coding agent. We unpack it next.
 
+**Comes later in this first-contact arc:**
+- In S1.6 you classify all 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) and the cloud-session restrictions.
+- In S1.7 you choose the right model (Fable 5 / Opus 4.8 / Sonnet 5 / Haiku 4.5) and effort level for a task based on cost and reasoning depth.
+
 ---
 
-<!-- LE: S1.1 -->
+<!-- LE: S1.2 -->
 > **Ich kann jetzt:** den Unterschied zwischen Chat-Assistent und Coding-Agent erklaeren und die Sicherheitsimplikation realer Tool-Aktionen benennen.
 
 ### Overview

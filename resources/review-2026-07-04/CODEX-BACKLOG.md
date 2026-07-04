@@ -374,8 +374,8 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 ## WP-27 · [P3] Concrete-before-abstract: Einstiegsrampe korrigieren
 **Dateien:** `session-plan.md:49–50`, `block-1-foundations.md` (Landkarte + Objectives Z.50–54)
 **Problem:** S1.1 (abstraktes mentales Modell) steht VOR S1.2 (konkret bauen) — kehrt das concrete-first-Design des eigenen Modultexts („do this now") und die Mission („gebaut bevor nachgedacht") um.
-- [ ] S1.1 und S1.2 tauschen (Build-First als Opener); Tabellen angleichen.
-- [ ] Die zwei „(Comes later)"-Objectives (Permissions/Modellwahl) aus dem Kopf-Block unter die First-Contact-Übung verschieben.
+- [x] S1.1 und S1.2 tauschen (Build-First als Opener); Tabellen angleichen.
+- [x] Die zwei „(Comes later)"-Objectives (Permissions/Modellwahl) aus dem Kopf-Block unter die First-Contact-Übung verschieben.
 **Codex-Fähigkeit:** Bereich: Curriculum-/Didaktik-Redaktion
 
 ## WP-28 · [P3] Format-vs-Kohorten-Fit explizit machen (N=3 live)

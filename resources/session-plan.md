@@ -46,8 +46,8 @@
 
 | LE | Titel | Level | Min | aus (alt) |
 |---|---|---|---:|---|
-| S1.1 | Coding Agent vs. Chat — das mentale Modell | core | 12 | 1.1 Overview + Consultant-Analogie |
-| S1.2 | First Contact: bau sofort eine Datei | core | 12 | 1.1 Hello/„What CC can do" + Demo 1.1 |
+| S1.1 | First Contact: bau sofort eine Datei | core | 12 | 1.1 Hello/„What CC can do" + Demo 1.1 |
+| S1.2 | Coding Agent vs. Chat — das mentale Modell | core | 12 | 1.1 Overview + Consultant-Analogie |
 | S1.3 | Die Oberflächen: CLI, Desktop, IDE, Web, iOS | core | 12 | 1.1 Five Surfaces + Surface-Switching |
 | S1.4 | Built-in Tools & die Tool-Namen | core | 12 | 1.1 Built-in Tools Reference |
 | S1.5 | Permissions Grundlagen: default & acceptEdits | core | 15 | 1.1 Permission System (Alltags-Modi) |

@@ -66,7 +66,7 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 `resources/modules/block-*.md` — consult it when a participant asks "which LE / which session covers X".
 
 **Block 1: Foundations → Session 1 (LEs S1.1–S1.20)**
-- 1.1 What is Claude Code? (starts with a hands-on "Hello, Claude Code" win → S1.2; agent-vs-chat mental model first → S1.1, then the five surfaces → S1.3, built-in tools → S1.4. **Permission modes are now `[core]`**: S1.5 = default/acceptEdits basics, S1.6 = all 6 modes + cloud restriction. Model selection + effort → S1.7.)
+- 1.1 What is Claude Code? (starts concrete-first with a hands-on "Hello, Claude Code" win → S1.1; agent-vs-chat mental model → S1.2, then the five surfaces → S1.3, built-in tools → S1.4. **Permission modes are now `[core]`**: S1.5 = default/acceptEdits basics, S1.6 = all 6 modes + cloud restriction. Model selection + effort → S1.7.)
 - 1.2 Context & Memory (core: Context Window → S1.8, /compact & /rewind → S1.9, ./CLAUDE.md → S1.10; Exercise 1.2 is ~22 min because it includes restart verification; deep-dive — "wenn Zeit" — Auto-Memory internals/rules//local/managed → S1.11, @path & --add-dir → S1.12)
 - 1.3 Effective Prompting (Contractor Analogy & scope → S1.13, Plan Mode & patterns → S1.14; deep-dive Output Styles/personas → S1.15)
 - 1.4 Git Integration & Worktrees (PR flow → S1.16; deep-dive git slash-commands → S1.17, worktrees → S1.18)

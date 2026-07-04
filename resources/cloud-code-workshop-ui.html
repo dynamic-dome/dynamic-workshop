@@ -1254,8 +1254,8 @@
     const routeElectives = new Set(["S1.11","S1.12","S1.18","S2.10","S2.16","S2.17","S3.10","S4.4"]);
 
     const sections = [
-      ["S1.1",1,"core",12,"Coding Agent vs. Chat - das mentale Modell","1.1 Overview + Consultant-Analogie","foundation"],
-      ["S1.2",1,"core",12,"First Contact: bau sofort eine Datei","1.1 Hello + Demo 1.1","foundation"],
+      ["S1.1",1,"core",12,"First Contact: bau sofort eine Datei","1.1 Hello + Demo 1.1","foundation"],
+      ["S1.2",1,"core",12,"Coding Agent vs. Chat - das mentale Modell","1.1 Overview + Consultant-Analogie","foundation"],
       ["S1.3",1,"core",12,"Die Oberflaechen: CLI, Desktop, IDE, Web, iOS","1.1 Five Surfaces","foundation"],
       ["S1.4",1,"core",12,"Built-in Tools & die Tool-Namen","1.1 Built-in Tools Reference","foundation"],
       ["S1.5",1,"core",15,"Permissions Grundlagen: default & acceptEdits","1.1 Permission System","guardrails"],
@@ -1474,13 +1474,13 @@
     };
 
     const sectionContent = {
-      "S1.1": {
+      "S1.2": {
         concept: "Claude Code ist kein Chat-Interface, sondern ein Agent mit direktem Zugriff auf Filesystem, Shell und Git – er schreibt Dateien, führt Befehle aus und prüft die Ergebnisse selbstständig, während du das Permission-System steuerst. Chat-Assistenten geben Ratschläge, die du selbst umsetzt; ein Agent übernimmt die Ausführung komplett. Boris Chernys Design-Philosophie: Claude Code ist ein Powertool ohne vorgeschriebenen Nutzungsweg – die Mechanik lernst du, den Einsatz entscheidest du.",
         analogy: "Wie der Unterschied zwischen dem Anruf beim Sicherheitsberater (der erklärt, wie du den Kartenleser verdrahten sollst, aber nie das Gebäude betritt) und einem Techniker mit OSDP-Besucherausweis, der die Relais-Verkabelung am Kontrollpanel selbst prüft, Konfig-Parameter am Controller ändert und das Türprotokoll zieht – während du danebenstehst und freigibst.",
         example: "mkdir -p ~/cc-workshop/hello && cd ~/cc-workshop/hello\nclaude\n# In der Session:\n# Create a file hello.py that prints \"Hello from Claude Code\" and run it.",
         checkpoint: "Du kannst in einem Satz erklären, warum Claude Code kein Chat-Tool ist und welche Konsequenz das für den Permission-Bedarf hat."
       },
-      "S1.2": {
+      "S1.1": {
         concept: "Der schnellste Einstieg folgt dem Muster: drei Befehle, ein sichtbares Ergebnis – bevor jede Theorie. Claude Code schlägt die Datei vor, fragt nach Erlaubnis, erstellt sie und führt sie aus. Diese Schleife (beschreibe → Agent handelt → Ergebnis sichtbar) ist das Kernmuster aller weiteren Module. Was Claude nicht kann: die GUI sehen, persistente Hintergrunddienste halten oder ohne Genehmigung in Produktionssysteme eingreifen.",
         analogy: "Wie ein Techniker, der zum ersten Mal mit Badge-Zugang in die Leitstelle kommt und sofort demonstriert, was er tut: er liest den Alarmplan, legt eine Testdatei im Konfig-Share an und startet das Diagnose-Script – in drei Schritten, bevor irgendwer erklärt, wie der Leittechnik-Server aufgebaut ist.",
         example: "mkdir -p ~/cc-workshop/hello && cd ~/cc-workshop/hello\nclaude\n# In der Session eingeben:\n# Create a file hello.py that prints \"Hello from Claude Code\" and run it.",
@@ -1867,7 +1867,7 @@
     };
 
     const sectionQuiz = {
-      "S1.1": {
+      "S1.2": {
         q: "Was ist der entscheidende Unterschied zwischen claude.ai (Web-Chat) und dem Claude Code CLI?",
         correct: "claude.ai gibt Ratschläge, die du selbst umsetzen musst; das Claude Code CLI ist ein Agent mit direktem Lese-/Schreibzugriff auf Filesystem und Shell, der Aktionen eigenständig ausführt – gesteuert durch ein Permission-System, das du konfigurierst.",
         wrong: [
@@ -1876,7 +1876,7 @@
           "Das CLI arbeitet mit einem größeren Kontextfenster als der Web-Chat, weshalb es größere Codebasen verarbeiten kann."
         ]
       },
-      "S1.2": {
+      "S1.1": {
         q: "Was passiert, wenn du in einer frischen Claude Code Session \"Create a file hello.py and run it\" eingibst – und warum unterscheidet sich das grundlegend von einem Chat-Assistenten?",
         correct: "Claude legt die Datei tatsächlich im Filesystem an, führt sie via Shell aus und zeigt den Output – anstatt dir nur Codebeispiele zu schicken. Das ist agentenbasiertes Handeln statt chatbasierter Beratung.",
         wrong: [
