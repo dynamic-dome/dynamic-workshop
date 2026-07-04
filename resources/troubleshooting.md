@@ -105,13 +105,13 @@ Default-Max ist 25k Tokens, Warning bei 10k. Per-Tool Override mit `_meta["anthr
 ## Permissions
 
 ### 16. Endlose Permission-Prompts
-`/fewer-permission-prompts` Bundled Skill: scant Transcripts, generiert `permissions.allow`-Liste. Alternativ: `/sandbox` toggeln (reduziert Prompts laut Anthropic um ~84%). Oder Permission-Mode wechseln (`acceptEdits` statt `default`).
+`/fewer-permission-prompts` Bundled Skill: scant Transcripts, generiert `permissions.allow`-Liste. Alternativ: `/sandbox` toggeln (reduziert Prompts laut Anthropic um ~84%; Vendor-Zahl, kein Garantiewert). Oder Permission-Mode wechseln (`acceptEdits` statt `default`).
 
 ### 17. Allowed Bash-Command failed mit Permission
 Pattern in `allow:` zu eng. Beispiel: `Bash(npm test)` matched nicht `npm test -v`. Wildcard: `Bash(npm test*)` oder `Bash(npm test *)`. Bei Sonderzeichen: ggf. Quotes oder Escapes pruefen.
 
 ### 18. `auto` Mode nicht verfuegbar
-- Voraussetzungen pruefen: **Max-Plan mit Opus 4.8** ODER Team/Enterprise (Sonnet 4.6, Opus 4.8)
+- Voraussetzungen pruefen: **Max-Plan mit Opus 4.8** ODER Team/Enterprise (Sonnet 5, Opus 4.8)
 - Anthropic API only, nicht Bedrock/Vertex
 - Claude Code v2.1.83+ noetig
 - Admins koennen `auto` per Managed Settings sperren

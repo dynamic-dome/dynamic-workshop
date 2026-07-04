@@ -2,6 +2,8 @@
 
 > Complete setup guide for participants of the Claude Code Dynamic Workshop.
 > Please complete these steps **before** the workshop begins.
+>
+> **Time budget:** plan ~45 minutes, in the order below. Do not start with optional plugins; get the core CLI, repo, and playground tests green first.
 
 ---
 
@@ -37,10 +39,27 @@ npm --version    # Should show 9+
 
 ## Step 2: Install Claude Code
 
-```bash
-# Install globally
-npm install -g @anthropic-ai/claude-code
+**Recommended installers (official docs):**
 
+```powershell
+# Windows
+irm https://claude.ai/install.ps1 | iex
+
+# Alternative on Windows
+winget install Anthropic.ClaudeCode
+```
+
+```bash
+# macOS / Linux
+curl -fsSL https://claude.ai/install.sh | bash
+
+# Alternative on macOS / Linux
+brew install --cask claude-code
+```
+
+The old npm install path exists in older material, but the current official docs mark npm as deprecated for new installs.
+
+```bash
 # Verify installation
 claude --version
 
@@ -48,7 +67,25 @@ claude --version
 claude update
 ```
 
-> **Use a recent version.** Several workshop features are gated on newer releases (Fable 5, Dynamic Workflows, some hook outputs). There's no hard minimum just to start, but if an advanced feature seems missing, your CLI is probably behind — run `claude update` and re-check `claude --version`. Always trust `claude --version` and `/release-notes` over any version number printed in this material.
+### Tested Version Gate
+
+This workshop was refreshed against `claude --version` **2.1.200** on 2026-07-04. Use **2.1.197+** as the tested minimum for the full workshop so Sonnet 5, Fable 5, workflows fixes, plugin improvements, and current hook behavior are all in range.
+
+| Feature used in workshop | Minimum documented version | Verification |
+|---|---:|---|
+| Plugin init / local plugin improvements | 2.1.157 | `claude plugin init`, `claude --plugin-dir` |
+| Fable 5 | 2.1.170 | `/model` shows Fable 5 after update |
+| `/workflows` agent detail/status UI | 2.1.186 | `/workflows` available in current CLI builds |
+| Hook JSON output fields (`continue`, `suppressOutput`, `systemMessage`) | Current hook docs | Run Demo 2.2 / Exercise 2.6 |
+| Sonnet 5 default + 1M context | 2.1.197 | `claude --version`, `/model` |
+
+```bash
+# Verify feature surface after update
+claude --version
+claude --print "Say ready"
+```
+
+> Always trust `claude --version`, `/model`, `/workflows`, and `/release-notes` over any version number printed in older workshop material.
 
 **Alternative — without global install:**
 ```bash
@@ -166,6 +203,8 @@ pip3 install -r requirements.txt
 python3 -m pytest -v
 ```
 
+Clone URL verified reachable on 2026-07-04 with `git ls-remote https://github.com/dynamic-dome/dynamic-workshop.git HEAD`.
+
 ---
 
 ## Pre-Workshop Checklist
@@ -186,10 +225,15 @@ Run through this checklist to make sure everything works:
 
 ## Quick Diagnostic
 
-If something isn't working, run the built-in doctor:
+If something isn't working, run the built-in doctor and the workshop doctor:
 
 ```bash
 claude /doctor
+```
+
+```powershell
+# From the cloned workshop repo:
+powershell -ExecutionPolicy Bypass -File .\tools\workshop_doctor.ps1
 ```
 
 This checks your environment and reports issues.
@@ -244,18 +288,30 @@ Several Block 3 demos reference custom plugins built specifically for this works
 
 **These are workshop-author plugins, not part of any official marketplace.**
 
-Three options:
+Four options:
 
-**Option A (recommended for live workshops): Get them from your workshop moderator.**
-The moderator will provide a tarball or shared Drive/Git link with the plugin sources.
-Extract each into `~/.claude/plugins/` and run `/reload-plugins` in Claude Code.
+**Option A (self-serve workshop plugin): Use the reachable workshop repo.**
+The workshop plugin in this repository is available at `https://github.com/dynamic-dome/dynamic-workshop.git`.
 
-**Option B (self-learners): Observation mode only.**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\install_workshop_plugin.ps1
+```
+
+Then start Claude Code with the local plugin source:
+
+```bash
+claude --plugin-dir ~/cc-workshop/dynamic-workshop/.claude-plugin
+```
+
+**Option B (live workshop extras): Get demo-only custom plugins from your workshop moderator.**
+If the moderator wants to run `agentic-os`, `devil-advocate-swarms`, or `multi-model-orchestrator` live, they must provide a real Git/Drive release link before the workshop. Do not depend on an unpublished tarball during participant setup.
+
+**Option C (self-learners): Observation mode only.**
 You can read about these plugins in the modules and watch the demos in recorded video form.
 The patterns they demonstrate (adversarial swarms, multi-model pipelines, self-improve loops)
 are conceptually transferable to plugins you build yourself.
 
-**Option C: Build minimal replacements.**
+**Option D: Build minimal replacements.**
 After completing Modules 2.1 (Skills) and 2.3 (Plugins), you can build your own simplified
 versions of these patterns. The workshop modules walk through the structure.
 
@@ -411,7 +467,8 @@ After all installs, run a quick verification:
 
 ```bash
 claude plugin list                      # shows installed plugins (0–3 depending on which option you chose)
-/skills                                 # should show notebooklm (only if you went with Option A above)
+claude --plugin-dir ~/cc-workshop/dynamic-workshop/.claude-plugin   # verifies local workshop plugin loads
+/skills                                 # should show notebooklm (only if you used Custom User-Skills Option A)
 ls ~/.claude/hooks/security-check.sh    # macOS/Linux/Git Bash — the hook file should exist
 # Windows PowerShell: Test-Path "$HOME/.claude/hooks/security-check.ps1"   # should print True
 notebooklm list                         # should show claude-code-docs (only if you used CLI variant)

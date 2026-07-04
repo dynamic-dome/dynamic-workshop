@@ -502,13 +502,13 @@ Answer:
 Create a minimal plugin structure for a hypothetical plugin relevant to your work. For example: `door-audit-plugin` (checks access logs and generates reports), or `firmware-tracker` (tracks firmware versions across devices), or `incident-checklist` (runs through your incident response SOP).
 
 ```bash
-# Create the plugin directory
-mkdir -p ~/.claude/plugins/cache/my-mini-plugin-marketplace/.claude-plugin
-mkdir -p ~/.claude/plugins/cache/my-mini-plugin-marketplace/skills/my-skill
-mkdir -p ~/.claude/plugins/cache/my-mini-plugin-marketplace/commands
+# macOS / Linux / Git Bash
+mkdir -p ./my-mini-plugin/.claude-plugin
+mkdir -p ./my-mini-plugin/skills/my-skill
+mkdir -p ./my-mini-plugin/commands
 
 # Create the manifest at .claude-plugin/plugin.json (NOT in the plugin root)
-cat > ~/.claude/plugins/cache/my-mini-plugin-marketplace/.claude-plugin/plugin.json << 'EOF'
+cat > ./my-mini-plugin/.claude-plugin/plugin.json << 'EOF'
 {
   "name": "my-mini-plugin",
   "version": "0.1.0",
@@ -522,10 +522,27 @@ cat > ~/.claude/plugins/cache/my-mini-plugin-marketplace/.claude-plugin/plugin.j
 EOF
 ```
 
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force -Path ".\my-mini-plugin\.claude-plugin", ".\my-mini-plugin\skills\my-skill", ".\my-mini-plugin\commands" | Out-Null
+@'
+{
+  "name": "my-mini-plugin",
+  "version": "0.1.0",
+  "description": "My first plugin - [describe what it does]",
+  "author": "[your name]",
+  "skills": ["my-skill"],
+  "commands": ["my-command"],
+  "agents": [],
+  "enabled": true
+}
+'@ | Set-Content -Encoding utf8 .\my-mini-plugin\.claude-plugin\plugin.json
+```
+
 The resulting layout:
 
 ```
-my-mini-plugin-marketplace/
+my-mini-plugin/
   .claude-plugin/
     plugin.json
   skills/
@@ -540,7 +557,7 @@ my-mini-plugin-marketplace/
 
 Create a skill:
 ```bash
-cat > ~/.claude/plugins/cache/my-mini-plugin-marketplace/skills/my-skill/SKILL.md << 'EOF'
+cat > ./my-mini-plugin/skills/my-skill/SKILL.md << 'EOF'
 ---
 name: my-skill
 description: >
@@ -554,10 +571,25 @@ when_to_use: >
 [Your skill instructions here]
 EOF
 ```
+```powershell
+@'
+---
+name: my-skill
+description: >
+  [What this skill does].
+when_to_use: >
+  [Your trigger phrases and situations]
+---
+
+# My Skill
+
+[Your skill instructions here]
+'@ | Set-Content -Encoding utf8 .\my-mini-plugin\skills\my-skill\SKILL.md
+```
 
 Create a command:
 ```bash
-cat > ~/.claude/plugins/cache/my-mini-plugin-marketplace/commands/my-command.md << 'EOF'
+cat > ./my-mini-plugin/commands/my-command.md << 'EOF'
 ---
 name: my-command
 description: [What this command does]
@@ -569,10 +601,28 @@ user_invocable: true
 When invoked, execute the my-skill skill.
 EOF
 ```
+```powershell
+@'
+---
+name: my-command
+description: [What this command does]
+user_invocable: true
+---
+
+# My Command
+
+When invoked, execute the my-skill skill.
+'@ | Set-Content -Encoding utf8 .\my-mini-plugin\commands\my-command.md
+```
 
 **Step 5: Verify the plugin loads**
 
-Restart Claude Code and type:
+Run Claude Code with the local plugin directory for testing:
+```bash
+claude --plugin-dir ./my-mini-plugin
+```
+
+Then type:
 ```
 /help
 ```
@@ -583,20 +633,20 @@ Look for your new command in the list. Try invoking it.
 
 - [ ] You can navigate the agentic-os plugin structure from the command line
 - [ ] You've answered the questions about skill anatomy and agent anatomy
-- [ ] `~/.claude/plugins/cache/my-mini-plugin-marketplace/.claude-plugin/plugin.json` exists and is valid JSON
+- [ ] `./my-mini-plugin/.claude-plugin/plugin.json` exists and is valid JSON
 - [ ] Your mini plugin has at least one skill and one command
 - [ ] (Stretch) Your new command appears in `/help` and can be invoked
 
 ### Hints
 
 **If the plugin doesn't appear after restart:**
-Check that `.claude-plugin/plugin.json` is valid JSON (`python3 -m json.tool .claude-plugin/plugin.json`), and that `"enabled": true` is set. The single most common reason a plugin is silently skipped: the manifest sits in the plugin root instead of under `.claude-plugin/`.
+Check that `.claude-plugin/plugin.json` is valid JSON (`python -m json.tool .claude-plugin/plugin.json` on Windows, `python3 -m json.tool .claude-plugin/plugin.json` on macOS/Linux), and that `"enabled": true` is set. The single most common reason a plugin is silently skipped: the manifest sits in the plugin root instead of under `.claude-plugin/`.
 
 **What makes a good plugin?**
 Cohesion. A plugin should do one thing well. Don't put your commit workflow and your documentation generator in the same plugin — make two plugins. This way you can enable/disable them independently.
 
 **Team distribution:**
-Once you have a working plugin, share it by zipping the directory or putting it in a git repo. Teammates drop the directory into `~/.claude/plugins/cache/` and they have the same capabilities.
+Once you have a working plugin, put it in a git repo or marketplace and install it with the CLI (`claude plugin install <name>@<marketplace> --scope local|project|user`). Do not ask teammates to hand-copy directories into `~/.claude/plugins/cache/`.
 
 **Disabling without deleting:**
 ```bash
@@ -859,11 +909,11 @@ After the workshop, consider:
 ## Bonus Exercise 2.6: Token Firewall — Hook-Based Output Filtering
 
 **Type:** Individual, ~20 minutes
-**Goal:** Build a PreToolUse hook that filters large test outputs before Claude sees them, saving context space and money.
+**Goal:** Build a PostToolUse hook that suppresses large test outputs and sends Claude a filtered summary, saving context space and money.
 
 ### Background
 
-When Claude runs `npm test` or `pytest` on a large project, the full output can be thousands of lines. Most of that is passing tests — only the failures matter. A "Token Firewall" hook intercepts the Bash output and filters it down to just the failure lines.
+When Claude runs `npm test` or `pytest` on a large project, the full output can be thousands of lines. Most of that is passing tests — only the failures matter. A "Token Firewall" hook receives the completed Bash result, hides the noisy original output from the transcript, and sends Claude a compact failure summary.
 
 This is the equivalent of a CCTV system that only records when motion is detected — instead of recording 24/7 of empty hallways.
 
@@ -878,14 +928,21 @@ Create `~/.claude/hooks/test-filter.sh`:
 # The hook receives the tool result as JSON on stdin.
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""')
-OUTPUT=$(echo "$INPUT" | jq -r '.output // ""')
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .tool_input.input // .command // ""')
+OUTPUT=$(echo "$INPUT" | jq -r '.tool_response.output // .tool_response.content // .output // ""')
 
-# Only filter test command output
-if echo "$OUTPUT" | grep -qE '(npm test|pytest|jest|mocha)'; then
-  # Show only failures and summary, suppress verbose passing tests
+# Only filter test command output.
+if [ "$TOOL_NAME" = "Bash" ] && echo "$COMMAND" | grep -qE '(npm test|pytest|jest|mocha)'; then
   FILTERED=$(echo "$OUTPUT" | grep -E '(FAIL|ERROR|AssertionError|✗|✘|FAILED|Summary|passed|failed)' | head -50)
-  echo "$FILTERED"
-  echo "--- [Token Firewall: full output filtered, showing failures only] ---"
+  MESSAGE="${FILTERED}
+--- [Token Firewall: original output suppressed; showing failures/summary only] ---"
+  jq -n --arg msg "$MESSAGE" '{
+    continue: true,
+    suppressOutput: true,
+    systemMessage: $msg
+  }'
+else
+  jq -n '{continue: true, suppressOutput: false}'
 fi
 
 exit 0
@@ -893,7 +950,9 @@ exit 0
 
 > **Important:** This is a **PostToolUse** hook, not PreToolUse. A PreToolUse hook cannot
 > filter tool output — it can only block or allow execution. PostToolUse receives the
-> completed tool result and can process it.
+> completed tool result. Plain stdout from an exit-0 hook is shown in the transcript;
+> to save tokens, return JSON with `suppressOutput: true` and put the compact summary
+> in `systemMessage`.
 
 **Step 2: Register the hook**
 
@@ -923,7 +982,8 @@ Ask Claude to run the test suite. Compare the context consumed with and without 
 ### Success Check
 
 - [ ] The hook fires when Claude runs test commands
-- [ ] Only failure lines + summary are shown to Claude
+- [ ] Test-command output is suppressed with `suppressOutput: true`
+- [ ] Only failure lines + summary are sent to Claude via `systemMessage`
 - [ ] Non-test commands are unaffected
 - [ ] You measured or estimated the token savings
 

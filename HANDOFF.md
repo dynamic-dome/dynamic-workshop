@@ -25,7 +25,7 @@
 
 **Welle F (Restrukturierung / 65 Lerneinheiten) ist erledigt** (User-Entscheidung 2026-06-23: 4 Sessions — siehe oberster Bullet).
 
-⚠️ **Playground-Tests vor/nach OSDP-C-Änderungen:** Die 3 absichtlichen Vulns sind Lehr-Material — NICHT „fixen" (außer ein TODO sagt explizit härten/dokumentieren, z.B. T-003). `python -m pytest -q` in `workshop-playground/` muss grün bleiben (18 Tests, harmlos, kein Prod-DB-Risiko).
+⚠️ **Playground-Tests vor/nach OSDP-C-Änderungen:** Die 5 absichtlichen Python-Vulns plus die OSDP-C-Lehrschwächen sind Lehr-Material — NICHT „fixen" (außer ein TODO sagt explizit härten/dokumentieren, z.B. T-003). `python -m pytest -q` in `workshop-playground/` muss grün bleiben (18 Tests, harmlos, kein Prod-DB-Risiko).
 
 ---
 
@@ -36,7 +36,7 @@ Erledigt (3 Commits auf `main`, **nicht gepusht** — Push = User):
 - **`e5346f5` — Welle B/1 (Modell-Currency):** T-025 (Opus 4.7→**4.8** als Default), T-026 (**Fable 5** GA 2026-06-09, `claude-fable-5`, $10/$50 in allen Modelltabellen), T-013 (Effort-Default = **`high`** auf Opus 4.8; `xhigh`/`max` auf 4.7/4.8/Fable 5), T-040 (`/model fable` + Fast Mode `/fast`), T-012 (Mentor-Agent). **Alles gegen platform.claude.com-Docs + Live-CLI verifiziert.**
 - **`b42a762` — Welle B/2:** `--max-turns` workshop-weit entfernt (existiert nicht in der CLI; ersetzt durch ehrlichen Hinweis „`--max-budget-usd` cappt Loops"), T-041 (28 lifecycle events → vage), HTML-Dashboard „Opus 4.6"→„4.8".
 
-**Verifizierte Fakten für künftige Currency-Arbeit** (nicht neu recherchieren): aktuelles Lineup = Fable 5 / Opus 4.8 (Default) / Opus 4.7 / Sonnet 4.6 / Haiku 4.5; Effort-Default `high` auf Opus 4.8; Fast Mode `/fast` (Opus 4.8/4.7). Live-CLI = **v2.1.185**.
+**Verifizierte Fakten für künftige Currency-Arbeit** (nicht neu recherchieren): aktuelles Lineup = Fable 5 / Opus 4.8 (Default) / Opus 4.7 / Sonnet 5 / Haiku 4.5; Effort-Default `high` auf Opus 4.8; Fast Mode `/fast` (Opus 4.8/4.7). Live-CLI = **v2.1.185**.
 
 **Wichtig:** `resources/review-2026-06-21/` ist das **historische Review-Archiv** — NIE editieren (auch wenn grep dort alte Begriffe wie „Opus 4.7"/„--max-turns" findet). Das sind die Befunde selbst, kein Kursinhalt.
 
@@ -111,7 +111,7 @@ und Windows-tauglich machen, ohne Inhalt zu verlieren.
 - **Windows-Umgebung:** Der Maintainer arbeitet auf Windows 11 / PowerShell. Hook-Skripte, Befehle und Exercises brauchen PowerShell-taugliche Varianten (kein blindes `bash`/`jq`/`chmod`/`sed -i`).
 - **Playground-Tests:** Falls du `pytest` im `workshop-playground/` laufen lässt — die Tests dort sind harmlos (kein Production-DB-Risiko), aber prüfe das `conftest`/Setup, bevor du destruktive Test-Schritte ausführst.
 - **Git:** chirurgisch stagen (`git add <pfad>` einzeln, **kein** `git add -A`). Commit/Push nur auf ausdrückliche Anweisung des Users. Nicht auf `main` committen ohne Freigabe.
-- **Die 3 absichtlichen Vulnerabilities** in `workshop-playground/access_control.py` und die in `osdp_frame_decoder.c` sind **Lehr-Material** — NICHT „fixen" (außer ein TODO sagt explizit, eine *zusätzliche, ungeplante* Schwäche zu dokumentieren, z.B. `T-003`).
+- **Die 5 absichtlichen Python-Vulnerabilities** in `workshop-playground/access_control.py` und die OSDP-C-Lehrschwächen in `osdp_frame_decoder.c` sind **Lehr-Material** — NICHT „fixen" (außer ein TODO sagt explizit, eine *zusätzliche, ungeplante* Schwäche zu dokumentieren, z.B. `T-003`).
 
 ## 6. Was du NICHT tun sollst
 

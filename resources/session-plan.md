@@ -27,7 +27,7 @@
 | 1 | Erste Schritte mit dem Agenten (sanfter Einstieg) | Foundations | 213 Min | 10. April 2026 (Erstfassung durchgeführt) |
 | 2 | Das Ecosystem (Skills, Hooks, Plugins, MCP, RAG) | Ecosystem | 177 Min | TBD |
 | 3 | Advanced Kern (Agents, Security, Automation) | Advanced-Kern | 157 Min | TBD |
-| 4 | Advanced Bonus (Multi-Model, CI/CD, Capstone, Troubleshooting) | Advanced-Bonus | 163 Min (voller Track) | TBD |
+| 4 | Advanced Bonus (Multi-Model, CI/CD, Capstone, Troubleshooting) | Advanced-Bonus | 166 Min (voller Track) | TBD |
 
 > **Warum 4 Sessions?** Block 3 hatte faktisch ~270 Min Inhalt in einem 180-Min-Termin. Der ehrliche
 > Schnitt trennt den Pflicht-Kern (Session 3: Agents + Security + Automation) vom Überlauf
@@ -46,8 +46,8 @@
 
 | LE | Titel | Level | Min | aus (alt) |
 |---|---|---|---:|---|
-| S1.1 | Coding Agent vs. Chat — das mentale Modell | core | 12 | 1.1 Overview + Consultant-Analogie |
-| S1.2 | First Contact: bau sofort eine Datei | core | 12 | 1.1 Hello/„What CC can do" + Demo 1.1 |
+| S1.1 | First Contact: bau sofort eine Datei | core | 12 | 1.1 Hello/„What CC can do" + Demo 1.1 |
+| S1.2 | Coding Agent vs. Chat — das mentale Modell | core | 12 | 1.1 Overview + Consultant-Analogie |
 | S1.3 | Die Oberflächen: CLI, Desktop, IDE, Web, iOS | core | 12 | 1.1 Five Surfaces + Surface-Switching |
 | S1.4 | Built-in Tools & die Tool-Namen | core | 12 | 1.1 Built-in Tools Reference |
 | S1.5 | Permissions Grundlagen: default & acceptEdits | core | 15 | 1.1 Permission System (Alltags-Modi) |
@@ -64,17 +64,23 @@
 | S1.16 | Git in einem Flow: branch → commit → PR | core | 18 | 1.4 Built-in Git + Full PR Workflow + Demo 1.4 |
 | S1.17 | Git-Slash-Commands: /diff /review /rewind /autofix-pr | deep-dive | 15 | 1.4 Git-Related Slash Commands + --from-pr |
 | S1.18 | Worktrees als Test-Labor | deep-dive | 15 | 1.4 Git Worktrees + --worktree + baseRef |
-| S1.19 | Kosten im Blick: /cost, /usage & Budget-Cap | core | 15 | 1.5 Token Tracking (core) + Budget Caps |
+| S1.19 | Kosten im Blick: /cost, /usage, Budget-Cap + 5-Min-Cost-Reduction | core | 15 | 1.5 Token Tracking (core) + Budget Caps + Caching/Effort/Model-per-Phase |
 | S1.20 | Demo + Hands-on Puffer (Exercise 1.x — pick 1) | core | 15 | Exercises 1.1–1.4 |
 
 **Session 1 Core:** S1.1–S1.10, S1.13, S1.14, S1.16, S1.19, S1.20 = 15 core-LEs → **213 Min roh** (der vollste Termin; muss aktiv gestrafft werden, siehe ⚠️ unten).
 **deep-dive (wenn Zeit):** S1.11 (18) + S1.12 (12) + S1.15 (12) + S1.17 (15) + S1.18 (15) = **72 Min**.
 
 > **⭐ Audience-Fit-Entscheidung:** S1.6 (alle 6 Permission Modes) ist **`[core]`**, nicht deep-dive —
-> die Zielgruppe (Physical-Security-Profis) will Clearance-Level früh vollständig sehen. Das macht
-> Session 1 mit **213 Min Roh-Core** zum vollsten Termin — deutlich über den ~140–150 netto fahrbaren
-> Minuten. Realistisch: S1.20-Puffer auf ~10 Min, S1.9 straffen, ggf. S1.4 in S1.3 bündeln; die
-> deep-dives (72 Min) entfallen hier fast immer. **Die 6 Modi NICHT opfern.**
+> die Zielgruppe (Physical-Security-Profis) will Clearance-Level früh vollständig sehen.
+>
+> **⏱️ Termin-Länge ist KEIN harter Constraint für diesen Workshop.** Content-Vollständigkeit geht vor
+> Slot-Fitting; die Sessions laufen so lang wie nötig (mit Pausen). Die Minutenzahlen (213 Min Roh-Core
+> + 72 Min deep-dives) sind daher **Pacing-/Pausen-Signale und Self-Study-Budget**, kein Zwang zum Kürzen.
+>
+> Der didaktisch relevante Punkt ist nicht „passt es in 180 Min", sondern **Ermüdung**: 213 Min Core am
+> Stück sind ein Firehose. Lösung ist **Rhythmus, nicht Streichen** — z. B. nach ~S1.6 und ~S1.14 je eine
+> Pause + einen 2-Fragen-Recall (Retrieval). Wer schneller durch will (Self-Learner-Pfad), kann weiche
+> Beats optional straffen. **Die 6 Modi (S1.6) bleiben.**
 
 ---
 
@@ -90,7 +96,7 @@
 | S2.4 | Bundled Skills (/batch /debug /loop /verify …) | core | 12 | 2.1 Bundled Skills + /skills |
 | S2.5 | Living Prompts: dynamische Injection & Argumente | deep-dive | 15 | 2.1 Argument Substitution + Dynamic Injection + Live-Reload |
 | S2.6 | Hooks = Event-Listener (die 3 Eckpfeiler) | core | 15 | 2.2 Core Idea + Three Cornerstones + Sensor-Analogie |
-| S2.7 | Die wichtigsten Hook-Events landkarten | core | 12 | 2.2 Hook Types (11er-Tabelle) |
+| S2.7 | Die wichtigsten Hook-Events landkarten | core | 12 | 2.2 Hook Types (12er-Tabelle) |
 | S2.8 | Einen Hook konfigurieren (settings.json, matcher, if) | core | 15 | 2.2 Hook Configuration + Real Example + Demo 2.2 |
 | S2.9 | Hook-Exec-Typen & component-scoped Hooks | deep-dive | 15 | 2.2 Execution Types + Component-Scoped Hooks |
 | S2.10 | Advanced Hook-Outputs + Secure Diff Gate | deep-dive | 15 | 2.2 Advanced Output + Circuit Breaker + Demo 2.2b |
@@ -103,7 +109,7 @@
 | S2.17 | MCP-Security & eigenen Server bauen | deep-dive | 18 | 2.4 MCP Security + Build Your Own + Channels |
 | S2.18 | RAG & NotebookLM: dem Agenten Blueprints geben | core | 18 | 2.5 Workflow + Use Cases + Demo 2.5 |
 | S2.19 | RAG-Grenzen & Datenschutz-Abwägung | deep-dive | 10 | 2.5 RAG Limitations + Data-Flow-Disclosure |
-| S2.20 | Hands-on Puffer (Exercise 2.x — pick 2–3) | core | 18 | Exercises 2.1–2.6 |
+| S2.20 | Hands-on Puffer (Exercise 2.x — pick 1 in-session) | core | 18 | Exercises 2.1–2.6 |
 
 **Session 2 Core:** S2.1–S2.4, S2.6–S2.8, S2.11, S2.14, S2.15, S2.18, S2.20 = 12 core-LEs → **177 Min roh** (auf ~145 fahrbar: S2.2 und der S2.20-Puffer sind die elastischen Posten).
 **deep-dive (wenn Zeit):** S2.5 (15) + S2.9 (15) + S2.10 (15) + S2.12 (15) + S2.13 (10) + S2.16 (15) + S2.17 (18) + S2.19 (10) = **113 Min**.
@@ -156,19 +162,20 @@
 | S4.5 | CI-Pipelines bauen (GitHub Actions / GitLab) | deep-dive | 18 | 3.6 GitHub Actions + GitLab CI + Failure Patterns + Don'ts |
 | S4.6 | Mobile/Remote: remote-control & /teleport | bonus | 12 | 3.5 Built-in Mobile Workflow + Telegram Bridge |
 | S4.7 | Inception (Docker) & Worktree-Isolation tief | bonus | 15 | 3.5 Inception + Worktree Isolation + baseRef + --tmux |
-| S4.8 | Die volle Architektur (Capstone-Diskussion) | bonus | 25 | 3.5 Full Architecture + Complete Analogy + Exercise 3.5 |
+| S4.8 | Bewerteter Capstone-Build | bonus | 25 | 3.5 Full Architecture + Complete Analogy + Exercise 3.5 + `capstone-exit-assessment.md` |
 | S4.9 | Troubleshooting: /debug, --verbose, /doctor | core* | 15 | 3.7 /debug + --verbose + /doctor |
 | S4.10 | Diagnose-Sequenzen (Hook/Skill/Plugin/MCP) | core* | 18 | 3.7 Failure-Diagnosen + 8-Schritt-Checkliste + Demo 3.7 |
 
-**Session 4 (voller Track):** 15+15+15+18+18+12+15+25+15+18 = **~163 Min** (passt in 180 Min mit Pause).
+**Session 4 (voller Track):** 15+15+15+18+18+12+15+25+15+18 = **166 Min roh** (davon nur S4.9/S4.10 = 33 Min `core*`). Netto ~140–150 fahrbar → deep-dives/bonus nach Zeitbudget; der volle Track läuft realistisch NIE komplett.
 
 > **`core*` = innerhalb von Session 4 Pflicht.** Troubleshooting (S4.9/S4.10) ist der einzige „jeder braucht
 > es"-Teil. **Fallback ohne 4. Termin:** S4.9 + S4.10 (33 Min) ans Ende von Session 3 hängen und die
 > Session-3-deep-dives streichen; der Rest von Session 4 wird strukturierter Selbststudien-Track.
 
-> **💸 Cost-Engineering-Verschiebung (Welle-F-Entscheidung):** Vom alten Modul 1.5 bleibt nur S1.19
-> (`/cost`, `/usage`, Budget-Cap) als Tag-1-Core. Der Rest — Pipeline-Ökonomie, Prompt-Caching,
-> `/insights`-Deep-Dive, Cost-Reduktions-Taktiken, Anti-Patterns — wird in **S4.4 bei den CI-Budget-Caps**
+> **💸 Cost-Engineering-Verschiebung (Welle-F-Entscheidung):** S1.19 bleibt Tag-1-Core:
+> `/cost`, `/usage`, Budget-Cap plus ein 5-Minuten-Beat zu Caching, Effort-Tiers und Modell-pro-Phase.
+> Der Rest — Pipeline-Ökonomie, `/insights`-Deep-Dive, die vollständigen Cost-Reduktions-Taktiken
+> und Anti-Patterns — wird in **S4.4 bei den CI-Budget-Caps**
 > praktisch wieder aufgegriffen, wo er Hand und Fuß hat. Begründung: Ein Neuling kann am Tag 1 ohne
 > Praxisgefühl die Pipeline-Ökonomie nicht einordnen; Budget-Caps werden erst bei autonomen Loops/CI relevant.
 
@@ -179,9 +186,14 @@
 | Übungen | Hängen an LE |
 |---|---|
 | Exercises 1.1–1.4 | S1.20 (Hands-on-Puffer Session 1) |
-| Exercises 2.1–2.6 | S2.20 (Hands-on-Puffer Session 2) |
-| Exercises 3.1–3.3 | S3.15 (Hands-on-Puffer Session 3) |
-| Exercise 3.5 (Capstone / Architecture Discussion) | S4.8 (Die volle Architektur) |
+| Exercises 2.1–2.6 | S2.20 (Hands-on-Puffer Session 2; **pick 1 in-session**, Rest optional/Selbststudium) |
+| Exercises 3.1–3.3 | S3.15 (Hands-on-Puffer Session 3; 3.1→S3.4, 3.3→S3.6/S3.7) |
+| Exercise 3.4 (Automation) | S3.12/S3.13 (Scheduling + abgesicherte Loops) |
+| Exercise 3.5 (Capstone Exit Build) | S4.8 (Bewerteter Capstone-Build) |
+| Exercise 3.6 (Pre-Commit Hook with Claude) | S4.3–S4.5 (Headless + CI/CD) |
+| Exercise 3.7 (Debug a Broken Hook) | S4.9/S4.10 (Troubleshooting + Diagnose-Sequenzen) |
+| Bonus Exercise 3.8 (HIPAA Guardrails) | S3.11 (Datenschutz/Regulated Industries) |
+| Exercise 3.9 (OSDP/Wiegand Domain Parser) | S3.4 + S3.6/S3.7 (Multi-Agent/TDD + Security-Audit-Transfer) |
 
 ---
 
@@ -203,10 +215,47 @@ Jede LE folgt demselben Muster:
 1. **Konzept verstehen** — LE-Abschnitt im Modul lesen (Anker `<!-- LE: Sx.y -->`)
 2. **Live-Demo sehen** — die an die LE gebundene Demo nachvollziehen (Demo > Slides)
 3. **Selbst ausprobieren** — Exercise im Hands-on-Puffer lösen
-4. **Mit Cheat Sheet absichern** — Quick-Reference
+4. **Bring-your-own-repo Transfer** — 10 Minuten heutige Fertigkeit auf ein echtes Job-Repo abbilden
+5. **Mit Cheat Sheet absichern** — Quick-Reference
 
-Jede Session startet weiterhin **visuell mit der PPT** (`claude-code-workshop.pptx`), dann Vertiefung in die LEs.
+Session 1 startet weiterhin **visuell mit der PPT** (`claude-code-workshop.pptx`). Sessions 2-4 starten mit einem 5-Minuten Active-Recall-Opener aus `resources/retrieval-recap-bridges.md`, dann sofort mit der neuen PPT.
 Durchgängige Physical-Security-Analogien und optionale Exercises bleiben erhalten.
+
+## Live-3-Personen-Modus
+
+Quelle: `resources/live-3-person-mode.md`.
+
+Der Live-Workshop fuer drei erfahrene Entwickler nutzt die 65-LE-Karte als Moderator-Geruest, nicht als MOOC-Checkliste. Pro Hands-on-Beat laufen **Think-Aloud-Pair-Driving** und Rollenrotation:
+
+| Rolle | Aufgabe |
+|---|---|
+| Driver | Claude Code bedient, Erwartung vor Enter laut sagen |
+| Navigator | Scope, Permissions, Dateien und Tests bewachen |
+| Observer | Kosten, Kontext und Transfer ins Job-Repo beobachten |
+
+Live gilt: sokratische Prompt-Fragen statt Dashboard-Quiz. Completion-UI, Heatmap und kumulatives Quiz sind Self-Learner-Track oder Nachbereitung, nicht der Taktgeber im Raum.
+
+## Retrieval-/Recap-Bruecken
+
+Quelle: `resources/retrieval-recap-bridges.md`.
+
+| Zeitpunkt | Format | Zweck |
+|---|---|---|
+| Vor Session 2 PPT | 5 Fragen aus Session 1 | Foundations aktiv abrufen, nicht nur Folien wiedersehen |
+| Vor Session 3 PPT | 5 Fragen aus Session 2 | Ecosystem-Begriffe reaktivieren |
+| Vor Session 4 PPT | 5 Fragen aus Session 3 | Advanced-Kern vor Bonus/Capstone stabilisieren |
+| Nach dichten Analogie-Clustern | 60-90s Quick-Check | Missverstaendnisse sofort sichtbar machen, unbenotet |
+
+## Bring-your-own-repo Transfer-LEs
+
+Quelle: `resources/transfer-retention-plan.md`. Diese Beats sind klein, aber Pflicht: der Playground beweist Mechanik; das eigene Repo beweist Adoption.
+
+| Transfer-LE | Wann | 10-Minuten-Output |
+|---|---|---|
+| S1-T | Ende Session 1 | Repo entry map: Kontextdateien, Protected Paths, erster sicherer Check |
+| S2-T | Ende Session 2 | Automation candidate: Skill/Hook/Plugin/MCP/RAG plus Trigger und Grenze |
+| S3-T | Ende Session 3 | Bounded automation design: Agent-Rolle, Permission Mode, Worktree, Budget Cap, Stop Condition |
+| S4-T | Ende Session 4 | Take-home adoption plan plus 30-Tage-async-Follow-up via `/schedule` oder Routine |
 
 ## Pausen
 
@@ -217,15 +266,16 @@ Pro Session ~10–15 Min Pause nach ~90 Min. Zusätzlich Q&A zwischen LEs.
 - **Pflicht je Session:** alle `[core]`-LEs + Hauptdemos + mindestens 1 Exercise (Hands-on-Puffer).
 - **„Wenn Zeit, dann zeigen":** `[deep-dive]`-LEs.
 - **Nur bei Überschuss / auf Nachfrage:** `[bonus]`-LEs (Self-Improve, Codex Swarm, Capstone, Mobile/Inception).
+- **Live mit 3 Personen:** `resources/live-3-person-mode.md` priorisieren; Cockpit-Completion/Quiz nur als Self-Learner-Nachbereitung.
 
 ## Materialien pro Session
 
 | Session | Mitbringen | Vorbereitung |
 |---|---|---|
-| 1 | Laptop, claude installiert, GitHub-Account | `resources/prerequisites.md` durchgearbeitet |
-| 2 | Session-1-Setup + Playwright-Browser, NotebookLM-Account | Plugin-Bundle installiert (siehe `prerequisites.md` „Workshop-Plugins") |
-| 3 | Session-2-Setup + Codex-CLI (falls verfügbar) | Workshop-Playground geklont |
-| 4 | Session-3-Setup | optional: CI-Repo mit GitHub Actions zum Mitschreiben |
+| 1 | Laptop, claude installiert, GitHub-Account, ein eigenes unkritisches Repo fuer Transfer | `resources/prerequisites.md` durchgearbeitet |
+| 2 | Session-1-Setup + Playwright-Browser, NotebookLM-Account, Transfer-Repo | Plugin-Bundle installiert (siehe `prerequisites.md` „Workshop-Plugins") |
+| 3 | Session-2-Setup + Codex-CLI (falls verfügbar), Transfer-Repo | Workshop-Playground geklont |
+| 4 | Session-3-Setup, Transfer-Repo | optional: CI-Repo mit GitHub Actions zum Mitschreiben; Take-home-Adoptionsplan vorbereiten |
 | **Alle** | **Moderator:** vorbereitetes `~/cc-workshop`-Bundle auf USB-Stick | Fallback bei kaputtem Teilnehmer-Setup (vgl. `trainer-notes.md` Pairing-Fallback) |
 
 ---

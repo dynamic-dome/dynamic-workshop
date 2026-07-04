@@ -19,6 +19,8 @@
 ---
 
 ## Demo 3.1: Multi-Agent Orchestration
+**LE binding:** S3.4 (orchestration patterns).
+**Duration:** ~8 minutes planned; reserve ~12 minutes live (×1.5) if agent outputs are verbose.
 
 **Goal:** Show two agents running simultaneously on independent tasks.
 
@@ -68,6 +70,8 @@ This is exactly how a well-run SOC operates."
 ---
 
 ## Demo 3.2: Codex Swarm
+**LE binding:** S4.1 (multi-model staffing) and S4.2 (Codex data-flow boundary).
+**Duration:** ~12 minutes planned; reserve ~18 minutes live (×1.5) because decomposition and Codex agent startup can vary.
 
 **Goal:** Show multi-model pipeline — Claude plans, Codex builds in parallel, Claude reviews.
 
@@ -125,13 +129,15 @@ Three different intelligence profiles.  One pipeline.  The result is better than
 ---
 
 ## Demo 3.3: Devil's Advocate — Adversarial Security Testing
+**LE binding:** S3.6 (adversarial pipeline) and S3.7 (review trio).
+**Duration:** ~12 minutes planned; reserve ~18 minutes live (×1.5) if Debate/Consensus output is long.
 
 **Goal:** Show automated penetration testing pipeline.  This demo is the highlight for the CySec audience.
 
 ### Setup
 
 You have already cloned `workshop-playground/` as part of the prerequisites (Step 7).
-We use it as-is — it ships with three deliberately planted vulnerabilities in `access_control.py`.
+We use it as-is — it ships with five deliberately planted vulnerabilities in `access_control.py`.
 
 No file creation required for this demo.
 
@@ -148,7 +154,7 @@ cd workshop-playground/
 **Step 2: Launch the adversarial swarm**
 
 ```
-/devil-advocate-swarms:swarm scan workshop-playground/access_control.py
+/devil-advocate-swarms:swarm scan access_control.py
 ```
 
 **Step 3: Watch Stage 1 — Scanners**
@@ -157,12 +163,14 @@ Two scanners run in parallel.
 Name what each is looking for.
 Point out: they will both find the planted issues — overlap = validation.
 
-Expected confirmed findings (three planted issues):
+Expected confirmed findings (five planted issues):
 - **Command Injection** in `backup_database()` (`access_control.py:~140`) — `subprocess.run(f"cp {DB_FILE} {filename}", shell=True)` with unvalidated CLI input from the `backup` command
 - **Hardcoded Credential** `ADMIN_PASSWORD = "admin123"` (`access_control.py:19`) — a literal secret at module scope
 - **Path Traversal** in `read_log()` (`access_control.py:~127`) — `open(f"logs/{log_name}")` with no sanitization, reachable via the `read-log` CLI command
+- **Fail-OPEN Access Logic** in `check_access_resilient()` (`access_control.py:~107`) — missing/corrupt DB grants access instead of failing secure, the domain-critical door-control lesson
+- **Log Injection / Log Forging** in `log_event()` (`access_control.py:~131`) — newline-bearing username/action can forge line-based audit entries
 
-There is also a strong chance the scanners surface an **ungeplante bonus finding**: a **Log-Injection / Log-Forging** issue in `log_event()` (`access_control.py:105-113`). The function writes `username` and `action` straight into a line-based log file — a newline-bearing username can forge log entries. If the swarm catches this, celebrate it; if not, mention it after the demo as evidence that no scanner is exhaustive.
+If the swarm misses the fail-open issue, pause and inspect it manually. This is the finding most connected to the audience's domain: an access-control system must fail secure, not grant access because the controller database is unavailable.
 
 **Step 4: Watch Stage 2 — Debate**
 
@@ -172,6 +180,7 @@ This is the most important part.  Slow down and explain what is happening:
 - For the hardcoded credential: Defender has no good argument.  Confirmed.
 - For the command injection: same.  Confirmed.
 - For the path traversal: Defender may argue "logs/ is a controlled directory" — Prosecutor counters with the `../../etc/passwd` example. Confirmed.
+- For fail-open logic: Defender may argue "availability matters for doors" — Prosecutor counters that emergency egress and credential validation are separate safety channels. Confirmed.
 - Point out if any finding gets argued away — that is the system saving engineer time.
 
 **Step 5: Watch Stage 3 — Consensus**
@@ -187,7 +196,7 @@ Each has a regression test.
 
 **Step 7: Show the planted vulnerabilities were all found**
 
-Scroll through findings. **Three confirmed planted issues + 1 bonus finding (Log-Injection)** is the expected outcome — three of the swarm's confirmations map 1:1 onto the planted vulnerabilities, the fourth (if surfaced) is the un-planted log forging issue.
+Scroll through findings. **Five confirmed planted issues** is the target outcome. If the swarm finds only four, use the missing one as the teaching moment for why adversarial automation still needs human domain review.
 
 ### Talking Point
 
@@ -204,7 +213,7 @@ For the CySec engineers in the room — this is your world applied to code."
 For Embedded / Physical-Security audiences:
 
 ```
-/devil-advocate-swarms:swarm scan workshop-playground/osdp_frame_decoder.c
+/devil-advocate-swarms:swarm scan osdp_frame_decoder.c
 ```
 
 Expected findings (4 planted issues):
@@ -223,13 +232,14 @@ Show both if time permits, or pick the one closest to the audience's daily work.
 
 - **If devil-advocate-swarms plugin not installed:** Show recording from prep. Discuss the 4-stage architecture (Scan → Debate → Consensus → Fix).
 - **If swarm finds wrong vulnerabilities (False Positives):** Use as teaching moment — "this is exactly why the Debate stage exists. Without it, you'd act on noise."
-- **If swarm misses one planted vulnerability:** Also a teaching moment — "automated tools have blind spots. Pair with human review."
+- **If swarm misses one planted vulnerability:** Also a teaching moment — "automated tools have blind spots. Pair with human review." If the missed issue is fail-open access, inspect `check_access_resilient()` manually and tie it back to fail-secure physical access-control design.
 - **If Windows `cp` command fails during live exploit:** Already noted in the demo — use Git Bash or WSL for the live run, or stay with the static finding (which is the actual point).
 - **If the debate stage looks different in this plugin version:** Narrate the intent ("Prosecutor argues exploitability, Defender pushes back") even if stage names differ. The architecture matters more than the labels.
 
 ---
 
 ## Demo 3.3b: Permission Modes — From Visitor to Master Key (~5 minutes)
+**LE binding:** S3.8 (advanced permission modes) and S3.9 (trust boundaries).
 
 ### Goal
 Show the 6 permission modes live. Demonstrate how the same task behaves differently under different clearance levels.
@@ -282,9 +292,10 @@ Claude shows the full plan first. One approval covers all steps.
 
 Say: *"Plan mode is the security briefing. You approve the whole mission, not each step. Useful for complex multi-step tasks where constant approving is exhausting."*
 
-**Step 4: Mention dontAsk and bypass (1 min)**
+**Step 4: Mention auto, dontAsk and bypass (1 min)**
 
 Don't demo these live (too dangerous for live demo). Just explain:
+- `auto` = classifier-assisted mode for trusted local/managed environments; unavailable in Cloud sessions
 - `dontAsk` = pre-approved work orders for CI/CD, only allow-listed operations run
 - `bypassPermissions` = master key, only inside sealed test facilities (Docker, sandbox)
 
@@ -303,6 +314,7 @@ Say: *"You would never give a contractor a master key in a live building. Same r
 ---
 
 ## Demo 3.3c: CVE-Fix Pipeline — From Advisory to PR (~5 minutes)
+**LE binding:** S3.6/S3.7 (security pipeline) with S4.5 PR automation as extension.
 
 ### Goal
 Show Claude fixing a real dependency vulnerability using web search + plan mode + automated PR. This is the "Research-to-Patch" blueprint.
@@ -382,6 +394,8 @@ Reverting keeps the playground in its intended state for later sessions and prev
 ---
 
 ## Demo 3.4: Self-Improve Loop
+**LE binding:** S3.12 (automation forms), S3.13 (budget/worktree safety) and S3.14 (self-improve showcase).
+**Duration:** ~10 minutes planned; reserve ~15 minutes live (×1.5) because loop iterations and test runtime vary.
 
 **Goal:** Show a system that analyzes its own weaknesses and fixes them autonomously.
 
@@ -461,6 +475,7 @@ This is what continuous security hardening looks like when applied to software."
 ---
 
 ## Demo 3.5: Full-Stack Architecture & Remote Workflow
+**LE binding:** S4.6 (remote workflow), S4.7 (worktree/isolation) and S4.8 (capstone architecture).
 
 **Teaching point:** What does a productive multi-agent workflow look like from the outside? Worktree-isolation for safety, background-sessions for long-running tasks, remote-control from the phone.
 
@@ -477,7 +492,7 @@ This is what continuous security hardening looks like when applied to software."
 Show how a worktree creates an isolated working tree for risky changes:
 
 ```bash
-git worktree add ../experiment-async-processing feature/async-experiment
+git worktree add ../experiment-async-processing -b feature/async-experiment
 cd ../experiment-async-processing
 claude
 # Make experimental changes — the main branch stays untouched
@@ -547,6 +562,7 @@ This is **a demonstration of the pattern**, not a recommended production setup �
 ---
 
 ## Demo 3.6: Headless Claude in 5 Minutes
+**LE binding:** S4.3 (headless mode) and S4.4 (CI auth/cost caps).
 
 > **⚓ This is the guaranteed-live anchor for Block 3.** It needs only the locally-installed
 > `claude` — no plugin, no Codex, no Internet, no bridge. Step 1 is also used as the 60-second
@@ -632,6 +648,7 @@ If you also want to show `claude setup-token`, do it **offline before the worksh
 ---
 
 ## Demo 3.7: Diagnosing a Broken Skill
+**LE binding:** S4.9 (debug tools) and S4.10 (diagnosis sequence).
 
 **Goal:** Walk the audience through the full diagnostic playbook on a skill that fails three different ways in sequence. Each fix reveals the next problem.
 

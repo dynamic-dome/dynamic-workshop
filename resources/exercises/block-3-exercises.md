@@ -53,6 +53,13 @@ Be explicit:
 - The orchestrator combining the results
 - Total time vs. what it would have been sequentially
 
+### Success Check
+
+- [ ] You can point to at least two separate agent outputs in the transcript.
+- [ ] Each agent had a distinct, independent task with no dependency on the other agent's result.
+- [ ] The final response combines both outputs into one report.
+- [ ] You can name one real work task where fan-out is safe, and one where a pipeline would be safer.
+
 ### Reflection Questions
 
 1. Were the tasks actually independent?  Did the agents need to coordinate?
@@ -109,12 +116,14 @@ Each group shares their most interesting answer.  5 minutes total.
 
 ### Setup
 
-Use `workshop-playground/access_control.py`. It already contains three deliberately planted vulnerabilities:
+Use `workshop-playground/access_control.py`. It already contains five deliberately planted vulnerabilities:
 1. Command Injection in `backup_database()`
 2. Hardcoded credential `ADMIN_PASSWORD = "admin123"` — note: **dead code**, never used in a reachable auth path (intentional; this matters in Step 3)
 3. Path Traversal in `read_log()`
+4. Fail-OPEN domain logic in `check_access_resilient()` — missing/corrupt DB grants access instead of failing secure
+5. Log-Injection / log-forging in `log_event()` — unsanitized `username`/`action` with a newline forges fake log lines
 
-The swarm often surfaces a fourth issue the planters didn't pre-list: **Log-Injection / log-forging** in `log_event()` (unsanitized `username`/`action` with a newline forges fake log lines). **Don't wave it off as a "bonus"** — in a physical-security system this is an **audit-trail integrity** failure, and audit-trail tampering is squarely in scope of **EN 50131** (intrusion-alarm standard). See the compliance mapping in Module 3.3b (EN 50131 → "require … audit trail"). Exercise idea: forge an admin line in `access.log`, then have Claude sanitize newlines and prove it with a test.
+**Don't wave off Log-Injection as a "bonus"** — in a physical-security system this is an **audit-trail integrity** failure, and audit-trail tampering is squarely in scope of **EN 50131** (intrusion-alarm standard). The fail-open issue is the domain-judgment lesson: pattern scanners often miss it, but access-control systems must fail secure. Exercise idea: forge an admin line in `access.log`, then inspect `check_access_resilient()` and explain why DB failure must deny access.
 
 **No vulnerability planting required** — we use the existing ones.
 
@@ -127,8 +136,8 @@ The swarm often surfaces a fourth issue the planters didn't pre-list: **Log-Inje
 > ```
 > …run from inside `workshop-playground/`, or just ask Claude directly:
 > *"Audit access_control.py for security vulnerabilities — injection, hardcoded secrets, path
-> traversal — and explain each with severity."* All three planted issues (Command Injection,
-> Hardcoded Credential, Path Traversal) are findable this way too; you just won't see the
+> traversal, log forging, and fail-open access-control logic — and explain each with severity."*
+> All five planted issues are findable this way too; you just won't see the
 > multi-agent Debate/Consensus stages. The rest of the exercise (report, fix, `pytest`) is identical.
 
 **Step 1: Open the playground**
@@ -141,24 +150,25 @@ ls access_control.py     # confirm you have the file
 **Step 2: Run the swarm against `access_control.py`**
 
 ```
-/devil-advocate-swarms:swarm scan workshop-playground/access_control.py
+/devil-advocate-swarms:swarm scan access_control.py
 ```
 
 **Step 3: Wait and watch**
 
 Do not skip ahead.  Watch each stage:
-- Scanners: what did each one identify? Did they catch all three planted issues? Anything beyond?
+- Scanners: what did each one identify? Did they catch all five planted issues? Anything beyond?
 - Debate: which findings are being argued?  Who is winning?
 - Consensus: how many CONFIRMED vs FALSE POSITIVE?
 - Fixers: what does the fix for each confirmed finding look like?
 
-The swarm will surface the **three planted issues** (Command Injection, Hardcoded Credential, Path Traversal) — plus, very likely, the **Log-Injection / audit-trail-forging** issue in `log_event()` (a regular EN-50131-relevant finding, not just a "bonus").
+The swarm should surface **five planted issues** (Command Injection, Hardcoded Credential, Path Traversal, Fail-OPEN access logic, and Log-Injection / audit-trail-forging). If it misses fail-open, pause and explain why that one requires physical-security domain judgment.
 
-> ⚠️ **Don't expect a clean "3/3 CONFIRMED".** `ADMIN_PASSWORD` is dead code — never reached by any
+> ⚠️ **Don't expect a clean "5/5 CONFIRMED".** `ADMIN_PASSWORD` is dead code — never reached by any
 > auth path. A good Defender will argue exactly that in the Debate stage, so the Hardcoded Credential
 > can legitimately end up **CONFIRMED-but-low-severity** or even **NEEDS-INVESTIGATION** instead of a
-> clean CONFIRMED. That disagreement *is* the lesson: **reachability changes severity.** Discuss why —
-> a hardcoded secret in unreachable code is a real smell but not an exploitable path today.
+> clean CONFIRMED. The fail-open issue may also be missed by pattern scanners because it is domain logic.
+> That disagreement *is* the lesson: **reachability and domain semantics change severity.** Discuss why —
+> a hardcoded secret in unreachable code is a real smell, while a corrupt door database granting access is a live safety failure.
 
 **Step 4: Pick one finding and apply its fix (temporary — you'll revert it)**
 
@@ -169,7 +179,7 @@ The swarm will surface the **three planted issues** (Command Injection, Hardcode
 > original. **Never commit the fix.** (No real contradiction: the rule says don't *keep* fixes; here you
 > apply one, verify, and revert.)
 
-Choose **one** of the three confirmed findings and let Claude implement the fix in `access_control.py`. After the fix:
+Choose **one** of the confirmed findings and let Claude implement the fix in `access_control.py`. After the fix:
 
 ```bash
 pytest -v   # run from the playground root — the baseline must stay green
@@ -187,8 +197,8 @@ git checkout -- access_control.py
 
 ### What to Report
 
-1. How many of the three planted vulnerabilities did the swarm confirm? At which stage?
-2. Did it find the Log-Injection / audit-trail-forging issue in `log_event()` (EN-50131-relevant) — or anything else you had not expected?
+1. How many of the five planted vulnerabilities did the swarm confirm? At which stage?
+2. Did it find both domain-relevant non-obvious issues: fail-open access in `check_access_resilient()` and Log-Injection / audit-trail-forging in `log_event()`?
 3. Were there false positives?  What did the Defender argue for each one?
 4. Which finding did you fix, and does the fix break any of the existing tests?
 
@@ -196,7 +206,7 @@ git checkout -- access_control.py
 
 - The debate phase is the most interesting part.  Read the Prosecutor and Defender arguments.
 - Some findings may end up as false positives — the Defender should win those.
-- If the swarm misses one of the three planted issues, that is also interesting — why?
+- If the swarm misses one of the five planted issues, that is also interesting — why?
 - Pay attention to the regression test the Fixer writes.  Is it testing the right thing?
 - After the fix, run `pytest -v` from the playground root to confirm the baseline still passes.
 
@@ -255,8 +265,10 @@ Design it, set it up, verify it triggers at least once.
 ### Verification
 
 After setting up your automation, verify it runs:
-- For `/schedule`: check the schedule list with `/schedule` and confirm your task appears
-- For `/loop`: watch it trigger at least twice in your terminal
+- [ ] For `/schedule`: check the schedule list with `/schedule` and confirm your task appears.
+- [ ] For `/loop`: watch it trigger at least twice in your terminal.
+- [ ] Capture the exact trigger condition and stop condition in one sentence.
+- [ ] Name the safety net: budget cap, permission mode, allow/deny rule, or human approval gate.
 
 ### Discussion (with the person next to you)
 
@@ -266,25 +278,27 @@ After setting up your automation, verify it runs:
 
 ---
 
-## Exercise 3.5: Architecture Discussion (Capstone) — Must-do, ~45 min
+## Exercise 3.5: Capstone Exit Build — Must-do, ~45 min
 
 **Priority:** Must-do — Workshop-Capstone
-**Type:** Group, ~30 minutes (Discussion) + optional Capstone Track (homework or bonus time)
-**Goal:** Design an ideal Claude Code workflow for a real project.
-This is the synthesis exercise — the goal of the entire workshop.
+**Type:** Individual driver with group observation, ~45 minutes
+**Goal:** Drive Claude Code independently through a small playground change, a guardrail, verification, and a PR-ready handoff.
+This is the synthesis assessment — the goal of the entire workshop.
+
+**Assessment sheet:** `resources/capstone-exit-assessment.md`
 
 > **Note:** Before starting, review the Use Case Blueprints below for inspiration.
 
 ### Format
 
-Groups of 3-4 people.  Each group designs a workflow.
+One participant drives; the other participants observe with the rubric. Rotate drivers if time allows.
 
 ### Your Task
 
-Pick a real project (your work, a side project, the workshop demo).
-Sketch the ideal Claude Code workflow for that project on the whiteboard or paper.
+Pick one small mission in `workshop-playground/`.
+First sketch the Claude Code workflow you would use, then build one concrete slice.
 
-**Your workflow should address:**
+**Your workflow plan should address:**
 
 1. **Hooks:**
    What automation happens without being asked?
@@ -321,10 +335,21 @@ Sketch the ideal Claude Code workflow for that project on the whiteboard or pape
 - What needs human review — where should Claude stop and ask?
 - What could go wrong?  Where are the safety nets?
 
+### Required Build Outputs
+
+Before the exercise is complete, the driver must produce:
+
+1. A small feature or fix in the playground.
+2. One hook, permission rule, deny rule, or documented safety guardrail.
+3. One narrow verification check with a short explanation of what it proves.
+4. One PR-ready handoff: branch/commit summary, risk note, rollback note, and checks run.
+
+Use `resources/capstone-exit-assessment.md` for the observable rubric.
+
 ### Presentation
 
-Each group presents their workflow in 5 minutes.
-Use the whiteboard or walk through your sketch.
+Each driver presents the handoff in 5 minutes.
+Use the whiteboard or walk through the diff and guardrail.
 
 Focus on:
 - What problem does this solve?
@@ -333,9 +358,9 @@ Focus on:
 
 ### This Exercise IS the Workshop Goal
 
-The ability to design this workflow is what we came here for.
+The ability to drive this workflow is what we came here for.
 You now have the vocabulary, the tools, and the mental models.
-The workflow you sketch today should be something you can actually start building tomorrow.
+The build you complete today should be something you can repeat in your own repo tomorrow.
 
 ### Optional: Capstone Track
 
@@ -696,7 +721,7 @@ These blueprints come from deep research into advanced Claude Code workflows. Us
 | # | Blueprint | Components | Security Relevance |
 |---|-----------|-----------|-------------------|
 | 1 | **Secure Diff Gate** — Block writes to `.env`, secrets, credentials | PreToolUse Hook + matcher `Write\|Edit` | Prevent accidental secret exposure |
-| 2 | **Token Firewall** — Filter noisy test/build output | PreToolUse Hook on Bash + filter script | Cost control, context management |
+| 2 | **Token Firewall** — Suppress noisy test/build output and send a compact summary | PostToolUse Hook on Bash + `suppressOutput` JSON | Cost control, context management |
 | 3 | **Circuit Breaker** — Stop agents stuck in retry loops | PostToolUse Hook detecting 3x same error | Prevent runaway token costs |
 | 4 | **CVE-Fix Pipeline** — From advisory to PR automatically | WebSearch + Plan Mode + Bash + Git | Vulnerability management |
 | 5 | **CI-Locked Agent** — Claude as CI worker with strict rules | `dontAsk` mode + allow rules + `--json-schema` | Deterministic pipeline integration |

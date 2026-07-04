@@ -1,8 +1,8 @@
 # Block 1: Foundations — Teaching Content
 
 **Audience:** Experienced programmers who are **new to coding agents**. We assume strong programming background and explain agent concepts from zero. Security analogies used throughout — especially relevant for the CySec engineer in the group.
-**Duration:** ~90 minutes
-**Goal:** Participants understand what Claude Code is, how context and memory work, how to write effective prompts, and how to use git integration.
+**Duration:** Speist **Session 1** (~3h-Termin; **213 Min Roh-Core**, aktiv gestrafft auf ~140–150 fahrbar — siehe `session-plan.md` als SSoT und den Straffungs-Plan dort).
+**Goal:** Participants understand what Claude Code is; how context, memory, and CLAUDE.md work; how permissions/clearance levels (all 6 modes) and model/effort choice work; how to write effective prompts; how to use git integration; and how to keep costs in view (`/cost`, `/usage`, budget cap).
 
 ---
 
@@ -14,8 +14,8 @@
 
 | LE | Level | Titel | Quell-Abschnitt(e) in diesem Modul |
 |---|---|---|---|
-| S1.1 | core | Coding Agent vs. Chat — mentales Modell | Module 1.1 → *Overview*, *The Three Consultant Modes*, *Boris Cherny's Philosophy* |
-| S1.2 | core | First Contact: bau sofort eine Datei | 1.1 → *First: Hello, Claude Code*, *What Claude Code Can Do*, *What Claude Code Cannot Do* |
+| S1.1 | core | First Contact: bau sofort eine Datei | 1.1 → *First: Hello, Claude Code*, *What Claude Code Can Do*, *What Claude Code Cannot Do* |
+| S1.2 | core | Coding Agent vs. Chat — mentales Modell | Module 1.1 → *Overview*, *The Three Consultant Modes*, *Boris Cherny's Philosophy* |
 | S1.3 | core | Die Oberflächen (CLI/Desktop/IDE/Web/iOS) | 1.1 → *The Five Surfaces*, *Surface-Switching from Inside a Session* |
 | S1.4 | core | Built-in Tools & Tool-Namen | 1.1 → *Built-in Tools Reference* |
 | S1.5 | core | Permissions Grundlagen: default & acceptEdits | 1.1 → *Permission System* (Alltags-Modi default/acceptEdits/plan + allow/deny) |
@@ -32,7 +32,7 @@
 | S1.16 | core | Git in einem Flow: branch → commit → PR | 1.4 → *Built-in Git Capabilities*, *The Full PR Workflow in One Flow*, *Key Git Commands* |
 | S1.17 | deep-dive | Git-Slash-Commands | 1.4 → *Git-Related Slash Commands*, *Resuming a Session at a Specific PR* |
 | S1.18 | deep-dive | Worktrees als Test-Labor | 1.4 → *Git Worktrees*, *Worktree as Test Lab*, *The --worktree CLI Flag*, *worktree.baseRef*, *Worktrees in Practice* |
-| S1.19 | core | Kosten im Blick: /cost, /usage & Budget-Cap | 1.5 → *Token Tracking — Three Tools*, *Budget Caps for Autonomous Sessions* |
+| S1.19 | core | Kosten im Blick: /cost, /usage, Budget-Cap + 5-Min-Cost-Reduction | 1.5 → *Token Tracking — Three Tools*, *Budget Caps for Autonomous Sessions*, compact *Cost-Reduction Tactics* |
 | S1.20 | core | Hands-on Puffer (Exercise 1.x — pick 1) | `exercises/block-1-exercises.md` |
 
 > **💸 Verschoben nach Session 4 (S4.4):** Der Rest von Modul 1.5 — *Pricing Reference*, *Deep Dive: /insights*,
@@ -50,10 +50,11 @@
 **Learning Objectives:** After this module, you can:
 - **Explain what a coding agent is and how it differs from a chat assistant** — the core mental model everything else builds on.
 - Distinguish between Claude Code's five surfaces (CLI, Desktop App, IDE Extension, Web App, iOS App) and pick the right one for a given workflow.
-- *(Comes later in the session — builds on the basics above)* Identify when each of the 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) applies and which restrictions cloud sessions impose. **Core for this security-focused audience** (LE S1.6).
-- *(Comes later in the session — builds on the basics above)* Choose the right model (Fable 5 / Opus 4.8 / Sonnet 4.6 / Haiku 4.5) and effort level for a given task based on cost and reasoning depth (LE S1.7).
 
 ---
+
+<!-- LE: S1.1 -->
+> **Ich kann jetzt:** Claude Code starten, eine kleine Datei bauen lassen und das Agenten-Feedback beobachten.
 
 ### First: Hello, Claude Code (do this now — ~5 minutes)
 
@@ -82,13 +83,23 @@ Watch what happens: Claude proposes the file, asks permission to write it, creat
 
 > New to agents? The key thing you just saw: Claude didn't *tell you how* to write the file — it *wrote and ran it itself*. That's the difference between a chat assistant and a coding agent. We unpack it next.
 
+**Comes later in this first-contact arc:**
+- In S1.6 you classify all 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) and the cloud-session restrictions.
+- In S1.7 you choose the right model (Fable 5 / Opus 4.8 / Sonnet 5 / Haiku 4.5) and effort level for a task based on cost and reasoning depth.
+
 ---
+
+<!-- LE: S1.2 -->
+> **Ich kann jetzt:** den Unterschied zwischen Chat-Assistent und Coding-Agent erklaeren und die Sicherheitsimplikation realer Tool-Aktionen benennen.
 
 ### Overview
 
 Claude Code is not a chat interface. It is a command-line tool that gives an AI agent full, active access to your development environment. A chat assistant answers your question and leaves the doing to you; an **agent** takes actions on your behalf — it reads and writes files, runs commands, and checks the results — inside a permission system you control. Understanding that distinction, and the different surfaces Claude Code runs on, is the first mental model to establish.
 
 ---
+
+<!-- LE: S1.3 -->
+> **Ich kann jetzt:** CLI, Desktop, IDE, Web und iOS als Arbeitsflaechen unterscheiden und passend einsetzen.
 
 ### The Five Surfaces
 
@@ -195,6 +206,9 @@ Compare this to a circular saw: the manual tells you how the blade works, the sa
 - **Connect via MCP**: Integrate with external tools — databases, APIs, monitoring systems, GitHub, Slack
 - **Remember across sessions**: Persist context using CLAUDE.md and the memory system
 
+<!-- LE: S1.4 -->
+> **Ich kann jetzt:** die wichtigsten Tool-Namen erkennen und einschaetzen, welche Aktionen Zustimmung brauchen.
+
 ### Built-in Tools Reference
 
 Claude Code works through **tools** — each capability has a specific tool name. These names matter for permissions, hooks, and agent configuration:
@@ -216,6 +230,9 @@ These are the tools you'll actually see in your first sessions — the everyday 
 
 ---
 
+<!-- LE: S1.7 -->
+> **Ich kann jetzt:** Modell und Effort-Level nach Aufgabe, Kosten und Reasoning-Tiefe auswaehlen.
+
 ### Model Selection & Cost Awareness
 
 Claude Code supports multiple models. Choosing the right one matters for both quality and cost:
@@ -224,7 +241,7 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 |-------|---------|-----------|------|
 | **Claude Fable 5** (`claude-fable-5`, GA 2026-06-09) | 1M tokens | Anthropic's most capable model — hardest reasoning, long-horizon agentic work. Premium tier. | Premium |
 | **Claude Opus 4.8** (current default, model ID `claude-opus-4-8`) | 1M tokens | Deepest Opus-tier reasoning, architecture, complex tasks. Effort defaults to `high`. | High |
-| **Claude Sonnet 4.6** | 1M tokens | Fast, capable, everyday coding | Medium |
+| **Claude Sonnet 5** | 1M tokens | Fast, capable, everyday coding | Medium |
 | **Claude Haiku 4.5** | 200K tokens | Quick tasks, brainstorming, bulk operations | Lowest |
 
 > Model names move fast. The script was written against Opus 4.8 (current default since ~May 2026); Fable 5 went GA on 2026-06-09. Run `/model` to see what your CLI actually offers, and `/release-notes` for the latest.
@@ -234,7 +251,7 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 **How to switch:**
 - At startup: `claude --model sonnet`
 - In session: `/model` command
-- Effort level: `/effort <low|medium|high|xhigh|max>` — five tiers from cheap-and-fast to deepest analysis. On Opus 4.8 the default is `high`; `xhigh` and `max` (available on Opus 4.7, Opus 4.8, and Fable 5) unlock even deeper reasoning when set explicitly
+- Effort level: `/effort <low|medium|high|xhigh|max>` — five tiers from cheap-and-fast to deepest analysis. On Opus 4.8 the default is `high`; `xhigh` and `max` (available on Opus 4.8, Sonnet 5, and Fable 5) unlock even deeper reasoning when set explicitly
 - Check spend: `/cost` shows token usage and cost for the current session
 - Check context: `/context` visualizes how much of the context window is used
 
@@ -245,6 +262,12 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 > Detailed pricing per million tokens, effort multipliers, and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth.
 
 ---
+
+<!-- LE: S1.5 -->
+> **Ich kann jetzt:** default, acceptEdits und plan als alltagstaugliche Permission-Modi erklaeren.
+
+<!-- LE: S1.6 -->
+> **Ich kann jetzt:** alle sechs Permission Modes inklusive Cloud-Grenzen als Clearance-Level einordnen.
 
 ### Permission System
 
@@ -274,6 +297,8 @@ Claude Code has a built-in permission system that controls which tools it can us
 **Allowlists via CLI flag:** `claude --allowedTools "Read,Glob,Grep"` — only these tools are available.
 
 **Security analogy:** This is card access clearance levels. A visitor badge gets you through the lobby but not the server room. A maintenance badge opens utility closets but not the executive floor. Each Claude session has a clearance level — you decide what it can access. The permission mode sets the *default* clearance, and allow/deny rules fine-tune individual doors.
+
+**Quick check (ungraded, 60 seconds):** "Name the clearance level you would give Claude for a repo you have never seen." Good answers choose `default` or `plan` and mention least privilege.
 
 ---
 
@@ -313,6 +338,9 @@ Claude Code does not have unlimited awareness of your project. It has a context 
 
 ---
 
+<!-- LE: S1.8 -->
+> **Ich kann jetzt:** Kontextfenster, Kompression und begrenzte Aufmerksamkeit praktisch erklaeren.
+
 ### The Context Window
 
 The context window is Claude's active memory for a session. Everything Claude "knows" during your conversation — your files, your instructions, your conversation history, the results of commands it ran — lives in this window.
@@ -342,6 +370,9 @@ Claude's context window works the same way. Active information is on the monitor
 The implication: **don't rely on Claude remembering details from early in a long session.** If something is important, write it down (CLAUDE.md, a file, a note). Make Claude reread it if it's critical.
 
 ---
+
+<!-- LE: S1.10 -->
+> **Ich kann jetzt:** eine CLAUDE.md als Projekt-Standing-Orders lesen, schreiben und begruenden.
 
 ### CLAUDE.md: Your Project Access Policy
 
@@ -375,6 +406,8 @@ CLAUDE.md is exactly this. Every session, Claude reads the policy before doing a
 
 You write the policy once. Claude follows it every session, without being reminded.
 
+**Quick check (ungraded, 60 seconds):** "Name one standing order that belongs in `CLAUDE.md` for your team." Good answers are persistent project rules, not one-off prompts.
+
 ---
 
 > ### ⏩ Deepening — skippable on a first pass
@@ -382,6 +415,9 @@ You write the policy once. Claude follows it every session, without being remind
 > **Core so far:** the context window fills and auto-compresses, and `./CLAUDE.md` is the standing policy Claude reads every session. That's enough to work productively. If this is your first pass, **jump ahead to "Context Compression" below** (the `/context` and `/compact` commands) and come back to the memory mechanisms here later.
 >
 > The next sections cover the *advanced* memory machinery — Auto-Memory internals, path-scoped rules, `@path` imports, `CLAUDE.local.md`, managed enterprise policy, and multi-repo `--add-dir`. Useful, but not needed for your first sessions.
+
+<!-- LE: S1.11 -->
+> **Ich kann jetzt:** Auto-Memory, rules, lokale Notizen und Managed Policy als getrennte Memory-Layer einordnen.
 
 ### The Memory System: Auto-Memory (Default On)
 
@@ -449,6 +485,9 @@ This rule will be loaded into context **only** when Claude is working on files m
 **Security analogy:** Path-scoped rules are zone-specific security policies. The rules for entering the server room are not the same as the rules for the reception lobby — and the guard at reception should not have to memorize server-room policy on every shift. Each zone has its own policy, loaded only when relevant.
 
 ---
+
+<!-- LE: S1.12 -->
+> **Ich kann jetzt:** `@path`, `--add-dir` und AGENTS.md-Interop ohne Policy-Vermischung erklaeren.
 
 ### `@path` Imports and AGENTS.md Interop
 
@@ -518,6 +557,9 @@ With the env var set, every `--add-dir` path also contributes its own `CLAUDE.md
 >
 > The rest of the module is core again: how compression behaves and the everyday context commands.
 
+<!-- LE: S1.9 -->
+> **Ich kann jetzt:** `/compact` und `/rewind` nutzen, um Kontext aktiv zu steuern.
+
 ### Context Compression: Why It Happens and How to Handle It
 
 When the context fills, Claude auto-compresses. The compression:
@@ -577,6 +619,9 @@ Claude Code's capability is constant. The quality of your results varies entirel
 
 ---
 
+<!-- LE: S1.13 -->
+> **Ich kann jetzt:** vage Prompts in konkrete Arbeitsauftraege mit Scope-Grenzen umformen.
+
 ### Clarity Over Cleverness
 
 The most common mistake with AI tools is being too vague in an attempt to let the AI "figure it out." This is the wrong mental model. Claude Code is not psychic. It works with what you give it.
@@ -635,6 +680,9 @@ Scope is defined. What not to touch is explicit. Success criterion is stated.
 
 ---
 
+<!-- LE: S1.14 -->
+> **Ich kann jetzt:** Explain/Propose/Refine/Execute und Plan Mode als sicheren Arbeitsrhythmus einsetzen.
+
 ### Iterative Work Pattern
 
 For complex tasks, a four-step pattern works well:
@@ -649,6 +697,9 @@ This pattern prevents the scenario where Claude writes 300 lines of code in a di
 **Effort as a prompting lever.** Some tasks benefit from `/effort xhigh` (architecture decisions, root-cause analysis of subtle bugs, multi-file refactors with side-effects to reason about). Others are better with `/effort low` (boilerplate, typo fixes, format-only edits). Choosing the right effort level is itself part of prompting — paying for `max` reasoning on a one-line typo wastes tokens; using `low` for an architectural choice produces shallow results. Match the effort to the cognitive load of the task.
 
 ---
+
+<!-- LE: S1.15 -->
+> **Ich kann jetzt:** Output Styles und Persona-Prompts gezielt fuer unterschiedliche Kommunikationslagen nutzen.
 
 ### Output Styles: Persona-Switching for Different Contexts
 
@@ -783,6 +834,9 @@ Claude Code has native git integration. This means you can manage your entire ve
 
 ---
 
+<!-- LE: S1.16 -->
+> **Ich kann jetzt:** branch, diff, test, commit, push und PR in einem Claude-Code-Flow fuehren.
+
 ### Built-in Git Capabilities
 
 Claude Code can execute git operations as naturally as it writes code:
@@ -804,6 +858,9 @@ change we discussed, commit it with a good message, and push it.
 ```
 
 Claude handles the git mechanics. You review the diff and approve.
+
+<!-- LE: S1.17 -->
+> **Ich kann jetzt:** Git-nahe Slash-Commands fuer Review, Rewind und PR-Arbeit sinnvoll einsetzen.
 
 ### Git-Related Slash Commands
 
@@ -881,6 +938,9 @@ Here is a complete feature development cycle as a single Claude Code session:
 This entire flow happens in conversation. No terminal window switching, no copy-pasting commit messages, no manual `git push` after forgetting to add `-u origin`.
 
 ---
+
+<!-- LE: S1.18 -->
+> **Ich kann jetzt:** Worktrees als isolierte Testlabore fuer Experimente und parallele Arbeit nutzen.
 
 ### Git Worktrees: Parallel Development Without the Risk
 
@@ -1035,7 +1095,7 @@ Claude Code is the same: Opus is the specialist, Sonnet is the seasoned patrol o
 |---|---:|---:|---|
 | Claude Fable 5 | $10 | $50 | ~2x |
 | Claude Opus 4.8 | $5 | $25 | 1x |
-| Claude Sonnet 4.6 | $3 | $15 | ~0.6x |
+| Claude Sonnet 5 | $3 | $15 | ~0.6x |
 | Claude Haiku 4.5 | $1 | $5 | ~0.2x |
 
 **Rule of thumb:** Output costs roughly 5x input. Write tight prompts with few pre-loaded files — you pay for input too. A 50 KB CLAUDE.md loaded into every session is a recurring tax on every conversation you have with Claude.
@@ -1043,6 +1103,9 @@ Claude Code is the same: Opus is the specialist, Sonnet is the seasoned patrol o
 (See **Module 1.1** for the qualitative model overview — context windows, strengths, use cases.)
 
 ---
+
+<!-- LE: S1.19 -->
+> **Ich kann jetzt:** `/cost`, `/usage` und Budget-Caps als Mindestkontrolle fuer Ausgaben verwenden.
 
 ### Token Tracking — Three Tools
 
@@ -1059,6 +1122,16 @@ Claude Code ships three slash commands for cost observability. Each answers a di
 | `/insights` | Optimization — which workflows are expensive and why? |
 
 A productive habit: glance at `/cost` whenever you've done something non-trivial (a multi-file refactor, a long planning session, a deep-research detour). It takes two seconds and prevents the "wait, I spent how much today?" moment at the end of the week.
+
+### 5-Minute Core: Cost-Reduction Tactics
+
+Even if Session 4 never happens, participants need three habits on day 1:
+
+1. **Cache the stable context:** keep `CLAUDE.md` and loaded skills stable during a work burst; repeated prompts within the cache window are much cheaper than cold starts.
+2. **Match effort to cognitive load:** use `/effort low|medium` for mechanical edits and reserve `xhigh|max` for architecture, root-cause analysis, or subtle security reasoning.
+3. **Use a model per phase:** plan/review with the strongest model only when judgment matters; implement routine code with Sonnet; use Haiku for cheap first-pass reads.
+
+Shortcut: before any long run, ask "Can this use cache, lower effort, or a cheaper phase model?" If yes, change that before the tokens start flowing.
 
 ---
 
@@ -1098,7 +1171,7 @@ Effort levels are not just a quality dial — they are a cost dial. The relative
 | `low` | Typo fixes, single-line refactors, quick code reviews | 0.5x |
 | `medium` | Standard coding, normal refactors | 1x |
 | `high` (default on Opus 4.8) | Architecture decisions, multi-file refactors | 2x |
-| `xhigh` | Deep analysis, root-cause debugging (Opus 4.7 / 4.8 / Fable 5) | 4x |
+| `xhigh` | Deep analysis, root-cause debugging (Opus 4.8 / Sonnet 5 / Fable 5) | 4x |
 | `max` | Edge cases, "look at everything" — use sparingly | 6x |
 
 **Best practice:** On Opus 4.8 the default is `high`. Downshift to `low`/`medium` for genuinely simple tasks (just as important as upshifting), and escalate to `xhigh`/`max` only when you can clearly identify a need for deep reasoning — otherwise you pay 4x for a 1.2x quality bump.
@@ -1114,7 +1187,7 @@ For demanding tasks, a three-model pipeline often beats a single-model approach 
 | Phase | Model | Effort | Why |
 |---|---|---|---|
 | **Plan** | Opus 4.8 | xhigh | Architecture is the most expensive phase to get wrong — paying for depth here saves you from rewriting later |
-| **Implement** | Sonnet 4.6 | medium | Writing code is routine — Sonnet does it fast and solidly |
+| **Implement** | Sonnet 5 | medium | Writing code is routine — Sonnet does it fast and solidly |
 | **Review** | Haiku 4.5 | low | Final check, fast pattern-matching, Haiku is enough |
 
 The cost shape is roughly `1x (plan) + 0.6x (implement) + 0.2x (review) ≈ 1.8x`, often producing better outcomes than Opus-only at the same total spend.
@@ -1212,6 +1285,9 @@ cache hit, it costs $0.05. Over 10 sessions/day, that's $4.50 vs $0.50 — meani
 See `session-plan.md` for workshop-wide cost estimates.
 
 ---
+
+<!-- LE: S1.20 -->
+> **Ich kann jetzt:** mindestens eine Block-1-Uebung auswaehlen und das Gelernte praktisch nachweisen.
 
 ### Summary: Block 1 Key Takeaways
 

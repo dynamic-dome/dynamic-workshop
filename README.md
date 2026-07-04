@@ -11,7 +11,7 @@ Dieses Repository ist die Materialbasis hinter der DoMe-Dynamics-Workshop-Seite:
 
 Die Website zeigt, warum der Workshop als Engineering-Arbeitsprobe zaehlt. Dieses Repo zeigt, womit er konkret funktioniert.
 
-> **📌 Stand & Versionen (zentraler Anker).** Material-Stand: **2026-06-23** (4 Sessions / 65 Lerneinheiten). Getestet gegen eine aktuelle Claude-Code-CLI; Modell-Lineup: Fable 5 · Opus 4.8 *(Default)* · Opus 4.7 · Sonnet 4.6 · Haiku 4.5. **Modellnamen, CLI-Flags und Versionsnummern ändern sich laufend** — im Zweifel `/model`, `/release-notes` und `claude --version` gegen dein Material prüfen, statt den hier genannten Zahlen blind zu vertrauen. Einzelne Dateien tragen eigene „Stand"-Zeilen; diese hier ist die maßgebliche Referenz.
+> **📌 Stand & Versionen (zentraler Anker).** Material-Stand: **2026-06-23** (4 Sessions / 65 Lerneinheiten). Getestet gegen eine aktuelle Claude-Code-CLI; Modell-Lineup: Fable 5 · Opus 4.8 *(Default)* · Opus 4.7 · Sonnet 5 · Haiku 4.5. **Modellnamen, CLI-Flags und Versionsnummern ändern sich laufend** — im Zweifel `/model`, `/release-notes` und `claude --version` gegen dein Material prüfen, statt den hier genannten Zahlen blind zu vertrauen. Einzelne Dateien tragen eigene „Stand"-Zeilen; diese hier ist die maßgebliche Referenz.
 
 ---
 
@@ -30,7 +30,7 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 ### Als Selbstlerner
 
 1. `resources/prerequisites.md` durcharbeiten (Installation, Auth, Tools)
-2. `resources/cloud-code-workshop-ui.html` im Browser oeffnen: interaktive 48-Section-Route mit 65-LE-Gesamtkarte, Folien, Uebungen, Bewertung und Quiz
+2. Fuer Selbstlernen/Moderation `resources/cloud-code-workshop-ui.html` im Browser oeffnen: interaktive 48-Section-Route mit 65-LE-Gesamtkarte, Folien, Uebungen, Bewertung und Quiz. Fuer die Live-3-Personen-Session gilt `resources/live-3-person-mode.md` statt Completion-Dashboard.
 3. `resources/workshop-guide.md` als **Haupt-Navigation** und Lern-Routine nutzen (ersetzt den Moderator); `WORKSHOP_EINFUEHRUNG.md` gibt die Kurz-Orientierung
 4. Block fuer Block durcharbeiten:
    - `resources/modules/block-1-foundations.md` lesen
@@ -125,6 +125,7 @@ Damit ist der Workshop nicht nur "Lehre ueber Claude Code", sondern eine Enablem
 ```
 dynamic_workshop/
 ├── README.md                       ← Du bist hier
+├── HOW-TO-USE.md                   ← Agent-/User-Wegweiser und kanonische Einstiegspfade
 ├── WORKSHOP_EINFUEHRUNG.md         ← Orientierung und Einstieg
 ├── CLAUDE.md                       ← Projektkontext fuer Claude Code
 ├── claude-code-workshop.pptx       ← Praesentationsfolien
@@ -170,7 +171,7 @@ Modulnummern: `1.1`–`1.5`, `2.1`–`2.5`, `3.1`–`3.7`
 
 ## Workshop Playground
 
-Das Verzeichnis `workshop-playground/` enthaelt ein kleines Python-Projekt mit **3 absichtlich eingebauten Sicherheitsluecken** (Command Injection, Hardcoded Credentials, Path Traversal). Es dient als realistisches Uebungsobjekt fuer Demos und Exercises.
+Das Verzeichnis `workshop-playground/` enthaelt ein kleines Python-Projekt mit **5 absichtlich eingebauten Sicherheitsluecken** (Command Injection, Hardcoded Credential, Path Traversal, Log-Injection und fail-OPEN Domain-Logik). Es dient als realistisches Uebungsobjekt fuer Demos und Exercises.
 
 ```bash
 cd workshop-playground

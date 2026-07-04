@@ -24,7 +24,7 @@
 | `/insights` | Analytics |
 | `--max-budget-usd 0.50` | Kosten-Cap |
 
-> Basics (`/cost`, `/usage`, `--max-budget-usd`) → Session 1 (S1.19). Cost-Strategie-Vertiefung (Pipeline, Caching, Effort-Multiplier, `/insights`) → Session 4 (S4.4) bei den CI-Budget-Caps.
+> Basics (`/cost`, `/usage`, `--max-budget-usd`) + 5-Min-Cost-Reduction (Caching, Effort-Tiers, Modell-pro-Phase) → Session 1 (S1.19). Cost-Strategie-Vertiefung (`/insights`, Pipeline, Anti-Patterns) → Session 4 (S4.4) bei den CI-Budget-Caps.
 
 ## Permissions
 | Mode | Was |

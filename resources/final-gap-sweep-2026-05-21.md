@@ -61,7 +61,7 @@ Session 2 opener references slides 12-18, Session 3 opener references slides 19-
 
 - `resources/deck-audit-2026-05-21.md` intentionally mentions the old 112-slide index as historical context.
 - `resources/dry-run-session-2-3-2026-05-21.md` intentionally mentions `allowed_tools` as a before/after finding.
-- Some generated/static artifacts such as `resources/workshop-learning-dashboard.html` may still contain older illustrative snippets, but they are not part of the current live trainer path.
+- Some generated/static artifacts such as `resources/archive/workshop-learning-dashboard-legacy.html` may still contain older illustrative snippets, but they are not part of the current live trainer path.
 - A later polish pass could make the old and new slides visually identical, but the current deck already renders cleanly and covers the missing 17-module visual layer.
 - `claude plugin validate .` now passes with a warning that root `CLAUDE.md` is project context, not plugin-shipped context. This is expected for this repo because `CLAUDE.md` is also the local workshop project guide.
 - The currently installed Claude plugin copy is stale: `claude plugin details dynamic-workshop` still reports `13 modules` and two `workshop` skill entries. Do not treat that as repo truth; reinstall/update the plugin from the fixed project after commit.

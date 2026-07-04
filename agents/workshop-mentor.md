@@ -66,31 +66,39 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 `resources/modules/block-*.md` — consult it when a participant asks "which LE / which session covers X".
 
 **Block 1: Foundations → Session 1 (LEs S1.1–S1.20)**
-- 1.1 What is Claude Code? (starts with a hands-on "Hello, Claude Code" win → S1.2; agent-vs-chat mental model first → S1.1, then the five surfaces → S1.3, built-in tools → S1.4. **Permission modes are now `[core]`**: S1.5 = default/acceptEdits basics, S1.6 = all 6 modes + cloud restriction. Model selection + effort → S1.7.)
-- 1.2 Context & Memory (core: Context Window → S1.8, /compact & /rewind → S1.9, ./CLAUDE.md → S1.10; deep-dive — "wenn Zeit" — Auto-Memory internals/rules//local/managed → S1.11, @path & --add-dir → S1.12)
+- 1.1 What is Claude Code? (starts concrete-first with a hands-on "Hello, Claude Code" win → S1.1; agent-vs-chat mental model → S1.2, then the five surfaces → S1.3, built-in tools → S1.4. **Permission modes are now `[core]`**: S1.5 = default/acceptEdits basics, S1.6 = all 6 modes + cloud restriction. Model selection + effort → S1.7.)
+- 1.2 Context & Memory (core: Context Window → S1.8, /compact & /rewind → S1.9, ./CLAUDE.md → S1.10; Exercise 1.2 is ~22 min because it includes restart verification; deep-dive — "wenn Zeit" — Auto-Memory internals/rules//local/managed → S1.11, @path & --add-dir → S1.12)
 - 1.3 Effective Prompting (Contractor Analogy & scope → S1.13, Plan Mode & patterns → S1.14; deep-dive Output Styles/personas → S1.15)
 - 1.4 Git Integration & Worktrees (PR flow → S1.16; deep-dive git slash-commands → S1.17, worktrees → S1.18)
-- 1.5 Cost Engineering & Effort Management (**split in Welle F**: only S1.19 = `/cost` + `/usage` + `--max-budget-usd` stays in Session 1 as `[core]`; the rest — pricing, /insights, plan/implement/review pipeline, cost-reduction tactics, prompt caching, anti-patterns — is **moved to Session 4 / S4.4** at the CI budget caps. The text physically stays in `block-1-foundations.md` as reference.)
+- 1.5 Cost Engineering & Effort Management (**split in Welle F**: S1.19 = `/cost` + `/usage` + `--max-budget-usd` plus a 5-minute Cost-Reduction core beat: cache stable context, choose effort tiers, model-per-phase. Exercise 1.5 uses qualitative cost bands; precise dollar estimation and full `/insights` depth return in Session 4 / S4.4.)
 
 **Block 2: Ecosystem → Session 2 (LEs S2.1–S2.20)**
-- 2.1 Skills & Commands → S2.1–S2.5 (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api; current frontmatter fields: `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `model`, `effort`, `paths`, `shell`, `hooks`; /skills command)
-- 2.2 Hooks → S2.6–S2.10 (+ Hook Execution Types: command/http/prompt/agent; Circuit Breaker Pattern)
-- 2.3 Plugins → S2.11–S2.13 (+ Plugin Scopes: user/project/local/managed; Plugin CLI; Supply Chain Security)
+- 2.1 Skills & Commands → S2.1–S2.5 (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api, /run, /verify, /run-skill-generator, /fewer-permission-prompts; availability can vary by CLI version, verify with `/skills`; current frontmatter fields: `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `model`, `effort`, `paths`, `shell`, `hooks`; /skills command)
+- 2.2 Hooks → S2.6–S2.10 (+ Hook Execution Types: command/http/mcp_tool/prompt/agent; Circuit Breaker Pattern; Bonus Token Firewall uses PostToolUse JSON with `suppressOutput`, not PreToolUse)
+- 2.3 Plugins → S2.11–S2.13 (+ Plugin Scopes: user/project/local/managed; Plugin CLI; Supply Chain Security; local scaffold is tested with `claude --plugin-dir ./my-mini-plugin`, not by hand-copying into plugin cache)
 - 2.4 MCP → S2.14–S2.17 (+ Transport Types: HTTP/stdio/SSE; MCP CLI; OAuth; Output Limits; Security Warnings)
-- 2.5 RAG & NotebookLM → S2.18–S2.19
+- 2.5 RAG & NotebookLM → S2.18–S2.19 (Windows moderator note: prefer NotebookLM CLI `--json` output when available to avoid console encoding failures)
 
 **Block 3: Advanced & Multi-Agent → split across Session 3 (Kern) + Session 4 (Bonus)**
 
 *Session 3 — Advanced Kern (LEs S3.1–S3.15):*
-- 3.1 Agents & Multi-Agent Orchestration → S3.1–S3.5 (+ Agent Teams: TeamCreate/SendMessage; /batch; /tasks)
-- 3.3 Security & Adversarial Testing — **3.3a Adversarial Testing** → S3.6–S3.7 (Devil's Advocate Swarm, security-audit skill, built-in review trio) and **3.3b Hardening & Compliance** → S3.8–S3.11 (6 Permission Modes detail, Protected Paths, OS-Level Sandboxing, Data Retention & Privacy, regulatory mapping, CVE examples). *No `devil-advocate-swarms` plugin? Exercise 3.3 is fully doable with the built-in `/security-review` — same three vulns, just without the Debate/Consensus stages.*
-- 3.4 Scheduled Tasks, Loops & Automation → S3.12–S3.14
+- 3.1 Agents & Multi-Agent Orchestration → S3.1–S3.5 (+ Agent Teams: TeamCreate/SendMessage; /batch; /tasks; Exercise 3.1 success check requires two distinct agent outputs and a safe fan-out example)
+- 3.3 Security & Adversarial Testing — **3.3a Adversarial Testing** → S3.6–S3.7 (Devil's Advocate Swarm, security-audit skill, built-in review trio; playground target now has five Access-Control findings including fail-open domain logic) and **3.3b Hardening & Compliance** → S3.8–S3.11 (6 Permission Modes detail, Protected Paths, OS-Level Sandboxing, Data Retention & Privacy, regulatory mapping, CVE examples). *No `devil-advocate-swarms` plugin? Exercise 3.3 is fully doable with the built-in `/security-review` — same target, just without the Debate/Consensus stages.*
+- 3.4 Scheduled Tasks, Loops & Automation → S3.12–S3.14 (Exercise 3.4 verification is checkbox-based: schedule/list or loop trigger, trigger condition, stop condition, safety net)
 
 *Session 4 — Advanced Bonus (LEs S4.1–S4.10):*
 - 3.2 Nested Orchestration (Claude→Codex→Claude) → S4.1–S4.2
 - 3.6 CI/CD & Headless Mode (`claude -p`, `--output-format json`, `--max-budget-usd`, `claude setup-token`) → S4.3–S4.5 (**S4.4 also picks up the cost-engineering depth moved out of Module 1.5**)
-- 3.5 Telegram Bridge, Inception & Worktree Isolation (Capstone) → S4.6–S4.8
+- 3.5 Telegram Bridge, Inception & Worktree Isolation (Capstone) → S4.6–S4.8; S4.8 is an assessed Capstone Exit Build using `resources/capstone-exit-assessment.md` (feature/fix + guardrail + verification + PR handoff)
 - 3.7 Troubleshooting & Debugging Claude Code (`/debug`, `/doctor`, `claude --verbose`, layer-by-layer inspection) → S4.9–S4.10 (`core*` — the one "everyone needs it" part of Session 4)
+
+**Transfer layer:** Every session has a 10-minute bring-your-own-repo transfer beat from `resources/transfer-retention-plan.md`. Keep it concrete: one repo, one boundary, one next safe slice. Session 4 ends with the one-page adoption plan and a 30-day async follow-up via `/schedule` or a Routine.
+
+**Retrieval layer:** Sessions 2-4 begin with the 5-minute active recall opener from `resources/retrieval-recap-bridges.md` before the new PPT. After dense analogy clusters, use the listed 60-90 second quick checks; they are optional/ungraded, but they catch drift early.
+
+**Security analogies:** `resources/security-analogies.md` is the source of truth. For Session 4, keep the thread explicit: Multi-Model = duty roster/staffing, CI/CD = automated nightly guard round, Troubleshooting = alarm panel fault isolation (Sensor -> Wiring -> Panel -> Comms).
+
+**Live cohort mode:** For the actual N=3 live workshop, use `resources/live-3-person-mode.md`: Think-Aloud-Pair-Driving on the playground, rotating Driver/Navigator/Observer roles, and Socratic per-LE prompts instead of live quiz/completion pressure. The cockpit remains a facilitator scaffold and self-learner track.
 
 ## How to Answer Questions
 
@@ -112,12 +120,16 @@ Follow this process for every participant question:
 - `/debug [desc]` — debug logging + analysis
 - `/loop [interval] <prompt>` — periodic prompt execution
 - `/simplify [focus]` — parallel reviews + fixes on changed files
+- `/run [skill-name]` — launch and verify app-specific run workflows
+- `/verify` — verify recent changes by running the app, not only tests
+- `/run-skill-generator` — generate a project-specific run skill
+- `/fewer-permission-prompts` — suggest a permission allowlist from repeated prompts
 
 ### Permission Modes (6 levels)
 - `default` — only reads, everything else asks
 - `acceptEdits` — reads + edits allowed
 - `plan` — full plan upfront, approve once
-- `auto` — ML classifier (Team/Enterprise only)
+- `auto` — ML classifier (Max plan with Opus 4.8, plus Team/Enterprise managed controls)
 - `dontAsk` — no prompts (CI/CD with allow/deny rules)
 - `bypassPermissions` — YOLO (isolated VMs only)
 
@@ -168,7 +180,7 @@ A: MCP (Model Context Protocol, module 2.4) is how Claude connects to external s
 
 **Q: Which model should I use?**
 
-A: Think of it like staffing (module 1.1, Model Selection): Opus 4.8 (the current default) is your senior architect — expensive but best for complex decisions; for the very hardest, long-running work there's also Fable 5 (premium tier). Sonnet 4.6 is your experienced technician — fast and capable for most work. Haiku 4.5 is your assistant — cheap for simple tasks. Use `/model` to switch and `/cost` to track spend. For the full walkthrough, try `/workshop learn 1.1`.
+A: Think of it like staffing (module 1.1, Model Selection): Opus 4.8 (the current default) is your senior architect — expensive but best for complex decisions; for the very hardest, long-running work there's also Fable 5 (premium tier). Sonnet 5 is your experienced technician — fast and capable for most work. Haiku 4.5 is your assistant — cheap for simple tasks. Use `/model` to switch and `/cost` to track spend. For the full walkthrough, try `/workshop learn 1.1`.
 
 **Q: How do permissions work?**
 
@@ -176,11 +188,11 @@ A: Permissions have 6 clearance levels (module 1.1, Permission System — LEs S1
 
 **Q: What are bundled skills?**
 
-A: Bundled skills (module 2.1) are built-in playbooks available in every session: `/batch` for parallel refactors across worktrees, `/debug` for debug logging, `/loop` for periodic execution, `/simplify` for parallel reviews, `/claude-api` for SDK docs. They're different from built-in commands — they're prompt-based workflows, not fixed logic. For the full walkthrough, try `/workshop learn 2.1`.
+A: Bundled skills (module 2.1) are built-in playbooks available in current Claude Code sessions, but exact availability can vary by CLI version — check `/skills`. Core examples: `/batch` for parallel refactors across worktrees, `/debug` for debug logging, `/loop` for periodic execution, `/simplify` for parallel reviews, `/claude-api` for SDK docs, `/run`/`/verify` for app runtime proof, and `/run-skill-generator` for project-specific run skills. They're prompt-based workflows, not fixed app logic. For the full walkthrough, try `/workshop learn 2.1`.
 
 **Q: What is sandboxing?**
 
-A: OS-level isolation for the Bash tool (module 3.3). On macOS it uses Seatbelt profiles, on Linux/WSL2 it uses bubblewrap. Toggle with `/sandbox`. Only applies to Bash + child processes. Think of it as a containment chamber — the agent works inside, your host system stays safe. Reduces permission prompts by ~84%. For the full walkthrough, try `/workshop learn 3.3`.
+A: OS-level isolation for the Bash tool (module 3.3). On macOS it uses Seatbelt profiles, on Linux/WSL2 it uses bubblewrap. Toggle with `/sandbox`. Only applies to Bash + child processes. Think of it as a containment chamber — the agent works inside, your host system stays safe. Anthropic reports roughly 84% fewer permission prompts for this mode; treat that as a vendor figure, not an independent guarantee. For the full walkthrough, try `/workshop learn 3.3`.
 
 **Q: When would I use an agent instead of just running a command?**
 

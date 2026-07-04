@@ -34,6 +34,10 @@
 | **Circuit Breaker (hook pattern)** | Deadman switch in alarm system | Stops runaway processes |
 | **Background Agent** | Patrol shift schedule | See/attach/stop active patrols |
 | **Effort Level** | Specialist skill level | Junior/Senior/Expert hour rates |
+| **Multi-Model Pipeline** | Duty roster / staffing plan | Senior architects plan/review, technicians implement, juniors do cheap first-pass checks |
+| **Headless CI/CD (`claude -p`)** | Automated nightly guard round | Runs without conversation, follows a checklist, reports exceptions |
+| **CI Cost Cap** | Patrol fuel/time budget | Stops unattended automation before runaway spend |
+| **Troubleshooting (`--verbose`, `/doctor`, `/debug`)** | Alarm panel fault isolation | Diagnose Sensor -> Wiring -> Panel -> Comms before replacing parts |
 | **Channels (MCP push)** | Radio dispatch to patrols | External events into live session |
 | **Telegram Bridge (custom)** | Group chat for ops center | Multi-operator coordination |
 | **Remote Control / Teleport** | Phone-based remote ops control | Solo operator, mobile |
@@ -54,4 +58,4 @@ In den Workshop-Files verlinken statt duplizieren:
 
 ---
 
-*Stand: 2026-05-20*
+*Stand: 2026-07-04*

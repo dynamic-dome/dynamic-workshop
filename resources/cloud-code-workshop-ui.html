@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Claude Code Workshop Lern-Cockpit</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230c0f0a'/%3E%3Crect width='64' height='64' rx='12' fill='none' stroke='%23f59e0b' stroke-width='3'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='monospace' font-size='20' font-weight='700' fill='%23f59e0b'%3ECC%3C/text%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: dark;
@@ -37,7 +34,7 @@
 
       /* Text */
       --ink:             #e8f0d8;
-      --muted:           #5a6b50;
+      --muted:           #8a9b80;
       --text-accent:     #f59e0b;
 
       /* Borders */
@@ -65,8 +62,8 @@
       --radius:          6px;
 
       /* Typography */
-      --mono:            'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
-      --sans:            'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --mono:            'Cascadia Code', 'Fira Code', Consolas, ui-monospace, monospace;
+      --sans:            system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
       /* Timing */
       --t-fast:          150ms ease;
@@ -75,6 +72,11 @@
     }
 
     * { box-sizing: border-box; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-primary);
+      outline-offset: 2px;
+    }
 
     body {
       margin: 0;
@@ -122,7 +124,6 @@
       justify-content: space-between;
       padding: 0 16px;
       z-index: 200;
-      animation: amber-flicker 9s ease-in-out infinite;
       backdrop-filter: blur(8px);
     }
 
@@ -369,20 +370,6 @@
       padding: 22px 28px 34px;
       overflow: hidden;
       position: relative;
-    }
-
-    /* Scan-Line Sweep (JS-triggered via .scanning class) */
-    .main.scanning::after {
-      content: "";
-      position: fixed;
-      left: 280px;
-      right: 330px;
-      height: 2px;
-      background: var(--accent-primary);
-      box-shadow: 0 0 12px var(--accent-primary), 0 0 24px rgba(245,158,11,0.4);
-      pointer-events: none;
-      z-index: 100;
-      animation: scan-line 400ms ease-out forwards;
     }
 
     .topbar {
@@ -814,7 +801,7 @@
       border: 1px solid var(--line);
       background: var(--surface);
       color: var(--muted);
-      font-size: 9px;
+      font-size: 10.5px;
       font-family: var(--mono);
       display: grid;
       place-items: center;
@@ -888,7 +875,7 @@
 
     .bar-row {
       display: grid;
-      grid-template-columns: 68px 1fr 42px;
+      grid-template-columns: 132px 1fr 42px;
       align-items: center;
       gap: 8px;
       color: var(--ink);
@@ -910,6 +897,10 @@
       border-radius: inherit;
       background: var(--cyan);
       width: var(--w);
+    }
+
+    .session-budget.over-budget {
+      color: var(--red);
     }
 
     .final-quiz {
@@ -1078,13 +1069,6 @@
       66%      { transform: translate(20px, -50px) scale(0.95); }
     }
 
-    /* Amber-Flicker: Phosphor-Monitor-Simulation */
-    @keyframes amber-flicker {
-      0%,89%,91%,97%,100% { opacity: 1; }
-      90%                  { opacity: 0.65; }
-      98%                  { opacity: 0.82; }
-    }
-
     /* Heartbeat: Progress-Ring (Bioluminescent Steal, amber recolor) */
     @keyframes heartbeat {
       0%  { transform: scale(1);    box-shadow: 0 0 0 0    rgba(245,158,11,0.6); }
@@ -1098,12 +1082,6 @@
     @keyframes dot-pulse {
       0%,100% { box-shadow: 0 0 4px rgba(34,197,94,0.4); }
       50%     { box-shadow: 0 0 12px rgba(34,197,94,0.95), 0 0 24px rgba(34,197,94,0.3); }
-    }
-
-    /* Scan-Line: Section-Wechsel (JS-triggered via .scanning class) */
-    @keyframes scan-line {
-      0%   { top: 28px; opacity: 1; }
-      100% { top: 100vh; opacity: 0; }
     }
 
     /* Card-Slide-In: Staggered beim Section-Load */
@@ -1125,28 +1103,6 @@
       }
     }
 
-    /* Sector-Flash Overlay (statisch positioniert, JS steuert opacity) */
-    #soc-flash-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-    }
-
-    #soc-flash-overlay span {
-      font-family: var(--mono);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent-primary);
-      text-shadow: 0 0 20px rgba(245,158,11,0.6);
-    }
-
   </style>
 </head>
 <body>
@@ -1154,26 +1110,23 @@
   <div class="soc-status-bar" id="socStatusBar">
     <span class="soc-left"><span class="soc-status-dot"></span>SYSTEM ONLINE</span>
     <span class="soc-center">CLAUDE CODE WORKSHOP — DYNAMIC WORKSHOP</span>
-    <span class="soc-right" id="socStatusRight">SECTOR T-001 STANDBY</span>
+    <span class="soc-right" id="socStatusRight">S1.1 STANDBY</span>
   </div>
-
-  <!-- Sector Flash Overlay -->
-  <div id="soc-flash-overlay"><span id="soc-flash-text">ACCESSING SECTOR T-001...</span></div>
 
   <div class="app">
     <aside class="left">
       <div class="brand">
         <div class="brand-row">
           <div class="mark">CC</div>
-          <h1>Workshop Lern-Cockpit</h1>
+          <h1>Self-Learner Cockpit</h1>
         </div>
-        <p>48-Section-Durcharbeitungsroute auf Basis der aktuellen 4-Session-/65-LE-Struktur.</p>
-        <div class="route-toggle" aria-label="Lernroute umschalten">
+        <p>Self-Learner- und Facilitator-Route. Live-3-Personen-Modus nutzt Pair-Driving statt Completion-Dashboard.</p>
+        <div class="route-toggle" aria-label="Lernroute umschalten" title="48 = Pflicht-Core plus fruehe Vertiefungen; 65 = komplette Landkarte.">
           <button id="route48" class="active" type="button">48 Route</button>
           <button id="route65" type="button">Alle 65</button>
         </div>
       </div>
-      <input class="side-search" id="search" type="search" placeholder="Section suchen...">
+      <input class="side-search" id="search" type="search" placeholder="Section suchen..." aria-label="Section suchen">
       <nav class="session-nav" id="nav"></nav>
     </aside>
 
@@ -1222,7 +1175,7 @@
 
           <article class="panel final-quiz">
             <div class="panel-head">
-              <h3>Kumulatives Abschluss-Quiz</h3>
+              <h3>Self-Learner Abschluss-Quiz</h3>
               <span id="finalQuizScope"></span>
             </div>
             <div class="final-list" id="finalQuiz"></div>
@@ -1301,73 +1254,73 @@
     const routeElectives = new Set(["S1.11","S1.12","S1.18","S2.10","S2.16","S2.17","S3.10","S4.4"]);
 
     const sections = [
-      ["S1.1",1,"core",12,"Coding Agent vs. Chat - das mentale Modell","1.1 Overview + Consultant-Analogie"],
-      ["S1.2",1,"core",12,"First Contact: bau sofort eine Datei","1.1 Hello + Demo 1.1"],
-      ["S1.3",1,"core",12,"Die Oberflaechen: CLI, Desktop, IDE, Web, iOS","1.1 Five Surfaces"],
-      ["S1.4",1,"core",12,"Built-in Tools & die Tool-Namen","1.1 Built-in Tools Reference"],
-      ["S1.5",1,"core",15,"Permissions Grundlagen: default & acceptEdits","1.1 Permission System"],
-      ["S1.6",1,"corestar",15,"Permission Modes komplett (6 Modi + Cloud)","1.1 Permission System"],
-      ["S1.7",1,"core",15,"Modellwahl & Effort-Level","1.1 Model Selection + 1.5 Effort"],
-      ["S1.8",1,"core",15,"Kontextfenster verstehen","1.2 Context Window"],
-      ["S1.9",1,"core",12,"/compact, /rewind & Kontext steuern","1.2 Key Context Commands"],
-      ["S1.10",1,"core",15,"CLAUDE.md: die Projekt-Standing-Orders","1.2 CLAUDE.md"],
-      ["S1.11",1,"deep-dive",18,"Memory-Layer komplett","1.2 Auto-Memory + rules + local + managed"],
-      ["S1.12",1,"deep-dive",12,"@path-Imports, --add-dir, AGENTS.md-Interop","1.2 Imports + Multi-Project"],
-      ["S1.13",1,"core",15,"Vager vs. praeziser Prompt","1.3 Clarity + Contractor"],
-      ["S1.14",1,"core",15,"Plan Mode & Explain/Propose/Refine/Execute","1.3 Iterative Pattern + Plan Mode"],
-      ["S1.15",1,"deep-dive",12,"Output Styles & Personas","1.3 Output Styles + Persona"],
-      ["S1.16",1,"core",18,"Git in einem Flow: branch -> commit -> PR","1.4 Git Workflow"],
-      ["S1.17",1,"deep-dive",15,"Git-Slash-Commands: /diff /review /rewind /autofix-pr","1.4 Slash Commands"],
-      ["S1.18",1,"deep-dive",15,"Worktrees als Test-Labor","1.4 Git Worktrees"],
-      ["S1.19",1,"core",15,"Kosten im Blick: /cost, /usage & Budget-Cap","1.5 Token Tracking"],
-      ["S1.20",1,"core",15,"Demo + Hands-on Puffer (Exercise 1.x)","Exercises 1.1-1.4"],
-      ["S2.1",2,"core",12,"Skills = SOPs, Commands = Buttons","2.1 Core Idea"],
-      ["S2.2",2,"core",18,"Eine SKILL.md schreiben (Frontmatter-Basics)","2.1 Anatomy + Demo 2.1"],
-      ["S2.3",2,"core",12,"Skills vs Commands & disable-model-invocation","2.1 Skills vs Commands"],
-      ["S2.4",2,"core",12,"Bundled Skills (/batch /debug /loop /verify)","2.1 Bundled Skills"],
-      ["S2.5",2,"deep-dive",15,"Living Prompts: dynamische Injection & Argumente","2.1 Dynamic Injection"],
-      ["S2.6",2,"core",15,"Hooks = Event-Listener (die 3 Eckpfeiler)","2.2 Core Idea + Sensor-Analogie"],
-      ["S2.7",2,"core",12,"Die wichtigsten Hook-Events landkarten","2.2 Hook Types"],
-      ["S2.8",2,"core",15,"Einen Hook konfigurieren (settings.json, matcher, if)","2.2 Hook Configuration + Demo 2.2"],
-      ["S2.9",2,"deep-dive",15,"Hook-Exec-Typen & component-scoped Hooks","2.2 Execution Types"],
-      ["S2.10",2,"deep-dive",15,"Advanced Hook-Outputs + Secure Diff Gate","2.2 Circuit Breaker + Demo 2.2b"],
-      ["S2.11",2,"core",15,"Plugins: ein Bundle schnueren","2.3 Plugin Structure"],
-      ["S2.12",2,"deep-dive",15,"Plugin-Lifecycle, Scopes & Marketplaces","2.3 Marketplace + Scopes"],
-      ["S2.13",2,"deep-dive",10,"Plugin-Supply-Chain-Risiken","2.3 Supply Chain Risks"],
-      ["S2.14",2,"core",15,"MCP: der Integrations-Stecker","2.4 Core Idea + BMS-Analogie"],
-      ["S2.15",2,"core",15,"MCP konfigurieren: Transports, Scopes, CLI","2.4 Transports + Config"],
-      ["S2.16",2,"deep-dive",15,"MCP OAuth, Output-Limits & Protokoll-Details","2.4 OAuth + Limits"],
-      ["S2.17",2,"deep-dive",18,"MCP-Security & eigenen Server bauen","2.4 MCP Security + Build Your Own"],
-      ["S2.18",2,"core",18,"RAG & NotebookLM: dem Agenten Blueprints geben","2.5 Workflow + Demo 2.5"],
-      ["S2.19",2,"deep-dive",10,"RAG-Grenzen & Datenschutz-Abwaegung","2.5 Limitations + Privacy"],
-      ["S2.20",2,"core",18,"Hands-on Puffer (Exercise 2.x)","Exercises 2.1-2.6"],
-      ["S3.1",3,"core",12,"Was ist ein Agent? (Spezialisierung)","3.1 Agent Basics"],
-      ["S3.2",3,"core",10,"Built-in Subagents nutzen (Explore/Plan/general)","3.1 Built-in Subagents"],
-      ["S3.3",3,"core",18,"Einen Custom Subagent definieren","3.1 Agent Definition + Demo 3.1"],
-      ["S3.4",3,"core",15,"Orchestrierungs-Muster (Fan-Out/Pipeline/Hierarchie)","3.1 Orchestration Patterns"],
-      ["S3.5",3,"deep-dive",15,"Background-Sessions & Agent Teams","3.1 Agent Teams + Background"],
-      ["S3.6",3,"core",18,"Devil's Advocate: adversariale Security-Pipeline","3.3a Pipeline + Demo 3.3"],
-      ["S3.7",3,"core",12,"Built-in Review-Trio (/security-review, /review, /ultrareview)","3.3a Review Trio"],
-      ["S3.8",3,"core",15,"Permissions fuer Autonomie (advanced modes)","3.3b Permission Modes"],
-      ["S3.9",3,"core",15,"Protected Paths & Sandboxing-Stufen","3.3b Protected Paths + Sandbox"],
-      ["S3.10",3,"deep-dive",12,"Netzwerk-/Skill-Hardening","3.3b Network + Skill Hardening"],
-      ["S3.11",3,"deep-dive",15,"Datenschutz, Retention & regulierte Branchen","3.3b Privacy + Compliance"],
-      ["S3.12",3,"core",15,"Scheduling: /loop, /goal, /schedule, Routines","3.4 Scheduling + Loops"],
-      ["S3.13",3,"core",12,"Autonome Loops absichern (Budget + Worktree)","3.4 Budget + Worktree"],
-      ["S3.14",3,"bonus",15,"Self-Improve Loop (Showcase + Grenzen)","3.4 Self-Improve"],
-      ["S3.15",3,"core",15,"Hands-on Puffer (Exercise 3.x)","Exercises 3.1-3.3"],
-      ["S4.1",4,"deep-dive",15,"Multi-Model: das richtige Modell pro Phase","3.2 Model Pipeline"],
-      ["S4.2",4,"bonus",15,"Codex Swarm & Daten-Fluss-Grenze","3.2 Codex Swarm"],
-      ["S4.3",4,"deep-dive",15,"Headless Mode: claude -p als Pipeline-Stufe","3.6 Headless Mode"],
-      ["S4.4",4,"deep-dive",18,"CI-Auth, Cost-Caps & Cost-Engineering-Vertiefung","3.6 CI Auth + shifted 1.5"],
-      ["S4.5",4,"deep-dive",18,"CI-Pipelines bauen (GitHub Actions / GitLab)","3.6 GitHub Actions + GitLab"],
-      ["S4.6",4,"bonus",12,"Mobile/Remote: remote-control & /teleport","3.5 Remote Workflow"],
-      ["S4.7",4,"bonus",15,"Inception (Docker) & Worktree-Isolation tief","3.5 Docker + Worktree"],
-      ["S4.8",4,"bonus",25,"Die volle Architektur (Capstone-Diskussion)","3.5 Full Architecture + Exercise 3.5"],
-      ["S4.9",4,"core",15,"Troubleshooting: /debug, --verbose, /doctor","3.7 Debug Tools"],
-      ["S4.10",4,"core",18,"Diagnose-Sequenzen (Hook/Skill/Plugin/MCP)","3.7 Diagnosis Checklist"]
-    ].map(([id, session, level, min, title, source]) => ({
-      id, session, level, min, title, source,
+      ["S1.1",1,"core",12,"First Contact: bau sofort eine Datei","1.1 Hello + Demo 1.1","foundation"],
+      ["S1.2",1,"core",12,"Coding Agent vs. Chat - das mentale Modell","1.1 Overview + Consultant-Analogie","foundation"],
+      ["S1.3",1,"core",12,"Die Oberflaechen: CLI, Desktop, IDE, Web, iOS","1.1 Five Surfaces","foundation"],
+      ["S1.4",1,"core",12,"Built-in Tools & die Tool-Namen","1.1 Built-in Tools Reference","foundation"],
+      ["S1.5",1,"core",15,"Permissions Grundlagen: default & acceptEdits","1.1 Permission System","guardrails"],
+      ["S1.6",1,"corestar",15,"Permission Modes komplett (6 Modi + Cloud)","1.1 Permission System","guardrails"],
+      ["S1.7",1,"core",15,"Modellwahl & Effort-Level","1.1 Model Selection + 1.5 Effort","cost"],
+      ["S1.8",1,"core",15,"Kontextfenster verstehen","1.2 Context Window","context"],
+      ["S1.9",1,"core",12,"/compact, /rewind & Kontext steuern","1.2 Key Context Commands","context"],
+      ["S1.10",1,"core",15,"CLAUDE.md: die Projekt-Standing-Orders","1.2 CLAUDE.md","context"],
+      ["S1.11",1,"deep-dive",18,"Memory-Layer komplett","1.2 Auto-Memory + rules + local + managed","context"],
+      ["S1.12",1,"deep-dive",12,"@path-Imports, --add-dir, AGENTS.md-Interop","1.2 Imports + Multi-Project","context"],
+      ["S1.13",1,"core",15,"Vager vs. praeziser Prompt","1.3 Clarity + Contractor","prompting"],
+      ["S1.14",1,"core",15,"Plan Mode & Explain/Propose/Refine/Execute","1.3 Iterative Pattern + Plan Mode","prompting"],
+      ["S1.15",1,"deep-dive",12,"Output Styles & Personas","1.3 Output Styles + Persona","prompting"],
+      ["S1.16",1,"core",18,"Git in einem Flow: branch -> commit -> PR","1.4 Git Workflow","git"],
+      ["S1.17",1,"deep-dive",15,"Git-Slash-Commands: /diff /review /rewind /autofix-pr","1.4 Slash Commands","git"],
+      ["S1.18",1,"deep-dive",15,"Worktrees als Test-Labor","1.4 Git Worktrees","git"],
+      ["S1.19",1,"core",15,"Kosten im Blick + 5-Min-Cost-Reduction","1.5 Token Tracking + Cost Reduction","cost"],
+      ["S1.20",1,"core",15,"Demo + Hands-on Puffer (Exercise 1.x)","Exercises 1.1-1.4","practice"],
+      ["S2.1",2,"core",12,"Skills = SOPs, Commands = Buttons","2.1 Core Idea","skills"],
+      ["S2.2",2,"core",18,"Eine SKILL.md schreiben (Frontmatter-Basics)","2.1 Anatomy + Demo 2.1","skills"],
+      ["S2.3",2,"core",12,"Skills vs Commands & disable-model-invocation","2.1 Skills vs Commands","skills"],
+      ["S2.4",2,"core",12,"Bundled Skills (/batch /debug /loop /verify)","2.1 Bundled Skills","skills"],
+      ["S2.5",2,"deep-dive",15,"Living Prompts: dynamische Injection & Argumente","2.1 Dynamic Injection","skills"],
+      ["S2.6",2,"core",15,"Hooks = Event-Listener (die 3 Eckpfeiler)","2.2 Core Idea + Sensor-Analogie","hooks"],
+      ["S2.7",2,"core",12,"Die wichtigsten Hook-Events landkarten","2.2 Hook Types","hooks"],
+      ["S2.8",2,"core",15,"Einen Hook konfigurieren (settings.json, matcher, if)","2.2 Hook Configuration + Demo 2.2","hooks"],
+      ["S2.9",2,"deep-dive",15,"Hook-Exec-Typen & component-scoped Hooks","2.2 Execution Types","hooks"],
+      ["S2.10",2,"deep-dive",15,"Advanced Hook-Outputs + Secure Diff Gate","2.2 Circuit Breaker + Demo 2.2b","hooks"],
+      ["S2.11",2,"core",15,"Plugins: ein Bundle schnueren","2.3 Plugin Structure","skills"],
+      ["S2.12",2,"deep-dive",15,"Plugin-Lifecycle, Scopes & Marketplaces","2.3 Marketplace + Scopes","skills"],
+      ["S2.13",2,"deep-dive",10,"Plugin-Supply-Chain-Risiken","2.3 Supply Chain Risks","guardrails"],
+      ["S2.14",2,"core",15,"MCP: der Integrations-Stecker","2.4 Core Idea + BMS-Analogie","mcp"],
+      ["S2.15",2,"core",15,"MCP konfigurieren: Transports, Scopes, CLI","2.4 Transports + Config","mcp"],
+      ["S2.16",2,"deep-dive",15,"MCP OAuth, Output-Limits & Protokoll-Details","2.4 OAuth + Limits","mcp"],
+      ["S2.17",2,"deep-dive",18,"MCP-Security & eigenen Server bauen","2.4 MCP Security + Build Your Own","mcp"],
+      ["S2.18",2,"core",18,"RAG & NotebookLM: dem Agenten Blueprints geben","2.5 Workflow + Demo 2.5","rag"],
+      ["S2.19",2,"deep-dive",10,"RAG-Grenzen & Datenschutz-Abwaegung","2.5 Limitations + Privacy","rag"],
+      ["S2.20",2,"core",18,"Hands-on Puffer (Exercise 2.x)","Exercises 2.1-2.6","practice"],
+      ["S3.1",3,"core",12,"Was ist ein Agent? (Spezialisierung)","3.1 Agent Basics","agents"],
+      ["S3.2",3,"core",10,"Built-in Subagents nutzen (Explore/Plan/general)","3.1 Built-in Subagents","agents"],
+      ["S3.3",3,"core",18,"Einen Custom Subagent definieren","3.1 Agent Definition + Demo 3.1","agents"],
+      ["S3.4",3,"core",15,"Orchestrierungs-Muster (Fan-Out/Pipeline/Hierarchie)","3.1 Orchestration Patterns","agents"],
+      ["S3.5",3,"deep-dive",15,"Background-Sessions & Agent Teams","3.1 Agent Teams + Background","agents"],
+      ["S3.6",3,"core",18,"Devil's Advocate: adversariale Security-Pipeline","3.3a Pipeline + Demo 3.3","agents"],
+      ["S3.7",3,"core",12,"Built-in Review-Trio (/security-review, /review, /ultrareview)","3.3a Review Trio","guardrails"],
+      ["S3.8",3,"core",15,"Permissions fuer Autonomie (advanced modes)","3.3b Permission Modes","guardrails"],
+      ["S3.9",3,"core",15,"Protected Paths & Sandboxing-Stufen","3.3b Protected Paths + Sandbox","guardrails"],
+      ["S3.10",3,"deep-dive",12,"Netzwerk-/Skill-Hardening","3.3b Network + Skill Hardening","guardrails"],
+      ["S3.11",3,"deep-dive",15,"Datenschutz, Retention & regulierte Branchen","3.3b Privacy + Compliance","guardrails"],
+      ["S3.12",3,"core",15,"Scheduling: /loop, /goal, /schedule, Routines","3.4 Scheduling + Loops","ci"],
+      ["S3.13",3,"core",12,"Autonome Loops absichern (Budget + Worktree)","3.4 Budget + Worktree","ci"],
+      ["S3.14",3,"bonus",15,"Self-Improve Loop (Showcase + Grenzen)","3.4 Self-Improve","agents"],
+      ["S3.15",3,"core",15,"Hands-on Puffer (Exercise 3.x)","Exercises 3.1-3.3","practice"],
+      ["S4.1",4,"deep-dive",15,"Multi-Model: das richtige Modell pro Phase","3.2 Model Pipeline","cost"],
+      ["S4.2",4,"bonus",15,"Codex Swarm & Daten-Fluss-Grenze","3.2 Codex Swarm","agents"],
+      ["S4.3",4,"deep-dive",15,"Headless Mode: claude -p als Pipeline-Stufe","3.6 Headless Mode","ci"],
+      ["S4.4",4,"deep-dive",18,"CI-Auth, Cost-Caps & Cost-Engineering-Vertiefung","3.6 CI Auth + shifted 1.5","ci"],
+      ["S4.5",4,"deep-dive",18,"CI-Pipelines bauen (GitHub Actions / GitLab)","3.6 GitHub Actions + GitLab","ci"],
+      ["S4.6",4,"bonus",12,"Mobile/Remote: remote-control & /teleport","3.5 Remote Workflow","agents"],
+      ["S4.7",4,"bonus",15,"Inception (Docker) & Worktree-Isolation tief","3.5 Docker + Worktree","git"],
+      ["S4.8",4,"bonus",25,"Bewerteter Capstone-Build","3.5 Full Architecture + Exit Assessment","agents"],
+      ["S4.9",4,"core",15,"Troubleshooting: /debug, --verbose, /doctor","3.7 Debug Tools","debug"],
+      ["S4.10",4,"core",18,"Diagnose-Sequenzen (Hook/Skill/Plugin/MCP)","3.7 Diagnosis Checklist","debug"]
+    ].map(([id, session, level, min, title, source, theme]) => ({
+      id, session, level, min, title, source, theme,
       route48: level === "core" || level === "corestar" || routeElectives.has(id)
     }));
 
@@ -1414,6 +1367,7 @@
     }
 
     function themeFor(s) {
+      if (s.theme) return s.theme;
       const t = s.title.toLowerCase();
       if (["S1.1","S1.2","S1.3","S1.4"].includes(s.id)) return "foundation";
       if (t.includes("debug") || t.includes("diagnose") || t.includes("troubleshooting")) return "debug";
@@ -1520,13 +1474,13 @@
     };
 
     const sectionContent = {
-      "S1.1": {
+      "S1.2": {
         concept: "Claude Code ist kein Chat-Interface, sondern ein Agent mit direktem Zugriff auf Filesystem, Shell und Git – er schreibt Dateien, führt Befehle aus und prüft die Ergebnisse selbstständig, während du das Permission-System steuerst. Chat-Assistenten geben Ratschläge, die du selbst umsetzt; ein Agent übernimmt die Ausführung komplett. Boris Chernys Design-Philosophie: Claude Code ist ein Powertool ohne vorgeschriebenen Nutzungsweg – die Mechanik lernst du, den Einsatz entscheidest du.",
         analogy: "Wie der Unterschied zwischen dem Anruf beim Sicherheitsberater (der erklärt, wie du den Kartenleser verdrahten sollst, aber nie das Gebäude betritt) und einem Techniker mit OSDP-Besucherausweis, der die Relais-Verkabelung am Kontrollpanel selbst prüft, Konfig-Parameter am Controller ändert und das Türprotokoll zieht – während du danebenstehst und freigibst.",
         example: "mkdir -p ~/cc-workshop/hello && cd ~/cc-workshop/hello\nclaude\n# In der Session:\n# Create a file hello.py that prints \"Hello from Claude Code\" and run it.",
         checkpoint: "Du kannst in einem Satz erklären, warum Claude Code kein Chat-Tool ist und welche Konsequenz das für den Permission-Bedarf hat."
       },
-      "S1.2": {
+      "S1.1": {
         concept: "Der schnellste Einstieg folgt dem Muster: drei Befehle, ein sichtbares Ergebnis – bevor jede Theorie. Claude Code schlägt die Datei vor, fragt nach Erlaubnis, erstellt sie und führt sie aus. Diese Schleife (beschreibe → Agent handelt → Ergebnis sichtbar) ist das Kernmuster aller weiteren Module. Was Claude nicht kann: die GUI sehen, persistente Hintergrunddienste halten oder ohne Genehmigung in Produktionssysteme eingreifen.",
         analogy: "Wie ein Techniker, der zum ersten Mal mit Badge-Zugang in die Leitstelle kommt und sofort demonstriert, was er tut: er liest den Alarmplan, legt eine Testdatei im Konfig-Share an und startet das Diagnose-Script – in drei Schritten, bevor irgendwer erklärt, wie der Leittechnik-Server aufgebaut ist.",
         example: "mkdir -p ~/cc-workshop/hello && cd ~/cc-workshop/hello\nclaude\n# In der Session eingeben:\n# Create a file hello.py that prints \"Hello from Claude Code\" and run it.",
@@ -1557,7 +1511,7 @@
         checkpoint: "Du kannst die drei aggressiven Modi (`auto`, `dontAsk`, `bypassPermissions`) von den drei Alltags-Modi abgrenzen und in einem Satz begründen, warum Cloud-Sessions keinen dieser drei anbieten."
       },
       "S1.7": {
-        concept: "Vier Modelle mit unterschiedlichem Kontext-Limit und Preispunkt: Haiku 4.5 hat ein Kontextfenster von nur 200K Tokens (nicht 1M wie die anderen) – kritisch bei Bulk-Reads großer Codebases; Sonnet 4.6 ist schnell für Alltagsaufgaben; Opus 4.8 ist der aktuelle Default mit Effort-Default `high`; Fable 5 ist das Premium-Modell für tiefste Reasoning-Kapazität. Effort-Level sind gleichzeitig Qualitäts- UND Kostenhebel: von 0,5x (`low`) bis 6x (`max`) Basiskosten – `xhigh` und `max` nur auf Opus 4.7+/Fable 5 verfügbar. Faustregel: Opus/Fable für Planung, Sonnet für Implementierung, Haiku für Bulk-Operationen.",
+        concept: "Vier Modelle mit unterschiedlichem Kontext-Limit und Preispunkt: Haiku 4.5 hat ein Kontextfenster von nur 200K Tokens (nicht 1M wie die anderen) – kritisch bei Bulk-Reads großer Codebases; Sonnet 5 ist schnell für Alltagsaufgaben; Opus 4.8 ist der aktuelle Default mit Effort-Default `high`; Fable 5 ist das Premium-Modell für tiefste Reasoning-Kapazität. Effort-Level sind gleichzeitig Qualitäts- UND Kostenhebel: von 0,5x (`low`) bis 6x (`max`) Basiskosten – `xhigh` und `max` nur auf Opus 4.8, Sonnet 5 und Fable 5 verfügbar. Faustregel: Opus/Fable für Planung, Sonnet für Implementierung, Haiku für Bulk-Operationen.",
         analogy: "Wie das Dienstplan-Konzept eines Bewachungsunternehmens: der Fachalarmtechniker (Fable 5/Opus, hoher Stundensatz) für Nacht-Alarmauswertung und Systemkonfiguration; der erfahrene Patrouillenbeamte (Sonnet) für Standardrunden; der Auszubildende mit begrenztem Erfahrungshorizont (Haiku) für einfache Lobbykontrollen. Niemand schickt den Fachalarmtechniker die ganze Nacht Lobbydienst machen – weder sinnvoll für das Budget noch für den Einsatzwert.",
         example: "# Session mit Sonnet starten, Effort auf medium:\nclaude --model sonnet\n/effort medium\n\n# Architektur-Session mit Opus und tiefem Reasoning:\nclaude --model opus\n/effort xhigh\n\n# Aktuell verfügbare Modelle prüfen:\n/model",
         checkpoint: "Du kannst erklären, warum Haiku für die Analyse einer 800-Datei-Firmware-Codebasis technisch scheitern kann – und was der konkrete Grund dafür ist."
@@ -1629,10 +1583,10 @@
         checkpoint: "Du kannst einen Worktree mit `claude --worktree` in einem Schritt anlegen und erklären, warum `worktree.baseRef: \"fresh\"` für parallele Multi-Agent-Sessions die sichere Wahl ist."
       },
       "S1.19": {
-        concept: "Claude Code bietet drei komplementäre Cost-Observability-Tools: /cost zeigt den Verbrauch der laufenden Session (Sofortblick während der Arbeit), /usage liefert die Tages-/Wochenübersicht, und /insights schlüsselt Kosten nach Projekt, Modell, Tool und Skill auf. `--max-budget-usd` ist die einzige harte Ausgabenbremse für unbeaufsichtigte Runs: wird das Limit erreicht, beendet Claude den -p-Lauf sauber mit einem detektierbaren Exit-Code — ohne dieses Flag können Loops und autonome Sessions unkontrolliert Kosten akkumulieren.",
+        concept: "Claude Code bietet drei komplementäre Cost-Observability-Tools: /cost zeigt den Verbrauch der laufenden Session, /usage liefert die Tages-/Wochenübersicht, und /insights schlüsselt Kosten nach Projekt, Modell, Tool und Skill auf. `--max-budget-usd` ist die harte Ausgabenbremse für unbeaufsichtigte Runs. Der 5-Minuten-Core-Beat ergänzt drei Reduktionshebel, die auch ohne Session 4 sitzen müssen: stabilen Kontext für Cache-Hits wiederverwenden, Effort-Level nach kognitiver Last wählen, und Modell pro Phase staffeln.",
         analogy: "Wie ein Wachdienst mit dreistufiger Abrechnung: Stundenzettel der aktuellen Schicht (/cost), wöchentliche Standort-Übersicht (/usage), und ein Controlling-Dashboard, das zeigt, welche Objekte und Spezialkräfte das Budget treiben (/insights). `--max-budget-usd` ist das Kontingent-Limit im Dienstleistungsvertrag — bei Überschreitung bricht der Einsatz sauber ab, statt unkontrolliert weiterzulaufen.",
         example: "claude --max-budget-usd 2.00 -p \"/loop check deploy status\"\n# If the $2.00 spend limit is reached, Claude exits cleanly with a detectable exit code.",
-        checkpoint: "Du kannst /cost, /usage und /insights situationsgerecht einsetzen und weißt, warum --max-budget-usd Pflicht ist für jeden unbeaufsichtigten oder Loop-basierten Claude-Code-Aufruf."
+        checkpoint: "Du kannst /cost, /usage und /insights situationsgerecht einsetzen, --max-budget-usd für unbeaufsichtigte Läufe begründen und vor einem langen Run mindestens einen Cost-Reduction-Hebel nennen: Cache, Effort-Tier oder Modell-pro-Phase."
       },
       "S1.20": {
         concept: "Die vier Block-1-Exercises bauen den Skill-Stack sequenziell auf: Exercise 1.1 trainiert den Describe-Implement-Run-Loop an einem praxisnahen Event-Log-Parser, 1.2 macht CLAUDE.md-Persistenz über Session-Restarts erlebbar und legt eine persönliche Memory-Note an, 1.3 lässt die Qualitätsdifferenz zwischen vaguelm und präzisem Prompt am gleichen Coding-Task direkt messen (Round 1 ohne Follow-ups, Round 2 mit 10 expliziten Test-Cases), und 1.4 schließt einen vollständigen Git-Flow — branch, commit, log, Bonus-Worktree — ohne manuellen Terminal-Eingriff ab.",
@@ -1803,7 +1757,7 @@
         checkpoint: "Du kannst /security-review, /review und /ultrareview voneinander abgrenzen — insbesondere wo der Unterschied zwischen lokalem und Cloud-basiertem Multi-Agent-Review liegt — und weißt wann du zum Custom Devil's-Advocate-Swarm greifst."
       },
       "S3.8": {
-        concept: "Die drei fortgeschrittenen Permission-Modi sind keine bloße Eskalationsleiter: `auto` lässt einen ML-Classifier per Aktion entscheiden und ist modell- und transport-gebunden (Consumer: nur Opus 4.8; Team/Enterprise: Sonnet 4.6 + Opus 4.8; nur Anthropic-API, nicht Bedrock/Vertex). `dontAsk` ist der regelbasierte Headless-Workhorse für CI — kein Prompt, nur Allow/Deny-Regeln. `bypassPermissions` hebelt sämtliche Schutzmechanismen aus und ist ausschließlich für ephemere Wegwerf-Container gedacht. Die Permission-Rule-Grammatik reicht weit über Bash hinaus: `Skill()`, `Agent()`, `WebFetch(domain:...)` und `permissions.ask` als Hard-Stop greifen über alle Modi.",
+        concept: "Die drei fortgeschrittenen Permission-Modi sind keine bloße Eskalationsleiter: `auto` lässt einen ML-Classifier per Aktion entscheiden und ist modell- und transport-gebunden (Consumer: nur Opus 4.8; Team/Enterprise: Sonnet 5 + Opus 4.8; nur Anthropic-API, nicht Bedrock/Vertex). `dontAsk` ist der regelbasierte Headless-Workhorse für CI — kein Prompt, nur Allow/Deny-Regeln. `bypassPermissions` hebelt sämtliche Schutzmechanismen aus und ist ausschließlich für ephemere Wegwerf-Container gedacht. Die Permission-Rule-Grammatik reicht weit über Bash hinaus: `Skill()`, `Agent()`, `WebFetch(domain:...)` und `permissions.ask` als Hard-Stop greifen über alle Modi.",
         analogy: "Wie die Berechtigungsebenen im Wiegand-26-Zutrittssystem: der Standardmitarbeiter fragt bei jeder unbekannten Zone nach (default); der Supervisor hat eine kalibrierte Regelliste und handelt ohne Rückfrage (dontAsk); der Generalschlüssel öffnet alles — aber nur im zertifizierten Testkeller, nie im Produktivgebäude (bypassPermissions). Die auto-Ebene entspricht einem intelligenten Kamerasystem, das selbst risikoarm/risikoreich klassifiziert — und das nur auf bestimmten Controller-Modellen verfügbar ist.",
         example: "claude --permission-mode dontAsk \\\n  --allowedTools \"Read,Glob,Grep,Bash(npm test)\" \\\n  --output-format json \\\n  -p \"Run the test suite and emit a structured failure report.\"",
         checkpoint: "Du kannst erklären, warum `bypassPermissions` ausschließlich in ephemeren Containern eingesetzt werden darf, welche Modell- und Transport-Einschränkungen `auto`-Mode hat, und welche Permission-Rule-Typen über Bash-Muster hinausgehen."
@@ -1853,13 +1807,13 @@
       "S4.1": {
         concept: "Das Drei-Phasen-Modell (Opus plant, Sonnet oder Codex implementiert, Haiku oder Opus reviewed) optimiert Kosten und Urteilstiefe getrennt: Opus ist nur dort eingesetzt wo genuines Reasoning entscheidend ist (Architekturentscheidung, Final-Review von Grenzfaellen), Haiku fangt 80% der Issues bei ~7% der Opus-Kosten und eskaliert den Rest. Die Kernentscheidung ist nicht 'welches Modell ist besser', sondern 'welche Phase dieser Aufgabe braucht tiefes Reasoning und welche braucht Durchsatz'. Codex (OpenAI) traegt eine Datenschutz-Dimension mit sich – Code der an Codex geht, unterliegt OpenAI-Policies, nicht Anthropic-Policies.",
         analogy: "Wie die Aufgabenteilung bei einer neuen OSDP-RS-485-Tuerinstallation: ein Senior-Sicherheitsarchitekt (Opus) schreibt die technische Leistungsbeschreibung mit Sicherheitsanforderungen; Subunternehmer (Sonnet/Codex) verlegen das Kabel und montieren die Leser parallel; derselbe Senior-Ingenieur (Opus) oder ein erfahrener Techniker (Haiku) fuehrt die Abnahme durch. Keiner schickt den Auszubildenden zur Sicherheitsabnahme, und kein Senior-Ingenieur zieht selbst Kabel.",
-        example: "# Plan mit Opus:\nclassification=plan claude -p --model claude-opus-4-8 \"Design the OSDP parser API contract\"\n# Implement mit Sonnet:\nclassification=impl claude -p --model claude-sonnet-4-6 \"Implement per spec\" < spec.md\n# First review mit Haiku:\nclassification=review claude -p --model claude-haiku-4-5-20251001 \"Quick quality check\" < impl.py",
+        example: "# Plan mit Opus:\nclassification=plan claude -p --model claude-opus-4-8 \"Design the OSDP parser API contract\"\n# Implement mit Sonnet:\nclassification=impl claude -p --model claude-sonnet-5 \"Implement per spec\" < spec.md\n# First review mit Haiku:\nclassification=review claude -p --model claude-haiku-4-5-20251001 \"Quick quality check\" < impl.py",
         checkpoint: "Du kannst fuer eine konkrete Aufgabe (z.B. 'Refactor des Wiegand-Frame-Parsers') die drei Phasen den richtigen Modellen zuordnen und die Kostenbegruendung auf Basis der Aufgaben-Charakteristik geben."
       },
       "S4.2": {
         concept: "Der Codex Swarm (`/multi-model-orchestrator:codex-swarm --decompose`) dekomponiert eine Aufgabe in N unabhaengige Subtasks und startet N parallele Codex-Agenten – die Gesamtdauer ist die des langsamsten Agenten, nicht die Summe. Die entscheidende Sicherheitsfrage ist die Daten-Fluss-Grenze: Codex ist OpenAI, nicht Anthropic; Code der an Codex geht unterliegt OpenAI's Datenschutz- und Trainings-Policy. Fuer sensiblen Code (Kunden-PII, proprietaere Firmware, Vertragsexklusivitaet) gibt es drei Handlungsoptionen: Codex-Step ueberspringen und Sonnet nutzen, lokales Modell (Ollama/vLLM) einsetzen, oder nur Skeleton-Signaturen ohne Geschaeftslogik senden.",
         analogy: "Wie die Vergabe eines Sicherheitsprojekts an einen Subunternehmer: der Generalunternehmer (Claude/Opus) uebergibt Montagepläne (Specs) an den Subunternehmer (Codex/OpenAI). Enthaelt der Montageplan vertrauliche Details ueber das Sicherheitskonzept des Kunden – Alarmzoneneinteilung, Badge-Level-Matrix, CCTV-Blindstellen – ist das ein Datenschutzproblem, weil der Subunternehmer externe Aufzeichnungspflichten hat. Loesung: nur den 'Kabelplan ohne Sicherheitskonzept-Details' weitergeben.",
-        example: "/multi-model-orchestrator:codex-swarm --decompose \\\n  \"Build a Python OSDP frame parser with decode, validate, report commands\"\n\n# Fuer sensiblen Code stattdessen:\nclassification=sensitive claude -p --model claude-sonnet-4-6 \"Implement per spec\" < spec.md",
+        example: "/multi-model-orchestrator:codex-swarm --decompose \\\n  \"Build a Python OSDP frame parser with decode, validate, report commands\"\n\n# Fuer sensiblen Code stattdessen:\nclassification=sensitive claude -p --model claude-sonnet-5 \"Implement per spec\" < spec.md",
         checkpoint: "Du kannst die Daten-Fluss-Grenze im Codex-Swarm erklaeren, die drei Optionen fuer sensiblen Code nennen, und beurteilen ob euer OSDP-Firmware-Code an Codex gehen darf."
       },
       "S4.3": {
@@ -1893,10 +1847,10 @@
         checkpoint: "Du kannst den Unterschied zwischen Worktree-Isolation und Docker-Inception benennen, `worktree.baseRef: fresh` vs. `head` im richtigen Kontext einsetzen und erklären, was `--tmux` beim Multi-Agent-Fan-Out visuell liefert."
       },
       "S4.8": {
-        concept: "Die vollständige Claude-Code-Architektur ist ein mehrstufiges SOC für Software: ein Orchestrator empfängt Aufträge über beliebige Kanäle (Terminal, Web-UI, oder Custom-Bridge), fächert sie auf spezialisierte Subagenten in isolierten Worktrees auf, schleust die Ergebnisse durch ein adversariales Devil's-Advocate-Swarm (Scanner → Debate → Consensus → Fixers) und liefert den konsolidierten Report auf demselben Eingangskanal zurück. Jede Schicht operiert mit genau den Berechtigungen, die ihre Rolle erfordert — der Explorer ist Read-only, der Implementer hat Write, der Fixer bekommt den vollständigen Debate-Kontext, aber niemals mehr Rechte als nötig. Mehrere Komponenten dieses Gesamtbilds (Telegram Bridge, Devil's Advocate Swarm als Custom Plugin) sind Workshop-Implementierungen, keine out-of-the-box Claude-Code-Features.",
+        concept: "Die vollständige Claude-Code-Architektur ist ein mehrstufiges SOC für Software: ein Orchestrator empfängt Aufträge über beliebige Kanäle (Terminal, Web-UI, oder Custom-Bridge), fächert sie auf spezialisierte Subagenten in isolierten Worktrees auf, schleust die Ergebnisse durch ein adversariales Devil's-Advocate-Swarm (Scanner → Debate → Consensus → Fixers) und liefert den konsolidierten Report auf demselben Eingangskanal zurück. S4.8 endet nicht bei der Skizze: im Capstone Exit Assessment treibt ein Teilnehmer Claude Code unassistiert durch eine kleine Playground-Mission mit Feature/Fix, Guardrail, enger Verifikation und PR-Handoff.",
         analogy: "Das vollständige Bild ist ein moderner Sicherheitsleitstand: der SOC-Operator (Orchestrator) empfängt Alarm-Events über Funkgerät, IP-Alarmübertragung oder Mobile App (Kanäle), dispatcht Funktionsteams mit definierten Badge-Levels in abgeschlossene Einsatzbereiche (Worktrees), lässt das Red-Team und das Blue-Team gegeneinander antreten (Prosecutor vs. Defender-Debate), holt erst nach Konsensentscheid des Sicherheitsleiters (Consensus Agent) das Patch-Team (Fixer Agents) rein und loggt alles lückenlos im Incident-Register (Agent Memory).",
         example: "Orchestrator\n  |-> Agent 1 (Explorer)  — Worktree A — Read-only\n  |-> Agent 2 (Tests)     — Worktree B — Read+Write\n  `-> Agent 3 (Docs)      — Worktree C — Write only\n          `-- results --> Agent 4 (Implementer) — Worktree D\n                                 |\n                        Devil's Advocate Swarm — Worktree E\n                          Scanner 1 + Scanner 2\n                          Prosecutor vs. Defender\n                              Consensus Agent\n                               Fixer Agents",
-        checkpoint: "Du kannst die vollständige Architektur aus dem Gedächtnis skizzieren, jede Schicht einem Physical-Security-Konzept zuordnen und für jede Komponente sagen, ob sie built-in oder ein custom Workshop-Bestandteil ist."
+        checkpoint: "Du kannst eine kleine Playground-Mission eigenständig mit Claude Code treiben: Scope setzen, Feature/Fix umsetzen, Hook oder Guardrail ergänzen, eng verifizieren und einen PR-ready Handoff formulieren."
       },
       "S4.9": {
         concept: "Claude Code stellt drei komplementäre Diagnose-Tools bereit, die auf verschiedenen Zeitpunkten und Detailgraden arbeiten: `claude --verbose` beim Start zeigt deskriptiv, was Claude als Konfiguration eingelesen hat (CLAUDE.md-Merge-Reihenfolge, Plugins, sichtbare Skills, MCP-Handshakes). `/doctor` ist präskriptiv — es analysiert die aktuelle Konfiguration auf konkrete Fehler (fehlende Skill-Dateien, unerreichbare MCP-Server, abgelaufene OAuth-Tokens, konfligierende Permission-Regeln) und gibt Handlungsempfehlungen. `/debug` ist investigativ und läuft während der Session — es verfolgt live nach, warum ein konkreter Prompt keinen Skill getriggert hat, welche Hooks in diesem Turn feuerten und welche Konfigurationsdateien konsultiert wurden.",
@@ -1913,7 +1867,7 @@
     };
 
     const sectionQuiz = {
-      "S1.1": {
+      "S1.2": {
         q: "Was ist der entscheidende Unterschied zwischen claude.ai (Web-Chat) und dem Claude Code CLI?",
         correct: "claude.ai gibt Ratschläge, die du selbst umsetzen musst; das Claude Code CLI ist ein Agent mit direktem Lese-/Schreibzugriff auf Filesystem und Shell, der Aktionen eigenständig ausführt – gesteuert durch ein Permission-System, das du konfigurierst.",
         wrong: [
@@ -1922,7 +1876,7 @@
           "Das CLI arbeitet mit einem größeren Kontextfenster als der Web-Chat, weshalb es größere Codebasen verarbeiten kann."
         ]
       },
-      "S1.2": {
+      "S1.1": {
         q: "Was passiert, wenn du in einer frischen Claude Code Session \"Create a file hello.py and run it\" eingibst – und warum unterscheidet sich das grundlegend von einem Chat-Assistenten?",
         correct: "Claude legt die Datei tatsächlich im Filesystem an, führt sie via Shell aus und zeigt den Output – anstatt dir nur Codebeispiele zu schicken. Das ist agentenbasiertes Handeln statt chatbasierter Beratung.",
         wrong: [
@@ -2561,7 +2515,8 @@
       $("resourceLinks").innerHTML = [
         [`modules/block-${block}-${["","foundations","ecosystem","advanced"][block]}.md`, "Modul"],
         [`demos/block-${block}-demos.md`, "Demo"],
-        [`exercises/block-${block}-exercises.md`, "Exercise"]
+        [`exercises/block-${block}-exercises.md`, "Exercise"],
+        ["cheatsheet.md", "Cheatsheet"]
       ].map(([href, label]) => `<a href="${href}" target="_blank">↗ ${label}</a>`).join("");
       $("routeNote").textContent = routeMode === "48" ? "Durcharbeitungsroute" : "Gesamtkarte";
       $("conceptLead").textContent = c.concept;
@@ -2607,11 +2562,11 @@
     function renderExercise(s, c) {
       const saved = state.answers[s.id] || "";
       $("exerciseRef").textContent = s.source.includes("Exercise") ? s.source : "Micro-Exercise";
-      $("exercisePrompt").textContent = `Bearbeite ${s.id}: Formuliere einen konkreten Mini-Plan oder ein Beispiel, das ${shortenTitle(s.title).toLowerCase()} in einem Physical-Security- oder Entwicklungsprojekt anwendet.`;
+      $("exercisePrompt").textContent = `Bearbeite ${s.id}: Demonstriere den Checkpunkt in einem kurzen, pruefbaren Mini-Beispiel: ${c.checkpoint}`;
       const tasks = [
-        `Nenne den konkreten Nutzen dieser Section.`,
-        `Beschreibe mindestens eine Grenze oder ein Risiko.`,
-        `Fuege einen pruefbaren Schritt, Befehl, Test oder Reviewpunkt hinzu.`
+        `Zeige konkret, woran man den Checkpunkt erkennt.`,
+        `Nenne ein Artefakt, einen Befehl, eine Entscheidung oder einen Reviewpunkt.`,
+        `Beschreibe mindestens eine Grenze oder ein Risiko.`
       ];
       $("taskList").innerHTML = tasks.map((task, i) => `
         <label><input type="checkbox" data-task="${i}" ${state.exercise[s.id]?.checks?.includes(i) ? "checked" : ""}>${task}</label>
@@ -2631,18 +2586,17 @@
       const keys = keywordsFor(s);
       const foundKeys = keys.filter(k => lower.includes(k));
       const hits = foundKeys.length;
-      const keywordScore = Math.min(42, hits * 7);
-      const lengthScore = Math.min(28, Math.floor(answer.length / 18));
-      const checkScore = checks.length * 10;
-      const score = Math.max(0, Math.min(100, keywordScore + lengthScore + checkScore));
+      const keywordScore = Math.min(55, hits * 11);
+      const checkScore = checks.length * 15;
+      const detailScore = answer ? 15 : 0;
+      const score = Math.max(0, Math.min(100, keywordScore + checkScore + detailScore));
       state.exercise[s.id] = { score, hits, foundKeys, checks, at: Date.now() };
-      if (score >= 70) state.done[s.id] = true;
       saveState();
       renderAll();
     }
 
     function feedbackClass(score) {
-      if (score >= 78) return "good";
+      if (score >= 70) return "good";
       if (score >= 48) return "warn";
       return "";
     }
@@ -2654,8 +2608,8 @@
         : "Noch keine Fachanker erkannt";
       const missing = keys.filter(k => !foundKeys.includes(k)).slice(0, 4);
       const missingStr = missing.length ? ` — fehlend: ${missing.join(", ")}` : "";
-      const hint = score >= 78
-        ? "Stark: Antwort ist konkret, risikobewusst und pruefbar."
+      const hint = score >= 70
+        ? "Stark: Antwort ist konkret, risikobewusst und pruefbar. Der Score ist Feedback; Done setzt du manuell oder durch ein korrektes Quiz."
         : score >= 48
           ? "Solide Basis. Schaerfe noch einen konkreten Pruefschritt oder eine klare Grenze nach."
           : "Zu duenn. Ergaenze Nutzen, Risiko und eine konkrete Verifikation.";
@@ -2666,7 +2620,8 @@
       const route = routeSectionsNoSearch();
       const idx = Math.max(0, route.findIndex(x => x.id === s.id));
       const pool = route.slice(0, idx + 1);
-      const q = pool[Math.max(0, (idx * 7 + pool.length) % pool.length)];
+      const openPool = pool.filter(item => !state.quiz[item.id]?.ok);
+      const q = (openPool.length ? shuffle(openPool) : shuffle(pool))[0] || s;
       const qz = sectionQuiz[q.id];
       const correct = qz ? qz.correct : copyFor(q).checkpoint;
       const wrongOpts = qz
@@ -2681,7 +2636,7 @@
         ? `Bis ${s.id}: ${qz.q}`
         : `Bis ${s.id}: Welche Aussage passt zu ${q.id} (${q.title})?`;
       $("quizOptions").innerHTML = options.map(opt => `<button type="button" data-correct="${opt === correct}">${opt}</button>`).join("");
-      $("quizResult").textContent = state.quiz[s.id]?.ok ? "Diese Section wurde im Kurzquiz korrekt beantwortet." : "";
+      $("quizResult").textContent = state.quiz[q.id]?.ok ? `${q.id} wurde im Kurzquiz korrekt beantwortet.` : "";
       document.querySelectorAll("#quizOptions button").forEach(btn => {
         btn.addEventListener("click", () => {
           const ok = btn.dataset.correct === "true";
@@ -2690,10 +2645,10 @@
             if (b.dataset.correct === "true") b.classList.add("correct");
           });
           if (!ok) btn.classList.add("wrong");
-          state.quiz[s.id] = { ok, at: Date.now() };
-          if (ok) state.done[s.id] = true;
+          state.quiz[q.id] = { ok, at: Date.now() };
+          if (ok) state.done[q.id] = true;
           saveState();
-          $("quizResult").textContent = ok ? "Richtig. Der Checkpunkt ist gespeichert." : "Nicht ganz. Lies Folie 2 und den Checkpunkt noch einmal.";
+          $("quizResult").textContent = ok ? `Richtig. Der Checkpunkt fuer ${q.id} ist gespeichert.` : "Nicht ganz. Lies Folie 2 und den Checkpunkt noch einmal.";
           renderProgress();
           renderNav();
           renderMap();
@@ -2713,15 +2668,14 @@
       if (finalQuizIds.length === 0) reshuffleFinalQuiz();
       $("finalQuizScope").textContent = routeMode === "48" ? "48er Route" : "65 LEs";
       $("finalQuiz").innerHTML = finalQuizIds.map((id, idx) => {
-        const s = getSection(id);
-        const correct = themeFor(s);
-        const options = shuffle([correct, "mcp", "guardrails", "prompting", "ci"].filter((v, i, a) => a.indexOf(v) === i)).slice(0, 4);
-        if (!options.includes(correct)) options[0] = correct;
+        const qz = sectionQuiz[id];
+        const correct = qz.correct;
+        const options = shuffle([correct, ...qz.wrong]);
         return `<div class="final-item">
-          <b>${idx + 1}. Ordne ${s.id} zu: ${s.title}</b>
+          <b>${idx + 1}. ${id}: ${qz.q}</b>
           <select data-final="${id}" data-correct="${correct}">
-            <option value="">Themenfamilie waehlen</option>
-            ${shuffle(options).map(o => `<option value="${o}">${o}</option>`).join("")}
+            <option value="">Antwort waehlen</option>
+            ${options.map(o => `<option value="${o}">${o}</option>`).join("")}
           </select>
         </div>`;
       }).join("");
@@ -2734,11 +2688,15 @@
         const good = sel.value === sel.dataset.correct;
         if (good) ok++;
         sel.style.borderColor = good ? "#9bd3b5" : "#ffc9c1";
-        if (good) state.quiz[`final:${sel.dataset.final}`] = { ok: true, at: Date.now() };
+        if (good) {
+          state.quiz[`final:${sel.dataset.final}`] = { ok: true, at: Date.now() };
+          state.quiz[sel.dataset.final] = { ok: true, at: Date.now() };
+          state.done[sel.dataset.final] = true;
+        }
       });
       saveState();
       $("finalFeedback").className = "feedback show " + feedbackClass(ok * 20);
-      $("finalFeedback").innerHTML = `<b>${ok}/${selects.length}</b> korrekt. ${ok === selects.length ? "Sauberer Querschnitt ueber die bisherige Route." : "Die roten Felder zeigen, welche Themenfamilie noch unscharf ist."}`;
+      $("finalFeedback").innerHTML = `<b>${ok}/${selects.length}</b> korrekt. ${ok === selects.length ? "Sauberer Querschnitt ueber die bisherige Route." : "Die roten Felder zeigen, welche Checkpunkte noch unscharf sind."}`;
       renderProgress();
       renderMap();
     }
@@ -2774,9 +2732,10 @@
       $("sessionBars").innerHTML = [1,2,3,4].map(session => {
         const items = route.filter(s => s.session === session);
         const done = items.filter(s => state.done[s.id]).length;
+        const minutes = items.reduce((sum, item) => sum + item.min, 0);
         const pct = items.length ? Math.round(done / items.length * 100) : 0;
         return `<div class="bar-row">
-          <span>S${session}</span>
+          <span class="session-budget ${minutes > 150 ? "over-budget" : ""}">S${session}: ${minutes} Min / ~150</span>
           <div class="bar"><span style="--w:${pct}%"></span></div>
           <span>${pct}%</span>
         </div>`;
@@ -2795,44 +2754,20 @@
       activeId = id;
       const route = routeSectionsNoSearch();
       if (!route.some(s => s.id === activeId)) activeId = route[0]?.id || "S1.1";
+      const focusTarget = document.activeElement?.classList?.contains("map-cell") ? "map-cell" : "nav-item";
       renderAll();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      requestAnimationFrame(() => {
+        const activeControl = document.querySelector(`.${focusTarget}[data-id="${activeId}"]`);
+        activeControl?.focus({ preventScroll: true });
+      });
+      window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 
-      // SOC Tactical: Sector-Flash + Scan-Line + Status-Bar Update
-      const secNum = activeId.replace("S","").replace(".", "-");
-      const flashOverlay = document.getElementById("soc-flash-overlay");
-      const flashText = document.getElementById("soc-flash-text");
+      // SOC Tactical: update the quiet status rail without adding navigation motion.
       const statusRight = document.getElementById("socStatusRight");
-      if (flashOverlay && flashText) {
-        flashText.textContent = `ACCESSING SECTOR T-${secNum}...`;
-        flashOverlay.style.transition = "opacity 100ms ease";
-        flashOverlay.style.opacity = "1";
-        setTimeout(() => {
-          flashOverlay.style.transition = "opacity 200ms ease";
-          flashOverlay.style.opacity = "0";
-        }, 400);
-      }
       if (statusRight) {
-        statusRight.textContent = `SECTOR T-${secNum} ACCESSED • CLEARANCE GRANTED`;
+        statusRight.textContent = `${activeId} ACCESSED`;
         statusRight.style.animation = "none";
-        // Amber blink 3x
-        let blinks = 0;
-        const blinkInterval = setInterval(() => {
-          statusRight.style.opacity = statusRight.style.opacity === "0" ? "1" : "0";
-          blinks++;
-          if (blinks >= 6) {
-            clearInterval(blinkInterval);
-            statusRight.style.opacity = "1";
-          }
-        }, 130);
-      }
-      // Scan-Line: CSS animation via class toggle
-      const mainEl = document.querySelector(".main");
-      if (mainEl) {
-        mainEl.classList.remove("scanning");
-        void mainEl.offsetWidth; // force reflow
-        mainEl.classList.add("scanning");
-        setTimeout(() => mainEl.classList.remove("scanning"), 450);
+        statusRight.style.opacity = "1";
       }
     }
 
@@ -2844,13 +2779,12 @@
     }
 
     function shuffle(arr) {
-      return [...arr].sort((a,b) => String(a).localeCompare(String(b))).sort((a,b) => ((hash(String(a)) % 97) - (hash(String(b)) % 97)));
-    }
-
-    function hash(str) {
-      let h = 0;
-      for (let i = 0; i < str.length; i++) h = ((h << 5) - h + str.charCodeAt(i)) | 0;
-      return Math.abs(h);
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
     }
 
     $("route48").addEventListener("click", () => {

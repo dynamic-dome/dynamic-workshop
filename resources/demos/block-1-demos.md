@@ -15,13 +15,14 @@ Before starting Block 1:
 - [ ] No sensitive files open or visible
 - [ ] Font size bumped up for screen visibility (terminal font size 16+)
 - [ ] `gh` (GitHub CLI) authenticated if Demo 1.4 includes PR creation
-- [ ] Python 3 available (`python3 --version`)
+- [ ] Python 3 available (`python --version` on Windows, `python3 --version` on macOS/Linux)
 
 ---
 
 ## Demo 1.1: First Contact
 
 **Teaching point this demo supports:** Module 1.1 — What Claude Code is and what it can do.
+**LE binding:** S1.2 (First Contact), reinforces S1.1 (agent vs. chat).
 
 **Duration:** ~8 minutes
 
@@ -91,7 +92,7 @@ Type in Claude Code:
 Run password_gen.py with length 20
 ```
 
-**Expected behavior:** Claude executes `python3 password_gen.py 20` (or equivalent) and shows the output — a 20-character password.
+**Expected behavior:** Claude executes `python password_gen.py 20` on Windows or `python3 password_gen.py 20` on macOS/Linux (or equivalent) and shows the output — a 20-character password.
 
 **Talking point:**
 > "It ran it. In the same session. No switching windows. No copy-pasting. Describe what you want → it writes it → it runs it → you see the result. This is the core loop of Claude Code."
@@ -111,11 +112,18 @@ Expected: Claude runs a loop or runs the command 5 times. Shows 5 different pass
 
 > "What just happened: I opened a terminal. I described what I wanted. Claude created a file, I reviewed it, Claude ran it. No copy-paste. No editor switch. No separate terminal tab to run the script. The entire development loop happened in one conversation. This is what 'full terminal integration' means."
 
+### Recovery Notes
+
+- **If `claude` does not start:** Run `claude --version` and `claude doctor`; if auth is missing, use a prepared screenshot/recording and continue with the mental model.
+- **If Python command differs:** On Windows say `python password_gen.py 20`; on macOS/Linux/Git Bash use `python3 password_gen.py 20`.
+- **If the file appears in the wrong directory:** Ask Claude to run `pwd` and `ls`, then either `cd` into the intended scratch folder or restart the demo in a fresh `~/cc-workshop/demos/demo-1.1` directory.
+
 ---
 
 ## Demo 1.2: Context & Memory Live
 
 **Teaching point this demo supports:** Module 1.2 — CLAUDE.md as persistent context, memory across sessions.
+**LE binding:** S1.9 (context commands) and S1.10 (CLAUDE.md).
 
 **Duration:** ~10 minutes
 
@@ -216,7 +224,7 @@ Remember that I prefer German for communication but all code and file names must
 **Expected behavior:** Claude confirms it has stored this as a memory. In future sessions, Claude will communicate in German if you are this user.
 
 **Talking point:**
-> "This is different from CLAUDE.md. CLAUDE.md is project-level — it's in the project directory, everyone who uses this project gets these rules. Memory is user-level — it's stored in my home directory and applies to all my sessions across all projects. Use CLAUDE.md for project conventions. Use memory for personal preferences."
+> "This is different from CLAUDE.md. CLAUDE.md is project-level — it lives with the project and is the reliable place for team conventions. Auto-Memory is stored under my user profile and can persist across sessions, but you should treat it as personal, context-specific preference memory, not as a substitute for project policy."
 
 **Talking point to close:**
 > "CLAUDE.md is your access policy. It lives with the project. Write the rules once. Claude follows every session."
@@ -233,6 +241,7 @@ Remember that I prefer German for communication but all code and file names must
 ## Demo 1.3: Good vs Bad Prompting
 
 **Teaching point this demo supports:** Module 1.3 — Effective prompting, specificity, scope control.
+**LE binding:** S1.13 (prompt specificity) and S1.14 (iterative verify loop).
 
 **Duration:** ~10 minutes
 
@@ -327,10 +336,11 @@ Write or display this:
 ## Demo 1.4: Git Workflow
 
 **Teaching point this demo supports:** Module 1.4 — Git integration and worktrees.
+**LE binding:** S1.16 (branch -> commit -> PR) and S1.18 (worktrees).
 
 **Duration:** ~10 minutes
 
-**What participants see:** A complete branch → implement → commit → log flow, then worktree creation.
+**What participants see:** A complete branch → implement → commit → push/PR flow, then worktree creation.
 
 ---
 
@@ -411,7 +421,21 @@ and invalid address inputs."
 
 ---
 
-### Step 5: Show Git Log
+### Step 5: Push and Create a PR
+
+Type in Claude Code:
+```
+Push this branch and create a GitHub PR with a short description of the validator change and test coverage.
+```
+
+**Expected behavior:** Claude runs `git push -u origin feature/ipv4-validation` and, if `gh` is authenticated, `gh pr create --fill` or an equivalent PR command.
+
+**Talking point:**
+> "This is the last mile: not just a local commit, but a reviewable PR. In real work, Claude can draft the PR description from the diff; you still review before merge."
+
+---
+
+### Step 6: Show Git Log
 
 Type in Claude Code:
 ```
@@ -425,7 +449,7 @@ Show me git log --oneline -5
 
 ---
 
-### Step 6: Create a Worktree (Bonus — if time allows)
+### Step 7: Create a Worktree (Bonus — if time allows)
 
 **Setup talking point:**
 > "Now let's say I want to experiment with a completely different approach — maybe rewriting this with regex after all, to see if it's actually cleaner. I don't want to mess up my current branch. Worktree."
@@ -469,6 +493,7 @@ What worktrees do we have now?
 ## Demo 1.5: Cost-Aware — Same Task, Three Models
 
 **Teaching point this demo supports:** Module 1.5 — model choice and effort levels are cost levers, not just quality levers.
+**LE binding:** S1.19 (`/cost`, `/usage`, budget caps); deeper cost strategy returns in S4.4.
 
 **Duration:** ~6 minutes
 
@@ -504,7 +529,7 @@ After it finishes, type:
 
 ---
 
-### Step 2: Same Task with Sonnet 4.6 + medium
+### Step 2: Same Task with Sonnet 5 + medium
 
 Reset the session or just continue:
 ```

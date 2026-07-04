@@ -4,12 +4,21 @@
 > Pre-Workshop-Skript, "If everything is on fire"-Cheatsheet.
 > Stand: 2026-05-20.
 
+> ⚠️ **STRUKTUR-HINWEIS (Welle-F, seit 2026-06-23): 4 Sessions / 65 Lerneinheiten.**
+> Diese Notizen sind noch **Block-organisiert** (3 Bloecke). Mapping auf die aktuelle Struktur:
+> **Block 1 → Session 1** (Foundations, S1.x) · **Block 2 → Session 2** (Ecosystem, S2.x) ·
+> **Block 3 splittet in ZWEI Termine:** **Session 3 = Advanced Kern** (Agents 3.1, Security 3.3, Automation 3.4 → S3.x)
+> und **Session 4 = Advanced Bonus** (Multi-Model 3.2, CI/CD 3.6, Capstone 3.5, Troubleshooting 3.7 → S4.x).
+> **`resources/session-plan.md` ist die Ablauf-SSoT** (Zeiten, core/deep-dive/bonus, Straffungs-Plan). Bei
+> Widerspruch gilt session-plan. Die „Session 3 Run Sheet"-Slide deckt nur den Kern; Troubleshooting ist der
+> `core*`-Teil von Session 4. *(Voll-Reorganisation dieser Datei + PPT-Deck-Umbau: Backlog WP-04.)*
+
 ## Quick Reference for Trainers
 
 ### Before the Workshop (1-2 Wochen vorher)
 
 1. **Setup-Check mit allen Teilnehmern** — 30 Min Onboarding-Call pro Teilnehmer
-   - Verifiziere: `claude --version`, `git --version`, `python3 --version`, `gh auth status`
+   - Verifiziere: `claude --version`, `git --version`, `python --version` (Windows; macOS/Linux `python3`), `gh auth status`
    - Workshop-Plugins installieren (falls verfuegbar — sonst klar markieren als Demo-only)
    - NotebookLM-Account-Erstellung
    - Workshop-Playground klonen

@@ -2,11 +2,12 @@
 
 **For the moderator.** Each demo has exact commands, expected output, recovery steps, and talking points.
 Audience: experienced programmers from physical security.
-Total demo time budget: ~35 minutes across 5 demos.
+Total demo time budget: ~40 minutes across 6 demos.
 
 ---
 
 ## Demo 2.1: Skills in Action (~8 minutes)
+**LE binding:** S2.2 (write a SKILL.md) and S2.4 (bundled/custom skills).
 
 ### Goal
 Show what skills look like, how they're invoked, and why they're more powerful than typing instructions every time.
@@ -93,6 +94,7 @@ This manually triggers the TDD workflow. Then say: *"I just did this manually. W
 ---
 
 ## Demo 2.2: Hooks — The Alarm System (~7 minutes)
+**LE binding:** S2.8 (hook configuration).
 
 ### Goal
 Show that hooks fire automatically in response to Claude's actions, can block dangerous operations, and require zero user intervention once configured.
@@ -182,6 +184,7 @@ Or show the structure conceptually and say: *"We'll configure this in Exercise 2
 ---
 
 ## Demo 2.2b: Secure Diff Gate — Write Protection via Hook (~5 minutes)
+**LE binding:** S2.10 (advanced hook outputs / secure diff gate).
 
 ### Goal
 Show a PreToolUse hook that **blocks** Claude from writing to sensitive files (`.env`, `secrets/`, `*.pem`). This is the "access control for code" pattern from the deep research.
@@ -251,6 +254,7 @@ Say: *"Normal doors open normally. Only the protected zones are locked. Least pr
 ---
 
 ## Demo 2.3: Plugin Anatomy (~5 minutes)
+**LE binding:** S2.11 (plugin bundle) and S2.12 (plugin lifecycle/scopes).
 
 ### Goal
 Show that a plugin is just a directory with well-structured files — not magic, not compiled, fully readable and modifiable.
@@ -320,6 +324,7 @@ Say: *"Agents are like specialized team members — each has a role, a set of re
 ---
 
 ## Demo 2.4: MCP — Browser Control (~8 minutes)
+**LE binding:** S2.14 (MCP concept) and S2.15 (MCP configuration).
 
 ### Goal
 Show that Claude can control a real browser — not simulate it, not scrape static HTML, but actually navigate, click, and interact with live web pages.
@@ -402,6 +407,7 @@ Alternatively: show a screenshot taken earlier during prep and describe what hap
 ---
 
 ## Demo 2.5: NotebookLM as Knowledge Base (~7 minutes)
+**LE binding:** S2.18 (RAG/NotebookLM workflow).
 
 ### Goal
 Show that Claude can answer questions from a specific, verifiable knowledge source — not from training data — and that this eliminates hallucination risk for domain-specific queries.
@@ -423,7 +429,7 @@ Say: *"I've already created a notebook and added some sources. Here's how that l
 
 Reference a pre-created notebook:
 ```
-notebooklm list
+notebooklm list --json
 ```
 
 Or if using the skill:
@@ -477,3 +483,7 @@ Demonstrate the concept via the NotebookLM web UI instead:
 - Show an existing notebook with sources
 - Ask a question in the web UI
 - Say: *"The skill wraps this same API so you can query from your terminal. Exercise 2.5 is where you build your own."*
+
+### Recovery if NotebookLM CLI output breaks on Windows
+
+- Re-run CLI commands with `--json` whenever available (`notebooklm list --json`, `notebooklm create "Claude Code Documentation" --json`). The JSON output avoids cp1252/Rich-console rendering failures on Windows.
