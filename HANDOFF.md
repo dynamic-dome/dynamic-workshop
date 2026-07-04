@@ -36,7 +36,7 @@ Erledigt (3 Commits auf `main`, **nicht gepusht** — Push = User):
 - **`e5346f5` — Welle B/1 (Modell-Currency):** T-025 (Opus 4.7→**4.8** als Default), T-026 (**Fable 5** GA 2026-06-09, `claude-fable-5`, $10/$50 in allen Modelltabellen), T-013 (Effort-Default = **`high`** auf Opus 4.8; `xhigh`/`max` auf 4.7/4.8/Fable 5), T-040 (`/model fable` + Fast Mode `/fast`), T-012 (Mentor-Agent). **Alles gegen platform.claude.com-Docs + Live-CLI verifiziert.**
 - **`b42a762` — Welle B/2:** `--max-turns` workshop-weit entfernt (existiert nicht in der CLI; ersetzt durch ehrlichen Hinweis „`--max-budget-usd` cappt Loops"), T-041 (28 lifecycle events → vage), HTML-Dashboard „Opus 4.6"→„4.8".
 
-**Verifizierte Fakten für künftige Currency-Arbeit** (nicht neu recherchieren): aktuelles Lineup = Fable 5 / Opus 4.8 (Default) / Opus 4.7 / Sonnet 4.6 / Haiku 4.5; Effort-Default `high` auf Opus 4.8; Fast Mode `/fast` (Opus 4.8/4.7). Live-CLI = **v2.1.185**.
+**Verifizierte Fakten für künftige Currency-Arbeit** (nicht neu recherchieren): aktuelles Lineup = Fable 5 / Opus 4.8 (Default) / Opus 4.7 / Sonnet 5 / Haiku 4.5; Effort-Default `high` auf Opus 4.8; Fast Mode `/fast` (Opus 4.8/4.7). Live-CLI = **v2.1.185**.
 
 **Wichtig:** `resources/review-2026-06-21/` ist das **historische Review-Archiv** — NIE editieren (auch wenn grep dort alte Begriffe wie „Opus 4.7"/„--max-turns" findet). Das sind die Befunde selbst, kein Kursinhalt.
 

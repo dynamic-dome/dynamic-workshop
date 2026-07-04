@@ -1,7 +1,7 @@
 # Block 2: The Claude Code Ecosystem
 
 **Target audience:** Experienced programmers. Security analogies used throughout — especially relevant for the CySec engineer in the group.
-**Duration:** ~90 minutes
+**Duration:** Speist **Session 2** (~3h-Termin); ~145 Min Core fahrbar (177 Min roh) + 113 Min deep-dives „wenn Zeit" — siehe `session-plan.md` (SSoT).
 **Goal:** Understand and use Skills, Hooks, Plugins, MCP, and RAG/NotebookLM to extend Claude Code
 
 ---

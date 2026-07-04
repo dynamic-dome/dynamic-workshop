@@ -306,22 +306,22 @@ Tool names are the strings used for permission rules, hook matchers, and subagen
 |-------|---------------|----------|-------------------|
 | **Claude Fable 5** | 1M tokens | Most capable model (GA 2026-06-09). Hardest reasoning, long-horizon agentic work. Premium tier. | In: 10 / Out: 50 |
 | **Claude Opus 4.8** | 1M tokens | Current default in Claude Code. Complex tasks, architecture, deep reasoning. Effort defaults to `high`. | In: ~5 / Out: ~25 |
-| **Claude Sonnet 4.6** | 1M tokens | Fast coding, everyday tasks, cost-effective | In: 3 / Out: 15 |
+| **Claude Sonnet 5** | 1M tokens | Fast coding, everyday tasks, cost-effective | In: 3 / Out: 15 |
 | **Claude Haiku 4.5** | 200K tokens | Simple tasks, brainstorming, cheapest option | In: 1 / Out: 5 |
 
-- Claude Code defaults to **Opus 4.8** with 1M context (Fable 5 premium tier; Sonnet 4.6 + Haiku 4.5 also current)
+- Claude Code defaults to **Opus 4.8** with 1M context (Fable 5 premium tier; Sonnet 5 + Haiku 4.5 also current)
 - Switch models: `/model` in session (e.g. `/model fable`, `/model opus`) or `claude --model sonnet` at startup
 - Fast Mode: `/fast` runs Opus 4.8/4.7 at up to ~2.5x output speed (premium pricing) — toggle on/off
 - Use `/compact` when context gets large — compresses older messages
 - Use `/context` to visualize how much context you've used
 - Use `/cost` to track token spend during a session
-- Effort levels: `/effort low|medium|high|xhigh|max` — default `high` on Opus 4.8; `xhigh`/`max` on Opus 4.7 / 4.8 / Fable 5
+- Effort levels: `/effort low|medium|high|xhigh|max` — default `high` on Opus 4.8; `xhigh`/`max` on Opus 4.8 / Sonnet 5 / Fable 5
 
 ### Cost Guidance
 
 | Metric | Typical Value |
 |--------|--------------|
-| Average cost per dev/day | ~$6 (Sonnet 4.6) |
+| Average cost per dev/day | ~$6 (Sonnet 5) |
 | Monthly per dev | $100-200 (varies heavily) |
 | Token reduction strategies | Skills instead of CLAUDE.md bloat, subagents, `/compact`, Sonnet for routine work |
 
@@ -362,7 +362,7 @@ Tool names are the strings used for permission rules, hook matchers, and subagen
 
 Set via: `claude --permission-mode plan` or `/permissions` in session. Cycle Normal -> acceptEdits -> plan via Shift+Tab.
 
-> **auto mode requirements:** **Max-Plan with Opus 4.8** OR Team/Enterprise (Sonnet 4.6, Opus 4.8). Anthropic API only (not Bedrock/Vertex). Claude Code v2.1.83+. Admins can lock/loosen via managed settings.
+> **auto mode requirements:** **Max-Plan with Opus 4.8** OR Team/Enterprise (Sonnet 5, Opus 4.8). Anthropic API only (not Bedrock/Vertex). Claude Code v2.1.83+. Admins can lock/loosen via managed settings.
 
 ### Permission Rules
 

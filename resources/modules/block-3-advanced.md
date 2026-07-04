@@ -196,7 +196,7 @@ Never modify files.  Never execute code.  Explore only.
 - **`description`** — This is how the orchestrator decides *when* to use this agent.
   Write it with trigger phrases and examples.  This is the routing logic.
 - **`model`** — Use shorthand `haiku` / `sonnet` / `opus`, or pin to a specific ID like
-  `claude-haiku-4-5-20251001`, `claude-sonnet-4-6`, `claude-opus-4-8`. Haiku for quick reads,
+  `claude-haiku-4-5-20251001`, `claude-sonnet-5`, `claude-opus-4-8`. Haiku for quick reads,
   Sonnet for analysis, Opus for architecture decisions.
 - **`tools`** — **Security through least privilege.**  An explorer has no Write.
   A reviewer has no Bash.  Lock down to exactly what is needed. (Field was renamed from
@@ -211,7 +211,7 @@ Never modify files.  Never execute code.  Explore only.
 | `description` | string | Trigger description — routing logic. Include examples. |
 | `tools` | list | Allowlist of tools the agent may call |
 | `disallowedTools` | list | Denylist — alternative to `tools`. Useful when "everything except X" is shorter than the allowlist. |
-| `model` | string | `haiku` / `sonnet` / `opus` shorthand or full ID (`claude-opus-4-7`) |
+| `model` | string | `haiku` / `sonnet` / `opus` shorthand or full ID (`claude-opus-4-8`) |
 | `permissionMode` | string | `default` / `acceptEdits` / `plan` / `auto` / `dontAsk` / `bypassPermissions` |
 | `maxTurns` | int | Hard turn limit for this subagent (cost / runaway guard) |
 | `skills` | list | Preload named skills into the subagent's startup context |
@@ -667,7 +667,7 @@ Three official slash-commands cover the common review surface — before reachin
 `auto` is the ML-classifier-driven mode where Claude itself decides which actions to auto-approve based on per-action risk:
 
 - **Max plan (consumer)** — available **with the current Opus (4.8) only** (other models locked).
-- **Team / Enterprise** — available with Sonnet 4.6 and Opus 4.8.
+- **Team / Enterprise** — available with Sonnet 5 and Opus 4.8.
 - **Transport** — Anthropic API only (not yet on Bedrock or Vertex).
 - **Version** — requires a recent Claude Code version (check `claude --version`).
 

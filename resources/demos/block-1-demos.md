@@ -504,7 +504,7 @@ After it finishes, type:
 
 ---
 
-### Step 2: Same Task with Sonnet 4.6 + medium
+### Step 2: Same Task with Sonnet 5 + medium
 
 Reset the session or just continue:
 ```

@@ -27,7 +27,7 @@
 | 1 | Erste Schritte mit dem Agenten (sanfter Einstieg) | Foundations | 213 Min | 10. April 2026 (Erstfassung durchgeführt) |
 | 2 | Das Ecosystem (Skills, Hooks, Plugins, MCP, RAG) | Ecosystem | 177 Min | TBD |
 | 3 | Advanced Kern (Agents, Security, Automation) | Advanced-Kern | 157 Min | TBD |
-| 4 | Advanced Bonus (Multi-Model, CI/CD, Capstone, Troubleshooting) | Advanced-Bonus | 163 Min (voller Track) | TBD |
+| 4 | Advanced Bonus (Multi-Model, CI/CD, Capstone, Troubleshooting) | Advanced-Bonus | 166 Min (voller Track) | TBD |
 
 > **Warum 4 Sessions?** Block 3 hatte faktisch ~270 Min Inhalt in einem 180-Min-Termin. Der ehrliche
 > Schnitt trennt den Pflicht-Kern (Session 3: Agents + Security + Automation) vom Überlauf
@@ -71,10 +71,16 @@
 **deep-dive (wenn Zeit):** S1.11 (18) + S1.12 (12) + S1.15 (12) + S1.17 (15) + S1.18 (15) = **72 Min**.
 
 > **⭐ Audience-Fit-Entscheidung:** S1.6 (alle 6 Permission Modes) ist **`[core]`**, nicht deep-dive —
-> die Zielgruppe (Physical-Security-Profis) will Clearance-Level früh vollständig sehen. Das macht
-> Session 1 mit **213 Min Roh-Core** zum vollsten Termin — deutlich über den ~140–150 netto fahrbaren
-> Minuten. Realistisch: S1.20-Puffer auf ~10 Min, S1.9 straffen, ggf. S1.4 in S1.3 bündeln; die
-> deep-dives (72 Min) entfallen hier fast immer. **Die 6 Modi NICHT opfern.**
+> die Zielgruppe (Physical-Security-Profis) will Clearance-Level früh vollständig sehen.
+>
+> **⏱️ Termin-Länge ist KEIN harter Constraint für diesen Workshop.** Content-Vollständigkeit geht vor
+> Slot-Fitting; die Sessions laufen so lang wie nötig (mit Pausen). Die Minutenzahlen (213 Min Roh-Core
+> + 72 Min deep-dives) sind daher **Pacing-/Pausen-Signale und Self-Study-Budget**, kein Zwang zum Kürzen.
+>
+> Der didaktisch relevante Punkt ist nicht „passt es in 180 Min", sondern **Ermüdung**: 213 Min Core am
+> Stück sind ein Firehose. Lösung ist **Rhythmus, nicht Streichen** — z. B. nach ~S1.6 und ~S1.14 je eine
+> Pause + einen 2-Fragen-Recall (Retrieval). Wer schneller durch will (Self-Learner-Pfad), kann weiche
+> Beats optional straffen. **Die 6 Modi (S1.6) bleiben.**
 
 ---
 
@@ -160,7 +166,7 @@
 | S4.9 | Troubleshooting: /debug, --verbose, /doctor | core* | 15 | 3.7 /debug + --verbose + /doctor |
 | S4.10 | Diagnose-Sequenzen (Hook/Skill/Plugin/MCP) | core* | 18 | 3.7 Failure-Diagnosen + 8-Schritt-Checkliste + Demo 3.7 |
 
-**Session 4 (voller Track):** 15+15+15+18+18+12+15+25+15+18 = **~163 Min** (passt in 180 Min mit Pause).
+**Session 4 (voller Track):** 15+15+15+18+18+12+15+25+15+18 = **166 Min roh** (davon nur S4.9/S4.10 = 33 Min `core*`). Netto ~140–150 fahrbar → deep-dives/bonus nach Zeitbudget; der volle Track läuft realistisch NIE komplett.
 
 > **`core*` = innerhalb von Session 4 Pflicht.** Troubleshooting (S4.9/S4.10) ist der einzige „jeder braucht
 > es"-Teil. **Fallback ohne 4. Termin:** S4.9 + S4.10 (33 Min) ans Ende von Session 3 hängen und die
