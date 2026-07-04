@@ -201,6 +201,7 @@ enthält zusätzlich stale Fakten (Sonnet 4.6; `auto`-Mode falsch beschrieben).
 > - **WP-10 ✅ ERLEDIGT** — `sections`-Array hat jetzt ein explizites `theme`-Feld pro Section; `themeFor(s)` bevorzugt `s.theme` vor dem alten Titel-Fallback. Strukturcheck: 65/65 Themes; Pins S2.4=`skills`, S3.4=`agents`, S3.6=`agents`, S3.7=`guardrails`.
 > - **WP-11 ✅ ERLEDIGT** — `--muted` auf `#8a9b80`, globale `:focus-visible`-Regel, Suchfeld-`aria-label`, Map-Labels 10.5px, Fokus-Restore nach `renderAll()` und JS-Flash/Blink/Scan-Line bei `prefers-reduced-motion: reduce` deaktiviert. Dashboard war bereits in Tier 1 archiviert.
 > - **WP-12 ✅ ERLEDIGT** — Google-Fonts-`preconnect`/Stylesheet entfernt; `--sans`/`--mono` nutzen nur noch System-Font-Stacks. Browser-Smoke: 0 externe Requests beim Laden der lokalen HTML.
+> - **WP-13 ✅ ERLEDIGT** — `shuffle()` ist jetzt echte Fisher-Yates-Permutation mit `Math.random()` statt deterministischem Hash-Sort; tote `hash()`-Hilfsfunktion entfernt; Regressionstest `tools/test_workshop_ui_behavior.py` ergänzt.
 
 ## WP-10 · [P2] Falscher Quiz-Antwortschlüssel durch Titel-Heuristik
 **Datei:** `resources/cloud-code-workshop-ui.html` (Z.1419–1426 `themeFor`, 2717 Antwortschlüssel, 2524 keywordsFor)

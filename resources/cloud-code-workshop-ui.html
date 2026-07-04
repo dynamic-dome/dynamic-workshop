@@ -2856,13 +2856,12 @@
     }
 
     function shuffle(arr) {
-      return [...arr].sort((a,b) => String(a).localeCompare(String(b))).sort((a,b) => ((hash(String(a)) % 97) - (hash(String(b)) % 97)));
-    }
-
-    function hash(str) {
-      let h = 0;
-      for (let i = 0; i < str.length; i++) h = ((h << 5) - h + str.charCodeAt(i)) | 0;
-      return Math.abs(h);
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
     }
 
     $("route48").addEventListener("click", () => {
