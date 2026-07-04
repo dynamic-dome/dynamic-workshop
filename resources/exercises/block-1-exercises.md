@@ -154,7 +154,7 @@ Then show me the diff.
 
 **Goal:** Create a CLAUDE.md for your actual work domain. Test that it persists across a session restart. Create a personal memory item.
 
-**Time:** ~15 minutes
+**Time:** ~22 minutes
 
 ---
 
@@ -166,6 +166,13 @@ Pick a directory that represents a real (or realistic) project from your work. I
 
 ```
 mkdir -p ~/cc-workshop/exercises/exercise-1.2 && cd ~/cc-workshop/exercises/exercise-1.2
+git init
+claude
+```
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\exercises\exercise-1.2" | Out-Null
+Set-Location "$HOME\cc-workshop\exercises\exercise-1.2"
 git init
 claude
 ```
@@ -389,10 +396,22 @@ Think about or discuss with your neighbor:
 ### Setup
 
 Use the project from Exercise 1.2, or create a new one:
-```
+```bash
+# macOS / Linux / Git Bash
 mkdir -p ~/cc-workshop/exercises/exercise-1.4-git && cd ~/cc-workshop/exercises/exercise-1.4-git
 git init
 echo "# Access Control Utilities" > README.md
+git add README.md
+git commit -m "Initial commit"
+claude
+```
+
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\exercises\exercise-1.4-git" | Out-Null
+Set-Location "$HOME\cc-workshop\exercises\exercise-1.4-git"
+git init
+"# Access Control Utilities" | Set-Content -Encoding utf8 README.md
 git add README.md
 git commit -m "Initial commit"
 claude
@@ -553,8 +572,8 @@ Pick three things you do (or expect to do) with Claude Code regularly. Examples 
 
 Fill in your own table. The columns matter more than the exact values:
 
-| Workflow | Model | Effort | Extra flags | Estimated cost / run |
-|---|---|---|---|---:|
+| Workflow | Model | Effort | Extra flags | Qualitative cost band |
+|---|---|---|---|---|
 | Code-review (~100 lines) | ? | ? | ? | ? |
 | Bug-fix in unknown code | ? | ? | ? | ? |
 | Doc/comment writing | ? | ? | ? | ? |
@@ -568,7 +587,7 @@ For each row, ask yourself:
 
 **4. Verify with one real run**
 
-Pick one workflow from your table. Run it once with your chosen config. Open `/cost`. Does the number match what you estimated? If not — adjust.
+Pick one workflow from your table. Run it once with your chosen config. Open `/cost`. Does the actual number fit the qualitative band you expected? If not — adjust. Save precise dollar estimation for S4.4, where CI/headless budget caps and repeatability make the calculation more meaningful.
 
 **5. Persist your config**
 
@@ -588,7 +607,7 @@ Or a small user-skill that wraps the right invocation. (Skills are covered in Bl
 
 ### Success Check
 
-- [ ] You have a filled-in table with three workflows, each with a model + effort + cost estimate
+- [ ] You have a filled-in table with three workflows, each with a model + effort + qualitative cost band
 - [ ] You have a justification one-liner for each row (not just "felt right")
 - [ ] At least one workflow has been run live and verified with `/cost`
 - [ ] You have either an alias or a note that captures your chosen config for future runs
@@ -655,7 +674,7 @@ Use these for group discussion or personal reflection after completing the exerc
 ### ⏪ W2 — The Undo Reflex  `[micro-warmup, 2–3 min | easy]` · after Module 1.1
 
 **Goal:** Build the "I'm in control" reflex before any real work — Claude creates, *you* discard.
-**Analogy:** A dry run of the door release on the test bench (a worktree is your test lab).
+**Analogy:** A dry run of the door release on the test bench: you press, observe, and reset before touching a real door.
 
 1. `Create junk.txt containing the word OOPS.`
 2. `Show me its contents.`
@@ -665,7 +684,7 @@ Use these for group discussion or personal reflection after completing the exerc
 ### 🔤 W4 — One-Word Diff  `[micro-warmup, 2 min | easy]` · before Exercise 1.4 (Git)
 
 **Goal:** Isolate the git `diff → commit` loop on the smallest possible change before the heavier Git exercise.
-**Analogy:** Logging a single door-open event in the shift book (a PostToolUse hook is the door-open log).
+**Analogy:** Logging a single door-open event in the shift book: small, timestamped, reviewable.
 
 1. Make a repo with a one-line `README.md`.
 2. Change exactly one word.

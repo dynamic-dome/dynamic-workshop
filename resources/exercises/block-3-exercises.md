@@ -53,6 +53,13 @@ Be explicit:
 - The orchestrator combining the results
 - Total time vs. what it would have been sequentially
 
+### Success Check
+
+- [ ] You can point to at least two separate agent outputs in the transcript.
+- [ ] Each agent had a distinct, independent task with no dependency on the other agent's result.
+- [ ] The final response combines both outputs into one report.
+- [ ] You can name one real work task where fan-out is safe, and one where a pipeline would be safer.
+
 ### Reflection Questions
 
 1. Were the tasks actually independent?  Did the agents need to coordinate?
@@ -258,8 +265,10 @@ Design it, set it up, verify it triggers at least once.
 ### Verification
 
 After setting up your automation, verify it runs:
-- For `/schedule`: check the schedule list with `/schedule` and confirm your task appears
-- For `/loop`: watch it trigger at least twice in your terminal
+- [ ] For `/schedule`: check the schedule list with `/schedule` and confirm your task appears.
+- [ ] For `/loop`: watch it trigger at least twice in your terminal.
+- [ ] Capture the exact trigger condition and stop condition in one sentence.
+- [ ] Name the safety net: budget cap, permission mode, allow/deny rule, or human approval gate.
 
 ### Discussion (with the person next to you)
 
