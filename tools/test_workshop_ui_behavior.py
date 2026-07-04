@@ -23,6 +23,37 @@ def test_quiz_shuffle_uses_real_fisher_yates_permutation():
     assert "[copy[i], copy[j]] = [copy[j], copy[i]];" in body
 
 
+def test_exercise_scoring_is_feedback_only():
+    source = UI_HTML.read_text(encoding="utf-8")
+    body = _extract_function(source, "gradeExercise")
+
+    assert "lengthScore" not in body
+    assert "state.done" not in body
+
+
+def test_cumulative_quiz_books_the_asked_section():
+    source = UI_HTML.read_text(encoding="utf-8")
+    body = _extract_function(source, "renderCumulativeQuiz")
+
+    assert "state.quiz[q.id]" in body
+    assert "state.done[q.id]" in body
+    assert "state.quiz[s.id]" not in body
+    assert "state.done[s.id]" not in body
+
+
+def test_final_quiz_uses_recall_questions_not_theme_labels():
+    source = UI_HTML.read_text(encoding="utf-8")
+    body = _extract_function(source, "renderFinalQuiz")
+
+    assert "const qz = sectionQuiz[id];" in body
+    assert "${qz.q}" in body
+    assert "themeFor(s)" not in body
+    assert "Themenfamilie" not in body
+
+
 if __name__ == "__main__":
     test_quiz_shuffle_uses_real_fisher_yates_permutation()
+    test_exercise_scoring_is_feedback_only()
+    test_cumulative_quiz_books_the_asked_section()
+    test_final_quiz_uses_recall_questions_not_theme_labels()
     print("OK - workshop UI behavior checks passed.")

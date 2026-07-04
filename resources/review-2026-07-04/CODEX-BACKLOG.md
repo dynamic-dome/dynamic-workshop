@@ -238,6 +238,9 @@ Falsch: S3.4 „…Pipeline"→`ci` (statt agents), S3.6 „…Security-Pipeline
 
 # TIER 3 — UI-Didaktik (Assessment-Integrität + Theming-Load)
 
+> **STATUS 2026-07-04 (Codex):**
+> - **WP-14 ✅ ERLEDIGT** — UI-Exercises werden aus dem konkreten `checkpoint` generiert; Exercise-Score ist nur noch Feedback ohne Auto-Done und ohne Laengen-Score; Kurzquiz rotiert offene Route-Fragen und bucht `q.id`; Final-Quiz nutzt echte `sectionQuiz`-Recall-Fragen; erfolgreiche Quizantworten setzen die geprüfte Section auf Done; Schwelle auf 70 vereinheitlicht.
+
 ## WP-14 · [P2] Assessment-Überholung: echte Checkpoints prüfen statt Keyword-Gate
 **Datei:** `resources/cloud-code-workshop-ui.html` (2610–2642 Übung, 2665–2727 Quizze)
 **Problem (Mastery-Grenze/Validität):** Jede LE hat einen präzisen `checkpoint`, der nur als Karte angezeigt,

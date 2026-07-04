@@ -2610,11 +2610,11 @@
     function renderExercise(s, c) {
       const saved = state.answers[s.id] || "";
       $("exerciseRef").textContent = s.source.includes("Exercise") ? s.source : "Micro-Exercise";
-      $("exercisePrompt").textContent = `Bearbeite ${s.id}: Formuliere einen konkreten Mini-Plan oder ein Beispiel, das ${shortenTitle(s.title).toLowerCase()} in einem Physical-Security- oder Entwicklungsprojekt anwendet.`;
+      $("exercisePrompt").textContent = `Bearbeite ${s.id}: Demonstriere den Checkpunkt in einem kurzen, pruefbaren Mini-Beispiel: ${c.checkpoint}`;
       const tasks = [
-        `Nenne den konkreten Nutzen dieser Section.`,
-        `Beschreibe mindestens eine Grenze oder ein Risiko.`,
-        `Fuege einen pruefbaren Schritt, Befehl, Test oder Reviewpunkt hinzu.`
+        `Zeige konkret, woran man den Checkpunkt erkennt.`,
+        `Nenne ein Artefakt, einen Befehl, eine Entscheidung oder einen Reviewpunkt.`,
+        `Beschreibe mindestens eine Grenze oder ein Risiko.`
       ];
       $("taskList").innerHTML = tasks.map((task, i) => `
         <label><input type="checkbox" data-task="${i}" ${state.exercise[s.id]?.checks?.includes(i) ? "checked" : ""}>${task}</label>
@@ -2634,18 +2634,17 @@
       const keys = keywordsFor(s);
       const foundKeys = keys.filter(k => lower.includes(k));
       const hits = foundKeys.length;
-      const keywordScore = Math.min(42, hits * 7);
-      const lengthScore = Math.min(28, Math.floor(answer.length / 18));
-      const checkScore = checks.length * 10;
-      const score = Math.max(0, Math.min(100, keywordScore + lengthScore + checkScore));
+      const keywordScore = Math.min(55, hits * 11);
+      const checkScore = checks.length * 15;
+      const detailScore = answer ? 15 : 0;
+      const score = Math.max(0, Math.min(100, keywordScore + checkScore + detailScore));
       state.exercise[s.id] = { score, hits, foundKeys, checks, at: Date.now() };
-      if (score >= 70) state.done[s.id] = true;
       saveState();
       renderAll();
     }
 
     function feedbackClass(score) {
-      if (score >= 78) return "good";
+      if (score >= 70) return "good";
       if (score >= 48) return "warn";
       return "";
     }
@@ -2657,8 +2656,8 @@
         : "Noch keine Fachanker erkannt";
       const missing = keys.filter(k => !foundKeys.includes(k)).slice(0, 4);
       const missingStr = missing.length ? ` — fehlend: ${missing.join(", ")}` : "";
-      const hint = score >= 78
-        ? "Stark: Antwort ist konkret, risikobewusst und pruefbar."
+      const hint = score >= 70
+        ? "Stark: Antwort ist konkret, risikobewusst und pruefbar. Der Score ist Feedback; Done setzt du manuell oder durch ein korrektes Quiz."
         : score >= 48
           ? "Solide Basis. Schaerfe noch einen konkreten Pruefschritt oder eine klare Grenze nach."
           : "Zu duenn. Ergaenze Nutzen, Risiko und eine konkrete Verifikation.";
@@ -2669,7 +2668,8 @@
       const route = routeSectionsNoSearch();
       const idx = Math.max(0, route.findIndex(x => x.id === s.id));
       const pool = route.slice(0, idx + 1);
-      const q = pool[Math.max(0, (idx * 7 + pool.length) % pool.length)];
+      const openPool = pool.filter(item => !state.quiz[item.id]?.ok);
+      const q = (openPool.length ? shuffle(openPool) : shuffle(pool))[0] || s;
       const qz = sectionQuiz[q.id];
       const correct = qz ? qz.correct : copyFor(q).checkpoint;
       const wrongOpts = qz
@@ -2684,7 +2684,7 @@
         ? `Bis ${s.id}: ${qz.q}`
         : `Bis ${s.id}: Welche Aussage passt zu ${q.id} (${q.title})?`;
       $("quizOptions").innerHTML = options.map(opt => `<button type="button" data-correct="${opt === correct}">${opt}</button>`).join("");
-      $("quizResult").textContent = state.quiz[s.id]?.ok ? "Diese Section wurde im Kurzquiz korrekt beantwortet." : "";
+      $("quizResult").textContent = state.quiz[q.id]?.ok ? `${q.id} wurde im Kurzquiz korrekt beantwortet.` : "";
       document.querySelectorAll("#quizOptions button").forEach(btn => {
         btn.addEventListener("click", () => {
           const ok = btn.dataset.correct === "true";
@@ -2693,10 +2693,10 @@
             if (b.dataset.correct === "true") b.classList.add("correct");
           });
           if (!ok) btn.classList.add("wrong");
-          state.quiz[s.id] = { ok, at: Date.now() };
-          if (ok) state.done[s.id] = true;
+          state.quiz[q.id] = { ok, at: Date.now() };
+          if (ok) state.done[q.id] = true;
           saveState();
-          $("quizResult").textContent = ok ? "Richtig. Der Checkpunkt ist gespeichert." : "Nicht ganz. Lies Folie 2 und den Checkpunkt noch einmal.";
+          $("quizResult").textContent = ok ? `Richtig. Der Checkpunkt fuer ${q.id} ist gespeichert.` : "Nicht ganz. Lies Folie 2 und den Checkpunkt noch einmal.";
           renderProgress();
           renderNav();
           renderMap();
@@ -2716,15 +2716,14 @@
       if (finalQuizIds.length === 0) reshuffleFinalQuiz();
       $("finalQuizScope").textContent = routeMode === "48" ? "48er Route" : "65 LEs";
       $("finalQuiz").innerHTML = finalQuizIds.map((id, idx) => {
-        const s = getSection(id);
-        const correct = themeFor(s);
-        const options = shuffle([correct, "mcp", "guardrails", "prompting", "ci"].filter((v, i, a) => a.indexOf(v) === i)).slice(0, 4);
-        if (!options.includes(correct)) options[0] = correct;
+        const qz = sectionQuiz[id];
+        const correct = qz.correct;
+        const options = shuffle([correct, ...qz.wrong]);
         return `<div class="final-item">
-          <b>${idx + 1}. Ordne ${s.id} zu: ${s.title}</b>
+          <b>${idx + 1}. ${s.id}: ${qz.q}</b>
           <select data-final="${id}" data-correct="${correct}">
-            <option value="">Themenfamilie waehlen</option>
-            ${shuffle(options).map(o => `<option value="${o}">${o}</option>`).join("")}
+            <option value="">Antwort waehlen</option>
+            ${options.map(o => `<option value="${o}">${o}</option>`).join("")}
           </select>
         </div>`;
       }).join("");
@@ -2737,11 +2736,15 @@
         const good = sel.value === sel.dataset.correct;
         if (good) ok++;
         sel.style.borderColor = good ? "#9bd3b5" : "#ffc9c1";
-        if (good) state.quiz[`final:${sel.dataset.final}`] = { ok: true, at: Date.now() };
+        if (good) {
+          state.quiz[`final:${sel.dataset.final}`] = { ok: true, at: Date.now() };
+          state.quiz[sel.dataset.final] = { ok: true, at: Date.now() };
+          state.done[sel.dataset.final] = true;
+        }
       });
       saveState();
       $("finalFeedback").className = "feedback show " + feedbackClass(ok * 20);
-      $("finalFeedback").innerHTML = `<b>${ok}/${selects.length}</b> korrekt. ${ok === selects.length ? "Sauberer Querschnitt ueber die bisherige Route." : "Die roten Felder zeigen, welche Themenfamilie noch unscharf ist."}`;
+      $("finalFeedback").innerHTML = `<b>${ok}/${selects.length}</b> korrekt. ${ok === selects.length ? "Sauberer Querschnitt ueber die bisherige Route." : "Die roten Felder zeigen, welche Checkpunkte noch unscharf sind."}`;
       renderProgress();
       renderMap();
     }
