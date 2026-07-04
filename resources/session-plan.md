@@ -221,6 +221,20 @@ Jede LE folgt demselben Muster:
 Session 1 startet weiterhin **visuell mit der PPT** (`claude-code-workshop.pptx`). Sessions 2-4 starten mit einem 5-Minuten Active-Recall-Opener aus `resources/retrieval-recap-bridges.md`, dann sofort mit der neuen PPT.
 Durchgängige Physical-Security-Analogien und optionale Exercises bleiben erhalten.
 
+## Live-3-Personen-Modus
+
+Quelle: `resources/live-3-person-mode.md`.
+
+Der Live-Workshop fuer drei erfahrene Entwickler nutzt die 65-LE-Karte als Moderator-Geruest, nicht als MOOC-Checkliste. Pro Hands-on-Beat laufen **Think-Aloud-Pair-Driving** und Rollenrotation:
+
+| Rolle | Aufgabe |
+|---|---|
+| Driver | Claude Code bedient, Erwartung vor Enter laut sagen |
+| Navigator | Scope, Permissions, Dateien und Tests bewachen |
+| Observer | Kosten, Kontext und Transfer ins Job-Repo beobachten |
+
+Live gilt: sokratische Prompt-Fragen statt Dashboard-Quiz. Completion-UI, Heatmap und kumulatives Quiz sind Self-Learner-Track oder Nachbereitung, nicht der Taktgeber im Raum.
+
 ## Retrieval-/Recap-Bruecken
 
 Quelle: `resources/retrieval-recap-bridges.md`.
@@ -252,6 +266,7 @@ Pro Session ~10–15 Min Pause nach ~90 Min. Zusätzlich Q&A zwischen LEs.
 - **Pflicht je Session:** alle `[core]`-LEs + Hauptdemos + mindestens 1 Exercise (Hands-on-Puffer).
 - **„Wenn Zeit, dann zeigen":** `[deep-dive]`-LEs.
 - **Nur bei Überschuss / auf Nachfrage:** `[bonus]`-LEs (Self-Improve, Codex Swarm, Capstone, Mobile/Inception).
+- **Live mit 3 Personen:** `resources/live-3-person-mode.md` priorisieren; Cockpit-Completion/Quiz nur als Self-Learner-Nachbereitung.
 
 ## Materialien pro Session
 

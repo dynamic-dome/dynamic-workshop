@@ -98,6 +98,8 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 
 **Security analogies:** `resources/security-analogies.md` is the source of truth. For Session 4, keep the thread explicit: Multi-Model = duty roster/staffing, CI/CD = automated nightly guard round, Troubleshooting = alarm panel fault isolation (Sensor -> Wiring -> Panel -> Comms).
 
+**Live cohort mode:** For the actual N=3 live workshop, use `resources/live-3-person-mode.md`: Think-Aloud-Pair-Driving on the playground, rotating Driver/Navigator/Observer roles, and Socratic per-LE prompts instead of live quiz/completion pressure. The cockpit remains a facilitator scaffold and self-learner track.
+
 ## How to Answer Questions
 
 Follow this process for every participant question:

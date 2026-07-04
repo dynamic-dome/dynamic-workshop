@@ -380,7 +380,7 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 
 ## WP-28 · [P3] Format-vs-Kohorten-Fit explizit machen (N=3 live)
 **Problem:** MOOC-Skalen-Maschinerie (65 sequenzierte LEs, Self-Paced-Cockpit, Completion-Dashboard) für 3 erfahrene Devs live im Raum.
-- [ ] 65-LE-Map als Facilitator-Gerüst + Self-Learner-Track behalten, aber einen expliziten „Live-3-Personen-Modus"-Run-of-Show definieren (Think-Aloud-Pair-Driving am Playground + Per-LE-Sokrates-Prompts statt Quizze); Completion-UI auf Self-Learner-Track demoten.
+- [x] 65-LE-Map als Facilitator-Gerüst + Self-Learner-Track behalten, aber einen expliziten „Live-3-Personen-Modus"-Run-of-Show definieren (Think-Aloud-Pair-Driving am Playground + Per-LE-Sokrates-Prompts statt Quizze); Completion-UI auf Self-Learner-Track demoten.
 **Codex-Fähigkeit:** Bereich: Curriculum-/Didaktik-Redaktion
 
 ---
