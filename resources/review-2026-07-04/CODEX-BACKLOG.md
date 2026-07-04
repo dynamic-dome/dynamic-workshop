@@ -197,6 +197,9 @@ enthält zusätzlich stale Fakten (Sonnet 4.6; `auto`-Mode falsch beschrieben).
 
 # TIER 2 — UI-Korrektheit & Barrierefreiheit
 
+> **STATUS 2026-07-04 (Codex):**
+> - **WP-10 ✅ ERLEDIGT** — `sections`-Array hat jetzt ein explizites `theme`-Feld pro Section; `themeFor(s)` bevorzugt `s.theme` vor dem alten Titel-Fallback. Strukturcheck: 65/65 Themes; Pins S2.4=`skills`, S3.4=`agents`, S3.6=`agents`, S3.7=`guardrails`.
+
 ## WP-10 · [P2] Falscher Quiz-Antwortschlüssel durch Titel-Heuristik
 **Datei:** `resources/cloud-code-workshop-ui.html` (Z.1419–1426 `themeFor`, 2717 Antwortschlüssel, 2524 keywordsFor)
 **Problem:** `themeFor()` klassifiziert per Titel-Substring und ist Quiz-**Lösung** *und* Keyword-Bank.
