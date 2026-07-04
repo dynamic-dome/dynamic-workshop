@@ -58,3 +58,4 @@ Facilitator note: compare the entry and exit numbers qualitatively. The goal is 
 4. **5 min:** participant drafts PR-ready handoff.
 5. **5 min:** facilitator scores rubric and gives one concrete next-step recommendation.
 
+Final handoff: copy the next-step recommendation into `resources/transfer-retention-plan.md`'s take-home adoption plan and schedule the 30-day async follow-up.

@@ -92,6 +92,8 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 - 3.5 Telegram Bridge, Inception & Worktree Isolation (Capstone) → S4.6–S4.8; S4.8 is an assessed Capstone Exit Build using `resources/capstone-exit-assessment.md` (feature/fix + guardrail + verification + PR handoff)
 - 3.7 Troubleshooting & Debugging Claude Code (`/debug`, `/doctor`, `claude --verbose`, layer-by-layer inspection) → S4.9–S4.10 (`core*` — the one "everyone needs it" part of Session 4)
 
+**Transfer layer:** Every session has a 10-minute bring-your-own-repo transfer beat from `resources/transfer-retention-plan.md`. Keep it concrete: one repo, one boundary, one next safe slice. Session 4 ends with the one-page adoption plan and a 30-day async follow-up via `/schedule` or a Routine.
+
 ## How to Answer Questions
 
 Follow this process for every participant question:

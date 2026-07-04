@@ -214,10 +214,22 @@ Jede LE folgt demselben Muster:
 1. **Konzept verstehen** — LE-Abschnitt im Modul lesen (Anker `<!-- LE: Sx.y -->`)
 2. **Live-Demo sehen** — die an die LE gebundene Demo nachvollziehen (Demo > Slides)
 3. **Selbst ausprobieren** — Exercise im Hands-on-Puffer lösen
-4. **Mit Cheat Sheet absichern** — Quick-Reference
+4. **Bring-your-own-repo Transfer** — 10 Minuten heutige Fertigkeit auf ein echtes Job-Repo abbilden
+5. **Mit Cheat Sheet absichern** — Quick-Reference
 
 Jede Session startet weiterhin **visuell mit der PPT** (`claude-code-workshop.pptx`), dann Vertiefung in die LEs.
 Durchgängige Physical-Security-Analogien und optionale Exercises bleiben erhalten.
+
+## Bring-your-own-repo Transfer-LEs
+
+Quelle: `resources/transfer-retention-plan.md`. Diese Beats sind klein, aber Pflicht: der Playground beweist Mechanik; das eigene Repo beweist Adoption.
+
+| Transfer-LE | Wann | 10-Minuten-Output |
+|---|---|---|
+| S1-T | Ende Session 1 | Repo entry map: Kontextdateien, Protected Paths, erster sicherer Check |
+| S2-T | Ende Session 2 | Automation candidate: Skill/Hook/Plugin/MCP/RAG plus Trigger und Grenze |
+| S3-T | Ende Session 3 | Bounded automation design: Agent-Rolle, Permission Mode, Worktree, Budget Cap, Stop Condition |
+| S4-T | Ende Session 4 | Take-home adoption plan plus 30-Tage-async-Follow-up via `/schedule` oder Routine |
 
 ## Pausen
 
@@ -233,10 +245,10 @@ Pro Session ~10–15 Min Pause nach ~90 Min. Zusätzlich Q&A zwischen LEs.
 
 | Session | Mitbringen | Vorbereitung |
 |---|---|---|
-| 1 | Laptop, claude installiert, GitHub-Account | `resources/prerequisites.md` durchgearbeitet |
-| 2 | Session-1-Setup + Playwright-Browser, NotebookLM-Account | Plugin-Bundle installiert (siehe `prerequisites.md` „Workshop-Plugins") |
-| 3 | Session-2-Setup + Codex-CLI (falls verfügbar) | Workshop-Playground geklont |
-| 4 | Session-3-Setup | optional: CI-Repo mit GitHub Actions zum Mitschreiben |
+| 1 | Laptop, claude installiert, GitHub-Account, ein eigenes unkritisches Repo fuer Transfer | `resources/prerequisites.md` durchgearbeitet |
+| 2 | Session-1-Setup + Playwright-Browser, NotebookLM-Account, Transfer-Repo | Plugin-Bundle installiert (siehe `prerequisites.md` „Workshop-Plugins") |
+| 3 | Session-2-Setup + Codex-CLI (falls verfügbar), Transfer-Repo | Workshop-Playground geklont |
+| 4 | Session-3-Setup, Transfer-Repo | optional: CI-Repo mit GitHub Actions zum Mitschreiben; Take-home-Adoptionsplan vorbereiten |
 | **Alle** | **Moderator:** vorbereitetes `~/cc-workshop`-Bundle auf USB-Stick | Fallback bei kaputtem Teilnehmer-Setup (vgl. `trainer-notes.md` Pairing-Fallback) |
 
 ---

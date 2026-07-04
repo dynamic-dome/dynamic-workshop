@@ -341,9 +341,9 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 
 ## WP-22 · [P2] Transfer-Brücke + Post-Workshop-Retention-Loop
 **Problem:** Alles bleibt im synthetischen Playground; die Mission ist Arbeitsalltags-Adoption.
-- [ ] Pro Session eine „Bring-your-own-repo"-Transfer-LE (10 Min: heutige Fertigkeit auf ein Job-Repo anwenden).
-- [ ] 1-seitiger Take-Home-Adoptionsplan.
-- [ ] Geplanter 30-Tage-async-Follow-up (dogfoodet die `/schedule`+Routines aus S3.12).
+- [x] Pro Session eine „Bring-your-own-repo"-Transfer-LE (10 Min: heutige Fertigkeit auf ein Job-Repo anwenden).
+- [x] 1-seitiger Take-Home-Adoptionsplan.
+- [x] Geplanter 30-Tage-async-Follow-up (dogfoodet die `/schedule`+Routines aus S3.12).
 **Codex-Fähigkeit:** Bereich: Curriculum-/Didaktik-Redaktion
 
 ## WP-23 · [P2] Retrieval-/Recap-Brücken zwischen Sessions
