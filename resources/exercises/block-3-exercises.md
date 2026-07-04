@@ -278,25 +278,27 @@ After setting up your automation, verify it runs:
 
 ---
 
-## Exercise 3.5: Architecture Discussion (Capstone) — Must-do, ~45 min
+## Exercise 3.5: Capstone Exit Build — Must-do, ~45 min
 
 **Priority:** Must-do — Workshop-Capstone
-**Type:** Group, ~30 minutes (Discussion) + optional Capstone Track (homework or bonus time)
-**Goal:** Design an ideal Claude Code workflow for a real project.
-This is the synthesis exercise — the goal of the entire workshop.
+**Type:** Individual driver with group observation, ~45 minutes
+**Goal:** Drive Claude Code independently through a small playground change, a guardrail, verification, and a PR-ready handoff.
+This is the synthesis assessment — the goal of the entire workshop.
+
+**Assessment sheet:** `resources/capstone-exit-assessment.md`
 
 > **Note:** Before starting, review the Use Case Blueprints below for inspiration.
 
 ### Format
 
-Groups of 3-4 people.  Each group designs a workflow.
+One participant drives; the other participants observe with the rubric. Rotate drivers if time allows.
 
 ### Your Task
 
-Pick a real project (your work, a side project, the workshop demo).
-Sketch the ideal Claude Code workflow for that project on the whiteboard or paper.
+Pick one small mission in `workshop-playground/`.
+First sketch the Claude Code workflow you would use, then build one concrete slice.
 
-**Your workflow should address:**
+**Your workflow plan should address:**
 
 1. **Hooks:**
    What automation happens without being asked?
@@ -333,10 +335,21 @@ Sketch the ideal Claude Code workflow for that project on the whiteboard or pape
 - What needs human review — where should Claude stop and ask?
 - What could go wrong?  Where are the safety nets?
 
+### Required Build Outputs
+
+Before the exercise is complete, the driver must produce:
+
+1. A small feature or fix in the playground.
+2. One hook, permission rule, deny rule, or documented safety guardrail.
+3. One narrow verification check with a short explanation of what it proves.
+4. One PR-ready handoff: branch/commit summary, risk note, rollback note, and checks run.
+
+Use `resources/capstone-exit-assessment.md` for the observable rubric.
+
 ### Presentation
 
-Each group presents their workflow in 5 minutes.
-Use the whiteboard or walk through your sketch.
+Each driver presents the handoff in 5 minutes.
+Use the whiteboard or walk through the diff and guardrail.
 
 Focus on:
 - What problem does this solve?
@@ -345,9 +358,9 @@ Focus on:
 
 ### This Exercise IS the Workshop Goal
 
-The ability to design this workflow is what we came here for.
+The ability to drive this workflow is what we came here for.
 You now have the vocabulary, the tools, and the mental models.
-The workflow you sketch today should be something you can actually start building tomorrow.
+The build you complete today should be something you can repeat in your own repo tomorrow.
 
 ### Optional: Capstone Track
 

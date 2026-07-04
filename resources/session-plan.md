@@ -162,7 +162,7 @@
 | S4.5 | CI-Pipelines bauen (GitHub Actions / GitLab) | deep-dive | 18 | 3.6 GitHub Actions + GitLab CI + Failure Patterns + Don'ts |
 | S4.6 | Mobile/Remote: remote-control & /teleport | bonus | 12 | 3.5 Built-in Mobile Workflow + Telegram Bridge |
 | S4.7 | Inception (Docker) & Worktree-Isolation tief | bonus | 15 | 3.5 Inception + Worktree Isolation + baseRef + --tmux |
-| S4.8 | Die volle Architektur (Capstone-Diskussion) | bonus | 25 | 3.5 Full Architecture + Complete Analogy + Exercise 3.5 |
+| S4.8 | Bewerteter Capstone-Build | bonus | 25 | 3.5 Full Architecture + Complete Analogy + Exercise 3.5 + `capstone-exit-assessment.md` |
 | S4.9 | Troubleshooting: /debug, --verbose, /doctor | core* | 15 | 3.7 /debug + --verbose + /doctor |
 | S4.10 | Diagnose-Sequenzen (Hook/Skill/Plugin/MCP) | core* | 18 | 3.7 Failure-Diagnosen + 8-Schritt-Checkliste + Demo 3.7 |
 
@@ -188,7 +188,7 @@
 | Exercises 2.1–2.6 | S2.20 (Hands-on-Puffer Session 2; **pick 1 in-session**, Rest optional/Selbststudium) |
 | Exercises 3.1–3.3 | S3.15 (Hands-on-Puffer Session 3; 3.1→S3.4, 3.3→S3.6/S3.7) |
 | Exercise 3.4 (Automation) | S3.12/S3.13 (Scheduling + abgesicherte Loops) |
-| Exercise 3.5 (Capstone / Architecture Discussion) | S4.8 (Die volle Architektur) |
+| Exercise 3.5 (Capstone Exit Build) | S4.8 (Bewerteter Capstone-Build) |
 | Exercise 3.6 (Pre-Commit Hook with Claude) | S4.3–S4.5 (Headless + CI/CD) |
 | Exercise 3.7 (Debug a Broken Hook) | S4.9/S4.10 (Troubleshooting + Diagnose-Sequenzen) |
 | Bonus Exercise 3.8 (HIPAA Guardrails) | S3.11 (Datenschutz/Regulated Industries) |

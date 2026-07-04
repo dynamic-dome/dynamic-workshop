@@ -70,7 +70,7 @@
 | S4.5 | deep-dive | CI-Pipelines bauen (GitHub Actions / GitLab) | 3.6 → *`/autofix-pr`*, *GitHub Actions*, *GitLab CI*, *Self-Hosted Runner*, *Token Rotation*, *Pre-Commit Hook*, *Monitoring CI Costs*, *Common Failure Patterns*, *Don'ts* |
 | S4.6 | bonus | Mobile/Remote: remote-control & /teleport | 3.5 → *Built-in Mobile Workflow*, *Telegram Bridge* |
 | S4.7 | bonus | Inception (Docker) & Worktree-Isolation tief | 3.5 → *Inception*, *Worktree Isolation*, *worktree.baseRef*, *`--tmux`* |
-| S4.8 | bonus | Die volle Architektur (Capstone-Diskussion) | 3.5 → *The Full Architecture*, *The Security Analogy — Complete Picture* (+ Exercise 3.5 Capstone) |
+| S4.8 | bonus | Bewerteter Capstone-Build | 3.5 → *The Full Architecture*, *The Security Analogy — Complete Picture* (+ Exercise 3.5 Capstone + `capstone-exit-assessment.md`) |
 | S4.9 | core* | Troubleshooting: /debug, --verbose, /doctor | 3.7 → *`/debug`*, *`--verbose` and `/doctor`* |
 | S4.10 | core* | Diagnose-Sequenzen (Hook/Skill/Plugin/MCP) | 3.7 → *Hook-Failure*, *Skill Does Not Trigger*, *Plugin*, *MCP Reconnect*, *InstructionsLoaded*, *Auto-Memory Drift*, *The Diagnosis Checklist* |
 
@@ -1239,7 +1239,7 @@ Each `--tmux` invocation drops into a labeled pane inside the current tmux windo
 ---
 
 <!-- LE: S4.8 -->
-> **Ich kann jetzt:** eine vollstaendige Capstone-Architektur mit Agents, Hooks, MCP, RAG und CI diskutieren.
+> **Ich kann jetzt:** einen kleinen Claude-Code-Build mit Feature/Fix, Guardrail, Verifikation und PR-Handoff eigenstaendig treiben.
 
 ### The Full Architecture
 
@@ -1326,6 +1326,8 @@ It runs adversarial tests against itself.
 It patches confirmed findings.
 It keeps a full audit trail.
 It surfaces findings on whichever channel you have wired up — terminal, web, push notification, or a custom bridge.
+
+**Capstone exit assessment:** S4.8 is no longer only a discussion. After this architecture walkthrough, participants run the assessed Capstone Exit Task from `resources/capstone-exit-assessment.md`: one small playground feature or fix, one hook/guardrail, one narrow verification, and one PR-ready handoff. The discussion sketch becomes the plan; the observed build is the proof.
 
 ---
 

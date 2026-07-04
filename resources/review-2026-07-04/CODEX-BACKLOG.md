@@ -334,9 +334,9 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 
 ## WP-21 · [P2] Summative, missions-verankerte Lernzielkontrolle
 **Problem:** Kein Instrument misst „eigenständig und produktiv einsetzen". Die vorhandenen Quizze sind keine valide Assessment-Schicht (siehe WP-14).
-- [ ] Authentische **Capstone-Exit-Aufgabe** mit beobachtbarer Rubrik: Teilnehmer treibt Claude Code unassistiert (Feature + Hook + PR auf dem Playground).
-- [ ] Pro Session ein 5-Item-Entry/Exit-Self-Efficacy-Check.
-- [ ] `S4.8` von „Diskussion" auf „bewerteter Build" heben.
+- [x] Authentische **Capstone-Exit-Aufgabe** mit beobachtbarer Rubrik: Teilnehmer treibt Claude Code unassistiert (Feature + Hook + PR auf dem Playground).
+- [x] Pro Session ein 5-Item-Entry/Exit-Self-Efficacy-Check.
+- [x] `S4.8` von „Diskussion" auf „bewerteter Build" heben.
 **Codex-Fähigkeit:** Bereich: Curriculum-/Didaktik-Redaktion
 
 ## WP-22 · [P2] Transfer-Brücke + Post-Workshop-Retention-Loop
