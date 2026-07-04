@@ -1,5 +1,9 @@
 # Codex Brief: HTML-Integration sectionContent.json → cloud-code-workshop-ui.html
 
+> **Status 2026-07-04:** umgesetzt und historisch. `resources/cloud-code-workshop-ui.html`
+> enthaelt `sectionContent`/`sectionQuiz` inline; die fruehere Generierungsdatei
+> `resources/sectionContent.json` wurde entfernt, damit die HTML-Datei die einzige UI-Content-Quelle ist.
+
 *Erstellt: 2026-06-30 | Phase 2 des UI-Overhaul*
 
 ---

@@ -30,7 +30,7 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 ### Als Selbstlerner
 
 1. `resources/prerequisites.md` durcharbeiten (Installation, Auth, Tools)
-2. `resources/cloud-code-workshop-ui.html` im Browser oeffnen: interaktive 48-Section-Route mit 65-LE-Gesamtkarte, Folien, Uebungen, Bewertung und Quiz
+2. `resources/cloud-code-workshop-ui.html` im Browser oeffnen: kanonische interaktive 48-Section-Route mit 65-LE-Gesamtkarte, Folien, Uebungen, Bewertung und Quiz
 3. `resources/workshop-guide.md` als **Haupt-Navigation** und Lern-Routine nutzen (ersetzt den Moderator); `WORKSHOP_EINFUEHRUNG.md` gibt die Kurz-Orientierung
 4. Block fuer Block durcharbeiten:
    - `resources/modules/block-1-foundations.md` lesen
@@ -125,6 +125,7 @@ Damit ist der Workshop nicht nur "Lehre ueber Claude Code", sondern eine Enablem
 ```
 dynamic_workshop/
 ├── README.md                       ← Du bist hier
+├── HOW-TO-USE.md                   ← Agent-/User-Wegweiser und kanonische Einstiegspfade
 ├── WORKSHOP_EINFUEHRUNG.md         ← Orientierung und Einstieg
 ├── CLAUDE.md                       ← Projektkontext fuer Claude Code
 ├── claude-code-workshop.pptx       ← Praesentationsfolien
@@ -170,7 +171,7 @@ Modulnummern: `1.1`–`1.5`, `2.1`–`2.5`, `3.1`–`3.7`
 
 ## Workshop Playground
 
-Das Verzeichnis `workshop-playground/` enthaelt ein kleines Python-Projekt mit **3 absichtlich eingebauten Sicherheitsluecken** (Command Injection, Hardcoded Credentials, Path Traversal). Es dient als realistisches Uebungsobjekt fuer Demos und Exercises.
+Das Verzeichnis `workshop-playground/` enthaelt ein kleines Python-Projekt mit **5 absichtlich eingebauten Sicherheitsluecken** (Command Injection, Hardcoded Credential, Path Traversal, Log-Injection und fail-OPEN Domain-Logik). Es dient als realistisches Uebungsobjekt fuer Demos und Exercises.
 
 ```bash
 cd workshop-playground

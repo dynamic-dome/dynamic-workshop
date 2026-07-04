@@ -105,7 +105,7 @@ Default-Max ist 25k Tokens, Warning bei 10k. Per-Tool Override mit `_meta["anthr
 ## Permissions
 
 ### 16. Endlose Permission-Prompts
-`/fewer-permission-prompts` Bundled Skill: scant Transcripts, generiert `permissions.allow`-Liste. Alternativ: `/sandbox` toggeln (reduziert Prompts laut Anthropic um ~84%). Oder Permission-Mode wechseln (`acceptEdits` statt `default`).
+`/fewer-permission-prompts` Bundled Skill: scant Transcripts, generiert `permissions.allow`-Liste. Alternativ: `/sandbox` toggeln (reduziert Prompts laut Anthropic um ~84%; Vendor-Zahl, kein Garantiewert). Oder Permission-Mode wechseln (`acceptEdits` statt `default`).
 
 ### 17. Allowed Bash-Command failed mit Permission
 Pattern in `allow:` zu eng. Beispiel: `Bash(npm test)` matched nicht `npm test -v`. Wildcard: `Bash(npm test*)` oder `Bash(npm test *)`. Bei Sonderzeichen: ggf. Quotes oder Escapes pruefen.

@@ -109,7 +109,7 @@
 | S2.17 | MCP-Security & eigenen Server bauen | deep-dive | 18 | 2.4 MCP Security + Build Your Own + Channels |
 | S2.18 | RAG & NotebookLM: dem Agenten Blueprints geben | core | 18 | 2.5 Workflow + Use Cases + Demo 2.5 |
 | S2.19 | RAG-Grenzen & Datenschutz-Abwägung | deep-dive | 10 | 2.5 RAG Limitations + Data-Flow-Disclosure |
-| S2.20 | Hands-on Puffer (Exercise 2.x — pick 2–3) | core | 18 | Exercises 2.1–2.6 |
+| S2.20 | Hands-on Puffer (Exercise 2.x — pick 1 in-session) | core | 18 | Exercises 2.1–2.6 |
 
 **Session 2 Core:** S2.1–S2.4, S2.6–S2.8, S2.11, S2.14, S2.15, S2.18, S2.20 = 12 core-LEs → **177 Min roh** (auf ~145 fahrbar: S2.2 und der S2.20-Puffer sind die elastischen Posten).
 **deep-dive (wenn Zeit):** S2.5 (15) + S2.9 (15) + S2.10 (15) + S2.12 (15) + S2.13 (10) + S2.16 (15) + S2.17 (18) + S2.19 (10) = **113 Min**.
@@ -185,9 +185,14 @@
 | Übungen | Hängen an LE |
 |---|---|
 | Exercises 1.1–1.4 | S1.20 (Hands-on-Puffer Session 1) |
-| Exercises 2.1–2.6 | S2.20 (Hands-on-Puffer Session 2) |
-| Exercises 3.1–3.3 | S3.15 (Hands-on-Puffer Session 3) |
+| Exercises 2.1–2.6 | S2.20 (Hands-on-Puffer Session 2; **pick 1 in-session**, Rest optional/Selbststudium) |
+| Exercises 3.1–3.3 | S3.15 (Hands-on-Puffer Session 3; 3.1→S3.4, 3.3→S3.6/S3.7) |
+| Exercise 3.4 (Automation) | S3.12/S3.13 (Scheduling + abgesicherte Loops) |
 | Exercise 3.5 (Capstone / Architecture Discussion) | S4.8 (Die volle Architektur) |
+| Exercise 3.6 (Pre-Commit Hook with Claude) | S4.3–S4.5 (Headless + CI/CD) |
+| Exercise 3.7 (Debug a Broken Hook) | S4.9/S4.10 (Troubleshooting + Diagnose-Sequenzen) |
+| Bonus Exercise 3.8 (HIPAA Guardrails) | S3.11 (Datenschutz/Regulated Industries) |
+| Exercise 3.9 (OSDP/Wiegand Domain Parser) | S3.4 + S3.6/S3.7 (Multi-Agent/TDD + Security-Audit-Transfer) |
 
 ---
 

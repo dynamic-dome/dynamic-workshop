@@ -145,6 +145,13 @@ Lehrfläche und der Facilitator-Fahrplan sind die *ältesten* Artefakte.
 
 # TIER 1 — Navigations- & Konsistenz-Rückgrat („versprochen, aber fehlt")
 
+> **STATUS 2026-07-04 (Codex, in-Session umgesetzt):**
+> - **WP-05 ✅ ERLEDIGT** — 65 reale `<!-- LE: Sx.y -->`-Anker in den Moduldateien gesetzt und je LE eine „Ich kann jetzt"-Mastery-Grenze ergänzt; Re-Grep/Count = 65.
+> - **WP-06 ✅ ERLEDIGT** — Demo-Skripte mit LE-Bindungen versehen; Exercise-Mapping für 3.4/3.6/3.7/3.8/3.9 ergänzt; S2.20 auf „pick 1 in-session, Rest optional" korrigiert; Block-2-Demozeit 6 Demos/~40 Min.
+> - **WP-07 ✅ ERLEDIGT** — Mentor/Projekttexte auf 5 Hook-Typen (`command/http/mcp_tool/prompt/agent`), `auto`-Verfügbarkeit laut Modul und 5 Playground-Vulns synchronisiert; 84%-Sandbox-Zahl als Vendor-Figure gehedged.
+> - **WP-08 ✅ ERLEDIGT** — `cloud-code-workshop-ui.html` als kanonische UI dokumentiert; alte 9-Modul-UI nach `resources/archive/workshop-learning-dashboard-legacy.html` verschoben; `HOW-TO-USE.md` angelegt.
+> - **WP-09 ✅ ERLEDIGT** — externe `resources/sectionContent.json` entfernt; HTML-inline `sectionContent`/`sectionQuiz` ist die einzige UI-Content-Quelle; historisches Integrationsbriefing entsprechend markiert.
+
 ## WP-05 · [P1] LE-Anker + Per-LE-Mastery-Grenzen real machen
 **Dateien:** `resources/modules/block-*.md` (0 Anker vorhanden), `session-plan.md:203`, `agents/workshop-mentor.md:41`
 - [ ] **Entweder (bevorzugt):** vor jedem LE-Quellabschnitt einen `<!-- LE: Sx.y -->`-Anker setzen (65 Stück),

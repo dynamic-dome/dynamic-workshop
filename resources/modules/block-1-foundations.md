@@ -55,6 +55,9 @@
 
 ---
 
+<!-- LE: S1.2 -->
+> **Ich kann jetzt:** Claude Code starten, eine kleine Datei bauen lassen und das Agenten-Feedback beobachten.
+
 ### First: Hello, Claude Code (do this now — ~5 minutes)
 
 Before any theory, get one success under your belt. Three commands, a visible result:
@@ -84,11 +87,17 @@ Watch what happens: Claude proposes the file, asks permission to write it, creat
 
 ---
 
+<!-- LE: S1.1 -->
+> **Ich kann jetzt:** den Unterschied zwischen Chat-Assistent und Coding-Agent erklaeren und die Sicherheitsimplikation realer Tool-Aktionen benennen.
+
 ### Overview
 
 Claude Code is not a chat interface. It is a command-line tool that gives an AI agent full, active access to your development environment. A chat assistant answers your question and leaves the doing to you; an **agent** takes actions on your behalf — it reads and writes files, runs commands, and checks the results — inside a permission system you control. Understanding that distinction, and the different surfaces Claude Code runs on, is the first mental model to establish.
 
 ---
+
+<!-- LE: S1.3 -->
+> **Ich kann jetzt:** CLI, Desktop, IDE, Web und iOS als Arbeitsflaechen unterscheiden und passend einsetzen.
 
 ### The Five Surfaces
 
@@ -195,6 +204,9 @@ Compare this to a circular saw: the manual tells you how the blade works, the sa
 - **Connect via MCP**: Integrate with external tools — databases, APIs, monitoring systems, GitHub, Slack
 - **Remember across sessions**: Persist context using CLAUDE.md and the memory system
 
+<!-- LE: S1.4 -->
+> **Ich kann jetzt:** die wichtigsten Tool-Namen erkennen und einschaetzen, welche Aktionen Zustimmung brauchen.
+
 ### Built-in Tools Reference
 
 Claude Code works through **tools** — each capability has a specific tool name. These names matter for permissions, hooks, and agent configuration:
@@ -215,6 +227,9 @@ These are the tools you'll actually see in your first sessions — the everyday 
 > **Full tool reference** — `WebSearch`, `WebFetch`, `LSP`, `Skill`, `Agent`, `Monitor`, `AskUserQuestion`, `TaskCreate`/`TaskList`/`TaskUpdate`, `NotebookEdit`, `PowerShell`, and the rest — lives in [`resources/cheatsheet.md`](../cheatsheet.md#built-in-tools). You don't need them on day one; `Skill` and `Agent` are explored in depth in Block 2.1 (Skills) and Block 3.1 (Agents).
 
 ---
+
+<!-- LE: S1.7 -->
+> **Ich kann jetzt:** Modell und Effort-Level nach Aufgabe, Kosten und Reasoning-Tiefe auswaehlen.
 
 ### Model Selection & Cost Awareness
 
@@ -245,6 +260,12 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 > Detailed pricing per million tokens, effort multipliers, and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth.
 
 ---
+
+<!-- LE: S1.5 -->
+> **Ich kann jetzt:** default, acceptEdits und plan als alltagstaugliche Permission-Modi erklaeren.
+
+<!-- LE: S1.6 -->
+> **Ich kann jetzt:** alle sechs Permission Modes inklusive Cloud-Grenzen als Clearance-Level einordnen.
 
 ### Permission System
 
@@ -313,6 +334,9 @@ Claude Code does not have unlimited awareness of your project. It has a context 
 
 ---
 
+<!-- LE: S1.8 -->
+> **Ich kann jetzt:** Kontextfenster, Kompression und begrenzte Aufmerksamkeit praktisch erklaeren.
+
 ### The Context Window
 
 The context window is Claude's active memory for a session. Everything Claude "knows" during your conversation — your files, your instructions, your conversation history, the results of commands it ran — lives in this window.
@@ -342,6 +366,9 @@ Claude's context window works the same way. Active information is on the monitor
 The implication: **don't rely on Claude remembering details from early in a long session.** If something is important, write it down (CLAUDE.md, a file, a note). Make Claude reread it if it's critical.
 
 ---
+
+<!-- LE: S1.10 -->
+> **Ich kann jetzt:** eine CLAUDE.md als Projekt-Standing-Orders lesen, schreiben und begruenden.
 
 ### CLAUDE.md: Your Project Access Policy
 
@@ -382,6 +409,9 @@ You write the policy once. Claude follows it every session, without being remind
 > **Core so far:** the context window fills and auto-compresses, and `./CLAUDE.md` is the standing policy Claude reads every session. That's enough to work productively. If this is your first pass, **jump ahead to "Context Compression" below** (the `/context` and `/compact` commands) and come back to the memory mechanisms here later.
 >
 > The next sections cover the *advanced* memory machinery — Auto-Memory internals, path-scoped rules, `@path` imports, `CLAUDE.local.md`, managed enterprise policy, and multi-repo `--add-dir`. Useful, but not needed for your first sessions.
+
+<!-- LE: S1.11 -->
+> **Ich kann jetzt:** Auto-Memory, rules, lokale Notizen und Managed Policy als getrennte Memory-Layer einordnen.
 
 ### The Memory System: Auto-Memory (Default On)
 
@@ -449,6 +479,9 @@ This rule will be loaded into context **only** when Claude is working on files m
 **Security analogy:** Path-scoped rules are zone-specific security policies. The rules for entering the server room are not the same as the rules for the reception lobby — and the guard at reception should not have to memorize server-room policy on every shift. Each zone has its own policy, loaded only when relevant.
 
 ---
+
+<!-- LE: S1.12 -->
+> **Ich kann jetzt:** `@path`, `--add-dir` und AGENTS.md-Interop ohne Policy-Vermischung erklaeren.
 
 ### `@path` Imports and AGENTS.md Interop
 
@@ -518,6 +551,9 @@ With the env var set, every `--add-dir` path also contributes its own `CLAUDE.md
 >
 > The rest of the module is core again: how compression behaves and the everyday context commands.
 
+<!-- LE: S1.9 -->
+> **Ich kann jetzt:** `/compact` und `/rewind` nutzen, um Kontext aktiv zu steuern.
+
 ### Context Compression: Why It Happens and How to Handle It
 
 When the context fills, Claude auto-compresses. The compression:
@@ -577,6 +613,9 @@ Claude Code's capability is constant. The quality of your results varies entirel
 
 ---
 
+<!-- LE: S1.13 -->
+> **Ich kann jetzt:** vage Prompts in konkrete Arbeitsauftraege mit Scope-Grenzen umformen.
+
 ### Clarity Over Cleverness
 
 The most common mistake with AI tools is being too vague in an attempt to let the AI "figure it out." This is the wrong mental model. Claude Code is not psychic. It works with what you give it.
@@ -635,6 +674,9 @@ Scope is defined. What not to touch is explicit. Success criterion is stated.
 
 ---
 
+<!-- LE: S1.14 -->
+> **Ich kann jetzt:** Explain/Propose/Refine/Execute und Plan Mode als sicheren Arbeitsrhythmus einsetzen.
+
 ### Iterative Work Pattern
 
 For complex tasks, a four-step pattern works well:
@@ -649,6 +691,9 @@ This pattern prevents the scenario where Claude writes 300 lines of code in a di
 **Effort as a prompting lever.** Some tasks benefit from `/effort xhigh` (architecture decisions, root-cause analysis of subtle bugs, multi-file refactors with side-effects to reason about). Others are better with `/effort low` (boilerplate, typo fixes, format-only edits). Choosing the right effort level is itself part of prompting — paying for `max` reasoning on a one-line typo wastes tokens; using `low` for an architectural choice produces shallow results. Match the effort to the cognitive load of the task.
 
 ---
+
+<!-- LE: S1.15 -->
+> **Ich kann jetzt:** Output Styles und Persona-Prompts gezielt fuer unterschiedliche Kommunikationslagen nutzen.
 
 ### Output Styles: Persona-Switching for Different Contexts
 
@@ -783,6 +828,9 @@ Claude Code has native git integration. This means you can manage your entire ve
 
 ---
 
+<!-- LE: S1.16 -->
+> **Ich kann jetzt:** branch, diff, test, commit, push und PR in einem Claude-Code-Flow fuehren.
+
 ### Built-in Git Capabilities
 
 Claude Code can execute git operations as naturally as it writes code:
@@ -804,6 +852,9 @@ change we discussed, commit it with a good message, and push it.
 ```
 
 Claude handles the git mechanics. You review the diff and approve.
+
+<!-- LE: S1.17 -->
+> **Ich kann jetzt:** Git-nahe Slash-Commands fuer Review, Rewind und PR-Arbeit sinnvoll einsetzen.
 
 ### Git-Related Slash Commands
 
@@ -881,6 +932,9 @@ Here is a complete feature development cycle as a single Claude Code session:
 This entire flow happens in conversation. No terminal window switching, no copy-pasting commit messages, no manual `git push` after forgetting to add `-u origin`.
 
 ---
+
+<!-- LE: S1.18 -->
+> **Ich kann jetzt:** Worktrees als isolierte Testlabore fuer Experimente und parallele Arbeit nutzen.
 
 ### Git Worktrees: Parallel Development Without the Risk
 
@@ -1043,6 +1097,9 @@ Claude Code is the same: Opus is the specialist, Sonnet is the seasoned patrol o
 (See **Module 1.1** for the qualitative model overview — context windows, strengths, use cases.)
 
 ---
+
+<!-- LE: S1.19 -->
+> **Ich kann jetzt:** `/cost`, `/usage` und Budget-Caps als Mindestkontrolle fuer Ausgaben verwenden.
 
 ### Token Tracking — Three Tools
 
@@ -1212,6 +1269,9 @@ cache hit, it costs $0.05. Over 10 sessions/day, that's $4.50 vs $0.50 — meani
 See `session-plan.md` for workshop-wide cost estimates.
 
 ---
+
+<!-- LE: S1.20 -->
+> **Ich kann jetzt:** mindestens eine Block-1-Uebung auswaehlen und das Gelernte praktisch nachweisen.
 
 ### Summary: Block 1 Key Takeaways
 

@@ -399,7 +399,7 @@ Configure in `settings.json`:
 
 - Toggle with `/sandbox` in session
 - Applies to `Bash` tool + child processes only (not all tools)
-- Reduces permission prompts by ~84% (Anthropic claim)
+- Reduces permission prompts by ~84% according to Anthropic; treat this as a vendor figure, not an independent benchmark.
 - Two modes: auto-allow sandbox, regular permissions + sandbox
 
 ---

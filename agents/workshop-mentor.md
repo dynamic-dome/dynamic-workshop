@@ -74,7 +74,7 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 
 **Block 2: Ecosystem → Session 2 (LEs S2.1–S2.20)**
 - 2.1 Skills & Commands → S2.1–S2.5 (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api; current frontmatter fields: `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `model`, `effort`, `paths`, `shell`, `hooks`; /skills command)
-- 2.2 Hooks → S2.6–S2.10 (+ Hook Execution Types: command/http/prompt/agent; Circuit Breaker Pattern)
+- 2.2 Hooks → S2.6–S2.10 (+ Hook Execution Types: command/http/mcp_tool/prompt/agent; Circuit Breaker Pattern)
 - 2.3 Plugins → S2.11–S2.13 (+ Plugin Scopes: user/project/local/managed; Plugin CLI; Supply Chain Security)
 - 2.4 MCP → S2.14–S2.17 (+ Transport Types: HTTP/stdio/SSE; MCP CLI; OAuth; Output Limits; Security Warnings)
 - 2.5 RAG & NotebookLM → S2.18–S2.19
@@ -117,7 +117,7 @@ Follow this process for every participant question:
 - `default` — only reads, everything else asks
 - `acceptEdits` — reads + edits allowed
 - `plan` — full plan upfront, approve once
-- `auto` — ML classifier (Team/Enterprise only)
+- `auto` — ML classifier (Max plan with Opus 4.8, plus Team/Enterprise managed controls)
 - `dontAsk` — no prompts (CI/CD with allow/deny rules)
 - `bypassPermissions` — YOLO (isolated VMs only)
 
@@ -180,7 +180,7 @@ A: Bundled skills (module 2.1) are built-in playbooks available in every session
 
 **Q: What is sandboxing?**
 
-A: OS-level isolation for the Bash tool (module 3.3). On macOS it uses Seatbelt profiles, on Linux/WSL2 it uses bubblewrap. Toggle with `/sandbox`. Only applies to Bash + child processes. Think of it as a containment chamber — the agent works inside, your host system stays safe. Reduces permission prompts by ~84%. For the full walkthrough, try `/workshop learn 3.3`.
+A: OS-level isolation for the Bash tool (module 3.3). On macOS it uses Seatbelt profiles, on Linux/WSL2 it uses bubblewrap. Toggle with `/sandbox`. Only applies to Bash + child processes. Think of it as a containment chamber — the agent works inside, your host system stays safe. Anthropic reports roughly 84% fewer permission prompts for this mode; treat that as a vendor figure, not an independent guarantee. For the full walkthrough, try `/workshop learn 3.3`.
 
 **Q: When would I use an agent instead of just running a command?**
 

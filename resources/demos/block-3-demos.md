@@ -19,6 +19,7 @@
 ---
 
 ## Demo 3.1: Multi-Agent Orchestration
+**LE binding:** S3.4 (orchestration patterns).
 
 **Goal:** Show two agents running simultaneously on independent tasks.
 
@@ -68,6 +69,7 @@ This is exactly how a well-run SOC operates."
 ---
 
 ## Demo 3.2: Codex Swarm
+**LE binding:** S4.1 (multi-model staffing) and S4.2 (Codex data-flow boundary).
 
 **Goal:** Show multi-model pipeline — Claude plans, Codex builds in parallel, Claude reviews.
 
@@ -125,6 +127,7 @@ Three different intelligence profiles.  One pipeline.  The result is better than
 ---
 
 ## Demo 3.3: Devil's Advocate — Adversarial Security Testing
+**LE binding:** S3.6 (adversarial pipeline) and S3.7 (review trio).
 
 **Goal:** Show automated penetration testing pipeline.  This demo is the highlight for the CySec audience.
 
@@ -230,6 +233,7 @@ Show both if time permits, or pick the one closest to the audience's daily work.
 ---
 
 ## Demo 3.3b: Permission Modes — From Visitor to Master Key (~5 minutes)
+**LE binding:** S3.8 (advanced permission modes) and S3.9 (trust boundaries).
 
 ### Goal
 Show the 6 permission modes live. Demonstrate how the same task behaves differently under different clearance levels.
@@ -303,6 +307,7 @@ Say: *"You would never give a contractor a master key in a live building. Same r
 ---
 
 ## Demo 3.3c: CVE-Fix Pipeline — From Advisory to PR (~5 minutes)
+**LE binding:** S3.6/S3.7 (security pipeline) with S4.5 PR automation as extension.
 
 ### Goal
 Show Claude fixing a real dependency vulnerability using web search + plan mode + automated PR. This is the "Research-to-Patch" blueprint.
@@ -382,6 +387,7 @@ Reverting keeps the playground in its intended state for later sessions and prev
 ---
 
 ## Demo 3.4: Self-Improve Loop
+**LE binding:** S3.12 (automation forms), S3.13 (budget/worktree safety) and S3.14 (self-improve showcase).
 
 **Goal:** Show a system that analyzes its own weaknesses and fixes them autonomously.
 
@@ -461,6 +467,7 @@ This is what continuous security hardening looks like when applied to software."
 ---
 
 ## Demo 3.5: Full-Stack Architecture & Remote Workflow
+**LE binding:** S4.6 (remote workflow), S4.7 (worktree/isolation) and S4.8 (capstone architecture).
 
 **Teaching point:** What does a productive multi-agent workflow look like from the outside? Worktree-isolation for safety, background-sessions for long-running tasks, remote-control from the phone.
 
@@ -477,7 +484,7 @@ This is what continuous security hardening looks like when applied to software."
 Show how a worktree creates an isolated working tree for risky changes:
 
 ```bash
-git worktree add ../experiment-async-processing feature/async-experiment
+git worktree add ../experiment-async-processing -b feature/async-experiment
 cd ../experiment-async-processing
 claude
 # Make experimental changes — the main branch stays untouched
@@ -547,6 +554,7 @@ This is **a demonstration of the pattern**, not a recommended production setup �
 ---
 
 ## Demo 3.6: Headless Claude in 5 Minutes
+**LE binding:** S4.3 (headless mode) and S4.4 (CI auth/cost caps).
 
 > **⚓ This is the guaranteed-live anchor for Block 3.** It needs only the locally-installed
 > `claude` — no plugin, no Codex, no Internet, no bridge. Step 1 is also used as the 60-second
@@ -632,6 +640,7 @@ If you also want to show `claude setup-token`, do it **offline before the worksh
 ---
 
 ## Demo 3.7: Diagnosing a Broken Skill
+**LE binding:** S4.9 (debug tools) and S4.10 (diagnosis sequence).
 
 **Goal:** Walk the audience through the full diagnostic playbook on a skill that fails three different ways in sequence. Each fix reveals the next problem.
 

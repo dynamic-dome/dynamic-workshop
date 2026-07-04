@@ -43,6 +43,9 @@
 - Use dynamic context injection (`` !`<command>` ``) and argument substitution (`$1`, `$mode`, `${CLAUDE_SESSION_ID}`) to turn static skills into living prompts.
 - Distinguish bundled skills (`/batch`, `/debug`, `/loop`, `/simplify`, `/verify`, `/run`, `/run-skill-generator`, `/fewer-permission-prompts`) and know which problem each one solves.
 
+<!-- LE: S2.1 -->
+> **Ich kann jetzt:** Skills als SOPs und Commands als ausloesbare Buttons unterscheiden.
+
 ### The Core Idea
 
 When you work with Claude Code repeatedly, you notice patterns: you always start sessions the same way, you always ask for commits in the same format, you always want tests written before implementation. Writing these instructions from scratch every time is wasteful and error-prone.
@@ -61,6 +64,9 @@ The alarm button itself is just a trigger. The SOP is the intelligence behind it
 - **Commands = Alarm buttons.** What the operator presses. The "how to trigger it."
 
 A command `/tdd` is the button. The SKILL.md file for TDD is the SOP that Claude reads and follows.
+
+<!-- LE: S2.2 -->
+> **Ich kann jetzt:** eine SKILL.md mit Frontmatter und Body aufbauen.
 
 ### Anatomy of a Skill
 
@@ -127,6 +133,9 @@ hooks:
 | `hooks` | Component-scoped hooks. Only run while this skill is active (see Module 2.2 for hook details) |
 | `context` | `fork` runs the skill in an isolated subagent context (own system prompt + tools) |
 | `agent` | With `context: fork`: which subagent **type** runs it (`Explore` / `Plan` / `general-purpose` / a custom agent name) — a type, not a model |
+
+<!-- LE: S2.5 -->
+> **Ich kann jetzt:** Argumente und dynamische Kontext-Injection in Skills sicher einsetzen.
 
 ### Argument Substitution
 
@@ -281,6 +290,9 @@ mkdir -p ~/.claude/skills/my-workflow
 
 Then in any Claude Code session, you can invoke it: `/my-workflow` or just describe what you want — Claude will match the trigger phrases in the description.
 
+<!-- LE: S2.3 -->
+> **Ich kann jetzt:** `disable-model-invocation` als echte Grenze zwischen Auto- und Manual-Invocation nutzen.
+
 ### Skills vs Commands — Same Thing, Different Defaults
 
 **Important didactic clarification.** In earlier versions of Claude Code, commands and skills were two separate categories. **Since v2.x they have been merged into a single concept.**
@@ -317,6 +329,9 @@ disable-model-invocation: true   # Manual /deploy only — never auto-triggered
 | Lives at | `commands/*.md` or `skills/*/SKILL.md` | `commands/*.md` or `skills/*/SKILL.md` |
 
 **Bottom line:** both names live on, but functionally they are merged. Treat `disable-model-invocation` as the real boundary, not the file path.
+
+<!-- LE: S2.4 -->
+> **Ich kann jetzt:** die wichtigsten bundled skills nennen und fuer typische Aufgaben auswaehlen.
 
 ### Bundled Skills (Built-in, Always Available)
 
@@ -410,11 +425,17 @@ Use `/skills` in any session to see all available skills — bundled, user, proj
 - Write a hook entry in `settings.json` with the right matcher syntax (literal vs. regex), the `if` permission-rule filter, and one of the 5 execution types (command / http / prompt / agent / mcp_tool).
 - Use advanced hook outputs (`updatedToolOutput`, `continueOnBlock`, `terminalSequence`) and `$CLAUDE_EFFORT` to build effort-aware, soft-blocking, redaction-capable hooks.
 
+<!-- LE: S2.6 -->
+> **Ich kann jetzt:** Hooks als Event-Listener mit Matcher, Event und Aktion erklaeren.
+
 ### The Core Idea
 
 Hooks are automated actions that run in response to Claude Code events — without you having to remember to ask. They execute shell commands (scripts, binaries, echo statements, curl calls) at specific moments in Claude's workflow.
 
 Think of hooks as **event listeners** for Claude's behavior. When something happens — Claude uses a tool, Claude finishes a response, Claude is about to run a bash command — a hook can fire.
+
+<!-- LE: S2.7 -->
+> **Ich kann jetzt:** die wichtigsten Hook-Events grob landkarten und passenden Einsatzfaellen zuordnen.
 
 ### Hook Types
 
@@ -456,6 +477,9 @@ In an access control system:
 - An **end-of-shift alarm** fires at 18:00 to remind the control room to check that all zones are secured. **This is Stop** — a scheduled/trigger-based end event.
 
 The sensors don't replace the guards. They automate the repetitive checking so guards can focus on exceptions.
+
+<!-- LE: S2.8 -->
+> **Ich kann jetzt:** einen Hook in settings.json mit Matcher und `if`-Filter konfigurieren.
 
 ### Hook Configuration
 
@@ -558,6 +582,9 @@ When Claude tries to run `rm -rf /tmp/build`, this hook fires, prints the warnin
 
 Hooks add **automated guards** to Claude Code — shell scripts that fire on specific lifecycle events. They are **best-effort** (a malformed matcher, missing executable bit, or hook timeout silently disables them), not a hard security boundary. Pair Hooks with proper permission rules and sandboxing for real isolation.
 
+<!-- LE: S2.9 -->
+> **Ich kann jetzt:** command, http, mcp_tool, prompt und agent hooks nach Einsatzgrenze unterscheiden.
+
 ### Hook Execution Types
 
 Hooks don't just run shell commands. There are five execution types:
@@ -615,6 +642,9 @@ hooks:
 The `pre-deploy-check.sh` only fires while the deploy skill's context is active. As soon as the session leaves the skill, the hook is gone — no need to add a matcher that filters by skill name in a global hook.
 
 **Security analogy:** A guard who is patrolling Zone A carries Zone-A-specific sensors. When they move to Zone B, those sensors don't come along — Zone B has its own. Component-scoped hooks are exactly that: localized, contextual, and they retire automatically.
+
+<!-- LE: S2.10 -->
+> **Ich kann jetzt:** fortgeschrittene Hook-Outputs als Warnung, Kontext oder Schutzschicht einsetzen.
 
 ### Advanced Hook Output — Rewriting, Soft-Blocking, Terminal Feedback
 
@@ -712,6 +742,9 @@ This is especially important when running autonomous loops or multi-agent workfl
 - Choose the right plugin scope (user / project / local / managed) for a given distribution scenario and use `claude plugin install/enable/disable/uninstall/prune` to manage the lifecycle.
 - Identify supply-chain risks of third-party plugins and apply mitigations (review code, pin versions, project scope for team plugins, inspect via `/plugin`).
 
+<!-- LE: S2.11 -->
+> **Ich kann jetzt:** Plugins als Bundle aus Skills, Commands, Agents und Hooks erklaeren.
+
 ### The Core Idea
 
 As you accumulate skills, hooks, agents, and commands, you want to package them together. A **plugin** is that package — a self-contained, distributable bundle that adds a coherent set of capabilities to Claude Code.
@@ -786,6 +819,9 @@ Most fields (skills, commands, agents, hooks, MCP servers) are now **auto-discov
 
 To disable a plugin without deleting it, use `claude plugin disable <name>` rather than renaming files manually.
 
+<!-- LE: S2.12 -->
+> **Ich kann jetzt:** Plugin-Scopes, Marketplace-Installation und Lifecycle grob fuehren.
+
 ### Official Marketplaces
 
 Anthropic runs two first-party plugin marketplaces:
@@ -805,6 +841,9 @@ Add a marketplace once, then install plugins from it by `<name>@<marketplace>`:
 ```
 
 **Submission flow:** To publish your own plugin, go to `claude.ai/settings/plugins/submit`. The form points to your plugin's git repository, Anthropic runs basic validation, and once approved it lands in `claude-community`. Getting into `claude-plugins-official` is a separate, higher-bar review.
+
+<!-- LE: S2.13 -->
+> **Ich kann jetzt:** Plugin-Supply-Chain-Risiken erkennen und einfache Schutzfragen stellen.
 
 ### Notable Plugins in the Ecosystem
 
@@ -906,6 +945,9 @@ Real supply chain risks:
 - Configure OAuth-enabled MCP servers with `--callback-port`, `--client-id`, `--client-secret` and use `${VAR:-default}` env-var expansion for safe team-shared `.mcp.json` files.
 - Recognize MCP-specific risks (prompt injection from untrusted content, token theft, output flooding) and apply mitigations (output limits, permission rules, trusted-server policy).
 
+<!-- LE: S2.14 -->
+> **Ich kann jetzt:** MCP als Integrationsschicht zwischen Claude und externen Systemen erklaeren.
+
 ### The Core Idea
 
 By default, Claude Code can read files, run bash commands, and search the web. MCP (Model Context Protocol) extends this with **connections to external services** — giving Claude Code access to real browsers, databases, communication platforms, and custom APIs.
@@ -950,6 +992,9 @@ Fetches current documentation for any library or framework. Prevents hallucinati
 
 **Custom MCP Servers**
 Any team can build an MCP server that exposes their internal tools. Deploy pipeline? Monitoring system? Bug tracker? Expose it via MCP and Claude can interact with it directly.
+
+<!-- LE: S2.15 -->
+> **Ich kann jetzt:** MCP-Transports, Scopes, CLI-Management und Dateikonfiguration unterscheiden.
 
 ### MCP Transport Types
 
@@ -1009,6 +1054,9 @@ claude --strict-mcp-config           # ONLY use servers from config (no others)
 /mcp                             # Check status, manage OAuth, troubleshoot
 ```
 
+<!-- LE: S2.16 -->
+> **Ich kann jetzt:** OAuth, Output-Limits und Protokolldetails als Betriebsrisiken einschaetzen.
+
 ### MCP OAuth
 
 Claude Code supports OAuth flows for compatible remote MCP servers. When you connect to an OAuth-enabled server, Claude opens a browser for authentication and listens on a callback port.
@@ -1043,6 +1091,9 @@ Large MCP tool outputs can flood your context window. Claude Code has built-in l
 | Per-tool override | up to 500k chars | Set via `_meta["anthropic/maxResultSizeChars"]` |
 
 This matters especially for database queries (MCP Postgres) or large file listings. If you need more data, use the `_meta` override on the specific MCP tool — but be aware of the context cost.
+
+<!-- LE: S2.17 -->
+> **Ich kann jetzt:** MCP-Sicherheitsrisiken benennen und einen einfachen eigenen Server einordnen.
 
 ### MCP Security
 
@@ -1219,6 +1270,9 @@ The MCP server becomes the **shared knowledge layer** for your team's Claude Cod
 - Build a NotebookLM-backed knowledge source end-to-end (`notebooklm create` / `add-source` / `use` / `ask`) and route Claude Code queries to it.
 - Decide whether a given codebase is suitable for NotebookLM (Google-hosted, source content leaves your perimeter) or whether a local RAG alternative is required.
 
+<!-- LE: S2.18 -->
+> **Ich kann jetzt:** RAG/NotebookLM als Blueprint-Schicht fuer aktuelle oder interne Wissensquellen einsetzen.
+
 ### The Problem: Training Cutoff and Niche Knowledge
 
 Claude's training data has a cutoff date. Ask about a library released last month and Claude might guess, hallucinate plausible-looking but wrong API calls, or admit uncertainty.
@@ -1328,6 +1382,9 @@ If you're building anything non-trivial with Claude Code, you will eventually hi
 
 This grounds Claude's answers in **your actual documentation** — Claude cites specific sources, you can verify them, and reduce hallucinations on your stack-specific questions. It is not "expertise upgrade" in the deep-learning sense — it is **document retrieval + citation**, with all the limitations that come with it (see below).
 
+<!-- LE: S2.19 -->
+> **Ich kann jetzt:** RAG-Grenzen, Datenschutz und Citation-Pruefung realistisch einordnen.
+
 ### RAG Limitations
 
 NotebookLM (and any RAG system) has known failure modes:
@@ -1341,6 +1398,9 @@ NotebookLM (and any RAG system) has known failure modes:
 For high-stakes answers: ask Claude to **always cite** the specific source page, then verify manually.
 
 ---
+
+<!-- LE: S2.20 -->
+> **Ich kann jetzt:** mindestens eine Block-2-Uebung auswaehlen und eine Erweiterungsschicht praktisch testen.
 
 ## Summary: The Ecosystem Stack
 

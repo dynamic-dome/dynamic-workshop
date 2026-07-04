@@ -25,7 +25,7 @@
 
 **Welle F (Restrukturierung / 65 Lerneinheiten) ist erledigt** (User-Entscheidung 2026-06-23: 4 Sessions — siehe oberster Bullet).
 
-⚠️ **Playground-Tests vor/nach OSDP-C-Änderungen:** Die 3 absichtlichen Vulns sind Lehr-Material — NICHT „fixen" (außer ein TODO sagt explizit härten/dokumentieren, z.B. T-003). `python -m pytest -q` in `workshop-playground/` muss grün bleiben (18 Tests, harmlos, kein Prod-DB-Risiko).
+⚠️ **Playground-Tests vor/nach OSDP-C-Änderungen:** Die 5 absichtlichen Python-Vulns plus die OSDP-C-Lehrschwächen sind Lehr-Material — NICHT „fixen" (außer ein TODO sagt explizit härten/dokumentieren, z.B. T-003). `python -m pytest -q` in `workshop-playground/` muss grün bleiben (18 Tests, harmlos, kein Prod-DB-Risiko).
 
 ---
 
@@ -111,7 +111,7 @@ und Windows-tauglich machen, ohne Inhalt zu verlieren.
 - **Windows-Umgebung:** Der Maintainer arbeitet auf Windows 11 / PowerShell. Hook-Skripte, Befehle und Exercises brauchen PowerShell-taugliche Varianten (kein blindes `bash`/`jq`/`chmod`/`sed -i`).
 - **Playground-Tests:** Falls du `pytest` im `workshop-playground/` laufen lässt — die Tests dort sind harmlos (kein Production-DB-Risiko), aber prüfe das `conftest`/Setup, bevor du destruktive Test-Schritte ausführst.
 - **Git:** chirurgisch stagen (`git add <pfad>` einzeln, **kein** `git add -A`). Commit/Push nur auf ausdrückliche Anweisung des Users. Nicht auf `main` committen ohne Freigabe.
-- **Die 3 absichtlichen Vulnerabilities** in `workshop-playground/access_control.py` und die in `osdp_frame_decoder.c` sind **Lehr-Material** — NICHT „fixen" (außer ein TODO sagt explizit, eine *zusätzliche, ungeplante* Schwäche zu dokumentieren, z.B. `T-003`).
+- **Die 5 absichtlichen Python-Vulnerabilities** in `workshop-playground/access_control.py` und die OSDP-C-Lehrschwächen in `osdp_frame_decoder.c` sind **Lehr-Material** — NICHT „fixen" (außer ein TODO sagt explizit, eine *zusätzliche, ungeplante* Schwäche zu dokumentieren, z.B. `T-003`).
 
 ## 6. Was du NICHT tun sollst
 

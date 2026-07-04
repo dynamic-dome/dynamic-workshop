@@ -86,6 +86,9 @@
 - Pick the right orchestration pattern (Fan-Out/Fan-In, Pipeline, Hierarchical) for a given multi-agent task and quantify the speed gain versus sequential execution.
 - Distinguish synchronous subagents (`Agent` tool) from background sessions (`claude --bg`, `claude agents`, `attach/logs/stop/respawn`) and know when to use each.
 
+<!-- LE: S3.1 -->
+> **Ich kann jetzt:** Agents als spezialisierte Claude-Instanzen mit eigenem Kontext erklaeren.
+
 ### What Is an Agent?
 
 An agent is an **autonomous Claude instance** with a specific role, a specific set of tools,
@@ -144,6 +147,9 @@ The orchestrating Claude stays at the top, aggregating results.
 
 ---
 
+<!-- LE: S3.2 -->
+> **Ich kann jetzt:** Explore, Plan und general-purpose als eingebaute Subagents passend auswaehlen.
+
 ### Built-in Subagents (Ships with Claude Code)
 
 Before defining custom subagents, Claude Code already provides three built-in ones you can invoke directly:
@@ -157,6 +163,9 @@ Before defining custom subagents, Claude Code already provides three built-in on
 Claude routes to these automatically when your prompt matches their job description (e.g., "explore the project structure" → Explore). You can also force one with `Agent(subagent_type="Explore", prompt=...)`. Most workshop demos focus on **custom subagents** below — but knowing the built-ins prevents you from reinventing scouts and planners.
 
 ---
+
+<!-- LE: S3.3 -->
+> **Ich kann jetzt:** einen Custom Subagent mit YAML-Frontmatter, Tools und Grenzen definieren.
 
 ### Agent Definition Anatomy
 
@@ -239,6 +248,9 @@ Useful when the CI runner does not own a persistent `.claude/agents/` directory 
 
 ---
 
+<!-- LE: S3.4 -->
+> **Ich kann jetzt:** Fan-Out, Pipeline und Hierarchie als Orchestrierungsformen unterscheiden.
+
 ### Orchestration Patterns
 
 #### Pattern 1: Fan-Out / Fan-In
@@ -317,6 +329,9 @@ Five files → five worktrees → five Sonnet subagents in parallel → five PRs
 
 Use `/tasks` (alias `/bashes`) to see all running background tasks in your session. When you spawn parallel agents or long-running operations, this is your dashboard.
 
+<!-- LE: S3.5 -->
+> **Ich kann jetzt:** Background-Sessions und Agent Teams als fortgeschrittene Koordinationsformen einordnen.
+
 ### Agent Teams (Experimental)
 
 Beyond subagents (which are one-shot workers), Claude Code supports **Agent Teams** — multi-session coordination where agents can communicate with each other:
@@ -379,12 +394,18 @@ Plus `claude daemon status` for a quick health check of the background-session s
 
 ---
 
+<!-- LE: S3.15 -->
+> **Ich kann jetzt:** eine passende Block-3-Uebung auswaehlen und Multi-Agent/Security praktisch nachweisen.
+
 ## Module 3.2: Nested Orchestration & Multi-Model Pipelines
 
 **Learning Objectives:** After this module, you can:
 - Map task phases (plan / implement / review) to the right model (Opus / Sonnet / Haiku / Codex) and justify the choice from cost and judgement perspectives.
 - Identify the data-flow boundary in a Claude-Codex pipeline (which provider sees which code) and choose between skip-Codex, local-model substitution, or signature-only stripping for sensitive code.
 - Use a multi-model pipeline (e.g. Codex Swarm with `--decompose`) for parallel implementation and aggregate the results via Claude review.
+
+<!-- LE: S4.1 -->
+> **Ich kann jetzt:** Modelle nach Phase und Reasoning-Bedarf in einer Pipeline staffeln.
 
 ### Different Models, Different Strengths
 
@@ -413,6 +434,9 @@ Using both together beats either alone.
 A 1000-token spec reviewed by Opus is ~$0.025. The same review by Haiku is ~$0.005. Across 200 PRs per month, that compounds.
 
 ---
+
+<!-- LE: S4.2 -->
+> **Ich kann jetzt:** Codex-Swarm und Datenflussgrenzen zwischen Claude und OpenAI erklaeren.
 
 ### Data Flow — What Goes Where?
 
@@ -510,6 +534,9 @@ All 4 Codex agents run simultaneously.  Claude reviews the assembled result.
 > **Note to moderator:** Frame this as automated penetration testing with a trial system.
 > Because that is literally what it is.  The CySec person will feel very at home.
 
+<!-- LE: S3.6 -->
+> **Ich kann jetzt:** eine adversariale Security-Pipeline mit Scan, Debate, Consensus und Fix erklaeren.
+
 ### The Devil's Advocate Swarms Pipeline
 
 A **multi-agent adversarial system** for finding and fixing security and quality issues.
@@ -601,6 +628,9 @@ For each confirmed finding, a fixer agent:
 
 ---
 
+<!-- LE: S3.7 -->
+> **Ich kann jetzt:** `/security-review`, `/review` und `/ultrareview` als Review-Trio passend einsetzen.
+
 ### Security Audit Skill
 
 The `/security-audit` skill provides automated scanning for any project receiving external input.
@@ -658,6 +688,9 @@ Three official slash-commands cover the common review surface — before reachin
 - Apply the right combination of permission modes, protected paths, permission-rule grammar, sandbox-level network hardening (`sandbox.network.deniedDomains`, `autoMode.hard_deny`), and skill-shell hardening (`disableSkillShellExecution`) for autonomous workflows.
 - Read the data-retention tiers and map the workshop's controls onto the compliance regimes (EN 50131, GDPR, HIPAA, PCI, DORA, NIS2) relevant to your industry.
 
+<!-- LE: S3.8 -->
+> **Ich kann jetzt:** fortgeschrittene Permission-Modi fuer autonome Arbeit mit ihren Risiken bewerten.
+
 ### Permission Modes — Going Deeper
 
 > **See Module 1.1 for the 6 modes overview** — the full table (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) lives there. This module skips the recap and dives only into the **advanced modes** (`auto`, `dontAsk`, `bypassPermissions`) and their CI/CD patterns.
@@ -705,6 +738,9 @@ Tips for CI: pair `--permission-mode dontAsk` with `--max-budget-usd` as a hard 
 
 ---
 
+<!-- LE: S3.9 -->
+> **Ich kann jetzt:** Protected Paths, Sandbox-Stufen und Trust Boundaries praktisch erklaeren.
+
 ### Protected Paths — What Claude *Refuses* to Touch
 
 Even in `bypassPermissions` Claude Code maintains an **unconditional protection list**. These paths cannot be written to without an explicit override flag, no matter how broad the permission mode:
@@ -744,6 +780,9 @@ The familiar `Bash(rm *)` pattern is only one rule family. The full permission-r
 Use these in your project `settings.json` to enforce policy without depending on the user picking the right mode at runtime.
 
 ---
+
+<!-- LE: S3.10 -->
+> **Ich kann jetzt:** Netzwerk- und Skill-Hardening fuer riskante Automationen begruenden.
 
 ### Sandbox-Level Network Hardening
 
@@ -796,6 +835,9 @@ Run generated code without risk to host.
 
 Full VM per agent.  Complete network isolation.
 For analyzing genuinely dangerous code samples.
+
+<!-- LE: S3.11 -->
+> **Ich kann jetzt:** Datenschutz, Retention und regulierte Branchen als Workshop-Entscheidungspunkte einordnen.
 
 ### Data Retention & Privacy
 
@@ -884,6 +926,9 @@ This is not optional hardening — it is the default design.
 - Pair every autonomous loop with `--max-budget-usd` and use `--worktree` to scope scheduled tasks to a dedicated branch.
 - Explain when to reach for a self-improve loop (with safety mechanisms: quality gates, hooks, max iterations) and recognize the failure modes (cost runaway, false fixes, memory drift).
 
+<!-- LE: S3.12 -->
+> **Ich kann jetzt:** `/schedule`, `/loop`, `/goal` und Routines als Automationsformen unterscheiden.
+
 ### Cronjobs with `/schedule`
 
 Remote agents that run on cron schedules — even when your laptop is closed.
@@ -957,6 +1002,9 @@ Routines vs. ad-hoc `/schedule`: `/schedule` creates one entry; routines are the
 
 ---
 
+<!-- LE: S3.13 -->
+> **Ich kann jetzt:** autonome Loops mit Budget-Cap, Worktree und Channel-Grenzen absichern.
+
 ### `--max-budget-usd` — Safety Net for Autonomous Loops
 
 Both `/loop` and `/agentic-os:run-loop` can burn tokens in a tight cycle if a tool keeps returning failures and Claude keeps retrying. The **hard cost cap** lives at the CLI level:
@@ -991,6 +1039,9 @@ claude --worktree routines/daily-build-report -p "/schedule daily 06:00 ..."
 Block 3.5 shows the **Telegram Bridge** as a :wrench: custom pattern: outside world pushes messages into a Claude session. The **official equivalent is Channels** — MCP servers can push messages directly into a running Claude Code session (research-preview status today). Same pattern, no custom bridge code, audit-logged via the MCP layer. We will treat the Telegram Bridge as a teaching example for the pattern, but in production you would reach for Channels first.
 
 ---
+
+<!-- LE: S3.14 -->
+> **Ich kann jetzt:** Self-Improve-Loops als Showcase mit klaren Grenzen und Risiken erklaeren.
 
 ### Self-Improve Loops
 
@@ -1063,6 +1114,9 @@ No human involvement.  Full audit trail.
 - Pick the right isolation level (worktree / Docker via Inception / remote VM) for a given task and configure `worktree.baseRef` and `--tmux` for multi-agent visibility.
 - Wire up `PushNotification` and Channels (research preview) to receive task completions without polling, and explain when to reach for the official API versus a custom bridge.
 
+<!-- LE: S4.6 -->
+> **Ich kann jetzt:** mobile/remote Workflows von custom Telegram-Bridges unterscheiden.
+
 ### Built-in Mobile Workflow — `claude remote-control` + `/teleport`
 
 Before showing the custom Telegram Bridge, look at what Claude Code already provides out-of-the-box for mobile/remote use:
@@ -1109,6 +1163,9 @@ For single-user "drive my laptop from my phone" scenarios, `claude remote-contro
 **`PushNotification` Tool** — A built-in tool that can emit a desktop or phone push when a task completes (for example, "Build done. 3 PRs ready for review."). Pair it with long-running background agents when you want a notification on completion instead of polling the session.
 
 ---
+
+<!-- LE: S4.7 -->
+> **Ich kann jetzt:** Inception, Worktree-Isolation und tmux als fortgeschrittene Isolationsmuster einordnen.
 
 ### Inception — Claude Code Inside Docker
 
@@ -1177,6 +1234,9 @@ claude --worktree feature/ui-migration --tmux
 Each `--tmux` invocation drops into a labeled pane inside the current tmux window — your three migration agents are visible side-by-side, output streams continuously, you can switch focus with the normal tmux bindings. Without `--tmux` you would either juggle three terminals or read logs after the fact. With `--tmux`, the multi-agent run becomes a live cockpit.
 
 ---
+
+<!-- LE: S4.8 -->
+> **Ich kann jetzt:** eine vollstaendige Capstone-Architektur mit Agents, Hooks, MCP, RAG und CI diskutieren.
 
 ### The Full Architecture
 
@@ -1291,6 +1351,9 @@ Claude Code is the same dual creature: an interactive partner *and* a scriptable
 
 ---
 
+<!-- LE: S4.3 -->
+> **Ich kann jetzt:** `claude -p` als nicht-interaktive Pipeline-Stufe einsetzen.
+
 ### Headless Mode — `claude -p`
 
 `claude -p "<prompt>"` runs Claude as a **one-shot command** instead of opening an interactive loop. Default output is plain text on stdout; exit code 0 on success, non-zero on failure.
@@ -1330,6 +1393,9 @@ The output is JSON that matches the schema — your downstream `jq` / Python / N
 **Security analogy:** A patrol report on a clipboard form, not a free-form story. The form forces consistent fields — incident type, severity, location — so the dispatcher can aggregate across patrols.
 
 ---
+
+<!-- LE: S4.4 -->
+> **Ich kann jetzt:** CI-Auth, Cost-Caps und Cost-Engineering in automatisierten Laeufen verbinden.
 
 ### CI Auth — `claude setup-token`
 
@@ -1401,6 +1467,9 @@ claude -p "Review the diff" \
 ```
 
 ---
+
+<!-- LE: S4.5 -->
+> **Ich kann jetzt:** Claude Code in GitHub/GitLab-CI mit Review-, Budget- und Failure-Grenzen einbauen.
 
 ### `/autofix-pr` — Claude in the PR Loop
 
@@ -1652,6 +1721,9 @@ This module gives you the inspection commands per layer.
 
 ---
 
+<!-- LE: S4.9 -->
+> **Ich kann jetzt:** `/debug`, `--verbose` und `/doctor` nach Diagnosefrage auswaehlen.
+
 ### `/debug` — The Bundled Debug Skill
 
 `/debug` is a bundled skill that **activates verbose trace logging for the current session**. Once active, Claude reports — in line — which skills it considered, which trigger phrases matched, which hooks fired, which tools were invoked, and which configuration files were consulted.
@@ -1702,6 +1774,9 @@ Use this when the question is *"What does Claude even think is configured right 
 `--verbose` is **descriptive** (what is configured), `/doctor` is **prescriptive** (what is wrong), `/debug` is **investigative** (what happened on this turn).
 
 ---
+
+<!-- LE: S4.10 -->
+> **Ich kann jetzt:** Hook-, Skill-, Plugin- und MCP-Fehler layerweise diagnostizieren.
 
 ### Hook-Failure Diagnosis
 
