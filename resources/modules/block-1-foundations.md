@@ -296,6 +296,8 @@ Claude Code has a built-in permission system that controls which tools it can us
 
 **Security analogy:** This is card access clearance levels. A visitor badge gets you through the lobby but not the server room. A maintenance badge opens utility closets but not the executive floor. Each Claude session has a clearance level — you decide what it can access. The permission mode sets the *default* clearance, and allow/deny rules fine-tune individual doors.
 
+**Quick check (ungraded, 60 seconds):** "Name the clearance level you would give Claude for a repo you have never seen." Good answers choose `default` or `plan` and mention least privilege.
+
 ---
 
 ### What Claude Code Cannot Do
@@ -401,6 +403,8 @@ In physical security, a new contractor arriving on site is handed the site acces
 CLAUDE.md is exactly this. Every session, Claude reads the policy before doing anything. If the policy says "always run pytest before committing," Claude will always run pytest before committing. If it says "never modify the legacy firmware parser," Claude will treat that as a hard boundary.
 
 You write the policy once. Claude follows it every session, without being reminded.
+
+**Quick check (ungraded, 60 seconds):** "Name one standing order that belongs in `CLAUDE.md` for your team." Good answers are persistent project rules, not one-off prompts.
 
 ---
 

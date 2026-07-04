@@ -348,8 +348,8 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 
 ## WP-23 · [P2] Retrieval-/Recap-Brücken zwischen Sessions
 **Problem (Retrieval & Spacing):** Nur S3 hat einen Opener-Anker; PPT-Start ist passives Review. Bei TBD-Terminen (Wochen Abstand) ist Vergessen hoch.
-- [ ] Für S2/S3/S4 je einen 5-Min-Aktiv-Recall-Opener (3–5 Fragen zur Vorsession) **vor** der PPT verankern.
-- [ ] In-Session Quick-Checks nach den Analogie-Clustern (z.B. nach S1.6 Permission-Modi, nach S1.10 CLAUDE.md) — optional/unbenotet.
+- [x] Für S2/S3/S4 je einen 5-Min-Aktiv-Recall-Opener (3–5 Fragen zur Vorsession) **vor** der PPT verankern.
+- [x] In-Session Quick-Checks nach den Analogie-Clustern (z.B. nach S1.6 Permission-Modi, nach S1.10 CLAUDE.md) — optional/unbenotet.
 **Codex-Fähigkeit:** Bereich: Curriculum-/Didaktik-Redaktion
 
 ## WP-24 · [P2] Security-Analogien über Session 4 fortführen (inverses Fading beheben)

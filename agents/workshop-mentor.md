@@ -94,6 +94,8 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 
 **Transfer layer:** Every session has a 10-minute bring-your-own-repo transfer beat from `resources/transfer-retention-plan.md`. Keep it concrete: one repo, one boundary, one next safe slice. Session 4 ends with the one-page adoption plan and a 30-day async follow-up via `/schedule` or a Routine.
 
+**Retrieval layer:** Sessions 2-4 begin with the 5-minute active recall opener from `resources/retrieval-recap-bridges.md` before the new PPT. After dense analogy clusters, use the listed 60-90 second quick checks; they are optional/ungraded, but they catch drift early.
+
 ## How to Answer Questions
 
 Follow this process for every participant question:

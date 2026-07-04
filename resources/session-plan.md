@@ -217,8 +217,19 @@ Jede LE folgt demselben Muster:
 4. **Bring-your-own-repo Transfer** — 10 Minuten heutige Fertigkeit auf ein echtes Job-Repo abbilden
 5. **Mit Cheat Sheet absichern** — Quick-Reference
 
-Jede Session startet weiterhin **visuell mit der PPT** (`claude-code-workshop.pptx`), dann Vertiefung in die LEs.
+Session 1 startet weiterhin **visuell mit der PPT** (`claude-code-workshop.pptx`). Sessions 2-4 starten mit einem 5-Minuten Active-Recall-Opener aus `resources/retrieval-recap-bridges.md`, dann sofort mit der neuen PPT.
 Durchgängige Physical-Security-Analogien und optionale Exercises bleiben erhalten.
+
+## Retrieval-/Recap-Bruecken
+
+Quelle: `resources/retrieval-recap-bridges.md`.
+
+| Zeitpunkt | Format | Zweck |
+|---|---|---|
+| Vor Session 2 PPT | 5 Fragen aus Session 1 | Foundations aktiv abrufen, nicht nur Folien wiedersehen |
+| Vor Session 3 PPT | 5 Fragen aus Session 2 | Ecosystem-Begriffe reaktivieren |
+| Vor Session 4 PPT | 5 Fragen aus Session 3 | Advanced-Kern vor Bonus/Capstone stabilisieren |
+| Nach dichten Analogie-Clustern | 60-90s Quick-Check | Missverstaendnisse sofort sichtbar machen, unbenotet |
 
 ## Bring-your-own-repo Transfer-LEs
 
