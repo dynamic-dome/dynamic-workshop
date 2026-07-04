@@ -37,7 +37,7 @@
 
       /* Text */
       --ink:             #e8f0d8;
-      --muted:           #5a6b50;
+      --muted:           #8a9b80;
       --text-accent:     #f59e0b;
 
       /* Borders */
@@ -75,6 +75,11 @@
     }
 
     * { box-sizing: border-box; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-primary);
+      outline-offset: 2px;
+    }
 
     body {
       margin: 0;
@@ -814,7 +819,7 @@
       border: 1px solid var(--line);
       background: var(--surface);
       color: var(--muted);
-      font-size: 9px;
+      font-size: 10.5px;
       font-family: var(--mono);
       display: grid;
       place-items: center;
@@ -1173,7 +1178,7 @@
           <button id="route65" type="button">Alle 65</button>
         </div>
       </div>
-      <input class="side-search" id="search" type="search" placeholder="Section suchen...">
+      <input class="side-search" id="search" type="search" placeholder="Section suchen..." aria-label="Section suchen">
       <nav class="session-nav" id="nav"></nav>
     </aside>
 
@@ -2796,15 +2801,21 @@
       activeId = id;
       const route = routeSectionsNoSearch();
       if (!route.some(s => s.id === activeId)) activeId = route[0]?.id || "S1.1";
+      const focusTarget = document.activeElement?.classList?.contains("map-cell") ? "map-cell" : "nav-item";
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       renderAll();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      requestAnimationFrame(() => {
+        const activeControl = document.querySelector(`.${focusTarget}[data-id="${activeId}"]`);
+        activeControl?.focus({ preventScroll: true });
+      });
+      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
 
       // SOC Tactical: Sector-Flash + Scan-Line + Status-Bar Update
       const secNum = activeId.replace("S","").replace(".", "-");
       const flashOverlay = document.getElementById("soc-flash-overlay");
       const flashText = document.getElementById("soc-flash-text");
       const statusRight = document.getElementById("socStatusRight");
-      if (flashOverlay && flashText) {
+      if (!reduceMotion && flashOverlay && flashText) {
         flashText.textContent = `ACCESSING SECTOR T-${secNum}...`;
         flashOverlay.style.transition = "opacity 100ms ease";
         flashOverlay.style.opacity = "1";
@@ -2816,20 +2827,23 @@
       if (statusRight) {
         statusRight.textContent = `SECTOR T-${secNum} ACCESSED • CLEARANCE GRANTED`;
         statusRight.style.animation = "none";
-        // Amber blink 3x
-        let blinks = 0;
-        const blinkInterval = setInterval(() => {
-          statusRight.style.opacity = statusRight.style.opacity === "0" ? "1" : "0";
-          blinks++;
-          if (blinks >= 6) {
-            clearInterval(blinkInterval);
-            statusRight.style.opacity = "1";
-          }
-        }, 130);
+        statusRight.style.opacity = "1";
+        if (!reduceMotion) {
+          // Amber blink 3x
+          let blinks = 0;
+          const blinkInterval = setInterval(() => {
+            statusRight.style.opacity = statusRight.style.opacity === "0" ? "1" : "0";
+            blinks++;
+            if (blinks >= 6) {
+              clearInterval(blinkInterval);
+              statusRight.style.opacity = "1";
+            }
+          }, 130);
+        }
       }
       // Scan-Line: CSS animation via class toggle
       const mainEl = document.querySelector(".main");
-      if (mainEl) {
+      if (!reduceMotion && mainEl) {
         mainEl.classList.remove("scanning");
         void mainEl.offsetWidth; // force reflow
         mainEl.classList.add("scanning");
