@@ -875,7 +875,7 @@
 
     .bar-row {
       display: grid;
-      grid-template-columns: 68px 1fr 42px;
+      grid-template-columns: 132px 1fr 42px;
       align-items: center;
       gap: 8px;
       color: var(--ink);
@@ -897,6 +897,10 @@
       border-radius: inherit;
       background: var(--cyan);
       width: var(--w);
+    }
+
+    .session-budget.over-budget {
+      color: var(--red);
     }
 
     .final-quiz {
@@ -1117,7 +1121,7 @@
           <h1>Workshop Lern-Cockpit</h1>
         </div>
         <p>48-Section-Durcharbeitungsroute auf Basis der aktuellen 4-Session-/65-LE-Struktur.</p>
-        <div class="route-toggle" aria-label="Lernroute umschalten">
+        <div class="route-toggle" aria-label="Lernroute umschalten" title="48 = Pflicht-Core plus fruehe Vertiefungen; 65 = komplette Landkarte.">
           <button id="route48" class="active" type="button">48 Route</button>
           <button id="route65" type="button">Alle 65</button>
         </div>
@@ -2511,7 +2515,8 @@
       $("resourceLinks").innerHTML = [
         [`modules/block-${block}-${["","foundations","ecosystem","advanced"][block]}.md`, "Modul"],
         [`demos/block-${block}-demos.md`, "Demo"],
-        [`exercises/block-${block}-exercises.md`, "Exercise"]
+        [`exercises/block-${block}-exercises.md`, "Exercise"],
+        ["cheatsheet.md", "Cheatsheet"]
       ].map(([href, label]) => `<a href="${href}" target="_blank">↗ ${label}</a>`).join("");
       $("routeNote").textContent = routeMode === "48" ? "Durcharbeitungsroute" : "Gesamtkarte";
       $("conceptLead").textContent = c.concept;
@@ -2727,9 +2732,10 @@
       $("sessionBars").innerHTML = [1,2,3,4].map(session => {
         const items = route.filter(s => s.session === session);
         const done = items.filter(s => state.done[s.id]).length;
+        const minutes = items.reduce((sum, item) => sum + item.min, 0);
         const pct = items.length ? Math.round(done / items.length * 100) : 0;
         return `<div class="bar-row">
-          <span>S${session}</span>
+          <span class="session-budget ${minutes > 150 ? "over-budget" : ""}">S${session}: ${minutes} Min / ~150</span>
           <div class="bar"><span style="--w:${pct}%"></span></div>
           <span>${pct}%</span>
         </div>`;

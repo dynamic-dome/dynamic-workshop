@@ -69,10 +69,22 @@ def test_tactical_theme_has_no_blocking_navigation_effects():
     assert "`${activeId} ACCESSED`" in source
 
 
+def test_route_transparency_shows_budget_and_reference_link():
+    source = UI_HTML.read_text(encoding="utf-8")
+
+    assert "48 = Pflicht-Core plus fruehe Vertiefungen; 65 = komplette Landkarte." in source
+    assert '["cheatsheet.md", "Cheatsheet"]' in source
+    assert "const minutes = items.reduce((sum, item) => sum + item.min, 0);" in source
+    assert "S${session}: ${minutes} Min / ~150" in source
+    assert "minutes > 150" in source
+    assert ".session-budget.over-budget" in source
+
+
 if __name__ == "__main__":
     test_quiz_shuffle_uses_real_fisher_yates_permutation()
     test_exercise_scoring_is_feedback_only()
     test_cumulative_quiz_books_the_asked_section()
     test_final_quiz_uses_recall_questions_not_theme_labels()
     test_tactical_theme_has_no_blocking_navigation_effects()
+    test_route_transparency_shows_budget_and_reference_link()
     print("OK - workshop UI behavior checks passed.")

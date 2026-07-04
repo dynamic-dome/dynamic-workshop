@@ -241,6 +241,7 @@ Falsch: S3.4 „…Pipeline"→`ci` (statt agents), S3.6 „…Security-Pipeline
 > **STATUS 2026-07-04 (Codex):**
 > - **WP-14 ✅ ERLEDIGT** — UI-Exercises werden aus dem konkreten `checkpoint` generiert; Exercise-Score ist nur noch Feedback ohne Auto-Done und ohne Laengen-Score; Kurzquiz rotiert offene Route-Fragen und bucht `q.id`; Final-Quiz nutzt echte `sectionQuiz`-Recall-Fragen; erfolgreiche Quizantworten setzen die geprüfte Section auf Done; Schwelle auf 70 vereinheitlicht.
 > - **WP-15 ✅ ERLEDIGT** — Vollbild-`ACCESSING`-Overlay, Scan-Line, Statusbar-`amber-flicker`, Blink-Intervall und kuenstliche `T-xxx`-Sektorcodes entfernt; Statusrail bleibt ruhig mit echten Section-IDs (`Sx.y ACCESSED`), Amber/Security-Framing bleibt erhalten.
+> - **WP-16 ✅ ERLEDIGT** — Route-Toggle hat einen Tooltip zur 48/65-Bedeutung; Resource-Links enthalten das `cheatsheet.md`; Session-Bars zeigen aktive Minutenbudgets als `Sx: n Min / ~150` und markieren >150 Minuten rot.
 
 ## WP-14 · [P2] Assessment-Überholung: echte Checkpoints prüfen statt Keyword-Gate
 **Datei:** `resources/cloud-code-workshop-ui.html` (2610–2642 Übung, 2665–2727 Quizze)
