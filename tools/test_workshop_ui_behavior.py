@@ -51,9 +51,28 @@ def test_final_quiz_uses_recall_questions_not_theme_labels():
     assert "Themenfamilie" not in body
 
 
+def test_tactical_theme_has_no_blocking_navigation_effects():
+    source = UI_HTML.read_text(encoding="utf-8")
+    forbidden = [
+        "amber-flicker",
+        "soc-flash",
+        "ACCESSING",
+        "SECTOR T",
+        "scan-line",
+        ".main.scanning",
+        "blinkInterval",
+    ]
+
+    for token in forbidden:
+        assert token not in source
+    assert "S1.1 STANDBY" in source
+    assert "`${activeId} ACCESSED`" in source
+
+
 if __name__ == "__main__":
     test_quiz_shuffle_uses_real_fisher_yates_permutation()
     test_exercise_scoring_is_feedback_only()
     test_cumulative_quiz_books_the_asked_section()
     test_final_quiz_uses_recall_questions_not_theme_labels()
+    test_tactical_theme_has_no_blocking_navigation_effects()
     print("OK - workshop UI behavior checks passed.")

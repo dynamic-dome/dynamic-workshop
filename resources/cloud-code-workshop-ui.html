@@ -124,7 +124,6 @@
       justify-content: space-between;
       padding: 0 16px;
       z-index: 200;
-      animation: amber-flicker 9s ease-in-out infinite;
       backdrop-filter: blur(8px);
     }
 
@@ -371,20 +370,6 @@
       padding: 22px 28px 34px;
       overflow: hidden;
       position: relative;
-    }
-
-    /* Scan-Line Sweep (JS-triggered via .scanning class) */
-    .main.scanning::after {
-      content: "";
-      position: fixed;
-      left: 280px;
-      right: 330px;
-      height: 2px;
-      background: var(--accent-primary);
-      box-shadow: 0 0 12px var(--accent-primary), 0 0 24px rgba(245,158,11,0.4);
-      pointer-events: none;
-      z-index: 100;
-      animation: scan-line 400ms ease-out forwards;
     }
 
     .topbar {
@@ -1080,13 +1065,6 @@
       66%      { transform: translate(20px, -50px) scale(0.95); }
     }
 
-    /* Amber-Flicker: Phosphor-Monitor-Simulation */
-    @keyframes amber-flicker {
-      0%,89%,91%,97%,100% { opacity: 1; }
-      90%                  { opacity: 0.65; }
-      98%                  { opacity: 0.82; }
-    }
-
     /* Heartbeat: Progress-Ring (Bioluminescent Steal, amber recolor) */
     @keyframes heartbeat {
       0%  { transform: scale(1);    box-shadow: 0 0 0 0    rgba(245,158,11,0.6); }
@@ -1100,12 +1078,6 @@
     @keyframes dot-pulse {
       0%,100% { box-shadow: 0 0 4px rgba(34,197,94,0.4); }
       50%     { box-shadow: 0 0 12px rgba(34,197,94,0.95), 0 0 24px rgba(34,197,94,0.3); }
-    }
-
-    /* Scan-Line: Section-Wechsel (JS-triggered via .scanning class) */
-    @keyframes scan-line {
-      0%   { top: 28px; opacity: 1; }
-      100% { top: 100vh; opacity: 0; }
     }
 
     /* Card-Slide-In: Staggered beim Section-Load */
@@ -1127,28 +1099,6 @@
       }
     }
 
-    /* Sector-Flash Overlay (statisch positioniert, JS steuert opacity) */
-    #soc-flash-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-    }
-
-    #soc-flash-overlay span {
-      font-family: var(--mono);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent-primary);
-      text-shadow: 0 0 20px rgba(245,158,11,0.6);
-    }
-
   </style>
 </head>
 <body>
@@ -1156,11 +1106,8 @@
   <div class="soc-status-bar" id="socStatusBar">
     <span class="soc-left"><span class="soc-status-dot"></span>SYSTEM ONLINE</span>
     <span class="soc-center">CLAUDE CODE WORKSHOP — DYNAMIC WORKSHOP</span>
-    <span class="soc-right" id="socStatusRight">SECTOR T-001 STANDBY</span>
+    <span class="soc-right" id="socStatusRight">S1.1 STANDBY</span>
   </div>
-
-  <!-- Sector Flash Overlay -->
-  <div id="soc-flash-overlay"><span id="soc-flash-text">ACCESSING SECTOR T-001...</span></div>
 
   <div class="app">
     <aside class="left">
@@ -2720,7 +2667,7 @@
         const correct = qz.correct;
         const options = shuffle([correct, ...qz.wrong]);
         return `<div class="final-item">
-          <b>${idx + 1}. ${s.id}: ${qz.q}</b>
+          <b>${idx + 1}. ${id}: ${qz.q}</b>
           <select data-final="${id}" data-correct="${correct}">
             <option value="">Antwort waehlen</option>
             ${options.map(o => `<option value="${o}">${o}</option>`).join("")}
@@ -2802,52 +2749,19 @@
       const route = routeSectionsNoSearch();
       if (!route.some(s => s.id === activeId)) activeId = route[0]?.id || "S1.1";
       const focusTarget = document.activeElement?.classList?.contains("map-cell") ? "map-cell" : "nav-item";
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       renderAll();
       requestAnimationFrame(() => {
         const activeControl = document.querySelector(`.${focusTarget}[data-id="${activeId}"]`);
         activeControl?.focus({ preventScroll: true });
       });
-      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+      window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 
-      // SOC Tactical: Sector-Flash + Scan-Line + Status-Bar Update
-      const secNum = activeId.replace("S","").replace(".", "-");
-      const flashOverlay = document.getElementById("soc-flash-overlay");
-      const flashText = document.getElementById("soc-flash-text");
+      // SOC Tactical: update the quiet status rail without adding navigation motion.
       const statusRight = document.getElementById("socStatusRight");
-      if (!reduceMotion && flashOverlay && flashText) {
-        flashText.textContent = `ACCESSING SECTOR T-${secNum}...`;
-        flashOverlay.style.transition = "opacity 100ms ease";
-        flashOverlay.style.opacity = "1";
-        setTimeout(() => {
-          flashOverlay.style.transition = "opacity 200ms ease";
-          flashOverlay.style.opacity = "0";
-        }, 400);
-      }
       if (statusRight) {
-        statusRight.textContent = `SECTOR T-${secNum} ACCESSED • CLEARANCE GRANTED`;
+        statusRight.textContent = `${activeId} ACCESSED`;
         statusRight.style.animation = "none";
         statusRight.style.opacity = "1";
-        if (!reduceMotion) {
-          // Amber blink 3x
-          let blinks = 0;
-          const blinkInterval = setInterval(() => {
-            statusRight.style.opacity = statusRight.style.opacity === "0" ? "1" : "0";
-            blinks++;
-            if (blinks >= 6) {
-              clearInterval(blinkInterval);
-              statusRight.style.opacity = "1";
-            }
-          }, 130);
-        }
-      }
-      // Scan-Line: CSS animation via class toggle
-      const mainEl = document.querySelector(".main");
-      if (!reduceMotion && mainEl) {
-        mainEl.classList.remove("scanning");
-        void mainEl.offsetWidth; // force reflow
-        mainEl.classList.add("scanning");
-        setTimeout(() => mainEl.classList.remove("scanning"), 450);
       }
     }
 
