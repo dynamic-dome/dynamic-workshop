@@ -429,7 +429,7 @@ Say: *"I've already created a notebook and added some sources. Here's how that l
 
 Reference a pre-created notebook:
 ```
-notebooklm list
+notebooklm list --json
 ```
 
 Or if using the skill:
@@ -483,3 +483,7 @@ Demonstrate the concept via the NotebookLM web UI instead:
 - Show an existing notebook with sources
 - Ask a question in the web UI
 - Say: *"The skill wraps this same API so you can query from your terminal. Exercise 2.5 is where you build your own."*
+
+### Recovery if NotebookLM CLI output breaks on Windows
+
+- Re-run CLI commands with `--json` whenever available (`notebooklm list --json`, `notebooklm create "Claude Code Documentation" --json`). The JSON output avoids cp1252/Rich-console rendering failures on Windows.

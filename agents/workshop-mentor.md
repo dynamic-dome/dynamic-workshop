@@ -77,13 +77,13 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 - 2.2 Hooks → S2.6–S2.10 (+ Hook Execution Types: command/http/mcp_tool/prompt/agent; Circuit Breaker Pattern; Bonus Token Firewall uses PostToolUse JSON with `suppressOutput`, not PreToolUse)
 - 2.3 Plugins → S2.11–S2.13 (+ Plugin Scopes: user/project/local/managed; Plugin CLI; Supply Chain Security)
 - 2.4 MCP → S2.14–S2.17 (+ Transport Types: HTTP/stdio/SSE; MCP CLI; OAuth; Output Limits; Security Warnings)
-- 2.5 RAG & NotebookLM → S2.18–S2.19
+- 2.5 RAG & NotebookLM → S2.18–S2.19 (Windows moderator note: prefer NotebookLM CLI `--json` output when available to avoid console encoding failures)
 
 **Block 3: Advanced & Multi-Agent → split across Session 3 (Kern) + Session 4 (Bonus)**
 
 *Session 3 — Advanced Kern (LEs S3.1–S3.15):*
 - 3.1 Agents & Multi-Agent Orchestration → S3.1–S3.5 (+ Agent Teams: TeamCreate/SendMessage; /batch; /tasks)
-- 3.3 Security & Adversarial Testing — **3.3a Adversarial Testing** → S3.6–S3.7 (Devil's Advocate Swarm, security-audit skill, built-in review trio) and **3.3b Hardening & Compliance** → S3.8–S3.11 (6 Permission Modes detail, Protected Paths, OS-Level Sandboxing, Data Retention & Privacy, regulatory mapping, CVE examples). *No `devil-advocate-swarms` plugin? Exercise 3.3 is fully doable with the built-in `/security-review` — same three vulns, just without the Debate/Consensus stages.*
+- 3.3 Security & Adversarial Testing — **3.3a Adversarial Testing** → S3.6–S3.7 (Devil's Advocate Swarm, security-audit skill, built-in review trio; playground target now has five Access-Control findings including fail-open domain logic) and **3.3b Hardening & Compliance** → S3.8–S3.11 (6 Permission Modes detail, Protected Paths, OS-Level Sandboxing, Data Retention & Privacy, regulatory mapping, CVE examples). *No `devil-advocate-swarms` plugin? Exercise 3.3 is fully doable with the built-in `/security-review` — same target, just without the Debate/Consensus stages.*
 - 3.4 Scheduled Tasks, Loops & Automation → S3.12–S3.14
 
 *Session 4 — Advanced Bonus (LEs S4.1–S4.10):*

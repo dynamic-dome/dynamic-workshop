@@ -278,6 +278,7 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 
 > **STATUS 2026-07-04 (Codex):**
 > - **WP-17 ✅ ERLEDIGT** — Exercise 2.6 nutzt jetzt PostToolUse statt PreToolUse; Filter-Script gibt JSON mit `suppressOutput: true` und gefiltertem `systemMessage` aus, statt stdout additiv zu drucken. Blueprint #2 in Block 3 und Mentor-Hook-Landkarte sind synchronisiert. context7: Exit-0-stdout wird angezeigt; Suppression braucht Hook-JSON.
+> - **WP-18 ✅ ERLEDIGT** — Demo 3.3 scannt nach `cd workshop-playground/` relative Pfade, deckt alle 5 Access-Control-Findings inkl. fail-open ab und hat manuelle fail-secure-Domain-Review-Notiz; 3.3b nennt jetzt `auto`; Block-3-Demos 3.1/3.2/3.3/3.4 haben Dauer + ×1.5-Live-Puffer; Demo 1.1 hat Recovery-Notes; Demo 1.2 Memory-Scope ist vorsichtiger formuliert; Demo 2.5 nutzt/rettet NotebookLM mit `--json`; Mentor synchronisiert. Bereits verifiziert im Bestand: Demo 1.4 PR-Step, 3.5 Worktree `-b`, Block-2-Header 40 Min/6 Demos.
 
 ## WP-17 · [P2] Exercise 2.6 „Token Firewall" funktioniert mechanisch nicht + Hook-Typ-Fehletikett
 **Dateien:** `resources/exercises/block-2-exercises.md` (862/888/926), `block-3-exercises.md:699`

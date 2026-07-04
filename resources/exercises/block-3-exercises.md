@@ -109,12 +109,14 @@ Each group shares their most interesting answer.  5 minutes total.
 
 ### Setup
 
-Use `workshop-playground/access_control.py`. It already contains three deliberately planted vulnerabilities:
+Use `workshop-playground/access_control.py`. It already contains five deliberately planted vulnerabilities:
 1. Command Injection in `backup_database()`
 2. Hardcoded credential `ADMIN_PASSWORD = "admin123"` — note: **dead code**, never used in a reachable auth path (intentional; this matters in Step 3)
 3. Path Traversal in `read_log()`
+4. Fail-OPEN domain logic in `check_access_resilient()` — missing/corrupt DB grants access instead of failing secure
+5. Log-Injection / log-forging in `log_event()` — unsanitized `username`/`action` with a newline forges fake log lines
 
-The swarm often surfaces a fourth issue the planters didn't pre-list: **Log-Injection / log-forging** in `log_event()` (unsanitized `username`/`action` with a newline forges fake log lines). **Don't wave it off as a "bonus"** — in a physical-security system this is an **audit-trail integrity** failure, and audit-trail tampering is squarely in scope of **EN 50131** (intrusion-alarm standard). See the compliance mapping in Module 3.3b (EN 50131 → "require … audit trail"). Exercise idea: forge an admin line in `access.log`, then have Claude sanitize newlines and prove it with a test.
+**Don't wave off Log-Injection as a "bonus"** — in a physical-security system this is an **audit-trail integrity** failure, and audit-trail tampering is squarely in scope of **EN 50131** (intrusion-alarm standard). The fail-open issue is the domain-judgment lesson: pattern scanners often miss it, but access-control systems must fail secure. Exercise idea: forge an admin line in `access.log`, then inspect `check_access_resilient()` and explain why DB failure must deny access.
 
 **No vulnerability planting required** — we use the existing ones.
 
@@ -127,8 +129,8 @@ The swarm often surfaces a fourth issue the planters didn't pre-list: **Log-Inje
 > ```
 > …run from inside `workshop-playground/`, or just ask Claude directly:
 > *"Audit access_control.py for security vulnerabilities — injection, hardcoded secrets, path
-> traversal — and explain each with severity."* All three planted issues (Command Injection,
-> Hardcoded Credential, Path Traversal) are findable this way too; you just won't see the
+> traversal, log forging, and fail-open access-control logic — and explain each with severity."*
+> All five planted issues are findable this way too; you just won't see the
 > multi-agent Debate/Consensus stages. The rest of the exercise (report, fix, `pytest`) is identical.
 
 **Step 1: Open the playground**
@@ -141,24 +143,25 @@ ls access_control.py     # confirm you have the file
 **Step 2: Run the swarm against `access_control.py`**
 
 ```
-/devil-advocate-swarms:swarm scan workshop-playground/access_control.py
+/devil-advocate-swarms:swarm scan access_control.py
 ```
 
 **Step 3: Wait and watch**
 
 Do not skip ahead.  Watch each stage:
-- Scanners: what did each one identify? Did they catch all three planted issues? Anything beyond?
+- Scanners: what did each one identify? Did they catch all five planted issues? Anything beyond?
 - Debate: which findings are being argued?  Who is winning?
 - Consensus: how many CONFIRMED vs FALSE POSITIVE?
 - Fixers: what does the fix for each confirmed finding look like?
 
-The swarm will surface the **three planted issues** (Command Injection, Hardcoded Credential, Path Traversal) — plus, very likely, the **Log-Injection / audit-trail-forging** issue in `log_event()` (a regular EN-50131-relevant finding, not just a "bonus").
+The swarm should surface **five planted issues** (Command Injection, Hardcoded Credential, Path Traversal, Fail-OPEN access logic, and Log-Injection / audit-trail-forging). If it misses fail-open, pause and explain why that one requires physical-security domain judgment.
 
-> ⚠️ **Don't expect a clean "3/3 CONFIRMED".** `ADMIN_PASSWORD` is dead code — never reached by any
+> ⚠️ **Don't expect a clean "5/5 CONFIRMED".** `ADMIN_PASSWORD` is dead code — never reached by any
 > auth path. A good Defender will argue exactly that in the Debate stage, so the Hardcoded Credential
 > can legitimately end up **CONFIRMED-but-low-severity** or even **NEEDS-INVESTIGATION** instead of a
-> clean CONFIRMED. That disagreement *is* the lesson: **reachability changes severity.** Discuss why —
-> a hardcoded secret in unreachable code is a real smell but not an exploitable path today.
+> clean CONFIRMED. The fail-open issue may also be missed by pattern scanners because it is domain logic.
+> That disagreement *is* the lesson: **reachability and domain semantics change severity.** Discuss why —
+> a hardcoded secret in unreachable code is a real smell, while a corrupt door database granting access is a live safety failure.
 
 **Step 4: Pick one finding and apply its fix (temporary — you'll revert it)**
 
@@ -169,7 +172,7 @@ The swarm will surface the **three planted issues** (Command Injection, Hardcode
 > original. **Never commit the fix.** (No real contradiction: the rule says don't *keep* fixes; here you
 > apply one, verify, and revert.)
 
-Choose **one** of the three confirmed findings and let Claude implement the fix in `access_control.py`. After the fix:
+Choose **one** of the confirmed findings and let Claude implement the fix in `access_control.py`. After the fix:
 
 ```bash
 pytest -v   # run from the playground root — the baseline must stay green
@@ -187,8 +190,8 @@ git checkout -- access_control.py
 
 ### What to Report
 
-1. How many of the three planted vulnerabilities did the swarm confirm? At which stage?
-2. Did it find the Log-Injection / audit-trail-forging issue in `log_event()` (EN-50131-relevant) — or anything else you had not expected?
+1. How many of the five planted vulnerabilities did the swarm confirm? At which stage?
+2. Did it find both domain-relevant non-obvious issues: fail-open access in `check_access_resilient()` and Log-Injection / audit-trail-forging in `log_event()`?
 3. Were there false positives?  What did the Defender argue for each one?
 4. Which finding did you fix, and does the fix break any of the existing tests?
 
@@ -196,7 +199,7 @@ git checkout -- access_control.py
 
 - The debate phase is the most interesting part.  Read the Prosecutor and Defender arguments.
 - Some findings may end up as false positives — the Defender should win those.
-- If the swarm misses one of the three planted issues, that is also interesting — why?
+- If the swarm misses one of the five planted issues, that is also interesting — why?
 - Pay attention to the regression test the Fixer writes.  Is it testing the right thing?
 - After the fix, run `pytest -v` from the playground root to confirm the baseline still passes.
 

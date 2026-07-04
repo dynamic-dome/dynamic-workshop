@@ -112,6 +112,12 @@ Expected: Claude runs a loop or runs the command 5 times. Shows 5 different pass
 
 > "What just happened: I opened a terminal. I described what I wanted. Claude created a file, I reviewed it, Claude ran it. No copy-paste. No editor switch. No separate terminal tab to run the script. The entire development loop happened in one conversation. This is what 'full terminal integration' means."
 
+### Recovery Notes
+
+- **If `claude` does not start:** Run `claude --version` and `claude doctor`; if auth is missing, use a prepared screenshot/recording and continue with the mental model.
+- **If Python command differs:** On Windows say `python password_gen.py 20`; on macOS/Linux/Git Bash use `python3 password_gen.py 20`.
+- **If the file appears in the wrong directory:** Ask Claude to run `pwd` and `ls`, then either `cd` into the intended scratch folder or restart the demo in a fresh `~/cc-workshop/demos/demo-1.1` directory.
+
 ---
 
 ## Demo 1.2: Context & Memory Live
@@ -218,7 +224,7 @@ Remember that I prefer German for communication but all code and file names must
 **Expected behavior:** Claude confirms it has stored this as a memory. In future sessions, Claude will communicate in German if you are this user.
 
 **Talking point:**
-> "This is different from CLAUDE.md. CLAUDE.md is project-level — it's in the project directory, everyone who uses this project gets these rules. Memory is user-level — it's stored in my home directory and applies to all my sessions across all projects. Use CLAUDE.md for project conventions. Use memory for personal preferences."
+> "This is different from CLAUDE.md. CLAUDE.md is project-level — it lives with the project and is the reliable place for team conventions. Auto-Memory is stored under my user profile and can persist across sessions, but you should treat it as personal, context-specific preference memory, not as a substitute for project policy."
 
 **Talking point to close:**
 > "CLAUDE.md is your access policy. It lives with the project. Write the rules once. Claude follows every session."
