@@ -73,7 +73,7 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 - 1.5 Cost Engineering & Effort Management (**split in Welle F**: only S1.19 = `/cost` + `/usage` + `--max-budget-usd` stays in Session 1 as `[core]`; Exercise 1.5 now uses qualitative cost bands, while precise dollar estimation returns in Session 4 / S4.4; the rest — pricing, /insights, plan/implement/review pipeline, cost-reduction tactics, prompt caching, anti-patterns — is **moved to S4.4** at the CI budget caps.)
 
 **Block 2: Ecosystem → Session 2 (LEs S2.1–S2.20)**
-- 2.1 Skills & Commands → S2.1–S2.5 (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api; current frontmatter fields: `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `model`, `effort`, `paths`, `shell`, `hooks`; /skills command)
+- 2.1 Skills & Commands → S2.1–S2.5 (+ Bundled Skills: /batch, /debug, /loop, /simplify, /claude-api, /run, /verify, /run-skill-generator, /fewer-permission-prompts; availability can vary by CLI version, verify with `/skills`; current frontmatter fields: `name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `model`, `effort`, `paths`, `shell`, `hooks`; /skills command)
 - 2.2 Hooks → S2.6–S2.10 (+ Hook Execution Types: command/http/mcp_tool/prompt/agent; Circuit Breaker Pattern; Bonus Token Firewall uses PostToolUse JSON with `suppressOutput`, not PreToolUse)
 - 2.3 Plugins → S2.11–S2.13 (+ Plugin Scopes: user/project/local/managed; Plugin CLI; Supply Chain Security; local scaffold is tested with `claude --plugin-dir ./my-mini-plugin`, not by hand-copying into plugin cache)
 - 2.4 MCP → S2.14–S2.17 (+ Transport Types: HTTP/stdio/SSE; MCP CLI; OAuth; Output Limits; Security Warnings)
@@ -112,6 +112,10 @@ Follow this process for every participant question:
 - `/debug [desc]` — debug logging + analysis
 - `/loop [interval] <prompt>` — periodic prompt execution
 - `/simplify [focus]` — parallel reviews + fixes on changed files
+- `/run [skill-name]` — launch and verify app-specific run workflows
+- `/verify` — verify recent changes by running the app, not only tests
+- `/run-skill-generator` — generate a project-specific run skill
+- `/fewer-permission-prompts` — suggest a permission allowlist from repeated prompts
 
 ### Permission Modes (6 levels)
 - `default` — only reads, everything else asks
@@ -176,7 +180,7 @@ A: Permissions have 6 clearance levels (module 1.1, Permission System — LEs S1
 
 **Q: What are bundled skills?**
 
-A: Bundled skills (module 2.1) are built-in playbooks available in every session: `/batch` for parallel refactors across worktrees, `/debug` for debug logging, `/loop` for periodic execution, `/simplify` for parallel reviews, `/claude-api` for SDK docs. They're different from built-in commands — they're prompt-based workflows, not fixed logic. For the full walkthrough, try `/workshop learn 2.1`.
+A: Bundled skills (module 2.1) are built-in playbooks available in current Claude Code sessions, but exact availability can vary by CLI version — check `/skills`. Core examples: `/batch` for parallel refactors across worktrees, `/debug` for debug logging, `/loop` for periodic execution, `/simplify` for parallel reviews, `/claude-api` for SDK docs, `/run`/`/verify` for app runtime proof, and `/run-skill-generator` for project-specific run skills. They're prompt-based workflows, not fixed app logic. For the full walkthrough, try `/workshop learn 2.1`.
 
 **Q: What is sandboxing?**
 

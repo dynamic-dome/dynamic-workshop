@@ -96,7 +96,7 @@
 | S2.4 | Bundled Skills (/batch /debug /loop /verify …) | core | 12 | 2.1 Bundled Skills + /skills |
 | S2.5 | Living Prompts: dynamische Injection & Argumente | deep-dive | 15 | 2.1 Argument Substitution + Dynamic Injection + Live-Reload |
 | S2.6 | Hooks = Event-Listener (die 3 Eckpfeiler) | core | 15 | 2.2 Core Idea + Three Cornerstones + Sensor-Analogie |
-| S2.7 | Die wichtigsten Hook-Events landkarten | core | 12 | 2.2 Hook Types (11er-Tabelle) |
+| S2.7 | Die wichtigsten Hook-Events landkarten | core | 12 | 2.2 Hook Types (12er-Tabelle) |
 | S2.8 | Einen Hook konfigurieren (settings.json, matcher, if) | core | 15 | 2.2 Hook Configuration + Real Example + Demo 2.2 |
 | S2.9 | Hook-Exec-Typen & component-scoped Hooks | deep-dive | 15 | 2.2 Execution Types + Component-Scoped Hooks |
 | S2.10 | Advanced Hook-Outputs + Secure Diff Gate | deep-dive | 15 | 2.2 Advanced Output + Circuit Breaker + Demo 2.2b |

@@ -297,11 +297,12 @@ Master Orchestrator
 #### Beyond hand-rolled fan-out: Dynamic Workflows *(optional, recent releases)*
 
 The patterns above are what you orchestrate **by hand** — typically 5–10 agents. Recent Claude Code
-releases add **Dynamic Workflows**: a single Opus-4.8-class model can plan and coordinate *hundreds* of
-parallel subagents programmatically, via the `/workflows` command (and a scripting layer). Treat the
-hand-rolled patterns as the teaching model and Dynamic Workflows as the production-scale version of the
-same idea — fan-out, pipeline, and hierarchy, but at a scale you wouldn't wire up by hand. Optional depth
-for Session 3; check availability with `/help` and `/release-notes` on your CLI.
+releases add **Dynamic Workflows**: a workflow run can coordinate *tens to hundreds* of background
+agents for larger tasks. `/workflows` is the command to view and manage those runs; the actual workflow
+is created from a high-level task request. Treat the hand-rolled patterns as the teaching model and
+Dynamic Workflows as the production-scale version of the same idea — fan-out, pipeline, and hierarchy,
+but at a scale you wouldn't wire up by hand. Optional depth for Session 3; check availability with
+`/help` and `/release-notes` on your CLI.
 
 ---
 
@@ -538,6 +539,8 @@ All 4 Codex agents run simultaneously.  Claude reviews the assembled result.
 > **Ich kann jetzt:** eine adversariale Security-Pipeline mit Scan, Debate, Consensus und Fix erklaeren.
 
 ### The Devil's Advocate Swarms Pipeline
+
+> 🔧 **Custom workshop component:** This pipeline is not a built-in Claude Code command. It is a workshop/plugin pattern that demonstrates what multi-agent review can look like. The built-in alternatives are `/security-review`, `/review`, and `/ultrareview` below.
 
 A **multi-agent adversarial system** for finding and fixing security and quality issues.
 It mirrors real professional security review — with one difference: it runs automatically.
@@ -865,7 +868,7 @@ $env:DISABLE_ERROR_REPORTING = "1"
 
 ### Regulated Industries: Compliance Notes
 
-Different industries — and different jurisdictions — impose different rules on what you can and cannot automate. The workshop covers HIPAA (US Healthcare) as Bonus Exercise 3.8 because the *mechanism* (regex-based PreToolUse guardrails) generalizes. Here is a quick map of the regulations most relevant to this audience:
+Different industries — and different jurisdictions — impose different rules on what you can and cannot automate. For this Physical-Security audience, treat **EN 50131/50132, GDPR, and NIS2** as the core lens. HIPAA, PCI-DSS, DORA, and MiFID II stay in the table as transfer examples: the same guardrail mechanisms generalize, but they are not the primary domain target.
 
 | Industry / Region | Key Regulation | Implications for Claude Code |
 |---|---|---|
@@ -1537,7 +1540,7 @@ jobs:
             --body "$(jq -r '.summary' /tmp/review.json)"
 ```
 
-Every building block from this module is in there: `--bare` for a clean run, JSON output for downstream parsing, budget cap and turn cap as the safety net, OAuth secret for auth.
+Every building block from this module is in there: `--bare` for a clean run, JSON output for downstream parsing, `--max-budget-usd` as the hard safety net, OAuth secret for auth.
 
 > **Note on shell syntax:** these CI examples run on **Linux runners** (`runs-on: ubuntu-latest`, GitLab shell runners), so the POSIX form (`export`, `/tmp/`, `#!/bin/bash`) is correct *there* — you do not translate it to PowerShell. If you reproduce one of these snippets **locally on Windows**, use `$env:VAR` for env vars and `$env:TEMP` instead of `/tmp/`.
 

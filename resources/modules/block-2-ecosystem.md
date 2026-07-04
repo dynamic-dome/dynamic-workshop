@@ -19,7 +19,7 @@
 | S2.4 | core | Bundled Skills (/batch /debug /loop /verify …) | 2.1 → *Bundled Skills*, *Authoring with /run-skill-generator*, *Skill Discovery: /skills* |
 | S2.5 | deep-dive | Living Prompts: dynamische Injection & Argumente | 2.1 → *Argument Substitution*, *Dynamic Context Injection*, *Advanced Skill Frontmatter*, *Skill Live-Reload* |
 | S2.6 | core | Hooks = Event-Listener (die 3 Eckpfeiler) | 2.2 → *The Core Idea*, *The Three Cornerstones in Detail*, *Access Control Sensors* |
-| S2.7 | core | Die wichtigsten Hook-Events landkarten | 2.2 → *Hook Types* (11er-Tabelle) |
+| S2.7 | core | Die wichtigsten Hook-Events landkarten | 2.2 → *Hook Types* (12er-Tabelle) |
 | S2.8 | core | Einen Hook konfigurieren (settings.json, matcher, if) | 2.2 → *Hook Configuration*, *A Real Hook Example*, *What Hooks Can Do* |
 | S2.9 | deep-dive | Hook-Exec-Typen & component-scoped Hooks | 2.2 → *Hook Execution Types*, *Component-Scoped Hooks* |
 | S2.10 | deep-dive | Advanced Hook-Outputs + Secure Diff Gate | 2.2 → *Advanced Hook Output*, *Circuit Breaker Pattern* (+ Demo 2.2b) |
@@ -137,7 +137,7 @@ hooks:
 <!-- LE: S2.5 -->
 > **Ich kann jetzt:** Argumente und dynamische Kontext-Injection in Skills sicher einsetzen.
 
-### Argument Substitution
+### Argument Substitution [deep-dive · S2.5]
 
 When a skill receives arguments, Claude Code substitutes them into the body at execution time. The substitutions match the `arguments:` frontmatter:
 
@@ -173,7 +173,7 @@ First positional: $1
 
 Invoked as `/review strict auth-service`, the body sees `$mode = strict`, `$module = auth-service`, `$1 = strict`, `$ARGUMENTS = "strict auth-service"`.
 
-### Dynamic Context Injection — Live Prompts
+### Dynamic Context Injection — Live Prompts [deep-dive · S2.5]
 
 Skills are no longer static markdown. The `` !`<command>` `` syntax runs a shell command at skill-load time and inlines the command's stdout directly into the prompt.
 
@@ -337,6 +337,8 @@ disable-model-invocation: true   # Manual /deploy only — never auto-triggered
 
 Claude Code ships with **bundled skills** — prompt-based playbooks available in every session without installation. These are different from built-in commands (which execute fixed logic):
 
+> **Version note:** Bundled skill availability changes across Claude Code releases. Use `/skills` in the room to show the exact set installed on the moderator machine; the table below is the workshop target set.
+
 | Skill | What it does | Example |
 |-------|-------------|---------|
 | `/batch <instruction>` | Parallel codebase changes across git worktrees | `/batch migrate src/ from Solid to React` |
@@ -421,7 +423,7 @@ Use `/skills` in any session to see all available skills — bundled, user, proj
 ## Module 2.2: Hooks
 
 **Learning Objectives:** After this module, you can:
-- Map the 11 most-used hook events (PreToolUse, PostToolUse, Stop, SessionStart/End, UserPromptSubmit, PreCompact, SubagentStart/Stop, FileChanged, InstructionsLoaded, Notification) to concrete use cases.
+- Map the 12 most-used hook events (PreToolUse, PostToolUse, Stop, SessionStart/End, UserPromptSubmit, PreCompact, SubagentStart/Stop, FileChanged, InstructionsLoaded, Notification) to concrete use cases.
 - Write a hook entry in `settings.json` with the right matcher syntax (literal vs. regex), the `if` permission-rule filter, and one of the 5 execution types (command / http / prompt / agent / mcp_tool).
 - Use advanced hook outputs (`updatedToolOutput`, `continueOnBlock`, `terminalSequence`) and `$CLAUDE_EFFORT` to build effort-aware, soft-blocking, redaction-capable hooks.
 
@@ -439,7 +441,7 @@ Think of hooks as **event listeners** for Claude's behavior. When something happ
 
 ### Hook Types
 
-The official docs currently list **a couple dozen lifecycle events**. We focus on the 11 you will reach for most often:
+The official docs currently list **a couple dozen lifecycle events**. We focus on the 12 you will reach for most often:
 
 | Event | When it fires | Typical use case |
 |-------|---------------|------------------|
@@ -474,7 +476,7 @@ In an access control system:
 
 - A **door-open sensor** fires after the door opens and logs: who entered, when, which door. **This is PostToolUse** — reactive logging after the fact.
 
-- An **end-of-shift alarm** fires at 18:00 to remind the control room to check that all zones are secured. **This is Stop** — a scheduled/trigger-based end event.
+- An **end-of-shift checklist** fires when the guard closes the shift report — not because the wall clock hit 18:00, but because the shift was explicitly ended. **This is Stop** — an event-triggered end-of-response hook.
 
 The sensors don't replace the guards. They automate the repetitive checking so guards can focus on exceptions.
 
@@ -549,6 +551,8 @@ This hook fires only on Bash invocations that match the permission rule `Bash(gi
 ### A Real Hook Example: Security Warning
 
 This hook warns before any bash command containing `rm -rf` or `git push --force`:
+
+> **Windows note:** The first hook example below is intentionally Bash + `jq` because it mirrors the CLI docs. On Windows, run it via Git Bash or use the PowerShell variant from Exercise 2.2 / `resources/demos/assets/hooks/`; do not paste Bash heredocs into PowerShell.
 
 **`~/.claude/hooks/pre-bash-check.sh`:**
 ```bash
@@ -827,7 +831,7 @@ To disable a plugin without deleting it, use `claude plugin disable <name>` rath
 Anthropic runs two first-party plugin marketplaces:
 
 - **`claude-plugins-official`** — curated by Anthropic, auto-available to every Claude Code installation. High quality bar, internally reviewed.
-- **`claude-community`** — public submissions, lower bar, broader selection. Anthropic does not vet each plugin individually.
+- **`claude-plugins-community`** — public submissions, lower bar, broader selection. Anthropic does not vet each plugin individually.
 
 Add a marketplace once, then install plugins from it by `<name>@<marketplace>`:
 
@@ -837,10 +841,10 @@ Add a marketplace once, then install plugins from it by `<name>@<marketplace>`:
 
 # Install a specific plugin from a specific marketplace
 /plugin install code-review@claude-plugins-official
-/plugin install some-niche-plugin@claude-community
+/plugin install some-niche-plugin@claude-plugins-community
 ```
 
-**Submission flow:** To publish your own plugin, go to `claude.ai/settings/plugins/submit`. The form points to your plugin's git repository, Anthropic runs basic validation, and once approved it lands in `claude-community`. Getting into `claude-plugins-official` is a separate, higher-bar review.
+**Submission flow:** To publish your own plugin, go to `claude.ai/settings/plugins/submit`. The form points to your plugin's git repository, Anthropic runs basic validation, and once approved it lands in `claude-plugins-community`. Getting into `claude-plugins-official` is a separate, higher-bar review.
 
 <!-- LE: S2.13 -->
 > **Ich kann jetzt:** Plugin-Supply-Chain-Risiken erkennen und einfache Schutzfragen stellen.
