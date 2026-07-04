@@ -32,7 +32,7 @@
 | S1.16 | core | Git in einem Flow: branch → commit → PR | 1.4 → *Built-in Git Capabilities*, *The Full PR Workflow in One Flow*, *Key Git Commands* |
 | S1.17 | deep-dive | Git-Slash-Commands | 1.4 → *Git-Related Slash Commands*, *Resuming a Session at a Specific PR* |
 | S1.18 | deep-dive | Worktrees als Test-Labor | 1.4 → *Git Worktrees*, *Worktree as Test Lab*, *The --worktree CLI Flag*, *worktree.baseRef*, *Worktrees in Practice* |
-| S1.19 | core | Kosten im Blick: /cost, /usage & Budget-Cap | 1.5 → *Token Tracking — Three Tools*, *Budget Caps for Autonomous Sessions* |
+| S1.19 | core | Kosten im Blick: /cost, /usage, Budget-Cap + 5-Min-Cost-Reduction | 1.5 → *Token Tracking — Three Tools*, *Budget Caps for Autonomous Sessions*, compact *Cost-Reduction Tactics* |
 | S1.20 | core | Hands-on Puffer (Exercise 1.x — pick 1) | `exercises/block-1-exercises.md` |
 
 > **💸 Verschoben nach Session 4 (S4.4):** Der Rest von Modul 1.5 — *Pricing Reference*, *Deep Dive: /insights*,
@@ -1120,6 +1120,16 @@ Claude Code ships three slash commands for cost observability. Each answers a di
 | `/insights` | Optimization — which workflows are expensive and why? |
 
 A productive habit: glance at `/cost` whenever you've done something non-trivial (a multi-file refactor, a long planning session, a deep-research detour). It takes two seconds and prevents the "wait, I spent how much today?" moment at the end of the week.
+
+### 5-Minute Core: Cost-Reduction Tactics
+
+Even if Session 4 never happens, participants need three habits on day 1:
+
+1. **Cache the stable context:** keep `CLAUDE.md` and loaded skills stable during a work burst; repeated prompts within the cache window are much cheaper than cold starts.
+2. **Match effort to cognitive load:** use `/effort low|medium` for mechanical edits and reserve `xhigh|max` for architecture, root-cause analysis, or subtle security reasoning.
+3. **Use a model per phase:** plan/review with the strongest model only when judgment matters; implement routine code with Sonnet; use Haiku for cheap first-pass reads.
+
+Shortcut: before any long run, ask "Can this use cache, lower effort, or a cheaper phase model?" If yes, change that before the tokens start flowing.
 
 ---
 

@@ -368,7 +368,7 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 
 ## WP-26 · [P3] Cost-Engineering-Verschiebung absichern
 **Problem:** S4.4 (die Cost-Tiefe) ist `deep-dive` in der explizit streichbaren Overflow-Session → das relevante Thema droht nie geliefert zu werden.
-- [ ] Entweder kompakten Core-Beat „Cost-Reduction-Taktiken" (5 Min: Caching, Effort-Tiers, Modell-pro-Phase) in S1.19 behalten, *oder* den Kosten-Teil von S4.4 ins core*-Fallback-Set (neben S4.9/S4.10) heben.
+- [x] Entweder kompakten Core-Beat „Cost-Reduction-Taktiken" (5 Min: Caching, Effort-Tiers, Modell-pro-Phase) in S1.19 behalten, *oder* den Kosten-Teil von S4.4 ins core*-Fallback-Set (neben S4.9/S4.10) heben.
 **Codex-Fähigkeit:** Bereich: Curriculum-/Didaktik-Redaktion
 
 ## WP-27 · [P3] Concrete-before-abstract: Einstiegsrampe korrigieren

@@ -64,7 +64,7 @@
 | S1.16 | Git in einem Flow: branch → commit → PR | core | 18 | 1.4 Built-in Git + Full PR Workflow + Demo 1.4 |
 | S1.17 | Git-Slash-Commands: /diff /review /rewind /autofix-pr | deep-dive | 15 | 1.4 Git-Related Slash Commands + --from-pr |
 | S1.18 | Worktrees als Test-Labor | deep-dive | 15 | 1.4 Git Worktrees + --worktree + baseRef |
-| S1.19 | Kosten im Blick: /cost, /usage & Budget-Cap | core | 15 | 1.5 Token Tracking (core) + Budget Caps |
+| S1.19 | Kosten im Blick: /cost, /usage, Budget-Cap + 5-Min-Cost-Reduction | core | 15 | 1.5 Token Tracking (core) + Budget Caps + Caching/Effort/Model-per-Phase |
 | S1.20 | Demo + Hands-on Puffer (Exercise 1.x — pick 1) | core | 15 | Exercises 1.1–1.4 |
 
 **Session 1 Core:** S1.1–S1.10, S1.13, S1.14, S1.16, S1.19, S1.20 = 15 core-LEs → **213 Min roh** (der vollste Termin; muss aktiv gestrafft werden, siehe ⚠️ unten).
@@ -172,9 +172,10 @@
 > es"-Teil. **Fallback ohne 4. Termin:** S4.9 + S4.10 (33 Min) ans Ende von Session 3 hängen und die
 > Session-3-deep-dives streichen; der Rest von Session 4 wird strukturierter Selbststudien-Track.
 
-> **💸 Cost-Engineering-Verschiebung (Welle-F-Entscheidung):** Vom alten Modul 1.5 bleibt nur S1.19
-> (`/cost`, `/usage`, Budget-Cap) als Tag-1-Core. Der Rest — Pipeline-Ökonomie, Prompt-Caching,
-> `/insights`-Deep-Dive, Cost-Reduktions-Taktiken, Anti-Patterns — wird in **S4.4 bei den CI-Budget-Caps**
+> **💸 Cost-Engineering-Verschiebung (Welle-F-Entscheidung):** S1.19 bleibt Tag-1-Core:
+> `/cost`, `/usage`, Budget-Cap plus ein 5-Minuten-Beat zu Caching, Effort-Tiers und Modell-pro-Phase.
+> Der Rest — Pipeline-Ökonomie, `/insights`-Deep-Dive, die vollständigen Cost-Reduktions-Taktiken
+> und Anti-Patterns — wird in **S4.4 bei den CI-Budget-Caps**
 > praktisch wieder aufgegriffen, wo er Hand und Fuß hat. Begründung: Ein Neuling kann am Tag 1 ohne
 > Praxisgefühl die Pipeline-Ökonomie nicht einordnen; Budget-Caps werden erst bei autonomen Loops/CI relevant.
 

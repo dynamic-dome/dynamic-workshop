@@ -1272,7 +1272,7 @@
       ["S1.16",1,"core",18,"Git in einem Flow: branch -> commit -> PR","1.4 Git Workflow","git"],
       ["S1.17",1,"deep-dive",15,"Git-Slash-Commands: /diff /review /rewind /autofix-pr","1.4 Slash Commands","git"],
       ["S1.18",1,"deep-dive",15,"Worktrees als Test-Labor","1.4 Git Worktrees","git"],
-      ["S1.19",1,"core",15,"Kosten im Blick: /cost, /usage & Budget-Cap","1.5 Token Tracking","cost"],
+      ["S1.19",1,"core",15,"Kosten im Blick + 5-Min-Cost-Reduction","1.5 Token Tracking + Cost Reduction","cost"],
       ["S1.20",1,"core",15,"Demo + Hands-on Puffer (Exercise 1.x)","Exercises 1.1-1.4","practice"],
       ["S2.1",2,"core",12,"Skills = SOPs, Commands = Buttons","2.1 Core Idea","skills"],
       ["S2.2",2,"core",18,"Eine SKILL.md schreiben (Frontmatter-Basics)","2.1 Anatomy + Demo 2.1","skills"],
@@ -1583,10 +1583,10 @@
         checkpoint: "Du kannst einen Worktree mit `claude --worktree` in einem Schritt anlegen und erklären, warum `worktree.baseRef: \"fresh\"` für parallele Multi-Agent-Sessions die sichere Wahl ist."
       },
       "S1.19": {
-        concept: "Claude Code bietet drei komplementäre Cost-Observability-Tools: /cost zeigt den Verbrauch der laufenden Session (Sofortblick während der Arbeit), /usage liefert die Tages-/Wochenübersicht, und /insights schlüsselt Kosten nach Projekt, Modell, Tool und Skill auf. `--max-budget-usd` ist die einzige harte Ausgabenbremse für unbeaufsichtigte Runs: wird das Limit erreicht, beendet Claude den -p-Lauf sauber mit einem detektierbaren Exit-Code — ohne dieses Flag können Loops und autonome Sessions unkontrolliert Kosten akkumulieren.",
+        concept: "Claude Code bietet drei komplementäre Cost-Observability-Tools: /cost zeigt den Verbrauch der laufenden Session, /usage liefert die Tages-/Wochenübersicht, und /insights schlüsselt Kosten nach Projekt, Modell, Tool und Skill auf. `--max-budget-usd` ist die harte Ausgabenbremse für unbeaufsichtigte Runs. Der 5-Minuten-Core-Beat ergänzt drei Reduktionshebel, die auch ohne Session 4 sitzen müssen: stabilen Kontext für Cache-Hits wiederverwenden, Effort-Level nach kognitiver Last wählen, und Modell pro Phase staffeln.",
         analogy: "Wie ein Wachdienst mit dreistufiger Abrechnung: Stundenzettel der aktuellen Schicht (/cost), wöchentliche Standort-Übersicht (/usage), und ein Controlling-Dashboard, das zeigt, welche Objekte und Spezialkräfte das Budget treiben (/insights). `--max-budget-usd` ist das Kontingent-Limit im Dienstleistungsvertrag — bei Überschreitung bricht der Einsatz sauber ab, statt unkontrolliert weiterzulaufen.",
         example: "claude --max-budget-usd 2.00 -p \"/loop check deploy status\"\n# If the $2.00 spend limit is reached, Claude exits cleanly with a detectable exit code.",
-        checkpoint: "Du kannst /cost, /usage und /insights situationsgerecht einsetzen und weißt, warum --max-budget-usd Pflicht ist für jeden unbeaufsichtigten oder Loop-basierten Claude-Code-Aufruf."
+        checkpoint: "Du kannst /cost, /usage und /insights situationsgerecht einsetzen, --max-budget-usd für unbeaufsichtigte Läufe begründen und vor einem langen Run mindestens einen Cost-Reduction-Hebel nennen: Cache, Effort-Tier oder Modell-pro-Phase."
       },
       "S1.20": {
         concept: "Die vier Block-1-Exercises bauen den Skill-Stack sequenziell auf: Exercise 1.1 trainiert den Describe-Implement-Run-Loop an einem praxisnahen Event-Log-Parser, 1.2 macht CLAUDE.md-Persistenz über Session-Restarts erlebbar und legt eine persönliche Memory-Note an, 1.3 lässt die Qualitätsdifferenz zwischen vaguelm und präzisem Prompt am gleichen Coding-Task direkt messen (Round 1 ohne Follow-ups, Round 2 mit 10 expliziten Test-Cases), und 1.4 schließt einen vollständigen Git-Flow — branch, commit, log, Bonus-Worktree — ohne manuellen Terminal-Eingriff ab.",
