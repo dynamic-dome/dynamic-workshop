@@ -361,9 +361,9 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 ## WP-25 · [P2] Prerequisites deterministisch & self-serve machen
 **Datei:** `resources/prerequisites.md`
 **Problem:** Unpinned Versions-Gate, harte Moderator-Tarball-Abhängigkeit, unverifizierte Clone-URL, kein Zeitbudget.
-- [ ] Getestetes Minimum `claude --version` pinnen + Feature→Version-Tabelle (Fable 5, Dynamic Workflows, Hook-Outputs) — via `context7` verifizieren.
-- [ ] Plugins an einen real erreichbaren Ort veröffentlichen (Git-Release/Drive-Link) + Self-Serve-Install-Skript; Clone-URL auf Auflösbarkeit prüfen.
-- [ ] „~45 Min, in dieser Reihenfolge"-Zeitbudget + ein Copy-Paste-Doctor-Skript.
+- [x] Getestetes Minimum `claude --version` pinnen + Feature→Version-Tabelle (Fable 5, Dynamic Workflows, Hook-Outputs) — via `context7` verifizieren.
+- [x] Plugins an einen real erreichbaren Ort veröffentlichen (Git-Release/Drive-Link) + Self-Serve-Install-Skript; Clone-URL auf Auflösbarkeit prüfen.
+- [x] „~45 Min, in dieser Reihenfolge"-Zeitbudget + ein Copy-Paste-Doctor-Skript.
 **Codex-Fähigkeit:** context7 + Bereich: Curriculum-/Didaktik-Redaktion
 
 ## WP-26 · [P3] Cost-Engineering-Verschiebung absichern
