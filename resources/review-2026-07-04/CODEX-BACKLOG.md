@@ -355,7 +355,7 @@ mit fixen Distraktoren. Kurzquiz bucht eine *fremde* Section als „gemeistert".
 ## WP-24 · [P2] Security-Analogien über Session 4 fortführen (inverses Fading beheben)
 **Datei:** `resources/security-analogies.md`
 **Problem:** Das Signatur-Gerüst bricht über S4 weg — nicht weil die Lerner Mastery erreichten, sondern weil dem Autor die Analogien ausgingen.
-- [ ] S4-Konzepte ergänzen + in die S4-LEs verdrahten: Troubleshooting = Alarmpanel-Fehlerisolation (Sensor→Verkabelung→Panel→Comms), CI/CD = automatisierte nächtliche Wachrunde, Multi-Model = Dienstplan-Staffing.
+- [x] S4-Konzepte ergänzen + in die S4-LEs verdrahten: Troubleshooting = Alarmpanel-Fehlerisolation (Sensor→Verkabelung→Panel→Comms), CI/CD = automatisierte nächtliche Wachrunde, Multi-Model = Dienstplan-Staffing.
 **Codex-Fähigkeit:** Bereich: Curriculum-/Didaktik-Redaktion
 
 ## WP-25 · [P2] Prerequisites deterministisch & self-serve machen

@@ -410,6 +410,8 @@ Plus `claude daemon status` for a quick health check of the background-session s
 
 ### Different Models, Different Strengths
 
+**Canonical S4 analogy:** Multi-model orchestration is the duty roster. Senior architects plan and inspect, experienced technicians implement, and junior patrols do cheap first-pass checks. See `resources/security-analogies.md`.
+
 | Model | Strengths | Best Used For |
 |---|---|---|
 | **Claude Opus** | Deep reasoning, architecture, judgment | Planning, review, quality decisions |
@@ -1354,6 +1356,8 @@ Think of a physical security operation. **Patrol officers are interactive** — 
 
 Claude Code is the same dual creature: an interactive partner *and* a scriptable tool. CI/CD is the autonomous-audit side of that creature.
 
+**Canonical S4 analogy:** CI/CD is the automated nightly guard round: no conversation, fixed checklist, budgeted route, exception report. See `resources/security-analogies.md`.
+
 ---
 
 <!-- LE: S4.3 -->
@@ -1718,11 +1722,13 @@ This module is your **diagnostic workbench**. It does not teach new features —
 
 ### Security Analogy
 
-Think of a complex access-control installation. A door does not open. There are **five candidate layers**: the card itself, the reader, the controller, the wiring, the power supply. A good technician does not start by replacing the reader — they walk the layers in order, eliminating each one with a quick test.
+Think of a complex access-control installation. A door does not open. The fault can sit at the sensor, the wiring, the panel, or the communication link to the SOC. A good technician does not start by replacing the reader — they walk the layers in order, eliminating each one with a quick test.
 
 Claude Code has the same structure. When something does not work, the layers are: **prompt → skill → hook → plugin → permission**. The order of inspection is what separates ten minutes of debugging from two hours.
 
 This module gives you the inspection commands per layer.
+
+**Canonical S4 analogy:** Troubleshooting is alarm-panel fault isolation: Sensor -> Wiring -> Panel -> Comms. See `resources/security-analogies.md`.
 
 ---
 

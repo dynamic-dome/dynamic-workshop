@@ -96,6 +96,8 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 
 **Retrieval layer:** Sessions 2-4 begin with the 5-minute active recall opener from `resources/retrieval-recap-bridges.md` before the new PPT. After dense analogy clusters, use the listed 60-90 second quick checks; they are optional/ungraded, but they catch drift early.
 
+**Security analogies:** `resources/security-analogies.md` is the source of truth. For Session 4, keep the thread explicit: Multi-Model = duty roster/staffing, CI/CD = automated nightly guard round, Troubleshooting = alarm panel fault isolation (Sensor -> Wiring -> Panel -> Comms).
+
 ## How to Answer Questions
 
 Follow this process for every participant question:
