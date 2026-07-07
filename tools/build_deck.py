@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Generiert das 4-Session-Opener-Deck (WP-04) aus der Welle-F-Struktur.
 
-Eigenes Deck (SOC Command / Amber-auf-Dunkel, passend zur cloud-code-workshop-ui.html),
+Eigenes Deck (SOC Command / Amber-auf-Dunkel, passend zur claude-code-workshop-ui.html),
 NICHT das alte pre-Welle-F claude-code-workshop.pptx ueberschreibend.
 Aufruf (Repo-Root):  python tools/build_deck.py
 """
@@ -213,7 +213,7 @@ for num, head, body in steps:
     x += Inches(3.02)
 text(s, Inches(0.72), Inches(5.0), Inches(11.9), Inches(1.2),
      [[("Start jeder Session: visuell mit diesem Deck. ", 15, AMBER, FONT, True),
-       ("Interaktives Lern-Cockpit (cloud-code-workshop-ui.html) + Mentor-Agent begleiten das Selbststudium.", 15, MUTED, FONT, False)]])
+       ("Interaktives Lern-Cockpit (claude-code-workshop-ui.html) + Mentor-Agent begleiten das Selbststudium.", 15, MUTED, FONT, False)]])
 footer(s)
 
 
@@ -294,7 +294,7 @@ text(s, Inches(0.7), Inches(0.9), Inches(11.9), Inches(0.7),
      [[("So arbeitest du durch den Workshop", 30, INK, FONT_SB, True)]])
 accentbar(s, Inches(0.72), Inches(1.62), Inches(2.6))
 mats = [
-    ("Interaktives Lern-Cockpit", "cloud-code-workshop-ui.html — 65 LEs, Slides, Übungen, Quiz, Fortschritt."),
+    ("Interaktives Lern-Cockpit", "claude-code-workshop-ui.html — 65 LEs, Slides, Übungen, Quiz, Fortschritt."),
     ("Cheatsheet & Quick-Reference", "50+ Commands, Permission-Modi, Hook-Typen, MCP — die Referenzkarte."),
     ("Workshop-Playground", "Demo-Repo mit gepflanzten Vulnerabilities (Zutrittskontrolle, OSDP/Wiegand)."),
     ("Mentor-Agent", "Beantwortet Konzeptfragen und verweist auf die richtige Lerneinheit."),

@@ -10,14 +10,15 @@ Byte-sicher (kein BOM, Zeilenenden bleiben erhalten). Klammert Archiv/docs/.agen
 Aufruf (Repo-Root):  python tools/sweep_sonnet5.py
 """
 import os
+import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 REPLACEMENTS = [
-    (b"claude-sonnet-4-6", b"claude-sonnet-5"),
-    (b"Sonnet 4.6", b"Sonnet 5"),
-    (b"claude-opus-4-7", b"claude-opus-4-8"),
+    (re.compile(br"claude-sonnet-4-6", re.IGNORECASE), b"claude-sonnet-5"),
+    (re.compile(br"sonnet[ -]4\.6", re.IGNORECASE), b"Sonnet 5"),
+    (re.compile(br"claude-opus-4-7", re.IGNORECASE), b"claude-opus-4-8"),
 ]
 
 EXTS = (".md", ".html", ".json", ".txt")
@@ -51,10 +52,10 @@ def main():
                 data = fh.read()
             orig = data
             n = 0
-            for old, new in REPLACEMENTS:
-                c = data.count(old)
+            for rx, new in REPLACEMENTS:
+                c = len(rx.findall(data))
                 if c:
-                    data = data.replace(old, new)
+                    data = rx.sub(new, data)
                     n += c
             if data != orig:
                 with open(full, "wb") as fh:

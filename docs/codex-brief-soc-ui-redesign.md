@@ -6,7 +6,7 @@
 
 ## Kontext
 
-Die `resources/cloud-code-workshop-ui.html` (Single-File, ~2582 Zeilen) bekommt ein
+Die `resources/claude-code-workshop-ui.html` (Single-File, ~2582 Zeilen) bekommt ein
 vollständiges visuelles Redesign. Das Konzept: **Security Operations Center / Military Tactical**.
 Zielgruppe sind Physical-Security-Entwickler (Zutrittskontrolle, Alarmanlagen) — das Design
 spricht deren Branchensprache.
@@ -1271,7 +1271,7 @@ Nach dem bestehenden `.panel-head`-Block, füge hinzu:
 
 ## Verifikation
 
-1. **Öffne im Browser** via `python -m http.server 8042 --bind 127.0.0.1` → `http://127.0.0.1:8042/cloud-code-workshop-ui.html`
+1. **Öffne im Browser** via `python -m http.server 8042 --bind 127.0.0.1` → `http://127.0.0.1:8042/claude-code-workshop-ui.html`
 2. **Kein heller Hintergrund** — das Panel soll dunkelgrün-schwarz sein, nicht weiß
 3. **Status-Bar oben** — amber Text "SYSTEM ONLINE" sichtbar
 4. **Nav-Klick-Test** — Klick auf S1.2: Scan-Line fährt durch, Status-Bar zeigt "SECTOR T-1-2 ACCESSED • CLEARANCE GRANTED", Karten gleiten rein

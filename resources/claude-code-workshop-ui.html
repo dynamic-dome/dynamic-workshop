@@ -1331,7 +1331,16 @@
       4: "Advanced Bonus"
     };
 
-    const state = JSON.parse(localStorage.getItem("ccWorkshopUiState") || "{}");
+    function loadState() {
+      try {
+        return JSON.parse(localStorage.getItem("ccWorkshopUiState") || "{}");
+      } catch (err) {
+        localStorage.removeItem("ccWorkshopUiState");
+        return {};
+      }
+    }
+
+    const state = loadState();
     state.done = state.done || {};
     state.exercise = state.exercise || {};
     state.quiz = state.quiz || {};
@@ -1342,6 +1351,17 @@
     let finalQuizIds = [];
 
     const $ = (id) => document.getElementById(id);
+
+    function applyDeepLink() {
+      const params = new URLSearchParams(window.location.search);
+      const requestedView = params.get("view");
+      routeMode = requestedView === "65" ? "65" : "48";
+      const requestedId = params.get("run") || params.get("section") || "";
+      const route = routeSectionsNoSearch();
+      activeId = route.some(s => s.id === requestedId) ? requestedId : (route[0]?.id || "S1.1");
+      $("route48").classList.toggle("active", routeMode === "48");
+      $("route65").classList.toggle("active", routeMode === "65");
+    }
 
     function saveState() {
       localStorage.setItem("ccWorkshopUiState", JSON.stringify(state));
@@ -2842,6 +2862,7 @@
     if (sections.filter(s => s.route48).length !== 48) {
       console.warn("48 route count drift", sections.filter(s => s.route48).length);
     }
+    applyDeepLink();
     renderAll();
   </script>
 </body>

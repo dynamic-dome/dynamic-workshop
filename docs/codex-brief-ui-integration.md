@@ -1,6 +1,6 @@
-# Codex Brief: HTML-Integration sectionContent.json → cloud-code-workshop-ui.html
+# Codex Brief: HTML-Integration sectionContent.json → claude-code-workshop-ui.html
 
-> **Status 2026-07-04:** umgesetzt und historisch. `resources/cloud-code-workshop-ui.html`
+> **Status 2026-07-04:** umgesetzt und historisch. `resources/claude-code-workshop-ui.html`
 > enthaelt `sectionContent`/`sectionQuiz` inline; die fruehere Generierungsdatei
 > `resources/sectionContent.json` wurde entfernt, damit die HTML-Datei die einzige UI-Content-Quelle ist.
 
@@ -21,7 +21,7 @@ Deine Aufgabe ist die mechanische Integration dieser Daten in die HTML-Datei.
 | Datei | Rolle |
 |---|---|
 | `resources/sectionContent.json` | Generierter Content (lesen, als const einfügen) |
-| `resources/cloud-code-workshop-ui.html` | Ziel-Datei (modifizieren) |
+| `resources/claude-code-workshop-ui.html` | Ziel-Datei (modifizieren) |
 
 ---
 

@@ -1,9 +1,11 @@
 from pathlib import Path
+import importlib.util
 import re
+import tempfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-UI_HTML = ROOT / "resources" / "cloud-code-workshop-ui.html"
+UI_HTML = ROOT / "resources" / "claude-code-workshop-ui.html"
 
 
 def _extract_function(source: str, name: str) -> str:
@@ -11,6 +13,14 @@ def _extract_function(source: str, name: str) -> str:
     if not match:
         raise AssertionError(f"function {name} not found")
     return match.group("body")
+
+
+def _load_tool(name: str):
+    path = ROOT / "tools" / f"{name}.py"
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def test_quiz_shuffle_uses_real_fisher_yates_permutation():
@@ -80,6 +90,54 @@ def test_route_transparency_shows_budget_and_reference_link():
     assert ".session-budget.over-budget" in source
 
 
+def test_local_storage_state_load_is_fail_soft():
+    source = UI_HTML.read_text(encoding="utf-8")
+    body = _extract_function(source, "loadState")
+
+    assert 'JSON.parse(localStorage.getItem("ccWorkshopUiState") || "{}")' in body
+    assert "catch (err)" in body
+    assert 'localStorage.removeItem("ccWorkshopUiState")' in body
+    assert "return {};" in body
+
+
+def test_deep_links_validate_route_and_section_before_first_render():
+    source = UI_HTML.read_text(encoding="utf-8")
+    body = _extract_function(source, "applyDeepLink")
+
+    assert "new URLSearchParams(window.location.search)" in body
+    assert 'requestedView === "65" ? "65" : "48"' in body
+    assert 'params.get("run") || params.get("section")' in body
+    assert "route.some(s => s.id === requestedId)" in body
+    assert 'route[0]?.id || "S1.1"' in body
+    assert source.rindex("applyDeepLink();") < source.rindex("renderAll();")
+
+
+def test_currency_sweep_matches_lint_for_sonnet_46_variants():
+    sweep = _load_tool("sweep_sonnet5")
+
+    data = b"SONNET 4.6\nsonnet-4.6\nSonnet 4.6\nclaude-sonnet-4-6"
+    for rx, new in sweep.REPLACEMENTS:
+        data = rx.sub(new, data)
+
+    assert b"SONNET 4.6" not in data
+    assert b"sonnet-4.6" not in data
+    assert b"Sonnet 4.6" not in data
+    assert b"claude-sonnet-4-6" not in data
+    assert data.count(b"Sonnet 5") == 3
+    assert b"claude-sonnet-5" in data
+
+
+def test_currency_lint_checks_cp1252_files_instead_of_skipping(tmp_path):
+    lint = _load_tool("lint_currency")
+    path = tmp_path / "cp1252.md"
+    path.write_bytes("Currency: SONNET 4.6 \u20ac".encode("cp1252"))
+
+    lines = lint.read_lines(path)
+    patterns = [re.compile(p, re.IGNORECASE) for p in lint.FORBIDDEN]
+
+    assert any(rx.search(lines[0]) for rx in patterns)
+
+
 if __name__ == "__main__":
     test_quiz_shuffle_uses_real_fisher_yates_permutation()
     test_exercise_scoring_is_feedback_only()
@@ -87,4 +145,9 @@ if __name__ == "__main__":
     test_final_quiz_uses_recall_questions_not_theme_labels()
     test_tactical_theme_has_no_blocking_navigation_effects()
     test_route_transparency_shows_budget_and_reference_link()
+    test_local_storage_state_load_is_fail_soft()
+    test_deep_links_validate_route_and_section_before_first_render()
+    test_currency_sweep_matches_lint_for_sonnet_46_variants()
+    with tempfile.TemporaryDirectory() as tmp:
+        test_currency_lint_checks_cp1252_files_instead_of_skipping(Path(tmp))
     print("OK - workshop UI behavior checks passed.")

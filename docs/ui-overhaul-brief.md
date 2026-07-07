@@ -1,10 +1,10 @@
-# Brief: Große UI-Überarbeitung — cloud-code-workshop-ui.html
+# Brief: Große UI-Überarbeitung — claude-code-workshop-ui.html
 
 *Erstellt: 2026-06-29 | Status: Bereit für nächste Session*
 
 ## Problem
 
-Die aktuelle `cloud-code-workshop-ui.html` ist ein gut gebauter Shell mit solidem UX-Gerüst,
+Die aktuelle `claude-code-workshop-ui.html` ist ein gut gebauter Shell mit solidem UX-Gerüst,
 aber **generischem Content**: Alle 65 Sections teilen sich 14 Themen-Templates.
 Das bedeutet — S2.6 (Hooks Grundlagen) und S2.10 (Advanced Hook-Outputs) zeigen denselben
 Konzepttext, dieselbe Analogie, dasselbe Beispiel. Die UI ist schön, aber leer.

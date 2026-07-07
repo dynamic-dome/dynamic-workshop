@@ -57,6 +57,15 @@ def is_excluded(rel):
     return False
 
 
+def read_lines(full):
+    try:
+        with open(full, encoding="utf-8-sig") as fh:
+            return list(fh)
+    except UnicodeDecodeError:
+        with open(full, encoding="cp1252") as fh:
+            return list(fh)
+
+
 def main():
     patterns = [(p, re.compile(p, re.IGNORECASE)) for p in FORBIDDEN]
     hits = []
@@ -71,12 +80,11 @@ def main():
             if is_excluded(rel):
                 continue
             try:
-                with open(full, encoding="utf-8") as fh:
-                    for i, line in enumerate(fh, 1):
-                        for label, rx in patterns:
-                            if rx.search(line):
-                                hits.append((rel.replace(os.sep, "/"), i, label, line.strip()[:120]))
-            except (UnicodeDecodeError, OSError):
+                for i, line in enumerate(read_lines(full), 1):
+                    for label, rx in patterns:
+                        if rx.search(line):
+                            hits.append((rel.replace(os.sep, "/"), i, label, line.strip()[:120]))
+            except OSError:
                 continue
 
     if hits:
