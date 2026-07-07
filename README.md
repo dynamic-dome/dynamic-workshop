@@ -30,7 +30,7 @@ Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding A
 ### Als Selbstlerner
 
 1. `resources/prerequisites.md` durcharbeiten (Installation, Auth, Tools)
-2. Fuer Selbstlernen/Moderation `resources/cloud-code-workshop-ui.html` im Browser oeffnen: interaktive 48-Section-Route mit 65-LE-Gesamtkarte, Folien, Uebungen, Bewertung und Quiz. Fuer die Live-3-Personen-Session gilt `resources/live-3-person-mode.md` statt Completion-Dashboard.
+2. Fuer Selbstlernen/Moderation `resources/claude-code-workshop-ui.html` im Browser oeffnen: interaktive 48-Section-Route mit 65-LE-Gesamtkarte, Folien, Uebungen, Bewertung und Quiz. Fuer die Live-3-Personen-Session gilt `resources/live-3-person-mode.md` statt Completion-Dashboard.
 3. `resources/workshop-guide.md` als **Haupt-Navigation** und Lern-Routine nutzen (ersetzt den Moderator); `WORKSHOP_EINFUEHRUNG.md` gibt die Kurz-Orientierung
 4. Block fuer Block durcharbeiten:
    - `resources/modules/block-1-foundations.md` lesen
