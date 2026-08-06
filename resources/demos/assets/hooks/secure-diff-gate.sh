@@ -7,7 +7,7 @@
 #
 # Contract:
 #   - Reads the PreToolUse hook payload as JSON on stdin.
-#   - Exits 1 (BLOCK) if the target path matches a protected pattern
+#   - Exits 2 (BLOCK) if the target path matches a protected pattern
 #     (.env / *.pem / secrets/ / credentials).
 #   - Exits 0 (ALLOW) for any other path.
 #
@@ -26,7 +26,7 @@ FILE=$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // .file_path // .pat
 
 if printf '%s' "$FILE" | grep -qE '(\.env|\.pem|secrets/|credentials)'; then
   echo "BLOCKED: write to protected path: $FILE" >&2
-  exit 1
+  exit 2
 fi
 
 exit 0

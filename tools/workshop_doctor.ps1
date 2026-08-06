@@ -27,6 +27,63 @@ function Test-CommandVersion {
   }
 }
 
+function Test-WorkshopRepository {
+  param([string]$Path)
+
+  if (-not (Test-Path -LiteralPath $Path -PathType Container)) {
+    Write-Host "[FAIL] Workshop repo missing: $Path"
+    return $false
+  }
+
+  $inside = & git -C $Path rev-parse --is-inside-work-tree 2>$null
+  if (($LASTEXITCODE -ne 0) -or ($inside -ne "true")) {
+    Write-Host "[FAIL] Workshop path is not a Git checkout: $Path"
+    return $false
+  }
+
+  $topLevel = & git -C $Path rev-parse --show-toplevel 2>$null
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host "[FAIL] Cannot determine workshop Git root: $Path"
+    return $false
+  }
+
+  $expected = [IO.Path]::GetFullPath($Path).TrimEnd([char[]]@('\', '/'))
+  $actual = [IO.Path]::GetFullPath(($topLevel | Select-Object -Last 1)).TrimEnd([char[]]@('\', '/'))
+  if ($actual -ne $expected) {
+    Write-Host "[FAIL] Workshop path is not the Git checkout root: $Path"
+    return $false
+  }
+
+  Write-Host "[OK]   Workshop Git checkout is valid"
+  return $true
+}
+
+function Test-PluginManifest {
+  param([string]$PluginPath)
+
+  $manifestPath = Join-Path $PluginPath "plugin.json"
+  if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+    Write-Host "[FAIL] Workshop plugin manifest missing: $manifestPath"
+    return $false
+  }
+
+  try {
+    $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+  } catch {
+    Write-Host "[FAIL] Workshop plugin manifest is invalid JSON: $manifestPath"
+    return $false
+  }
+
+  if (-not $manifest.name) {
+    Write-Host "[FAIL] Workshop plugin manifest has no name: $manifestPath"
+    return $false
+  }
+
+  Write-Host "[OK]   Workshop plugin manifest is valid: $manifestPath"
+  Write-Host "       Launch with: claude --plugin-dir `"$PluginPath`""
+  return $true
+}
+
 Write-Host "Claude Code Workshop Doctor"
 Write-Host "WorkshopRoot: $WorkshopRoot"
 Write-Host ""
@@ -36,16 +93,10 @@ $ok = (Test-CommandVersion -Command node -VersionArgs @("--version") -Label "Nod
 $ok = (Test-CommandVersion -Command git -VersionArgs @("--version") -Label "Git") -and $ok
 $ok = (Test-CommandVersion -Command python -VersionArgs @("--version") -Label "Python") -and $ok
 $ok = (Test-CommandVersion -Command claude -VersionArgs @("--version") -Label "Claude Code") -and $ok
-
-if (Test-Path $WorkshopRoot) {
-  Write-Host "[OK]   Workshop repo exists"
-} else {
-  Write-Host "[FAIL] Workshop repo missing: $WorkshopRoot"
-  $ok = $false
-}
+$ok = (Test-WorkshopRepository -Path $WorkshopRoot) -and $ok
 
 $playground = Join-Path $WorkshopRoot "workshop-playground"
-if (Test-Path $playground) {
+if (Test-Path -LiteralPath $playground -PathType Container) {
   Push-Location $playground
   try {
     python -m pytest -q
@@ -59,16 +110,12 @@ if (Test-Path $playground) {
     Pop-Location
   }
 } else {
-  Write-Host "[WARN] Playground folder missing; clone the workshop repo first"
+  Write-Host "[FAIL] Playground folder missing: $playground"
+  $ok = $false
 }
 
 $plugin = Join-Path $WorkshopRoot ".claude-plugin"
-if (Test-Path $plugin) {
-  Write-Host "[OK]   Workshop plugin directory exists: $plugin"
-  Write-Host "       Launch with: claude --plugin-dir `"$plugin`""
-} else {
-  Write-Host "[WARN] Workshop plugin directory missing"
-}
+$ok = (Test-PluginManifest -PluginPath $plugin) -and $ok
 
 if ($ok) {
   Write-Host ""

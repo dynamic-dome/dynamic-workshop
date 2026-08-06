@@ -145,7 +145,7 @@ Read, Glob, Grep (no permission) | Edit, Write, NotebookEdit, Bash, WebSearch, W
 - Shell snippets in the modules/exercises are POSIX-first. On Windows: run them in **Git Bash**, or translate to PowerShell (`New-Item -ItemType Directory -Force` for `mkdir -p`, `;` for `&&`, `$HOME` for `~`, `$env:VAR`/`setx` for `export`, `$env:TEMP` for `/tmp/`, no `chmod`).
 - **Use `python`, not `python3`, on Windows** (incl. the `.mcp.json` `command`).
 - **Hooks are not cross-platform script files.** Each hook exercise/demo ships both forms: a bash `.sh` (run via `bash ...`, needs `chmod +x`) and a PowerShell `.ps1` (registered as `pwsh -File ...` — or `powershell -File ...` for PS 5.1 — no `chmod`). Exercise 2.2 (Build a Safety Hook) shows both side by side; the cheatsheet has a "Hooks on Windows" box.
-- **Tested fallback hook assets live in `resources/demos/assets/hooks/`**: `secure-diff-gate.sh` (Git Bash) and a jq-free `secure-diff-gate.py` (Windows). Both block writes to `.env`/`*.pem`/`secrets/`/`credentials` and pass normal writes.
+- **Tested fallback hook assets live in `resources/demos/assets/hooks/`**: `secure-diff-gate.sh` (Git Bash) and a jq-free `secure-diff-gate.py` (Windows). Both block writes to `.env`/`*.pem`/`secrets/`/`credentials` with the command-hook contract exit code 2 and pass normal writes with exit 0.
 - The C playground (`osdp_frame_decoder.c`) needs **no compiler** — the swarm reviews the source directly, which is the recommended path on Windows (no gcc/clang).
 
 ## Playground & Domain Exercises (for access-control questions)

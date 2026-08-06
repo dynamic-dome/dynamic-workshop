@@ -6,7 +6,7 @@ that have Python but not jq / Git Bash.
 
 Contract:
   - Reads the PreToolUse hook payload as JSON on stdin.
-  - Exits 1 (BLOCK) if the target path matches a protected pattern
+  - Exits 2 (BLOCK) if the target path matches a protected pattern
     (.env / *.pem / secrets/ / credentials).
   - Exits 0 (ALLOW) for any other path.
 
@@ -38,7 +38,7 @@ def main() -> int:
 
     if PROTECTED.search(path):
         sys.stderr.write(f"BLOCKED: write to protected path: {path}\n")
-        return 1
+        return 2
 
     return 0
 
