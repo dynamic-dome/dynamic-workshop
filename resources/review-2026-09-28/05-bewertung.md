@@ -35,9 +35,11 @@ die nicht blocken.
   `modules/block-2-ecosystem.md:563` (`jq -r '.command'`), `:665` (`.toolOutput`); `prerequisites.md:359,381`;
   `exercises/block-3-exercises.md:537` (`.content // .new_content`); `claude-code-workshop-ui.html:1650,1674,1884`.
   Korrekt sind nur Exercise 2.6 (`block-2-exercises.md:931`) und die Demo-Assets.
-- **Folge:** Übung 2.1, die erste Kern-Übung zu Hooks, kann nicht funktionieren: Der Hook sieht immer einen leeren
-  Befehl, lässt alles durch, und der Tipp im Kurs („make sure it exits with `exit 1`") führt tiefer in den Fehler.
-  Mit Trainer im Raum fällt das auf; Selbstlernende bleiben allein damit.
+- **Folge:** Übung 2.2 („Build a Safety Hook"), die erste Kern-Übung zu Hooks, kann nicht funktionieren: Der Hook
+  sieht immer einen leeren Befehl, lässt alles durch, und der Tipp im Kurs („make sure it exits with `exit 1`") führt
+  tiefer in den Fehler. Der Hinweis „What data does the hook receive?" (`block-2-exercises.md:425-428`) zeigt das
+  falsche Format sogar ausdrücklich (`{"command": "rm -rf /tmp/test"}`). Mit Trainer im Raum fällt das auf;
+  Selbstlernende bleiben allein damit.
 - **Aufwand:** M (zusammen mit H-01)
 
 ### H-03 · falsch · P1 · Troubleshooting lehrt die Fehlerrichtung verkehrt herum
@@ -53,6 +55,33 @@ die nicht blocken.
 - **Beleg:** code.claude.com/docs/en/hooks: „A timed-out `command`, `http`, or `mcp_tool` hook doesn't block the tool
   call. The call continues through the normal permission flow, so don't count on a stalled hook to act as a gate."
 - **Ort:** S2.8 ff., S4.10. **Vorschlag:** Mit H-03 zusammen lehren. **Aufwand:** S
+
+### H-07 · falsch · P2 · Mehrere Hooks laufen parallel, nicht der Reihe nach
+- **Ort:** `exercises/block-2-exercises.md:421-422` („they run in array order. The first one to exit non-zero blocks").
+- **Beleg:** Hooks-Referenz (Markdown-Fassung, Abruf 2026-09-28): „All matching hooks run in parallel."
+- **Vorschlag:** Satz ersetzen; Folge für die Übung: Ein Audit-Log-Hook sieht auch Befehle, die ein anderer Hook
+  gerade blockt. **Aufwand:** S
+
+### H-08 · falsch · P2 · Ausgabe-Felder: `suppressOutput` wirkt nicht, `updatedToolOutput` braucht die Tool-Form
+- **Ort:** Übung 2.6 Token Firewall, `retrieval-recap-bridges.md:22,45`, `prerequisites.md:79`,
+  `exercises/block-3-exercises.md:724`, `agents/workshop-mentor.md:77`; Redaktions-Beispiel
+  `modules/block-2-ecosystem.md:655-702` und Cockpit `claude-code-workshop-ui.html:1672-1675`.
+- **Beleg:** Hooks-Referenz: `suppressOutput` — „Has no effect: Claude Code accepts the field but doesn't act on it."
+  `updatedToolOutput` — „The value must match the tool's output shape … a value that doesn't match the tool's output
+  schema is ignored"; Bash-Form `{stdout, stderr, interrupted, isImage}`, Eingabe unter `tool_response`.
+  `continueOnBlock` existiert, aber als Feld prompt-basierter Hooks.
+- **Korrektur zu F-08:** Der Faktencheck hielt `updatedToolOutput`/`continueOnBlock` für möglicherweise nicht existent;
+  die vollständige Referenz belegt beide. Falsch ist im Kurs nicht der Feldname, sondern Eingabepfad (`.toolOutput`),
+  Wertform (String statt Bash-Objekt) und der Hook-Typ bei `continueOnBlock`.
+- **Aufwand:** M
+
+### H-09 · falsch · P2 · Getesteter Demo-Hook übersieht Windows-Pfade
+- **Ort:** `demos/assets/hooks/secure-diff-gate.{py,sh}`, Tests in `tools/test_workshop_tooling.py:73-92`.
+- **Beleg:** Hooks-Referenz: Dateipfade kommen „always absolute … On Windows, the path arrives with backslash
+  separators … A comparison written with forward slashes, such as a `/src/` check, never matches a backslash path,
+  and the tool call proceeds". Das Muster `secrets/` greift bei `C:\proj\secrets\db.txt` nicht. Die Tests nutzen
+  relative Pfade mit Schrägstrich und sehen das deshalb nicht.
+- **Aufwand:** S
 
 ### H-05 · veraltet · P2 · Lineup hat sich am Tag der Bewertung erneut bewegt
 - **Beleg:** platform.claude.com/docs/en/about-claude/models/overview (2026-09-28): aktuelles Lineup Fable 5.1 /
@@ -124,4 +153,49 @@ dieselbe Lektion wie P-01: Ein grüner Bericht ist kein Beweis, ausgeführter Co
 - Modell-Lineup W-01/W-04/W-13: Modellübersicht und Changelog selbst abgerufen — bestätigt, inkl. Sonnet 5.5.
 - Faktencheck-Helfer musste einen hängengebliebenen `claude remote-control --help`-Prozess beenden; Nachprüfung
   per Prozessliste: kein Rest-Prozess.
-- Nicht nachgeprüft: F-04, F-05 (Helfer-Belege mit wörtlichen Zitaten, plausibel), die P3-Befunde.
+- F-05 selbst nachgeprüft (`claude plugin validate --help`: „Usage: claude plugin validate [options] <path>").
+- Nicht nachgeprüft: F-04 (Helfer-Beleg mit wörtlichem Zitat, plausibel), die P3-Befunde.
+
+## Korrekturen nach dem ersten Commit (2026-09-28, vor Veröffentlichung)
+
+- H-02 nannte die Hook-Übung „Übung 2.1"; richtig ist **Übung 2.2** („Build a Safety Hook"). 2.1 ist die Skill-Übung.
+- F-08 war als „unklar, vermutlich nicht existent" geführt; die vollständige Hooks-Referenz (Markdown statt gekürzter
+  WebFetch-Zusammenfassung) belegt beide Felder. Neu bewertet in H-08.
+- H-07 bis H-09 kamen beim Lesen der vollständigen Referenz für den Hotfix hinzu.
+- F-01 war nur halb richtig. `claude --help` sagt „Skills still resolve via /skill-name", die Headless-Doku
+  (code.claude.com/docs/en/headless.md) sagt, `--bare` überspringt die **automatische Erkennung** von Hooks, Skills,
+  Subagents, Plugins, MCP-Servern, Auto-Memory und CLAUDE.md. Beides stimmt: keine Auto-Discovery, expliziter
+  `/skill-name`-Aufruf geht. Der Hotfix formuliert es so.
+
+## Nachträge aus dem Hotfix (2026-09-28)
+
+### H-10 · falsch · P1 · CI-Anleitung kombiniert `claude setup-token` mit `--bare` — das authentifiziert nicht
+- **Beleg:** code.claude.com/docs/en/authentication.md: „Bare mode does not read `CLAUDE_CODE_OAUTH_TOKEN`. If your
+  script passes `--bare`, authenticate with `ANTHROPIC_API_KEY` or an `apiKeyHelper` instead." `setup-token` erzeugt
+  genau so ein OAuth-Token (Env-Var `CLAUDE_CODE_OAUTH_TOKEN`).
+- **Ort:** `modules/block-3-advanced.md` Modul 3.6 (Lernziel, „CI Auth — `claude setup-token`", Env-Name
+  `CLAUDE_CODE_TOKEN` statt `CLAUDE_CODE_OAUTH_TOKEN`, Failure-Tabelle), Cockpit S4.4/S4.5, `faq.md:171`,
+  `cheatsheet.md:120`, Mentor.
+- **Stand:** Im Hotfix nur der `--bare`-Absatz korrigiert (Auth-Hinweis). Die übrige CI-Anleitung ist ein eigener
+  Folgepunkt, bewusst nicht halb geändert.
+- **Aufwand:** M
+
+### H-11 · fehlt · P2 · `-p` ohne `--bare` führt Hooks und MCP-Server eines fremden Repos aus
+- **Beleg:** code.claude.com/docs/en/headless.md: „Without `--bare`, a `-p` session runs the hooks in a project's
+  `.claude/settings.json` and connects the servers in its `.mcp.json`, even in a folder you've never trusted."
+- **Stand:** Im Hotfix als Sicherheitsabsatz in Modul 3.6 ergänzt (`--bare`-Abschnitt).
+
+### H-12 · falsch · P2 · Cockpit zeigte Code-Beispiele ohne Zeilenumbrüche in 114 px breiten Karten
+- **Beleg:** Browser-Messung (Playwright, 1413 px Fenster): `<p id="example">` mit `white-space: normal`, drei
+  Karten à 114 px. Kopiert man ein Beispiel, macht die `#!/bin/bash`-Zeile den ganzen Rest zum Kommentar.
+- **Stand:** Behoben — `<pre>` mit `white-space: pre-wrap`, Code-Karte über volle Breite (12 statt 41 Zeilen),
+  Test in `tools/test_workshop_ui_behavior.py`.
+
+## Hotfix-Stand (2026-09-28)
+
+Behoben mit Belegen: H-01, H-02, H-03, H-04, H-07, H-08, H-09, H-11, H-12, A-01/F-03 (auto-Modus-Text), F-01
+(`--bare`, präzisiert), F-04, F-05; dazu Skill-Frontmatter-Format und -Lebensdauer, `if`-Position,
+`terminalSequence`-Allowlist, Hook-Timeout (600 s, fail-open). Neue Absicherung: `tools/test_course_hooks.py`
+(Verhalten jeder kopierbaren Hook-Datei mit Eingaben im offiziellen Format inkl. Windows-Pfaden; Abgleich jedes
+markierten Kurs-Snippets mit seiner Datei; Wächter gegen die alten Fehlmuster mit eingebauter Gegenprobe).
+Offen: H-10 (CI-Auth), Modell-Lineup (Phase 2), neue Features (W-08 ff.).
