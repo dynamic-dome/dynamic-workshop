@@ -60,7 +60,9 @@ def _create_source_repo(path: Path) -> None:
     plugin = path / ".claude-plugin"
     plugin.mkdir()
     (plugin / "plugin.json").write_text(
-        json.dumps({"name": "workshop", "version": "0.0.0", "description": "test"}),
+        json.dumps(
+            {"name": "dynamic-workshop", "version": "0.0.0", "description": "test"}
+        ),
         encoding="utf-8",
     )
     (path / "state.txt").write_text("one\n", encoding="utf-8")
@@ -114,6 +116,57 @@ def test_installer_updates_clean_checkout_fast_forward_only(tmp_path: Path):
 
 
 @pytest.mark.skipif(POWERSHELL is None, reason="Windows PowerShell is required")
+def test_installer_rejects_existing_checkout_with_wrong_origin_without_changes(
+    tmp_path: Path,
+):
+    requested_source = tmp_path / "requested-source"
+    wrong_source = tmp_path / "wrong-source"
+    install_root = tmp_path / "install"
+    _create_source_repo(requested_source)
+    _create_source_repo(wrong_source)
+    assert _run_installer(install_root, wrong_source).returncode == 0
+
+    checkout = install_root / "dynamic-workshop"
+    head_before = _git("rev-parse", "HEAD", cwd=checkout)
+    status_before = _git("status", "--porcelain", "--untracked-files=all", cwd=checkout)
+
+    result = _run_installer(install_root, requested_source)
+
+    assert result.returncode != 0
+    assert "origin" in (result.stdout + result.stderr).lower()
+    assert _git("rev-parse", "HEAD", cwd=checkout) == head_before
+    assert _git("status", "--porcelain", "--untracked-files=all", cwd=checkout) == status_before
+
+
+@pytest.mark.skipif(POWERSHELL is None, reason="Windows PowerShell is required")
+def test_installer_rejects_existing_checkout_with_wrong_plugin_name_without_changes(
+    tmp_path: Path,
+):
+    source = tmp_path / "source"
+    install_root = tmp_path / "install"
+    _create_source_repo(source)
+    assert _run_installer(install_root, source).returncode == 0
+
+    checkout = install_root / "dynamic-workshop"
+    manifest = checkout / ".claude-plugin" / "plugin.json"
+    manifest.write_text(
+        json.dumps({"name": "another-plugin", "version": "0.0.0"}),
+        encoding="utf-8",
+    )
+    _git("add", ".claude-plugin/plugin.json", cwd=checkout)
+    _git("commit", "-m", "change plugin identity", cwd=checkout)
+    head_before = _git("rev-parse", "HEAD", cwd=checkout)
+    status_before = _git("status", "--porcelain", "--untracked-files=all", cwd=checkout)
+
+    result = _run_installer(install_root, source)
+
+    assert result.returncode != 0
+    assert "dynamic-workshop" in (result.stdout + result.stderr)
+    assert _git("rev-parse", "HEAD", cwd=checkout) == head_before
+    assert _git("status", "--porcelain", "--untracked-files=all", cwd=checkout) == status_before
+
+
+@pytest.mark.skipif(POWERSHELL is None, reason="Windows PowerShell is required")
 def test_installer_rejects_dirty_checkout(tmp_path: Path):
     source = tmp_path / "source"
     install_root = tmp_path / "install"
@@ -151,3 +204,4 @@ def test_doctor_requires_git_checkout_and_valid_plugin_manifest():
     assert "rev-parse" in source
     assert "plugin.json" in source
     assert "ConvertFrom-Json" in source
+    assert "dynamic-workshop" in source

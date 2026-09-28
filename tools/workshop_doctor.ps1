@@ -74,12 +74,12 @@ function Test-PluginManifest {
     return $false
   }
 
-  if (-not $manifest.name) {
-    Write-Host "[FAIL] Workshop plugin manifest has no name: $manifestPath"
+  if ($manifest.name -ne "dynamic-workshop") {
+    Write-Host "[FAIL] Workshop plugin manifest name must be 'dynamic-workshop': $manifestPath"
     return $false
   }
 
-  Write-Host "[OK]   Workshop plugin manifest is valid: $manifestPath"
+  Write-Host "[OK]   Workshop plugin identity is valid: $manifestPath"
   Write-Host "       Launch with: claude --plugin-dir `"$PluginPath`""
   return $true
 }

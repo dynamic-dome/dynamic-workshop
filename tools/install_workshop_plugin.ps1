@@ -14,6 +14,26 @@ function Invoke-Git {
   }
 }
 
+function ConvertTo-RepositoryIdentity {
+  param([string]$Url)
+
+  $value = $Url.Trim()
+  if ($value -match '^[A-Za-z]:[\\/]') {
+    $identity = [IO.Path]::GetFullPath($value).Replace('\', '/')
+  } elseif ($value -match '^file://') {
+    $identity = ([Uri]$value).LocalPath.Replace('\', '/')
+  } elseif ($value -match '^[^@/\\]+@([^:]+):(.+)$') {
+    $identity = "$($Matches[1])/$($Matches[2])"
+  } elseif ($value -match '^[A-Za-z][A-Za-z0-9+.-]*://') {
+    $uri = [Uri]$value
+    $identity = "$($uri.Host)/$($uri.AbsolutePath.TrimStart('/'))"
+  } else {
+    $identity = [IO.Path]::GetFullPath($value).Replace('\', '/')
+  }
+
+  return $identity.TrimEnd('/').ToLowerInvariant() -replace '\.git$', ''
+}
+
 function Assert-GitCheckout {
   param([string]$Path)
 
@@ -34,12 +54,30 @@ function Assert-GitCheckout {
   }
 }
 
+function Assert-RepositoryOrigin {
+  param(
+    [string]$Path,
+    [string]$RequestedRepoUrl
+  )
+
+  $originUrl = & git -C $Path remote get-url origin 2>$null
+  if ($LASTEXITCODE -ne 0) {
+    throw "Existing Git checkout has no readable origin remote: $Path"
+  }
+
+  $actual = ConvertTo-RepositoryIdentity ($originUrl | Select-Object -Last 1)
+  $expected = ConvertTo-RepositoryIdentity $RequestedRepoUrl
+  if ($actual -ne $expected) {
+    throw "Existing Git checkout origin does not match requested RepoUrl: $originUrl"
+  }
+}
+
 function Assert-PluginManifest {
   param([string]$PluginPath)
 
   $manifestPath = Join-Path $PluginPath "plugin.json"
   if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
-    throw "Plugin manifest not found after checkout update: $manifestPath"
+    throw "Plugin manifest not found: $manifestPath"
   }
 
   try {
@@ -48,8 +86,8 @@ function Assert-PluginManifest {
     throw "Plugin manifest is not valid JSON: $manifestPath"
   }
 
-  if (-not $manifest.name) {
-    throw "Plugin manifest is missing required field 'name': $manifestPath"
+  if ($manifest.name -ne "dynamic-workshop") {
+    throw "Plugin manifest name must be 'dynamic-workshop': $manifestPath"
   }
 }
 
@@ -67,6 +105,9 @@ if (-not (Test-Path -LiteralPath $repoDir)) {
   }
 
   Assert-GitCheckout $repoDir
+  Assert-RepositoryOrigin -Path $repoDir -RequestedRepoUrl $RepoUrl
+  Assert-PluginManifest $pluginDir
+
   $dirty = & git -C $repoDir status --porcelain --untracked-files=normal
   if ($LASTEXITCODE -ne 0) {
     throw "Could not inspect Git checkout state: $repoDir"
