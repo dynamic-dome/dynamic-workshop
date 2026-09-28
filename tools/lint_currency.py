@@ -30,8 +30,6 @@ EXTS = (".md", ".html", ".json", ".txt")
 
 # Ausgeklammerte Pfad-Fragmente (historisch / Archiv / Meta / generiert)
 EXCLUDE_DIRS = (
-    os.path.join("resources", "review-2026-06-21"),
-    os.path.join("resources", "review-2026-07-04"),
     ".agent-memory",
     "docs",
     ".git",
@@ -46,7 +44,13 @@ EXCLUDE_FILES = (
 )
 
 
+# Datierte Review-Archive (resources/review-YYYY-MM-DD/...) sind Befunde, kein Kursinhalt.
+REVIEW_ARCHIVE = re.compile(r"^resources/review-[^/]+/")
+
+
 def is_excluded(rel):
+    if REVIEW_ARCHIVE.match(rel.replace(os.sep, "/")):
+        return True
     rel_norm = rel.replace("/", os.sep)
     for d in EXCLUDE_DIRS:
         if rel_norm.startswith(d + os.sep) or rel_norm == d:

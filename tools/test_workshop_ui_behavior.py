@@ -138,6 +138,15 @@ def test_currency_lint_checks_cp1252_files_instead_of_skipping(tmp_path):
     assert any(rx.search(lines[0]) for rx in patterns)
 
 
+def test_currency_lint_excludes_every_dated_review_archive_but_not_live_content():
+    lint = _load_tool("lint_currency")
+
+    assert lint.is_excluded("resources/review-2026-09-28/01-welt-delta.md")
+    assert lint.is_excluded("resources/review-2031-01-01/00-SCHEMA.md")
+    assert not lint.is_excluded("resources/modules/block-1-foundations.md")
+    assert not lint.is_excluded("resources/review-notes.md")
+
+
 if __name__ == "__main__":
     test_quiz_shuffle_uses_real_fisher_yates_permutation()
     test_exercise_scoring_is_feedback_only()
