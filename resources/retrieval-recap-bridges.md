@@ -19,7 +19,7 @@ Run these before the new session's PPT. Participants answer from memory first; t
 ### Session 3 Opener: Ecosystem Recall
 
 1. When is a hook better than a skill?
-2. What does `suppressOutput` solve in a PostToolUse hook?
+2. Which exit code makes a PreToolUse hook block — and what happens if the hook crashes with any other code?
 3. What is the difference between a local plugin test with `--plugin-dir` and a team install?
 4. When should NotebookLM/RAG be preferred over pasting a large document into chat?
 5. What is the first safety question before giving an automation write access?
@@ -42,7 +42,7 @@ Use after dense analogy clusters. These are 60-90 second checks, not quizzes.
 |---|---|---|
 | S1.6 Permission Modes | "Name the clearance level you would give Claude for a repo you have never seen." | Participant chooses `default` or `plan` and mentions least privilege. |
 | S1.10 `CLAUDE.md` | "Name one standing order that belongs in `CLAUDE.md` for your team." | Participant names a persistent rule, not a one-off prompt. |
-| S2.8 Hook Outputs | "Plain stdout or JSON field: which one suppresses noisy output?" | Participant says JSON with `suppressOutput`, not plain stdout. |
+| S2.8 Hook Outputs | "How does a PostToolUse hook shrink noisy output before Claude reads it?" | Participant says `hookSpecificOutput.updatedToolOutput` in the tool's own shape (for Bash: `stdout`/`stderr`/`interrupted`/`isImage`); `suppressOutput` has no effect. |
 | S3.12 Scheduling | "What safety net must every unattended routine carry?" | Participant names budget cap plus stop condition or human review. |
 | S4.8 Capstone | "What evidence makes your handoff PR-ready?" | Participant names narrow check, risk, rollback, and exact command run. |
 

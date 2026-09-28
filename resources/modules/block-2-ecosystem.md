@@ -115,9 +115,10 @@ paths: ["src/**/*.ts", "tests/**/*.ts"]
 shell: powershell
 hooks:
   PreToolUse:
-    - matcher: Bash
-      type: command
-      command: ./pre-test-check.sh
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "./pre-test-check.sh"
 ---
 ```
 
@@ -425,7 +426,7 @@ Use `/skills` in any session to see all available skills — bundled, user, proj
 **Learning Objectives:** After this module, you can:
 - Map the 12 most-used hook events (PreToolUse, PostToolUse, Stop, SessionStart/End, UserPromptSubmit, PreCompact, SubagentStart/Stop, FileChanged, InstructionsLoaded, Notification) to concrete use cases.
 - Write a hook entry in `settings.json` with the right matcher syntax (literal vs. regex), the `if` permission-rule filter, and one of the 5 execution types (command / http / prompt / agent / mcp_tool).
-- Use advanced hook outputs (`updatedToolOutput`, `continueOnBlock`, `terminalSequence`) and `$CLAUDE_EFFORT` to build effort-aware, soft-blocking, redaction-capable hooks.
+- Use advanced hook outputs (`updatedToolOutput`, soft warnings via `systemMessage`/`additionalContext`, `terminalSequence`) and `$CLAUDE_EFFORT` to build effort-aware, redaction-capable hooks — and know that only exit 2 blocks.
 
 <!-- LE: S2.6 -->
 > **Ich kann jetzt:** Hooks als Event-Listener mit Matcher, Event und Aktion erklaeren.
@@ -445,7 +446,7 @@ The official docs currently list **a couple dozen lifecycle events**. We focus o
 
 | Event | When it fires | Typical use case |
 |-------|---------------|------------------|
-| **PreToolUse** | Before Claude uses a tool (bash, edit, MCP call). **Can block** by exiting non-zero | Prevent dangerous commands, enforce review before deploy, confirm irreversible actions |
+| **PreToolUse** | Before Claude uses a tool (bash, edit, MCP call). **Can block** by exiting with code **2** (any other non-zero code does not block) | Prevent dangerous commands, enforce review before deploy, confirm irreversible actions |
 | **PostToolUse** | After a tool runs and the result is back. Can react, log, trigger follow-ups | Audit log of every edit, Slack notification when tests pass, dashboard updates |
 | **Stop** | Claude finishes a response and is waiting for the next user prompt | End-of-session summaries, cleanup tasks, status updates |
 | **SessionStart** | Each time a Claude Code session starts | Briefing hook: print project status, check `git status`, verify dependencies are installed |
@@ -462,7 +463,7 @@ The official docs currently list **a couple dozen lifecycle events**. We focus o
 
 ### The Three Cornerstones in Detail
 
-**PreToolUse — Before, Can Block.** Fires before Claude uses a tool (runs bash, edits a file, calls an MCP server). The hook receives information about what Claude is about to do. It can log the action, warn the user, or **block the action entirely** by exiting with a non-zero code.
+**PreToolUse — Before, Can Block.** Fires before Claude uses a tool (runs bash, edits a file, calls an MCP server). The hook receives information about what Claude is about to do. It can log the action, warn the user, or **block the action entirely** by exiting with code 2. Only 2 blocks: `exit 1`, a crash, or a timeout just report a hook error, and the action goes ahead. For a guard, that is the dangerous failure direction.
 
 **PostToolUse — After, Can React.** Fires after Claude uses a tool and receives the result. It can log what happened, trigger follow-up actions, send notifications, write to audit logs.
 
@@ -501,7 +502,7 @@ The structure:
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/pre-bash-check.sh"
+            "command": "bash ~/.claude/hooks/safety-check.sh"
           }
         ]
       }
@@ -536,44 +537,79 @@ The `matcher` field controls which tool calls the hook reacts to. The matching l
 - If the matcher contains **only letters, digits, `_`, and `|`**, it is treated as an exact match or a pipe-separated list. `"Bash"` matches just the Bash tool; `"Bash|Edit|Write"` matches any of those three.
 - If the matcher contains **any other special characters**, it is treated as a JavaScript regex. `".*"` matches all tools; `"Bash|^Edit$"` is also regex once `.` or `^`/`$` appear.
 
-You can also add an `if` field for further filtering using **permission-rule syntax**, which is a much more semantic filter than tool-name regex alone:
+You can also add an `if` field for further filtering using **permission-rule syntax**, which is a much more semantic filter than tool-name regex alone. `if` belongs on the individual hook handler, next to `type` and `command`, not on the matcher group:
 
 ```json
 {
   "matcher": "Bash",
-  "if": "Bash(git *)",
-  "hooks": [...]
+  "hooks": [
+    {
+      "type": "command",
+      "if": "Bash(git *)",
+      "command": "bash ~/.claude/hooks/git-audit.sh"
+    }
+  ]
 }
 ```
 
-This hook fires only on Bash invocations that match the permission rule `Bash(git *)` — i.e., only git-related shell commands. The `if` syntax mirrors the same patterns you use in `permissions.allow` / `permissions.deny`.
+This hook fires only on Bash invocations that match the permission rule `Bash(git *)` — i.e., only git-related shell commands. The `if` syntax mirrors the same patterns you use in `permissions.allow` / `permissions.deny`. It is only evaluated on tool events (`PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`, `PermissionDenied`).
 
 ### A Real Hook Example: Security Warning
 
-This hook warns before any bash command containing `rm -rf` or `git push --force`:
+This hook blocks any bash command that matches a destructive pattern such as `rm -rf` or `git push --force`. It is the same tested script you build in Exercise 2.2.
 
-> **Windows note:** The first hook example below is intentionally Bash + `jq` because it mirrors the CLI docs. On Windows, run it via Git Bash or use the PowerShell variant from Exercise 2.2 / `resources/demos/assets/hooks/`; do not paste Bash heredocs into PowerShell.
+> **Windows note:** The example below is Bash + `jq`. On Windows, run it via Git Bash or use the PowerShell variant from Exercise 2.2 (`resources/demos/assets/hooks/safety-check.ps1`); do not paste Bash heredocs into PowerShell.
 
-**`~/.claude/hooks/pre-bash-check.sh`:**
+**`~/.claude/hooks/safety-check.sh`:**
 ```bash
 #!/bin/bash
+# safety-check.sh - PreToolUse hook (matcher "Bash"): block destructive shell commands.
+# tested asset: resources/demos/assets/hooks/safety-check.sh
+#
+# Contract (official hooks reference):
+#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command.
+#   - exit 2 = BLOCK: the command does not run, and stderr is shown to Claude as the reason.
+#   - exit 0 = allow. Any OTHER exit code (1, 127, ...) does NOT block: the command runs anyway.
 
-# Claude passes tool input via stdin as JSON
 INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.command // ""')
 
-# Check for dangerous patterns
-if echo "$COMMAND" | grep -qE 'rm\s+-rf|git push.*--force|DROP TABLE|truncate'; then
-  echo "WARNING: Potentially destructive command detected: $COMMAND" >&2
-  echo "Pausing for confirmation..." >&2
-  # Exit 1 to BLOCK the command from running
-  exit 1
+# Fail closed: if the input cannot be read, block instead of silently allowing everything.
+if ! COMMAND=$(printf '%s' "$INPUT" | jq -er '.tool_input.command // ""' 2>/dev/null); then
+  echo "SAFETY HOOK: could not read the hook input (is jq installed?) - blocking to stay safe." >&2
+  exit 2
 fi
 
+# Dangerous patterns (extended regex, case-insensitive)
+DANGEROUS_PATTERNS=(
+  'rm[[:space:]]+-rf'
+  'git push.*--force'
+  'git push.*-f([[:space:]]|$)'
+  'DROP TABLE'
+  'truncate.*--yes'
+  'mkfs\.'
+  'dd[[:space:]]+if=.*of=/dev/'
+  '> /dev/sd'
+)
+
+for PATTERN in "${DANGEROUS_PATTERNS[@]}"; do
+  if printf '%s' "$COMMAND" | grep -qiE -- "$PATTERN"; then
+    echo "SAFETY HOOK: potentially destructive command blocked." >&2
+    echo "Command: $COMMAND" >&2
+    echo "Pattern matched: $PATTERN" >&2
+    echo "If this was intended, run it yourself outside Claude Code." >&2
+    exit 2
+  fi
+done
+
+# All checks passed - allow the command
 exit 0
 ```
 
-When Claude tries to run `rm -rf /tmp/build`, this hook fires, prints the warning, and exits with code 1 — Claude Code sees the block and stops.
+When Claude tries to run `rm -rf /tmp/build`, this hook fires, prints the reason to stderr and exits with code 2. Claude Code blocks the call and shows Claude the reason, so Claude can pick a safer approach.
+
+**Two details decide whether a guard like this works at all:**
+- The command sits in `tool_input.command`. A script that reads a top-level `command` field always sees an empty string and never matches anything.
+- The failure direction. If the script crashes (missing `jq`, syntax error, exit 127) or times out, Claude Code does **not** block; the command runs. That is why the script checks its own input and exits 2 when it cannot read it: a broken guard should close the door, not open it.
 
 ### What Hooks Can Do
 
@@ -584,7 +620,7 @@ When Claude tries to run `rm -rf /tmp/build`, this hook fires, prints the warnin
 5. **Automate workflows** — after a successful test run, automatically open a PR draft
 6. **Security scanning** — check for secrets, API keys, or `innerHTML` assignments before committing
 
-Hooks add **automated guards** to Claude Code — shell scripts that fire on specific lifecycle events. They are **best-effort** (a malformed matcher, missing executable bit, or hook timeout silently disables them), not a hard security boundary. Pair Hooks with proper permission rules and sandboxing for real isolation.
+Hooks add **automated guards** to Claude Code — shell scripts that fire on specific lifecycle events. They are **best-effort** (a malformed matcher, a missing executable bit, a crash with any exit code other than 2, or a hook timeout lets the action through), not a hard security boundary. Pair Hooks with proper permission rules and sandboxing for real isolation.
 
 <!-- LE: S2.9 -->
 > **Ich kann jetzt:** command, http, mcp_tool, prompt und agent hooks nach Einsatzgrenze unterscheiden.
@@ -622,9 +658,12 @@ Hooks don't just run shell commands. There are five execution types:
 
 ### Component-Scoped Hooks: Hooks in Skill and Subagent Frontmatter
 
-Hooks don't have to live in `settings.json`. They can also be **embedded in the frontmatter of a skill or subagent**, in which case they only run **while that component is active**. Outside the skill or subagent, the hook is silent.
+Hooks don't have to live in `settings.json`. They can also be **embedded in the frontmatter of a skill or subagent**, in the same nested format as in settings (matcher group → `hooks` list → handler). The two component types differ in how long their hooks live:
 
-This is a major 2026 feature that lets a skill ship its own pre- and post-checks without polluting global settings.
+- **Subagent hooks** run only while that subagent runs and are removed when it finishes.
+- **Skill hooks** are registered when the skill is invoked and **stay active for the rest of the session**, also on later turns. Set `once: true` on a handler if it should be removed after its first successful run.
+
+This lets a skill ship its own pre- and post-checks without polluting global settings.
 
 ```yaml
 ---
@@ -633,76 +672,101 @@ description: Deploy the current branch to staging
 disable-model-invocation: true
 hooks:
   PreToolUse:
-    - matcher: Bash
-      type: command
-      command: ./pre-deploy-check.sh
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "./pre-deploy-check.sh"
   PostToolUse:
-    - matcher: Bash
-      type: command
-      command: ./post-deploy-notify.sh
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "./post-deploy-notify.sh"
+          once: true
 ---
 ```
 
-The `pre-deploy-check.sh` only fires while the deploy skill's context is active. As soon as the session leaves the skill, the hook is gone — no need to add a matcher that filters by skill name in a global hook.
+`pre-deploy-check.sh` is armed from the moment `/deploy` runs until the session ends; `post-deploy-notify.sh` fires once and is removed. You don't need a global hook that filters by skill name.
 
-**Security analogy:** A guard who is patrolling Zone A carries Zone-A-specific sensors. When they move to Zone B, those sensors don't come along — Zone B has its own. Component-scoped hooks are exactly that: localized, contextual, and they retire automatically.
+**Security analogy:** A subagent hook is a sensor a guard carries on one patrol — it comes back with the guard. A skill hook is a sensor the guard mounts on the wall during the patrol: it stays armed for the rest of the shift unless it is built to switch itself off after the first alarm (`once: true`).
 
 <!-- LE: S2.10 -->
 > **Ich kann jetzt:** fortgeschrittene Hook-Outputs als Warnung, Kontext oder Schutzschicht einsetzen.
 
 ### Advanced Hook Output — Rewriting, Soft-Blocking, Terminal Feedback
 
-Beyond simply exiting 0 (allow) or non-zero (block), hooks can return a **structured JSON object** on stdout to control downstream behavior more precisely. Three fields matter in practice.
+Beyond exiting 0 (allow) or 2 (block), a hook can print a **structured JSON object** on stdout (with exit 0) to control what happens more precisely. Three uses matter in practice.
 
-#### `updatedToolOutput` — Rewrite What Claude Sees (recent versions)
+#### `updatedToolOutput` — Rewrite What Claude Sees
 
-A `PostToolUse` hook can **replace the tool's output before Claude reads it**. The original output is intercepted; Claude sees only the rewritten version.
+A `PostToolUse` hook can **replace the tool's output before Claude reads it**. It receives the finished result in `tool_response` and returns the replacement under `hookSpecificOutput.updatedToolOutput`. The replacement must have **the same shape as the tool's own output**: for Bash an object with `stdout`, `stderr`, `interrupted` and `isImage`. A plain string is ignored for built-in tools, and Claude then sees the original.
 
 ```bash
 #!/bin/bash
-# ~/.claude/hooks/redact-secrets.sh
+# redact-output.sh - PostToolUse hook (matcher "Bash"): hide secrets from Claude in command output.
+# tested asset: resources/demos/assets/hooks/redact-output.sh
+#
+# PostToolUse receives the finished result in tool_response (Bash: stdout, stderr, interrupted, isImage).
+# To change what Claude sees, print hookSpecificOutput.updatedToolOutput in the SAME shape;
+# a plain string is ignored for built-in tools. The command itself has already run.
+
 INPUT=$(cat)
-OUTPUT=$(echo "$INPUT" | jq -r '.toolOutput')
-REDACTED=$(echo "$OUTPUT" | sed -E 's/(sk-[a-zA-Z0-9]{20,}|AKIA[A-Z0-9]{16})/[REDACTED]/g')
-jq -n --arg out "$REDACTED" '{"hookSpecificOutput":{"updatedToolOutput":$out}}'
+SECRETS='(sk-[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16})'
+
+TEXT=$(printf '%s' "$INPUT" | jq -r '.tool_response | (.stdout // "") + "\n" + (.stderr // "")')
+if ! printf '%s' "$TEXT" | grep -qE -- "$SECRETS"; then
+  exit 0   # nothing to hide: print nothing, Claude sees the original output
+fi
+
+printf '%s' "$INPUT" | jq --arg re "$SECRETS" '{
+  hookSpecificOutput: {
+    hookEventName: "PostToolUse",
+    updatedToolOutput: (.tool_response | (.stdout, .stderr) |= gsub($re; "[REDACTED]"))
+  }
+}'
 exit 0
 ```
 
-**Use case:** Redact API keys, tokens, or PII out of tool output before Claude embeds them into its reasoning (and potentially into future messages). The model never sees the raw secret.
+**Use case:** Redact API keys, tokens, or PII out of tool output before Claude embeds them into its reasoning (and potentially into future messages). **Limit:** the command has already run, and telemetry records the original output. To stop something from happening at all, use a PreToolUse hook.
 
-> **Windows:** the hook examples in this section are written in bash (`jq`, `sed`, `case`). On Windows run them via Git Bash, or port them to a `.ps1` (parse stdin with `$input | Out-String | ConvertFrom-Json`, emit JSON with `ConvertTo-Json`) and register with `pwsh -File ...`. See the "Hooks on Windows" box in the cheatsheet and the bash+PowerShell pair in Exercise 2.2.
+> **Windows:** the hook examples in this section are written in bash (`jq`, `case`). On Windows run them via Git Bash, or port them to a `.ps1` (read stdin with `[Console]::In.ReadToEnd() | ConvertFrom-Json`, emit JSON with `ConvertTo-Json -Depth 5`) and register with `pwsh -File ...`. See the "Hooks on Windows" box in the cheatsheet and the bash+PowerShell pair in Exercise 2.2.
 
 **Security analogy:** A redaction officer between the field operative and the briefing room — the report still reaches the analyst, but with the sensitive identifiers blacked out first.
 
-#### `continueOnBlock: true` — Soft Warnings (recent versions)
+#### Soft warnings instead of hard blocks
 
-By default, a non-zero exit from a hook **stops Claude** in its tracks. With `continueOnBlock: true` on the hook entry, the block degrades to a **warning** — Claude is told what was blocked and why, but the turn continues.
+Not every signal should stop the action. For a **command hook**, the soft options are JSON fields printed with exit 0:
 
-```json
-{
-  "matcher": "Bash",
-  "if": "Bash(git push *)",
-  "continueOnBlock": true,
-  "hooks": [
-    { "type": "command", "command": "./audit-log-push.sh" }
-  ]
-}
-```
-
-**Use case:** Non-fatal audit logs ("we noticed a `git push` — entry written to the audit trail") where you want the action to proceed but want the hook's signal preserved in the transcript.
-
-#### `terminalSequence` — ANSI Output to the User's Terminal (recent versions)
-
-A hook can return a `terminalSequence` field whose value is written **directly to the user's terminal** as raw ANSI escape sequences — independent of the model's reasoning stream.
+- `systemMessage` — a warning line shown to **you** in the transcript (Claude does not see it).
+- `hookSpecificOutput.additionalContext` — a note added to **Claude's** context next to the tool result.
+- For PreToolUse, `hookSpecificOutput.permissionDecision: "deny"` with a `permissionDecisionReason` blocks the call but hands the reason to Claude so it can adjust (the same routing as exit 2).
 
 ```bash
 #!/bin/bash
-# Flash red status line when a destructive command was attempted
-jq -n '{"terminalSequence":"[41;97m  DESTRUCTIVE COMMAND BLOCKED [0m\n"}'
-exit 1
+# PreToolUse, matcher "Bash", handler "if": "Bash(git push *)": let the push run, but leave a trace.
+echo "$(date -Iseconds) git push" >> ~/.claude/push-audit.log
+jq -n '{hookSpecificOutput: {hookEventName: "PreToolUse",
+        additionalContext: "Push recorded in the audit trail."},
+        systemMessage: "git push noticed - audit entry written"}'
+exit 0
 ```
 
-**Use case:** Colored warnings, status-bar updates, audible bells, anything that should reach the human operator's eyes without going through Claude's token budget.
+`continueOnBlock: true` also exists, but as a field of **prompt-based hooks** (`"type": "prompt"`): it feeds the model's `ok: false` reason back to Claude and continues the turn instead of ending it.
+
+#### `terminalSequence` — Notify the Operator Directly
+
+A hook can return a `terminalSequence` field that Claude Code emits to the user's terminal: a desktop notification, a window title, or the bell. Only these are allowed: OSC `0`/`1`/`2` (title), OSC `9`/`99`/`777` (notification) and BEL. Anything else, for example colour codes, makes Claude Code ignore the field.
+
+```bash
+#!/bin/bash
+# After a block decision: pop a desktop notification (OSC 9), then block with exit 2.
+jq -n '{terminalSequence: "\u001b]9;Destructive command blocked\u0007"}'
+echo "Blocked: destructive command" >&2
+exit 2
+```
+
+On exit 2, Claude Code still reads valid JSON on stdout, so the notification appears and the call is blocked.
+
+**Use case:** Reach the human operator's eyes — a notification when a long task finishes or a guard fires — without going through Claude's token budget.
 
 #### `$CLAUDE_EFFORT` — Effort-Aware Hooks (recent versions)
 

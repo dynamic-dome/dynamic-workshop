@@ -23,6 +23,8 @@ INPUT=$(cat)
 # Newer Claude Code nests the path under tool_input.file_path; older/demo
 # payloads use a top-level file_path or path. Check all three, first non-empty wins.
 FILE=$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // .file_path // .path // ""')
+# Windows delivers absolute backslash paths (C:\project\secrets\x): normalise before matching "secrets/".
+FILE="${FILE//\\//}"
 
 if printf '%s' "$FILE" | grep -qE '(\.env|\.pem|secrets/|credentials)'; then
   echo "BLOCKED: write to protected path: $FILE" >&2

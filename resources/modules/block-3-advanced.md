@@ -1453,9 +1453,13 @@ claude --bare -p "Categorize" --output-format json
 
 `--bare` gives you:
 
-- **Faster cold-start** — no skill discovery, no MCP handshake.
-- **Deterministic behavior** — no surprise hook intervention.
-- **Lower token use** — no skill descriptions injected into the system prompt.
+- **Faster cold-start** — no auto-discovery of hooks, skills, custom commands, subagents, plugins, MCP servers, auto-memory or CLAUDE.md.
+- **Deterministic behavior** — nothing from the host or the checked-out repo runs unless you pass it in.
+- **Explicit context only** — pass what the step needs with `--append-system-prompt-file`, `--add-dir`, `--mcp-config`, `--settings`, `--agents` or `--plugin-dir`. A skill can still be called explicitly via `/skill-name`.
+
+**Why this matters for security:** without `--bare`, a `-p` session runs the hooks in the project's `.claude/settings.json` and connects the servers in its `.mcp.json` — even in a folder you never trusted, with no trust dialog. In CI that checks out contributor code, `--bare` keeps their hooks from running on your runner.
+
+**Auth catch:** `--bare` authenticates **only** via `ANTHROPIC_API_KEY` or an `apiKeyHelper`. It does not read OAuth, the keychain or `CLAUDE_CODE_OAUTH_TOKEN` (the token from `claude setup-token`), so a `--bare` pipeline needs an API key.
 
 Use `--bare` for any CI step that does not actually need your custom skills or hooks. Reach for full mode only when the pipeline genuinely depends on a plugin or MCP server.
 
@@ -1707,7 +1711,7 @@ A short checklist of mistakes that look fine in a dev environment and bite hard 
 
 **Learning Objectives:** After this module, you can:
 - Use `/debug`, `--verbose`, and `/doctor` to diagnose Claude Code issues at the right level (investigative / descriptive / prescriptive).
-- Recognize the 4 classic hook failure patterns (overly broad matcher, non-executable script, non-zero exit interpreted as block, script hang) and the 4 classic skill failures (vague description, model-invocation disabled, paths filter mismatch, YAML parse error) and apply the diagnosis sequence for each.
+- Recognize the 4 classic hook failure patterns (overly broad matcher, non-executable script, crash that silently fails open, script hang) and the 4 classic skill failures (vague description, model-invocation disabled, paths filter mismatch, YAML parse error) and apply the diagnosis sequence for each.
 - Walk through the 8-step diagnosis checklist (CLAUDE.md → skills → plugins → hooks → MCP → permissions → `--verbose` → `/doctor`) in order without skipping steps.
 
 ### Overview
@@ -1797,18 +1801,21 @@ Hooks are the fastest layer to misconfigure because they are **shell scripts wir
 
 1. **Hook blocks everything.** The matcher is too broad — typically `".*"` instead of a specific tool pattern. Every `Bash` invocation triggers the hook; the hook denies; nothing in your terminal works without a prompt.
 2. **Hook script does not run at all.** File is not executable (`chmod +x` missing), shebang line absent, or the path in `settings.json` is wrong (typo, relative path that does not resolve, Windows-style backslash).
-3. **Hook script errors out.** Any non-zero exit code is interpreted as a **block** by Claude Code. Your script that just wanted to log something is now denying every operation because it has a syntax error on line 12.
-4. **Hook script hangs.** No timeout, the script waits for input that never comes, or it shells out to a slow command. Claude Code's default hook timeout is around 5 seconds — past that, the hook is killed and the operation blocked.
+3. **Hook script errors out — and your guard is open.** Only exit code **2** blocks. A syntax error on line 12, a missing `jq` (exit 127) or a plain `exit 1` is treated as a *non-blocking* hook error: the transcript shows a `hook error` notice and the tool call **goes ahead**. For a logging hook that is harmless; for a safety hook it means the door stands open while everything looks configured. Design guards to fail closed: check your own input and `exit 2` when you cannot read it.
+4. **Hook script hangs.** The script waits for input that never comes, or shells out to a slow command. A `command` hook's default timeout is **600 seconds** (set `timeout` in seconds on the handler). When it expires, Claude Code cancels the hook and discards its output — and a timed-out PreToolUse hook does **not** block the call. A stalled guard is another open door.
+
+**Security analogy:** A door controller that loses power should lock (fail-secure), not unlock. Claude Code hooks fail *open* on crash and timeout, so the fail-secure behaviour has to be built into the script itself.
 
 **Diagnosis sequence:**
 
 1. **`/hooks`** — Lists active hooks with their matchers. Confirms that your hook is even registered. (Surprisingly often the issue: typo in the JSON key.)
-2. **Run the script manually.** `bash ~/.claude/hooks/security-check.sh` — does it execute at all? Does it return 0?
-3. **Simulate the JSON input.** Hook scripts receive a JSON payload on stdin. Replay it:
+2. **Run the script manually.** `bash ~/.claude/hooks/security-check.sh < /dev/null` — does it execute at all, and what does it do with input it cannot read?
+3. **Simulate the JSON input in the real format.** Hook scripts receive the whole event as JSON on stdin; the Bash command sits in `tool_input.command`. Replay it:
 
    ```bash
-   echo '{"command":"rm -rf /","tool":"Bash"}' | bash ~/.claude/hooks/security-check.sh
-   echo $?    # 0 = allow, non-zero = block
+   echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"rm -rf /"}}' \
+     | bash ~/.claude/hooks/security-check.sh
+   echo $?    # 2 = block, 0 = allow, anything else = hook error (the call would go ahead!)
    ```
 
 4. **Activate `--verbose`** and re-trigger the action. The hook trace shows match attempts and exit codes inline.

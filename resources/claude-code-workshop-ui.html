@@ -534,7 +534,7 @@
 
     .explain-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
       margin: 16px 0;
     }
@@ -561,6 +561,22 @@
       color: var(--ink);
       font-size: 13px;
       line-height: 1.45;
+    }
+
+    /* Code needs the full width: analogy + checkpoint share row 1, code gets row 2. */
+    .mini-code {
+      grid-column: 1 / -1;
+      order: 1;
+    }
+
+    #example {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
     .slide-strip {
@@ -1160,9 +1176,9 @@
                   <b>Operator-Bild</b>
                   <p id="analogy"></p>
                 </div>
-                <div class="mini">
+                <div class="mini mini-code">
                   <b>Code-Beispiel</b>
-                  <p id="example"></p>
+                  <pre id="example"></pre>
                 </div>
                 <div class="mini">
                   <b>Checkpunkt</b>
@@ -1525,7 +1541,7 @@
         checkpoint: "Du kannst erklären, warum `acceptEdits` bei einem `rm`-Befehl im Arbeitsverzeichnis KEINE Rückfrage stellt – und was das für den produktiven Einsatz bedeutet."
       },
       "S1.6": {
-        concept: "Die drei aggressiven Modi vervollständigen das Clearance-Spektrum: `auto` delegiert die Risikoeinschätzung an einen ML-Classifier (nur verfügbar im Max-Plan/Team/Enterprise); `dontAsk` verzichtet auf interaktive Rückfragen komplett und verlässt sich ausschließlich auf Allow/Deny-Regeln; `bypassPermissions` akzeptiert alles ohne jede Prüfung und ist ausdrücklich nur für isolierte VMs bestimmt. Für Cloud-Sessions (Web App/iOS) sind alle drei gesperrt, weil ohne lokale VM-Sandbox keine vertrauenswürdige Isolation besteht.",
+        concept: "Die drei aggressiven Modi vervollständigen das Clearance-Spektrum: `auto` delegiert die Risikoeinschätzung an ein Classifier-Modell (seit CLI v2.1.283 der eingebaute Startmodus interaktiver Sessions, davor nur auf Pro/Max/Team); `dontAsk` verzichtet auf interaktive Rückfragen komplett und verlässt sich ausschließlich auf Allow/Deny-Regeln; `bypassPermissions` akzeptiert alles ohne jede Prüfung und ist ausdrücklich nur für isolierte VMs bestimmt. Für Cloud-Sessions (Web App/iOS) sind alle drei gesperrt, weil ohne lokale VM-Sandbox keine vertrauenswürdige Isolation besteht.",
         analogy: "Wie drei Hochsicherheits-Zugangsstufen im BMS: der 'Smart Badge' (`auto`) lässt das Zutrittssystem selbst entscheiden – KI-gestützt auf Basis von Verhaltensmustern und Zeitzone; der 'regelbasierte Automat' (`dontAsk`) öffnet genau die Türen aus der vorprogrammierten Zutrittsliste, ohne dass ein Wächter beteiligt ist; der 'Generalschlüssel' (`bypassPermissions`) öffnet jeden Raum sofort – und darf deshalb ausschließlich in der abgeschlossenen Testkammer existieren, niemals im Produktivgebäude.",
         example: "# dontAsk: kein interaktiver Prompt, nur Allow/Deny-Regeln greifen\nclaude --permission-mode dontAsk\n\n# bypassPermissions – NUR in isolierter CI/Docker-VM:\nclaude --permission-mode bypassPermissions -p \"run full test suite and report results\"",
         checkpoint: "Du kannst die drei aggressiven Modi (`auto`, `dontAsk`, `bypassPermissions`) von den drei Alltags-Modi abgrenzen und in einem Satz begründen, warum Cloud-Sessions keinen dieser drei anbieten."
@@ -1645,34 +1661,34 @@
         checkpoint: "Du kannst erklären, wann genau `` !`git diff HEAD` `` in einer SKILL.md ausgeführt wird (beim Laden, nicht beim Modell-Call), und warum `disableSkillShellExecution` in regulated environments Pflicht sein kann."
       },
       "S2.6": {
-        concept: "Hooks sind automatisierte Aktionen, die auf Claude-Code-Events reagieren — ohne manuellen Anstoß. Die drei Eckpfeiler: PreToolUse feuert vor einem Tool-Aufruf und kann durch Non-Zero-Exit-Code blockieren; PostToolUse feuert danach und kann reagieren, loggen, weiterleiten; Stop feuert wenn Claude auf die nächste User-Eingabe wartet und ermöglicht Cleanup- und Summary-Automatisierungen. Hooks sind deterministische Shell-Skripte oder HTTP-Calls — kein Modell-Output, kein Claude-Code.",
-        analogy: "Drei Sensortypen in einer RS-485-Zugangskontrollschleuse: Der Badge-Reader vor der Tür (PreToolUse) prüft die Berechtigung, bevor sich die Elektroklinke öffnet — er kann verweigern. Der Door-Open-Sensor (PostToolUse) protokolliert nach dem Ereignis, wer und wann durchgegangen ist. Der End-of-Shift-Alarm (Stop) feuert um 18:00 Uhr und erinnert den Leitstand, alle Zonen zu sichern und den Statusbericht zu schreiben.",
-        example: "#!/bin/bash\nINPUT=$(cat)\nCOMMAND=$(echo \"$INPUT\" | jq -r '.command // \"\"')\nif echo \"$COMMAND\" | grep -qE 'rm\\s+-rf|git push.*--force'; then\n  echo \"Destructive command blocked\" >&2\n  exit 1\nfi\nexit 0",
+        concept: "Hooks sind automatisierte Aktionen, die auf Claude-Code-Events reagieren — ohne manuellen Anstoß. Die drei Eckpfeiler: PreToolUse feuert vor einem Tool-Aufruf und kann mit Exit-Code 2 blockieren (jeder andere Fehlercode blockt nicht: die Aktion läuft weiter); PostToolUse feuert danach und kann reagieren, loggen, weiterleiten; Stop feuert wenn Claude auf die nächste User-Eingabe wartet und ermöglicht Cleanup- und Summary-Automatisierungen. Hooks sind deterministische Shell-Skripte oder HTTP-Calls — kein Modell-Output, kein Claude-Code.",
+        analogy: "Drei Sensortypen in einer RS-485-Zugangskontrollschleuse: Der Badge-Reader vor der Tür (PreToolUse) prüft die Berechtigung, bevor sich die Elektroklinke öffnet — er kann verweigern. Der Door-Open-Sensor (PostToolUse) protokolliert nach dem Ereignis, wer und wann durchgegangen ist. Die End-of-Shift-Checkliste (Stop) feuert, sobald die Schicht ausdrücklich beendet wird — nicht nach Uhrzeit — und erinnert den Leitstand, alle Zonen zu sichern und den Statusbericht zu schreiben.",
+        example: "#!/bin/bash\n# Der Bash-Befehl steht in tool_input.command; nur exit 2 blockt.\nINPUT=$(cat)\nCOMMAND=$(printf '%s' \"$INPUT\" | jq -r '.tool_input.command // \"\"')\nif printf '%s' \"$COMMAND\" | grep -qiE 'rm[[:space:]]+-rf|git push.*--force'; then\n  echo \"Destructive command blocked\" >&2\n  exit 2   # exit 1 wuerde NICHT blocken\nfi\nexit 0",
         checkpoint: "Du kannst die 3 Eckpfeiler-Hooks benennen, erklären welcher blockieren kann und welcher nicht, und ein konkretes Beispiel für jede Kategorie nennen."
       },
       "S2.7": {
         concept: "Claude Code bietet eine Landkarte von Events, die den gesamten Session-Lifecycle abdecken: SessionStart und SessionEnd klammern die Session, UserPromptSubmit feuert vor Claude (ideal für Secret-Redaktion), PreCompact sichert State vor Context-Komprimierung, SubagentStart/Stop koordinieren Multi-Agent-Workflows, FileChanged reagiert auf externe Edits. Die Wahl des richtigen Events ist entscheidend — ein Secret-Scanner gehört an UserPromptSubmit, nicht an PreToolUse, weil Secrets im Prompt erscheinen können, bevor ein Tool-Call entsteht.",
         analogy: "Wie der Ereignis-Log eines BMS (Building Management System): 'Schicht beginnt' (SessionStart), 'Badge präsentiert' (UserPromptSubmit — bevor die Tür reagiert), 'Tür-Elektroklinke öffnet' (PreToolUse), 'Door-Open-Sensor aktiv' (PostToolUse), 'Patrouille gestartet' (SubagentStart), 'Externe Änderung am Kabelplan' (FileChanged), 'Übergabeprotokoll schließen bevor Schichtende' (PreCompact), 'Schicht endet' (SessionEnd).",
         example: "{\n  \"hooks\": {\n    \"SessionStart\": [{\"hooks\": [{\"type\": \"command\", \"command\": \"echo 'Session started' >> ~/.claude/session.log\"}]}],\n    \"UserPromptSubmit\": [{\"hooks\": [{\"type\": \"command\", \"command\": \"bash ~/.claude/hooks/redact-before-claude.sh\"}]}],\n    \"PreCompact\": [{\"hooks\": [{\"type\": \"command\", \"command\": \"bash ~/.claude/hooks/save-state.sh\"}]}]\n  }\n}",
-        checkpoint: "Du kannst für jedes der 11 Hook-Events ein konkretes Use Case benennen und erklären, warum PreCompact besonders kritisch für Long-Running-Sessions ist."
+        checkpoint: "Du kannst für jedes der 12 Hook-Events ein konkretes Use Case benennen und erklären, warum PreCompact besonders kritisch für Long-Running-Sessions ist."
       },
       "S2.8": {
-        concept: "Hooks werden in `settings.json` konfiguriert — global (`~/.claude/settings.json`) oder projektspezifisch (`.claude/settings.json`). Der `matcher` bestimmt, auf welche Tool-Aufrufe reagiert wird: bei reinen Buchstaben, Ziffern und `|` ist es eine Literal-OR-Liste; bei jedem anderen Sonderzeichen wechselt die Interpretation zu JavaScript-Regex. Das optionale `if`-Feld ergänzt den Tool-Namen-Filter um permission-rule-Syntax — dadurch kann ein Bash-Hook auf reine git-Befehle eingeschränkt werden, ohne einen eigenen Wrapper zu schreiben.",
+        concept: "Hooks werden in `settings.json` konfiguriert — global (`~/.claude/settings.json`) oder projektspezifisch (`.claude/settings.json`). Der `matcher` bestimmt, auf welche Tool-Aufrufe reagiert wird: bei reinen Buchstaben, Ziffern und `|` ist es eine Literal-OR-Liste; bei jedem anderen Sonderzeichen wechselt die Interpretation zu JavaScript-Regex. Das optionale `if`-Feld am einzelnen Hook-Handler (neben `type` und `command`, nicht an der Matcher-Gruppe) ergänzt den Tool-Namen-Filter um permission-rule-Syntax — dadurch kann ein Bash-Hook auf reine git-Befehle eingeschränkt werden, ohne einen eigenen Wrapper zu schreiben.",
         analogy: "Wie die Filterregeln einer Alarmmatrix mit zwei Ebenen: Die erste Ebene ist der Sensor-Typ ('Wiegand-Leser' = Bash, 'Kamera-Bewegung' = Edit). Die zweite Ebene ist der Bereichs-Filter ('nur wenn Badge-Level < 3 UND Zone = Serverraum' = if-Feld mit permission-rule). Ohne zweite Ebene löst jeder Badge-Scan den Alarm aus; mit ihr nur die wirklich relevanten Ereignisse.",
-        example: "{\n  \"hooks\": {\n    \"PreToolUse\": [\n      {\n        \"matcher\": \"Bash\",\n        \"if\": \"Bash(git *)\",\n        \"hooks\": [{\"type\": \"command\", \"command\": \"bash ~/.claude/hooks/git-audit.sh\"}]\n      }\n    ]\n  }\n}",
+        example: "{\n  \"hooks\": {\n    \"PreToolUse\": [\n      {\n        \"matcher\": \"Bash\",\n        \"hooks\": [{\"type\": \"command\", \"if\": \"Bash(git *)\", \"command\": \"bash ~/.claude/hooks/git-audit.sh\"}]\n      }\n    ]\n  }\n}",
         checkpoint: "Du kannst erklären, wann der matcher als Regex vs. als Literal-Liste behandelt wird, und demonstrieren, wie das `if`-Feld einen Bash-Hook auf reine git-Befehle einschränkt."
       },
       "S2.9": {
-        concept: "Hooks kennen fünf Execution-Typen: `command` (Shell-Skript), `http` (Webhook an externe URL), `prompt` (Claude evaluiert die Aktion kontextbewusst), `agent` (Subagent übernimmt mehrstufige Validierung), `mcp_tool` (direkter MCP-Tool-Aufruf ohne Shell-Overhead). Component-scoped Hooks gehen weiter: im Frontmatter eines Skills oder Subagents definiert, sind sie nur aktiv während diese Komponente aktiv ist — kein globaler settings.json-Eintrag, kein Kontext-Filter nötig, automatisch inaktiv sobald der Skill endet.",
-        analogy: "Exec-Typen wie Aktionsarten bei einem Alarmauslöser: Shell-Skript (Guard per Telefon informieren), HTTP (Signal an externe Leitstelle senden), Prompt (Claude bewertet ob Fehlalarm), Agent (spezialisierter Subagent übernimmt Untersuchung), MCP-Tool (direkt in das BMS schreiben ohne Umweg). Component-Scope wie ein Guard, der Zone-A-spezifische Sensoren nur trägt während er Zone A patrouilliert — in Zone B greifen diese Sensoren nicht, Zone B hat ihre eigenen.",
-        example: "---\nname: deploy\nhooks:\n  PreToolUse:\n    - matcher: Bash\n      type: command\n      command: ./pre-deploy-check.sh\n  PostToolUse:\n    - matcher: Bash\n      type: command\n      command: ./post-deploy-notify.sh\n---",
+        concept: "Hooks kennen fünf Execution-Typen: `command` (Shell-Skript), `http` (Webhook an externe URL), `prompt` (Claude evaluiert die Aktion kontextbewusst), `agent` (Subagent übernimmt mehrstufige Validierung), `mcp_tool` (direkter MCP-Tool-Aufruf ohne Shell-Overhead). Component-scoped Hooks gehen weiter: im Frontmatter eines Skills oder Subagents definiert, im selben verschachtelten Format wie in settings.json. Subagent-Hooks laufen nur, solange der Subagent läuft; Skill-Hooks werden beim Aufruf des Skills registriert und bleiben bis zum Session-Ende aktiv (`once: true` entfernt einen Handler nach dem ersten erfolgreichen Lauf).",
+        analogy: "Exec-Typen wie Aktionsarten bei einem Alarmauslöser: Shell-Skript (Guard per Telefon informieren), HTTP (Signal an externe Leitstelle senden), Prompt (Claude bewertet ob Fehlalarm), Agent (spezialisierter Subagent übernimmt Untersuchung), MCP-Tool (direkt in das BMS schreiben ohne Umweg). Component-Scope: Ein Subagent-Hook ist ein Sensor, den der Guard auf einer Patrouille trägt und wieder mitbringt; ein Skill-Hook ist ein Sensor, den der Guard dabei an die Wand montiert — er bleibt bis Schichtende scharf, außer er schaltet sich nach dem ersten Alarm selbst ab (`once: true`).",
+        example: "---\nname: deploy\nhooks:\n  PreToolUse:\n    - matcher: \"Bash\"\n      hooks:\n        - type: command\n          command: \"./pre-deploy-check.sh\"\n  PostToolUse:\n    - matcher: \"Bash\"\n      hooks:\n        - type: command\n          command: \"./post-deploy-notify.sh\"\n          once: true\n---",
         checkpoint: "Du kannst erklären, wann ein `prompt`-Exec-Typ einem `command`-Typ vorzuziehen ist, und demonstrieren, wie ein component-scoped Hook den Deploy-Skill mit eigenem Pre/Post-Check ausstattet, ohne global settings.json zu verschmutzen."
       },
       "S2.10": {
-        concept: "Hooks können strukturiertes JSON zurückgeben, das Claude Code differenziert verarbeitet: `updatedToolOutput` lässt einen PostToolUse-Hook die Tool-Ausgabe überschreiben bevor Claude sie sieht — ideal für Secret-Redaktion; `continueOnBlock: true` degradiert einen Block zum Soft-Warning (Aktion läuft, Transcript enthält den Hinweis); `terminalSequence` schreibt ANSI-Escape-Codes direkt ans Terminal am Modell-Reasoning vorbei. Das Circuit-Breaker-Pattern nutzt Hooks, um wiederholte identische Tool-Calls zu erkennen und die Schleife zu unterbrechen, bevor Token-Kosten eskalieren.",
-        analogy: "Ein Leitstand mit drei Ausgabewegen: Der Redaktionsoffizier (updatedToolOutput) schwärzt Berichte, bevor sie den Analysten erreichen — der Analyst sieht nie die Rohdaten. Die gelbe Warnlampe (continueOnBlock: true) leuchtet ohne Türsperre — Betrieb läuft, Leitstand ist informiert. Der rote Buzzer direkt am Operator-Panel (terminalSequence) geht am Protokollsystem vorbei und erreicht den Menschen ohne Modell-Overhead. Der Totmann-Schalter (Circuit Breaker) eskaliert automatisch, wenn der Guard aufhört einzuchecken.",
-        example: "#!/bin/bash\nINPUT=$(cat)\nOUTPUT=$(echo \"$INPUT\" | jq -r '.toolOutput')\nREDACTED=$(echo \"$OUTPUT\" | sed -E 's/(sk-[a-zA-Z0-9]{20,}|AKIA[A-Z0-9]{16})/[REDACTED]/g')\njq -n --arg out \"$REDACTED\" '{\"hookSpecificOutput\":{\"updatedToolOutput\":$out}}'\nexit 0",
-        checkpoint: "Du kannst erklären, wie `updatedToolOutput` verhindert dass ein API-Key in Claude's Reasoning landet, und wann `continueOnBlock: true` vs. hard block (`exit 1`) der richtige Trade-off ist."
+        concept: "Hooks können strukturiertes JSON zurückgeben, das Claude Code differenziert verarbeitet: `hookSpecificOutput.updatedToolOutput` lässt einen PostToolUse-Hook die Tool-Ausgabe ersetzen, bevor Claude sie liest — in der Form des Tools (Bash: stdout, stderr, interrupted, isImage), sonst wird sie ignoriert; ideal für Secret-Redaktion. Weiche Signale statt Sperre: `systemMessage` (für dich) oder `additionalContext` (für Claude) bei exit 0; `continueOnBlock` gibt es nur bei prompt-basierten Hooks. `terminalSequence` schickt eine Desktop-Benachrichtigung, einen Fenstertitel oder die Glocke ans Terminal (nur OSC 0/1/2/9/99/777 und BEL, keine Farbcodes). Das Circuit-Breaker-Pattern nutzt Hooks, um wiederholte identische Tool-Calls zu erkennen und die Schleife zu unterbrechen, bevor Token-Kosten eskalieren.",
+        analogy: "Ein Leitstand mit drei Ausgabewegen: Der Redaktionsoffizier (updatedToolOutput) schwärzt Berichte, bevor sie den Analysten erreichen — der Analyst sieht nie die Rohdaten. Die gelbe Warnlampe (systemMessage/additionalContext) leuchtet ohne Türsperre — Betrieb läuft, Leitstand ist informiert. Der Pager des Operators (terminalSequence) geht am Protokollsystem vorbei und erreicht den Menschen ohne Modell-Overhead. Der Totmann-Schalter (Circuit Breaker) eskaliert automatisch, wenn der Guard aufhört einzuchecken.",
+        example: "#!/bin/bash\n# PostToolUse, matcher Bash: Secrets aus der Ausgabe entfernen, bevor Claude sie liest.\n# Getestete Vollversion: resources/demos/assets/hooks/redact-output.sh\nINPUT=$(cat)\nprintf '%s' \"$INPUT\" | jq '{hookSpecificOutput: {hookEventName: \"PostToolUse\",\n  updatedToolOutput: (.tool_response | (.stdout, .stderr) |= gsub(\"(sk-[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16})\"; \"[REDACTED]\"))}}'\nexit 0",
+        checkpoint: "Du kannst erklären, wie `updatedToolOutput` (in der Form des Tools) verhindert, dass ein API-Key in Claudes Kontext landet, warum nur exit 2 blockt, und wann ein weiches Signal (`systemMessage`/`additionalContext`) besser passt als eine Sperre."
       },
       "S2.11": {
         concept: "Ein Plugin ist die Verpackungsschicht über einzelnen Skills, Hooks, Agents und Commands — ein selbstständiges, versioniertes Verzeichnis, das eine kohärente Fähigkeitsmenge in einem Schritt installiert. Der Manifest liegt zwingend unter `.claude-plugin/plugin.json` (nicht im Plugin-Root), und die meisten Komponenten (Skills in `skills/`, Commands in `commands/`, Hooks in `hooks/hooks.json`) werden per Auto-Discovery aus der Verzeichnisstruktur geladen, ohne sie im Manifest einzeln aufzulisten. Vor der Weitergabe validiert `claude plugin validate <path>` die Struktur.",
@@ -1837,7 +1853,7 @@
         checkpoint: "Du kannst die Daten-Fluss-Grenze im Codex-Swarm erklaeren, die drei Optionen fuer sensiblen Code nennen, und beurteilen ob euer OSDP-Firmware-Code an Codex gehen darf."
       },
       "S4.3": {
-        concept: "`claude -p` macht Claude zu einem deterministischen Unix-Kommando: stdin rein, stdout raus, Exit-Code 0 oder non-zero, kein interaktiver Transcript, kein State zwischen Aufrufen. `--output-format json` kombiniert mit `--json-schema` erzwingt maschinenlesbaren Output statt Prosa, sodass nachgelagerte jq/Python/Node-Skripte konsistent parsen koennen ohne mit freiem Text umgehen zu muessen. `--bare` deaktiviert alle Skills, Hooks, Plugins und MCP-Server fuer diesen Aufruf: schnellerer Cold-Start, deterministisches Modell-Verhalten, weniger Token-Overhead durch skill-injizierte System-Prompt-Teile – unverzichtbar fuer einfache CI-Schritte die keine Projekt-Infrastruktur benoetigen.",
+        concept: "`claude -p` macht Claude zu einem deterministischen Unix-Kommando: stdin rein, stdout raus, Exit-Code 0 oder non-zero, kein interaktiver Transcript, kein State zwischen Aufrufen. `--output-format json` kombiniert mit `--json-schema` erzwingt maschinenlesbaren Output statt Prosa, sodass nachgelagerte jq/Python/Node-Skripte konsistent parsen koennen ohne mit freiem Text umgehen zu muessen. `--bare` ueberspringt das automatische Laden von Hooks, Skills, Plugins, MCP-Servern, Auto-Memory und CLAUDE.md: schnellerer Cold-Start, deterministisches Verhalten, und Hooks aus einem fremden Repo laufen nicht auf deinem CI-Runner. Achtung: `--bare` authentifiziert nur per `ANTHROPIC_API_KEY` oder `apiKeyHelper`, nicht per OAuth-Token aus `claude setup-token`.",
         analogy: "Wie ein OSDP-Polling-Kommando ueber RS-485: ein definiertes Binaer-Frame rein (Prompt via stdin), ein definiertes Response-Frame raus (JSON via stdout), Exit-Code signalisiert OK oder FAIL. Kein Dialog, kein Session-State, kein 'bitte warten auf Benutzerinteraktion'. Genau diese Eigenschaft macht `claude -p` sicher in CI-Pipelines – wie das OSDP-Protokoll selbst: deterministisch, transaktional, auditierbar.",
         example: "git diff origin/main...HEAD > /tmp/diff.patch\nclassification=ci claude --bare -p \"Review this diff. Find bugs, security issues. Output JSON.\" \\\n  --output-format json \\\n  --max-budget-usd 0.50 \\\n  < /tmp/diff.patch > /tmp/review.json\njq -r '.summary' /tmp/review.json",
         checkpoint: "Du kannst den Unterschied zwischen `claude -p` und interaktivem `claude` in einer CI-Pipeline erklaeren und weisst, in welchen Szenarien `--bare` angebracht ist und in welchen nicht."
@@ -1881,7 +1897,7 @@
       "S4.10": {
         concept: "Die häufigsten Konfigurationsfehler in Claude Code folgen je Schicht vier Mustern: bei Hooks sind es überweit gefasste Matcher, nicht-ausführbare Scripts (fehlendes chmod+x oder Shebang), ungewollte Non-Zero-Exit-Codes (die als Block interpretiert werden), und Timeouts (Standard 5s). Bei Skills sind es zu generische Beschreibungen ohne Trigger-Phrasen, `disable-model-invocation: true`, Path-Filter-Mismatches und YAML-Parse-Fehler. Der 8-Schritte-Diagnose-Checklist (CLAUDE.md → Skills → Plugins → Hooks → MCP → Permissions → `--verbose` → `/doctor`) deckt alle Schichten ab und muss sequentiell durchlaufen werden — das Überspringen von Schritten ist der häufigste Grund, warum eine Diagnose-Session 2 Stunden statt 10 Minuten dauert.",
         analogy: "Wie ein Zutrittskontroll-Techniker, der einen nicht öffnenden OSDP-Controller debuggt: er prüft sequentiell Karte → Leser → Controller → Verkabelung → Stromversorgung und simuliert den Kartenlesevorgang manuell am Prüfgerät, bevor er auch nur eine Ader umlötet. In Claude Code entspricht das dem manuellen Einspielen des echten JSON-Payloads in das Hook-Script auf stdin — kein Reinstall, kein Settings-Edit, bevor alle Schichten in Reihenfolge geprüft sind.",
-        example: "# Hook manuell mit realem JSON-Input simulieren:\necho '{\"command\":\"rm -rf /\",\"tool\":\"Bash\"}' \\\n  | bash ~/.claude/hooks/security-check.sh\necho $?    # 0 = allow, non-zero = block\n\n# MCP-Status und Approval-Cache-Reset:\n/mcp\nclaude mcp reset-project-choices",
+        example: "# Hook manuell mit Input im echten Format simulieren:\necho '{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"rm -rf /\"}}' \\\n  | bash ~/.claude/hooks/security-check.sh\necho $?    # 2 = block, 0 = allow, alles andere = Hook-Fehler (Aktion liefe weiter!)\n\n# MCP-Status und Approval-Cache-Reset:\n/mcp\nclaude mcp reset-project-choices",
         checkpoint: "Du kannst die 8-Schritte-Diagnose-Sequenz in Reihenfolge nennen, für jeden der 4 klassischen Hook-Fehler den konkreten Fix benennen und den Hook-Payload-Simulationsbefehl aus dem Gedächtnis schreiben."
       }
     };
@@ -2402,7 +2418,7 @@
       },
       "S4.3": {
         q: "Welches Symptom zeigt an, dass `--bare` in einem CI-Job fehlt, obwohl dieser Job keine Skills benoetigt?",
-        correct: "Der CI-Job laeuft langsamer als erwartet und produziert inkonsistente Outputs je nachdem welche Skills im Projektverzeichnis installiert sind. Ohne `--bare` laedt Claude bei jedem Aufruf alle Skills, Hooks und Plugins – das kostet Cold-Start-Zeit und kann durch skill-injizierte System-Prompt-Teile das Modell-Verhalten zwischen verschiedenen Projekten oder nach Skill-Updates veraendern.",
+        correct: "Der CI-Job laeuft langsamer als erwartet und produziert inkonsistente Outputs je nachdem welche Skills im Projektverzeichnis installiert sind. Ohne `--bare` laedt Claude bei jedem Aufruf automatisch Skills, Hooks, Plugins, MCP-Server und CLAUDE.md – das kostet Cold-Start-Zeit und kann durch skill-injizierte System-Prompt-Teile das Modell-Verhalten zwischen verschiedenen Projekten oder nach Skill-Updates veraendern.",
         wrong: [
           "Das Symptom ist ein `401 Unauthorized`-Fehler, weil `--bare` gleichzeitig die Token-Authentifizierung deaktiviert und ein frischer `claude setup-token`-Aufruf nach jedem `--bare`-Job notwendig wird.",
           "Das Symptom ist dass `--output-format json` ignoriert wird und der Job Prosa-Output produziert – das ist ein bekannter Bug der auftritt wenn `--bare` fehlt und ein Skills den Output-Format-Flag ueberschreibt.",

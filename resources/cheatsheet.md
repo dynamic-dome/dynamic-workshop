@@ -59,7 +59,7 @@ claude /login
 | `claude --strict-mcp-config` | Only use MCP servers from config |
 | `claude --plugin-dir <path>` | Load local plugin directory (accepts `.zip`) |
 | `claude --plugin-url <url>` | Load remote plugin from URL (v2.1.129+) |
-| `claude --bare` | Headless mode without Hooks/Skills/Plugins/MCP/AutoMemory |
+| `claude --bare` | Minimal mode: skips auto-discovery of hooks, skills, custom commands, subagents, plugins, MCP servers, auto-memory and CLAUDE.md (a skill can still be called explicitly via `/skill-name`). Auth **only** via `ANTHROPIC_API_KEY` or `apiKeyHelper` — no OAuth, no `CLAUDE_CODE_OAUTH_TOKEN` |
 | `claude --tools <list>` | Restrict tools (different from `--allowedTools` allowlist) |
 | `claude --max-budget-usd <amount>` | Cost cap per `-p` run |
 | `claude --append-system-prompt "..."` | Add persona text to system prompt |
@@ -100,7 +100,7 @@ claude plugin uninstall <name>    # Remove plugin
 claude plugin enable <name>       # Enable disabled plugin (auto-pulls deps)
 claude plugin disable <name>      # Disable plugin (blocked if others depend on it)
 claude plugin update <name>       # Update plugin
-claude plugin validate            # Local pre-submission check
+claude plugin validate <path>     # Local pre-submission check (manifest, skills, agents, commands)
 claude plugin prune               # Cleanup orphaned dependencies
 claude plugin marketplace add <owner/repo>  # Add a marketplace
 
@@ -362,7 +362,7 @@ Tool names are the strings used for permission rules, hook matchers, and subagen
 
 Set via: `claude --permission-mode plan` or `/permissions` in session. Cycle Normal -> acceptEdits -> plan via Shift+Tab.
 
-> **auto mode requirements:** **Max-Plan with Opus 4.8** OR Team/Enterprise (Sonnet 5, Opus 4.8). Anthropic API only (not Bedrock/Vertex). Claude Code v2.1.83+. Admins can lock/loosen via managed settings.
+> **auto mode:** since Claude Code **v2.1.283** it is the built-in **starting** mode for interactive terminal and VS Code sessions (on earlier versions only on Pro, Max and Team plans). Available on the Anthropic API and on Bedrock, Google Cloud and Foundry. `default` is labelled **Manual** in the CLI since v2.1.200 (`--permission-mode manual` works too). Admins can lock/loosen via managed settings. Check your own start mode after every update.
 
 ### Permission Rules
 
@@ -433,7 +433,7 @@ Configure in `settings.json`:
 | `claudeMdExcludes: [...]` | Glob list to exclude from CLAUDE.md auto-discovery (monorepo filter) |
 | `skillOverrides: { ... }` | Per-skill visibility: on / name-only / user-invocable-only / off |
 | `skillListingBudgetFraction: 0.1` | Token-budget fraction reserved for skill listings |
-| `maxSkillDescriptionChars: 200` | Cap description length used in listings |
+| `skillListingMaxDescChars: 200` | Cap each skill's description length in the skill listing |
 
 ---
 
@@ -441,7 +441,7 @@ Configure in `settings.json`:
 
 | Hook Event | When it fires | Use case |
 |-----------|---------------|----------|
-| **PreToolUse** | Before tool execution | Block unsafe operations, validate inputs |
+| **PreToolUse** | Before tool execution | Block unsafe operations (exit 2), validate inputs |
 | **PostToolUse** | After tool completes | Log results, aggregate data, cleanup |
 | **Stop** | Session finishes | Save session, cleanup, final reports |
 | **SessionStart** | Session begins | Pre-load context, check inventory, env warmup |
@@ -456,6 +456,8 @@ Configure in `settings.json`:
 
 > Full list with ~28 events: code.claude.com/docs/en/hooks (incl. UserPromptExpansion, PermissionRequest, PermissionDenied, PostToolUseFailure, PostToolBatch, TaskCreated, TaskCompleted, StopFailure, TeammateIdle, ConfigChange, CwdChanged, WorktreeCreate, WorktreeRemove, PostCompact, Elicitation, ElicitationResult).
 
+> **Hook contract (command hooks):** input is JSON on stdin — `tool_name`, `tool_input` (Bash: `tool_input.command`; Write: `file_path`, `content`; Edit: `file_path`, `old_string`, `new_string`), PostToolUse also `tool_response`. **`exit 2` blocks** (PreToolUse), `exit 0` allows, **any other exit code is only a hook error — the action proceeds**. A hook timeout does not block either. All matching hooks run **in parallel**. To change what Claude sees after a tool ran, return `hookSpecificOutput.updatedToolOutput` in the tool's own shape; `suppressOutput` has no effect. File paths arrive absolute, with backslashes on Windows. Tested examples: `resources/demos/assets/hooks/`.
+
 ### Hook Execution Types
 
 | Type | How it works |
@@ -466,7 +468,7 @@ Configure in `settings.json`:
 | **agent** | Spawns a subagent for complex evaluation |
 | **mcp_tool** | Calls an MCP tool directly (v2.1.119+) |
 
-> **Matcher syntax:** Letters/digits/`_`/`|` only = exact or pipe-list. With special chars = JavaScript regex. Add `if`-field for additional filter via permission-rule syntax (e.g. `"if": "Bash(git *)"`). Hooks can also live in **Skill frontmatter** and **Subagent frontmatter** — scoped to that component.
+> **Matcher syntax:** Letters/digits/`_`/`|` only = exact or pipe-list. With special chars = JavaScript regex. Add an `if` field **on the hook handler** (next to `type`/`command`) for an additional filter via permission-rule syntax (e.g. `"if": "Bash(git *)"`). Hooks can also live in **Skill frontmatter** (active from the skill's first invocation until the session ends; `once: true` removes a handler after its first successful run) and **Subagent frontmatter** (active only while that subagent runs), in the same nested `matcher` → `hooks` format as settings.
 
 Hook config in `settings.json`:
 ```json
@@ -507,7 +509,8 @@ The `command` of a hook runs in whatever shell the script needs — script files
 | macOS / Linux / Git Bash | `safety-check.sh` (`#!/bin/bash`, needs `chmod +x`) | `bash ~/.claude/hooks/safety-check.sh` |
 | Windows PowerShell | `safety-check.ps1` (no `chmod`) | `pwsh -File $HOME/.claude/hooks/safety-check.ps1` |
 
-- Read stdin in PowerShell with `$input | Out-String | ConvertFrom-Json`; match with `-match` (case-insensitive by default); `exit 1` blocks, `exit 0` allows.
+- Read stdin in PowerShell with `[Console]::In.ReadToEnd() | ConvertFrom-Json`; the command is in `$data.tool_input.command`; match with `-match` (case-insensitive by default); **`exit 2` blocks**, `exit 0` allows, any other code does **not** block.
+- Alternative: set `"shell": "powershell"` on the hook handler to run the `command` string in PowerShell directly.
 - `pwsh` = PowerShell 7; fall back to `powershell -File ...` for Windows PowerShell 5.1.
 - No `jq` on Windows? Parse JSON with `python` (`json.load(sys.stdin)`) instead — see the tested assets in `resources/demos/assets/hooks/` and the bash+PowerShell pair in Exercise 2.2.
 

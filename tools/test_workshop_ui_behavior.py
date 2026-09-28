@@ -138,6 +138,18 @@ def test_currency_lint_checks_cp1252_files_instead_of_skipping(tmp_path):
     assert any(rx.search(lines[0]) for rx in patterns)
 
 
+def test_code_example_keeps_line_breaks_so_it_can_be_copied():
+    """A <p> with normal white-space collapses newlines; a shebang line would then comment out the whole script."""
+    source = UI_HTML.read_text(encoding="utf-8")
+
+    assert re.search(r'<pre id="example"[^>]*>', source)
+    rule = re.search(r"#example\s*\{(?P<body>[^}]*)\}", source)
+    assert rule and "white-space: pre-wrap" in rule.group("body")
+    card = re.search(r"\.mini-code\s*\{(?P<body>[^}]*)\}", source)
+    assert card and "grid-column: 1 / -1" in card.group("body")
+    assert '<div class="mini mini-code">' in source
+
+
 def test_currency_lint_excludes_every_dated_review_archive_but_not_live_content():
     lint = _load_tool("lint_currency")
 

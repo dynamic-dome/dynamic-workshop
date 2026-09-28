@@ -521,30 +521,40 @@ In healthcare (HIPAA), in finance (PCI-DSS), and in physical security (access lo
 
 **Step 1: Define your sensitive patterns**
 
-Choose patterns relevant to your domain:
-- Social security numbers: `\d{3}-\d{2}-\d{4}`
-- Credit card numbers: `\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}`
-- API keys: `(sk-|pk_|AKIA)[A-Za-z0-9]{20,}`
+Choose patterns relevant to your domain (written for `grep -E`, which has no `\d`):
+- Social security numbers: `[0-9]{3}-[0-9]{2}-[0-9]{4}`
+- Credit card numbers: `[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}`
+- API keys: `(sk-|pk_)[A-Za-z0-9]{20,}` and `AKIA[A-Z0-9]{16}`
 - Access card IDs (your domain!): patterns from your card reader format
-- IP addresses of internal infrastructure: `10\.\d+\.\d+\.\d+` or `192\.168\.`
+- IP addresses of internal infrastructure: `10\.[0-9]+\.[0-9]+\.[0-9]+` or `192\.168\.`
 
 **Step 2: Create the scanner hook**
 
-Create `~/.claude/hooks/sensitive-data-scanner.sh`:
+Create `~/.claude/hooks/sensitive-data-scanner.sh` (tested in the repo as `resources/demos/assets/hooks/sensitive-data-scanner.sh`). Note: `grep -E` does not understand `\d`, so the script spells digits as `[0-9]`.
 ```bash
 #!/bin/bash
+# sensitive-data-scanner.sh - PreToolUse hook (matcher "Write|Edit"): block sensitive data in file writes.
+# tested asset: resources/demos/assets/hooks/sensitive-data-scanner.sh
+#
+# Write sends the new file text as tool_input.content, Edit sends it as tool_input.new_string.
+# exit 2 blocks the write; any other non-zero exit code would let it through.
+
 INPUT=$(cat)
-CONTENT=$(echo "$INPUT" | jq -r '.content // .new_content // ""')
 
-# Check for sensitive patterns
-PATTERNS='(\d{3}-\d{2}-\d{4}|sk-[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16}|password\s*=\s*["\x27][^"\x27]+)'
+# Fail closed: if the input cannot be read, block instead of silently allowing the write.
+if ! CONTENT=$(printf '%s' "$INPUT" | jq -er '.tool_input.content // .tool_input.new_string // ""' 2>/dev/null); then
+  echo "SCANNER: could not read the hook input (is jq installed?) - blocking to stay safe." >&2
+  exit 2
+fi
 
-if echo "$CONTENT" | grep -qEi "$PATTERNS"; then
-  MATCH=$(echo "$CONTENT" | grep -oEi "$PATTERNS" | head -3)
-  echo "BLOCKED: Sensitive data pattern detected in file content:" >&2
-  echo "$MATCH" >&2
-  echo "Redact or remove sensitive data before writing." >&2
-  exit 1
+# Adapt to your domain (card reader formats, internal IP ranges, ...). grep -E has no \d: use [0-9].
+PATTERNS='([0-9]{3}-[0-9]{2}-[0-9]{4}|[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}|(sk-|pk_)[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16}|password[[:space:]]*=[[:space:]]*"[^"]+")'
+
+if printf '%s' "$CONTENT" | grep -qiE -- "$PATTERNS"; then
+  # Do not echo the match itself: stderr goes to Claude as the block reason.
+  echo "BLOCKED: sensitive data pattern detected in the file content." >&2
+  echo "Redact or remove it before writing (use an environment variable or a secret store)." >&2
+  exit 2
 fi
 
 exit 0
@@ -559,7 +569,7 @@ Add this hook under a `Write|Edit` matcher — **merge** it into your existing `
 - [ ] Hook blocks writes containing sensitive patterns
 - [ ] Hook allows normal writes without sensitive data
 - [ ] You adapted at least one pattern to your specific domain
-- [ ] You understand the difference between blocking (exit 1) and allowing (exit 0)
+- [ ] You can explain why only `exit 2` blocks, and what happens if the scanner crashes with any other code (the write goes through: the scanner fails open)
 
 ### Reflection
 
@@ -721,7 +731,7 @@ These blueprints come from deep research into advanced Claude Code workflows. Us
 | # | Blueprint | Components | Security Relevance |
 |---|-----------|-----------|-------------------|
 | 1 | **Secure Diff Gate** — Block writes to `.env`, secrets, credentials | PreToolUse Hook + matcher `Write\|Edit` | Prevent accidental secret exposure |
-| 2 | **Token Firewall** — Suppress noisy test/build output and send a compact summary | PostToolUse Hook on Bash + `suppressOutput` JSON | Cost control, context management |
+| 2 | **Token Firewall** — Replace noisy test/build output with a compact summary before Claude reads it | PostToolUse Hook on Bash + `updatedToolOutput` (Bash shape) | Cost control, context management |
 | 3 | **Circuit Breaker** — Stop agents stuck in retry loops | PostToolUse Hook detecting 3x same error | Prevent runaway token costs |
 | 4 | **CVE-Fix Pipeline** — From advisory to PR automatically | WebSearch + Plan Mode + Bash + Git | Vulnerability management |
 | 5 | **CI-Locked Agent** — Claude as CI worker with strict rules | `dontAsk` mode + allow rules + `--json-schema` | Deterministic pipeline integration |

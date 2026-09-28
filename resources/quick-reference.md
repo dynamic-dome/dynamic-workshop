@@ -7,7 +7,7 @@
 |---|---|
 | `claude` | Interactive session |
 | `claude -p "<prompt>"` | One-shot (headless) |
-| `claude --bare -p "..."` | Headless, kein Skill/Hook-Overhead |
+| `claude --bare -p "..."` | Headless ohne automatisch geladene Hooks, Skills, Plugins, MCP-Server, Auto-Memory, CLAUDE.md (nur API-Key-Auth) |
 | `claude -c` | Continue last session |
 | `claude --resume <id>` | Resume specific session |
 | `claude --from-pr 1234` | Resume at PR |
@@ -57,9 +57,10 @@ paths: ["src/**"]
 shell: bash
 hooks:
   PreToolUse:
-    - matcher: Bash
-      type: command
-      command: ./check.sh
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "./check.sh"
 ---
 ```
 Substitution: `$ARGUMENTS`, `$1`, `$N`, `$name`, `${CLAUDE_SESSION_ID}`, `` !`cmd` ``
@@ -74,7 +75,7 @@ Execution types: `command` `http` `prompt` `agent` `mcp_tool`
 claude plugin marketplace add <owner/repo>
 claude plugin install <name>@<marketplace> --scope user
 claude plugin list / enable / disable / update / uninstall
-claude plugin validate <name>
+claude plugin validate <path>
 /reload-plugins
 ```
 Manifest at `.claude-plugin/plugin.json` (NOT root!)

@@ -190,7 +190,11 @@ Or show the structure conceptually and say: *"We'll configure this in Exercise 2
 Show a PreToolUse hook that **blocks** Claude from writing to sensitive files (`.env`, `secrets/`, `*.pem`). This is the "access control for code" pattern from the deep research.
 
 ### Setup (before demo)
-Add to `.claude/settings.json` in the demo project:
+Copy the tested gate from the repo, then register it in `.claude/settings.json` of the demo project:
+```bash
+mkdir -p ~/.claude/hooks
+cp resources/demos/assets/hooks/secure-diff-gate.sh ~/.claude/hooks/   # Windows without jq: secure-diff-gate.py
+```
 ```json
 {
   "hooks": {
@@ -200,7 +204,7 @@ Add to `.claude/settings.json` in the demo project:
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'INPUT=$(cat); FILE=$(echo \"$INPUT\" | jq -r .file_path // .path // \"\" ); if echo \"$FILE\" | grep -qE \"(\\.env|\\.pem|secrets/|credentials)\"; then echo \"BLOCKED: Write to protected path: $FILE\" >&2; exit 2; fi; exit 0'"
+            "command": "bash ~/.claude/hooks/secure-diff-gate.sh"
           }
         ]
       }
@@ -208,6 +212,7 @@ Add to `.claude/settings.json` in the demo project:
   }
 }
 ```
+The gate reads the target from `tool_input.file_path` (absolute; on Windows with backslashes, which it normalises) and blocks with exit 2. Earlier versions of this demo used an inline one-liner that read a top-level `file_path` — it never matched anything.
 
 ### Steps
 

@@ -280,7 +280,7 @@ Claude Code has a built-in permission system that controls which tools it can us
 | **default** | Only reads allowed, everything else asks for approval | Visitor badge — lobby access only |
 | **acceptEdits** | Reads + file edits allowed; bash still asks — **but** common filesystem Bash in the workdir (`mkdir`/`touch`/`rm`/`mv`) is also auto-approved (⚠️ incl. destructive `rm`/`mv`; detail in Modul 3.3) | Maintenance badge — utility rooms too |
 | **plan** | Shows full plan upfront, approves all steps at once | Security briefing — approve the mission |
-| **auto** | ML classifier decides risk level (Max-Plan with Opus 4.8, plus Team/Enterprise) | Smart badge — system decides per door |
+| **auto** | A classifier model reviews actions instead of you. Since CLI v2.1.283 the built-in starting mode for interactive sessions (earlier only on Pro/Max/Team) | Smart badge — system decides per door |
 | **dontAsk** | Never prompts — relies entirely on allow/deny rules | Automated system — rules only, no guard |
 | **bypassPermissions** | Accepts everything (DANGER — isolated VMs only!) | Master key — no locks at all |
 
@@ -445,7 +445,7 @@ Open `~/.claude/projects/<your-project-hash>/memory/MEMORY.md` in your editor. Y
 
 The old phrase "Remember that..." or "Note for future sessions that..." still works as an explicit hint — Claude will preserve that note with higher priority. But it is no longer required for memory to accumulate. The system runs whether you ask for it or not.
 
-To opt out of Auto-Memory for a single run, use `claude --bare` (skips Hooks, Skills, Plugins, MCP, and Auto-Memory — useful for short scripted invocations).
+To opt out of Auto-Memory for a single run, use `claude --bare` (skips auto-discovery of hooks, skills, plugins, MCP servers, auto-memory and CLAUDE.md — useful for short scripted invocations). Note that `--bare` authenticates only with an API key (`ANTHROPIC_API_KEY` or `apiKeyHelper`), not with a subscription login.
 
 > **Privacy — the one thing to remember now:** Auto-Memory writes notes to disk and sends them
 > to Anthropic as part of each session's context. **Never let secrets (API keys, credentials,
@@ -1223,7 +1223,7 @@ Eight habits that compound over the months:
 4. **Sonnet for routine work** — only reach for Opus when the task actually rewards depth.
 5. **Haiku for bulk reads** — file inventory, simple filtering, "find me all files matching X."
 6. **Cache reuse** — repeated tasks often land in cache (5-minute TTL on Anthropic's side).
-7. **`--bare` mode** for simple invocations — skips Hook/Skill/Plugin/MCP overhead when you don't need them.
+7. **`--bare` mode** for simple scripted invocations — skips hook, skill, plugin, MCP, auto-memory and CLAUDE.md discovery when you don't need them (API-key auth only).
 8. **Tight prompts** — drop unnecessary "explain your reasoning" when the answer is obvious.
 
 ---

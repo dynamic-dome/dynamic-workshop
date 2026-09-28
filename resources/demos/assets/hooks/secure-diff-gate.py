@@ -35,6 +35,8 @@ def main() -> int:
     # payloads use a top-level file_path or path. First non-empty wins.
     tool_input = payload.get("tool_input") or {}
     path = tool_input.get("file_path") or payload.get("file_path") or payload.get("path") or ""
+    # Windows delivers absolute backslash paths (C:\project\secrets\x): normalise before matching "secrets/".
+    path = path.replace("\\", "/")
 
     if PROTECTED.search(path):
         sys.stderr.write(f"BLOCKED: write to protected path: {path}\n")

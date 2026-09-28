@@ -173,43 +173,53 @@ Create `~/.claude/hooks/safety-check.sh`:
 mkdir -p ~/.claude/hooks
 ```
 
-Write the script:
+Write the script (needs `jq`, see the prerequisites; on Windows without Git Bash use the PowerShell variant below). The same file ships tested in the repo as `resources/demos/assets/hooks/safety-check.sh`, so you can also copy it instead of typing.
+
+Two facts decide whether a safety hook works at all:
+- Claude Code sends the whole event as JSON. The shell command sits in **`tool_input.command`**, not at the top level.
+- **Only `exit 2` blocks.** `exit 1` (or a crash with any other code) just reports a hook error, and the command still runs. A broken safety hook is an open door.
 
 ```bash
 #!/bin/bash
+# safety-check.sh - PreToolUse hook (matcher "Bash"): block destructive shell commands.
+# tested asset: resources/demos/assets/hooks/safety-check.sh
+#
+# Contract (official hooks reference):
+#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command.
+#   - exit 2 = BLOCK: the command does not run, and stderr is shown to Claude as the reason.
+#   - exit 0 = allow. Any OTHER exit code (1, 127, ...) does NOT block: the command runs anyway.
 
-# Read the tool input from stdin (Claude passes it as JSON)
 INPUT=$(cat)
 
-# Extract the command that Claude wants to run
-# The field name depends on the tool — for Bash it's "command"
-COMMAND=$(echo "$INPUT" | python3 -c "import sys, json; d=json.load(sys.stdin); print(d.get('command', ''))" 2>/dev/null || echo "")
+# Fail closed: if the input cannot be read, block instead of silently allowing everything.
+if ! COMMAND=$(printf '%s' "$INPUT" | jq -er '.tool_input.command // ""' 2>/dev/null); then
+  echo "SAFETY HOOK: could not read the hook input (is jq installed?) - blocking to stay safe." >&2
+  exit 2
+fi
 
-# Define dangerous patterns to check
+# Dangerous patterns (extended regex, case-insensitive)
 DANGEROUS_PATTERNS=(
-  'rm\s+-rf'
+  'rm[[:space:]]+-rf'
   'git push.*--force'
-  'git push.*-f\b'
+  'git push.*-f([[:space:]]|$)'
   'DROP TABLE'
   'truncate.*--yes'
   'mkfs\.'
-  'dd\s+if=.*of=/dev/'
+  'dd[[:space:]]+if=.*of=/dev/'
   '> /dev/sd'
 )
 
-# Check each pattern
 for PATTERN in "${DANGEROUS_PATTERNS[@]}"; do
-  if echo "$COMMAND" | grep -qiE "$PATTERN"; then
-    echo "SAFETY HOOK: Potentially destructive command detected!" >&2
+  if printf '%s' "$COMMAND" | grep -qiE -- "$PATTERN"; then
+    echo "SAFETY HOOK: potentially destructive command blocked." >&2
     echo "Command: $COMMAND" >&2
     echo "Pattern matched: $PATTERN" >&2
-    echo "Hook blocked execution. Review and run manually if intended." >&2
-    # Exit 1 to BLOCK the command
-    exit 1
+    echo "If this was intended, run it yourself outside Claude Code." >&2
+    exit 2
   fi
 done
 
-# All checks passed — allow the command
+# All checks passed - allow the command
 exit 0
 ```
 
@@ -220,19 +230,32 @@ chmod +x ~/.claude/hooks/safety-check.sh
 
 **Windows / PowerShell variant**
 
-On a pure Windows box there is no `chmod`, `bash` needs Git Bash on `PATH`, and `python3` is usually just `python`. Use this PowerShell parallel instead. Create `~/.claude/hooks/safety-check.ps1`:
+On a pure Windows box there is no `chmod`, `bash` needs Git Bash on `PATH`, and `jq` is usually missing. Use this PowerShell parallel instead (tested in the repo as `resources/demos/assets/hooks/safety-check.ps1`). Create `~/.claude/hooks/safety-check.ps1`:
 
 ```powershell
-# Read the tool input from stdin (Claude passes it as JSON)
-$raw = $input | Out-String
-try { $data = $raw | ConvertFrom-Json } catch { exit 0 }
-$command = [string]$data.command
+# safety-check.ps1 - PreToolUse hook (matcher "Bash"): block destructive shell commands.
+# tested asset: resources/demos/assets/hooks/safety-check.ps1
+#
+# Contract (official hooks reference):
+#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command.
+#   - exit 2 = BLOCK: the command does not run, and stderr is shown to Claude as the reason.
+#   - exit 0 = allow. Any OTHER exit code (1, ...) does NOT block: the command runs anyway.
 
-# Define dangerous patterns to check (same set as the bash version)
+$raw = [Console]::In.ReadToEnd()
+
+# Fail closed: if the input cannot be read, block instead of silently allowing everything.
+try { $data = $raw | ConvertFrom-Json -ErrorAction Stop }
+catch {
+  [Console]::Error.WriteLine("SAFETY HOOK: could not read the hook input - blocking to stay safe.")
+  exit 2
+}
+$command = [string]$data.tool_input.command
+
+# Dangerous patterns (same set as the bash version)
 $dangerous = @(
   'rm\s+-rf',
   'git push.*--force',
-  'git push.*-f\b',
+  'git push.*-f(\s|$)',
   'DROP TABLE',
   'truncate.*--yes',
   'mkfs\.',
@@ -243,15 +266,16 @@ $dangerous = @(
 foreach ($pattern in $dangerous) {
   # -match is case-insensitive by default (like grep -i)
   if ($command -match $pattern) {
-    [Console]::Error.WriteLine("SAFETY HOOK: Potentially destructive command detected!")
+    [Console]::Error.WriteLine("SAFETY HOOK: potentially destructive command blocked.")
     [Console]::Error.WriteLine("Command: $command")
     [Console]::Error.WriteLine("Pattern matched: $pattern")
-    [Console]::Error.WriteLine("Hook blocked execution. Review and run manually if intended.")
-    exit 1   # Exit 1 to BLOCK the command
+    [Console]::Error.WriteLine("If this was intended, run it yourself outside Claude Code.")
+    exit 2
   }
 }
 
-exit 0   # All checks passed — allow the command
+# All checks passed - allow the command
+exit 0
 ```
 
 No `chmod` step is needed on Windows — PowerShell does not use the executable bit. (If `pwsh` is not installed, `powershell` — Windows PowerShell 5.1 — works too; this script is compatible with both.)
@@ -310,7 +334,13 @@ Restart Claude Code (hooks are read at startup), then:
 Run: rm -rf /tmp/test-directory
 ```
 
-Expected: Claude tries to run it, your hook fires, Claude Code shows the warning/block message, the command does NOT execute.
+Expected: Claude tries to run it, your hook fires and exits 2, the command does NOT execute, and Claude sees your stderr text as the reason.
+
+Before you trust it, test the hook by hand with an input in the real format:
+```bash
+echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /tmp/test"}}' | bash ~/.claude/hooks/safety-check.sh; echo "exit=$?"
+# expected: SAFETY HOOK ... blocked, exit=2
+```
 
 Try a safe command to verify normal operation:
 ```
@@ -329,7 +359,7 @@ Create `~/.claude/hooks/audit-log.sh`:
 #!/bin/bash
 
 INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | python3 -c "import sys, json; d=json.load(sys.stdin); print(d.get('command', ''))" 2>/dev/null || echo "unknown")
+COMMAND=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // "unknown"' 2>/dev/null || echo "unknown")
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
 echo "[$TIMESTAMP] BASH: $COMMAND" >> ~/.claude/audit.log
@@ -343,9 +373,9 @@ chmod +x ~/.claude/hooks/audit-log.sh
 **Windows / PowerShell variant** — create `~/.claude/hooks/audit-log.ps1` (no `chmod` needed):
 
 ```powershell
-$raw = $input | Out-String
-try { $data = $raw | ConvertFrom-Json } catch { $data = $null }
-$command = if ($data) { [string]$data.command } else { "unknown" }
+$raw = [Console]::In.ReadToEnd()
+try { $data = $raw | ConvertFrom-Json -ErrorAction Stop } catch { $data = $null }
+$command = if ($data) { [string]$data.tool_input.command } else { "unknown" }
 $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
 
 Add-Content -Path "$HOME/.claude/audit.log" -Value "[$timestamp] BASH: $command"
@@ -404,13 +434,10 @@ You've succeeded when:
 ### Hints
 
 **If the hook fires but doesn't block:**
-Make sure the script exits with `exit 1` for dangerous patterns, not `exit 0`. Exit code 0 = allow, non-zero = block.
+Check two things. (1) The script must exit with **`exit 2`** for dangerous patterns. `exit 1` and every other non-zero code only show a hook error, and the command runs anyway. (2) The command must be read from `tool_input.command`. Reading a top-level `command` field gives an empty string, so no pattern ever matches.
 
-**If the JSON parsing fails:**
-The `python3 -c` approach is robust. If python3 is not available, try:
-```bash
-COMMAND=$(echo "$INPUT" | grep -o '"command":"[^"]*"' | cut -d'"' -f4)
-```
+**If every Bash command is suddenly blocked:**
+The script could not read its input and failed closed on purpose. Usually `jq` is missing: install it, or use the PowerShell variant. That is the safe failure direction; a hook that silently allows everything on a parse error would be the dangerous one.
 
 **If settings.json is invalid JSON after editing:**
 Validate it:
@@ -419,14 +446,19 @@ python3 -m json.tool ~/.claude/settings.json
 ```
 
 **Hook execution order:**
-If you have multiple hooks for the same event and tool, they run in array order. The first one to exit non-zero blocks the action.
+All hooks that match an event run **in parallel**, not one after another in array order. If any PreToolUse hook exits 2, the call is blocked.
 
 **What data does the hook receive?**
-Claude passes the tool input as JSON to stdin. For the Bash tool, it looks like:
+Claude Code passes the whole event as JSON on stdin. For the Bash tool it looks like this (shortened):
 ```json
-{"command": "rm -rf /tmp/test"}
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Bash",
+  "tool_input": { "command": "rm -rf /tmp/test", "description": "Remove test dir" },
+  "tool_use_id": "toolu_01ABC..."
+}
 ```
-For Edit, it includes `file_path`, `old_string`, `new_string`. You can log the raw input to inspect it: `echo "$INPUT" >> ~/.claude/debug.log`
+For Edit, `tool_input` holds `file_path`, `old_string`, `new_string`; for Write, `file_path` and `content`. File paths are absolute, and on Windows they use backslashes. You can log the raw input to inspect it: `echo "$INPUT" >> ~/.claude/debug.log`
 
 ---
 
@@ -909,11 +941,11 @@ After the workshop, consider:
 ## Bonus Exercise 2.6: Token Firewall — Hook-Based Output Filtering
 
 **Type:** Individual, ~20 minutes
-**Goal:** Build a PostToolUse hook that suppresses large test outputs and sends Claude a filtered summary, saving context space and money.
+**Goal:** Build a PostToolUse hook that replaces large test outputs with a filtered summary before Claude reads them, saving context space and money.
 
 ### Background
 
-When Claude runs `npm test` or `pytest` on a large project, the full output can be thousands of lines. Most of that is passing tests — only the failures matter. A "Token Firewall" hook receives the completed Bash result, hides the noisy original output from the transcript, and sends Claude a compact failure summary.
+When Claude runs `npm test` or `pytest` on a large project, the full output can be thousands of lines. Most of that is passing tests — only the failures matter. A "Token Firewall" hook receives the completed Bash result and swaps the output Claude will read for a compact failure summary (`updatedToolOutput`). The test run itself is unchanged; only what enters Claude's context shrinks.
 
 This is the equivalent of a CCTV system that only records when motion is detected — instead of recording 24/7 of empty hallways.
 
@@ -921,38 +953,44 @@ This is the equivalent of a CCTV system that only records when motion is detecte
 
 **Step 1: Create the filter script**
 
-Create `~/.claude/hooks/test-filter.sh`:
+Create `~/.claude/hooks/token-firewall.sh` (tested in the repo as `resources/demos/assets/hooks/token-firewall.sh`):
 ```bash
 #!/bin/bash
-# PostToolUse hook: filters test output AFTER execution to save tokens.
-# The hook receives the tool result as JSON on stdin.
-INPUT=$(cat)
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""')
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .tool_input.input // .command // ""')
-OUTPUT=$(echo "$INPUT" | jq -r '.tool_response.output // .tool_response.content // .output // ""')
+# token-firewall.sh - PostToolUse hook (matcher "Bash"): shrink noisy test output before Claude reads it.
+# tested asset: resources/demos/assets/hooks/token-firewall.sh
+#
+# Replaces tool_response.stdout via hookSpecificOutput.updatedToolOutput (same Bash shape).
+# stderr passes through unchanged: stripping error details can mislead Claude.
+# Note: suppressOutput has no effect, and systemMessage only reaches the user, not Claude.
 
-# Only filter test command output.
-if [ "$TOOL_NAME" = "Bash" ] && echo "$COMMAND" | grep -qE '(npm test|pytest|jest|mocha)'; then
-  FILTERED=$(echo "$OUTPUT" | grep -E '(FAIL|ERROR|AssertionError|✗|✘|FAILED|Summary|passed|failed)' | head -50)
-  MESSAGE="${FILTERED}
---- [Token Firewall: original output suppressed; showing failures/summary only] ---"
-  jq -n --arg msg "$MESSAGE" '{
-    continue: true,
-    suppressOutput: true,
-    systemMessage: $msg
-  }'
-else
-  jq -n '{continue: true, suppressOutput: false}'
+INPUT=$(cat)
+COMMAND=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // ""')
+
+# Only touch test runs; everything else passes through untouched.
+if ! printf '%s' "$COMMAND" | grep -qE '(npm test|pytest|jest|mocha)'; then
+  exit 0
 fi
 
+printf '%s' "$INPUT" | jq '{
+  hookSpecificOutput: {
+    hookEventName: "PostToolUse",
+    updatedToolOutput: (.tool_response | .stdout |= (
+      [split("\n")[] | select(test("FAIL|ERROR|Error|passed|failed|Summary"))]
+      | .[-50:] | join("\n")
+      | . + "\n--- [Token Firewall: passing-test lines removed; failures and summary kept] ---"
+    ))
+  }
+}'
 exit 0
 ```
 
-> **Important:** This is a **PostToolUse** hook, not PreToolUse. A PreToolUse hook cannot
-> filter tool output — it can only block or allow execution. PostToolUse receives the
-> completed tool result. Plain stdout from an exit-0 hook is shown in the transcript;
-> to save tokens, return JSON with `suppressOutput: true` and put the compact summary
-> in `systemMessage`.
+> **Important:** This is a **PostToolUse** hook, not PreToolUse. A PreToolUse hook runs
+> before the command, so there is no output to filter yet. PostToolUse receives the
+> finished result in `tool_response`; for Bash that is an object with `stdout`, `stderr`,
+> `interrupted` and `isImage`. Claude Code only accepts a replacement in **exactly that
+> shape** — a plain string is ignored and Claude sees the full original output. Two
+> fields look tempting but do not help: `suppressOutput` has no effect, and
+> `systemMessage` is shown to *you*, not to Claude.
 
 **Step 2: Register the hook**
 
@@ -966,7 +1004,7 @@ Add to `.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/test-filter.sh"
+            "command": "bash ~/.claude/hooks/token-firewall.sh"
           }
         ]
       }
@@ -982,15 +1020,16 @@ Ask Claude to run the test suite. Compare the context consumed with and without 
 ### Success Check
 
 - [ ] The hook fires when Claude runs test commands
-- [ ] Test-command output is suppressed with `suppressOutput: true`
-- [ ] Only failure lines + summary are sent to Claude via `systemMessage`
-- [ ] Non-test commands are unaffected
+- [ ] Test-command output reaches Claude as failures + summary only (`updatedToolOutput` in Bash shape)
+- [ ] Non-test commands are unaffected (the hook prints nothing)
+- [ ] You tested it by hand: `echo '{"tool_input":{"command":"pytest"},"tool_response":{"stdout":"a PASSED\nb FAILED\n1 failed, 1 passed","stderr":"","interrupted":false,"isImage":false}}' | bash ~/.claude/hooks/token-firewall.sh`
 - [ ] You measured or estimated the token savings
 
 ### Hints
 
-- Add a `--verbose` flag to your hook that lets you bypass the filter when needed
-- The `head -50` prevents even filtered output from being too large
+- Add a bypass (for example an environment variable your hook checks) for runs where Claude needs the full log
+- The `.[-50:]` keeps the last 50 matching lines, so the summary at the end survives even with many failures
+- If a test run prints nothing that matches, Claude only sees the marker line: widen the filter for your test runner
 - This pattern works for any noisy command: build logs, lint output, dependency installs
 
 ---

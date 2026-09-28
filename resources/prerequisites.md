@@ -76,7 +76,7 @@ This workshop was refreshed against `claude --version` **2.1.200** on 2026-07-04
 | Plugin init / local plugin improvements | 2.1.157 | `claude plugin init`, `claude --plugin-dir` |
 | Fable 5 | 2.1.170 | `/model` shows Fable 5 after update |
 | `/workflows` agent detail/status UI | 2.1.186 | `/workflows` available in current CLI builds |
-| Hook JSON output fields (`continue`, `suppressOutput`, `systemMessage`) | Current hook docs | Run Demo 2.2 / Exercise 2.6 |
+| Hook JSON output (`updatedToolOutput`, `systemMessage`, `terminalSequence`) | Current hook docs | `python -m pytest tools/test_course_hooks.py` in the repo, then Demo 2.2 / Exercise 2.6 |
 | Sonnet 5 default + 1M context | 2.1.197 | `claude --version`, `/model` |
 
 ```bash
@@ -348,44 +348,27 @@ Verify Option A with `/skills` — `notebooklm` should appear in the list.
 
 Demo 2.2 (Hooks — The Alarm System) uses a pre-prepared hook file at `~/.claude/hooks/security-check.sh`. Create it before the demo:
 
+The hook is the tested safety script from the repo (`resources/demos/assets/hooks/safety-check.*`, the same one Exercise 2.2 builds). It reads the command from `tool_input.command` and blocks with **exit 2** — the only exit code that blocks. Copy it instead of retyping it:
+
 **macOS / Linux / Git Bash** (needs `jq` — see the prerequisites checklist):
 
 ```bash
 mkdir -p ~/.claude/hooks
-cat > ~/.claude/hooks/security-check.sh << 'EOF'
-#!/bin/bash
-# Workshop demo hook: blocks rm -rf and force-pushes
-INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.command // ""')
-
-if echo "$COMMAND" | grep -qE 'rm\s+-rf|git push.*--force|DROP TABLE|truncate'; then
-  echo "WARNING: Potentially destructive command detected: $COMMAND" >&2
-  echo "Pausing for confirmation..." >&2
-  exit 1
-fi
-
-exit 0
-EOF
+cp ~/cc-workshop/dynamic-workshop/resources/demos/assets/hooks/safety-check.sh ~/.claude/hooks/security-check.sh
 chmod +x ~/.claude/hooks/security-check.sh
+
+# Smoke test with an input in the real format - expect "blocked" and exit=2:
+echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /tmp/x"}}' | bash ~/.claude/hooks/security-check.sh; echo "exit=$?"
 ```
 
-**Windows / PowerShell** (no `jq`, no `chmod`, no heredoc — uses `New-Item -Force` and a here-string):
+**Windows / PowerShell** (no `jq`, no `chmod` needed):
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$HOME/.claude/hooks" | Out-Null
+Copy-Item "$HOME/cc-workshop/dynamic-workshop/resources/demos/assets/hooks/safety-check.ps1" "$HOME/.claude/hooks/security-check.ps1"
 
-@'
-# Workshop demo hook: blocks rm -rf and force-pushes
-$raw = $input | Out-String
-try { $data = $raw | ConvertFrom-Json } catch { exit 0 }
-$command = [string]$data.command
-if ($command -match 'rm\s+-rf|git push.*--force|DROP TABLE|truncate') {
-  [Console]::Error.WriteLine("WARNING: Potentially destructive command detected: $command")
-  [Console]::Error.WriteLine("Pausing for confirmation...")
-  exit 1
-}
-exit 0
-'@ | Set-Content -Path "$HOME/.claude/hooks/security-check.ps1" -Encoding utf8
+# Smoke test with an input in the real format - expect "blocked" and exit=2:
+'{"tool_name":"Bash","tool_input":{"command":"rm -rf /tmp/x"}}' | powershell -NoProfile -ExecutionPolicy Bypass -File "$HOME/.claude/hooks/security-check.ps1"; "exit=$LASTEXITCODE"
 ```
 
 Reference this hook in your `~/.claude/settings.json`. Use the `command` that matches the script you created:
