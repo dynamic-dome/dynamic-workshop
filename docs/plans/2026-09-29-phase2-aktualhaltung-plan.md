@@ -296,6 +296,11 @@ def test_foreign_flags_in_prose_css_and_pipes_are_ignored():
     assert values(text, "flag") == []
 
 
+def test_camel_case_and_single_letter_flags_are_kept_whole():
+    assert values("claude -p --allowedTools Read --x", "flag") == ["--allowedTools", "--x"]
+    assert values("Use `--disallowedTools` and `--x`.", "flag") == ["--disallowedTools", "--x"]
+
+
 def test_env_model_ids_aliases_and_modes():
     text = (
         "export ANTHROPIC_MODEL=x CLAUDE_CODE_OAUTH_TOKEN=y SLACK_BOT_TOKEN=z\n"
@@ -352,10 +357,10 @@ import json
 import re
 from dataclasses import dataclass
 
-FLAG = re.compile(r"(?<![\w-])--[a-z][a-z0-9-]*[a-z0-9]")
+FLAG = re.compile(r"(?<![\w-])--[A-Za-z](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?![\w-])")
 ENV = re.compile(r"\b(?:ANTHROPIC|CLAUDE)_[A-Z0-9_]*[A-Z0-9]\b")
 MODEL_ID = re.compile(r"\bclaude-(?:opus|sonnet|haiku|fable|mythos)-\d+(?:-\d+)*\b")
-INLINE_FLAG = re.compile(r"`(--[a-z][a-z0-9-]*[a-z0-9])[^`]*`")
+INLINE_FLAG = re.compile(r"`(--[A-Za-z](?:[A-Za-z0-9-]*[A-Za-z0-9])?)(?![\w-])[^`]*`")
 # "claude" as a command word: not ~/.claude/, not claude-code, not @anthropic-ai/claude-...
 CLAUDE_CALL = re.compile(r"(?<![\w./@-])claude\b(?![./-])")
 MODEL_VALUE = re.compile(
@@ -467,7 +472,7 @@ def extract_course_hits(path, text):
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `python -m pytest tools/test_currency_extract.py -q` → Expected: 8 passed.
+Run: `python -m pytest tools/test_currency_extract.py -q` → Expected: 9 passed.
 Falls `test_js_string_continuation_in_the_cockpit_is_joined` scheitert: `repr()` der Testzeile ausgeben und mit einer
 echten Cockpit-Zeile vergleichen (`grep -n "claude --bare -p" resources/claude-code-workshop-ui.html`); der Test
 muss die echte Dateiform abbilden, nicht umgekehrt.
@@ -493,7 +498,8 @@ git commit -m "feat(tools): extract the identifiers the course teaches"
 - Produces:
   - `parse_date(text) -> date | None`
   - `DepRow(model_id, status, retirement)`; `parse_deprecations(text) -> dict[str, DepRow]`
-  - `parse_aliases(text) -> set[str]`; `parse_permission_modes(text) -> set[str]`
+  - `parse_aliases(text) -> set[str]`; `parse_permission_modes(modes_text, cli_text="") -> set[str]`
+    (Tabellen in permission-modes.md inkl. verlinkter Zellen + Werte der `--permission-mode`-Zeile in cli-reference.md)
   - `parse_canon_header(text) -> tuple[date, str]` (raises `ValueError`)
   - `CanonModel(name, model_id, alias, tier, status, retirement)`; `parse_canon_models(text) -> list[CanonModel]`
   - `parse_canon_sources(text) -> dict[str, list[str]]` mit Schlüsseln `Doku`, `CLI-Version`, `Changelog`
@@ -567,8 +573,13 @@ def test_parse_deprecations_reads_only_the_status_table():
 def test_parse_aliases_and_permission_modes():
     aliases = cx.parse_aliases("| Model alias | Behavior |\n| - | - |\n| **`default`** | x |\n| **`sonnet[1m]`** | y |\n")
     assert aliases == {"default", "sonnet[1m]"}
-    modes = cx.parse_permission_modes("| Mode | x |\n| - | - |\n| `default` | a |\n| `default`, `acceptEdits` | b |\n| `--flag` | c |\n")
-    assert modes == {"default", "acceptEdits"}
+    modes = cx.parse_permission_modes(
+        "| Mode | x |\n| - | - |\n| `default` | a |\n| [`plan`](#plan-mode) | b |\n"
+        "| `default`, `acceptEdits` | c |\n| `--flag` | d |\n",
+        "| `--permission-mode` | Accepts `default`, `plan`, or `manual` | `claude --permission-mode plan` |\n"
+        "| `claude` | start |\n",
+    )
+    assert modes == {"default", "plan", "acceptEdits", "manual"}
 
 
 def test_canon_header_models_and_sources():
@@ -666,7 +677,8 @@ CANON_TABLE_HEAD = re.compile(r"^\|\s*Modell\s*\|\s*ID\s*\|\s*Alias\s*\|\s*Tier\
 DEPRECATIONS_HEAD = re.compile(r"^\|\s*API model name\s*\|\s*Current state\s*\|.*$", re.M)
 SOURCE_LINE = re.compile(r"^- (Doku|CLI-Version|Changelog):\s*(https://\S+)\s*$", re.M)
 ALIAS_ROW = re.compile(r"^\|\s*\*\*`([^`]+)`\*\*\s*\|", re.M)
-MODE_ROW = re.compile(r"^\|\s*((?:`[A-Za-z]+`(?:,\s*)?)+)\s*\|", re.M)
+MODE_ROW = re.compile(r"^\|\s*((?:\[?`[A-Za-z]+`\]?(?:\([^)]*\))?(?:,\s*)?)+)\s*\|", re.M)
+MODE_FLAG_ROW = re.compile(r"^\|\s*`--permission-mode`\s*\|(.*)$", re.M)
 UPDATE = re.compile(r'^<Update label="(\d+\.\d+\.\d+)"', re.M)
 PROVENANCE = re.compile(r"^<!-- Quelle: .*claude-code-workshop-ui\.html.*-->\s*$")
 
@@ -720,9 +732,12 @@ def parse_aliases(text):
     return set(ALIAS_ROW.findall(text))
 
 
-def parse_permission_modes(text):
+def parse_permission_modes(modes_text, cli_text=""):
+    """Mode names from the mode tables (linked cells too) plus every value the --permission-mode row accepts."""
     modes = set()
-    for match in MODE_ROW.finditer(text):
+    for match in MODE_ROW.finditer(modes_text):
+        modes.update(re.findall(r"`([A-Za-z]+)`", match.group(1)))
+    for match in MODE_FLAG_ROW.finditer(cli_text):
         modes.update(re.findall(r"`([A-Za-z]+)`", match.group(1)))
     return modes
 
@@ -816,7 +831,7 @@ def parse_exceptions(text):
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `python -m pytest tools/test_currency_extract.py -q` → Expected: 20 passed.
+Run: `python -m pytest tools/test_currency_extract.py -q` → Expected: 21 passed.
 
 - [ ] **Step 6: Commit**
 
@@ -1026,6 +1041,18 @@ def test_changelog_naming_a_course_identifier_is_yellow_keyword_only_is_info():
     assert result.exit_code == 1
 
 
+def test_documented_mode_alias_from_the_cli_reference_is_accepted():
+    cli = pages()[BASE + "cli-reference.md"] + "\n| `--permission-mode` | Accepts `default`, `plan`, or `manual` | x |\n"
+    result = run(course={"c.md": "claude --permission-mode manual\n"}, available=pages(**{BASE + "cli-reference.md": cli}))
+    assert levels(result, "rot") == []
+
+
+def test_changelog_names_aliases_and_modes_only_in_code_form():
+    available = pages(**{BASE + "changelog.md": changelog(["Changed `opus` to resolve differently", "Improved the opus picker"])})
+    result = run(available=available)
+    assert [f.text for f in levels(result, "gelb")] == ["2.1.285: Changed `opus` to resolve differently"]
+
+
 def test_cockpit_comparison_ignores_provenance_but_reports_real_differences():
     course_cockpit = "<!doctype html>\n<p>x</p>\n" + "c" * 100_000
     same = course_cockpit.replace("<!doctype html>\n", "<!doctype html>\n<!-- Quelle: dynamic_workshop/resources/claude-code-workshop-ui.html · Stand X -->\n")
@@ -1153,7 +1180,7 @@ MIN_BYTES = {"doc": 5_000, "cli": 200, "changelog": 100_000, "cockpit": 100_000}
 MIN_FLAGS, MIN_ENV, MIN_DEPRECATIONS, MIN_ALIASES, MIN_MODES = 80, 150, 10, 3, 5
 RETIREMENT_WARN_DAYS = 60
 CANON_INFO_DAYS, CANON_RED_DAYS = 45, 90
-REQUIRED_DOCS = ("model-deprecations.md", "model-config.md", "permission-modes.md")
+REQUIRED_DOCS = ("cli-reference.md", "model-deprecations.md", "model-config.md", "permission-modes.md")
 KEYWORDS = re.compile(r"\b(removed|deprecated|renamed|no longer|default)\b", re.I)
 SPECIFIC_KINDS = ("flag", "env", "hook_event", "model_id")
 KIND_LABEL = {
@@ -1291,9 +1318,12 @@ def _check_canon_models(canon_models, deprecations, today):
 
 def _check_changelog(entries, by_value):
     specific = sorted({v for (k, v) in by_value if k in SPECIFIC_KINDS}, key=len, reverse=True)
+    # Aliases and modes are ordinary words ("default", "plan"): they count only in code form.
+    words = sorted({v for (k, v) in by_value if k not in SPECIFIC_KINDS}, key=len, reverse=True)
     findings = []
     for version, line in entries:
         named = [v for v in specific if re.search(r"(?<![\w-])" + re.escape(v) + r"(?![\w-])", line)]
+        named += [v for v in words if "`" + v + "`" in line]
         if named:
             findings.append(Finding("gelb", f"changelog:{version}:{_short(line)}", f"{version}: {line}",
                                     tuple(f"nennt {v}" for v in named)))
@@ -1325,7 +1355,7 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
     doc_ids = cx.doc_identifiers(union)
     deprecations = cx.parse_deprecations(by_name["model-deprecations.md"].text)
     aliases = cx.parse_aliases(by_name["model-config.md"].text)
-    modes = cx.parse_permission_modes(by_name["permission-modes.md"].text)
+    modes = cx.parse_permission_modes(by_name["permission-modes.md"].text, by_name["cli-reference.md"].text)
     for label, got, floor in (
         ("Flags in der Doku", len(doc_ids["flag"]), MIN_FLAGS),
         ("Env-Variablen in der Doku", len(doc_ids["env"]), MIN_ENV),
@@ -1474,7 +1504,7 @@ if __name__ == "__main__":
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `python -m pytest tools/test_currency_check.py -q` → Expected: 22 passed.
+Run: `python -m pytest tools/test_currency_check.py -q` → Expected: 24 passed.
 Run: `python -m pytest tools -q` → Expected: alles grün (Baseline + neue Tests).
 
 - [ ] **Step 5: Mutation probe (nicht committen)**
@@ -1975,7 +2005,7 @@ python tools/currency_check.py --cockpit-url https://dynamic-dome.com/workshop-c
 
 Expected: Exit 1. Bericht `.currency/reports/<heute>.md` lesen. Erwartete rote Befunde (Messung 2026-09-29):
 `--metadata`, `--worktree-base-ref`, `--no-verbose`, `--fast`, Fremd-Flags (`--decompose`, `--door`, `--headed`,
-`--notebook`, `--orphan`, `--or`), `retiring:claude-haiku-4-5-20251001:2026-10-15`, `cockpit-differs` (Sweep ist
+`--notebook`, `--orphan`), `retiring:claude-haiku-4-5-20251001:2026-10-15`, `cockpit-differs` (Sweep ist
 noch nicht exportiert). Weitere Befunde einzeln bewerten. **Exit 2:** Fehlermeldung lesen, Quelle/Parser prüfen,
 nicht umgehen.
 
@@ -1994,16 +2024,18 @@ nicht umgehen.
   Kommentarzeile `# Datenklasse: sensitiv — nur Modelle/Anbieter laut Datenhaltungs-Regel` davor setzen.
   Danach `test_cockpit_inline_script_still_parses` laufen lassen.
 
-- [ ] **Step 3: Ratchet-Test schreiben** (an `tools/test_currency_check.py` anhängen; `N` = Zahl der Einträge nach Step 2)
+- [ ] **Step 3: Ratchet-Test schreiben** (an `tools/test_currency_check.py` anhängen; die Menge = genau die Bezeichner
+  aus `tools/currency_exceptions.txt` nach Step 2, als Python-Menge ausgeschrieben)
 
 ```python
-FROZEN_EXCEPTIONS = N  # first live run 2026-09-29; the list may only shrink
+# First live run 2026-09-29: the identifiers recorded in Step 2. The set may only shrink; a swap is caught too.
+FROZEN_EXCEPTIONS = frozenset({"--decompose", "--door"})  # replace with the exact Step-2 set
 
 
 def test_exception_list_only_shrinks():
     cx = _load("currency_extract")
     entries = cx.parse_exceptions((ROOT / "tools" / "currency_exceptions.txt").read_text(encoding="utf-8"))
-    assert len(entries) <= FROZEN_EXCEPTIONS
+    assert set(entries) <= FROZEN_EXCEPTIONS, sorted(set(entries) - FROZEN_EXCEPTIONS)
 ```
 
 - [ ] **Step 4: Erneuter Live-Lauf**
