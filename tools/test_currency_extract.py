@@ -221,8 +221,25 @@ def test_gegenprobe_finds_known_wrong_identifiers_in_old_course_text():
     old_cheatsheet = (ROOT / "tools/fixtures/currency/cheatsheet-before-ee52d54.md").read_text(encoding="utf-8")
     hits, _ = cx.extract_course_hits("cheatsheet.md", old_cheatsheet)
     assert "CLAUDE_MODEL" in {h.value for h in hits if h.kind == "env"}
-    assert not cx.exists_in_docs("env", "CLAUDE_MODEL", "| `ANTHROPIC_MODEL` | model |", set(), set())
+    union = (ROOT / "tools/fixtures/currency/docs-denials-2026-09-29.md").read_text(encoding="utf-8")
+    assert cx.denied_in_docs("CLAUDE_MODEL", union) is not None
 
     old_block1 = (ROOT / "tools/fixtures/currency/block-1-before-sweep.md").read_text(encoding="utf-8")
     hits, _ = cx.extract_course_hits("block-1.md", old_block1)
     assert "claude-opus-4-8" in {h.value for h in hits if h.kind == "model_id"}
+
+
+def test_denied_in_docs_reads_negations_and_removed_rows():
+    union = (ROOT / "tools/fixtures/currency/docs-denials-2026-09-29.md").read_text(encoding="utf-8")
+    assert cx.denied_in_docs("CLAUDE_MODEL", union) is not None
+    assert cx.denied_in_docs("--enable-auto-mode", union) is not None
+    assert cx.denied_in_docs("ANTHROPIC_MODEL", union) is None
+    assert cx.denied_in_docs("--bare", "`--bare` does not load hooks.\n| `--bare` | Skip auto-discovery |") is None
+
+
+def test_changelog_since_tolerates_version_gaps():
+    text = (
+        '<Update label="2.1.286" description="a">\n  * Added --foo\n</Update>\n'
+        '<Update label="2.1.284" description="c">\n  * Old entry\n</Update>\n'
+    )
+    assert cx.changelog_since(text, "2.1.285") == [("2.1.286", "Added --foo")]

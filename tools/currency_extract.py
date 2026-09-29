@@ -233,11 +233,11 @@ def version_tuple(version):
 
 
 def changelog_since(text, since):
-    """Entries (version, line) of every release newer than `since`; ValueError if `since` is not listed."""
+    """Entries (version, line) of every release newer than `since`; ValueError if no listed release is <= `since`."""
     marks = [(m.start(), m.group(1)) for m in UPDATE.finditer(text)]
     since_t = version_tuple(since)
-    if since_t not in {version_tuple(v) for _pos, v in marks}:
-        raise ValueError(f"Changelog: Version {since} nicht gefunden")
+    if not any(version_tuple(v) <= since_t for _pos, v in marks):
+        raise ValueError(f"Changelog: reicht nicht bis Version {since} zurueck")
     entries = []
     for index, (pos, version) in enumerate(marks):
         if version_tuple(version) <= since_t:
@@ -265,6 +265,17 @@ def exists_in_docs(kind, value, union, aliases, modes):
     if kind == "permission_mode":
         return value in modes
     return re.search(r"(?<![\w-])" + re.escape(value) + r"(?![\w-])", union) is not None
+
+
+def denied_in_docs(value, union):
+    """First doc line that says `value` does not exist ("There is no `X`") or marks its table row "Removed in"."""
+    quoted = re.escape(value)
+    negation = re.compile(r"there is no `\$?" + quoted + "`", re.I)
+    removed_row = re.compile(r"^\|\s*`" + quoted + r"`\s*\|.*removed in", re.I)
+    for line in union.splitlines():
+        if negation.search(line) or removed_row.search(line.strip()):
+            return line.strip()
+    return None
 
 
 def normalize_cockpit(text):
