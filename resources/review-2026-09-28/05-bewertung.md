@@ -299,7 +299,7 @@ Quelle nachgeprüft (Verdikt-Stufe: unabhängig gefunden, selbst bestätigt).
 
 ## Phase-2-Stand (2026-09-29)
 
-Phase 2 (Design: `docs/plans/2026-09-29-phase2-aktualhaltung-design.md`) macht Aktualität zu einem Prozess statt zu einem Sweep. Umgesetzt auf dem Zweig `phase2-aktualhaltung` (Commits `f46682b` … `0c3d7aa`), bisher nicht gepusht.
+Phase 2 (Design: `docs/plans/2026-09-29-phase2-aktualhaltung-design.md`) macht Aktualität zu einem Prozess statt zu einem Sweep. Umgesetzt auf dem Zweig `phase2-aktualhaltung` (Commits `1ed2bef` … `0db5b33`, seit `2521170`), bisher nicht gepusht.
 
 ### Mechanismus
 - **Lint** (`tools/lint_currency.py`), zwei Regeln: (1) Modellgenerationen stehen nur im Kanon `resources/_canonical.md`; im Kurs Aliase und Rollen, bewusste Ausnahmen tragen `version-pinned: <Grund>` in derselben Zeile. (2) Stale-Gate auf `Geprüft:`: mehr als 45 Tage Warnung, mehr als 90 Tage rot, fehlende Zeile rot.
@@ -314,7 +314,7 @@ Phase 2 (Design: `docs/plans/2026-09-29-phase2-aktualhaltung-design.md`) macht A
 |---|---|---|
 | `--decompose` | Fremd-Flag | Argument des Plugin-Commands `codex-swarm`; Ausnahme |
 | `--door` | Fremd-Flag | Parameter des Übungsskripts `event_log_parser.py`; Ausnahme |
-| `--headed` -> `--headless` | Fremd-Flag | Playwright-MCP-Flag; Hinweis korrigiert (Fenster ist Standard), Ausnahme |
+| `--headless` (zuerst als `--headed` geführt) | Fremd-Flag | Playwright-MCP-Flag im Übungshinweis (Standard ist headed); `--headed` gibt es nicht, Hinweis korrigiert (R11), Ausnahme |
 | `--orphan` | Fremd-Flag | `git worktree add --orphan`; Ausnahme |
 | `--enable-auto-mode` | erwarteter Treffer | Kurs nennt das Flag ausdrücklich als entfernt (Doku: „Removed in v2.1.111“); Ausnahme |
 | `--metadata` (H-13) | Fehler | in keiner Doku; ersetzt durch `OTEL_RESOURCE_ATTRIBUTES` (monitoring-usage.md) samt Exportpfad |
