@@ -300,7 +300,7 @@ Claude Code account, expect these costs per session:
 
 **To stay on the low end:**
 - Use `claude --bare -p` for batch demos (skip overhead)
-- Set `--max-budget-usd 0.50` for autonomous loops (current CLI has no hard turn-cap flag anymore — `--max-budget-usd` bounds runaway loops/cost)
+- Set `--max-budget-usd 0.50` and `--max-turns` for autonomous `-p` loops (budget bounds cost, turn limit bounds loops; `--max-turns` is documented but missing from `claude --help`)
 - Use Haiku for cost-baseline runs
 
 **For workshop moderators:** Bring a Pro/Max account with at least $50 of budget for safe live execution.

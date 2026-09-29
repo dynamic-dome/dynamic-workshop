@@ -1202,7 +1202,7 @@ When you let Claude run for a long time without supervision (`/loop`, `/goal`, s
 
 - `--max-budget-usd 5.00` — hard cap on dollars spent in this `-p` run
 
-The current CLI offers no hard turn-limit flag anymore — `--max-budget-usd` is what caps runaway loops and runaway cost. This flag is essential for CI integration and any unattended workflow. It will be revisited in **Module 3.6 (CI/CD & Headless)** in detail.
+Its partner is `--max-turns <n>`, a hard limit on agentic turns that exits with an error when reached (documented in the CLI reference, though `claude --help` does not list it). Both flags work in print mode (`-p`) only: the budget caps runaway cost, the turn limit caps runaway loops. This flag is essential for CI integration and any unattended workflow. It will be revisited in **Module 3.6 (CI/CD & Headless)** in detail.
 
 Example:
 ```bash

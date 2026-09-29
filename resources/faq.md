@@ -168,7 +168,7 @@ Faustregel: kleines Projekt (<50 Files) -> CLAUDE.md reicht. Grosses Projekt ode
 
 ### Kann ich Claude in GitHub Actions laufen lassen?
 
-Ja — Modul 3.6 zeigt das im Detail. Kern: `claude --bare -p "task" --output-format json` als Befehl, `--max-budget-usd 0.50` als Sicherheitsnetz, ein API-Key (`ANTHROPIC_API_KEY`) als CI-Secret. Der Abo-Token aus `claude setup-token` (`CLAUDE_CODE_OAUTH_TOKEN`, ~1 Jahr) geht nur **ohne** `--bare` — und ohne `--bare` laufen Hooks und MCP-Server des ausgecheckten Repos mit. Also: fremder Code → API-Key + `--bare`; Abo-Token nur fuer eigene, vertrauenswuerdige Repos. Die aktuelle CLI bietet keine harte Turn-Grenze per Flag mehr — `--max-budget-usd` kappt Endlos-Loops/Runaway-Kosten.
+Ja — Modul 3.6 zeigt das im Detail. Kern: `claude --bare -p "task" --output-format json` als Befehl, `--max-budget-usd 0.50` als Sicherheitsnetz, ein API-Key (`ANTHROPIC_API_KEY`) als CI-Secret. Der Abo-Token aus `claude setup-token` (`CLAUDE_CODE_OAUTH_TOKEN`, ~1 Jahr) geht nur **ohne** `--bare` — und ohne `--bare` laufen Hooks und MCP-Server des ausgecheckten Repos mit. Also: fremder Code → API-Key + `--bare`; Abo-Token nur fuer eigene, vertrauenswuerdige Repos. Dazu `--max-turns <n>` als harte Grenze fuer die Agenten-Runden (nur `-p`; dokumentiert, fehlt aber in `claude --help`).
 
 ### Was kostet ein Claude-PR-Reviewer im CI?
 

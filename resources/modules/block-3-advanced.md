@@ -735,7 +735,7 @@ claude --permission-mode dontAsk \
   -p "Run the test suite and emit a structured failure report."
 ```
 
-Tips for CI: pair `--permission-mode dontAsk` with `--max-budget-usd` as a hard cost/loop cap (see Module 3.4) — the current CLI has no hard turn-limit flag anymore, so the budget cap is what bounds runaway loops — and use a long-lived OAuth token from `claude setup-token` so the runner never prompts for re-auth.
+Tips for CI: pair `--permission-mode dontAsk` with `--max-budget-usd` as a hard cost cap and `--max-turns` as a hard turn limit (see Module 3.4; both print mode only), and give the runner a credential that never prompts for re-auth — which one depends on `--bare` and on whose code the job runs (see *CI Auth* in Module 3.6).
 
 #### `bypassPermissions` — When You Actually Need It
 
@@ -1414,7 +1414,7 @@ Interactive `claude` sessions authenticate through a browser login. CI runners h
 |---|---|---|---|---|
 | **A — API key** (default for scripted `claude -p`) | `ANTHROPIC_API_KEY` (key from the Claude Console) or an `apiKeyHelper` passed via `--settings` | **yes** | API usage | Shared pipelines, org-wide secrets, any job that checks out code you did not write |
 | **B — Subscription token** | `CLAUDE_CODE_OAUTH_TOKEN`, generated once with `claude setup-token` | **no** — bare mode never reads it | Your Pro/Max/Team/Enterprise subscription | Your own repos on your own subscription; the official GitHub Action input `claude_code_oauth_token` |
-| **C — No long-lived secret** | Claude Code GitHub Action with workload identity federation, or Bedrock/Vertex with short-lived cloud credentials | — | API or cloud provider | High-security environments (see *Token Rotation* below) |
+| **C — No long-lived secret** | Claude Code GitHub Action with workload identity federation, or Bedrock/Vertex with short-lived cloud credentials | Bedrock/Vertex: **yes**; federation profiles: **no** — the Action handles federation itself | API or cloud provider | High-security environments (see *Token Rotation* below) |
 
 Path B in two lines:
 
@@ -1425,7 +1425,7 @@ claude setup-token   # once, on a workstation: browser login, then prints a 1-ye
 
 Three rules follow from the table:
 
-1. **`--bare` means path A or C.** A `--bare` job that only has `CLAUDE_CODE_OAUTH_TOKEN` is not authenticated. `--bare` is the recommended mode for scripted calls and is slated to become the default for `-p`, so path A is the future-proof default.
+1. **A direct `claude --bare` call needs an API key or cloud-provider credentials.** It reads `ANTHROPIC_API_KEY`, an `apiKeyHelper`, or Bedrock/Vertex credentials — never `CLAUDE_CODE_OAUTH_TOKEN` and never federation profiles. A `--bare` job that only has the subscription token is not authenticated. `--bare` is the recommended mode for scripted calls and is slated to become the default for `-p`, so path A is the future-proof default.
 2. **Code you did not write → path A with `--bare`.** Path B runs without `--bare`, and then the checked-out repo's `.claude/settings.json` hooks and `.mcp.json` servers run on your runner (see *`--bare` Mode* below). Keep path B for repositories you trust.
 3. **Shared secret → API key.** A subscription token belongs to the person who ran `claude setup-token`. For a secret shared across repositories or a team, use an API key.
 
@@ -1441,13 +1441,15 @@ The single biggest CI risk with autonomous LLMs is a runaway loop: a tool keeps 
 
 - **`--max-budget-usd 0.50`** — hard dollar cap. Once spend hits the cap, the session exits with a non-zero code. CI fails cleanly instead of bleeding money.
 
-The current CLI offers no hard turn-limit flag anymore — `--max-budget-usd` is the cap that bounds runaway retry loops and runaway reasoning cost alike.
+- **`--max-turns 10`** — hard limit on agentic turns. When Claude reaches it, the run exits with an error. The flag is documented in the CLI reference but not listed in `claude --help` — a reminder that the help text is not the full reference.
+
+Both flags work in print mode (`-p`) only. The turn limit bounds runaway retry loops; the budget bounds runaway reasoning cost, even inside a single long turn.
 
 ```bash
-claude -p "Generate release notes" --max-budget-usd 0.20
+claude -p "Generate release notes" --max-budget-usd 0.20 --max-turns 10
 ```
 
-Set the budget cap in CI, always.
+Set both caps in CI, always.
 
 **Cross-reference:** Module 3.4 (`/loop`, `/goal`) discusses the same flag as a safety net for autonomous loops in interactive sessions — the CI use-case is the strictest application of that pattern.
 
@@ -1473,7 +1475,7 @@ claude --bare -p "Categorize" --output-format json
 
 **Why this matters for security:** without `--bare`, a `-p` session runs the hooks in the project's `.claude/settings.json` and connects the servers in its `.mcp.json` — even in a folder you never trusted, with no trust dialog. In CI that checks out contributor code, `--bare` keeps their hooks from running on your runner.
 
-**Auth catch:** `--bare` authenticates **only** via `ANTHROPIC_API_KEY` or an `apiKeyHelper`. It does not read OAuth, the keychain or `CLAUDE_CODE_OAUTH_TOKEN` (the token from `claude setup-token`), so a `--bare` pipeline needs an API key — path A (or C) of the *CI Auth* table.
+**Auth catch:** `--bare` authenticates **only** via `ANTHROPIC_API_KEY` or an `apiKeyHelper`. It does not read OAuth, the keychain or `CLAUDE_CODE_OAUTH_TOKEN` (the token from `claude setup-token`), so a `--bare` pipeline needs an API key (path A of the *CI Auth* table) or Bedrock/Vertex credentials. Federation profiles are not read in bare mode either.
 
 Use `--bare` for any CI step that does not actually need your custom skills or hooks. Reach for full mode only when the pipeline genuinely depends on a plugin or MCP server.
 

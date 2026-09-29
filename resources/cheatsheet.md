@@ -62,6 +62,7 @@ claude /login
 | `claude --bare` | Minimal mode: skips auto-discovery of hooks, skills, custom commands, subagents, plugins, MCP servers, auto-memory and CLAUDE.md (a skill can still be called explicitly via `/skill-name`). Auth **only** via `ANTHROPIC_API_KEY` or `apiKeyHelper` — no OAuth, no `CLAUDE_CODE_OAUTH_TOKEN` |
 | `claude --tools <list>` | Restrict tools (different from `--allowedTools` allowlist) |
 | `claude --max-budget-usd <amount>` | Cost cap per `-p` run |
+| `claude --max-turns <n>` | Hard limit on agentic turns per `-p` run (documented, not listed in `claude --help`) |
 | `claude --append-system-prompt "..."` | Add persona text to system prompt |
 | `claude --system-prompt "..."` | Full persona override |
 | `claude --system-prompt-file <path>` | Load persona from file |

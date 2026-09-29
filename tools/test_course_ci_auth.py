@@ -25,6 +25,14 @@ WRONG_CLAIMS = {
     "no 'manage tokens' command exists": re.compile(r"manage tokens", re.I),
     "placeholder env names are read by nothing": re.compile(r"\b[A-Z_]*CREDENTIAL_PLACEHOLDER\b"),
     "env var CLAUDE_MODEL does not exist (it is ANTHROPIC_MODEL)": re.compile(r"\bCLAUDE_MODEL\b"),
+    # cli-reference.md documents `--max-turns` (print mode only); `claude --help` just does not list it.
+    "denies the documented --max-turns flag": re.compile(
+        r"no (hard |separate )?turn.?(limit|cap).?flag|keine harte Turn-Grenze|kein Hard-Turn-Limit"
+        r"|Turn-Limit-Flag im CLI nicht mehr|einzige[^.]{0,40}Hard-Guard",
+        re.I,
+    ),
+    # authentication.md: bare mode reads no federation profiles, so federation is not a --bare path.
+    "claims --bare works with federation (path C)": re.compile(r"--bare` means path A or C|path A \(or C\)"),
 }
 FENCE = re.compile(r"^```[\w-]*\n(.*?)^```", re.S | re.M)
 JS_EXAMPLE = re.compile(r'example:\s*"((?:[^"\\]|\\.)*)"')
@@ -44,12 +52,18 @@ def snippets(path: Path, text: str) -> list:
 
 
 def bare_without_api_key(path: Path, text: str) -> list:
-    """Snippets that run `--bare` on the subscription token (or setup-token) with no API key in sight."""
-    return [
-        snippet[:80]
-        for snippet in snippets(path, text)
-        if BARE_INVOCATION.search(snippet) and OAUTH_CREDENTIAL.search(snippet) and not API_KEY_CREDENTIAL.search(snippet)
-    ]
+    """Snippets that run `--bare` on the subscription token (or setup-token) with no API key in sight.
+
+    Known limit: an API-key mention anywhere in the same snippet counts as "in sight", so a snippet that
+    names the key only in a comment passes. Backslash line continuations are joined first, so a wrapped
+    `claude \\` + `--bare` call is still seen as one invocation.
+    """
+    problems = []
+    for snippet in snippets(path, text):
+        joined = re.sub(r"\\\n\s*", " ", snippet)
+        if BARE_INVOCATION.search(joined) and OAUTH_CREDENTIAL.search(joined) and not API_KEY_CREDENTIAL.search(joined):
+            problems.append(snippet[:80])
+    return problems
 
 
 def test_guard_catches_the_old_mistakes():
@@ -67,10 +81,19 @@ def test_guard_catches_the_old_mistakes():
         'example: "env:\\n    CLAUDE_CI_CREDENTIAL_PLACEHOLDER: ${{ secrets.CLAUDE_CI_CREDENTIAL_PLACEHOLDER }}",\n'
     )
 
+    old_turn_limit = (
+        "The current CLI offers no hard turn-limit flag anymore.\n"
+        "Die aktuelle CLI bietet keine harte Turn-Grenze per Flag mehr.\n"
+        "1. **`--bare` means path A or C.**\n"
+    )
+    wrapped = "```bash\nclaude \\\n  --bare -p \"Review\"\n# token: claude setup-token\n```\n"
+
     assert len(find_wrong_claims(old_module)) >= 4
     assert bare_without_api_key(Path("x.md"), old_module)
     assert find_wrong_claims(old_cockpit)
     assert bare_without_api_key(COCKPIT, old_cockpit)
+    assert len(find_wrong_claims(old_turn_limit)) == 2
+    assert bare_without_api_key(Path("x.md"), wrapped)
 
 
 def test_guard_accepts_the_correct_patterns():

@@ -447,7 +447,7 @@ exit 0
 
 Notice every flag from Module 3.6 in there:
 - `--bare` so the hook starts fast and stays deterministic.
-- `--max-budget-usd 0.10` as a hard cap — the worst-case cost of a commit attempt is one dime, and it doubles as the runaway-loop guard (the current CLI has no separate turn-limit flag).
+- `--max-budget-usd 0.10` as a hard cap — the worst-case cost of a commit attempt is one dime, and `--max-turns` (print mode only, documented but missing from `claude --help`) is the matching turn limit if you want a second, independent loop guard.
 - `--output-format text` because we only need a yes/no answer.
 
 **Step 3: Make it executable**
