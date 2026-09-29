@@ -374,7 +374,7 @@ def _few_deprecations():
     ("Zeilen der Deprecations-Tabelle", "model-deprecations.md", _few_deprecations()),
     ("Aliase in model-config.md", "model-config.md", _aliases_with(["default", "opus"])),
     ("Permission-Modi", "permission-modes.md", _modes_with(["default", "plan", "auto"])),
-])
+], ids=["flags", "env", "deprecations", "aliases", "modes"])
 def test_each_parser_floor_alone_is_a_source_error_naming_its_label(label, doc, body):
     with pytest.raises(cc.SourceError, match=re.escape(label)):
         run(available=pages(**{BASE + doc: body}))
