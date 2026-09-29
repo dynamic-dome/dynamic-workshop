@@ -2,6 +2,7 @@
 import datetime as dt
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -272,3 +273,19 @@ def test_main_turns_an_unreadable_canon_into_exit_2(monkeypatch, tmp_path, capsy
     _patch_main(monkeypatch, tmp_path, pages())
     monkeypatch.setattr(cc, "CANON", tmp_path / "missing.md")
     assert cc.main(["--today", "2026-09-29", "--state-dir", str(tmp_path / "s")]) == 2
+
+
+def test_real_canon_is_machine_readable():
+    cx = _load("currency_extract")
+    text = (ROOT / "resources" / "_canonical.md").read_text(encoding="utf-8")
+    cx.parse_canon_header(text)
+    models = cx.parse_canon_models(text)
+    assert {m.tier for m in models} == {"Fable", "Opus", "Sonnet", "Haiku"}
+    for model in models:
+        assert model.model_id.startswith("claude-") and model.alias in {"fable", "opus", "sonnet", "haiku"}
+        assert re.fullmatch(r"(Not sooner than )?[A-Z][a-z]+ \d{1,2}, \d{4}", model.retirement), model.retirement
+    sources = cx.parse_canon_sources(text)
+    assert len(sources["Doku"]) == 13
+    assert all(url.startswith("https://") for urls in sources.values() for url in urls)
+    names = {url.rsplit("/", 1)[-1] for url in sources["Doku"]}
+    assert {"model-deprecations.md", "model-config.md", "permission-modes.md"} <= names
