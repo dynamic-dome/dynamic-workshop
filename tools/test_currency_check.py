@@ -299,3 +299,95 @@ def test_exception_list_only_shrinks():
     cx = _load("currency_extract")
     entries = cx.parse_exceptions((ROOT / "tools" / "currency_exceptions.txt").read_text(encoding="utf-8"))
     assert set(entries) <= FROZEN_EXCEPTIONS, sorted(set(entries) - FROZEN_EXCEPTIONS)
+
+
+# --- Final review fixes (R14): future dates, pinned rules, floors, boundaries ---
+
+def test_future_check_date_is_red_and_today_is_not():
+    future = run(canon_text=canon(checked="2027-09-29"))
+    assert [f.key for f in levels(future, "rot")] == ["canon-future:2027-09-29"]
+    assert future.exit_code == 1
+    assert not any(f.key.startswith("canon-future") for f in run().findings)
+
+
+def test_canon_cli_newer_than_npm_is_red_and_equal_is_not():
+    ahead = run(canon_text=canon(cli="2.1.286"))
+    assert [f.key for f in levels(ahead, "rot")] == ["canon-cli-ahead:2.1.286:2.1.285"]
+    assert not any(f.key.startswith("canon-cli-ahead") for f in run(canon_text=canon(cli="2.1.285")).findings)
+
+
+def test_canon_model_with_a_non_active_status_is_red():
+    table = dep_table().replace("| claude-opus-5-5 | Active |", "| claude-opus-5-5 | Deprecated |")
+    result = run(available=pages(**{BASE + "model-deprecations.md": table}))
+    assert "canon-status:claude-opus-5-5:Deprecated" in [f.key for f in levels(result, "rot")]
+
+
+def test_canon_model_missing_from_the_deprecations_table_is_red():
+    ghost = ("Claude Sonnet 9", "claude-sonnet-9", "sonnet", "Sonnet", "Active", "Not sooner than May 1, 2030")
+    result = run(canon_text=canon(rows=(OPUS, ghost)))
+    assert [f.key for f in levels(result, "rot")] == ["canon-unknown:claude-sonnet-9"]
+
+
+def test_yellow_findings_are_new_once_then_known():
+    available = pages(**{BASE + "changelog.md": changelog(["Fixed --max-turns off by one"])})
+    first = run(available=available)
+    key = levels(first, "gelb")[0].key
+    assert key in first.state["finding_keys"]
+    assert cc.summary(first, None, Path("r.md"))["new_yellow"] == 1
+    second = run(available=available, previous=first.state)
+    assert cc.summary(second, first.state, Path("r.md"))["new_yellow"] == 0
+
+
+def test_size_floor_alone_is_a_source_error_naming_the_minimum():
+    small = "| Model alias | Behavior |\n| - | - |\n| **`default`** | x |\n| **`opus`** | x |\n| **`sonnet`** | x |\n| **`haiku`** | x |\n"
+    assert 100 < len(small.encode("utf-8")) < 5_000
+    with pytest.raises(cc.SourceError, match="Minimum 5000"):
+        run(available=pages(**{BASE + "model-config.md": small}))
+
+
+def _cli_with(count):
+    return "# CLI\n" + "\n".join(f"| `--flag-{i}` | x |" for i in range(count)) + "\n| `--max-turns` | x |\n| `--model` | x |" + PAD
+
+
+def _env_with(count):
+    return "# Env\n" + "\n".join(f"| `ANTHROPIC_VAR_{i}` | x |" for i in range(count)) + "\n| `ANTHROPIC_MODEL` | x |" + PAD
+
+
+def _aliases_with(names):
+    return "| Model alias | Behavior |\n| - | - |\n" + "\n".join(f"| **`{n}`** | x |" for n in names) + "\n" + PAD
+
+
+def _modes_with(names):
+    return "| Mode | x |\n| - | - |\n" + "\n".join(f"| `{n}` | x |" for n in names) + "\n" + PAD + "\nPreToolUse Stop\n"
+
+
+def _few_deprecations():
+    rows = [("claude-opus-5-5", "Active", "N/A", "Not sooner than September 22, 2027")]
+    rows += [(f"claude-opus-4-{i}", "Active", "N/A", "Not sooner than May 28, 2027") for i in range(1, 5)]
+    body = "\n".join(f"| {a} | {b} | {c} | {d} |" for a, b, c, d in rows)
+    return "| API model name | Current state | Deprecated | Tentative retirement date |\n| --- | --- | --- | --- |\n" + body + "\n" + PAD
+
+
+@pytest.mark.parametrize("label,doc,body", [
+    ("Flags in der Doku", "cli-reference.md", _cli_with(50)),
+    ("Env-Variablen in der Doku", "env-vars.md", _env_with(100)),
+    ("Zeilen der Deprecations-Tabelle", "model-deprecations.md", _few_deprecations()),
+    ("Aliase in model-config.md", "model-config.md", _aliases_with(["default", "opus"])),
+    ("Permission-Modi", "permission-modes.md", _modes_with(["default", "plan", "auto"])),
+])
+def test_each_parser_floor_alone_is_a_source_error_naming_its_label(label, doc, body):
+    with pytest.raises(cc.SourceError, match=re.escape(label)):
+        run(available=pages(**{BASE + doc: body}))
+
+
+def _retiring_in(days):
+    date = TODAY + dt.timedelta(days=days)
+    text = f"Not sooner than {date.strftime('%B')} {date.day}, {date.year}"
+    model = ("Claude Haiku 4.5", "claude-haiku-4-5-20251001", "haiku", "Haiku", "Active", text)
+    table = dep_table([("claude-haiku-4-5-20251001", "Active", "N/A", text)])
+    return run(canon_text=canon(rows=(OPUS, model)), available=pages(**{BASE + "model-deprecations.md": table}))
+
+
+def test_retirement_warning_boundary_is_59_days_red_60_days_not():
+    assert any(f.key.startswith("retiring:") for f in levels(_retiring_in(59), "rot"))
+    assert not any(f.key.startswith("retiring:") for f in _retiring_in(60).findings)

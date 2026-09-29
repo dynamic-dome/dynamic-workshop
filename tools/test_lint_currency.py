@@ -83,7 +83,10 @@ LEGACY_FORBIDDEN_SAMPLES = [
 
 
 def test_generation_rule_covers_every_pattern_of_the_retired_forbidden_list():
-    """Guard replacement: every pattern of the old FORBIDDEN list (until 274e244) must stay blocked."""
+    """Guard replacement: every pattern of the old FORBIDDEN list (until 274e244) must stay blocked.
+
+    Accepted difference: glued forms such as `model_claude-3-5-sonnet` are not blocked, because the rule is \b-based.
+    """
     for sample in LEGACY_FORBIDDEN_SAMPLES:
         assert lint.GENERATION.search(sample), sample
 
@@ -102,6 +105,34 @@ def test_stale_gate(tmp_path, today, level):
     canon = tmp_path / "_canonical.md"
     canon.write_text(CANON_OK, encoding="utf-8")
     assert lint.canon_status(str(canon), today)[0] == level
+
+
+def test_future_check_date_is_red(tmp_path):
+    canon = tmp_path / "_canonical.md"
+    canon.write_text("# Kanon\n\nGeprüft: 2027-09-29 · CLI 2.1.284\n", encoding="utf-8")
+    level, message = lint.canon_status(str(canon), dt.date(2026, 9, 29))
+    assert level == "red" and "Zukunft" in message
+
+
+@pytest.mark.parametrize("today,level", [
+    (dt.date(2026, 11, 13), "ok"), (dt.date(2026, 11, 14), "warn"),
+    (dt.date(2026, 12, 28), "warn"), (dt.date(2026, 12, 29), "red"),
+])
+def test_stale_gate_boundaries(tmp_path, today, level):
+    """Rule is age > 45 (warn) and age > 90 (red): 45 days ok, 46 warn, 90 warn, 91 red."""
+    canon = tmp_path / "_canonical.md"
+    canon.write_text(CANON_OK, encoding="utf-8")
+    assert lint.canon_status(str(canon), today)[0] == level
+
+
+def test_main_warns_at_46_days_but_exits_0(tmp_path, capsys):
+    root = _tree(tmp_path, {"resources/_canonical.md": CANON_OK, "resources/modules/m.md": "Nutze das Opus-Tier.\n"})
+    assert lint.main(str(root), today=dt.date(2026, 11, 14)) == 0
+    assert "WARNUNG" in capsys.readouterr().out
+
+
+def test_course_has_no_generation_outside_the_canon():
+    assert lint.generation_hits(lint.ROOT) == []
 
 
 def test_missing_or_unreadable_check_date_is_red(tmp_path):

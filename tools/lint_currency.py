@@ -128,6 +128,8 @@ def canon_status(canon_path, today):
     except (OSError, ValueError) as exc:
         return "red", f"Kanon-Prüfdatum nicht lesbar: {exc}"
     age = (today - checked).days
+    if age < 0:
+        return "red", f"Kanon-Prüfdatum {checked} liegt in der Zukunft (Tippfehler?): Datum korrigieren"
     if age > STALE_RED_DAYS:
         return "red", (f"Kanon zuletzt geprüft {checked} ({age} Tage > {STALE_RED_DAYS}): "
                        "Monatsbericht abarbeiten und Prüfdatum setzen")

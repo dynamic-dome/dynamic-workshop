@@ -236,6 +236,12 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
     findings += _check_changelog(entries, by_value)
 
     age = (today - checked).days
+    if age < 0:
+        findings.append(Finding("rot", f"canon-future:{checked}",
+                                f"Kanon-Prüfdatum {checked} liegt in der Zukunft (Tippfehler?)"))
+    if cx.version_tuple(cli_canon) > cx.version_tuple(cli_latest):
+        findings.append(Finding("rot", f"canon-cli-ahead:{cli_canon}:{cli_latest}",
+                                f"Kanon nennt CLI {cli_canon}, neuer als npm {cli_latest} (Tippfehler?)"))
     if age > CANON_RED_DAYS:
         findings.append(Finding("rot", f"canon-stale:{checked}",
                                 f"Kanon-Prüfdatum {checked} ist {age} Tage alt (> {CANON_RED_DAYS})"))
