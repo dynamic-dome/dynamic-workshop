@@ -179,7 +179,7 @@ Globaler Sicherheits-Level fuer eine Session. Sechs Modi:
 - `default` — fragt bei allem nach (ausser Reads)
 - `acceptEdits` — Edits + sichere FS-Bash-Commands auto-akzeptiert
 - `plan` — zeigt Gesamtplan vorab, einmal genehmigen
-- `auto` — ML-Klassifizierer entscheidet (alle Plaene; braucht ein unterstuetztes Modell: Opus-, Sonnet- oder Fable-Tier, nicht Haiku, siehe [Kanon](_canonical.md); Admins koennen es sperren)
+- `auto` — ML-Klassifizierer entscheidet (alle Plaene; braucht ein unterstuetztes Modell: Opus-, Sonnet- oder Fable-Tier, nicht Haiku; genaue Grenzen in der Permission-Modes-Doku, Aliase im [Kanon](_canonical.md); Admins koennen es sperren)
 - `dontAsk` — niemals fragen, nur allow/deny-Rules zaehlen
 - `bypassPermissions` — YOLO, akzeptiert alles ausser Protected Paths
 

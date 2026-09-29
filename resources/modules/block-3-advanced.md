@@ -1681,7 +1681,7 @@ Cross-reference: Module 2.2 (Hooks) covers Claude Code's *internal* hook system 
 
 ### Monitoring CI Costs
 
-`/cost` shows spend for the current interactive session — not aggregated across CI runs. For CI-wide cost visibility you have two paths:
+`/cost` shows spend for the current interactive session — not aggregated across CI runs. For CI-wide cost visibility you have three paths:
 
 - **Anthropic Console dashboard** — aggregates API spend across all calls under your token.
 - **Custom logging** — pipe `--output-format stream-json` to a log aggregator and parse the `usage` events.

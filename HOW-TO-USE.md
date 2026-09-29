@@ -20,5 +20,5 @@
 - Playground-Checks: vor Python-Tests sicherstellen, dass keine Produktions-DB beruehrt wird. Dieses Repo hat nur das isolierte `workshop-playground`; historischer Check: `cd workshop-playground && python -m pytest -v`.
 - Currency-Checks: `python tools/lint_currency.py` (Modellgenerationen nur im Kanon, Prüfdatum ≤ 90 Tage) und
   `python tools/currency_check.py [--cockpit-url <Website-Cockpit>]` (Kurs-Bezeichner gegen die Doku, Kanon gegen
-  Deprecations/npm; Bericht unter `.currency/reports/`, Exit 0/1/2). Nach dem Abarbeiten eines Berichts
+  Deprecations/npm; Bericht unter `.currency/reports/`, Exit 0/1/2; manuelle Läufe mit `--state-dir .currency/manual`, damit sie Befunde nicht für den Monatslauf als bekannt markieren). Nach dem Abarbeiten eines Berichts
   `Geprüft:` in `resources/_canonical.md` setzen. Details: `docs/plans/2026-09-29-phase2-aktualhaltung-design.md`.

@@ -1192,7 +1192,7 @@ For demanding tasks, a three-model pipeline often beats a single-model approach 
 | **Implement** | Sonnet tier | medium | Writing code is routine — Sonnet does it fast and solidly |
 | **Review** | Haiku tier | — (no effort setting) | Final check, fast pattern-matching, Haiku is enough |
 
-The cost shape is roughly `1x (plan) + 0.5x (implement) + 0.25x (review) ≈ 1.75x`, often producing better outcomes than Opus-only at the same total spend.
+The cost shape is roughly `1x (plan) + 0.5x (implement) + 0.25x (review) ≈ 1.75x` instead of `3x` (Opus in all three phases), i.e. roughly 40 % cheaper, often with better outcomes than Opus-only.
 
 When *not* to use this pipeline: small tasks where the planning phase is the trivial part. A one-file utility doesn't need an Opus architect.
 
@@ -1263,8 +1263,9 @@ How to maximize cache hits:
 - 5-minute idle window (TTL)
 - Different `--system-prompt` between runs
 
-**Order of magnitude:** A 100K-token CLAUDE.md costs $0.50 per fresh load with Sonnet. On a
-cache hit, it costs $0.05. Over 10 sessions/day, that's $4.50 vs $0.50 — meaningful.
+**Order of magnitude:** A 100K-token CLAUDE.md pays the full input price on a fresh load. On a
+cache hit you pay only the cache-read price, for the Sonnet tier about a tenth of the input price
+(see the current pricing docs). Over 10 sessions a day that difference adds up.
 
 ---
 

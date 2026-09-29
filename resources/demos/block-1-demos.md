@@ -525,7 +525,7 @@ After it finishes, type:
 **Expected output:** A session cost in the ballpark of ~$0.10–$0.20 for this single turn (numbers vary; the point is the *order of magnitude*).
 
 **Talking point:**
-> "That's the most expensive combination Claude Code offers — Opus at the deepest effort level. Look at the cost. Now let's see what we get for less."
+> "That's an expensive combination — Opus at a deep effort level. Look at the cost. Now let's see what we get for less."
 
 ---
 
