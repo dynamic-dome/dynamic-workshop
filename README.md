@@ -11,7 +11,7 @@ Dieses Repository ist die Materialbasis hinter der DoMe-Dynamics-Workshop-Seite:
 
 Die Website zeigt, warum der Workshop als Engineering-Arbeitsprobe zaehlt. Dieses Repo zeigt, womit er konkret funktioniert.
 
-> **📌 Stand & Versionen (zentraler Anker).** Material-Stand: **2026-06-23** (4 Sessions / 65 Lerneinheiten). Getestet gegen eine aktuelle Claude-Code-CLI; Modelle: Der Kurs nennt Aliase (`fable`, `opus`, `sonnet`, `haiku`) und Rollen; Generationen, Preise und Kontextgrößen stehen nur im [Kanon](resources/_canonical.md). **Modellnamen, CLI-Flags und Versionsnummern ändern sich laufend** — im Zweifel `/model`, `/release-notes` und `claude --version` gegen dein Material prüfen, statt den hier genannten Zahlen blind zu vertrauen. Einzelne Dateien tragen eigene „Stand"-Zeilen; diese hier ist die maßgebliche Referenz.
+> **📌 Stand & Versionen (zentraler Anker).** Kursaufbau: 4 Sessions / 65 Lerneinheiten. Modell- und CLI-Stand: siehe `Geprüft:` in [resources/_canonical.md](resources/_canonical.md). Getestet gegen eine aktuelle Claude-Code-CLI; Modelle: Der Kurs nennt Aliase (`fable`, `opus`, `sonnet`, `haiku`) und Rollen; Generationen, Preise und Kontextgrößen stehen nur im [Kanon](resources/_canonical.md). **Modellnamen, CLI-Flags und Versionsnummern ändern sich laufend** — im Zweifel `/model`, `/release-notes` und `claude --version` gegen dein Material prüfen, statt den hier genannten Zahlen blind zu vertrauen. Einzelne Dateien tragen eigene „Stand"-Zeilen; diese hier ist die maßgebliche Referenz.
 
 ---
 

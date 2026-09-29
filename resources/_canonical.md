@@ -16,16 +16,18 @@ gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach meh
   Aliase (`opus`, `sonnet`, `haiku`, `fable`), Prosa nennt die Rolle („das Opus-Tier“) und verweist hierher.
 - Preise, Kontextgrößen, Effort-Defaults und Retirement-Daten stehen nur hier.
 - Bewusst versionierte Stellen tragen in derselben Zeile `version-pinned: <Grund>`.
-- Immer `claude --version`, `/release-notes` und `/model` über jede hier gedruckte Zahl stellen.
+- `claude --version`, `/release-notes` und `/model` haben Vorrang vor jeder hier gedruckten Zahl.
 
 ## Aktuelle Claude-Modelle
 
 | Modell | ID | Alias | Tier | Status | Retirement frühestens | Kontext | In $/1M | Out $/1M | Rolle |
 |---|---|---|---|---|---|---|---|---|---|
 | Claude Fable 5.1 | `claude-fable-5-1` | `fable` | Fable | Active | Not sooner than September 1, 2027 | 1M | 10 | 50 | Härtestes, langlaufendes Reasoning; nie Account-Default |
-| Claude Opus 5.5 | `claude-opus-5-5` | `opus` | Opus | Active | Not sooner than September 22, 2027 | 1M | 4 | 20 | Default in Claude Code; Architektur, tiefes Reasoning |
+| Claude Opus 5.5 | `claude-opus-5-5` | `opus` | Opus | Active | Not sooner than September 22, 2027 | 1M | 4 | 20 | Default in Claude Code (außer Microsoft Foundry); Architektur, tiefes Reasoning |
 | Claude Sonnet 5.5 | `claude-sonnet-5-5` | `sonnet` | Sonnet | Active | Not sooner than September 28, 2027 | 1M | 2 | 10 | Schnelles Standard-Coding, Alltag |
 | Claude Haiku 4.5 | `claude-haiku-4-5-20251001` | `haiku` | Haiku | Active | Not sooner than October 15, 2026 | 200K | 1 | 5 | Bulk-Reads, einfache Suchen, Routine-Reviews |
+
+Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon Bedrock und Google Cloud veröffentlichen eigene (Quellen: model-deprecations.md, models/overview.md).
 
 - **Haiku-Risiko:** Haiku 4.5 kann frühestens am 15.10.2026 abgeschaltet werden. Wer `haiku` für Massenarbeit nutzt,
   prüft vor dem Einsatz mit `/model`, worauf der Alias auflöst.
@@ -34,7 +36,7 @@ gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach meh
 ## Aliase und ihre Auflösung (Quelle: model-config.md)
 
 - `default` löst je Kontotyp auf: Opus 5.5 auf Pro, Max, Team, Enterprise und der Anthropic API sowie auf Claude
-  Platform on AWS, Amazon Bedrock und Google Cloud; Sonnet 4.5 auf Microsoft Foundry. Eine Organisations-Vorgabe geht vor.
+  Platform on AWS, Amazon Bedrock und Google Cloud; Sonnet 4.5 auf Microsoft Foundry. Eine Organisations-Vorgabe geht vor; außerdem lässt sich `default` u. a. über `ANTHROPIC_DEFAULT_MODEL` oder das im Konto hinterlegte Modell überschreiben.
 - `opus` und `sonnet` lösen **je Anbieter** unterschiedlich auf:
 
 | Anbieter | `opus` | `sonnet` |
@@ -44,7 +46,9 @@ gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach meh
 | Amazon Bedrock, Google Cloud | Opus 5.5 | Sonnet 4.5 |
 | Microsoft Foundry | Opus 4.6 | Sonnet 4.5 |
 
-- `fable` löst auf Fable 5.1 auf, im Claude-apps-Gateway auf Fable 5; `best` = `fable`, wo Fable verfügbar ist, sonst `opus`.
+Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, Sonnet 4.5, Opus 4.6). Das früheste Retirement von Sonnet 4.5 ist laut Deprecations-Seite „Not sooner than September 29, 2026“ – vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen.
+
+- `fable` löst auf Fable 5.1 auf (u. a. überschreibbar per `ANTHROPIC_DEFAULT_FABLE_MODEL`), im Claude-apps-Gateway auf Fable 5; `best` = `fable`, wo Fable verfügbar ist, sonst `opus`.
 - Weitere Werte: `opusplan` (Opus im Plan-Modus, dann Sonnet), `sonnet[1m]`, `opus[1m]`.
 
 ## Effort (Quelle: model-config.md, „Adjust effort level“)
@@ -61,7 +65,7 @@ gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach meh
 
 ## Struktur
 
-- **4 Sessions / 65 Lerneinheiten (LE)** — Welle-F-Restrukturierung (`session-plan.md` ist die Ablauf-SSoT).
+- **4 Sessions / 65 Lerneinheiten (LE)** – Welle-F-Restrukturierung (`session-plan.md` ist die Ablauf-SSoT).
 - Session 1 = Block 1 (Foundations, S1.1–S1.20). Session 2 = Block 2 (Ecosystem, S2.1–S2.20).
   Session 3 = Block 3 Advanced Kern (S3.1–S3.15). Session 4 = Block 3 Advanced Bonus (S4.1–S4.10).
 - 17 Module (5+5+7) über 3 Blöcke bleiben die Volltext-Quelle; die 65-LE-Landkarte ist die Navigations-Schicht darüber.
