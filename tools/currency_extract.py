@@ -4,6 +4,7 @@
 Consumers: tools/currency_check.py (monthly drift check) and tools/lint_currency.py (canon header).
 Design: docs/plans/2026-09-29-phase2-aktualhaltung-design.md
 """
+import datetime as dt
 import json
 import re
 from dataclasses import dataclass
@@ -119,3 +120,166 @@ def extract_course_hits(path, text):
     events, unparsed = hook_events_from_json_fences(text)
     hits.extend(Hit("hook_event", name, path, line) for name, line in events)
     return hits, unparsed
+
+
+MONTHS = {
+    name: number for number, name in enumerate(
+        ["January", "February", "March", "April", "May", "June", "July",
+         "August", "September", "October", "November", "December"], 1)
+}
+DATE_TEXT = re.compile(r"([A-Z][a-z]+) (\d{1,2}), (\d{4})")
+CANON_HEADER = re.compile(r"^Geprüft:\s*(\d{4}-\d{2}-\d{2})\s*[·|]\s*CLI\s+(\d+\.\d+\.\d+)\s*$", re.M)
+CANON_TABLE_HEAD = re.compile(r"^\|\s*Modell\s*\|\s*ID\s*\|\s*Alias\s*\|\s*Tier\s*\|\s*Status\s*\|\s*Retirement[^|]*\|.*$", re.M)
+DEPRECATIONS_HEAD = re.compile(r"^\|\s*API model name\s*\|\s*Current state\s*\|.*$", re.M)
+SOURCE_LINE = re.compile(r"^- (Doku|CLI-Version|Changelog):\s*(https://\S+)\s*$", re.M)
+ALIAS_ROW = re.compile(r"^\|\s*\*\*`([^`]+)`\*\*\s*\|", re.M)
+MODE_ROW = re.compile(r"^\|\s*((?:\[?`[A-Za-z]+`\]?(?:\([^)]*\))?(?:,\s*)?)+)\s*\|", re.M)
+MODE_FLAG_ROW = re.compile(r"^\|\s*`--permission-mode`\s*\|(.*)$", re.M)
+UPDATE = re.compile(r'^<Update label="(\d+\.\d+\.\d+)"', re.M)
+PROVENANCE = re.compile(r"^<!-- Quelle: .*claude-code-workshop-ui\.html.*-->\s*$")
+
+
+@dataclass(frozen=True)
+class DepRow:
+    model_id: str
+    status: str
+    retirement: str
+
+
+@dataclass(frozen=True)
+class CanonModel:
+    name: str
+    model_id: str
+    alias: str
+    tier: str
+    status: str
+    retirement: str
+
+
+def parse_date(text):
+    match = DATE_TEXT.search(text or "")
+    if not match or match.group(1) not in MONTHS:
+        return None
+    return dt.date(int(match.group(3)), MONTHS[match.group(1)], int(match.group(2)))
+
+
+def _table_rows(text, head_match):
+    """Cells of every row after the header and separator line, until the table ends."""
+    rows = []
+    for line in text[head_match.start():].splitlines()[2:]:
+        if not line.startswith("|"):
+            break
+        rows.append([cell.strip() for cell in line.strip().strip("|").split("|")])
+    return rows
+
+
+def parse_deprecations(text):
+    head = DEPRECATIONS_HEAD.search(text)
+    if not head:
+        return {}
+    rows = {}
+    for cells in _table_rows(text, head):
+        if len(cells) >= 4 and cells[0].startswith("claude-"):
+            rows[cells[0]] = DepRow(cells[0], cells[1], cells[3])
+    return rows
+
+
+def parse_aliases(text):
+    return set(ALIAS_ROW.findall(text))
+
+
+def parse_permission_modes(modes_text, cli_text=""):
+    """Mode names from the mode tables (linked cells too) plus every value the --permission-mode row accepts."""
+    modes = set()
+    for match in MODE_ROW.finditer(modes_text):
+        modes.update(re.findall(r"`([A-Za-z]+)`", match.group(1)))
+    for match in MODE_FLAG_ROW.finditer(cli_text):
+        modes.update(re.findall(r"`([A-Za-z]+)`", match.group(1)))
+    return modes
+
+
+def parse_canon_header(text):
+    match = CANON_HEADER.search(text)
+    if not match:
+        raise ValueError("Kanon: Zeile 'Geprüft: YYYY-MM-DD · CLI X.Y.Z' fehlt oder ist unlesbar")
+    return dt.date.fromisoformat(match.group(1)), match.group(2)
+
+
+def parse_canon_models(text):
+    head = CANON_TABLE_HEAD.search(text)
+    if not head:
+        raise ValueError("Kanon: Modelltabelle fehlt")
+    models = []
+    for cells in _table_rows(text, head):
+        if len(cells) < 6:
+            raise ValueError(f"Kanon: Tabellenzeile unvollständig: {cells}")
+        models.append(CanonModel(cells[0], cells[1].strip("`"), cells[2].strip("`"), cells[3], cells[4], cells[5]))
+    if not models:
+        raise ValueError("Kanon: Modelltabelle leer")
+    return models
+
+
+def parse_canon_sources(text):
+    sources = {"Doku": [], "CLI-Version": [], "Changelog": []}
+    for kind, url in SOURCE_LINE.findall(text):
+        sources[kind].append(url)
+    if not sources["Doku"] or len(sources["CLI-Version"]) != 1 or len(sources["Changelog"]) != 1:
+        raise ValueError("Kanon: Quellenliste unvollständig (Doku, genau eine CLI-Version, genau ein Changelog)")
+    return sources
+
+
+def version_tuple(version):
+    return tuple(int(part) for part in version.split("."))
+
+
+def changelog_since(text, since):
+    """Entries (version, line) of every release newer than `since`; ValueError if `since` is not listed."""
+    marks = [(m.start(), m.group(1)) for m in UPDATE.finditer(text)]
+    since_t = version_tuple(since)
+    if since_t not in {version_tuple(v) for _pos, v in marks}:
+        raise ValueError(f"Changelog: Version {since} nicht gefunden")
+    entries = []
+    for index, (pos, version) in enumerate(marks):
+        if version_tuple(version) <= since_t:
+            continue
+        end = marks[index + 1][0] if index + 1 < len(marks) else len(text)
+        for line in text[pos:end].splitlines()[1:]:
+            stripped = line.strip()
+            if stripped.startswith("* "):
+                entries.append((version, stripped[2:]))
+    return entries
+
+
+def model_family_version(model_id):
+    parts = model_id.split("-")
+    return parts[1], tuple(int(p) for p in parts[2:] if p.isdigit() and len(p) < 8)
+
+
+def doc_identifiers(union):
+    return {"flag": set(FLAG.findall(union)), "env": set(ENV.findall(union))}
+
+
+def exists_in_docs(kind, value, union, aliases, modes):
+    if kind == "alias":
+        return value in aliases
+    if kind == "permission_mode":
+        return value in modes
+    return re.search(r"(?<![\w-])" + re.escape(value) + r"(?![\w-])", union) is not None
+
+
+def normalize_cockpit(text):
+    lines = text.replace("\r\n", "\n").split("\n")
+    return "\n".join(line for line in lines if not PROVENANCE.match(line))
+
+
+def parse_exceptions(text):
+    entries = {}
+    for number, raw in enumerate(text.splitlines(), 1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        value, sep, reason = line.partition("|")
+        if not sep or len(reason.strip()) < 3:
+            raise ValueError(f"Ausnahme Zeile {number}: Format 'bezeichner | grund' (Grund mindestens 3 Zeichen)")
+        entries[value.strip()] = reason.strip()
+    return entries
