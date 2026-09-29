@@ -23,7 +23,7 @@ Der Kanon trägt ein Prüfdatum, und ein zu altes Prüfdatum macht den Lint rot.
 | E3 | Prüfdatum | Setzt nur eine Session, die den Kanon gegen einen Monatsbericht abgeglichen hat. Lint warnt ab 45 Tagen, rot ab 90 Tagen. Monatslauf erinnert ab 60 Tagen. |
 | E4 | Ansatz | Existenzprüfung der Kurs-Bezeichner gegen die Doku plus Faktenabgleich des Kanons; kein Seiten-Diff. |
 | E5 | Zuschnitt | Öffentliches Werkzeug im Repo; privater Wrapper außerhalb des Repos meldet Befunde an das persönliche Todo-System des Autors. Der Monatslauf ändert keine Kursdateien und committet nichts. |
-| E6 | Website | Der Monatslauf erkennt eine abweichende Cockpit-Kopie; der Re-Export bleibt ein manueller Schritt (live-wirksam). Erster Re-Export direkt nach 2b. |
+| E6 | Website | Der Monatslauf erkennt eine abweichende Cockpit-Kopie; der Re-Export bleibt ein manueller Schritt (live-wirksam). Erster Re-Export direkt nach 2b. Nachtrag 2026-09-29: verglichen wird mit der Live-Seite (Redirects gefolgt), nicht mit einer lokalen Kopie, weil lokale Checkouts auf fremden Branches stehen können. |
 
 ## Nicht-Ziele
 
@@ -96,7 +96,7 @@ code.claude.com/docs/en/changelog.md.
 | Rot | Kanon-Modell nicht mehr `Active`, oder frühestes Retirement in weniger als 60 Tagen. |
 | Rot | Neuestes aktives Modell eines Tiers fehlt im Kanon; Kanon-Retirement weicht von der Tabelle ab. Tiers sind die Familien der Kanon-Tabelle; „neuestes" nach Versionstupel aus der ID (Datumssuffix ignoriert). Familien der Deprecations-Tabelle, die der Kanon nicht führt (z. B. Mythos), sind Info. |
 | Rot | Kanon älter als 90 Tage. |
-| Rot | Cockpit-Kopie der Website weicht vom Kurs-Cockpit ab (sha256 nach Normalisierung: LF, Provenienz-Zeile entfernt). |
+| Rot | Cockpit der Website (live abgerufen, Redirects gefolgt) weicht vom Kurs-Cockpit ab (sha256 nach Normalisierung: LF, Provenienz-Zeile entfernt). |
 | Rot | Verwaiste Ausnahme (Eintrag kommt im Kurs nicht mehr vor). |
 | Gelb | Changelog-Zeile seit der Kanon-CLI-Version, die einen Kurs-Bezeichner nennt (Kandidat, braucht Urteil). |
 | Info | Changelog-Zeilen mit `removed|deprecated|renamed|no longer|default` ohne Kurs-Bezug; neue Doku-Bezeichner seit dem letzten Lauf (Vorrat für Phase 3); geänderte Seiten (sha256); Redirects mit neuer URL; Kanon-Alter 45–90 Tage. |
@@ -124,12 +124,13 @@ mit Begründung im Commit.
 
 ### 5. Monatlicher Lauf (privat, außerhalb des Repos)
 
-- Wrapper ruft `python tools/currency_check.py --report … [--compare-cockpit <Website-Kopie>]` und übersetzt:
+- Wrapper ruft `python tools/currency_check.py --cockpit-url <Live-URL des Website-Cockpits>` und übersetzt:
   - Exit 1 mit **neuen** roten oder gelben Befunden gegenüber dem letzten Lauf → Todo „Workshop-Drift: n rot,
     m gelb → Bericht <Pfad>". Befunde, die schon im letzten Lauf standen, erzeugen kein neues Todo (kein
     Monats-Duplikat); das Stale-Gate eskaliert, wenn niemand sie abarbeitet.
-  - Exit 0 und Kanon älter als 60 Tage → Todo „Kanon bestätigen", höchstens einmal je Kanon-Prüfdatum
-    (eigener kleiner Zustand des Wrappers).
+  - Keine neuen roten oder gelben Befunde und Kanon älter als 60 Tage → Todo „Kanon bestätigen", höchstens einmal
+    je Kanon-Prüfdatum (eigener kleiner Zustand des Wrappers). Nachtrag 2026-09-29: nicht an „Exit 0" gebunden, weil
+    ein dauerhaft offener Befund (etwa ein Retirement-Hinweis) den Exit auf 1 hält und die Erinnerung sonst nie käme.
   - Exit 2, Absturz oder Timeout (10 min) → Todo „Monatslauf fehlgeschlagen".
 - Die Todo-Aktion wird dem Wrapper übergeben; Tests nutzen einen Fake.
 - Windows-Aufgabe: monatlich am 1. um 09:00, „Starten, wenn verpasst", ohne gespeichertes Passwort (S4U), ohne
