@@ -80,7 +80,7 @@ Slash-Command, der eine bestimmte Action triggert. Seit v2.x technisch mit Skill
 - **Modul:** 2.1 — Skills & Commands
 
 ### Context Window
-Die maximale Token-Menge, die Claude in einer Session "im Kopf" behalten kann. Fable 5, Opus 4.8, Opus 4.7 und Sonnet 5: 1M Token, Haiku 4.5: 200K. `/context` zeigt aktuelle Nutzung, `/compact` komprimiert.
+Die maximale Token-Menge, die Claude in einer Session "im Kopf" behalten kann. Fable-, Opus- und Sonnet-Tier: 1M Token, Haiku-Tier: 200K (aktuelle Werte im [Kanon](_canonical.md)). `/context` zeigt aktuelle Nutzung, `/compact` komprimiert. <!-- version-pinned: Haiku-Kontextgrenze (Kanon) -->
 - **Verwandt:** Token, Model
 - **Modul:** 1.2 — Context & Memory
 
@@ -108,7 +108,7 @@ Skill-Feature, das via `` !`command` `` Syntax die Ausgabe eines Shell-Commands 
 ## E
 
 ### Effort Level
-Steuert die Tiefe von Claudes Reasoning. Werte: `low` / `medium` / `high` / `xhigh` / `max`. `xhigh` und `max` sind auf Opus 4.8, Sonnet 5 und Fable 5 verfuegbar; Opus 4.8 defaultet auf `high`. CLI: `/effort xhigh` in Session. Trade-off: Tiefe vs. Latenz und Cost.
+Steuert die Tiefe von Claudes Reasoning. Werte: `low` / `medium` / `high` / `xhigh` / `max`. `xhigh` und `max` sind auf den Tiers Opus, Sonnet und Fable verfuegbar (nicht Haiku); der Start-Effort in Claude Code unterscheidet sich je Tier (siehe [Kanon](_canonical.md)). CLI: `/effort xhigh` in Session. Trade-off: Tiefe vs. Latenz und Cost.
 - **Verwandt:** Model, Cost-Cap
 - **Modul:** 1.3 — Effective Prompting
 
@@ -156,7 +156,7 @@ Claudes persistenter Speicher zwischen Sessions. Drei Ebenen: (1) `CLAUDE.md` (m
 - **Modul:** 1.2 — Context & Memory
 
 ### Model
-Das LLM hinter Claude Code. Aktuelle Modelle: **Fable 5** (`claude-fable-5`, GA 2026-06-09, faehigstes Modell, 1M Context, Premium-Tier), **Opus 4.8** (aktueller Default, 1M Context, fuer Architektur und Reasoning, Effort-Default `high`), **Sonnet 5** (1M Context, fuer Standard-Coding), **Haiku 4.5** (200K Context, fuer Bulk-Reads). Wechsel via `/model` oder `--model`.
+Das LLM hinter Claude Code. Vier Tiers: **Fable** (`fable`, faehigstes Modell, Premium-Tier), **Opus** (`opus`, Default in Claude Code, fuer Architektur und Reasoning), **Sonnet** (`sonnet`, fuer Standard-Coding), **Haiku** (`haiku`, kleineres Kontextfenster, fuer Bulk-Reads). Generationen, Kontextgroessen und Preise stehen im [Kanon](_canonical.md). Wechsel via `/model` oder `--model`.
 - **Verwandt:** Context Window, Effort Level
 - **Modul:** 1.1 — What is Claude Code?
 
@@ -179,7 +179,7 @@ Globaler Sicherheits-Level fuer eine Session. Sechs Modi:
 - `default` — fragt bei allem nach (ausser Reads)
 - `acceptEdits` — Edits + sichere FS-Bash-Commands auto-akzeptiert
 - `plan` — zeigt Gesamtplan vorab, einmal genehmigen
-- `auto` — ML-Klassifizierer entscheidet (Max-Plan oder Team/Enterprise)
+- `auto` — ML-Klassifizierer entscheidet (alle Plaene; braucht ein unterstuetztes Modell: Opus-, Sonnet- oder Fable-Tier, nicht Haiku; genaue Grenzen in der Permission-Modes-Doku, Aliase im [Kanon](_canonical.md); Admins koennen es sperren)
 - `dontAsk` — niemals fragen, nur allow/deny-Rules zaehlen
 - `bypassPermissions` — YOLO, akzeptiert alles ausser Protected Paths
 
@@ -345,7 +345,6 @@ Aktualisierungen, die in aelteren Workshops, Doku oder Tutorials noch anders hei
 | `/vim` | entfernt | v2.1.92 — Vim-Mode raus |
 | `/pr-comments` | entfernt | v2.1.91 — stattdessen Claude direkt fragen ("zeig mir die PR-Comments") |
 | `TodoWrite` | `TaskCreate`/`TaskList`/... | Task-Cluster ersetzt TodoWrite, v2.1.142 |
-| `--fast` (CLI-Flag) | `/fast` (Slash-Command) | Toggle nur noch in Session |
 | `~/.claude/skills/<name>.md` | `~/.claude/skills/<name>/SKILL.md` | Skill ist immer ein Ordner mit `SKILL.md` |
 
 ---

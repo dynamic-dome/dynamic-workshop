@@ -204,8 +204,8 @@ Never modify files.  Never execute code.  Explore only.
 
 - **`description`** — This is how the orchestrator decides *when* to use this agent.
   Write it with trigger phrases and examples.  This is the routing logic.
-- **`model`** — Use shorthand `haiku` / `sonnet` / `opus`, or pin to a specific ID like
-  `claude-haiku-4-5-20251001`, `claude-sonnet-5`, `claude-opus-4-8`. Haiku for quick reads,
+- **`model`** — Use shorthand `haiku` / `sonnet` / `opus`, or pin to a specific full model ID (the current IDs are
+  listed in the [canon](../_canonical.md)). Haiku for quick reads,
   Sonnet for analysis, Opus for architecture decisions.
 - **`tools`** — **Security through least privilege.**  An explorer has no Write.
   A reviewer has no Bash.  Lock down to exactly what is needed. (Field was renamed from
@@ -220,7 +220,7 @@ Never modify files.  Never execute code.  Explore only.
 | `description` | string | Trigger description — routing logic. Include examples. |
 | `tools` | list | Allowlist of tools the agent may call |
 | `disallowedTools` | list | Denylist — alternative to `tools`. Useful when "everything except X" is shorter than the allowlist. |
-| `model` | string | `haiku` / `sonnet` / `opus` shorthand or full ID (`claude-opus-4-8`) |
+| `model` | string | `haiku` / `sonnet` / `opus` shorthand or full model ID (see the [canon](../_canonical.md)) |
 | `permissionMode` | string | `default` / `acceptEdits` / `plan` / `auto` / `dontAsk` / `bypassPermissions` |
 | `maxTurns` | int | Hard turn limit for this subagent (cost / runaway guard) |
 | `skills` | list | Preload named skills into the subagent's startup context |
@@ -426,15 +426,15 @@ Using both together beats either alone.
 
 ### Cost Trade-Off — Order-of-Magnitude Multipliers
 
-> Full pricing table and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth. Rough orientation for this module: Opus ~3x Sonnet, Haiku ~0.2x Sonnet (per MTok).
+> Prices: see the [canon](../_canonical.md); strategy (Plan/Implement/Review): **Module 1.5 (Cost Engineering)**. Rough orientation for this module, derived from the canon prices: Opus ~2x Sonnet, Haiku ~0.5x Sonnet (per MTok).
 
 **Mini-Strategy for a typical Claude → Codex → Claude pipeline:**
 
 - **Plan with Opus** — one expensive call buys a clean spec; bad plans are 10x more costly downstream.
 - **Implement with Sonnet** (or Codex when speed beats determinism) — the bulk of the tokens flow here.
-- **Review with Haiku first**, escalate disagreements to Opus — Haiku catches 80% of issues at ~7% of Opus cost.
+- **Review with Haiku first**, escalate disagreements to Opus — Haiku catches 80% of issues at ~25% of Opus cost (price ratio from the canon).
 
-A 1000-token spec reviewed by Opus is ~$0.025. The same review by Haiku is ~$0.005. Across 200 PRs per month, that compounds.
+A spec review by Haiku costs roughly a quarter of the same review by Opus. Across 200 PRs per month, that compounds.
 
 ---
 
@@ -704,9 +704,9 @@ Three official slash-commands cover the common review surface — before reachin
 
 `auto` is the ML-classifier-driven mode where Claude itself decides which actions to auto-approve based on per-action risk:
 
-- **Max plan (consumer)** — available **with the current Opus (4.8) only** (other models locked).
-- **Team / Enterprise** — available with Sonnet 5 and Opus 4.8.
-- **Transport** — Anthropic API only (not yet on Bedrock or Vertex).
+- **Plans** — available on all plans (on Team / Enterprise admins can switch it off with `permissions.disableAutoMode`).
+- **Model** — requires a supported model: the Opus, Sonnet or Fable tier, not Haiku. On the Anthropic API only recent generations qualify, on Bedrock, Google Cloud and Foundry only newer ones still — the exact cut-offs are in the permission-modes docs (see the [canon](../_canonical.md) for what your aliases resolve to).
+- **Provider** — Anthropic API, Claude Platform on AWS, Amazon Bedrock, Google Cloud and Microsoft Foundry.
 - **Version** — requires a recent Claude Code version (check `claude --version`).
 
 Admins on Team/Enterprise can tighten or loosen `auto` via managed settings — see `autoMode.hard_deny` below for the unconditional block-list.
@@ -1224,7 +1224,7 @@ The `worktree.baseRef` setting controls **which ref a new `claude --worktree` br
 | **`fresh`** | Branches from `origin/<default>` — always the latest pushed mainline | Multi-agent fan-out where all agents must start from identical, fresh state |
 | **`head`** | Branches from your local `HEAD` — your uncommitted intent goes with it | "I'm mid-refactor, spawn a worktree to try an alternative without losing my current state" |
 
-The default for `worktree.baseRef` changed across CLI versions, so set it explicitly rather than relying on it. For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in `settings.json` (project scope) or via `--worktree-base-ref` per invocation.
+The default for `worktree.baseRef` changed across CLI versions, so set it explicitly rather than relying on it. For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in a settings file (for example the project `settings.json`); for a single invocation, pass it inline with `--settings '{"worktree":{"baseRef":"fresh"}}'`.
 
 #### `--tmux` — Multi-Agent Visibility in One Screen
 
@@ -1623,7 +1623,7 @@ export HTTP_PROXY="http://proxy.corp.example:8080"
 claude -p "Review this diff" < diff.patch
 ```
 
-The proxy needs an outbound rule for `api.anthropic.com`. Most enterprise proxies already log all traffic — pair this with a `--metadata` tag (Module 3.6 Monitoring section) so corporate SOC can correlate Claude calls with runner jobs.
+The proxy needs an outbound rule for `api.anthropic.com`. Most enterprise proxies already log all traffic — pair this with custom OpenTelemetry resource attributes (`OTEL_RESOURCE_ATTRIBUTES`, see Monitoring CI Costs in this module) so corporate SOC can correlate Claude calls with runner jobs.
 
 **Option B: AWS Bedrock in VPC** — Use Claude via Bedrock inside your VPC:
 
@@ -1681,12 +1681,12 @@ Cross-reference: Module 2.2 (Hooks) covers Claude Code's *internal* hook system 
 
 ### Monitoring CI Costs
 
-`/cost` shows spend for the current interactive session — not aggregated across CI runs. For CI-wide cost visibility you have two paths:
+`/cost` shows spend for the current interactive session — not aggregated across CI runs. For CI-wide cost visibility you have three paths:
 
 - **Anthropic Console dashboard** — aggregates API spend across all calls under your token.
 - **Custom logging** — pipe `--output-format stream-json` to a log aggregator and parse the `usage` events.
 
-**Tag your CI runs** so the aggregation is meaningful. Pass `--metadata '{"ci_run_id":"<id>","repo":"<name>"}'` and you can later slice spend by repo, by workflow, by PR.
+A third path is OpenTelemetry export. **Tag your CI runs** so the aggregation is meaningful. Enable OpenTelemetry export in the job environment (`CLAUDE_CODE_ENABLE_TELEMETRY=1`, `OTEL_METRICS_EXPORTER=otlp`, `OTEL_EXPORTER_OTLP_ENDPOINT=<your collector>`) and add `OTEL_RESOURCE_ATTRIBUTES="ci_run_id=<id>,repo=<name>"`: Claude Code attaches these keys as attributes to every metric datapoint and event record it exports, so you can later slice spend by repo, by workflow, by PR in your metrics backend.
 
 ---
 

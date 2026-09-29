@@ -252,7 +252,7 @@ session_slide(
     S1C,
     ["Coding Agent vs. Chat — mentales Modell", "First Contact: sofort eine Datei bauen",
      "Oberflächen: CLI · Desktop · IDE · Web · iOS", "Permission Modes komplett (6 Modi + Cloud)",
-     "Modellwahl & Effort (Opus 4.8 / Sonnet 5 / Haiku / Fable 5)", "Kontextfenster · /compact · /rewind",
+     "Modellwahl & Effort (Tiers: Opus / Sonnet / Haiku / Fable)", "Kontextfenster · /compact · /rewind",
      "CLAUDE.md: Projekt-Standing-Orders", "Vager vs. präziser Prompt · Plan Mode",
      "Git in einem Flow: branch → commit → PR", "Kosten im Blick: /cost · /usage · Budget-Cap"],
     "Permission Modes = Clearance-Level. default = Besucherausweis (nur lesen) … bypass = Generalschlüssel (nur versiegelte Umgebungen).")

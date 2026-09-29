@@ -296,3 +296,42 @@ Quelle nachgeprüft (Verdikt-Stufe: unabhängig gefunden, selbst bestätigt).
   Vorrang API-Key vor OAuth-Token (zusätzlich ausgeführt), `--bare` als künftiger `-p`-Standard (headless.md),
   `id-token: write` (github-actions.md), `claude auth` nur `login`/`logout`/`status` (`--help`), `ANTHROPIC_MODEL`
   (env-vars.md).
+
+## Phase-2-Stand (2026-09-29)
+
+Phase 2 (Design: `docs/plans/2026-09-29-phase2-aktualhaltung-design.md`) macht Aktualität zu einem Prozess statt zu einem Sweep. Umgesetzt auf dem Zweig `phase2-aktualhaltung` (Commits `1ed2bef` … `0db5b33`, seit `2521170`), bisher nicht gepusht.
+
+### Mechanismus
+- **Lint** (`tools/lint_currency.py`), zwei Regeln: (1) Modellgenerationen stehen nur im Kanon `resources/_canonical.md`; im Kurs Aliase und Rollen, bewusste Ausnahmen tragen `version-pinned: <Grund>` in derselben Zeile. (2) Stale-Gate auf `Geprüft:`: mehr als 45 Tage Warnung, mehr als 90 Tage rot, fehlende Zeile rot.
+- **Monatslauf** (`tools/currency_check.py`): liest Kurs-Bezeichner (Flags, Env-Variablen, Hook-Events, Modell-IDs) und prüft sie gegen die Doku-Vereinigung der Kanon-Quellen; prüft den Kanon gegen Deprecations-Tabelle und npm-Version; optional das Website-Cockpit per `--cockpit-url`. Drei Ergebnisstufen: **Rot** (Bezeichner fehlt oder wird verneint, Modell nicht mehr aktiv oder Retirement in weniger als 60 Tagen, neues Modell fehlt im Kanon, Kanon älter als 90 Tage, Cockpit weicht ab, verwaiste Ausnahme), **Gelb** (Changelog-Zeile seit der Kanon-CLI-Version nennt einen Kurs-Bezeichner) und **Info**. Fail-closed: Quellenfehler oder zu kleine Auswertung geben Exit 2. Bericht unter `.currency/reports/`, Ausnahmen in `tools/currency_exceptions.txt` (nur schrumpfend, per Test gesichert).
+- Ein privater Monatslauf-Wrapper außerhalb des Repos startet den Check monatlich und legt bei neuen Befunden ein Todo an. Registrierung der Windows-Aufgabe nach dem Merge auf `main`.
+
+### Sweep
+59 Treffer in 12 Dateien (Generationsregel, Arbeitsliste des neuen Lints) auf Aliase und Rollen umgestellt, 5 begründete `version-pinned`-Stellen (u. a. Haiku-Kontext 200K, CLI-Minimum in `prerequisites.md`). Der Lint endet danach mit Exit 0; das Foliendeck ist neu gebaut, sein Titel entversioniert.
+
+### Erster Live-Lauf (2026-09-29): 11 rot -> 2 rot
+| Befund | Einordnung | Beleg / Maßnahme |
+|---|---|---|
+| `--decompose` | Fremd-Flag | Argument des Plugin-Commands `codex-swarm`; Ausnahme |
+| `--door` | Fremd-Flag | Parameter des Übungsskripts `event_log_parser.py`; Ausnahme |
+| `--headless` (zuerst als `--headed` geführt) | Fremd-Flag | Playwright-MCP-Flag im Übungshinweis (Standard ist headed); `--headed` gibt es nicht, Hinweis korrigiert (R11), Ausnahme |
+| `--orphan` | Fremd-Flag | `git worktree add --orphan`; Ausnahme |
+| `--enable-auto-mode` | erwarteter Treffer | Kurs nennt das Flag ausdrücklich als entfernt (Doku: „Removed in v2.1.111“); Ausnahme |
+| `--metadata` (H-13) | Fehler | in keiner Doku; ersetzt durch `OTEL_RESOURCE_ATTRIBUTES` (monitoring-usage.md) samt Exportpfad |
+| `--fast` | Fehler | fast-mode.md kennt nur `/fast` und die Einstellung `fastMode`; Zeile in der Migrationstabelle entfernt |
+| `--worktree-base-ref` | Fehler | nur die Einstellung `worktree.baseRef` existiert; Aussage korrigiert, `--settings` als Aufruf-Variante genannt |
+| `--no-verbose` | Fehler | Quiz-Distraktor; Doku kennt nur `--verbose` |
+| Haiku-4.5-Retirement | erwartet | frühestens 2026-10-15, bleibt rot |
+| Cockpit-Abweichung | erwartet | bleibt rot bis zum Re-Export |
+
+Zusätzlich H-16: das Präfix `classification=` (kein Claude-Code-Mechanismus) ist aus 8 Cockpit-Beispielen entfernt. Danach Exit 1 mit 2 roten und 0 gelben Befunden, 184 Tests grün. Der Lauf fand vier echte Kursfehler in Bezeichnern (`--metadata`, `--fast`, `--worktree-base-ref`, `--no-verbose`), die kein Modellnamen-Lint erfasst.
+
+### Stand H-13 und H-16
+- **H-13** (`--metadata`): behoben, siehe Tabelle.
+- **H-16** (`classification=`): behoben, Präfix entfernt, Datenklasse steht als Kommentarzeile im sensiblen Beispiel.
+
+### Offene Punkte
+- **Haiku-Retirement:** Haiku 4.5 kann frühestens am 2026-10-15 abgeschaltet werden; der Befund bleibt rot, solange der Kanon Haiku 4.5 als aktives Modell führt; vor dem Termin über Ersatz oder Pin entscheiden.
+- **Cockpit-Re-Export:** Website-Cockpit neu exportieren (eigenes Repo, Provenienz-Zeile, Build, Live-Stand gleich Commit); danach verschwindet `cockpit-differs`.
+- **Windows-Aufgabe:** Registrierung des Monatslaufs und Live-Abnahme erst nach dem freigegebenen Merge auf `main`.
+- Push und Merge stehen aus (Owner-Gate).

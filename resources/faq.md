@@ -21,13 +21,13 @@ Vertiefung: Modul 2.1 (Skills & Commands), 2.2 (Hooks), 3.1 (Agents).
 
 ### Welches Model wann?
 
-Opus 4.8 (oder Fable 5 fuer die haertesten, langlaufenden Aufgaben) fuer Architektur, Planning, Root-Cause-Analysis. Sonnet 5 fuer Standard-Coding und Refactors. Haiku 4.5 fuer Bulk-Reads, einfache Suchen, Routine-Reviews.
+Das Opus-Tier (`opus`, in Claude Code der Default; `fable` fuer die haertesten, langlaufenden Aufgaben) fuer Architektur, Planning, Root-Cause-Analysis. Das Sonnet-Tier (`sonnet`) fuer Standard-Coding und Refactors. Das Haiku-Tier (`haiku`) fuer Bulk-Reads, einfache Suchen, Routine-Reviews. Welche Generation hinter welchem Alias steckt, samt Preisen und Kontextgroessen, steht im [Kanon](_canonical.md); `/model` zeigt, worauf der Alias bei dir aufloest.
 
 Pipeline-Pattern: `/plan` mit Opus, `/batch` von Subagents mit Sonnet, `/review` mit Haiku.
 
 ### Was kostet Claude Code im Alltag?
 
-Solo-Dev mit aktiver Nutzung: ~$5-10 pro Tag (Kosten-Baseline: Sonnet 5 als Arbeitsmodell; der Claude-Code-Default bleibt Opus 4.8). Mit `/cost` kannst du laufende Session pruefen, `/usage` zeigt Rate-Limits und Subscription-Status, `/insights` Analytics ueber Sessions. Monatlich typisch $100-200 pro Dev.
+Laut Anthropic-Kostendoku liegen Enterprise-Teams im Schnitt bei ~$13 pro Entwickler und aktivem Tag (90 % der Nutzer unter $30). Mit `/cost` kannst du laufende Session pruefen, `/usage` zeigt Rate-Limits und Subscription-Status, `/insights` Analytics ueber Sessions. Monatlich typisch $150-250 pro Dev; das Sonnet-Tier als Arbeitsmodell ist guenstiger als der Opus-Default.
 
 Cost-Drivers: Opus statt Sonnet, `xhigh`/`max` Effort, viele Subagents parallel, ausufernde CLAUDE.md.
 
@@ -83,7 +83,7 @@ Bei Team-Konventionen: Projekt-Skill. Bei eigenen Daily-Workflows: User-Skill. B
 
 ### Ist es OK, `--dangerously-skip-permissions` zu nutzen?
 
-Nur in isolierten VMs oder Docker-Containern. Niemals auf deinem Haupt-Dev-Laptop fuer interaktive Sessions. Wenn du es brauchst, denke nochmal nach. Alternative: `--permission-mode auto` (Max-Plan oder Team/Enterprise) plus `allow/deny`-Rules fuer feingranulare Kontrolle.
+Nur in isolierten VMs oder Docker-Containern. Niemals auf deinem Haupt-Dev-Laptop fuer interaktive Sessions. Wenn du es brauchst, denke nochmal nach. Alternative: `--permission-mode auto` (alle Plaene, mit unterstuetztem Modell: Opus-, Sonnet- oder Fable-Tier, nicht Haiku; genaue Grenzen in der Permission-Modes-Doku, Aliase im [Kanon](_canonical.md); Admins koennen es sperren) plus `allow/deny`-Rules fuer feingranulare Kontrolle.
 
 ### Was sind Protected Paths?
 
@@ -198,7 +198,7 @@ Headless ohne Hooks, Skills, Plugins, MCP, Auto-Memory. Maximal schnell, maximal
 
 ### Was ist Effort-Level und wann nutze ich was?
 
-`low` fuer triviale Aufgaben (kommentar-fix, einfache Lookups). `medium` fuer Standard-Coding. `high` (Default auf Opus 4.8) fuer Refactors und schwierigere Bugs. `xhigh` und `max` (auf Opus 4.8, Sonnet 5 und Fable 5) fuer Architektur-Entscheidungen und komplexe Root-Cause-Analyse. Trade-off: Tiefe vs. Latenz/Cost — `max` kann 5-10x so lange brauchen wie `medium`.
+`low` fuer triviale Aufgaben (kommentar-fix, einfache Lookups). `medium` fuer Standard-Coding. `high` fuer Refactors und schwierigere Bugs (der Start-Effort in Claude Code unterscheidet sich je Tier, siehe [Kanon](_canonical.md)). `xhigh` und `max` (auf den Tiers Opus, Sonnet und Fable) fuer Architektur-Entscheidungen und komplexe Root-Cause-Analyse. Trade-off: Tiefe vs. Latenz/Cost — `max` kann 5-10x so lange brauchen wie `medium`.
 
 ---
 

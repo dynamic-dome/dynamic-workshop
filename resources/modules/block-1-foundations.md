@@ -85,7 +85,7 @@ Watch what happens: Claude proposes the file, asks permission to write it, creat
 
 **Comes later in this first-contact arc:**
 - In S1.6 you classify all 6 permission modes (default / acceptEdits / plan / auto / dontAsk / bypassPermissions) and the cloud-session restrictions.
-- In S1.7 you choose the right model (Fable 5 / Opus 4.8 / Sonnet 5 / Haiku 4.5) and effort level for a task based on cost and reasoning depth.
+- In S1.7 you choose the right model (Fable / Opus / Sonnet / Haiku tier) and effort level for a task based on cost and reasoning depth.
 
 ---
 
@@ -237,29 +237,29 @@ These are the tools you'll actually see in your first sessions — the everyday 
 
 Claude Code supports multiple models. Choosing the right one matters for both quality and cost:
 
-| Model | Context | Strengths | Cost |
-|-------|---------|-----------|------|
-| **Claude Fable 5** (`claude-fable-5`, GA 2026-06-09) | 1M tokens | Anthropic's most capable model — hardest reasoning, long-horizon agentic work. Premium tier. | Premium |
-| **Claude Opus 4.8** (current default, model ID `claude-opus-4-8`) | 1M tokens | Deepest Opus-tier reasoning, architecture, complex tasks. Effort defaults to `high`. | High |
-| **Claude Sonnet 5** | 1M tokens | Fast, capable, everyday coding | Medium |
-| **Claude Haiku 4.5** | 200K tokens | Quick tasks, brainstorming, bulk operations | Lowest |
+| Tier (alias) | Role — when to pick it | Cost |
+|--------------|------------------------|------|
+| **Fable** (`fable`) | Anthropic's most capable tier — hardest reasoning, long-horizon agentic work. Never the account default. | Premium |
+| **Opus** (`opus`) | Deepest reasoning, architecture, complex tasks. The default in Claude Code. | High |
+| **Sonnet** (`sonnet`) | Fast, capable, everyday coding. | Medium |
+| **Haiku** (`haiku`) | Quick tasks, brainstorming, bulk operations. Smaller context window, no effort setting. | Lowest |
 
-> Model names move fast. The script was written against Opus 4.8 (current default since ~May 2026); Fable 5 went GA on 2026-06-09. Run `/model` to see what your CLI actually offers, and `/release-notes` for the latest.
+> Model names move fast, so this course teaches aliases and roles. Generations, context windows, prices, effort defaults and retirement dates live only in the [canon](../_canonical.md). Run `/model` to see what your CLI actually offers (an alias can resolve to different generations per provider), and `/release-notes` for the latest.
 >
-> **Mind Haiku's 200K context** (vs. 1M on the others): it caps *bulk-read* tasks. Use Haiku for small, focused reads and Opus/Fable for whole-codebase analysis — if Haiku seems to "forget" the start of a large file, the 200K limit is why.
+> **Mind Haiku's 200K context** (vs. 1M on the others): it caps *bulk-read* tasks. Use Haiku for small, focused reads and Opus/Fable for whole-codebase analysis — if Haiku seems to "forget" the start of a large file, the 200K limit is why. <!-- version-pinned: Haiku-Kontextgrenze (Kanon) -->
 
 **How to switch:**
 - At startup: `claude --model sonnet`
 - In session: `/model` command
-- Effort level: `/effort <low|medium|high|xhigh|max>` — five tiers from cheap-and-fast to deepest analysis. On Opus 4.8 the default is `high`; `xhigh` and `max` (available on Opus 4.8, Sonnet 5, and Fable 5) unlock even deeper reasoning when set explicitly
+- Effort level: `/effort <low|medium|high|xhigh|max>` — five levels from cheap-and-fast to deepest analysis. The level Claude Code starts with differs per tier (see the [canon](../_canonical.md)); `xhigh` and `max` (available on the Fable, Opus, and Sonnet tiers, not Haiku) unlock even deeper reasoning when set explicitly
 - Check spend: `/cost` shows token usage and cost for the current session
 - Check context: `/context` visualizes how much of the context window is used
 
 **Rule of thumb:** Start with Opus for planning and architecture. Switch to Sonnet for implementation. Use Haiku for bulk reads and simple tasks. Use `/cost` regularly to stay aware of spend.
 
-> **Lean System Prompt (recent default).** On current Opus-4.8+ builds Claude Code ships a **leaner system prompt** by default — less fixed overhead in your context window, so more room for your actual code. You rarely need to touch it; if you want to override or extend it, use `--append-system-prompt` (add to it) or `--system-prompt` / `--system-prompt-file` (replace it).
+> **Lean System Prompt (recent default).** On current Fable and Opus builds Claude Code ships a **leaner system prompt** by default (which models get it can change between releases) — less fixed overhead in your context window, so more room for your actual code. You rarely need to touch it; if you want to override or extend it, use `--append-system-prompt` (add to it) or `--system-prompt` / `--system-prompt-file` (replace it).
 
-> Detailed pricing per million tokens, effort multipliers, and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth.
+> Prices per million tokens: see the [canon](../_canonical.md). Effort multipliers and the Plan/Implement/Review cost strategy: **Module 1.5 (Cost Engineering)**.
 
 ---
 
@@ -1063,7 +1063,7 @@ If you have the commit skill installed, `/commit` triggers a structured commit w
 > **⏩ Optional / deepening module.** This is the 5th module of day one, on a topic that only
 > matters once you've actually spent something. It's marked optional — exactly like its hands-on
 > Exercise 1.5. **The 5-minute core:** `/cost` shows your current-session spend (glance at it
-> occasionally); the default model (Opus 4.8) is a fine starting point; for anything unattended,
+> occasionally); the default model (the Opus tier) is a fine starting point; for anything unattended,
 > cap it with `--max-budget-usd`. That's all you need on day one. Everything below — the pricing
 > table, the Plan/Implement/Review pipeline, prompt caching, effort multipliers — is depth for
 > when cost becomes a real lever (revisit after Session 1).
@@ -1089,14 +1089,16 @@ Claude Code is the same: Opus is the specialist, Sonnet is the seasoned patrol o
 
 ---
 
-### Pricing Reference (as of 2026-06)
+### Pricing Reference
 
-| Model | Input ($/M tokens) | Output ($/M tokens) | Relative cost |
-|---|---:|---:|---|
-| Claude Fable 5 | $10 | $50 | ~2x |
-| Claude Opus 4.8 | $5 | $25 | 1x |
-| Claude Sonnet 5 | $3 | $15 | ~0.6x |
-| Claude Haiku 4.5 | $1 | $5 | ~0.2x |
+Absolute prices per million tokens change with every generation, so they live only in the [canon](../_canonical.md). Relative to the Opus tier, the canon's prices give roughly this picture (recompute from the canon table when it changes):
+
+| Tier | Relative cost |
+|---|---|
+| Fable | ~2.5x |
+| Opus | 1x |
+| Sonnet | ~0.5x |
+| Haiku | ~0.25x |
 
 **Rule of thumb:** Output costs roughly 5x input. Write tight prompts with few pre-loaded files — you pay for input too. A 50 KB CLAUDE.md loaded into every session is a recurring tax on every conversation you have with Claude.
 
@@ -1170,11 +1172,11 @@ Effort levels are not just a quality dial — they are a cost dial. The relative
 |---|---|---:|
 | `low` | Typo fixes, single-line refactors, quick code reviews | 0.5x |
 | `medium` | Standard coding, normal refactors | 1x |
-| `high` (default on Opus 4.8) | Architecture decisions, multi-file refactors | 2x |
-| `xhigh` | Deep analysis, root-cause debugging (Opus 4.8 / Sonnet 5 / Fable 5) | 4x |
+| `high` | Architecture decisions, multi-file refactors | 2x |
+| `xhigh` | Deep analysis, root-cause debugging (Fable / Opus / Sonnet tier) | 4x |
 | `max` | Edge cases, "look at everything" — use sparingly | 6x |
 
-**Best practice:** On Opus 4.8 the default is `high`. Downshift to `low`/`medium` for genuinely simple tasks (just as important as upshifting), and escalate to `xhigh`/`max` only when you can clearly identify a need for deep reasoning — otherwise you pay 4x for a 1.2x quality bump.
+**Best practice:** The start level differs per tier (see the [canon](../_canonical.md)), so check `/effort` before a long task. Downshift to `low`/`medium` for genuinely simple tasks (just as important as upshifting), and escalate to `xhigh`/`max` only when you can clearly identify a need for deep reasoning — otherwise you pay 4x for a 1.2x quality bump.
 
 The reverse is also true: downshifting to `low` for genuinely simple tasks is just as important as upshifting for hard ones. Paying `xhigh` for a one-line typo fix is a small but recurring leak.
 
@@ -1186,11 +1188,11 @@ For demanding tasks, a three-model pipeline often beats a single-model approach 
 
 | Phase | Model | Effort | Why |
 |---|---|---|---|
-| **Plan** | Opus 4.8 | xhigh | Architecture is the most expensive phase to get wrong — paying for depth here saves you from rewriting later |
-| **Implement** | Sonnet 5 | medium | Writing code is routine — Sonnet does it fast and solidly |
-| **Review** | Haiku 4.5 | low | Final check, fast pattern-matching, Haiku is enough |
+| **Plan** | Opus tier | xhigh | Architecture is the most expensive phase to get wrong — paying for depth here saves you from rewriting later |
+| **Implement** | Sonnet tier | medium | Writing code is routine — Sonnet does it fast and solidly |
+| **Review** | Haiku tier | — (no effort setting) | Final check, fast pattern-matching, Haiku is enough |
 
-The cost shape is roughly `1x (plan) + 0.6x (implement) + 0.2x (review) ≈ 1.8x`, often producing better outcomes than Opus-only at the same total spend.
+The cost shape is roughly `1x (plan) + 0.5x (implement) + 0.25x (review) ≈ 1.75x` instead of `3x` (Opus in all three phases), i.e. roughly 40 % cheaper, often with better outcomes than Opus-only.
 
 When *not* to use this pipeline: small tasks where the planning phase is the trivial part. A one-file utility doesn't need an Opus architect.
 
@@ -1261,8 +1263,9 @@ How to maximize cache hits:
 - 5-minute idle window (TTL)
 - Different `--system-prompt` between runs
 
-**Order of magnitude:** A 100K-token CLAUDE.md costs $0.50 per fresh load with Sonnet. On a
-cache hit, it costs $0.05. Over 10 sessions/day, that's $4.50 vs $0.50 — meaningful.
+**Order of magnitude:** A 100K-token CLAUDE.md pays the full input price on a fresh load. On a
+cache hit you pay only the cache-read price, for the Sonnet tier about a tenth of the input price
+(see the current pricing docs). Over 10 sessions a day that difference adds up.
 
 ---
 

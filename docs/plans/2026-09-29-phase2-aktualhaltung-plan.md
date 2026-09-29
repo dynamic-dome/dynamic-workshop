@@ -2157,3 +2157,22 @@ lassen. Expected: `sweep clean` in beiden Läufen. Jeder Treffer wird vor dem Pu
   - Cockpit-Re-Export auf die Website nach dem bewährten Verfahren (eigenes Repo, Provenienz-Zeile, Build, Live-sha
     = Commit-sha). Danach `python tools/currency_check.py --cockpit-url https://dynamic-dome.com/workshop-cockpit`:
     `cockpit-differs` ist verschwunden.
+
+## Nachträge während der Umsetzung (2026-09-29)
+
+Entscheidungen des Controllers, die Code oder Umfang des Plans gegenüber den obigen Task-Abschnitten geändert haben
+(die früheren Abschnitte bleiben unverändert stehen):
+
+- **R1 (Task 1):** Der Lint schließt zusätzlich `.superpowers` aus (lokaler Agent-Zustand); der Lint läuft über das Dateisystem, nicht über git, und würde sonst Task-Briefs als Kursinhalt zählen.
+- **R2 (Task 8):** H-16 (Präfix `classification=`) wird wie geplant entfernt: aus 8 Cockpit-Beispielen, das sensible Beispiel trägt einen Kommentar zur Datenklasse.
+- **R3 (Task 3/4):** Neue Funktion `denied_in_docs` (in `tools/currency_extract.py`, dem Modul aus Task 3); ein Bezeichner, den die Doku ausdrücklich verneint („There is no …“) oder als „removed in“ führt, wird rot (`denied:<Art>:<Wert>`), auch wenn er an anderer Stelle erwähnt wird. Task 4 meldet verneinte Bezeichner rot. Die Gegenprobe läuft gegen die wörtliche Doku-Fixture `tools/fixtures/currency/docs-denials-2026-09-29.md` statt gegen die synthetische Vereinigung im Text von Task 3.
+- **R4 (Task 3):** `changelog_since` schlägt nur fehl, wenn keine gelistete Version ≤ `since` existiert; Lücken im echten Changelog (z. B. fehlende 2.1.279) machen nicht jeden Monatslauf zu Exit 2.
+- **R5 (Task 6):** Kanon-Wortlaut an die Regel angepasst: mehr als 45 Tage warnt, mehr als 90 Tage ist rot (Tests 44/46/91).
+- **R6 (Task 10):** Inhaltliche Kanon-Präzisierungen aus dem Task-5-Review: Retirement-Daten sind Daten der Anthropic-Plattform, „Default in Claude Code (außer Microsoft Foundry)“, Hinweis auf nicht überwachte Anbieter-Modelle (Sonnet 4.5), „u. a.“ bei den Überschreibungen von `default` und `fable`, Typografie.
+- **R7 (Task 6):** Die Generationsregel erkennt zusätzlich „Opus (4.8)“ und Legacy-IDs (`claude-3-5-…`); ein Test belegt, dass jedes Muster der abgelösten Verbotsliste blockiert bleibt, dazu Negativkontrollen.
+- **R8 (Task 8):** `--enable-auto-mode` wird Ausnahme (der Kurs nennt es ausdrücklich als entferntes Flag); die Verneinungs-Ebene bleibt für echten Fehlgebrauch.
+- **R9 (Task 7):** Fix-Runde 1 umfasst zusätzlich die Übung `--model haiku --effort low` (Haiku hat keinen Effort); der Folientitel in `tools/build_deck.py` wird entversioniert und das Deck neu gebaut.
+- **R10 (Task 9):** Der privat gehaltene Monatslauf-Wrapper wird in zwei Schritte geteilt: erst schreiben und offline testen, Registrierung der Windows-Aufgabe und Live-Abnahme erst nach dem freigegebenen Merge auf `main`.
+- **R11 (Task 8):** Playwright MCP läuft standardmäßig mit Fenster; der Hinweis nennt `--headless`, Ausnahme und eingefrorene Liste tauschen `--headed` gegen `--headless`; dazu `--settings '{"worktree":{"baseRef":"fresh"}}'` und der OpenTelemetry-Exportpfad im Modul 3.
+- **R12 (Task 9):** Nicht abgelegte Todo-Texte des privaten Monatslauf-Wrappers werden vorgemerkt und beim nächsten Lauf zuerst abgelegt; zusätzliche Entscheidungsfälle, eine nicht-dict-Zusammenfassung zählt als Fehler, ein unlesbarer Zustand als leer mit Logzeile.
+- **R14 (Abschluss-Review):** Prüfdatum in der Zukunft und Kanon-CLI neuer als npm sind rot (Lint + Check); Tests pinnen canon-status, canon-unknown, gelbe Schlüssel, Mindestgrößen und Grenzwerte; Kostenfaktoren 1.75x statt 3x.

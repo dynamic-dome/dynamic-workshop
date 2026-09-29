@@ -23,6 +23,9 @@ Einen praxisnahen, demo-lastigen Workshop in 4 aufeinander aufbauenden Sessions 
 - Demos > Slides — lieber zeigen als erklaeren
 - Exercises sind optional/Bonus, keine Pflicht-Hausaufgaben
 - Sprache: Deutsch fuer Kommunikation, Englisch fuer Code und Dateinamen
+- Modellgenerationen, Preise, Kontextgrößen und Retirement-Daten nur in `resources/_canonical.md`; im Kurs Aliase
+  (`opus`, `sonnet`, `haiku`, `fable`) und Rollen. Bewusste Ausnahme: `version-pinned: <Grund>` in derselben Zeile.
+  `python tools/lint_currency.py` prüft das.
 
 ## Struktur
 

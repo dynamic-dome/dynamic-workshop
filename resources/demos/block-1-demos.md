@@ -506,7 +506,7 @@ What worktrees do we have now?
 
 ---
 
-### Step 1: Baseline with Opus 4.8 + xhigh
+### Step 1: Baseline with the Opus tier + xhigh
 
 In Claude Code:
 ```
@@ -525,11 +525,11 @@ After it finishes, type:
 **Expected output:** A session cost in the ballpark of ~$0.10–$0.20 for this single turn (numbers vary; the point is the *order of magnitude*).
 
 **Talking point:**
-> "That's the most expensive combination Claude Code offers — Opus at the deepest effort level. Look at the cost. Now let's see what we get for less."
+> "That's an expensive combination — Opus at a deep effort level. Look at the cost. Now let's see what we get for less."
 
 ---
 
-### Step 2: Same Task with Sonnet 5 + medium
+### Step 2: Same Task with the Sonnet tier + medium
 
 Reset the session or just continue:
 ```
@@ -550,11 +550,12 @@ After completion:
 
 ---
 
-### Step 3: Same Task with Haiku 4.5 + low
+### Step 3: Same Task with the Haiku tier (no effort setting)
+
+Haiku has no effort levels, so there is no `/effort` line here — the model choice alone is the cost lever. (Aliases, generations and effort support per tier: [canon](../_canonical.md).)
 
 ```
 /model haiku
-/effort low
 Write a Python function that validates IPv4 addresses with proper edge case handling. Include a few tests at the bottom of the file demonstrating valid and invalid inputs.
 ```
 
@@ -565,7 +566,7 @@ Write a Python function that validates IPv4 addresses with proper edge case hand
 **Expected output:** Roughly one order of magnitude cheaper than the Opus baseline.
 
 **Talking point:**
-> "Haiku at low effort. The output will be a bit terser, maybe one or two fewer edge cases enumerated. But for validating an IPv4 address — a task with a well-known correct answer — Haiku is plenty."
+> "Haiku, the cheapest tier. The output will be a bit terser, maybe one or two fewer edge cases enumerated. But for validating an IPv4 address — a task with a well-known correct answer — Haiku is plenty."
 
 ---
 

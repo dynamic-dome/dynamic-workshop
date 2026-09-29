@@ -69,15 +69,15 @@ claude update
 
 ### Tested Version Gate
 
-This workshop was refreshed against `claude --version` **2.1.200** on 2026-07-04. Use **2.1.197+** as the tested minimum for the full workshop so Sonnet 5, Fable 5, workflows fixes, plugin improvements, and current hook behavior are all in range.
+This workshop was refreshed against `claude --version` **2.1.200** on 2026-07-04. Use **2.1.197+** as the tested minimum for the full workshop so the `fable`/`opus`/`sonnet`/`haiku` aliases, workflows fixes, plugin improvements, and current hook behavior are in range. The generations those aliases resolve to today need a newer CLI (Fable 5.1 from 2.1.257, Opus 5.5 from 2.1.280, Sonnet 5.5 from 2.1.284; see the [canon](_canonical.md) and check `claude --version`). <!-- version-pinned: Mindest-CLI je Modellgeneration -->
 
 | Feature used in workshop | Minimum documented version | Verification |
 |---|---:|---|
 | Plugin init / local plugin improvements | 2.1.157 | `claude plugin init`, `claude --plugin-dir` |
-| Fable 5 | 2.1.170 | `/model` shows Fable 5 after update |
+| Fable tier | 2.1.170 | `/model` lists `fable` after update |
 | `/workflows` agent detail/status UI | 2.1.186 | `/workflows` available in current CLI builds |
 | Hook JSON output (`updatedToolOutput`, `systemMessage`, `terminalSequence`) | Current hook docs | `python -m pytest tools/test_course_hooks.py` in the repo, then Demo 2.2 / Exercise 2.6 |
-| Sonnet 5 default + 1M context | 2.1.197 | `claude --version`, `/model` |
+| Sonnet tier with 1M context | 2.1.197 | `claude --version`, `/model` |
 
 ```bash
 # Verify feature surface after update
