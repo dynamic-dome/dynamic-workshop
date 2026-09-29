@@ -1,2 +1,7 @@
 # Bezeichner, die der Kurs lehrt, die aber keine Claude-Code-Bezeichner sind (Fremd-Flags, Übungsparameter).
 # Format: bezeichner | grund. Die Liste darf nur schrumpfen (tools/test_currency_check.py).
+--decompose | Argument des Plugin-Commands /multi-model-orchestrator:codex-swarm (Cockpit-Beispiel, block-3-advanced.md, block-3-demos.md), kein Claude-Code-Flag
+--door | Kommandozeilenparameter des Übungsskripts event_log_parser.py in resources/exercises/block-1-exercises.md (Success Check), kein Claude-Code-Flag
+--headed | Playwright-MCP-Flag laut Hinweis in resources/exercises/block-2-exercises.md (Verweis auf die @playwright/mcp-Doku), kein Claude-Code-Flag
+--orphan | git-Flag (git worktree add --orphan) im Troubleshooting von resources/exercises/block-1-exercises.md, kein Claude-Code-Flag
+--enable-auto-mode | Kurs nennt das Flag ausdrücklich als entfernt (Migrationshinweis in resources/cheatsheet.md und resources/glossary.md; Doku: Removed in v2.1.111)

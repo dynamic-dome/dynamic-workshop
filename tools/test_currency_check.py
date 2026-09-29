@@ -289,3 +289,13 @@ def test_real_canon_is_machine_readable():
     assert all(url.startswith("https://") for urls in sources.values() for url in urls)
     names = {url.rsplit("/", 1)[-1] for url in sources["Doku"]}
     assert {"model-deprecations.md", "model-config.md", "permission-modes.md"} <= names
+
+
+# First live run 2026-09-29: the identifiers recorded in Step 2. The set may only shrink; a swap is caught too.
+FROZEN_EXCEPTIONS = frozenset({"--decompose", "--door", "--headed", "--orphan", "--enable-auto-mode"})
+
+
+def test_exception_list_only_shrinks():
+    cx = _load("currency_extract")
+    entries = cx.parse_exceptions((ROOT / "tools" / "currency_exceptions.txt").read_text(encoding="utf-8"))
+    assert set(entries) <= FROZEN_EXCEPTIONS, sorted(set(entries) - FROZEN_EXCEPTIONS)
