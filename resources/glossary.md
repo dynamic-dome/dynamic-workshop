@@ -345,7 +345,6 @@ Aktualisierungen, die in aelteren Workshops, Doku oder Tutorials noch anders hei
 | `/vim` | entfernt | v2.1.92 — Vim-Mode raus |
 | `/pr-comments` | entfernt | v2.1.91 — stattdessen Claude direkt fragen ("zeig mir die PR-Comments") |
 | `TodoWrite` | `TaskCreate`/`TaskList`/... | Task-Cluster ersetzt TodoWrite, v2.1.142 |
-| `--fast` (CLI-Flag) | `/fast` (Slash-Command) | Toggle nur noch in Session |
 | `~/.claude/skills/<name>.md` | `~/.claude/skills/<name>/SKILL.md` | Skill ist immer ein Ordner mit `SKILL.md` |
 
 ---

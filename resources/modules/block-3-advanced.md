@@ -1224,7 +1224,7 @@ The `worktree.baseRef` setting controls **which ref a new `claude --worktree` br
 | **`fresh`** | Branches from `origin/<default>` — always the latest pushed mainline | Multi-agent fan-out where all agents must start from identical, fresh state |
 | **`head`** | Branches from your local `HEAD` — your uncommitted intent goes with it | "I'm mid-refactor, spawn a worktree to try an alternative without losing my current state" |
 
-The default for `worktree.baseRef` changed across CLI versions, so set it explicitly rather than relying on it. For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in `settings.json` (project scope) or via `--worktree-base-ref` per invocation.
+The default for `worktree.baseRef` changed across CLI versions, so set it explicitly rather than relying on it. For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in a settings file (for example the project `settings.json`); there is no per-invocation CLI flag for it.
 
 #### `--tmux` — Multi-Agent Visibility in One Screen
 
@@ -1623,7 +1623,7 @@ export HTTP_PROXY="http://proxy.corp.example:8080"
 claude -p "Review this diff" < diff.patch
 ```
 
-The proxy needs an outbound rule for `api.anthropic.com`. Most enterprise proxies already log all traffic — pair this with a `--metadata` tag (Module 3.6 Monitoring section) so corporate SOC can correlate Claude calls with runner jobs.
+The proxy needs an outbound rule for `api.anthropic.com`. Most enterprise proxies already log all traffic — pair this with custom OpenTelemetry resource attributes (`OTEL_RESOURCE_ATTRIBUTES`, see Monitoring CI Costs in this module) so corporate SOC can correlate Claude calls with runner jobs.
 
 **Option B: AWS Bedrock in VPC** — Use Claude via Bedrock inside your VPC:
 
@@ -1686,7 +1686,7 @@ Cross-reference: Module 2.2 (Hooks) covers Claude Code's *internal* hook system 
 - **Anthropic Console dashboard** — aggregates API spend across all calls under your token.
 - **Custom logging** — pipe `--output-format stream-json` to a log aggregator and parse the `usage` events.
 
-**Tag your CI runs** so the aggregation is meaningful. Pass `--metadata '{"ci_run_id":"<id>","repo":"<name>"}'` and you can later slice spend by repo, by workflow, by PR.
+**Tag your CI runs** so the aggregation is meaningful. Enable telemetry (`CLAUDE_CODE_ENABLE_TELEMETRY=1`) and set `OTEL_RESOURCE_ATTRIBUTES="ci_run_id=<id>,repo=<name>"` in the job environment: Claude Code attaches these keys as attributes to every metric and event, so you can later slice spend by repo, by workflow, by PR in your metrics backend.
 
 ---
 
