@@ -116,6 +116,13 @@ def test_redirect_stub_or_html_page_is_a_source_error(body):
         run(available=pages(**{BASE + "model-config.md": body}))
 
 
+def test_html_prefixed_page_that_still_parses_is_a_source_error():
+    # Everything else about the page is valid, so only the HTML guard can catch it.
+    body = "<!doctype html><html><body>" + pages()[BASE + "env-vars.md"]
+    with pytest.raises(cc.SourceError, match="HTML"):
+        run(available=pages(**{BASE + "env-vars.md": body}))
+
+
 def test_missing_source_is_a_source_error():
     available = pages()
     del available[BASE + "env-vars.md"]
