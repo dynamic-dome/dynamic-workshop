@@ -133,9 +133,7 @@ def test_currency_lint_checks_cp1252_files_instead_of_skipping(tmp_path):
     path.write_bytes("Currency: SONNET 4.6 \u20ac".encode("cp1252"))
 
     lines = lint.read_lines(path)
-    patterns = [re.compile(p, re.IGNORECASE) for p in lint.FORBIDDEN]
-
-    assert any(rx.search(lines[0]) for rx in patterns)
+    assert lint.GENERATION.search(lines[0])
 
 
 def test_code_example_keeps_line_breaks_so_it_can_be_copied():

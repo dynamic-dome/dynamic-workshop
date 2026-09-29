@@ -1,29 +1,34 @@
 # -*- coding: utf-8 -*-
-"""Drift-Lint fuer den Dynamic Workshop.
+"""Currency-Lint fuer den Dynamic Workshop.
 
-Blockt veraltete Model-IDs/Generationen in learner-facing Live-Content.
-Kanonische Quelle: resources/_canonical.md. Historische Kontexte (docs/, review-Archive,
-.agent-memory) sind bewusst ausgeklammert. Exit 0 = sauber, Exit 1 = Drift gefunden.
+Zwei Regeln (Design: docs/plans/2026-09-29-phase2-aktualhaltung-design.md):
+1. Generationsregel: Modellgenerationen (etwa "Opus 5.5" oder claude-sonnet-5-5) stehen nur in
+   resources/_canonical.md. Ausnahme nur mit `version-pinned: <Grund>` in derselben Zeile.
+2. Stale-Gate: das Pruefdatum im Kanon ist hoechstens 90 Tage alt (ab 45 Tagen Warnung).
+Ausgeklammert: docs/, review-Archive, resources/archive/, .agent-memory, HANDOFF.md, tools/, lokaler Zustand.
+Exit 0 = sauber, Exit 1 = Drift oder Kanon zu alt/unlesbar.
 
 Aufruf (aus dem Repo-Root):  python tools/lint_currency.py
 """
+import datetime
 import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import currency_extract  # noqa: E402
+
 # Repo-Root = Elternordner von tools/
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Verbotene Legacy-Tokens (Vorgaenger-/retired Generationen). Muss zu resources/_canonical.md passen.
-# Case-insensitive (siehe re.IGNORECASE unten).
-FORBIDDEN = [
-    r"claude-sonnet-4-6",
-    r"sonnet[ -]4\.6",       # 'Sonnet 4.6' / 'sonnet-4.6' / 'SONNET 4.6'
-    r"claude-opus-4-7",
-    r"claude-3-5-sonnet",    # retired
-    r"claude-3-7-sonnet",    # retired
-    r"claude-3-5-haiku",     # retired
-]
+GENERATION = re.compile(
+    r"\b(?:opus|sonnet|haiku|fable|mythos)[ -]?\d+(?:[.-]\d+)?\b"
+    r"|\bclaude-(?:opus|sonnet|haiku|fable|mythos)-\d",
+    re.IGNORECASE,
+)
+PIN = re.compile(r"version-pinned:\s*(.*?)\s*(?:-->|\*/|$)")
+STALE_WARN_DAYS = 45
+STALE_RED_DAYS = 90
 
 # Zu scannende Endungen
 EXTS = (".md", ".html", ".json", ".txt")
@@ -95,25 +100,55 @@ def read_lines(full):
             return list(fh)
 
 
-def main():
-    patterns = [(p, re.compile(p, re.IGNORECASE)) for p in FORBIDDEN]
+def is_pinned(line):
+    match = PIN.search(line)
+    return bool(match) and len(match.group(1).strip()) >= 3
+
+
+def generation_hits(root=ROOT):
     hits = []
-    for rel, full in live_files():
+    for rel, full in live_files(root):
         try:
-            for i, line in enumerate(read_lines(full), 1):
-                for label, rx in patterns:
-                    if rx.search(line):
-                        hits.append((rel, i, label, line.strip()[:120]))
+            lines = read_lines(full)
         except OSError:
             continue
+        for number, line in enumerate(lines, 1):
+            match = GENERATION.search(line)
+            if match and not is_pinned(line):
+                hits.append((rel, number, match.group(0), line.strip()[:120]))
+    return hits
 
+
+def canon_status(canon_path, today):
+    """Return (level, message) with level 'ok' | 'warn' | 'red'."""
+    try:
+        with open(canon_path, encoding="utf-8") as fh:
+            checked, _cli = currency_extract.parse_canon_header(fh.read())
+    except (OSError, ValueError) as exc:
+        return "red", f"Kanon-Prüfdatum nicht lesbar: {exc}"
+    age = (today - checked).days
+    if age > STALE_RED_DAYS:
+        return "red", (f"Kanon zuletzt geprüft {checked} ({age} Tage > {STALE_RED_DAYS}): "
+                       "Monatsbericht abarbeiten und Prüfdatum setzen")
+    if age > STALE_WARN_DAYS:
+        return "warn", f"WARNUNG: Kanon zuletzt geprüft {checked} ({age} Tage > {STALE_WARN_DAYS})"
+    return "ok", f"Kanon geprüft {checked} ({age} Tage)"
+
+
+def main(root=ROOT, today=None):
+    today = today or datetime.date.today()
+    level, message = canon_status(os.path.join(root, "resources", "_canonical.md"), today)
+    print(message)
+    hits = generation_hits(root)
     if hits:
-        print("DRIFT gefunden — {} veraltete Token-Vorkommen in Live-Content:".format(len(hits)))
-        for rel, ln, label, snippet in hits:
-            print("  {}:{}  [{}]  {}".format(rel, ln, label, snippet))
-        print("\nFix: auf die kanonischen IDs aus resources/_canonical.md aktualisieren.")
+        print("DRIFT gefunden — {} Zeilen nennen eine Modellgeneration außerhalb des Kanons:".format(len(hits)))
+        for rel, number, token, snippet in hits:
+            print("  {}:{}  [{}]  {}".format(rel, number, token, snippet))
+        print("\nFix: Alias oder Rolle nennen und auf resources/_canonical.md verweisen; bewusst versioniert nur mit"
+              " `version-pinned: <Grund>` in derselben Zeile.")
+    if hits or level == "red":
         return 1
-    print("OK — keine veralteten Model-IDs/Generationen in Live-Content.")
+    print("OK — keine Modellgeneration außerhalb des Kanons.")
     return 0
 
 

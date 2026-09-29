@@ -8,7 +8,7 @@
 Geprüft: 2026-09-29 · CLI 2.1.284
 
 Das Prüfdatum setzt nur eine Session, die diesen Kanon gegen einen Bericht von `tools/currency_check.py` oder direkt
-gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt ab 45 Tagen und wird ab 90 Tagen rot.
+gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach mehr als 45 Tagen und wird nach mehr als 90 Tagen rot.
 
 ## Alias-Regel
 
