@@ -69,7 +69,7 @@ claude update
 
 ### Tested Version Gate
 
-This workshop was refreshed against `claude --version` **2.1.200** on 2026-07-04. Use **2.1.197+** as the tested minimum for the full workshop so the current model tiers, workflows fixes, plugin improvements, and current hook behavior are all in range.
+This workshop was refreshed against `claude --version` **2.1.200** on 2026-07-04. Use **2.1.197+** as the tested minimum for the full workshop so the `fable`/`opus`/`sonnet`/`haiku` aliases, workflows fixes, plugin improvements, and current hook behavior are in range. The generations those aliases resolve to today need a newer CLI (Fable 5.1 from 2.1.257, Opus 5.5 from 2.1.280, Sonnet 5.5 from 2.1.284; see the [canon](_canonical.md) and check `claude --version`). <!-- version-pinned: Mindest-CLI je Modellgeneration -->
 
 | Feature used in workshop | Minimum documented version | Verification |
 |---|---:|---|

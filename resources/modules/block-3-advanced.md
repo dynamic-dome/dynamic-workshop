@@ -426,15 +426,15 @@ Using both together beats either alone.
 
 ### Cost Trade-Off — Order-of-Magnitude Multipliers
 
-> Full pricing table and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth. Rough orientation for this module: Opus ~3x Sonnet, Haiku ~0.2x Sonnet (per MTok).
+> Prices: see the [canon](../_canonical.md); strategy (Plan/Implement/Review): **Module 1.5 (Cost Engineering)**. Rough orientation for this module, derived from the canon prices: Opus ~2x Sonnet, Haiku ~0.5x Sonnet (per MTok).
 
 **Mini-Strategy for a typical Claude → Codex → Claude pipeline:**
 
 - **Plan with Opus** — one expensive call buys a clean spec; bad plans are 10x more costly downstream.
 - **Implement with Sonnet** (or Codex when speed beats determinism) — the bulk of the tokens flow here.
-- **Review with Haiku first**, escalate disagreements to Opus — Haiku catches 80% of issues at ~7% of Opus cost.
+- **Review with Haiku first**, escalate disagreements to Opus — Haiku catches 80% of issues at ~25% of Opus cost (price ratio from the canon).
 
-A 1000-token spec reviewed by Opus is ~$0.025. The same review by Haiku is ~$0.005. Across 200 PRs per month, that compounds.
+A spec review by Haiku costs roughly a quarter of the same review by Opus. Across 200 PRs per month, that compounds.
 
 ---
 

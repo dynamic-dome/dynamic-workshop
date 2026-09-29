@@ -246,7 +246,7 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 
 > Model names move fast, so this course teaches aliases and roles. Generations, context windows, prices, effort defaults and retirement dates live only in the [canon](../_canonical.md). Run `/model` to see what your CLI actually offers (an alias can resolve to different generations per provider), and `/release-notes` for the latest.
 >
-> **Mind Haiku's 200K context** (vs. 1M on the others): it caps *bulk-read* tasks. Use Haiku for small, focused reads and Opus/Fable for whole-codebase analysis — if Haiku seems to "forget" the start of a large file, the 200K limit is why.
+> **Mind Haiku's 200K context** (vs. 1M on the others): it caps *bulk-read* tasks. Use Haiku for small, focused reads and Opus/Fable for whole-codebase analysis — if Haiku seems to "forget" the start of a large file, the 200K limit is why. <!-- version-pinned: Haiku-Kontextgrenze (Kanon) -->
 
 **How to switch:**
 - At startup: `claude --model sonnet`
@@ -259,7 +259,7 @@ Claude Code supports multiple models. Choosing the right one matters for both qu
 
 > **Lean System Prompt (recent default).** On current Fable and Opus builds Claude Code ships a **leaner system prompt** by default (which models get it can change between releases) — less fixed overhead in your context window, so more room for your actual code. You rarely need to touch it; if you want to override or extend it, use `--append-system-prompt` (add to it) or `--system-prompt` / `--system-prompt-file` (replace it).
 
-> Detailed pricing per million tokens, effort multipliers, and the Plan/Implement/Review cost strategy live in **Module 1.5 (Cost Engineering)** — single source of truth.
+> Prices per million tokens: see the [canon](../_canonical.md). Effort multipliers and the Plan/Implement/Review cost strategy: **Module 1.5 (Cost Engineering)**.
 
 ---
 

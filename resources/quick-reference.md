@@ -32,7 +32,7 @@
 | `default` | Reads only, Rest fragt |
 | `acceptEdits` | + File Edits + FS-Bash |
 | `plan` | Plan upfront |
-| `auto` | ML decides (Max-Plan/Team) |
+| `auto` | ML decides (alle Plaene; Modell-Tier Opus/Sonnet/Fable, nicht Haiku; Admins koennen es sperren) |
 | `dontAsk` | No prompts (CI) |
 | `bypassPermissions` | ALL (VM only!) |
 

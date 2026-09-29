@@ -80,7 +80,7 @@ Slash-Command, der eine bestimmte Action triggert. Seit v2.x technisch mit Skill
 - **Modul:** 2.1 — Skills & Commands
 
 ### Context Window
-Die maximale Token-Menge, die Claude in einer Session "im Kopf" behalten kann. Fable-, Opus- und Sonnet-Tier: 1M Token, Haiku-Tier: 200K (aktuelle Werte im [Kanon](_canonical.md)). `/context` zeigt aktuelle Nutzung, `/compact` komprimiert.
+Die maximale Token-Menge, die Claude in einer Session "im Kopf" behalten kann. Fable-, Opus- und Sonnet-Tier: 1M Token, Haiku-Tier: 200K (aktuelle Werte im [Kanon](_canonical.md)). `/context` zeigt aktuelle Nutzung, `/compact` komprimiert. <!-- version-pinned: Haiku-Kontextgrenze (Kanon) -->
 - **Verwandt:** Token, Model
 - **Modul:** 1.2 — Context & Memory
 
@@ -179,7 +179,7 @@ Globaler Sicherheits-Level fuer eine Session. Sechs Modi:
 - `default` — fragt bei allem nach (ausser Reads)
 - `acceptEdits` — Edits + sichere FS-Bash-Commands auto-akzeptiert
 - `plan` — zeigt Gesamtplan vorab, einmal genehmigen
-- `auto` — ML-Klassifizierer entscheidet (Max-Plan oder Team/Enterprise)
+- `auto` — ML-Klassifizierer entscheidet (alle Plaene; braucht ein unterstuetztes Modell: Opus-, Sonnet- oder Fable-Tier, nicht Haiku, siehe [Kanon](_canonical.md); Admins koennen es sperren)
 - `dontAsk` — niemals fragen, nur allow/deny-Rules zaehlen
 - `bypassPermissions` — YOLO, akzeptiert alles ausser Protected Paths
 

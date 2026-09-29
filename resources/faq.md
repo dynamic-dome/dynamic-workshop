@@ -83,7 +83,7 @@ Bei Team-Konventionen: Projekt-Skill. Bei eigenen Daily-Workflows: User-Skill. B
 
 ### Ist es OK, `--dangerously-skip-permissions` zu nutzen?
 
-Nur in isolierten VMs oder Docker-Containern. Niemals auf deinem Haupt-Dev-Laptop fuer interaktive Sessions. Wenn du es brauchst, denke nochmal nach. Alternative: `--permission-mode auto` (Max-Plan oder Team/Enterprise) plus `allow/deny`-Rules fuer feingranulare Kontrolle.
+Nur in isolierten VMs oder Docker-Containern. Niemals auf deinem Haupt-Dev-Laptop fuer interaktive Sessions. Wenn du es brauchst, denke nochmal nach. Alternative: `--permission-mode auto` (alle Plaene, mit unterstuetztem Modell: Opus-, Sonnet- oder Fable-Tier, nicht Haiku, siehe [Kanon](_canonical.md); Admins koennen es sperren) plus `allow/deny`-Rules fuer feingranulare Kontrolle.
 
 ### Was sind Protected Paths?
 

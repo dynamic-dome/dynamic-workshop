@@ -598,7 +598,7 @@ Either a shell alias:
 # ~/.bashrc or ~/.zshrc
 alias claude-review='claude --model sonnet --effort medium --max-budget-usd 0.30'
 alias claude-deep='claude --model opus --effort xhigh --max-budget-usd 2.00'
-alias claude-quick='claude --model haiku --effort low'
+alias claude-quick='claude --model haiku'   # Haiku has no effort setting
 ```
 
 Or a small user-skill that wraps the right invocation. (Skills are covered in Block 2 — for now an alias is fine.)
