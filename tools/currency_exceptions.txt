@@ -1,0 +1,2 @@
+# Bezeichner, die der Kurs lehrt, die aber keine Claude-Code-Bezeichner sind (Fremd-Flags, Übungsparameter).
+# Format: bezeichner | grund. Die Liste darf nur schrumpfen (tools/test_currency_check.py).
