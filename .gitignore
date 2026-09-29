@@ -1,6 +1,14 @@
 # Agent memory (session-specific, not for participants)
 .agent-memory/
 
+# Local agent/tool state (code index, goal tracking)
+.codegraph/
+.pi-glla/
+
+# Python
+__pycache__/
+*.py[cod]
+
 # Plugin config (local installation)
 .claude-plugin/
 !.claude-plugin/
