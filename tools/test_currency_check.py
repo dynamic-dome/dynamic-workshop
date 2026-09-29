@@ -292,7 +292,7 @@ def test_real_canon_is_machine_readable():
 
 
 # First live run 2026-09-29: the identifiers recorded in Step 2. The set may only shrink; a swap is caught too.
-FROZEN_EXCEPTIONS = frozenset({"--decompose", "--door", "--headed", "--orphan", "--enable-auto-mode"})
+FROZEN_EXCEPTIONS = frozenset({"--decompose", "--door", "--headless", "--orphan", "--enable-auto-mode"})
 
 
 def test_exception_list_only_shrinks():

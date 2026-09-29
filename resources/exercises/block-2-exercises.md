@@ -807,7 +807,7 @@ Navigate to [site], fill in username [X] and password [ask me for it], then [tas
 Claude will ask for the password rather than storing it.
 
 **Headless vs. headed mode:**
-By default, Playwright MCP may run headless (no visible window). To see the browser: check `@playwright/mcp` documentation for `--headed` flag.
+By default, Playwright MCP runs headed (you see the browser window). To hide the window, start it with the `--headless` flag; see the `@playwright/mcp` documentation.
 
 **Security consideration:**
 The Playwright browser runs with your network access. Be thoughtful about which sites you automate, especially in corporate environments with proxies or SSO.

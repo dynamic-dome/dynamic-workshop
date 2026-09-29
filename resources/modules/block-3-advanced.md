@@ -1224,7 +1224,7 @@ The `worktree.baseRef` setting controls **which ref a new `claude --worktree` br
 | **`fresh`** | Branches from `origin/<default>` — always the latest pushed mainline | Multi-agent fan-out where all agents must start from identical, fresh state |
 | **`head`** | Branches from your local `HEAD` — your uncommitted intent goes with it | "I'm mid-refactor, spawn a worktree to try an alternative without losing my current state" |
 
-The default for `worktree.baseRef` changed across CLI versions, so set it explicitly rather than relying on it. For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in a settings file (for example the project `settings.json`); there is no per-invocation CLI flag for it.
+The default for `worktree.baseRef` changed across CLI versions, so set it explicitly rather than relying on it. For Block 3's multi-agent patterns the answer is almost always `fresh` — five agents starting from five subtly-different bases is a debugging nightmare. The setting lives in a settings file (for example the project `settings.json`); for a single invocation, pass it inline with `--settings '{"worktree":{"baseRef":"fresh"}}'`.
 
 #### `--tmux` — Multi-Agent Visibility in One Screen
 
@@ -1686,7 +1686,7 @@ Cross-reference: Module 2.2 (Hooks) covers Claude Code's *internal* hook system 
 - **Anthropic Console dashboard** — aggregates API spend across all calls under your token.
 - **Custom logging** — pipe `--output-format stream-json` to a log aggregator and parse the `usage` events.
 
-**Tag your CI runs** so the aggregation is meaningful. Enable telemetry (`CLAUDE_CODE_ENABLE_TELEMETRY=1`) and set `OTEL_RESOURCE_ATTRIBUTES="ci_run_id=<id>,repo=<name>"` in the job environment: Claude Code attaches these keys as attributes to every metric and event, so you can later slice spend by repo, by workflow, by PR in your metrics backend.
+A third path is OpenTelemetry export. **Tag your CI runs** so the aggregation is meaningful. Enable OpenTelemetry export in the job environment (`CLAUDE_CODE_ENABLE_TELEMETRY=1`, `OTEL_METRICS_EXPORTER=otlp`, `OTEL_EXPORTER_OTLP_ENDPOINT=<your collector>`) and add `OTEL_RESOURCE_ATTRIBUTES="ci_run_id=<id>,repo=<name>"`: Claude Code attaches these keys as attributes to every metric datapoint and event record it exports, so you can later slice spend by repo, by workflow, by PR in your metrics backend.
 
 ---
 
