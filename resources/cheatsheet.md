@@ -117,7 +117,7 @@ claude update                     # Update Claude Code CLI
 claude install [version]          # Pin a specific version
 claude remote-control             # Start remote control session
 claude ultrareview [target]       # Cloud-based multi-agent code review
-claude setup-token                # Long-lived OAuth token for CI (~1 year)
+claude setup-token                # 1-year subscription token for CI -> CLAUDE_CODE_OAUTH_TOKEN (not read by --bare)
 claude project purge [path]       # Complete reset of a project
 claude auto-mode defaults         # Print auto-mode classifier rules
 ```
@@ -408,8 +408,9 @@ Configure in `settings.json`:
 
 | Variable | Purpose |
 |----------|---------|
-| `ANTHROPIC_API_KEY` | API key for direct Anthropic usage |
-| `CLAUDE_MODEL` | Set default model |
+| `ANTHROPIC_API_KEY` | API key for direct Anthropic usage; the only Anthropic credential `--bare` reads besides `apiKeyHelper`. Wins over `CLAUDE_CODE_OAUTH_TOKEN` when both are set |
+| `CLAUDE_CODE_OAUTH_TOKEN` | Subscription token from `claude setup-token` for CI and scripts. Never read in `--bare` mode |
+| `ANTHROPIC_MODEL` | Set default model |
 | `CLAUDE_CODE_USE_BEDROCK` | Use AWS Bedrock as backend |
 | `CLAUDE_CODE_USE_VERTEX` | Use Google Vertex AI as backend |
 | `AWS_REGION` | Region for Bedrock |

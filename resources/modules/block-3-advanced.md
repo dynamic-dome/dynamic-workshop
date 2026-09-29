@@ -1337,8 +1337,8 @@ It surfaces findings on whichever channel you have wired up — terminal, web, p
 
 **Learning Objectives:** After this module, you can:
 - Run Claude headlessly with `claude -p`, `--output-format json`, and `--json-schema` to build deterministic, machine-parseable pipeline stages.
-- Set up CI authentication with `claude setup-token` and combine `--max-budget-usd` and `--bare` to bound cost and behavior for unattended runs.
-- Build a complete pre-commit hook or GitHub Actions workflow that uses Claude Code as a pipeline stage, and recognize the common CI failure patterns (token expiry, missing budget cap, interactive-mode hang).
+- Pick the right CI credential — an API key (`ANTHROPIC_API_KEY` or `apiKeyHelper`) for `--bare` runs, a subscription token from `claude setup-token` (`CLAUDE_CODE_OAUTH_TOKEN`) only without `--bare` — and bound cost and behavior with `--max-budget-usd` and `--bare`.
+- Build a complete pre-commit hook or GitHub Actions workflow that uses Claude Code as a pipeline stage, and recognize the common CI failure patterns (credential that `--bare` ignores, missing budget cap, interactive-mode hang).
 
 ### Overview
 
@@ -1346,7 +1346,7 @@ Up to this point we have used Claude Code interactively — typed prompts, watch
 
 > **Mission hint:** When Claude Code is more than an editor sidekick in your daily work, it is running in CI. This module shows how.
 
-The foundation is four building blocks: **headless invocation (`claude -p`), structured output (`--output-format json`), cost caps (`--max-budget-usd`), and CI-grade auth (`claude setup-token`)**. Combine them and Claude becomes a deterministic pipeline stage.
+The foundation is four building blocks: **headless invocation (`claude -p`), structured output (`--output-format json`), cost caps (`--max-budget-usd`), and CI-grade auth (an API key for `--bare` runs, or a subscription token from `claude setup-token`)**. Combine them and Claude becomes a deterministic pipeline stage.
 
 ---
 
@@ -1406,18 +1406,32 @@ The output is JSON that matches the schema — your downstream `jq` / Python / N
 <!-- LE: S4.4 -->
 > **Ich kann jetzt:** CI-Auth, Cost-Caps und Cost-Engineering in automatisierten Laeufen verbinden.
 
-### CI Auth — `claude setup-token`
+### CI Auth — Pick the Credential Before You Pick the Flags
 
-Interactive `claude` sessions authenticate through a browser OAuth flow. CI runners do not have a browser. The bridge is **`claude setup-token`**:
+Interactive `claude` sessions authenticate through a browser login. CI runners have no browser, so you hand the runner a credential. There are three paths, and they are **not interchangeable** — `--bare` decides which ones work:
+
+| Path | Credential on the runner | Works with `--bare`? | Billing | Use it for |
+|---|---|---|---|---|
+| **A — API key** (default for scripted `claude -p`) | `ANTHROPIC_API_KEY` (key from the Claude Console) or an `apiKeyHelper` passed via `--settings` | **yes** | API usage | Shared pipelines, org-wide secrets, any job that checks out code you did not write |
+| **B — Subscription token** | `CLAUDE_CODE_OAUTH_TOKEN`, generated once with `claude setup-token` | **no** — bare mode never reads it | Your Pro/Max/Team/Enterprise subscription | Your own repos on your own subscription; the official GitHub Action input `claude_code_oauth_token` |
+| **C — No long-lived secret** | Claude Code GitHub Action with workload identity federation, or Bedrock/Vertex with short-lived cloud credentials | — | API or cloud provider | High-security environments (see *Token Rotation* below) |
+
+Path B in two lines:
 
 ```bash
-claude setup-token         # interactive once on a workstation
-# generates a long-lived OAuth token (1 year)
+claude setup-token   # once, on a workstation: browser login, then prints a 1-year token
+# The command saves the token nowhere. Copy it into the CI secret CLAUDE_CODE_OAUTH_TOKEN now.
 ```
 
-Store the token as a CI secret (GitHub Actions Secret, GitLab CI Variable, etc.). At runtime CI exports it as `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_TOKEN`) and `claude -p` picks it up automatically.
+Three rules follow from the table:
 
-> **Security note:** The token grants full Claude Code access for a year. Treat it like an SSH deploy key — never commit it, never log it, rotate on a schedule, revoke if a CI provider is compromised.
+1. **`--bare` means path A or C.** A `--bare` job that only has `CLAUDE_CODE_OAUTH_TOKEN` is not authenticated. `--bare` is the recommended mode for scripted calls and is slated to become the default for `-p`, so path A is the future-proof default.
+2. **Code you did not write → path A with `--bare`.** Path B runs without `--bare`, and then the checked-out repo's `.claude/settings.json` hooks and `.mcp.json` servers run on your runner (see *`--bare` Mode* below). Keep path B for repositories you trust.
+3. **Shared secret → API key.** A subscription token belongs to the person who ran `claude setup-token`. For a secret shared across repositories or a team, use an API key.
+
+> **Precedence trap:** when both are present, `ANTHROPIC_API_KEY` wins over `CLAUDE_CODE_OAUTH_TOKEN` — in `-p` mode a present key is always used. A leftover key in the runner environment silently moves a "subscription" pipeline to API billing. `claude auth status` shows which credential Claude Code would use (`"authMethod": "api_key"` or `"oauth_token"`); it does not check that the credential is valid.
+
+> **Security note:** Both are standing credentials. The subscription token can only make model requests (no Remote Control, no claude.ai connectors), but it spends your subscription for a year. Treat either like an SSH deploy key — never commit it, never log it, rotate on a schedule, replace it at once if a CI provider is compromised.
 
 ---
 
@@ -1459,7 +1473,7 @@ claude --bare -p "Categorize" --output-format json
 
 **Why this matters for security:** without `--bare`, a `-p` session runs the hooks in the project's `.claude/settings.json` and connects the servers in its `.mcp.json` — even in a folder you never trusted, with no trust dialog. In CI that checks out contributor code, `--bare` keeps their hooks from running on your runner.
 
-**Auth catch:** `--bare` authenticates **only** via `ANTHROPIC_API_KEY` or an `apiKeyHelper`. It does not read OAuth, the keychain or `CLAUDE_CODE_OAUTH_TOKEN` (the token from `claude setup-token`), so a `--bare` pipeline needs an API key.
+**Auth catch:** `--bare` authenticates **only** via `ANTHROPIC_API_KEY` or an `apiKeyHelper`. It does not read OAuth, the keychain or `CLAUDE_CODE_OAUTH_TOKEN` (the token from `claude setup-token`), so a `--bare` pipeline needs an API key — path A (or C) of the *CI Auth* table.
 
 Use `--bare` for any CI step that does not actually need your custom skills or hooks. Reach for full mode only when the pipeline genuinely depends on a plugin or MCP server.
 
@@ -1550,7 +1564,7 @@ jobs:
             --body "$(jq -r '.summary' /tmp/review.json)"
 ```
 
-Every building block from this module is in there: `--bare` for a clean run, JSON output for downstream parsing, `--max-budget-usd` as the hard safety net, OAuth secret for auth.
+Every building block from this module is in there: `--bare` for a clean run, JSON output for downstream parsing, `--max-budget-usd` as the hard safety net, and an API key secret for auth (path A — the only Anthropic credential `--bare` accepts). With the subscription token instead, drop `--bare` and run the workflow only on pull requests from people you trust.
 
 > **Note on shell syntax:** these CI examples run on **Linux runners** (`runs-on: ubuntu-latest`, GitLab shell runners), so the POSIX form (`export`, `/tmp/`, `#!/bin/bash`) is correct *there* — you do not translate it to PowerShell. If you reproduce one of these snippets **locally on Windows**, use `$env:VAR` for env vars and `$env:TEMP` instead of `/tmp/`.
 
@@ -1635,12 +1649,12 @@ Equivalent isolation — Claude runs inside your GCP project boundary. Pick Bedr
 
 ### Token Rotation for Long-Lived Runners
 
-`claude setup-token` generates a 1-year OAuth token. For long-lived CI runners (build farms, on-prem GitLab runners, Jenkins agents) the rotation discipline matters:
+Whichever credential sits on a long-lived CI runner (build farms, on-prem GitLab runners, Jenkins agents), the rotation discipline matters:
 
-- **Rotate the token at least quarterly** — never let a runner-resident token live to its 1-year expiry undetected.
-- **Store in CI provider's secret store** (GitLab CI/CD Variables marked **Protected** + **Masked**; GitHub Actions Secrets; Jenkins Credentials with masked logging).
-- **Revoke old tokens** via `claude auth status` -> "manage tokens" — leftover tokens from previous CI integrations are a long-tail risk surface.
-- **For high-security environments:** use Bedrock or Vertex with **short-lived AWS/GCP credentials via OIDC federation**. The runner gets a 1-hour STS token from the CI provider's identity, calls Bedrock with it, never carries a long-lived Anthropic token. Token-leak blast radius drops from 1 year to 1 hour.
+- **Subscription token (path B):** `claude setup-token` issues a 1-year token. Rotate by generating a new one and replacing the CI secret — at least quarterly, and never let a runner-resident token run into its expiry undetected. `claude auth` only offers `login`, `logout` and `status`; there is no command that lists the tokens you issued, so keep your own inventory of where each one lives.
+- **API key (path A):** create one key per pipeline in the Claude Console. If one leaks, you disable that key without breaking the others.
+- **Store in CI provider's secret store** (GitLab CI/CD Variables marked **Protected** + **Masked**; GitHub Actions Secrets; Jenkins Credentials with masked logging). Leftover secrets from earlier CI integrations are a long-tail risk surface — delete them.
+- **For high-security environments (path C):** avoid long-lived secrets entirely. The Claude Code GitHub Action can exchange the workflow's GitHub OIDC token for Claude API access through a Claude Console service account (workload identity federation; the workflow needs `id-token: write`). Outside GitHub, use Bedrock or Vertex with **short-lived AWS/GCP credentials via OIDC federation**: the runner gets a 1-hour STS token from the CI provider's identity, calls Bedrock with it, and never carries a long-lived Anthropic token. Token-leak blast radius drops from 1 year to 1 hour.
 
 ---
 
@@ -1680,7 +1694,9 @@ Things that will go wrong in your first CI Claude integration — and how to fix
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `401 Unauthorized` | OAuth token expired or never set | Re-run `claude setup-token`, rotate the CI secret |
+| Auth error although `CLAUDE_CODE_OAUTH_TOKEN` is set | The job runs with `--bare`, which never reads the subscription token | Switch the job to an API key (path A); drop `--bare` only for trusted code (path B) |
+| Auth error on a job that used to work | Subscription token past its 1-year life, or the API key was disabled | Generate a new token or key, replace the CI secret |
+| Pipeline bills the API although you set up a subscription token | A leftover `ANTHROPIC_API_KEY` in the runner environment outranks `CLAUDE_CODE_OAUTH_TOKEN` | Remove the key from the job environment; `claude auth status` must show `"authMethod": "oauth_token"` |
 | Unexpected `$10` spend on a single run | Loop without budget cap | Set `--max-budget-usd` on **every** CI invocation |
 | Downstream `jq` fails on output | Free-form prose, not JSON | Add `--output-format json` and `--json-schema` |
 | Inconsistent persona across runs | Default system prompt drifts with skills loaded | Use `--bare` plus `--system-prompt-file` for deterministic persona |
@@ -1694,7 +1710,7 @@ A short checklist of mistakes that look fine in a dev environment and bite hard 
 
 - **Do not** use `--dangerously-skip-permissions` on shared CI runners. CI infrastructure is shared — bypassing the permission system can leak secrets across jobs or write to the runner host. Use a sandboxed runner if you need full automation.
 - **Do not** start interactive sessions in CI. `claude` without `-p` waits for stdin and hangs the job.
-- **Do not** echo the API key in CI logs. Run `set +x` before any step that touches `ANTHROPIC_API_KEY`, and mask the secret in your CI provider's UI.
+- **Do not** echo credentials in CI logs. Run `set +x` before any step that touches `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN`, and mask the secret in your CI provider's UI.
 - **Do not** skip cost caps in autonomous loops. `--max-budget-usd` is one flag — write it on every line.
 
 ---

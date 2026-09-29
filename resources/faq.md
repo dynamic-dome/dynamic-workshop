@@ -168,7 +168,7 @@ Faustregel: kleines Projekt (<50 Files) -> CLAUDE.md reicht. Grosses Projekt ode
 
 ### Kann ich Claude in GitHub Actions laufen lassen?
 
-Ja — Modul 3.6 (geplant) zeigt das im Detail. Kern: `claude setup-token` einmalig fuer langlebigen OAuth-Token (~1 Jahr), `claude -p "task" --output-format json` als Befehl, `--max-budget-usd 0.50` als Sicherheitsnetz. Die aktuelle CLI bietet keine harte Turn-Grenze per Flag mehr — `--max-budget-usd` kappt Endlos-Loops/Runaway-Kosten.
+Ja — Modul 3.6 zeigt das im Detail. Kern: `claude --bare -p "task" --output-format json` als Befehl, `--max-budget-usd 0.50` als Sicherheitsnetz, ein API-Key (`ANTHROPIC_API_KEY`) als CI-Secret. Der Abo-Token aus `claude setup-token` (`CLAUDE_CODE_OAUTH_TOKEN`, ~1 Jahr) geht nur **ohne** `--bare` — und ohne `--bare` laufen Hooks und MCP-Server des ausgecheckten Repos mit. Also: fremder Code → API-Key + `--bare`; Abo-Token nur fuer eigene, vertrauenswuerdige Repos. Die aktuelle CLI bietet keine harte Turn-Grenze per Flag mehr — `--max-budget-usd` kappt Endlos-Loops/Runaway-Kosten.
 
 ### Was kostet ein Claude-PR-Reviewer im CI?
 
@@ -176,11 +176,11 @@ Pro PR ~$0.10-1.00 abhaengig von Diff-Groesse und Effort-Level. `--max-budget-us
 
 ### Wie automatisiere ich PR-Fixes?
 
-`/autofix-pr <num>` spawned eine Cloud-Session, die PR-CI watcht und Fixes pusht. Alternativ: GitHub-Action mit `claude -p`, die auf PR-Comments reagiert. Beides setzt einen langlebigen Token via `claude setup-token` voraus.
+`/autofix-pr <num>` spawned eine Cloud-Session, die PR-CI watcht und Fixes pusht. Alternativ: GitHub-Action mit `claude -p`, die auf PR-Comments reagiert. Die Cloud-Session nutzt immer deine Abo-Anmeldung; die GitHub-Action braucht ein CI-Secret — API-Key (`anthropic_api_key`) oder Abo-Token aus `claude setup-token` (`claude_code_oauth_token`), fuer Repos mehrerer Leute besser den API-Key.
 
 ### Was ist `--bare` Mode?
 
-Headless ohne Hooks, Skills, Plugins, MCP, Auto-Memory. Maximal schnell, maximal predictable, maximal Token-sparend. Fuer CI/Scripts, wo du genau eine Operation willst ohne Side-Effects der Konfiguration.
+Headless ohne Hooks, Skills, Plugins, MCP, Auto-Memory. Maximal schnell, maximal predictable, maximal Token-sparend. Fuer CI/Scripts, wo du genau eine Operation willst ohne Side-Effects der Konfiguration. Achtung Auth: `--bare` liest nur `ANTHROPIC_API_KEY` oder `apiKeyHelper` — kein Abo-Login, kein `CLAUDE_CODE_OAUTH_TOKEN`.
 
 ---
 

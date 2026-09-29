@@ -88,7 +88,7 @@ The authoritative LE↔module mapping lives in the "Lerneinheiten-Landkarte" tab
 
 *Session 4 — Advanced Bonus (LEs S4.1–S4.10):*
 - 3.2 Nested Orchestration (Claude→Codex→Claude) → S4.1–S4.2
-- 3.6 CI/CD & Headless Mode (`claude -p`, `--output-format json`, `--max-budget-usd`, `claude setup-token`) → S4.3–S4.5 (**S4.4 also picks up the cost-engineering depth moved out of Module 1.5**)
+- 3.6 CI/CD & Headless Mode (`claude -p`, `--output-format json`, `--max-budget-usd`, CI auth paths: API key for `--bare`, `claude setup-token` → `CLAUDE_CODE_OAUTH_TOKEN` only without `--bare` and only on trusted code, workload identity federation) → S4.3–S4.5 (**S4.4 also picks up the cost-engineering depth moved out of Module 1.5**)
 - 3.5 Telegram Bridge, Inception & Worktree Isolation (Capstone) → S4.6–S4.8; S4.8 is an assessed Capstone Exit Build using `resources/capstone-exit-assessment.md` (feature/fix + guardrail + verification + PR handoff)
 - 3.7 Troubleshooting & Debugging Claude Code (`/debug`, `/doctor`, `claude --verbose`, layer-by-layer inspection) → S4.9–S4.10 (`core*` — the one "everyone needs it" part of Session 4)
 
