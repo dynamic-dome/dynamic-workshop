@@ -28,19 +28,23 @@ FORBIDDEN = [
 # Zu scannende Endungen
 EXTS = (".md", ".html", ".json", ".txt")
 
-# Ausgeklammerte Pfad-Fragmente (historisch / Archiv / Meta / generiert)
+# Ausgeklammerte Ordner relativ zum Repo-Root (Historie, Archiv, Meta, Werkzeuge, lokaler Zustand)
 EXCLUDE_DIRS = (
     ".agent-memory",
+    ".codegraph",
+    ".currency",
+    ".pi-glla",
+    ".superpowers",
     "docs",
-    ".git",
-    ".pytest_cache",
-    "node_modules",
-    "__pycache__",
+    "tools",
+    os.path.join("resources", "archive"),
 )
+# Ordner, die an jeder Stelle uebersprungen werden
+PRUNE_ANYWHERE = (".git", "node_modules", "__pycache__", ".pytest_cache")
 # Ausgeklammerte einzelne Dateien
 EXCLUDE_FILES = (
-    os.path.join("resources", "_canonical.md"),  # definiert die Liste absichtlich
-    os.path.join("tools", "lint_currency.py"),   # enthaelt die Patterns
+    os.path.join("resources", "_canonical.md"),  # definiert die Fakten absichtlich
+    "HANDOFF.md",  # datierte Agenten-Uebergabe vom 2026-06-21, kein Kursinhalt
 )
 
 
@@ -61,6 +65,27 @@ def is_excluded(rel):
     return False
 
 
+def live_files(root=ROOT):
+    """Yield (rel_posix, full_path) for every live-content file, sorted; shared by lint and currency check."""
+    for dirpath, dirnames, filenames in os.walk(root):
+        rel_dir = os.path.relpath(dirpath, root)
+        kept = []
+        for name in dirnames:
+            rel = name if rel_dir == "." else os.path.join(rel_dir, name)
+            if name in PRUNE_ANYWHERE or is_excluded(rel):
+                continue
+            kept.append(name)
+        dirnames[:] = sorted(kept)
+        for name in sorted(filenames):
+            if not name.endswith(EXTS):
+                continue
+            full = os.path.join(dirpath, name)
+            rel = os.path.relpath(full, root)
+            if is_excluded(rel):
+                continue
+            yield rel.replace(os.sep, "/"), full
+
+
 def read_lines(full):
     try:
         with open(full, encoding="utf-8-sig") as fh:
@@ -73,23 +98,14 @@ def read_lines(full):
 def main():
     patterns = [(p, re.compile(p, re.IGNORECASE)) for p in FORBIDDEN]
     hits = []
-    for dirpath, dirnames, filenames in os.walk(ROOT):
-        # in-place prune fuer Performance
-        dirnames[:] = [d for d in dirnames if d not in (".git", ".agent-memory", "docs", "node_modules", "__pycache__", ".pytest_cache")]
-        for fn in filenames:
-            if not fn.endswith(EXTS):
-                continue
-            full = os.path.join(dirpath, fn)
-            rel = os.path.relpath(full, ROOT)
-            if is_excluded(rel):
-                continue
-            try:
-                for i, line in enumerate(read_lines(full), 1):
-                    for label, rx in patterns:
-                        if rx.search(line):
-                            hits.append((rel.replace(os.sep, "/"), i, label, line.strip()[:120]))
-            except OSError:
-                continue
+    for rel, full in live_files():
+        try:
+            for i, line in enumerate(read_lines(full), 1):
+                for label, rx in patterns:
+                    if rx.search(line):
+                        hits.append((rel, i, label, line.strip()[:120]))
+        except OSError:
+            continue
 
     if hits:
         print("DRIFT gefunden — {} veraltete Token-Vorkommen in Live-Content:".format(len(hits)))

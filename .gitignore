@@ -4,6 +4,7 @@
 # Local agent/tool state (code index, goal tracking)
 .codegraph/
 .pi-glla/
+.currency/
 
 # Python
 __pycache__/
