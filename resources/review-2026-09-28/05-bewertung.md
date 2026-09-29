@@ -199,3 +199,64 @@ Behoben mit Belegen: H-01, H-02, H-03, H-04, H-07, H-08, H-09, H-11, H-12, A-01/
 (Verhalten jeder kopierbaren Hook-Datei mit Eingaben im offiziellen Format inkl. Windows-Pfaden; Abgleich jedes
 markierten Kurs-Snippets mit seiner Datei; Wächter gegen die alten Fehlmuster mit eingebauter Gegenprobe).
 Offen: H-10 (CI-Auth), Modell-Lineup (Phase 2), neue Features (W-08 ff.).
+
+## Nachträge aus dem CI-Auth-Fix (2026-09-29)
+
+Quellen, im Wortlaut per `curl` als Markdown abgerufen (nicht per WebFetch-Zusammenfassung):
+code.claude.com/docs/en/authentication.md, headless.md, github-actions.md, cli-reference.md, env-vars.md;
+dazu `claude --help` 2.1.284.
+
+### H-10 · Stand: behoben
+- **Befund präzisiert:** Der Kurs vermischte zwei Auth-Wege, die sich ausschließen. `setup-token` druckt ein
+  Abo-Token (Pro/Max/Team/Enterprise) für `CLAUDE_CODE_OAUTH_TOKEN`, das nur Modell-Anfragen stellen kann; `--bare`
+  liest es nie. Weitere Fehler im selben Abschnitt: Widerruf über „`claude auth status` → manage tokens" existiert
+  nicht (`claude auth` kennt nur `login`, `logout`, `status`); Token-Umfang „full Claude Code access" war zu weit;
+  der Workflow-Text nannte ein „OAuth secret", der Code nutzt korrekt `ANTHROPIC_API_KEY`; eine Quiz-Falschantwort
+  (S4.3) war im Kern richtig.
+- **Selbst ausgeführt:** Vorrang mit Dummy-Werten über `claude auth status` (keine Modell-Anfrage): nur OAuth-Token
+  → `authMethod: oauth_token`; nur API-Key → `api_key`; beide → `api_key`. `loggedIn` ist auch bei Dummy-Werten
+  `true` — `auth status` zeigt die Wahl, nicht die Gültigkeit.
+- **Korrektur:** Modul 3.6 lehrt jetzt drei Wege als Tabelle (A: API-Key, mit `--bare`; B: Abo-Token, nur ohne
+  `--bare` und nur auf vertrauenswürdigem Code; C: ohne langlebiges Secret — GitHub-Action mit Workload Identity
+  Federation oder Bedrock/Vertex per OIDC), dazu Vorrang-Falle, Token-Rotation, Fehlertabelle, Don'ts. Nachgezogen:
+  Cockpit S4.4/S4.5 und Quiz S4.3, FAQ, Cheatsheet, Mentor.
+- **Bewusst nicht gelehrt:** `--safe-mode` (liest das Abo-Token, schaltet alle Anpassungen ab) und `--restricted`
+  als Absicherung für Weg B. Beide sind neu, als Fehlersuch- bzw. Eval-Harness-Werkzeug dokumentiert und nicht real
+  in CI getestet. Kandidaten für Phase 2/3 (neue Features), nach einem echten Lauf.
+- **Absicherung:** `tools/test_course_ci_auth.py` (bekannte Falschbehauptungen; kein Snippet ruft `claude --bare`
+  mit Abo-Token oder `setup-token` ohne API-Key auf; Positiv- und Negativkontrolle). Gegenprobe gegen die Fassungen
+  vor dem Fix: Modul 4 Treffer, Cheatsheet 1, Cockpit 2. Den alten FAQ-Text fängt der Wächter nicht (unvollständig,
+  nicht musterhaft falsch).
+
+### H-13 · falsch · P2 · `--metadata` existiert nicht
+- **Beleg:** Weder `claude --help` 2.1.284 noch cli-reference.md kennen das Flag.
+- **Ort:** `modules/block-3-advanced.md` Modul 3.6, Abschnitte *Self-Hosted Runner* (Option A) und *Monitoring CI
+  Costs*.
+- **Stand:** Offen. Braucht einen belegten Ersatz für die Kostenzuordnung je CI-Lauf (Kandidat: OpenTelemetry-
+  Attribute, zu prüfen). **Aufwand:** S
+
+### H-14 · falsch · P3 · `CLAUDE_MODEL` existiert nicht
+- **Beleg:** env-vars.md kennt `ANTHROPIC_MODEL`, nicht `CLAUDE_MODEL`.
+- **Stand:** Behoben in der Env-Tabelle des Cheatsheets; im Wächter verankert.
+
+### H-15 · falsch · P2 · Pseudonymisierte Env-Namen liest kein Programm
+- **Ort:** Cockpit S4.5 (`CLAUDE_CI_CREDENTIAL_PLACEHOLDER`) und Slack-MCP-Beispiel (`SLACK_CREDENTIAL_PLACEHOLDER`),
+  eingeführt mit `44e219b` (2026-07-07, „Credential-Pseudonymisierung").
+- **Beleg:** Claude Code liest `ANTHROPIC_API_KEY`, der Slack-MCP-Server `SLACK_BOT_TOKEN` (so auch Modul 2.4). Das
+  Website-Repo hatte dieselbe Ersetzung am 2026-07-07 verworfen: Lehrbeispiele mit Env-Var-**Namen** sind keine
+  Secrets, die Ersetzung macht den Inhalt fachlich falsch. Der Cockpit-Re-Export vom 2026-09-29 (dome-dynamics
+  `f4ce412`) hat die Platzhalter trotzdem auf die Website gebracht; der nächste Re-Export behebt das.
+- **Stand:** Behoben im Kurs; im Wächter verankert.
+
+### H-16 · irreführend · P3 · Unerklärtes Präfix `classification=… claude …` in acht Cockpit-Beispielen
+- **Ort:** Cockpit, u. a. S4.3 (`classification=ci claude --bare -p …`), Datenhaltung, Multi-Model, Codex-Swarm,
+  `/loop`; eingeführt mit `5ec8004` (2026-06-30, SOC-Redesign, von Codex umgesetzt).
+- **Befund:** Das Präfix setzt nur eine Shell-Variable für den einen Aufruf, die Claude Code nicht auswertet. Weder
+  Module noch Cheatsheet noch Cockpit erklären es. Lernende halten es leicht für ein Feature.
+- **Vorschlag:** Entfernen oder einmal als Team-Konvention (Daten-Klassifizierungs-Label) erklären. Entscheidung
+  offen. **Aufwand:** S
+
+## CI-Auth-Stand (2026-09-29)
+
+Behoben: H-10, H-14, H-15. Offen: H-13 (`--metadata`), H-16 (`classification=`-Präfix), Modell-Lineup (Phase 2),
+neue Features (W-08 ff., dazu `--safe-mode`/`--restricted`).
