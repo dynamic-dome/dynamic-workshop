@@ -22,8 +22,9 @@ import currency_extract  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 GENERATION = re.compile(
-    r"\b(?:opus|sonnet|haiku|fable|mythos)[ -]?\d+(?:[.-]\d+)?\b"
-    r"|\bclaude-(?:opus|sonnet|haiku|fable|mythos)-\d",
+    r"\b(?:opus|sonnet|haiku|fable|mythos)[ -]?\(?\d+(?:[.-]\d+)?\b"
+    r"|\bclaude-(?:opus|sonnet|haiku|fable|mythos)-\d"
+    r"|\bclaude-\d(?:-\d)?-(?:opus|sonnet|haiku)",
     re.IGNORECASE,
 )
 PIN = re.compile(r"version-pinned:\s*(.*?)\s*(?:-->|\*/|$)")

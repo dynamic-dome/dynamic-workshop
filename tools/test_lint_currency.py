@@ -62,7 +62,7 @@ CANON_OK = "# Kanon\n\nGeprüft: 2026-09-29 · CLI 2.1.284\n"
 
 @pytest.mark.parametrize("line", [
     "Nutze Opus 4.8 für Architektur.", "sonnet-4.6", "--model claude-haiku-4-5-20251001",
-    "Claude Fable 5.1 ist neu.", "SONNET 5", "claude-opus-5-5",
+    "Claude Fable 5.1 ist neu.", "SONNET 5", "claude-opus-5-5", "the current Opus (4.8) only",
 ])
 def test_generation_mentions_are_found(line):
     assert lint.GENERATION.search(line) and not lint.is_pinned(line)
@@ -70,9 +70,22 @@ def test_generation_mentions_are_found(line):
 
 @pytest.mark.parametrize("line", [
     "Nutze das Opus-Tier.", "--model opus", "model: sonnet[1m]", "seit 2.1.145 verfügbar", "Opus-Modelle und Haiku",
+    "Opus (2x cheaper)", "Sonnet (1M context)",
 ])
 def test_aliases_roles_and_cli_versions_are_allowed(line):
     assert not lint.GENERATION.search(line)
+
+
+LEGACY_FORBIDDEN_SAMPLES = [
+    "claude-sonnet-4-6", "Sonnet 4.6", "sonnet-4.6", "SONNET 4.6", "claude-opus-4-7",
+    "claude-3-5-sonnet", "claude-3-7-sonnet-latest", "claude-3-5-haiku",
+]
+
+
+def test_generation_rule_covers_every_pattern_of_the_retired_forbidden_list():
+    """Guard replacement: every pattern of the old FORBIDDEN list (until 274e244) must stay blocked."""
+    for sample in LEGACY_FORBIDDEN_SAMPLES:
+        assert lint.GENERATION.search(sample), sample
 
 
 def test_pin_needs_a_reason_on_the_same_line():
