@@ -260,3 +260,39 @@ dazu `claude --help` 2.1.284.
 
 Behoben: H-10, H-14, H-15. Offen: H-13 (`--metadata`), H-16 (`classification=`-Präfix), Modell-Lineup (Phase 2),
 neue Features (W-08 ff., dazu `--safe-mode`/`--restricted`).
+
+## Unabhängige Prüfung des CI-Auth-Fixes (Codex-Verifier, 2026-09-29)
+
+Codex hat den Diff read-only gegen dieselben Doku-Dateien geprüft; Urteil **REJECT**. Jeder Befund wurde danach an der
+Quelle nachgeprüft (Verdikt-Stufe: unabhängig gefunden, selbst bestätigt).
+
+### H-17 · falsch · P1 · Der Kurs bestreitet das dokumentierte Flag `--max-turns` (löst P-06 auf)
+- **Beleg:** cli-reference.md: „`--max-turns` | Limit the number of agentic turns (print mode only). Exits with an
+  error when the limit is reached." `claude --help` 2.1.284 listet das Flag nicht — daher der Irrtum aus Welle A/B
+  (Juni), der das Flag nach der Hilfe entfernte. Selbst ausgeführt: `claude -p --max-turnz 1` → `unknown option`;
+  `claude -p --model haiku --max-turns 1` → läuft. Das Abbrechen beim Erreichen des Limits ist Doku-Aussage, nicht
+  separat provoziert.
+- **Ort (vor dem Fix):** Modul 1 (Cost-Basics), Modul 3.3 (CI-Tipp), Modul 3.6 (Cost Caps), Übung 3.6, Glossar,
+  Session-Plan, Troubleshooting, FAQ, Cockpit S3.13/S4.4 — acht Dateien.
+- **Stand:** Behoben. `--max-turns` wird als Partner von `--max-budget-usd` gelehrt (beide nur `-p`), Cheatsheet-Zeile
+  ergänzt, Wächter-Regel mit Gegenprobe (alle acht Vorher-Fassungen werden gefunden). P-06 ist damit entschieden:
+  Die eigene Praxis hatte recht, der Kurs nicht.
+- **Lektion:** `--help` ist nicht die Referenz. Dieselbe Fehlerklasse wie H-01: Text gegen Text geprüft, nicht gegen
+  die vollständige Quelle.
+
+### Weitere Codex-Befunde
+- **P2 Federation mit `--bare` — bestätigt, behoben.** authentication.md: „Claude Code doesn't read profiles or
+  federation variables in bare mode." Die Regel „`--bare` = Weg A oder C" war falsch; jetzt: ein direkter
+  `claude --bare`-Aufruf braucht API-Key, `apiKeyHelper` oder Bedrock/Vertex-Credentials; Federation erledigt die
+  GitHub-Action selbst. Tabelle, Regel 1, `--bare`-Abschnitt und Cockpit S4.5 angepasst.
+- **P2 S4.5 verlangte pauschal ein CI-Secret — bestätigt, behoben** („passende CI-Zugangsdaten").
+- **P2 Wächter-Lücken — teils übernommen.** Umbrochene Aufrufe (`claude \` + `--bare`) werden jetzt vor der Prüfung
+  zusammengezogen (Negativkontrolle ergänzt). Bleibende, dokumentierte Grenze: Ein API-Key irgendwo im selben Snippet
+  gilt als vorhanden. Den Vorschlag, den alten FAQ-Text als Negativkontrolle aufzunehmen, nicht übernommen: Der alte
+  Text lehrte Weg B ohne `--bare` — unvollständig, aber nicht falsch.
+- **P3 mögliche Falsch-Positive** (Warnung, die `CLAUDE_MODEL` beim Namen nennt, würde rot) — akzeptiert als Grenze;
+  heute kein Treffer.
+- **Nicht von Codex bewertet** (weder bestätigt noch bestritten), vorher selbst an der Doku belegt: 1-Jahres-Token,
+  Vorrang API-Key vor OAuth-Token (zusätzlich ausgeführt), `--bare` als künftiger `-p`-Standard (headless.md),
+  `id-token: write` (github-actions.md), `claude auth` nur `login`/`logout`/`status` (`--help`), `ANTHROPIC_MODEL`
+  (env-vars.md).
