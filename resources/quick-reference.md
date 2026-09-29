@@ -16,9 +16,9 @@
 ## Models & Cost
 | Command | Was |
 |---|---|
-| `/model fable\|opus\|sonnet\|haiku` | Model wechseln (Default: Opus 4.8; Fable 5 = Premium-Tier) |
-| `/fast` | Fast Mode an/aus (Opus 4.8/4.7, ~2.5x Output-Speed, Premium-Preis) |
-| `/effort low\|medium\|high\|xhigh\|max` | Effort-Level (Default `high` auf Opus 4.8) |
+| `/model fable\|opus\|sonnet\|haiku` | Model wechseln (Default: Opus-Tier; Fable = Premium-Tier; Generationen im [Kanon](_canonical.md)) |
+| `/fast` | Fast Mode an/aus (nur Opus-Tier, bis ~2.5x schneller, hoeherer Preis pro Token) |
+| `/effort low\|medium\|high\|xhigh\|max` | Effort-Level (Start-Effort je Tier verschieden, siehe [Kanon](_canonical.md)) |
 | `/cost` | Aktuelle Session |
 | `/usage` | Tagessumme |
 | `/insights` | Analytics |
@@ -95,7 +95,7 @@ Scopes: `local` (was project) · `project` (shared via .mcp.json) · `user` (was
 name: my-agent
 description: "Use when ..."
 tools: Read Grep Bash      # NOT allowed_tools
-model: haiku                # or claude-haiku-4-5-20251001
+model: haiku                # alias; full IDs: see resources/_canonical.md
 permissionMode: acceptEdits
 maxTurns: 5
 skills: [test-driven]

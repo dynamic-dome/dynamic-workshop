@@ -204,8 +204,8 @@ Never modify files.  Never execute code.  Explore only.
 
 - **`description`** — This is how the orchestrator decides *when* to use this agent.
   Write it with trigger phrases and examples.  This is the routing logic.
-- **`model`** — Use shorthand `haiku` / `sonnet` / `opus`, or pin to a specific ID like
-  `claude-haiku-4-5-20251001`, `claude-sonnet-5`, `claude-opus-4-8`. Haiku for quick reads,
+- **`model`** — Use shorthand `haiku` / `sonnet` / `opus`, or pin to a specific full model ID (the current IDs are
+  listed in the [canon](../_canonical.md)). Haiku for quick reads,
   Sonnet for analysis, Opus for architecture decisions.
 - **`tools`** — **Security through least privilege.**  An explorer has no Write.
   A reviewer has no Bash.  Lock down to exactly what is needed. (Field was renamed from
@@ -220,7 +220,7 @@ Never modify files.  Never execute code.  Explore only.
 | `description` | string | Trigger description — routing logic. Include examples. |
 | `tools` | list | Allowlist of tools the agent may call |
 | `disallowedTools` | list | Denylist — alternative to `tools`. Useful when "everything except X" is shorter than the allowlist. |
-| `model` | string | `haiku` / `sonnet` / `opus` shorthand or full ID (`claude-opus-4-8`) |
+| `model` | string | `haiku` / `sonnet` / `opus` shorthand or full model ID (see the [canon](../_canonical.md)) |
 | `permissionMode` | string | `default` / `acceptEdits` / `plan` / `auto` / `dontAsk` / `bypassPermissions` |
 | `maxTurns` | int | Hard turn limit for this subagent (cost / runaway guard) |
 | `skills` | list | Preload named skills into the subagent's startup context |
@@ -704,9 +704,9 @@ Three official slash-commands cover the common review surface — before reachin
 
 `auto` is the ML-classifier-driven mode where Claude itself decides which actions to auto-approve based on per-action risk:
 
-- **Max plan (consumer)** — available **with the current Opus (4.8) only** (other models locked).
-- **Team / Enterprise** — available with Sonnet 5 and Opus 4.8.
-- **Transport** — Anthropic API only (not yet on Bedrock or Vertex).
+- **Plans** — available on all plans (on Team / Enterprise admins can switch it off with `permissions.disableAutoMode`).
+- **Model** — requires a supported model: the Opus, Sonnet or Fable tier, not Haiku. On the Anthropic API only recent generations qualify, on Bedrock, Google Cloud and Foundry only newer ones still — the exact cut-offs are in the permission-modes docs (see the [canon](../_canonical.md) for what your aliases resolve to).
+- **Provider** — Anthropic API, Claude Platform on AWS, Amazon Bedrock, Google Cloud and Microsoft Foundry.
 - **Version** — requires a recent Claude Code version (check `claude --version`).
 
 Admins on Team/Enterprise can tighten or loosen `auto` via managed settings — see `autoMode.hard_deny` below for the unconditional block-list.

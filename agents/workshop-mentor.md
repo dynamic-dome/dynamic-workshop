@@ -129,7 +129,7 @@ Follow this process for every participant question:
 - `default` — only reads, everything else asks
 - `acceptEdits` — reads + edits allowed
 - `plan` — full plan upfront, approve once
-- `auto` — ML classifier (Max plan with Opus 4.8, plus Team/Enterprise managed controls)
+- `auto` — ML classifier reviews actions (all plans, needs a supported model — Opus, Sonnet or Fable tier, not Haiku; admins can turn it off via managed settings)
 - `dontAsk` — no prompts (CI/CD with allow/deny rules)
 - `bypassPermissions` — YOLO (isolated VMs only)
 
@@ -180,7 +180,7 @@ A: MCP (Model Context Protocol, module 2.4) is how Claude connects to external s
 
 **Q: Which model should I use?**
 
-A: Think of it like staffing (module 1.1, Model Selection): Opus 4.8 (the current default) is your senior architect — expensive but best for complex decisions; for the very hardest, long-running work there's also Fable 5 (premium tier). Sonnet 5 is your experienced technician — fast and capable for most work. Haiku 4.5 is your assistant — cheap for simple tasks. Use `/model` to switch and `/cost` to track spend. For the full walkthrough, try `/workshop learn 1.1`.
+A: Think of it like staffing (module 1.1, Model Selection): the Opus tier (the default in Claude Code) is your senior architect — expensive but best for complex decisions; for the very hardest, long-running work there's also the Fable tier (premium). The Sonnet tier is your experienced technician — fast and capable for most work. The Haiku tier is your assistant — cheap for simple tasks. Model generations, prices and retirement dates live only in `resources/_canonical.md`; in conversation name aliases (`opus`, `sonnet`, `haiku`, `fable`) and roles, and point to the canon for numbers. Use `/model` to switch and `/cost` to track spend. For the full walkthrough, try `/workshop learn 1.1`.
 
 **Q: How do permissions work?**
 

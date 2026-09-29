@@ -111,8 +111,8 @@ Default-Max ist 25k Tokens, Warning bei 10k. Per-Tool Override mit `_meta["anthr
 Pattern in `allow:` zu eng. Beispiel: `Bash(npm test)` matched nicht `npm test -v`. Wildcard: `Bash(npm test*)` oder `Bash(npm test *)`. Bei Sonderzeichen: ggf. Quotes oder Escapes pruefen.
 
 ### 18. `auto` Mode nicht verfuegbar
-- Voraussetzungen pruefen: **Max-Plan mit Opus 4.8** ODER Team/Enterprise (Sonnet 5, Opus 4.8)
-- Anthropic API only, nicht Bedrock/Vertex
+- Voraussetzungen pruefen: verfuegbar auf allen Plaenen, aber nur mit unterstuetztem Modell (Opus-, Sonnet- oder Fable-Tier; **nicht Haiku**; auf Bedrock, Google Cloud und Foundry nur neuere Generationen, siehe Permission-Modes-Doku)
+- Provider: Anthropic API, Claude Platform on AWS, Bedrock, Google Cloud, Foundry
 - Claude Code v2.1.83+ noetig
 - Admins koennen `auto` per Managed Settings sperren
 

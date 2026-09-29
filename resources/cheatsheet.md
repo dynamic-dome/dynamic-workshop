@@ -161,7 +161,7 @@ claude auto-mode defaults         # Print auto-mode classifier rules
 | Command | What it does |
 |---------|-------------|
 | `/model <name>` | Switch model (opus, sonnet, haiku, fable) |
-| `/fast` | Toggle Fast Mode (Opus 4.8/4.7, ~2.5× output speed) |
+| `/fast` | Toggle Fast Mode (Opus tier only, up to ~2.5× faster, higher price per token) |
 | `/effort <level>` | Set effort level (low/high/xhigh/max) — controls thinking depth |
 | `/context` | Visualize context window usage |
 | `/cost` | Show token usage and cost for session |
@@ -303,27 +303,29 @@ Tool names are the strings used for permission rules, hook matchers, and subagen
 
 > Quick-ref snapshot. **Session 1 (LE S1.19)** covers the basics: `/cost`, `/usage`, `--max-budget-usd`. The full cost strategy — effort multipliers, Plan/Implement/Review pipeline, prompt caching, cost-reduction tactics — is taught in **Session 4 (LE S4.4)** alongside CI budget caps (the text still lives in Module 1.5 of `block-1-foundations.md` for reference).
 
-| Model | Context Window | Best for | API Price ($/MTok) |
-|-------|---------------|----------|-------------------|
-| **Claude Fable 5** | 1M tokens | Most capable model (GA 2026-06-09). Hardest reasoning, long-horizon agentic work. Premium tier. | In: 10 / Out: 50 |
-| **Claude Opus 4.8** | 1M tokens | Current default in Claude Code. Complex tasks, architecture, deep reasoning. Effort defaults to `high`. | In: ~5 / Out: ~25 |
-| **Claude Sonnet 5** | 1M tokens | Fast coding, everyday tasks, cost-effective | In: 3 / Out: 15 |
-| **Claude Haiku 4.5** | 200K tokens | Simple tasks, brainstorming, cheapest option | In: 1 / Out: 5 |
+| Tier (alias) | Best for |
+|--------------|----------|
+| **Fable** (`fable`) | Most capable tier, premium price. Hardest reasoning, long-horizon agentic work. |
+| **Opus** (`opus`) | Default in Claude Code. Complex tasks, architecture, deep reasoning. |
+| **Sonnet** (`sonnet`) | Fast coding, everyday tasks, cost-effective. |
+| **Haiku** (`haiku`) | Simple tasks, brainstorming, cheapest option; smaller context window. |
 
-- Claude Code defaults to **Opus 4.8** with 1M context (Fable 5 premium tier; Sonnet 5 + Haiku 4.5 also current)
+Model generations, context windows, prices and retirement dates live only in the [canon](_canonical.md) — check them there and with `/model`, don't memorize them from this sheet.
+
+- Claude Code defaults to the **Opus tier** (Fable is a premium tier, Sonnet and Haiku are the cheaper tiers)
 - Switch models: `/model` in session (e.g. `/model fable`, `/model opus`) or `claude --model sonnet` at startup
-- Fast Mode: `/fast` runs Opus 4.8/4.7 at up to ~2.5x output speed (premium pricing) — toggle on/off
+- Fast Mode: `/fast` runs the Opus tier at up to ~2.5x speed (higher price per token; not available on Sonnet or Haiku) — toggle on/off
 - Use `/compact` when context gets large — compresses older messages
 - Use `/context` to visualize how much context you've used
 - Use `/cost` to track token spend during a session
-- Effort levels: `/effort low|medium|high|xhigh|max` — default `high` on Opus 4.8; `xhigh`/`max` on Opus 4.8 / Sonnet 5 / Fable 5
+- Effort levels: `/effort low|medium|high|xhigh|max` — the start level differs per tier (see [canon](_canonical.md)); `xhigh`/`max` on the Fable, Opus and Sonnet tiers (not Haiku)
 
 ### Cost Guidance
 
 | Metric | Typical Value |
 |--------|--------------|
-| Average cost per dev/day | ~$6 (Sonnet 5) |
-| Monthly per dev | $100-200 (varies heavily) |
+| Average cost per dev/day | ~$13 per active day (enterprise average; 90% stay below $30) |
+| Monthly per dev | $150-250 (varies heavily) |
 | Token reduction strategies | Skills instead of CLAUDE.md bloat, subagents, `/compact`, Sonnet for routine work |
 
 ---

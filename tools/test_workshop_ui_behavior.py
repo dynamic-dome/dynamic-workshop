@@ -1,6 +1,8 @@
 from pathlib import Path
 import importlib.util
 import re
+import shutil
+import subprocess
 import tempfile
 
 
@@ -157,6 +159,19 @@ def test_currency_lint_excludes_every_dated_review_archive_but_not_live_content(
     assert not lint.is_excluded("resources/review-notes.md")
 
 
+def test_cockpit_inline_script_still_parses(tmp_path):
+    """A stray quote or comment in a JS string leaves learners with a blank cockpit."""
+    node = shutil.which("node")
+    assert node, "node is required to syntax-check the cockpit script"
+    source = UI_HTML.read_text(encoding="utf-8")
+    scripts = re.findall(r"<script[^>]*>(.*?)</script>", source, re.S)
+    assert len(scripts) == 1
+    path = tmp_path / "cockpit.js"
+    path.write_text(scripts[0], encoding="utf-8")
+    proc = subprocess.run([node, "--check", str(path)], capture_output=True, text=True, encoding="utf-8")
+    assert proc.returncode == 0, proc.stderr
+
+
 if __name__ == "__main__":
     test_quiz_shuffle_uses_real_fisher_yates_permutation()
     test_exercise_scoring_is_feedback_only()
@@ -169,4 +184,6 @@ if __name__ == "__main__":
     test_currency_sweep_matches_lint_for_sonnet_46_variants()
     with tempfile.TemporaryDirectory() as tmp:
         test_currency_lint_checks_cp1252_files_instead_of_skipping(Path(tmp))
+    with tempfile.TemporaryDirectory() as tmp:
+        test_cockpit_inline_script_still_parses(Path(tmp))
     print("OK - workshop UI behavior checks passed.")
