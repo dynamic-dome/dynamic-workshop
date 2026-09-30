@@ -18,6 +18,12 @@ aliases: []
 
 # S2.9 · Hook-Typen und Hooks in Komponenten
 
+<!-- meta:start -->
+> **Regal:** [Hooks](README.md#hooks) · **Stufe:** Vertiefung · **~15 Min** · **Voraussetzungen:** [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md)
+>
+> ← [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md) · [Bibliothek](README.md) · [S2.10 Hook-Ausgaben und das Secure Diff Gate](s2-10-hook-ausgaben.md) →
+<!-- meta:end -->
+
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen erklären, wann ein `prompt`-Hook statt eines `command`-Hooks sinnvoll ist?

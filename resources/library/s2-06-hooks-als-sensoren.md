@@ -17,6 +17,12 @@ aliases: ["2.2"]
 
 # S2.6 · Hooks als Sensoren: die drei Eckpfeiler
 
+<!-- meta:start -->
+> **Regal:** [Hooks](README.md#hooks) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** [S1.5 Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md)
+>
+> ← [S2.5 Lebendige Prompts: Argumente und dynamischer Inhalt](s2-05-lebendige-prompts.md) · [Bibliothek](README.md) · [S2.7 Die wichtigsten Hook-Ereignisse](s2-07-hook-ereignisse.md) →
+<!-- meta:end -->
+
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen sagen, welcher der drei Eckpfeiler-Hooks eine Aktion verhindern kann und welcher nur reagiert?

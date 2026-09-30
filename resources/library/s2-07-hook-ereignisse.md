@@ -16,6 +16,12 @@ aliases: []
 
 # S2.7 · Die wichtigsten Hook-Ereignisse
 
+<!-- meta:start -->
+> **Regal:** [Hooks](README.md#hooks) · **Stufe:** Kern · **~12 Min** · **Voraussetzungen:** [S2.6 Hooks als Sensoren: die drei Eckpfeiler](s2-06-hooks-als-sensoren.md)
+>
+> ← [S2.6 Hooks als Sensoren: die drei Eckpfeiler](s2-06-hooks-als-sensoren.md) · [Bibliothek](README.md) · [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md) →
+<!-- meta:end -->
+
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen sagen, welches Ereignis vor dem Komprimieren des Kontexts feuert und wofür du es nutzt?

@@ -17,6 +17,12 @@ aliases: []
 
 # S2.8 · Einen Hook einrichten, der wirklich blockt
 
+<!-- meta:start -->
+> **Regal:** [Hooks](README.md#hooks) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** [S2.7 Die wichtigsten Hook-Ereignisse](s2-07-hook-ereignisse.md) · 🛡 **Sicherheitsboden**
+>
+> ← [S2.7 Die wichtigsten Hook-Ereignisse](s2-07-hook-ereignisse.md) · [Bibliothek](README.md) · [S2.9 Hook-Typen und Hooks in Komponenten](s2-09-hook-typen.md) →
+<!-- meta:end -->
+
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen einen Hook skizzieren, der nur `git push` in Bash blockt, und sagen, welcher Exit-Code blockt?

@@ -16,6 +16,12 @@ aliases: []
 
 # S2.10 · Hook-Ausgaben und das Secure Diff Gate
 
+<!-- meta:start -->
+> **Regal:** [Hooks](README.md#hooks) · **Stufe:** Vertiefung · **~15 Min** · **Voraussetzungen:** [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md)
+>
+> ← [S2.9 Hook-Typen und Hooks in Komponenten](s2-09-hook-typen.md) · [Bibliothek](README.md) · [S2.11 Plugins: ein Bündel schnüren](s2-11-plugins-buendeln.md) →
+<!-- meta:end -->
+
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen erklären, wie ein PostToolUse-Hook verhindert, dass ein API-Key aus einer Befehlsausgabe in Claudes Kontext landet?
