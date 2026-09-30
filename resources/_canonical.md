@@ -63,6 +63,18 @@ Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, So
   mit `medium`. Im Kurs gilt das Claude-Code-Verhalten.
 - `max` gilt nur für die laufende Session, außer über `CLAUDE_CODE_EFFORT_LEVEL`.
 
+## Rechte-Startmodus (Quelle: permission-modes.md, „Which mode a session starts in“)
+
+| Wie du Claude Code startest | Eingebauter Startmodus |
+|---|---|
+| Eine Settings-Datei setzt `disableAutoMode` auf `"disable"` | `default` (Manual) |
+| `claude -p` oder Agent SDK | `default` (Manual) |
+| Terminal oder VS Code-Erweiterung | `auto` ab CLI 2.1.283; davor `auto` nur auf Pro, Max, Team, sonst `default` |
+
+- Ist `auto` für die Session nicht verfügbar (Modell, Einstellung, serverseitig aus), startet sie in Manual.
+- Die erste Session nach Installation oder Upgrade kann abweichen; die nächste folgt der Tabelle.
+- Kapitel S1.6, die Karte „Rechte“ und der Mentor verweisen hierher, statt den Startmodus selbst zu nennen.
+
 ## Struktur
 
 - **4 Sessions / 65 Lerneinheiten (LE)** – Welle-F-Restrukturierung (`session-plan.md` ist die Ablauf-SSoT).
