@@ -1,7 +1,7 @@
 # Praxisbibliothek statt Kursordner — Design
 
 > Stand: 2026-09-30 · Branch `praxisbibliothek` (Worktree `dynamic_workshop-bibliothek`, ab `ba222d2`)
-> Auftrag und Entscheidungen: Dominic, 2026-09-30 (siehe „Entscheidungen"). Status: Entwurf v2 nach Codex-Runde 1 (§15), Runde 2 ausstehend.
+> Auftrag und Entscheidungen: Dominic, 2026-09-30 (siehe „Entscheidungen"). Status: v3 nach Codex-Runden 1 und 2 (§15).
 
 ## 1. Auftrag in einem Absatz
 
@@ -67,7 +67,7 @@ resources/
   reference/                   druckbare Karten (je ≤ 1 Seite, Doku-Link + Prüfstempel): karte-start-und-flags,
                                karte-rechte, karte-hooks, karte-kontext, karte-erweitern (Skills/Plugins/MCP),
                                karte-agenten-worktrees, karte-kosten, karte-fehlersuche, karte-alte-namen;
-                               glossar.md, analogien.md (Master für „Bild im Kopf"), faq.md (nur Fragen ohne
+                               glossar.md, analogien.md (GENERIERT aus „Bild im Kopf" der Kapitel), faq.md (nur Fragen ohne
                                Kapitelheimat), adoptionsplan-vorlage.md, kosten-nachbau.md; README.md (Index)
   moderation/                  README.md, handbuch.md (trainer-notes, live-3-person, recap-bridges, transfer,
                                Ablauf/Zeiten aus session-plan), vorbereitung.md (Plugins/Assets aus prerequisites,
@@ -93,11 +93,17 @@ die Review-/Audit-Dateien wandern unverändert nach `docs/reviews/`. Genaue Ziel
 
 ## 4. Kapitel-Format
 
-### 4.1 Dateiname und ID
+### 4.1 Dateiname, ID, Reihenfolge
 
-`resources/library/s<session>-<nn>-<slug>.md` (z. B. `s2-08-hook-konfigurieren.md`), neue Kapitel `x-<nn>-<slug>.md`.
-Die ID steht im Frontmatter (`S2.8`, `X.1`) und ist der stabile Schlüssel. Der Dateiname sortiert in Lehrreihenfolge.
-Alte Modulnummern bleiben als `aliases` erreichbar (`/workshop learn 2.2` → Einstieg Hooks-Regal).
+- IDs: `S<s>.<p>` mit s ∈ 0–4 (S0.1 = neues Setup-Kapitel „Werkstatt einrichten", Session 0 = Vorbereitung vor
+  Session 1) und `X.<n>` für Kapitel ohne Live-Session (X.1, X.2).
+- Dateiname: `resources/library/s<s>-<pp>-<slug>.md` (pp zweistellig, z. B. `s2-08-hook-konfigurieren.md`),
+  `x-<nn>-<slug>.md`. Der Validator prüft, dass Dateiname und ID zusammenpassen.
+- Reihenfolge wird **abgeleitet**, nicht gepflegt: `order(S<s>.<p>) = s × 1000 + p × 10` (S0.1 = 10, S2.8 = 2080,
+  S4.10 = 4100); `order(X.n) = order(after) + 5` mit Pflichtfeld `after`. Session = s (X-Kapitel: keine Session).
+- Pflicht-IDs (Validator, Vollständigkeit): S0.1, S1.1–S1.20, S2.1–S2.20, S3.1–S3.15, S4.1–S4.10, X.1, X.2.
+- Alte Modulnummern bleiben als `aliases` erreichbar (`/workshop learn 2.2` → Einstieg Hooks-Regal), eindeutig über
+  alle Kapitel.
 
 ### 4.2 Frontmatter (YAML, schmal)
 
@@ -109,8 +115,7 @@ title: Einen Hook konfigurieren
 shelf: hooks
 level: core            # core | deep-dive | bonus
 minutes: 15
-order: 2.08            # Lehrreihenfolge (Session.Position); X-Kapitel z. B. 2.135 (nach S2.13)
-session: 2             # Live-Workshop-Session; null = nicht im Live-Pfad
+after: null            # nur X-Kapitel: ID, nach der sie einsortiert werden (z. B. S2.13)
 requires: [S2.6, S2.7] # nur Kapitel mit kleinerem order (Validator), keine Zyklen
 safety_floor: false    # true = nie unter „überfliegen" (Regel §6.3)
 transferable: true     # Agentic-Coding-Prinzip, nicht nur Claude-Code-Bedienung
@@ -118,6 +123,7 @@ outcome: "Ich kann einen PreToolUse-Hook eintragen, der mit exit 2 wirklich bloc
 sources:
   - https://code.claude.com/docs/en/hooks
 aliases: ["2.2"]       # alte Modulnummern, eindeutig über alle Kapitel
+# nur type: practice →  offers: [S2.2, S2.8, S2.11]  (Kapitel, deren Übungen die Station anbietet; requires: [])
 ---
 ```
 
@@ -229,67 +235,79 @@ Berechnet aus der Quellenkarte, Anhang A.
   Eine falsche Antwort deckelt den Bereich auf „gehört davon", mehr nicht.
 - Das Ergebnis heißt „Empfehlung", zeigt je Kapitel eine **Begründung** und lässt sich pro Kapitel übersteuern.
 - **Sicherheitsboden:** Kapitel mit `safety_floor: true` (Rechte-Modi, fail-open bei Hooks, Secrets, fremder Code)
-  fallen nie unter „überfliegen".
+  fallen nie unter „überfliegen" — außer die Person übersteuert selbst; dann zeigt das Ergebnis eine Warnung.
 - Freitext („Warum") bleibt lokal (localStorage bzw. `MISSION.md`), fließt nicht in Regeln.
 
 ### 6.2 Fragen (`_placement.yaml`, endgültige Liste in Anhang E)
 
 1. **Ziel** (1–2 wählen, 7 Optionen): `alltag` · `team` · `automation` · `agents` · `security` · `einschaetzen` ·
-   `moderieren`. Keine Auswahl = `alltag`.
-2. **Warum** (Freitext, optional) und **Zeit je Etappe**: `kurz` (120 Min) · `abende` (360 Min) · `komplett`
-   (unbegrenzt) · `nach-und-nach` (90 Min je Etappe).
+   `moderieren`. Keine Auswahl = `alltag`; mehr als zwei lässt die Oberfläche nicht zu (Engine nimmt die ersten zwei).
+2. **Warum** (Freitext, optional) und **Zeit** — gemeint ist die Länge einer Lernsitzung, nicht der Gesamtumfang;
+   für wenig Gesamtzeit gibt es den Schnellstart:
+   `schnellstart` („nur ein paar Stunden insgesamt": Mindestpfad, eine Etappe) · `stunde` (Etappen à 60 Min) ·
+   `abende` (Etappen à 150 Min, **Voreinstellung**, auch wenn die Frage übersprungen wird) · `gruendlich`
+   (Etappen à 180 Min, Kür-Kapitel im Schwerpunkt werden relevant).
 3. **Stand je Bereich** (genau 14 Bereiche, Anhang E.1; Bereiche sind **keine** Regale, sie zeigen direkt auf
-   Kapitel): `neu` (0) · `gehört davon` (1) · `schon gemacht` (2) · `weiß nicht` (= 0). Unbeantwortet = 0.
+   Kapitel; **jedes Kapitel gehört höchstens einem Bereich**, Validator-Regel): `neu` (0) · `gehört davon` (1) ·
+   `schon gemacht` (2) · `weiß nicht` (= 0). Unbeantwortet = 0.
 4. **Mini-Szenarien** (optional, 6, je genau einem Bereich zugeordnet): falsch beantwortet → Bereich höchstens 1;
    nicht beantwortet → keine Wirkung. Mehrere falsche Szenarien im selben Bereich wirken wie eines.
 
-### 6.3 Regeln (deterministisch, als reine Funktion `place(catalog, rules, answers)`)
+### 6.3 Regeln (deterministisch, reine Funktion `place(catalog, answers)`)
 
 Status je Kapitel: `work` (durcharbeiten) · `skim` (überfliegen: Auf einen Blick + Check) · `skip` (Schnellcheck
-reicht) · `later` (nicht empfohlen; Begründung). Zusätzlich je empfohlenem Kapitel eine **Etappe** (1, 2, …).
+reicht) · `later` (nicht empfohlen; mit Begründung). Jedes `work`/`skim`-Kapitel bekommt eine **Etappe** (1, 2, …).
+Notation: r(c) = Stand des Bereichs von Kapitel c nach Szenario-Deckel (Kapitel ohne Bereich: kein r).
+„Nur-Einschätzen" heißt: `goals == [einschaetzen]`.
 
-**Schritt A — Relevanz.** Relevant sind: alle `core`-Kapitel der Grundregale (`start`, `permissions`, `context`,
-`prompting`, `git`, `cost`) und alle `core`-Kapitel der Schwerpunkt-Regale der gewählten Ziele (Vereinigung bei zwei
-Zielen). `deep-dive`/`bonus` sind nur in Schwerpunkt-Regalen relevant, `bonus` zusätzlich nur bei Zeit `komplett`
-oder `nach-und-nach`. Ziel `moderieren` macht alle `core`- und `practice`-Kapitel relevant. Praxis-Stationen sind
-relevant, wenn ein Lesson-Kapitel ihrer Session `work` ist. `capstone` ist relevant bei Ziel `agents` oder
-`moderieren`; X-Kapitel bei jedem Ziel außer `einschaetzen` als `skim`.
+**Schritt A — Relevanzmenge R.**
+- `schnellstart`: R = Mindestpfad (`_placement.yaml`, Validator erzwingt, dass er alle eigenen Voraussetzungen
+  enthält). Sonst nichts.
+- sonst, Ziel `moderieren` gewählt: R = alle Kapitel.
+- sonst: R = `core`-Kapitel der Grundregale (`start`, `permissions`, `context`, `prompting`, `git`, `cost`)
+  ∪ `core`- und `deep-dive`-Kapitel der Schwerpunkt-Regale aller gewählten Ziele ∪ bei `gruendlich` deren `bonus`-Kapitel
+  ∪ jede Praxis-Station, deren `offers` ein Kapitel aus R mit r < 2 enthält (die Station zeigt dann nur diese Übungen)
+  ∪ `capstone`, wenn ein Ziel `agents` oder `einschaetzen` ist
+  ∪ X-Kapitel, wenn ein Ziel nicht `einschaetzen` ist.
+- Kapitel außerhalb R: `later`, Grund `after-quickstart` (bei `schnellstart`) bzw. `not-goal`.
 
-**Schritt B — Stand.** Für relevante Kapitel mit Bereich (Wert r nach Szenario-Deckel):
-r = 0 → `work`; r = 1 → `skim` (bei `deep-dive` im Schwerpunkt `work`); r = 2 → `skip`. Kapitel ohne Bereich
-(Setup, Praxis, Capstone, Community) → `work`, außer Setup bei `basics` = 2 → `skip`. Ziel `einschaetzen`: `work` →
-`skim` außer Sicherheitsboden. Nicht relevante Kapitel → `later` (Grund `not-goal`).
+**Schritt B — Status in R.**
+- Lesson/Setup mit Bereich: r = 0 → `work`; r = 1 → `skim` (`deep-dive` → `work`); r = 2 → `skip`.
+- Ohne Bereich: Praxis-Station → `work`; Capstone → `work` (bei Nur-Einschätzen `skim`); Community → `skim`.
+- Nur-Einschätzen: `work` → `skim` für alle Kapitel ohne Sicherheitsboden.
 
-**Schritt C — Sicherheitsboden.** Ein Kapitel mit `safety_floor: true`, das relevant ist **oder** dessen Bereich
-r ≥ 1 hat (wer MCP nutzt, liest MCP-Sicherheit auch ohne MCP-Ziel), wird mindestens `skim`, bei r < 2 `work`.
+**Schritt C — Sicherheitsboden.** Kapitel mit `safety_floor: true` (Liste unten), die in R liegen **oder** deren
+Bereich r = 2 hat (wer ein Feature schon nutzt, liest dessen Sicherheitskapitel auch ohne passendes Ziel): Status
+mindestens `skim`, bei r < 2 `work`; ein so neu hinzugekommenes Kapitel bekommt Grund `safety-floor`.
 Liste (bewusst knapp): S1.5, S1.6 (Rechte-Modi), S2.8 (nur `exit 2` blockt, fail-open), S2.13 (Plugin-Lieferkette),
 S2.17 (MCP-Sicherheit), S3.8, S3.9 (Rechte für Autonomie, geschützte Pfade, Sandbox), S3.13 (autonome Loops mit
 Budget + Worktree), S4.4 (`-p` ohne `--bare` führt fremde Hooks aus; CI-Zugangsdaten).
 
-**Schritt D — Voraussetzungen bis zum Fixpunkt.** Für jedes Kapitel mit `work`/`skim` gilt für jede transitive
-Voraussetzung: `later` → `skim` (Grund `prerequisite`). Wiederholen, bis sich nichts ändert (endlich, da der
-Graph azyklisch ist). `skip` bleibt `skip` (die Person kann es schon).
+**Schritt D — Voraussetzungen.** Für jedes Kapitel mit `work`/`skim` wird jede transitive Voraussetzung
+(`requires_all` im Katalog) mit Status `later` zu `skim` (Grund `prerequisite`). Ein Durchlauf genügt, weil
+`requires_all` bereits transitiv ist. `skip` bleibt `skip`.
 
-**Schritt E — Übersteuerung.** Manuelle Wahl der lernenden Person je Kapitel (`work`/`skim`/`skip`/`later`) gilt
-zuletzt und schlägt alles, auch den Sicherheitsboden; das Ergebnis zeigt dann ein Warnsymbol mit Text. Danach
-Schritt D erneut (eine übersteuerte Voraussetzung wird nicht zurückgesetzt, fehlende Vorläufer aber ergänzt).
+**Schritt E — Übersteuerung.** Die Wahl der lernenden Person je Kapitel gilt zuletzt und schlägt alles, auch den
+Sicherheitsboden. Danach Schritt D noch einmal. Warnungen: `override-safety`, wenn ein Sicherheitsboden-Kapitel
+dadurch unter seinen berechneten Status fällt; `override-prereq`, wenn ein `work`/`skim`-Kapitel eine per
+Übersteuerung (nicht per r = 2) übersprungene Voraussetzung hat — mit beiden Kapitel-IDs.
 
-**Schritt F — Etappen statt Streichen.** Das Zeitbudget **kürzt nichts**, es teilt den Pfad in Etappen
-(Budget je Etappe; Minuten: `work` = volle Minuten, `skim` = 30 %, aufgerundet). Füllreihenfolge: Priorität 1 =
-Sicherheitsboden + Mindestpfad-Liste aus `_placement.yaml`, Priorität 2 = übrige `work`, Priorität 3 = `skim`; innerhalb
-einer Priorität nach `order`. Ein Kapitel kommt mit allen noch nicht eingeplanten empfohlenen Voraussetzungen in die
-aktuelle Etappe; passt es nicht mehr hinein (Etappe voll ab 100 % Budget), beginnt die nächste Etappe. Das erste
-Kapitel einer Etappe passt immer. Innerhalb der Etappe wird nach `order` sortiert. `komplett` = eine Etappe.
-Ist schon Etappe 1 länger als das Budget, sagt das Ergebnis es ehrlich („Mindestpfad ≈ X h — plane dafür mehrere
-Sitzungen").
+**Schritt F — Etappen.** L = alle `work`/`skim`-Kapitel nach `order` (= Lehrreihenfolge; Voraussetzungen stehen
+immer vorher). Minuten: `work` = `minutes`, `skim` = `ceil(minutes × 0,3)`. Budget B aus der Zeitantwort
+(`schnellstart`: eine Etappe). Gierig und zusammenhängend: Die aktuelle Etappe schließt, wenn sie nicht leer ist und
+das nächste Kapitel B überschreiten würde. Die Reihenfolge wird nie umgestellt. Warnung `quickstart-long`, wenn der
+Schnellstart mehr als 180 Minuten ergibt (mit gerundeten Stunden).
 
-**Ausgabe:** `{version, chapters: [{id, status, reason, stage|null, override: bool}], stages: [{n, minutes}],
-totals: {work_min, skim_min}, warnings: [...]}`, stabil sortiert nach `order`. Begründungscodes → deutsche
-Textbausteine in `_placement.yaml`. Leerer Pfad ist unmöglich: Setup und S1.1 sind immer relevant.
+**Ausgabe:** `{version: 1, chapters: [{id, status, reason, stage|null, override: bool}], stages: [{n, minutes}],
+totals: {work_min, skim_min}, warnings: [{code, ids}]}`, stabil nach `order`. Begründungs- und Warncodes → deutsche
+Textbausteine in `_placement.yaml`. Kein leerer Pfad: S0.1 und S1.1 sind in jedem R (Grundregal bzw. Mindestpfad).
 
-**Vertrag:** `tools/fixtures/placement-vectors.json` (≥ 12 Personas inkl. Randfälle: alles `gemacht`, alles `neu`
-mit `kurz`, zwei Ziele, Übersteuerung eines Sicherheitsboden-Kapitels, Voraussetzungskette über drei Kapitel,
-`einschaetzen`, `moderieren`) ist die Spezifikation; Python- und JS-Engine müssen jeden Vektor exakt treffen.
+**Vertrag:** `tools/fixtures/placement-vectors.json` ist die Spezifikation (≥ 14 Personas): Anfänger `alltag`
+`abende` · Anfänger `schnellstart` · alles `schon gemacht` + `security` · Nur-Einschätzen `gruendlich` ·
+`automation` mit `basics` = 2, `hooks` = 0 und falschem Hook-Szenario · Übersteuerung S2.8 → `skip` (Warnungen) ·
+Übersteuerung einer Voraussetzung · zwei Ziele `team` + `agents` · `moderieren` · nur Ziel, sonst nichts · MCP r = 2 ohne
+MCP-Ziel → S2.17 `skim` · alles „weiß nicht" · Zeitfrage ausgelassen (= `abende`) · `stunde` mit vielen Etappen.
+Python- und JS-Engine müssen jeden Vektor exakt treffen.
 
 ### 6.4 Drei Oberflächen, eine Engine-Semantik
 
@@ -309,7 +327,7 @@ mit `kurz`, zwei Ziele, Übersteuerung eines Sicherheitsboden-Kapitels, Vorausse
 
 - **Parse:** Frontmatter (PyYAML), H2-Abschnitte, Quiz, `cockpit:example`, Mermaid-Blöcke.
 - **Validieren (fail-closed, Exit 1):** Schema; IDs eindeutig; alle 65 LE + X-Kapitel vorhanden; `requires` existiert und
-  zeigt rückwärts; Pflichtabschnitte in Reihenfolge; genau ein `cockpit:example`; Quiz parsebar (1 richtig, 3 falsch);
+  zeigt rückwärts; Pflichtabschnitte, Beispiel- und Quizanzahl **je Kapiteltyp** (Tabelle §4.3); Quiz parsebar (1 richtig, 3 falsch);
   relative Links existieren; Regale/Bereiche aus `_placement.yaml` referenzieren nur existierende Kapitel;
   generierte Blöcke aktuell.
 - **Generieren:** `library/README.md`, `library/einstufung.md`, `library/catalog.json`, `paths/*.md`, Meta-Blöcke in
@@ -355,7 +373,7 @@ richtige, Quizfragen würfeln bei jedem Render neu, kein „weiter, wo ich war",
   stöbern; „weiter, wo du warst") → *Einstufung* (Assistent: Ziel → Warum & Zeit → Stand je Bereich → Mini-Szenarien
   optional → Ergebnis) → *Mein Pfad* (Kapitel nach Status gruppiert, Begründung, Minuten, je Kapitel übersteuern) →
   *Bibliothek* (Regale als Raster, Kacheln mit Status-Farbe **und** Icon/Text) → *Kapitel* (Auf einen Blick, Bild im
-  Kopf, Diagramm, Beispiel mit Kopieren, Check, Quiz zur **aktuellen** LE, „ganzes Kapitel lesen", zurück/weiter
+  Kopf, Diagramm, Beispiel mit Kopieren, Check, Quiz zur **aktuellen** LE — jeweils nur, wenn der Kapiteltyp das Feld hat (§4.3) —, „ganzes Kapitel lesen", zurück/weiter
   im eigenen Pfad) → *Wiederholen* (Abruf über erledigte Kapitel mit Abstand).
 - **„Erledigt"** setzt nur die lernende Person selbst (Button); das Quiz gibt Rückmeldung, bucht aber nichts.
   Quiz-Optionen einmal je Kapitelaufruf gemischt (Fisher-Yates), nicht bei jedem Render.
@@ -368,6 +386,8 @@ richtige, Quizfragen würfeln bei jedem Render neu, kein „weiter, wo ich war",
 - **Barrierefreiheit:** Status nie nur per Farbe, `aria-pressed`/`aria-current`/`aria-live`, Labels an allen
   Eingaben, Tastatur ohne Modifier-Kollision, Schrift ≥ 13 px, Kontrast ≥ 4,5:1 für Text.
 - **Größenregel:** Wird die Datei mit Volltext > 1,5 MB, zeigt „ganzes Kapitel lesen" auf die GitHub-Fassung.
+- **Abwerfbar (Plan Task 13 und Volltext):** Fehlen vorgerenderte SVG-Diagramme oder der Volltext, zeigt die
+  Kapitelansicht Mermaid-Quelltext bzw. den GitHub-Link; keine andere Funktion hängt davon ab.
 - **Look:** SOC-Anker (dunkel, Amber) bleibt, aber ruhiger; Status-Farben aus der geprüften Status-Palette.
 - **Tests:** Die Wortlaut-Tests (`tools/test_workshop_ui_behavior.py`) werden durch **Verhaltenstests** ersetzt
   (Playwright gegen `127.0.0.1`: Einstufung für 3 Personas → erwarteter Pfad, Kapitel-Navigation, Quiz bucht nichts,
@@ -380,7 +400,7 @@ richtige, Quizfragen würfeln bei jedem Render neu, kein „weiter, wo ich war",
 
 | Bisheriger Nachweis | Neuer gleichwertiger Nachweis |
 |---|---|
-| `test_course_ci_auth`: ≥ 50 Cockpit-Beispiele per Regex `example: "…"`, keine `--bare`-Abo-Token-Kombination | Extraktion aus Kapitel-Codeblöcken (≥ 150 Snippets) **und** aus dem Cockpit-Datenblock (neuer Parser für das JSON-Format, ≥ 50 Beispiele); Negativprobe: eine absichtlich falsche `--bare`+`CLAUDE_CODE_OAUTH_TOKEN`-Zeile im Fixture wird gefunden |
+| `test_course_ci_auth`: ≥ 50 Cockpit-Beispiele per Regex `example: "…"`, keine `--bare`-Abo-Token-Kombination | Scan über **alle** Codeblöcke aller Live-Markdown-Dateien und **alle** Beispiele im Cockpit-Datenblock (neuer JSON-Parser); Vollständigkeit ohne Mindestzahl: Anzahl Cockpit-Beispiele = Anzahl Kapitel mit `cockpit:example` laut Katalog, und der Snippet-Ledger belegt, dass jeder der ~300 alten Quellblöcke ein Ziel hat; Negativprobe: absichtlich falsche `--bare`+`CLAUDE_CODE_OAUTH_TOKEN`-Zeile im Fixture wird gefunden |
 | `test_course_hooks`: WRONG_IDIOMS auf Rohtext aller Live-Dateien inkl. Cockpit | unverändert (Rohtext); Live-Dateien = Kapitel + Referenz + Moderation + Cockpit; Gegenprobe gegen die Fassung `ba222d2` bleibt |
 | `test_course_hooks`: `tested asset:`-Marker ↔ identisches Snippet | unverändert, läuft über `resources/**/*.md` |
 | `test_workshop_ui_behavior`: Fisher-Yates, Quiz bucht die gefragte LE, Übung ist nur Feedback, genau ein Script + `node --check`, keine Flash-Tokens, fail-soft `loadState`, Deep-Link | Invarianten-Tests auf dem Template (Fisher-Yates-Funktion, genau ein Script, `node --check`, keine Flash-Tokens, kein `confirm(`, keine Inline-Handler/-Styles) **plus** Playwright-Verhaltenstests (Quiz bucht nichts, Storage blockiert/kaputt → Seite rendert, `?run=S2.3` öffnet S2.3, Personas → Pfad) |
@@ -398,7 +418,7 @@ Abstand (Speicherstärke statt Scheingewandtheit), gleich lange Quizantworten, G
 |---|---|
 | `/workshop` | Übersicht: Regale, drei Einstiege |
 | `/workshop start` | Lernordner anlegen (Vorschlag `~/cc-workshop/lernen`), `MISSION.md` im teach-Format, Einstufung im Dialog, optional (nur mit Zustimmung, nur lesend) Blick auf das echte Setup, `einstufung.json` → `placement.py` → `lernpfad.md`, erste Lernprotokolle für genanntes Vorwissen |
-| `/workshop next` | nächstes Kapitel aus Pfad + Lernprotokollen: Schnellcheck → Auf einen Blick → Bild im Kopf → selbst machen (im eigenen Terminal, Tutor prüft Ergebnis) → Check → Lernprotokoll, wenn Evidenz |
+| `/workshop next` | nächstes Kapitel aus Pfad + Lernprotokollen, Ablauf je Kapiteltyp (§4.3; fehlende Abschnitte werden übersprungen): Schnellcheck → Auf einen Blick → Bild im Kopf → selbst machen (im eigenen Terminal, Tutor prüft Ergebnis) → Check → Lernprotokoll, wenn Evidenz |
 | `/workshop learn <ID\|Alias>` | bestimmtes Kapitel im selben Ablauf |
 | `/workshop review` | Abruf über erledigte Kapitel mit Abstand, gemischt; Fehler → Wiederholung vormerken |
 | `/workshop guide <ID\|Session>` | Moderationsmodus: Ablauf, Zeiten, „Für Moderierende"-Hinweise |
@@ -409,8 +429,11 @@ Doku; er hält **keine** Inhaltskopie mehr (die alte Regel „bei jeder Inhalts�
 
 **Im selben Schritt migriert** (sonst laufen `/workshop guide|learn` ins Leere und fallen still auf Modellwissen
 zurück): `commands/workshop.md` (Modi `start|next|learn|review|guide`, IDs `S0.1…S4.10`, `X.1/X.2`, Aliase), `SKILL.md`
-(liest `resources/library/catalog.json` und das Kapitel; Pfad über `${CLAUDE_SKILL_DIR}/../..`, vor Umsetzung gegen
-die aktuelle Skills-Doku geprüft), Mentor, `plugin.json`. **Fehlt ein Kapitel oder der Katalog, meldet der Tutor das als
+(liest `${CLAUDE_PLUGIN_ROOT}/resources/library/catalog.json` und das Kapitel, ruft
+`${CLAUDE_PLUGIN_ROOT}/tools/placement.py`; belegt in code.claude.com/docs/en/skills.md, Abruf 2026-09-30, CLI
+2.1.285: „`${CLAUDE_PLUGIN_ROOT}` — The plugin's installation directory. Substituted only in plugin skills";
+benannte Argumente über `arguments: [mode, target]` → `$mode`, `$target`), Mentor, `plugin.json`. Wird der Skill
+ohne Plugin (kopiert nach `~/.claude/skills/`) genutzt, fragt er nach dem Repo-Pfad. **Fehlt ein Kapitel oder der Katalog, meldet der Tutor das als
 Fehler** und rät nicht aus dem Modellwissen. Alias-Auflösung: `2.2` → erstes Kapitel des Regals, Liste der übrigen.
 
 ## 10. Community-Regal (neu)
@@ -492,6 +515,23 @@ Fehler** und rät nicht aus dem Modellwissen. Alias-Auflösung: `2.2` → erstes
 | 9 | Einheitsvorlage erzwingt Beispiele/Übungen überall | berechtigt | §4.3 Kapiteltypen |
 | 10 | Zu viel für V1 (2 Engines, Markdown-Einstufung, Übersteuerung, Lernprotokolle, Volltext, SVG) | teilweise | Beibehalten, weil ausdrücklich gewünscht (drei Oberflächen, `/teach`, bessere Visualisierung); Markdown-Einstufung ehrlich vereinfacht (§6.4); Volltext und SVG im Plan als spätere, abwerfbare Aufgaben |
 
+**Runde 2 (Codex, read-only, 2026-09-30): REJECT.** Status Runde 1: 3 gelöst, 7 teilweise; 9 neue Befunde, dazu
+eine Persona-Simulation, die zeigte, dass die Etappen-Priorisierung die Lehrreihenfolge umkehren konnte.
+
+| # | Befund (Kurz) | Urteil | Änderung (v3) |
+|---|---|---|---|
+| R2-1 | Kapiteltypen vs. Validator/Cockpit/Tutor („genau ein Beispiel") | berechtigt | §7, §8, §9: überall „je Kapiteltyp (§4.3)" |
+| R2-2 | „immer work" für Security-Kapitel nicht umgesetzt | berechtigt | Zusage gestrichen (E.2); Status folgt §6.3 B/C |
+| R2-3 | Priorisierte Etappen kehren Lehrreihenfolge um; Warnung unerreichbar | berechtigt | §6.3 F: zusammenhängende Etappen in `order`; Zeit = Sitzungslänge; eigene Option `schnellstart` |
+| R2-4 | Community/Capstone/Einschätzen mit konkurrierenden Regeln | berechtigt | §6.3 A/B eindeutig, „Nur-Einschätzen" definiert |
+| R2-5 | Kapitel in zwei Bereichen (S4.4, S4.7) | berechtigt | E.1 bereinigt, Validator-Regel „höchstens ein Bereich" |
+| R2-6 | S0.1 nicht im Schema | berechtigt | §4.1 IDs/Order/Pflicht-IDs, Anhang A Quelle |
+| R2-7 | Mindestzahlen im Abdeckungstest erlauben Verlust | berechtigt | §8.1: Gleichheit mit Katalog + Ledger statt Mindestzahl |
+| R2-8 | Zwei Master für Analogien | berechtigt | Kapitel sind Quelle, `analogien.md` generiert |
+| R2-9 | Zeitantwort fehlt → nicht bestimmt | berechtigt | Voreinstellung `abende` |
+| R1-2 (Rest) | Übersteuerte Voraussetzung bleibt übersprungen | berechtigt | §6.3 E: Warnung `override-prereq` |
+| R1-10 (Rest) | Volltext/SVG als abwerfbar genannt, aber vorausgesetzt | berechtigt | §8: Fallback ausdrücklich |
+
 ## Anhang A — Quellenkarte und Heimat-Zuordnung
 
 Liegt maschinenlesbar in `docs/migration/source-map.json` (je LE: Zeilenbereiche in Modul/Demo/Übung, Regal-Vorschlag,
@@ -502,6 +542,8 @@ Banner-Zeilen (werden zu `outcome`). 466 Waisen-Zeilen: Modulköpfe/Lernziele �
 Blockenden → entfallen (Dubletten des Session-Plans); Kosten-Vertiefung → S4.4; Blueprints → S4.8; „Saboteur on
 Shift" → S4.10; Übungspools → Praxis-Stationen; Feature-Reife-Tabelle → `reference/karte-alte-namen.md` + Badges.
 Regal- und Voraussetzungs-Vorschläge der Agenten sind Eingabe, nicht Beschluss; Sicherheitsboden legt §6.3 C fest.
+S0.1 hat keine Quellenkarten-Zeile: Quelle ist `resources/prerequisites.md` Z. 1–266 und 466–490 (Lernenden-Setup), der Rest
+(Moderations-Plugins, Z. 271–460) geht nach `moderation/vorbereitung.md`; der Snippet-Ledger deckt `prerequisites.md` mit ab.
 
 ## Anhang B — Zielorte je Bestandsdatei
 
@@ -517,7 +559,8 @@ Regal- und Voraussetzungs-Vorschläge der Agenten sind Eingabe, nicht Beschluss;
 | `capstone-exit-assessment.md` | S4.8 (Aufgabe + Rubrik); Selbstwirksamkeits-Check → Handbuch |
 | `video-scripts.md` + Medien | `moderation/videos.md` + `media/` (Transkript bleibt wörtlich, Vermerk „3 Sessions, historisch") |
 | `cheatsheet.md`, `quick-reference.md` | Referenzkarten; Nachbau der Doku wird zu Link + wenigen Alltagsfakten; Hook-Vertrag, Auth-Falle → Kapitel |
-| `glossary.md`, `security-analogies.md` | `reference/glossar.md`, `reference/analogien.md` (Widersprüche vorher korrigiert, LE-IDs statt Modulnummern) |
+| `glossary.md` | `reference/glossar.md` (Widersprüche vorher korrigiert, LE-IDs statt Modulnummern) |
+| `security-analogies.md` | Analogie je Kapitel in „Bild im Kopf" (einzige Quelle); `reference/analogien.md` wird daraus generiert (Tabelle Kapitel → Analogie); die Konsistenzregeln der alten Datei gehen in den Schreib-Brief |
 | `faq.md`, `troubleshooting.md` | Antworten als „Typische Fallen"/Faustregeln in die Kapitel; Rest als `reference/faq.md` und `reference/karte-fehlersuche.md` |
 | `deck-audit-…`, `dry-run-…`, `final-gap-sweep-…`, `review-2026-*`, `HANDOFF.md` | `docs/reviews/` unverändert (Verweise darauf angepasst) |
 | `claude-code-workshop*.pptx` | ersetzt durch neues Deck `resources/media/claude-code-praxisbibliothek.pptx` |
@@ -558,7 +601,7 @@ offiziellen Verzeichnis. Prüfliste „fremden Skill bewerten" (12 Punkte) aus d
 | `context` | Ich pflege eine CLAUDE.md und weiß, wann ich `/compact` nehme und wann eine neue Session. | S1.8–S1.12 |
 | `prompting` | Ich schreibe Aufträge mit Ziel, Grenzen und Prüfschritt und nutze den Plan-Modus. | S1.13–S1.15 |
 | `git` | Ich lasse Claude auf einem Branch arbeiten, prüfe den Diff selbst und nutze Worktrees. | S1.16–S1.18, S4.7 |
-| `cost` | Ich lese `/cost` bzw. `/usage` und deckele autonome Läufe mit Budget und Rundenlimit. | S1.7, S1.19, S4.1, S4.4 |
+| `cost` | Ich lese `/cost` bzw. `/usage` und deckele autonome Läufe mit Budget und Rundenlimit. | S1.7, S1.19, S4.1 |
 | `skills` | Ich habe einen eigenen Skill oder Slash-Command geschrieben und benutzt. | S2.1–S2.5 |
 | `hooks` | Ich habe einen Hook gebaut, der eine Aktion wirklich blockt. | S2.6–S2.10 |
 | `plugins` | Ich habe Plugins geprüft, installiert oder selbst gebündelt. | S2.11–S2.13 |
@@ -571,8 +614,8 @@ offiziellen Verzeichnis. Prüfliste „fremden Skill bewerten" (12 Punkte) aus d
 Setup (S0.1) hängt an `basics`. Praxis-Stationen (S1.20, S2.20, S3.15), Capstone (S4.8) und Community (X.1, X.2)
 hängen an keinem Bereich (Regeln §6.3 A/B).
 
-**Mindestpfad** (Priorität 1 in §6.3 F, zusätzlich zum Sicherheitsboden): S0.1, S1.1, S1.2, S1.8, S1.10, S1.13,
-S1.14, S1.16, S1.19 — sofern im Ergebnis `work` oder `skim`.
+**Mindestpfad** (nur für `schnellstart`, §6.3 A; muss seine eigenen Voraussetzungen enthalten): S0.1, S1.1, S1.2, S1.5,
+S1.6, S1.10, S1.13, S1.14, S1.16, S1.19 — zusammen ≈ 150 Min bei Stand „neu".
 
 ### E.2 Ziele → Schwerpunkt-Regale
 
@@ -582,8 +625,8 @@ S1.14, S1.16, S1.19 — sofern im Ergebnis `work` oder `skim`.
 | `team` sicher im Team einführen | permissions, context, hooks, plugins, security | CLAUDE.md-Ebenen, Managed Policy |
 | `automation` automatisieren & CI | automation, headless-ci, cost, hooks | — |
 | `agents` Agenten-Systeme bauen | agents, automation, remote-isolation, capstone, mcp-knowledge | Capstone im Pfad |
-| `security` Sicherheit & Compliance | permissions, hooks, security, plugins, mcp-knowledge | S2.13, S2.17, S3.10, S3.11 immer work |
-| `einschaetzen` einschätzen/entscheiden | — | Kern standardmäßig skim, Sicherheitsboden work; Capstone skim |
+| `security` Sicherheit & Compliance | permissions, hooks, security, plugins, mcp-knowledge | Vertiefungen S2.13, S2.17, S3.10, S3.11 sind dadurch relevant (Status nach §6.3 B/C) |
+| `einschaetzen` einschätzen/entscheiden | — | Nur-Einschätzen: Kern `skim`, Sicherheitsboden nach §6.3 C; Capstone relevant (`skim`); keine X-Kapitel |
 | `moderieren` moderieren | alle Kern-Kapitel + Praxis-Stationen | Pfad = Live-Workshop, Verweis Moderations-Handbuch |
 
 ### E.3 Mini-Szenarien (freiwillig, unbenotet)
