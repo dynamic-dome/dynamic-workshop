@@ -453,6 +453,15 @@ Fehler** und rät nicht aus dem Modellwissen. Alias-Auflösung: `2.2` → erstes
   bewerten" (Supply-Chain, verlinkt S2.13).
 - **X.2 Mit Claude Code lernen** — `/teach` und der Workshop-Tutor: Mission, Lernprotokolle, Abruf, und warum ein
   Agent als Lehrer Grenzen hat (Quellen prüfen, nicht dem Modellwissen trauen).
+- **X.3 Der minimale Agent: Pi als Spiegel** (nach S3.2) — ein bewusst minimaler Harness zeigt, welche Schichten
+  Claude Code um die Agenten-Schleife legt (Rechte, Hooks, Subagenten, MCP, Skills, Speicher) und welche davon
+  übertragbare Denkmodelle sind. Sicherheitslehre: Wo der Harness nichts erzwingt, bringst du den Schutz selbst mit.
+- **X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann** (nach S4.6) — ein selbst betriebener,
+  über Messenger erreichbarer Dauer-Agent als Verlängerung von headless/CI: Risiken (Injection über Kanäle, fremde
+  Skills, offenes Gateway, zu weite Rechte, Kosten im Dauer-Takt, vergifteter Speicher) mit Gegenmitteln und
+  Entsprechung in Claude Code; Prüfliste „Bevor ein Agent dauerhaft läuft".
+- X.3 und X.4: nur öffentliche Primärquellen (Faktendatei mit URL + Zitat je Aussage), Prüfdatum im Kapitel, keine
+  private Infrastruktur; relevant nur für die Ziele `agents`, `security`, `einschaetzen` (`chapter_goals`, §6.3 A).
 
 ## 11. Visualisierung
 
