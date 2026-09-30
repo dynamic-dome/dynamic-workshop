@@ -34,13 +34,40 @@ def test_claude_md_stays_short():
     assert len((ROOT / "CLAUDE.md").read_text(encoding="utf-8").splitlines()) <= 40
 
 
+def _repo_path(base: Path, target: str):
+    try:
+        return os.path.relpath(os.path.normpath(base / target), ROOT).replace("\\", "/")
+    except ValueError:  # other drive
+        return None
+
+
+def retired_references(path: Path, text: str) -> list:
+    """Links resolve relative to the file; code mentions (`resources/x.md`) may also be repo-relative."""
+    found = []
+    links = [(t, False) for t in re.findall(r"\]\(([^)\s]+)\)", text)]
+    codes = [(t, True) for t in re.findall(r"`([^`\s]+\.(?:md|pptx))`", text)]
+    for target, is_code in links + codes:
+        clean = target.split("#", 1)[0].replace("\\", "/")
+        if not clean or "://" in clean or clean.startswith("mailto:"):
+            continue
+        bases = [path.parent, ROOT] if is_code else [path.parent]
+        for rel in filter(None, (_repo_path(b, clean) for b in bases)):
+            if any(rel == old.rstrip("/") or rel.startswith(old) for old in RETIRED):
+                found.append(f"{path.relative_to(ROOT).as_posix()}: {target}")
+                break
+    return found
+
+
+def test_retired_reference_guard_resolves_relative_to_the_file():
+    lib = ROOT / "resources" / "library" / "x.md"
+    ref = ROOT / "resources" / "reference" / "README.md"
+    assert retired_references(lib, "[alt](../cheatsheet.md) und `resources/modules/block-1-foundations.md`")
+    assert retired_references(ROOT / "README.md", "[alt](WORKSHOP_EINFUEHRUNG.md)")
+    assert retired_references(ref, "[FAQ](faq.md), `faq.md`, [Karte](karte-hooks.md#x)") == []
+
+
 def test_no_links_to_retired_files():
     offenders = []
     for path in live_markdown():
-        text = path.read_text(encoding="utf-8")
-        for target in re.findall(r"\]\(([^)\s]+)\)", text) + re.findall(r"`([^`\s]+\.(?:md|pptx))`", text):
-            normalized = target.replace("\\", "/").lstrip("./")
-            normalized = re.sub(r"^(\.\./)+", "", normalized)
-            if any(old in "resources/" + normalized or old in normalized for old in RETIRED):
-                offenders.append(f"{path.relative_to(ROOT).as_posix()}: {target}")
+        offenders += retired_references(path, path.read_text(encoding="utf-8"))
     assert not offenders, "\n".join(offenders)
