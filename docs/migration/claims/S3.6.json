@@ -1,0 +1,80 @@
+{
+  "id": "S3.6",
+  "verdict": "ask",
+  "counts": {"kept": 96, "changed": 4, "dropped": 2, "new": 3},
+  "items": [
+    {
+      "status": "dropped",
+      "source": "resources/modules/block-3-advanced.md:588",
+      "old": "Traditional security tooling commonly reports 30-50% false positive rates",
+      "new": "(fehlt; Kapitel behält nur: Wirkung hängt von Prompts, Scannern, Codebasis ab, gegen gelabelten Datensatz nicht gemessen)",
+      "rating": "ok",
+      "reason": "Unbelegte Zahl ohne Quelle; der Hinweis auf fehlende Messung und die Einschränkung stehen im Kapitel (Zeile 78). Unschädliche Straffung."
+    },
+    {
+      "status": "dropped",
+      "source": "resources/demos/block-3-demos.md:208",
+      "old": "The entire thing just ran in under 5 minutes. / in under 3 minutes (Demo 3.3c)",
+      "new": "Das Ganze ist gerade von allein durchgelaufen. / in wenigen Minuten",
+      "rating": "ok",
+      "reason": "Konkrete Laufzeitbehauptungen entfernt, die vom Plugin und Modell abhängen; Dauer der Demo (12/18 Min., 5 Min.) steht weiter in 'Für Moderierende'."
+    },
+    {
+      "status": "changed",
+      "source": "resources/demos/block-3-demos.md:180",
+      "old": "For the hardcoded credential: Defender has no good argument. Confirmed.",
+      "new": "Fest eingetragenes Passwort: Hier hat der Verteidiger ein gutes Argument, denn ADMIN_PASSWORD ist toter Code. Ergebnis kann CONFIRMED mit niedriger Schwere oder NEEDS INVESTIGATION lauten.",
+      "rating": "ok",
+      "reason": "Löst den Widerspruch der Quelle auf: Exercise 3.3 (block-3-exercises.md:121,166-171) nennt das Passwort ausdrücklich toten Code mit möglichem Low-Severity-/Needs-Investigation-Ausgang. Kapitel ist intern konsistent; Playground-Code bestätigt (ADMIN_PASSWORD wird nirgends genutzt)."
+    },
+    {
+      "status": "changed",
+      "source": "resources/demos/block-3-demos.md:162",
+      "old": "Two scanners run in parallel.",
+      "new": "Die Scanner laufen parallel (Mehrere; Mermaid und Stufe 1 nennen drei: Security, Quality, Architecture).",
+      "rating": "ok",
+      "reason": "Modul-Quelle (block-3-advanced.md:556-560) nennt drei Scanner; 'Mehrere' vereint beide Quellen ohne Bedeutungsverlust."
+    },
+    {
+      "status": "changed",
+      "source": "resources/demos/block-3-demos.md:166-170",
+      "old": "access_control.py:~140, :19, :~127, :~107, :~131 (Zeilennummern)",
+      "new": "Orte als Funktionsnamen (backup_database(), read_log(), check_access_resilient(), log_event()); Hinweis, dass Zeilennummern bewusst fehlen",
+      "rating": "ok",
+      "reason": "Die Playground-Dateien führen selbst 'referenced by function name' ein; Funktionsnamen stimmen mit access_control.py überein. Gewollte Stabilisierung."
+    },
+    {
+      "status": "changed",
+      "source": "resources/exercises/block-3-exercises.md:135-141",
+      "old": "Fallback ohne Plugin: '/security-review ... run from inside workshop-playground/, or just ask Claude directly'",
+      "new": "'/security-review hilft hier nicht: Es prüft nur die Änderungen deines Branches gegenüber dem Standard-Branch von origin, und auf einem frischen Klon gibt es keine' (S3.7); Fallback nur per direkter Bitte an Claude",
+      "rating": "ok",
+      "reason": "Per curl gegen https://code.claude.com/docs/en/commands.md geprüft, Zeile 139: '/security-review | Analyze the changes on your current branch for security vulnerabilities. Reviews the diff between your branch and origin's default branch ... Needs an origin remote'. Korrektur der Quelle ist belegt."
+    },
+    {
+      "status": "new",
+      "source": "(keine Quelle im Pack; prerequisites.md:273-276,289,306-307)",
+      "old": "",
+      "new": "Das Plugin devil-advocate-swarms liegt in keinem offiziellen Marketplace; im Live-Workshop stellt es die Moderation bereit.",
+      "rating": "ok",
+      "reason": "Steht sinngleich in resources/prerequisites.md (Basis-Commit), das in die Moderations-/Setup-Kapitel umzieht; Kapitel verweist kein Fakt, der dort fehlt."
+    },
+    {
+      "status": "new",
+      "source": "",
+      "old": "",
+      "new": "Nach der Demo: Die Fixer haben access_control.py geändert; mit 'git checkout -- access_control.py' zurücksetzen (auch in Typische Fallen).",
+      "rating": "ok",
+      "reason": "Folgt aus Demo-Schritt 6 ('fixes being applied'), aus Exercise-Schritt 4 (git checkout -- access_control.py) und der Playground-Regel 'Do NOT fix them'. Befehl stimmt mit Quelle überein."
+    },
+    {
+      "status": "new",
+      "source": "",
+      "old": "",
+      "new": "Optionaler C-Schritt: 'Einen Compiler brauchst du nicht, der Schwarm liest den Quelltext.'",
+      "rating": "ask",
+      "reason": "Neue Verhaltensaussage über das Plugin, in keiner Quelle belegt. Plausibel (statische Analyse wie beim Windows-cp-Hinweis), aber nicht nachweisbar; Orchestrator entscheidet, ob sie bleibt oder gestrichen wird."
+    }
+  ],
+  "style": []
+}
