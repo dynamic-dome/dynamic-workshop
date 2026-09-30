@@ -1,0 +1,2181 @@
+{
+ "base_commit": "ba222d2",
+ "rule": "smallest covering range; practice stations last; primary before secondary; teaching order",
+ "packs": {
+  "S1.20": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 1,
+    "end": 21,
+    "kind": "demo_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 598,
+    "end": 626,
+    "kind": "demo_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 1,
+    "end": 22,
+    "kind": "exercise_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 634,
+    "end": 664,
+    "kind": "exercise_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.1": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 22,
+    "end": 46,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.1"
+   },
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 63,
+    "end": 122,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.1"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 23,
+    "end": 59,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.0"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 60,
+    "end": 152,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.1"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 665,
+    "end": 673,
+    "kind": "exercise_ranges",
+    "ref": "W1"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 704,
+    "end": 713,
+    "kind": "exercise_ranges",
+    "ref": "Bingo"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 56,
+    "end": 90,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 198,
+    "end": 208,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.2": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 47,
+    "end": 62,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.1"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 92,
+    "end": 100,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 156,
+    "end": 197,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 305,
+    "end": 314,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.10": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 123,
+    "end": 216,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.2"
+   },
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 232,
+    "end": 240,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.2"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 153,
+    "end": 242,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.2"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 254,
+    "end": 272,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.2"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 374,
+    "end": 412,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.11": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 217,
+    "end": 231,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.2"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 243,
+    "end": 253,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.2"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 419,
+    "end": 488,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 510,
+    "end": 531,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.13": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 241,
+    "end": 300,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.3"
+   },
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 310,
+    "end": 335,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.3"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 273,
+    "end": 350,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.3"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 361,
+    "end": 387,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.3"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 694,
+    "end": 703,
+    "kind": "exercise_ranges",
+    "ref": "Oracle Game"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 724,
+    "end": 736,
+    "kind": "exercise_ranges",
+    "ref": "Blind Vault"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 616,
+    "end": 682,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 804,
+    "end": 814,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.14": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 301,
+    "end": 309,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.3"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 351,
+    "end": 360,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.3"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 683,
+    "end": 700,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 743,
+    "end": 803,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 815,
+    "end": 823,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.16": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 336,
+    "end": 451,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.4"
+   },
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 480,
+    "end": 492,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.4"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 388,
+    "end": 495,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.4"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 529,
+    "end": 548,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.4"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 684,
+    "end": 693,
+    "kind": "exercise_ranges",
+    "ref": "W4"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 831,
+    "end": 861,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 926,
+    "end": 941,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1006,
+    "end": 1028,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1034,
+    "end": 1042,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.18": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 452,
+    "end": 479,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.4"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 496,
+    "end": 528,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.4"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 942,
+    "end": 1005,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1029,
+    "end": 1033,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1049,
+    "end": 1060,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.19": [
+   {
+    "file": "resources/demos/block-1-demos.md",
+    "start": 493,
+    "end": 597,
+    "kind": "demo_ranges",
+    "ref": "Demo 1.5"
+   },
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 549,
+    "end": 633,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 1.5"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1076,
+    "end": 1083,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1109,
+    "end": 1139,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1201,
+    "end": 1217,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "ORPHAN": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 1,
+    "end": 8,
+    "kind": "orphan",
+    "ref": "in Trainer-Doku (Session-2-Moderationsplan), nicht als Kapitel; Zeitbudget stimmt mit 8+7+5+5+8+7=40 Min ueberein."
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 1,
+    "end": 14,
+    "kind": "orphan",
+    "ref": "in Kapitel S2.20 als Einleitung; Windows-Hinweis (Zeile 11) in Regal-Intro 'Hooks'; 'Do them in order' (7) streichen wegen Widerspruch zu 'pick 1'."
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 1056,
+    "end": 1060,
+    "kind": "orphan",
+    "ref": "in Kapitel S2.20 als optionaler Pool."
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 1092,
+    "end": 1102,
+    "kind": "orphan",
+    "ref": "in Kapitel S4.10 (Diagnose-Sequenzen fuer Hooks); nicht in Session 2."
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 1,
+    "end": 8,
+    "kind": "orphan",
+    "ref": "Windows/Git-Bash-Hinweis (Zeile 7) in Regal-Intro practice; Rest streichen."
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 26,
+    "end": 26,
+    "kind": "orphan",
+    "ref": "Priorisierungstabelle in Regal-Intro 'Praxis-Stationen' (practice) bzw. S3.15; Windows-Hinweis (7) als globaler Hinweis."
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 813,
+    "end": 816,
+    "kind": "orphan",
+    "ref": "in Regal 'Praxis-Stationen' (practice) als optionaler Uebungspool; keiner S4-LE zugeordnet."
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1,
+    "end": 8,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'Erste Schritte' bzw. Kursseite Session 1; Duration-Angabe ist Dublette von session-plan.md:36-38"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 9,
+    "end": 47,
+    "kind": "orphan",
+    "ref": "streichen: Dublette von session-plan.md:49-68 (Landkarte) und :175-180 (Cost-Verschiebung); S1.6-Hinweis :43-46 in Kapitel S1.6 als Begruendungs-Kasten"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 48,
+    "end": 55,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'start'; Lernziele auf Kapitel S1.2 und S1.3 als 'Ich kann danach' verteilen"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 315,
+    "end": 327,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'start' (Zielgruppen-/Transfer-Kasten) oder als Transferkasten in Kapitel S1.2"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 328,
+    "end": 334,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'context'; Zeile :333 (InstructionsLoaded-Debug) gehoert zu S4.10 (block-3-advanced.md:1897)"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 413,
+    "end": 418,
+    "kind": "orphan",
+    "ref": "in Lernpfad-Logik (deep-dive-Markierung), nicht in Kapitel"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 556,
+    "end": 559,
+    "kind": "orphan",
+    "ref": "in Lernpfad-Logik; streichen als Kapiteltext"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 609,
+    "end": 615,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'prompting'; Ziel :614 (Output Styles) auf S1.15 verteilen"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 824,
+    "end": 830,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'git'; die drei Lernziele auf S1.16/S1.17/S1.18 verteilen"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1061,
+    "end": 1075,
+    "kind": "orphan",
+    "ref": "Banner :1063-1069 als Einstiegs-Kasten in Kapitel S1.19; Lernziele :1071-1074 in Regal-Intro 'cost' (Ziele zu /insights und Pipeline nach S4.4)"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1108,
+    "end": 1108,
+    "kind": "orphan",
+    "ref": "verschoben nach S4.4 (session-plan.md:161); absolute Preise nur in _canonical.md, relative Tabelle als Kasten in S1.7"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1281,
+    "end": 1291,
+    "kind": "orphan",
+    "ref": "in Kapitel S4.4; Anti-Patterns teils Dublette von :1132-1136 und Budget-Cap-Abschnitt :1201-1214"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1292,
+    "end": 1306,
+    "kind": "orphan",
+    "ref": "in Regal-Intro/Session-Abschluss 'Session 1'; Dublette der Kapitel-Checks; nicht in S1.20 (Anker :1292 ist nur mechanisch)"
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1,
+    "end": 7,
+    "kind": "orphan",
+    "ref": "in Session-2-Intro (Regal-Uebersicht); Dauer-Zeile 4 ist Dublette von session-plan.md:114-115 -> streichen."
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 9,
+    "end": 38,
+    "kind": "orphan",
+    "ref": "streichen: Dublette von resources/session-plan.md:91-112 (LE-Tabelle); Abweichungen (S2.5 Advanced Frontmatter, S2.20 'pick 2-3') beheben statt duplizieren."
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 39,
+    "end": 45,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'Skills & Commands'; Lernziele werden ersetzt durch Outcome je Kapitel (S2.1-S2.5)."
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 424,
+    "end": 430,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'Hooks'; Lernziele (12 Events, matcher/if, updatedToolOutput) auf S2.7/S2.8/S2.10 verteilen."
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 806,
+    "end": 812,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'Plugins'; Lernziele auf S2.11-S2.13 verteilen."
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1009,
+    "end": 1015,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'MCP & Wissensquellen'; Lernziele auf S2.14-S2.17 verteilen."
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1334,
+    "end": 1340,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'MCP & Wissensquellen' (gemeinsames Intro mit Modul 2.4), Lernziele auf S2.18/S2.19 verteilen."
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1473,
+    "end": 1491,
+    "kind": "orphan",
+    "ref": "in Regal-Intro/Session-Abschluss 'Ecosystem-Stack' (Diagramm Skills-Hooks-Plugins-MCP-RAG); alternativ in Kapitel S2.20 als Rueckblick."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1,
+    "end": 5,
+    "kind": "orphan",
+    "ref": "streichen bzw. Kurs-Einleitung; Zielgruppen-Hinweis (Security-Analogien) in Regal-Intro agents/security."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 6,
+    "end": 35,
+    "kind": "orphan",
+    "ref": "In Kopf/Regal-Intro als Reife-Legende (stable/experimental/custom) uebernehmen; Einzelzeilen je LE als Reife-Badge (z. B. Agent Teams -> S3.5, Devil's Advocate "
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 36,
+    "end": 61,
+    "kind": "orphan",
+    "ref": "streichen: Dublette von session-plan.md (Tabellen); Abschnittsverweise nur als Metadaten in die LE-Frontmatter uebernehmen. Session-3-Teil gehoert nicht zu dies"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 62,
+    "end": 81,
+    "kind": "orphan",
+    "ref": "streichen: Dublette von session-plan.md:150-173; core*-/Fallback-Hinweis (79-81) in das Regal-Intro 'Fehlersuche' bzw. Lernpfad-Seite uebernehmen."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 82,
+    "end": 88,
+    "kind": "orphan",
+    "ref": "In Regal-Intro 'Agenten & Orchestrierung'; Lernziele auf S3.1-S3.5 verteilen (Bullet 1 -> S3.3, Bullet 2 -> S3.4, Bullet 3 -> S3.5)."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 398,
+    "end": 400,
+    "kind": "orphan",
+    "ref": "streichen; S3.15 speist sich aus resources/exercises/block-3-exercises.md."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 401,
+    "end": 410,
+    "kind": "orphan",
+    "ref": "Modul-Kopf und Lernziele in Regal-Intro 'Modelle & Kosten' (S4.1) bzw. 'Agenten & Orchestrierung'; Lernziele in die Outcome-Saetze von S4.1/S4.2 auflösen."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 526,
+    "end": 539,
+    "kind": "orphan",
+    "ref": "In Regal-Intro 'Adversariale Pruefung & Compliance'; Lernziele -> S3.6/S3.7; Moderatorhinweis (536-538 'automated penetration testing with a trial system') in A"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 686,
+    "end": 695,
+    "kind": "orphan",
+    "ref": "In Regal-Intro 'Rechte & Freigaben' bzw. 'Adversariale Pruefung & Compliance'; Lernziele auf S3.8-S3.11 verteilen."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 927,
+    "end": 933,
+    "kind": "orphan",
+    "ref": "In Regal-Intro 'Automation & Loops'; Lernziele auf S3.12-S3.14 verteilen."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1115,
+    "end": 1121,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'Remote, Docker, Isolation'; Lernziel 3 (PushNotification/Channels, 1120) auf S4.6 bzw. S3.13/S2.17 verteilen."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1336,
+    "end": 1352,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'Headless & CI/CD'; Lernziele (1338-1341) auf S4.3/S4.4/S4.5 aufteilen; Overview 'four building blocks' (1349) als Einleitung der Regalseite."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1720,
+    "end": 1727,
+    "kind": "orphan",
+    "ref": "streichen: Dublette der Inline-Verweise (1454, 1678); als Kapitel-Links (S2.8, S3.8, S3.13) in die S4.5-Seite uebernehmen."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1728,
+    "end": 1744,
+    "kind": "orphan",
+    "ref": "in Regal-Intro 'Fehlersuche' ('inspection tools turn a black box into a glass box', 1743); Lernziele auf S4.9/S4.10 aufteilen."
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1973,
+    "end": 1974,
+    "kind": "orphan",
+    "ref": "streichen: Datei-Endmarker ohne Lehrwert."
+   }
+  ],
+  "S2.2": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 9,
+    "end": 81,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.1"
+   },
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 88,
+    "end": 95,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.1"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 15,
+    "end": 136,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 2.1"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 1081,
+    "end": 1091,
+    "kind": "exercise_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 71,
+    "end": 136,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 210,
+    "end": 237,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 272,
+    "end": 293,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.1": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 82,
+    "end": 87,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.1"
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 49,
+    "end": 70,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.8": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 96,
+    "end": 166,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.2"
+   },
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 175,
+    "end": 185,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.2"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 137,
+    "end": 464,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 2.2"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 1061,
+    "end": 1069,
+    "kind": "exercise_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 487,
+    "end": 624,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.6": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 167,
+    "end": 174,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.2"
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 434,
+    "end": 439,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 464,
+    "end": 483,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.10": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 186,
+    "end": 260,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.2b"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 941,
+    "end": 1036,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 2.6"
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 695,
+    "end": 803,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.11": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 261,
+    "end": 330,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.3"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 465,
+    "end": 691,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 2.3"
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 816,
+    "end": 889,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.14": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 331,
+    "end": 413,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.4"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 692,
+    "end": 816,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 2.4"
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1019,
+    "end": 1063,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.18": [
+   {
+    "file": "resources/demos/block-2-demos.md",
+    "start": 414,
+    "end": 495,
+    "kind": "demo_ranges",
+    "ref": "Demo 2.5"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 817,
+    "end": 940,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 2.5"
+   },
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 1070,
+    "end": 1080,
+    "kind": "exercise_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1344,
+    "end": 1370,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1383,
+    "end": 1442,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.3": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 1,
+    "end": 4,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.6"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 20,
+    "end": 20,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.6"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 564,
+    "end": 581,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.6"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 598,
+    "end": 614,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.6"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 640,
+    "end": 643,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.6"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1353,
+    "end": 1361,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1366,
+    "end": 1403,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.1": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 5,
+    "end": 19,
+    "kind": "demo_ranges",
+    "ref": "Anker-Notiz"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 582,
+    "end": 597,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.6 Step 1"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 791,
+    "end": 801,
+    "kind": "exercise_ranges",
+    "ref": "Extra: Telephone Game"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 89,
+    "end": 148,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.4": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 21,
+    "end": 69,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.1"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 27,
+    "end": 74,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.1"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 780,
+    "end": 790,
+    "kind": "exercise_ranges",
+    "ref": "Extra: Alarm-Storm Correlator"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 251,
+    "end": 327,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.2": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 72,
+    "end": 130,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.2"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 77,
+    "end": 111,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.2"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 444,
+    "end": 456,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 487,
+    "end": 524,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.6": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 131,
+    "end": 238,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.3"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 316,
+    "end": 393,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.3c"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 112,
+    "end": 228,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.3"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 657,
+    "end": 724,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.9"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 751,
+    "end": 759,
+    "kind": "exercise_ranges",
+    "ref": "Extra: CTF"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 760,
+    "end": 769,
+    "kind": "exercise_ranges",
+    "ref": "Extra: Duel"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 770,
+    "end": 779,
+    "kind": "exercise_ranges",
+    "ref": "Extra: Audit-Trail Integrity"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 540,
+    "end": 634,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.8": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 241,
+    "end": 312,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.3b"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 802,
+    "end": 812,
+    "kind": "exercise_ranges",
+    "ref": "Extra: Wrong-Door Heist"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 696,
+    "end": 744,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 772,
+    "end": 787,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.14": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 396,
+    "end": 415,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.4"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 427,
+    "end": 474,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.4"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1048,
+    "end": 1113,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.13": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 416,
+    "end": 426,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.4"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 490,
+    "end": 508,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.5 Step 1"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1010,
+    "end": 1046,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.7": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 477,
+    "end": 489,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.5"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1175,
+    "end": 1241,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.8": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 509,
+    "end": 518,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.5"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 558,
+    "end": 563,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.5"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 281,
+    "end": 381,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.5"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 727,
+    "end": 745,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.5"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1246,
+    "end": 1332,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.6": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 519,
+    "end": 557,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.5"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1125,
+    "end": 1170,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.4": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 615,
+    "end": 639,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.6"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 644,
+    "end": 649,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.6"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 469,
+    "end": 478,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.6"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1092,
+    "end": 1107,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1140,
+    "end": 1166,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1185,
+    "end": 1200,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1218,
+    "end": 1280,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1409,
+    "end": 1499,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.10": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 650,
+    "end": 710,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.7"
+   },
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 725,
+    "end": 782,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.7"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 582,
+    "end": 656,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.7"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1814,
+    "end": 1957,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1959,
+    "end": 1971,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.9": [
+   {
+    "file": "resources/demos/block-3-demos.md",
+    "start": 711,
+    "end": 724,
+    "kind": "demo_ranges",
+    "ref": "Demo 3.7"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1745,
+    "end": 1755,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1760,
+    "end": 1809,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.5": [
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 674,
+    "end": 683,
+    "kind": "exercise_ranges",
+    "ref": "W2"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 266,
+    "end": 268,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 272,
+    "end": 282,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 287,
+    "end": 299,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.8": [
+   {
+    "file": "resources/exercises/block-1-exercises.md",
+    "start": 714,
+    "end": 723,
+    "kind": "exercise_ranges",
+    "ref": "Strike-List"
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 335,
+    "end": 373,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 563,
+    "end": 574,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.20": [
+   {
+    "file": "resources/exercises/block-2-exercises.md",
+    "start": 1037,
+    "end": 1055,
+    "kind": "exercise_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.15": [
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 9,
+    "end": 25,
+    "kind": "exercise_ranges",
+    "ref": "Priority Guide"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 746,
+    "end": 750,
+    "kind": "exercise_ranges",
+    "ref": "Extra Exercises (Intro)"
+   }
+  ],
+  "S3.12": [
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 231,
+    "end": 278,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.4"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 934,
+    "end": 1008,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.5": [
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 382,
+    "end": 468,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.6"
+   },
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 479,
+    "end": 501,
+    "kind": "exercise_ranges",
+    "ref": "Exercise 3.6"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 1503,
+    "end": 1718,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.11": [
+   {
+    "file": "resources/exercises/block-3-exercises.md",
+    "start": 502,
+    "end": 579,
+    "kind": "exercise_ranges",
+    "ref": "Bonus Exercise 3.8"
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 844,
+    "end": 909,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.3": [
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 101,
+    "end": 141,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 144,
+    "end": 155,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.6": [
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 142,
+    "end": 143,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 269,
+    "end": 271,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 283,
+    "end": 286,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 300,
+    "end": 303,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.4": [
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 209,
+    "end": 232,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.7": [
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 233,
+    "end": 265,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1084,
+    "end": 1091,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1167,
+    "end": 1184,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.12": [
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 489,
+    "end": 509,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 532,
+    "end": 555,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.9": [
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 560,
+    "end": 562,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 575,
+    "end": 608,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.15": [
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 701,
+    "end": 742,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S1.17": [
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 862,
+    "end": 925,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-1-foundations.md",
+    "start": 1043,
+    "end": 1047,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.5": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 141,
+    "end": 209,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 388,
+    "end": 391,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.3": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 238,
+    "end": 271,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 297,
+    "end": 336,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 392,
+    "end": 417,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.4": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 337,
+    "end": 387,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 418,
+    "end": 423,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.7": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 443,
+    "end": 463,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.9": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 628,
+    "end": 691,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.12": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 893,
+    "end": 912,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 934,
+    "end": 994,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.13": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 913,
+    "end": 933,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 995,
+    "end": 1006,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.15": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1067,
+    "end": 1124,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1177,
+    "end": 1216,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.16": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1128,
+    "end": 1162,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1228,
+    "end": 1247,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.17": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1166,
+    "end": 1176,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1217,
+    "end": 1227,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1248,
+    "end": 1331,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S2.19": [
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1371,
+    "end": 1382,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-2-ecosystem.md",
+    "start": 1443,
+    "end": 1467,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.2": [
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 150,
+    "end": 165,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.3": [
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 167,
+    "end": 249,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.5": [
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 329,
+    "end": 396,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S4.1": [
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 411,
+    "end": 437,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 458,
+    "end": 485,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.7": [
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 636,
+    "end": 682,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.9": [
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 746,
+    "end": 770,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 811,
+    "end": 843,
+    "kind": "module_ranges",
+    "ref": ""
+   },
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 911,
+    "end": 925,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ],
+  "S3.10": [
+   {
+    "file": "resources/modules/block-3-advanced.md",
+    "start": 789,
+    "end": 809,
+    "kind": "module_ranges",
+    "ref": ""
+   }
+  ]
+ },
+ "links": {
+  "S1.7": [
+   [
+    "S1.19",
+    "Demo 1.5"
+   ],
+   [
+    "S1.19",
+    "Exercise 1.5"
+   ]
+  ],
+  "S1.10": [
+   [
+    "S1.11",
+    "Exercise 1.2"
+   ]
+  ],
+  "S1.13": [
+   [
+    "S1.14",
+    "Demo 1.3"
+   ],
+   [
+    "S1.14",
+    "Exercise 1.3"
+   ]
+  ],
+  "S1.20": [
+   [
+    "S1.1",
+    "Exercise 1.1"
+   ],
+   [
+    "S1.10",
+    "Exercise 1.2-1.4"
+   ],
+   [
+    "S1.11",
+    "Exercise 1.2-1.4"
+   ],
+   [
+    "S1.13",
+    "Exercise 1.2-1.4"
+   ],
+   [
+    "S1.14",
+    "Exercise 1.2-1.4"
+   ],
+   [
+    "S1.16",
+    "Exercise 1.2-1.4"
+   ],
+   [
+    "S1.18",
+    "Exercise 1.2-1.4"
+   ]
+  ],
+  "S2.2": [
+   [
+    "S2.1",
+    "Demo 2.1"
+   ]
+  ],
+  "S2.8": [
+   [
+    "S2.6",
+    "Demo 2.2"
+   ]
+  ],
+  "S2.15": [
+   [
+    "S2.14",
+    "Demo 2.4"
+   ],
+   [
+    "S2.14",
+    "Exercise 2.4"
+   ]
+  ],
+  "S2.20": [
+   [
+    "S2.10",
+    "Exercise 2.6"
+   ],
+   [
+    "S2.11",
+    "Exercise 2.3"
+   ],
+   [
+    "S2.14",
+    "Exercise 2.4"
+   ],
+   [
+    "S2.18",
+    "Exercise 2.5"
+   ],
+   [
+    "S2.2",
+    "Exercise 2.1"
+   ],
+   [
+    "S2.8",
+    "Exercise 2.2"
+   ]
+  ],
+  "S3.4": [
+   [
+    "S3.6",
+    "Exercise 3.9"
+   ]
+  ],
+  "S3.7": [
+   [
+    "S3.6",
+    "Demo 3.3"
+   ],
+   [
+    "S3.6",
+    "Demo 3.3c"
+   ],
+   [
+    "S3.6",
+    "Exercise 3.3"
+   ],
+   [
+    "S3.6",
+    "Exercise 3.9"
+   ]
+  ],
+  "S3.9": [
+   [
+    "S3.8",
+    "Demo 3.3b"
+   ],
+   [
+    "S3.8",
+    "Extra: Wrong-Door Heist"
+   ]
+  ],
+  "S3.11": [
+   [
+    "S3.6",
+    "Extra: Audit-Trail Integrity"
+   ]
+  ],
+  "S3.12": [
+   [
+    "S3.13",
+    "Demo 3.4"
+   ],
+   [
+    "S3.14",
+    "Demo 3.4"
+   ]
+  ],
+  "S3.13": [
+   [
+    "S3.12",
+    "Exercise 3.4"
+   ]
+  ],
+  "S3.14": [
+   [
+    "S3.13",
+    "Demo 3.4"
+   ]
+  ],
+  "S3.15": [
+   [
+    "S3.4",
+    "Exercise 3.1"
+   ],
+   [
+    "S3.6",
+    "Exercise 3.3"
+   ],
+   [
+    "S4.2",
+    "Exercise 3.2"
+   ]
+  ],
+  "S4.1": [
+   [
+    "S4.2",
+    "Demo 3.2"
+   ],
+   [
+    "S4.2",
+    "Exercise 3.2"
+   ]
+  ],
+  "S4.3": [
+   [
+    "S3.1",
+    "Demo 3.6"
+   ],
+   [
+    "S4.4",
+    "Exercise 3.6"
+   ],
+   [
+    "S4.5",
+    "Exercise 3.6"
+   ]
+  ],
+  "S4.5": [
+   [
+    "S4.4",
+    "Exercise 3.6"
+   ]
+  ],
+  "S4.7": [
+   [
+    "S3.13",
+    "Demo 3.5"
+   ]
+  ],
+  "S4.9": [
+   [
+    "S4.10",
+    "Exercise 3.7"
+   ]
+  ],
+  "S4.10": [
+   [
+    "S4.9",
+    "Demo 3.7"
+   ]
+  ]
+ }
+}
