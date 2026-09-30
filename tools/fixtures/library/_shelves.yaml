@@ -1,0 +1,12 @@
+- id: hooks
+  title: Hooks
+  purpose: Aktionen automatisch prüfen und blocken.
+  intro: Hooks sind Skripte, die Claude Code bei Ereignissen aufruft.
+- id: practice
+  title: Praxis-Stationen
+  purpose: Eine Übung auswählen und selbst lösen.
+  intro: Jede Station bietet Übungen aus ihren Kapiteln an.
+- id: community
+  title: Community & Lernen
+  purpose: Leute und Skills, die weiterhelfen.
+  intro: Belegte Quellen mit Lizenz und Installationsweg.
