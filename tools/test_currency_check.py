@@ -107,9 +107,26 @@ def test_undocumented_course_flag_is_red_with_location():
 
 def test_exception_suppresses_and_orphaned_exception_is_red():
     course = {"x.md": "Run `--door 3` in exercise 1.\n"}
-    assert run(course=course, exceptions="--door | Übungsparameter\n").exit_code == 0
-    orphan = run(exceptions="--orphan | git-Flag\n")
+    assert run(course=course, exceptions="--door | x.md | Übungsparameter\n").exit_code == 0
+    orphan = run(exceptions="--orphan | m.md | git-Flag\n")
     assert [f.key for f in levels(orphan, "rot")] == ["orphan-exception:--orphan"]
+
+
+def test_exception_only_covers_its_own_files():
+    """An exception for an exercise parameter must not hide the same string used as a Claude Code flag elsewhere."""
+    course = {"x.md": "Run `--door 3` in exercise 1.\n", "y.md": "Start with `claude --door -p hi`.\n"}
+    result = run(course=course, exceptions="--door | x.md | Übungsparameter\n")
+    [finding] = levels(result, "rot")
+    assert finding.key == "missing:flag:--door" and finding.where == ("y.md:1",)
+
+
+def test_foreign_source_outage_keeps_its_last_hash():
+    text = canon(foreign=[(PI, "X.3")])
+    first = run(canon_text=text, available=pages(**{PI: PI_PAGE}))
+    outage = run(canon_text=text, previous=first.state)
+    assert outage.state["sources"][PI] == first.state["sources"][PI]
+    changed = run(canon_text=text, available=pages(**{PI: PI_PAGE.replace("four", "seven")}), previous=outage.state)
+    assert any("X.3" in f.text for f in levels(changed, "gelb"))
 
 
 @pytest.mark.parametrize("body", ["/docs/en/models/overview.md", "<!doctype html><html>" + "x" * 6000])
@@ -231,6 +248,11 @@ def test_foreign_pages_never_document_claude_code_identifiers():
     result = run(course={"b3.md": "Pass `--metadata` here.\n"}, canon_text=canon(foreign=[(PI, "X.3")]),
                  available=pages(**{PI: page}))
     assert any("--metadata" in f.text for f in levels(result, "rot"))
+
+
+def test_redirect_to_another_host_is_yellow():
+    result = run(final={BASE + "env-vars.md": "https://elsewhere.example/env-vars.md"})
+    assert any(f.key == f"redirect-host:{BASE}env-vars.md" for f in levels(result, "gelb"))
 
 
 def test_redirect_is_reported_as_info():

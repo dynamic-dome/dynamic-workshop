@@ -233,8 +233,8 @@ def parse_canon_foreign(text):
     """[(url, chapter)] of the `- Fremdprojekt: <url> (<chapter>)` lines; ValueError on a line without a chapter."""
     found = []
     for line in text.splitlines():
-        if not line.startswith("- Fremdprojekt:"):
-            continue
+        if "Fremdprojekt:" not in line:
+            continue  # any spelling that mentions the kind must be the exact form, or the source goes unwatched
         match = FOREIGN_LINE.match(line)
         if not match:
             raise ValueError(f"Kanon: Fremdprojekt-Zeile ohne Kapitel: {line}")
@@ -313,8 +313,10 @@ def parse_exceptions(text):
         line = raw.strip()
         if not line or line.startswith("#"):
             continue
-        value, sep, reason = line.partition("|")
-        if not sep or len(reason.strip()) < 3:
-            raise ValueError(f"Ausnahme Zeile {number}: Format 'bezeichner | grund' (Grund mindestens 3 Zeichen)")
-        entries[value.strip()] = reason.strip()
+        parts = [part.strip() for part in line.split("|", 2)]
+        files = frozenset(f.strip() for f in parts[1].split(",") if f.strip()) if len(parts) == 3 else frozenset()
+        if len(parts) != 3 or not files or len(parts[2]) < 3:
+            raise ValueError(f"Ausnahme Zeile {number}: Format 'bezeichner | datei[, datei] | grund' "
+                             "(mindestens eine Datei, Grund mindestens 3 Zeichen)")
+        entries[parts[0]] = {"files": files, "reason": parts[2]}
     return entries

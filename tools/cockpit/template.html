@@ -435,7 +435,7 @@
       chapters.forEach(c => {
         if (status[c.id] !== "work" && status[c.id] !== "skim") return;
         c.requires_all.forEach(p => {
-          if (p in overrides && (status[p] === "skip" || status[p] === "later") && (computed[p] === "work" || computed[p] === "skim")) {
+          if (p in overrides && (status[p] === "skip" || status[p] === "later") && computed[p] !== "skip") {
             warnings.push({ code: "override-prereq", ids: [p, c.id] });
           }
         });

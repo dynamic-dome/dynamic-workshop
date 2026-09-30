@@ -23,7 +23,8 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = "ba222d2"
 DROPPED = ROOT / "tools" / "fixtures" / "migration-dropped.txt"
 OWNERSHIP = ROOT / "docs" / "migration" / "ownership.json"
-FENCE = re.compile(r"^\s*(```|~~~)(.*)$")
+FENCE = re.compile(r"^\s*((?:>\s?)*)\s*(```|~~~)(.*)$")
+QUOTE = re.compile(r"^\s*>\s?")
 
 OLD_FILES = [
     "resources/modules/block-1-foundations.md", "resources/modules/block-2-ecosystem.md",
@@ -64,17 +65,26 @@ def digest(text: str) -> str:
 
 
 def fenced_blocks(text: str):
-    """Yield (line_number_of_opening_fence, lang, content). Nested fences of a different marker are content."""
+    """Yield (line_number_of_opening_fence, lang, content). Nested fences of a different marker are content.
+
+    A fence inside a blockquote ('> ```bash') counts as well; its quote prefix is removed from every content line."""
     lines = text.replace("\r\n", "\n").split("\n")
+
+    def unquote(line, depth):
+        for _ in range(depth):
+            line = QUOTE.sub("", line, count=1)
+        return line
+
     i = 0
     while i < len(lines):
         match = FENCE.match(lines[i])
         if match:
-            marker, lang = match.group(1), match.group(2).strip()
+            depth = match.group(1).count(">")
+            marker, lang = match.group(2), match.group(3).strip()
             j = i + 1
-            while j < len(lines) and not lines[j].strip().startswith(marker):
+            while j < len(lines) and not unquote(lines[j], depth).strip().startswith(marker):
                 j += 1
-            yield i + 1, lang, "\n".join(lines[i + 1:j])
+            yield i + 1, lang, "\n".join(unquote(line, depth) for line in lines[i + 1:j])
             i = j + 1
         else:
             i += 1

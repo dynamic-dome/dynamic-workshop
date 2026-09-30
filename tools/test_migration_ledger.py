@@ -28,6 +28,9 @@ def test_fence_parser_and_normalization():
     # a block that sat in a list item (common indentation) is the same snippet when it moves to column 0
     assert ml.digest("   mkdir x\n     cd x\n") == ml.digest("mkdir x\n  cd x\n")
     assert ml.digest("mkdir x\n  cd x\n") != ml.digest("mkdir x\ncd x\n")
+    # a fence inside a blockquote counts too, with the quote prefix removed
+    quoted = list(ml.fenced_blocks("> Tip:\n>\n> ```bash\n> claude --max-budget-usd 1.00\n> ```\nafter\n"))
+    assert [(lang, body) for _line, lang, body in quoted] == [("bash", "claude --max-budget-usd 1.00")]
 
 
 def test_old_snippets_come_from_the_base_commit():

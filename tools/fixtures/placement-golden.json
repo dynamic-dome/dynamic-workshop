@@ -8839,5 +8839,1571 @@
   },
   "version": 1,
   "warnings": []
+ },
+ "P18": {
+  "chapters": [
+   {
+    "id": "S0.1",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "X.2",
+    "override": false,
+    "reason": "community",
+    "stage": 1,
+    "status": "skim"
+   },
+   {
+    "id": "S1.1",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.2",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.3",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.4",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.5",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.6",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.7",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.8",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.9",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.10",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.11",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.12",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.13",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.14",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.15",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.16",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.17",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.18",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.19",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.20",
+    "override": false,
+    "reason": "practice",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.1",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.2",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.3",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.4",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.5",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.6",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S2.7",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S2.8",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S2.9",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.10",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.11",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.12",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.13",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "X.1",
+    "override": false,
+    "reason": "community",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S2.14",
+    "override": true,
+    "reason": "override",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.15",
+    "override": true,
+    "reason": "override",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.16",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.17",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.18",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.19",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.20",
+    "override": false,
+    "reason": "practice",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S3.1",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.2",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "X.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.4",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.5",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.6",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.7",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.8",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.9",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.10",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.11",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.12",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.13",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.14",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.15",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.1",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.2",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.4",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.5",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.6",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "X.4",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.7",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.8",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.9",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S4.10",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   }
+  ],
+  "stages": [
+   {
+    "minutes": 144,
+    "n": 1
+   },
+   {
+    "minutes": 150,
+    "n": 2
+   },
+   {
+    "minutes": 136,
+    "n": 3
+   },
+   {
+    "minutes": 63,
+    "n": 4
+   }
+  ],
+  "totals": {
+   "skim_min": 23,
+   "work_min": 470
+  },
+  "version": 1,
+  "warnings": [
+   {
+    "code": "override-prereq",
+    "ids": [
+     "S2.14",
+     "S2.15"
+    ]
+   }
+  ]
+ },
+ "P19": {
+  "chapters": [
+   {
+    "id": "S0.1",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "X.2",
+    "override": false,
+    "reason": "community",
+    "stage": 1,
+    "status": "skim"
+   },
+   {
+    "id": "S1.1",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.2",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.3",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.4",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.5",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.6",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.7",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.8",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.9",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.10",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.11",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.12",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.13",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.14",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.15",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S1.16",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.17",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S1.18",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S1.19",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.20",
+    "override": false,
+    "reason": "practice",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S2.1",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 2,
+    "status": "skim"
+   },
+   {
+    "id": "S2.2",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 2,
+    "status": "skim"
+   },
+   {
+    "id": "S2.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.4",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.5",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.6",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S2.7",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.8",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.9",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.10",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.11",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.12",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.13",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "X.1",
+    "override": false,
+    "reason": "community",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S2.14",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.15",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.16",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.17",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.18",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.19",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.20",
+    "override": false,
+    "reason": "practice",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S3.1",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S3.2",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "X.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.4",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S3.5",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.6",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S3.7",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.8",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.9",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.10",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.11",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.12",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.13",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.14",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.15",
+    "override": false,
+    "reason": "practice",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S4.1",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.2",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.4",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.5",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.6",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "X.4",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.7",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.8",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.9",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S4.10",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   }
+  ],
+  "stages": [
+   {
+    "minutes": 144,
+    "n": 1
+   },
+   {
+    "minutes": 148,
+    "n": 2
+   },
+   {
+    "minutes": 147,
+    "n": 3
+   },
+   {
+    "minutes": 117,
+    "n": 4
+   }
+  ],
+  "totals": {
+   "skim_min": 28,
+   "work_min": 528
+  },
+  "version": 1,
+  "warnings": []
+ },
+ "P20": {
+  "chapters": [
+   {
+    "id": "S0.1",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "X.2",
+    "override": false,
+    "reason": "community",
+    "stage": 1,
+    "status": "skim"
+   },
+   {
+    "id": "S1.1",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.2",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.3",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.4",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.5",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.6",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.7",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.8",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.9",
+    "override": false,
+    "reason": "new",
+    "stage": 1,
+    "status": "work"
+   },
+   {
+    "id": "S1.10",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.11",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.12",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.13",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.14",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.15",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S1.16",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.17",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S1.18",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S1.19",
+    "override": false,
+    "reason": "new",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S1.20",
+    "override": false,
+    "reason": "practice",
+    "stage": 2,
+    "status": "work"
+   },
+   {
+    "id": "S2.1",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 2,
+    "status": "skim"
+   },
+   {
+    "id": "S2.2",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 2,
+    "status": "skim"
+   },
+   {
+    "id": "S2.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.4",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 2,
+    "status": "skim"
+   },
+   {
+    "id": "S2.5",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.6",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.7",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.8",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.9",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.10",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.11",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.12",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S2.13",
+    "override": false,
+    "reason": "new",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "X.1",
+    "override": false,
+    "reason": "community",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S2.14",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.15",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.16",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.17",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.18",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.19",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S2.20",
+    "override": false,
+    "reason": "practice",
+    "stage": 3,
+    "status": "work"
+   },
+   {
+    "id": "S3.1",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S3.2",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "X.3",
+    "override": false,
+    "reason": "community",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S3.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.4",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 3,
+    "status": "skim"
+   },
+   {
+    "id": "S3.5",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.6",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.7",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.8",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.9",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.10",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.11",
+    "override": false,
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S3.12",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 4,
+    "status": "skim"
+   },
+   {
+    "id": "S3.13",
+    "override": false,
+    "reason": "prerequisite",
+    "stage": 4,
+    "status": "skim"
+   },
+   {
+    "id": "S3.14",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S3.15",
+    "override": false,
+    "reason": "practice",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S4.1",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.2",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.3",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.4",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.5",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.6",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "X.4",
+    "override": false,
+    "reason": "community",
+    "stage": 4,
+    "status": "skim"
+   },
+   {
+    "id": "S4.7",
+    "override": false,
+    "reason": "not-goal",
+    "stage": null,
+    "status": "later"
+   },
+   {
+    "id": "S4.8",
+    "override": false,
+    "reason": "capstone",
+    "stage": 4,
+    "status": "work"
+   },
+   {
+    "id": "S4.9",
+    "override": false,
+    "reason": "new",
+    "stage": 5,
+    "status": "work"
+   },
+   {
+    "id": "S4.10",
+    "override": false,
+    "reason": "new",
+    "stage": 5,
+    "status": "work"
+   }
+  ],
+  "stages": [
+   {
+    "minutes": 144,
+    "n": 1
+   },
+   {
+    "minutes": 137,
+    "n": 2
+   },
+   {
+    "minutes": 149,
+    "n": 3
+   },
+   {
+    "minutes": 141,
+    "n": 4
+   },
+   {
+    "minutes": 33,
+    "n": 5
+   }
+  ],
+  "totals": {
+   "skim_min": 51,
+   "work_min": 553
+  },
+  "version": 1,
+  "warnings": []
  }
 }

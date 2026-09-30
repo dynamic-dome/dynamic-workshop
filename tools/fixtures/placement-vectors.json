@@ -802,6 +802,93 @@
     },
     "warnings": []
    }
+  },
+  {
+   "id": "P18",
+   "title": "Voraussetzung selbst auf später gesetzt, obwohl ein Kapitel sie braucht",
+   "answers": {
+    "goals": [
+     "alltag"
+    ],
+    "overrides": {
+     "S2.15": "work",
+     "S2.14": "later"
+    }
+   },
+   "expect": {
+    "status": {
+     "S2.14": [
+      "later",
+      "override"
+     ],
+     "S2.15": [
+      "work",
+      "override"
+     ]
+    },
+    "overridden": [
+     "S2.14",
+     "S2.15"
+    ],
+    "warnings": [
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S2.14",
+       "S2.15"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "P19",
+   "title": "Team-Ziel allein: Pi und OpenClaw später, Community-Skills überfliegen",
+   "answers": {
+    "goals": [
+     "team"
+    ]
+   },
+   "expect": {
+    "status": {
+     "X.3": [
+      "later",
+      "not-goal"
+     ],
+     "X.4": [
+      "later",
+      "not-goal"
+     ],
+     "X.1": [
+      "skim",
+      "community"
+     ]
+    },
+    "warnings": []
+   }
+  },
+  {
+   "id": "P20",
+   "title": "Einschätzen plus Team: Pi und OpenClaw gehören dazu",
+   "answers": {
+    "goals": [
+     "einschaetzen",
+     "team"
+    ]
+   },
+   "expect": {
+    "status": {
+     "X.3": [
+      "skim",
+      "community"
+     ],
+     "X.4": [
+      "skim",
+      "community"
+     ]
+    },
+    "warnings": []
+   }
   }
  ]
 }

@@ -205,7 +205,8 @@ def place(catalog, answers):
         if status[c["id"]] not in ("work", "skim"):
             continue
         for p in c["requires_all"]:
-            if p in overrides and status[p] in ("skip", "later") and computed[p] in ("work", "skim"):
+            # spec 6.3 E: skipped by the person, not already skip by r = 2 (a "later" before the override counts too)
+            if p in overrides and status[p] in ("skip", "later") and computed[p] != "skip":
                 warnings.append({"code": "override-prereq", "ids": [p, c["id"]]})
 
     # --- F: stages (contiguous in teaching order) ---------------------------

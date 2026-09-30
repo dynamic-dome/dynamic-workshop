@@ -38,6 +38,7 @@ ALLOWED = {
 }
 VOID = {"br", "hr"}
 DROP_WITH_CONTENT = {"script", "style", "iframe", "object", "embed", "svg", "math", "template", "noscript"}
+EMPTY_ELEMENTS = {"embed", "img", "input", "source", "track", "wbr", "param", "area", "base", "link", "meta", "col"}
 
 
 class _Sanitizer(HTMLParser):
@@ -47,7 +48,7 @@ class _Sanitizer(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         if self.skip or tag in DROP_WITH_CONTENT:
-            if tag in DROP_WITH_CONTENT and tag not in VOID:
+            if tag in DROP_WITH_CONTENT and tag not in VOID and tag not in EMPTY_ELEMENTS:
                 self.skip += 1
             return
         if tag not in ALLOWED:
@@ -75,6 +76,8 @@ class _Sanitizer(HTMLParser):
             self.stack.append(tag)
 
     def handle_startendtag(self, tag, attrs):
+        if tag in DROP_WITH_CONTENT:
+            return  # <svg/>, <iframe/>: nothing inside to drop, and no end tag will close it
         self.handle_starttag(tag, attrs)
         if tag not in VOID and self.stack and self.stack[-1] == tag:
             self.stack.pop()
@@ -243,9 +246,11 @@ def inline_html(text, ids_by_file):
 
 
 def script_safe_json(data):
-    """JSON that can sit inside a <script> element: no '</' and no U+2028/2029 surprises."""
+    """JSON that can sit inside a <script> element: no '</', no '<!--' (script data escape state) and no U+2028/2029
+    surprises. Both escapes stay valid JSON and JavaScript."""
     text = json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return text.replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
+    text = text.replace("<!--", "\\u003c!--").replace("</", "<\\/")
+    return text.replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
 
 
 def cockpit_data(lib, catalog, diagrams=None):
@@ -294,13 +299,15 @@ def render(lib, catalog, template_text=None, diagrams=None):
 
 def artefact_problems(text):
     problems = []
-    if len(re.findall(r"<script\b", text)) != 1:
+    if len(re.findall(r"<script\b", text, re.I)) != 1:
         problems.append("nicht genau ein <script>")
-    if re.search(r"<(?:link|img|iframe|object|embed)\b[^>]*(?:src|href)=\"https?:", text):
+    # the embedded JSON writes attribute quotes as \" - look at the markup the browser will actually build
+    markup = text.replace('\\"', '"')
+    if re.search(r"<(?:link|img|iframe|object|embed|use|image)\b[^>]*(?:src|href)=\"(?:https?:)?//", markup, re.I):
         problems.append("externe Referenz")
-    if re.search(r"\son[a-z]+\s*=\s*[\"']", text):
+    if re.search(r"\son[a-z]+\s*=\s*[\"']", markup, re.I):
         problems.append("Inline-Event-Handler")
-    if re.search(r"<[a-z][^>]*\sstyle=\"", text):
+    if re.search(r"<[a-z][^>]*\sstyle=\"", markup, re.I):
         problems.append("Inline-style-Attribut")
     if "confirm(" in text:
         problems.append("confirm()")

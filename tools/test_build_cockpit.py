@@ -40,6 +40,23 @@ def test_dangerous_markup_is_dropped():
     assert "javascript:" not in html
 
 
+def test_self_closing_or_void_dropped_tags_do_not_swallow_the_rest():
+    for markup in ("<svg/>", '<iframe src="x"/>', "<embed src=\"x\">", "<math/>"):
+        html = bc.chapter_html(f"# T\n\n{markup}TEXT1 and more\n\nNext paragraph\n", IDS)
+        assert "TEXT1 and more" in html and "Next paragraph" in html, markup
+        assert "<svg" not in html and "<iframe" not in html and "<embed" not in html
+
+
+def test_script_data_cannot_open_an_html_comment_and_checks_see_escaped_markup():
+    text = bc.script_safe_json({"t": "<!-- <SCRIPT>", "u": "</script>"})
+    assert "<!--" not in text and "</" not in text
+    assert bc.json.loads(text) == {"t": "<!-- <SCRIPT>", "u": "</script>"}
+    art = '<script>const LIBRARY = {"d":"<svg onload=\\"x()\\" style=\\"a:b\\">"};</script>'
+    problems = bc.artefact_problems(art)
+    assert "Inline-Event-Handler" in problems and "Inline-style-Attribut" in problems
+    assert "nicht genau ein <script>" in bc.artefact_problems(art + "<SCRIPT>")
+
+
 def test_links_are_rewritten_for_the_export():
     html = html_of("\n\n[Karte](../reference/karte-hooks.md#exit) und [intern](#check) und [Kapitel](s2-07-demo-events.md#x)\n")
     assert 'href="?run=S2.7" data-chapter="S2.7"' in html

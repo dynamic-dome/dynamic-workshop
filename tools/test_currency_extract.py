@@ -176,8 +176,10 @@ def test_foreign_sources_name_their_chapter_and_fail_closed():
     assert cx.parse_canon_foreign(text) == [("https://pi.test/docs", "X.3"), ("https://claw.test/security.md", "X.4")]
     assert cx.parse_canon_foreign(CANON) == []
     assert cx.parse_canon_sources(text) == cx.parse_canon_sources(CANON)
-    with pytest.raises(ValueError):
-        cx.parse_canon_foreign(CANON + "- Fremdprojekt: https://pi.test/docs\n")
+    for bad in ("- Fremdprojekt: https://pi.test/docs\n", "  - Fremdprojekt: https://pi.test/docs (X.3)\n",
+                "* Fremdprojekt: https://pi.test/docs (X.3)\n", "-  Fremdprojekt: https://pi.test/docs (X.3)\n"):
+        with pytest.raises(ValueError):
+            cx.parse_canon_foreign(CANON + bad)
 
 
 def test_normalize_foreign_keeps_only_the_readable_text():
@@ -225,12 +227,12 @@ def test_normalize_cockpit_drops_provenance_and_crlf():
     assert cx.normalize_cockpit(course) == cx.normalize_cockpit(live)
 
 
-def test_parse_exceptions_requires_a_reason():
-    assert cx.parse_exceptions("# Kommentar\n\n--orphan | git-Flag in Übung 1.3\n") == {"--orphan": "git-Flag in Übung 1.3"}
-    with pytest.raises(ValueError):
-        cx.parse_exceptions("--orphan\n")
-    with pytest.raises(ValueError):
-        cx.parse_exceptions("--orphan | ok\n")
+def test_parse_exceptions_requires_files_and_a_reason():
+    parsed = cx.parse_exceptions("# Kommentar\n\n--orphan | a.md, b.html | git-Flag in Übung 1.3\n")
+    assert parsed == {"--orphan": {"files": frozenset({"a.md", "b.html"}), "reason": "git-Flag in Übung 1.3"}}
+    for bad in ("--orphan\n", "--orphan | a.md | ok\n", "--orphan | git-Flag ohne Datei\n", "--orphan |  | Grund lang\n"):
+        with pytest.raises(ValueError):
+            cx.parse_exceptions(bad)
 
 
 def test_gegenprobe_finds_known_wrong_identifiers_in_old_course_text():
