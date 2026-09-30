@@ -1,0 +1,155 @@
+{
+ "id": "S3.12",
+ "verdict": "ask",
+ "counts": {
+  "kept": 34,
+  "changed": 5,
+  "dropped": 1,
+  "new": 11
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1000-1006",
+   "old": "Routines vs. ad-hoc /schedule: /schedule creates one entry; routines are the long-lived management surface around them; Routine = saved /schedule entry with lifecycle (create, list, pause, resume)",
+   "new": "/schedule legt eine Routine an (gespeicherter Auftrag aus Prompt, Repos, Connectors, Cloud); Pausieren per Schalter auf claude.ai/code/routines; Befehl und Web sind zwei Wege zu denselben Routinen; /schedule heisst auch /routines",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur der Quell-Unschaerfe. Belegt: routines.md 'The command is also available under the alias /routines', 'Use the on/off switch ... to pause or resume'; 'All three surfaces write to the same cloud account'."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:968",
+   "old": "Cost shape open-ended - pair with --max-budget-usd",
+   "new": "Kostenform offen, begrenzen wie in S3.13 (Link)",
+   "rating": "ok",
+   "reason": "Flag ist im Kapitel nicht mehr genannt, Verweis auf S3.13 (Ziel der Absicherung). Kein Faktverlust ohne Ziel."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:950",
+   "old": "Credential scan: every commit; Performance regression: after every deploy (als Zeitplaene)",
+   "new": "Tabelle behalten, aber Hinweis: die letzten beiden Zeilen sind Ereignisse, keine Zeitplaene; GitHub-/API-Ausloeser der Routine; jeder Commit lokal per Git-Hook (S4.5)",
+   "rating": "ok",
+   "reason": "Sachliche Korrektur. Belegt: routines.md Z.19/265 (GitHub: pull requests, releases), Z.167 (API-Trigger fuer Deploy-Pipelines), Minimum 1 Stunde Z.145."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:264",
+   "old": "For /schedule: check the schedule list with /schedule",
+   "new": "Ruf /schedule list auf",
+   "rating": "ok",
+   "reason": "Belegt: routines.md Z.320 'Run /schedule list to see all routines'."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:940",
+   "old": "/schedule step 2: cron syntax or natural language",
+   "new": "natuerliche Sprache; genauer Cron-Ausdruck per /schedule update",
+   "rating": "ok",
+   "reason": "Belegt: routines.md Z.145 'run /schedule update in the CLI to set a specific cron expression'."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1004",
+   "old": "Routines (implizit) 'Daily build report ... 06:00' als Routine",
+   "new": "Beispiele unveraendert, aber Mindestintervall 1 Stunde und Grobraster ergaenzt",
+   "rating": "ok",
+   "reason": "Gewollte Praezisierung, belegt routines.md Z.145."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Routinen: Research Preview, Plaene Pro/Max/Team/Enterprise",
+   "rating": "ok",
+   "reason": "Belegt: routines.md Z.10 und Z.23."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Routine: frischer Klon vom Standardbranch, claude/-Branches, keine Rechte-Modi/Freigaben, nutzt alle Connectors",
+   "rating": "ok",
+   "reason": "Belegt: routines.md Z.51, 83, 115, 330-332."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Kürzestes Intervall Routine 1 Stunde; Vergleichstabelle Cloud/Desktop/loop",
+   "rating": "ok",
+   "reason": "Belegt: scheduled-tasks.md Z.17-27 und desktop-scheduled-tasks.md Z.21-27 (Tabelle deckungsgleich)."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "/loop: Einheiten s/m/h/d; ohne Intervall waehlt Claude zwischen 1 min und 1 h; ohne Prompt Wartungs-Prompt oder loop.md; Skill '/loop' mitgeliefert",
+   "rating": "ok",
+   "reason": "Belegt: scheduled-tasks.md Z.58, 64, 84-98, 35; commands.md Z.109."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Wiederkehrende Loop-Aufgaben laufen nach 7 Tagen ab",
+   "rating": "ok",
+   "reason": "Belegt: scheduled-tasks.md Z.181 'Recurring tasks automatically expire 7 days after creation'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Jeder Loop-Durchgang schickt den ganzen Kontext mit und kostet auch, wenn nichts zu tun ist",
+   "rating": "ask",
+   "reason": "In scheduled-tasks.md nicht woertlich belegt (grep cost/context ohne Treffer); plausibel, aber ohne Zitat. Orchestrator: belegen (z.B. costs-Seite) oder streichen."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "/goal: kleines schnelles Modell prueft nach jeder Runde; endet bei erfuellt/unerfuellbar/Fehler; Anzeige '◎ /goal active'; /goal ohne Argument zeigt Status; /goal clear; neues /goal ersetzt; Pruefer fuehrt keine Befehle aus",
+   "rating": "ok",
+   "reason": "Belegt: goal.md Z.9, 42, 48, 56, 80-96, 120-124."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Tipps zur Formulierung der Bedingung (messbarer Endzustand, Pruefschritt, was unveraendert bleibt)",
+   "rating": "ok",
+   "reason": "Belegt: goal.md Z.56-58 (kongruent)."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Desktop-Aufgaben: laufen auf dem Rechner, sehen lokale Dateien, kuerzestes Intervall 1 Minute",
+   "rating": "ok",
+   "reason": "Belegt: desktop-scheduled-tasks.md Z.11, 21-27."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Option A: Routine klont das Repo von GitHub; lokale Dateien nicht sichtbar. Option C: Auftrag direkt hinter Intervall, sonst Wartungs-Prompt",
+   "rating": "ok",
+   "reason": "Belegt: routines.md Z.83, scheduled-tasks.md Z.41, 84-88."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Fallen: /schedule 'Unknown command' (Console-Key/Bedrock/Google/Foundry, ANTHROPIC_API_KEY Vorrang); Loop nach Neustart (--resume/--continue, selbst getakteter Loop nicht); disable-model-invocation-Skills und eingebaute Befehle wie /model; gruen heisst nicht erledigt",
+   "rating": "ok",
+   "reason": "Belegt: routines.md Z.403-410, 306; scheduled-tasks.md Z.45-46, 210."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Im Detail /goal, Codeblock",
+   "issue": "Beispiele '/goal All TypeScript errors resolved' und '/goal No more TODO comments...' sind Englisch im deutschen Kapitel (Quelle auch gemischt; Beispiel-Prompts koennten als Bezeichner gelten)."
+  }
+ ]
+}
