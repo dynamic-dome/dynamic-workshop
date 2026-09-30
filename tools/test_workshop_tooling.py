@@ -110,6 +110,9 @@ def test_installer_updates_clean_checkout_fast_forward_only(tmp_path: Path):
 
     assert second.returncode == 0, second.stdout + second.stderr
     assert _git("rev-parse", "HEAD", cwd=checkout) == expected_head
+    # plugins/create.md: --plugin-dir takes the plugin root (the folder holding .claude-plugin/), not .claude-plugin
+    [launch] = [line for line in second.stdout.splitlines() if "--plugin-dir" in line]
+    assert ".claude-plugin" not in launch and "dynamic-workshop" in launch
     # This static guard complements the behavioral update check: a plain pull
     # could also update but would violate the approved no-merge contract.
     assert "--ff-only" in INSTALLER.read_text(encoding="utf-8")

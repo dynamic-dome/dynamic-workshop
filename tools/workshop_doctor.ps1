@@ -80,7 +80,8 @@ function Test-PluginManifest {
   }
 
   Write-Host "[OK]   Workshop plugin identity is valid: $manifestPath"
-  Write-Host "       Launch with: claude --plugin-dir `"$PluginPath`""
+  # --plugin-dir takes the plugin root, the parent of .claude-plugin
+  Write-Host "       Launch with: claude --plugin-dir `"$(Split-Path -Parent $PluginPath)`""
   return $true
 }
 

@@ -126,4 +126,5 @@ Write-Host "Workshop plugin source is ready:"
 Write-Host $pluginDir
 Write-Host ""
 Write-Host "Start Claude Code with the local plugin enabled:"
-Write-Host "claude --plugin-dir `"$pluginDir`""
+# --plugin-dir takes the plugin root: the folder that holds .claude-plugin/plugin.json
+Write-Host "claude --plugin-dir `"$repoDir`""
