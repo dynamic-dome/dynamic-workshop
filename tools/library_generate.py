@@ -16,6 +16,7 @@ TOOLS = Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
+import build_cockpit  # noqa: E402
 import catalog_core  # noqa: E402
 import placement as engine  # noqa: E402
 
@@ -279,7 +280,7 @@ def analogies(lib):
 
 # --- all outputs -----------------------------------------------------------------------------------------
 
-def build_outputs(lib):
+def build_outputs(lib, cockpit=True):
     base = lib.root.parent
     cat = catalog(lib)
     outputs = {
@@ -292,4 +293,16 @@ def build_outputs(lib):
         outputs[base / "paths" / name] = text
     for ch in lib.chapters:
         outputs[ch.path] = with_meta(ch.path.read_text(encoding="utf-8"), meta_block(lib, ch))
+    if cockpit:
+        outputs[base / "claude-code-workshop-ui.html"] = build_cockpit.render(lib, cat, diagrams=load_diagrams(lib))
     return outputs
+
+
+def load_diagrams(lib):
+    """Pre-rendered SVGs from tools/render_diagrams.py (optional step), keyed by build_cockpit.diagram_key."""
+    folder = lib.root / "diagrams"
+    found = {}
+    if folder.exists():
+        for path in sorted(folder.glob("*.svg")):
+            found[path.stem] = path.read_text(encoding="utf-8")
+    return found

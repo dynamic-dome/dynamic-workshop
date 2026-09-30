@@ -35,7 +35,8 @@ def test_build_writes_expected_files_and_check_is_clean(lib_dir):
     assert bl.build(lib_dir, write=True) == 0
     base = lib_dir.parent
     for rel in ["library/catalog.json", "library/README.md", "library/einstufung.md", "paths/README.md",
-                "paths/live-workshop.md", "paths/schnellstart.md", "paths/ziel-alltag.md", "reference/analogien.md"]:
+                "paths/live-workshop.md", "paths/schnellstart.md", "paths/ziel-alltag.md", "reference/analogien.md",
+                "claude-code-workshop-ui.html"]:
         assert (base / rel).exists(), rel
     assert bl.build(lib_dir, write=False) == 0
 
@@ -123,3 +124,11 @@ def test_einstufung_does_not_reveal_answer_position(lib_dir):
     bl.build(lib_dir, write=True)
     text = (lib_dir / "einstufung.md").read_text(encoding="utf-8")
     assert "a) Alle Codes blocken" in text and "Richtig ist d)" in text
+
+
+def test_cockpit_artefact_contains_the_library(lib_dir):
+    bl.build(lib_dir, write=True)
+    html = (lib_dir.parent / "claude-code-workshop-ui.html").read_text(encoding="utf-8")
+    assert html.count("<script") == 1 and "@@LIBRARY_DATA@@null" not in html
+    assert "Einen Hook konfigurieren" in html and '\\u003c' not in html[:0]
+    assert "<title>Claude Code Workshop Lern-Cockpit</title>" in html

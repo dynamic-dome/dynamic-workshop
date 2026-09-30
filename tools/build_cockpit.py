@@ -189,7 +189,77 @@ def chapter_html(text, ids_by_file, diagrams=None):
     return parser.close()
 
 
+def inline_html(text, ids_by_file):
+    """Short Markdown (code spans, bold, links) -> sanitised inline HTML without the outer <p>."""
+    if not text:
+        return ""
+    html = markdown.markdown(text, output_format="html")
+    parser = _Sanitizer(link_rewriter(ids_by_file))
+    parser.feed(html)
+    out = parser.close().strip()
+    if out.startswith("<p>") and out.endswith("</p>") and out.count("<p>") == 1:
+        out = out[3:-4]
+    return out
+
+
 def script_safe_json(data):
     """JSON that can sit inside a <script> element: no '</' and no U+2028/2029 surprises."""
     text = json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return text.replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
+
+
+def cockpit_data(lib, catalog, diagrams=None):
+    """Catalog plus sanitised chapter HTML and optional pre-rendered diagrams (spec section 8)."""
+    diagrams = diagrams or {}
+    ids_by_file = {c.path.name: c.id for c in lib.chapters}
+    data = json.loads(json.dumps(catalog))  # deep copy
+    for entry in data["chapters"]:
+        ch = lib.by_id[entry["id"]]
+        entry["html"] = chapter_html(ch.path.read_text(encoding="utf-8"), ids_by_file, diagrams)
+        for key in ("glance", "analogy", "checkpoint", "outcome"):
+            entry[key + "_html"] = inline_html(entry.get(key) or "", ids_by_file)
+        entry["skip_check_html"] = [inline_html(q, ids_by_file) for q in entry.get("skip_check") or []]
+        if entry.get("quiz"):
+            q = entry["quiz"]
+            entry["quiz_html"] = {"q": inline_html(q["q"], ids_by_file), "correct": inline_html(q["correct"], ids_by_file),
+                                  "wrong": [inline_html(w, ids_by_file) for w in q["wrong"]]}
+        entry["full_url"] = REPO_URL + "resources/library/" + ch.path.name
+    data["diagrams"] = diagrams
+    return data
+
+
+def render(lib, catalog, template_text=None, diagrams=None):
+    """Template + data -> artefact text. Falls back to GitHub links when the file would exceed MAX_BYTES."""
+    template_text = template_text if template_text is not None else TEMPLATE.read_text(encoding="utf-8")
+    if DATA_MARKER not in template_text:
+        raise ValueError("Template ohne Datenmarker " + DATA_MARKER)
+    data = cockpit_data(lib, catalog, diagrams)
+    text = template_text.replace(DATA_MARKER + "null", script_safe_json(data), 1)
+    if len(text.encode("utf-8")) > MAX_BYTES:
+        for entry in data["chapters"]:
+            entry["html"] = None
+        text = template_text.replace(DATA_MARKER + "null", script_safe_json(data), 1)
+    problems = artefact_problems(text)
+    if problems:
+        raise ValueError("Cockpit-Artefakt verletzt Vorgaben: " + "; ".join(problems))
+    return text
+
+
+def artefact_problems(text):
+    problems = []
+    if len(re.findall(r"<script\b", text)) != 1:
+        problems.append("nicht genau ein <script>")
+    if re.search(r"<(?:link|img|iframe|object|embed)\b[^>]*(?:src|href)=\"https?:", text):
+        problems.append("externe Referenz")
+    if re.search(r"\son[a-z]+\s*=\s*[\"']", text):
+        problems.append("Inline-Event-Handler")
+    if re.search(r"<[a-z][^>]*\sstyle=\"", text):
+        problems.append("Inline-style-Attribut")
+    if "confirm(" in text:
+        problems.append("confirm()")
+    hrefs = re.findall(r'href=\\?"([^"\\]*)', text)
+    for href in hrefs:
+        if href and not href.startswith(("?", "#", "https://", "data:", "${")):
+            problems.append("relativer Link " + href)
+            break
+    return problems
