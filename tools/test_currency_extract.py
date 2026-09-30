@@ -171,6 +171,22 @@ def test_canon_parsers_fail_closed():
         cx.parse_canon_sources(CANON.replace("- Changelog: https://code.claude.com/docs/en/changelog.md\n", ""))
 
 
+def test_foreign_sources_name_their_chapter_and_fail_closed():
+    text = CANON + "- Fremdprojekt: https://pi.test/docs (X.3)\n- Fremdprojekt: https://claw.test/security.md (X.4)\n"
+    assert cx.parse_canon_foreign(text) == [("https://pi.test/docs", "X.3"), ("https://claw.test/security.md", "X.4")]
+    assert cx.parse_canon_foreign(CANON) == []
+    assert cx.parse_canon_sources(text) == cx.parse_canon_sources(CANON)
+    with pytest.raises(ValueError):
+        cx.parse_canon_foreign(CANON + "- Fremdprojekt: https://pi.test/docs\n")
+
+
+def test_normalize_foreign_keeps_only_the_readable_text():
+    page = "<html><head><style>a{}</style><script>var build='a1';</script></head><body><p>Pi  runs\n tools</p></body>"
+    other = page.replace("a1", "b2").replace("<p>", '<p class="x">')
+    assert cx.normalize_foreign(page) == cx.normalize_foreign(other) == "Pi runs tools"
+    assert cx.normalize_foreign("# Pi\n\nruns  tools\n") == "# Pi runs tools"
+
+
 def test_changelog_since_returns_only_newer_entries():
     text = (
         '<Update label="2.1.286" description="a">\n  * Added --foo\n  * Fixed bar\n</Update>\n'

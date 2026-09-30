@@ -29,7 +29,7 @@ EXCEPTIONS = ROOT / "tools" / "currency_exceptions.txt"
 STATE_DIR = ROOT / ".currency"
 
 TIMEOUT_S = 30
-MIN_BYTES = {"doc": 5_000, "cli": 200, "changelog": 100_000, "cockpit": 100_000}
+MIN_BYTES = {"doc": 5_000, "cli": 200, "changelog": 100_000, "cockpit": 100_000, "foreign": 500}
 MIN_FLAGS, MIN_ENV, MIN_DEPRECATIONS, MIN_ALIASES, MIN_MODES = 80, 150, 10, 3, 5
 RETIREMENT_WARN_DAYS = 60
 CANON_INFO_DAYS, CANON_RED_DAYS = 45, 90
@@ -197,6 +197,7 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
         checked, cli_canon = cx.parse_canon_header(canon_text)
         canon_models = cx.parse_canon_models(canon_text)
         sources = cx.parse_canon_sources(canon_text)
+        foreign = cx.parse_canon_foreign(canon_text)
         exceptions = cx.parse_exceptions(exceptions_text)
     except ValueError as exc:
         raise SourceError(str(exc)) from exc
@@ -263,12 +264,27 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
             findings.append(Finding("info", f"doc-new:{kind}:{_short(' '.join(new))}",
                                     f"Neu in der Doku ({KIND_LABEL[kind]}): " + ", ".join(new)))
 
+    # Third-party pages (community chapters) are only watched for changes; their text never joins `union`, so they
+    # cannot make an undocumented Claude Code flag look documented. An outage there must not stop the monthly run.
+    chapter_of, foreign_got = {}, []
+    for url, chapter in foreign:
+        chapter_of[url] = chapter
+        try:
+            foreign_got.append(fetch_checked(fetcher, url, "foreign"))
+        except SourceError as exc:
+            findings.append(Finding("gelb", f"foreign-unreadable:{url}",
+                                    f"Fremdprojekt-Quelle nicht lesbar ({exc}) — Kapitel {chapter} von Hand prüfen", (url,)))
+
     known_sources = previous.get("sources", {})
     rows = []
-    for got in docs + [cli, changelog] + ([live_cockpit] if live_cockpit else []):
-        sha = _sha(got.text)
+    for got in docs + [cli, changelog] + ([live_cockpit] if live_cockpit else []) + foreign_got:
+        sha = _sha(cx.normalize_foreign(got.text) if got.url in chapter_of else got.text)
         changed = got.url in known_sources and known_sources[got.url]["sha256"] != sha
         rows.append((got.url, got.final_url, len(got.text.encode("utf-8")), sha, changed))
+        if changed and got.url in chapter_of:
+            findings.append(Finding("gelb", f"foreign-changed:{got.url}:{sha[:12]}",
+                                    f"Fremdprojekt-Quelle geändert — Kapitel {chapter_of[got.url]} gegen die Quelle "
+                                    "prüfen und das Prüfdatum erneuern", (got.url,)))
         if got.final_url != got.url:
             findings.append(Finding("info", f"redirect:{got.url}",
                                     f"Quelle umgezogen: {got.url} -> {got.final_url} (Kanon-Quellenliste nachziehen)"))

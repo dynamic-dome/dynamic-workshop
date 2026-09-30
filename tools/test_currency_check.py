@@ -25,7 +25,7 @@ DOCS = ["cli-reference.md", "env-vars.md", "model-deprecations.md", "model-confi
 OPUS = ("Claude Opus 5.5", "claude-opus-5-5", "opus", "Opus", "Active", "Not sooner than September 22, 2027")
 
 
-def canon(checked="2026-09-29", cli="2.1.284", rows=(OPUS,), docs=DOCS):
+def canon(checked="2026-09-29", cli="2.1.284", rows=(OPUS,), docs=DOCS, foreign=()):
     table = "\n".join(f"| {n} | `{i}` | `{a}` | {t} | {s} | {r} | 1M | 4 | 20 | Rolle |" for n, i, a, t, s, r in rows)
     listed = "\n".join(f"- Doku: {BASE}{d}" for d in docs)
     return (
@@ -33,6 +33,7 @@ def canon(checked="2026-09-29", cli="2.1.284", rows=(OPUS,), docs=DOCS):
         "| Modell | ID | Alias | Tier | Status | Retirement frühestens | Kontext | In $/1M | Out $/1M | Rolle |\n"
         "|---|---|---|---|---|---|---|---|---|---|\n" + table + "\n\n## Quellen\n\n" + listed +
         f"\n- CLI-Version: https://npm.test/latest\n- Changelog: {BASE}changelog.md\n"
+        + "".join(f"- Fremdprojekt: {url} ({chapter})\n" for url, chapter in foreign)
     )
 
 
@@ -202,6 +203,34 @@ def test_cockpit_comparison_ignores_provenance_but_reports_real_differences():
     assert levels(clean, "rot") == []
     differs = run(available=pages(**{url: same.replace("<p>x</p>", "<p>y</p>")}), cockpit_text=course_cockpit, cockpit_url=url)
     assert [f.key.split(":")[0] for f in levels(differs, "rot")] == ["cockpit-differs"]
+
+
+PI = "https://pi.test/docs"
+PI_PAGE = "<html><body><script>var build = 1;</script><p>Pi has four tools.</p>" + PAD + "</body></html>"
+
+
+def test_changed_foreign_source_is_yellow_and_names_the_chapter():
+    text = canon(foreign=[(PI, "X.3")])
+    first = run(canon_text=text, available=pages(**{PI: PI_PAGE}))
+    assert first.exit_code == 0 and PI in first.state["sources"]
+    same = run(canon_text=text, available=pages(**{PI: PI_PAGE.replace("build = 1", "build = 2")}), previous=first.state)
+    assert levels(same, "gelb") == []
+    moved = run(canon_text=text, available=pages(**{PI: PI_PAGE.replace("four", "seven")}), previous=first.state)
+    [finding] = levels(moved, "gelb")
+    assert "X.3" in finding.text and finding.where == (PI,) and moved.exit_code == 1
+
+
+def test_unreachable_foreign_source_is_yellow_not_a_source_error():
+    result = run(canon_text=canon(foreign=[(PI, "X.3")]))
+    [finding] = levels(result, "gelb")
+    assert "X.3" in finding.text and "nicht lesbar" in finding.text
+
+
+def test_foreign_pages_never_document_claude_code_identifiers():
+    page = PI_PAGE.replace("four tools", "the flag `--metadata`")
+    result = run(course={"b3.md": "Pass `--metadata` here.\n"}, canon_text=canon(foreign=[(PI, "X.3")]),
+                 available=pages(**{PI: page}))
+    assert any("--metadata" in f.text for f in levels(result, "rot"))
 
 
 def test_redirect_is_reported_as_info():
