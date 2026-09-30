@@ -1,0 +1,149 @@
+{
+ "id": "S3.9",
+ "verdict": "pass",
+ "counts": {
+  "kept": 34,
+  "changed": 8,
+  "dropped": 0,
+  "new": 9
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:751",
+   "old": "Schutzliste gilt unbedingt, ohne Override-Flag nicht beschreibbar, egal welcher Modus (auch bei bypassPermissions)",
+   "new": "Ausnahme bypassPermissions und plan-Modus interaktiver Terminal-Sitzung mit verfügbarem bypassPermissions; Modus-Tabelle",
+   "rating": "ok",
+   "reason": "Korrektur belegt: permission-modes.md 'Writes to a small set of paths are never auto-approved, except in `bypassPermissions` mode and in interactive terminal sessions in plan mode with bypass permissions available' (per curl geprüft, Tabelle identisch)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:757",
+   "old": ".claude ausser vier Unterpfaden: commands, agents, skills, worktrees",
+   "new": "`.claude` ausser `.claude/worktrees`",
+   "rating": "ok",
+   "reason": "Doku: '`.claude`, except for `.claude/worktrees` where Claude stores its own git worktrees'. Die drei anderen Unterpfade stehen nicht mehr in der Ausnahme (per curl geprüft)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:766",
+   "old": "Auto-Mode-Klassifikator kann nie ein git config/.bashrc/.mcp.json durchwinken; Schutz nicht über Rechte-Regeln",
+   "new": "Liste fest im Programm; keine Allow-Regel winkt durch; in auto entscheidet für diese Pfade immer der Klassifikator",
+   "rating": "ok",
+   "reason": "Doku: auto = 'Routed to the classifier', Allow-Regeln greifen nicht ('safety check runs before ... allow rules'). Aussage 'Schutz nie durch Regeln' ist präziser; die Formulierung 'fest im Programm' bleibt wie in der Quelle."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:768",
+   "old": "Analogie: Tresorraum, den selbst der Hausherr mit Generalschlüssel nicht betreten kann",
+   "new": "Tresorräume; Generalschlüssel (bypassPermissions) sperrt sie ohne Frage auf",
+   "rating": "ok",
+   "reason": "Analogie folgt der korrigierten Fakten-Lage (bypassPermissions erlaubt Schreiben)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:823",
+   "old": "Windows: natives PowerShell-Tool mit Host-Rechtesystem, 'first-class shell path rather than a fallback'",
+   "new": "Windows (nativ): keine eingebaute Sandbox; WSL2 nutzen",
+   "rating": "ok",
+   "reason": "sandboxing.md: 'Native Windows is not supported. On Windows, run Claude Code inside a WSL2 distribution.' (per curl geprüft). Alte Aussage suggerierte Sandbox-Ersatz."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:825",
+   "old": "Gilt nur für Bash/PowerShell + Kindprozesse",
+   "new": "Bash-, PowerShell- und Monitor-Befehle samt Kindprozessen",
+   "rating": "ok",
+   "reason": "sandboxing.md: 'applies only to Bash, PowerShell, and Monitor commands and their child processes' (per curl geprüft)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:917",
+   "old": "Pfadschutz: .git, Shell-Konfig, .mcp.json können nicht umgeschrieben werden",
+   "new": "... nicht ohne Prüfung umgeschrieben, ausser in bypassPermissions",
+   "rating": "ok",
+   "reason": "Folge der gleichen Doku-Korrektur."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:919",
+   "old": "Prozess: Hooks blocking actions -> 'Bestimmte Befehle werden ganz geblockt'",
+   "new": "Hooks, die Aktionen blocken, 'nach bestem Bemühen' (Verweis S2.8)",
+   "rating": "ok",
+   "reason": "Abschwächung im Sinne der Hook-Fakten (Bewertung H-xx/S2.8, Hooks sind keine harte Grenze); permissions.md: nur Exit 2 blockt. Unschädlich."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Modus-Tabelle für geschützte Pfade (default/acceptEdits Rückfrage, plan, auto Klassifikator, dontAsk abgelehnt, bypassPermissions erlaubt)",
+   "rating": "ok",
+   "reason": "Zeilenweise gegen permission-modes.md#protected-paths geprüft: identisch."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Allow-Regeln aus Settings geben geschützte Pfade nicht frei, Beispiel `Edit(.claude/**)`; Prompt kann sitzungsweise Freigabe für `.claude` anbieten",
+   "rating": "ok",
+   "reason": "Wörtlich in der Doku (`Edit(.claude/**)`, 'session-scoped options') per curl bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Vollständige Liste länger: `.config/git`, `.devcontainer`, `.npmrc`, `.envrc`",
+   "rating": "ok",
+   "reason": "Alle vier in der Doku-Liste geschützter Pfade vorhanden."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "`/sandbox` ist kein Rechte-Modus; Read-/Edit-Deny-Regeln greifen bei Datei-Werkzeugen und erkannten Shell-Dateibefehlen, nicht bei Skripten, die Dateien selbst öffnen; Sperre für jeden Prozess nur per Sandbox",
+   "rating": "ok",
+   "reason": "permissions.md Z.334: 'They don't apply to ... a Python or Node script that opens files itself. For OS-level enforcement ... enable the sandbox.' sandboxing.md Z.583-584 bestätigt Trennung."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Read/Edit/Write laufen direkt über das Rechte-System, nicht durch die Sandbox",
+   "rating": "ok",
+   "reason": "sandboxing.md Z.731 'Read, Edit, and Write use the permission system directly rather than running through the sandbox'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Unter Linux/WSL2 braucht die Sandbox `bubblewrap` und `socat`; /sandbox-Panel zeigt Fehlendes (nur Dependencies-Reiter)",
+   "rating": "ok",
+   "reason": "sandboxing.md Z.35, 69-70, 88-92 bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "'Anthropic nennt aus eigener Nutzung 84 %' (Quelle: Anthropic Engineering)",
+   "rating": "ok",
+   "reason": "Blog: 'In our internal usage, we've found that sandboxing safely reduces permission prompts by 84%' (per curl geprüft). Herstellerangabe-Hinweis bleibt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Git-Worktree-Beispiel `git worktree add ../agent-task-1 -b agent/task-1`",
+   "rating": "ok",
+   "reason": "Standard-Git-Syntax, Cockpit-Beispiel, keine Claude-Code-Behauptung."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Querverweise auf S3.8 (Modus je Stufe, Wrong-Door Heist), S4.7, S1.18, S3.3, S3.10, S2.8 und Typische Fallen/Quiz",
+   "rating": "ok",
+   "reason": "Nur Verweise bzw. aus verifizierten Aussagen abgeleitet; Ziele in ownership/links zu prüfen, Inhalte sind keine neuen Fakten."
+  }
+ ],
+ "style": []
+}

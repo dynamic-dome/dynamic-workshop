@@ -1,0 +1,192 @@
+{
+ "id": "S3.8",
+ "verdict": "ask",
+ "counts": {
+  "kept": 34,
+  "changed": 10,
+  "dropped": 2,
+  "new": 9
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:700",
+   "old": "auto is the ML-classifier-driven mode where Claude itself decides which actions to auto-approve",
+   "new": "In auto prüft ein eigenes Klassifikator-Modell jede Aktion; blockt, was über den Auftrag hinausgeht, unbekannte Infrastruktur trifft oder nach feindlichem Inhalt aussieht",
+   "rating": "ok",
+   "reason": "permission-modes.md: 'a separate classifier model reviews actions ... blocking anything that escalates beyond your request, targets unrecognized infrastructure, or appears driven by hostile content Claude read'. Quelle war ungenau."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:784",
+   "old": "permissions.ask rule: Always prompts the user, even in auto or dontAsk mode",
+   "new": "fragt immer nach, auch in auto und bypassPermissions; in dontAsk wird der Aufruf stattdessen abgelehnt",
+   "rating": "ok",
+   "reason": "permission-modes.md: 'Claude Code doesn't auto-approve in any mode, including bypassPermissions: Tools matched by an explicit ask rule'; dontAsk 'denies calls matching your explicit ask rules rather than prompting'. Gewollte Korrektur."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:783",
+   "old": "Skill(<name> *): Wildcard for a skill family (Skill(agentic-os *))",
+   "new": "Präfix-Treffer: Skill mit beliebigen Argumenten, Beispiel Skill(review-pr *)",
+   "rating": "ok",
+   "reason": "skills.md: 'Skill(name *) for prefix match with any arguments'; Beispiel Skill(review-pr *) steht dort wörtlich."
+  },
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:264",
+   "old": "Step 2: Switch via /permissions to acceptEdits",
+   "new": "Wechsel mit Shift+Tab, Statusleiste zeigt '⏵⏵ accept edits on'; /permissions zeigt nur Regeln, wechselt den Modus nicht",
+   "rating": "ok",
+   "reason": "permission-modes.md: 'press Shift+Tab to cycle ... ⏵⏵ accept edits on'; permissions.md: /permissions listet Regeln und ihre settings-Datei. Quelle war falsch."
+  },
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:311",
+   "old": "Recovery: acceptEdits prompts -> check ~/.claude/settings.local.json; local settings take precedence over user settings",
+   "new": "projektlokale .claude/settings.local.json auf Ask-Regeln prüfen; geht Projekt- und Nutzer-Einstellungen vor",
+   "rating": "ok",
+   "reason": "permissions.md: settings.local.json liegt im Projekt (primary working directory); settings.md Precedence. Pfad korrigiert; Ask-Regel als Ursache in permission-modes.md belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:309",
+   "old": "Recovery: /permissions doesn't show the mode -> claude --verbose or jq",
+   "new": "Statusleiste zeigt Modus, /permissions Regeln; jq-Befehl für Startmodus bleibt",
+   "rating": "ok",
+   "reason": "--verbose als Modusanzeige ist nicht belegt; Statusleisten-Strings (manual mode on, accept edits on, plan mode on) stehen wörtlich in permission-modes.md."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:744",
+   "old": "bypassPermissions really does mean everything",
+   "new": "Deny-Regeln blocken weiter; Ask-Regeln und rm auf kritische Pfade fragen auch hier; Allow-Regeln wirken nicht",
+   "rating": "ok",
+   "reason": "permission-modes.md: 'Deny rules block in every mode, including bypassPermissions ... Allow rules have no effect'; Critical-path-Tabelle: bypassPermissions 'Asks you to approve it'. Präzisierung."
+  },
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:286",
+   "old": "auto = classifier-assisted mode for trusted local/managed environments; unavailable in Cloud sessions",
+   "new": "Ein Klassifikator prüft statt dir. Auch in Cloud-Sitzungen wählbar, wenn Organisation und Modell es erlauben",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.208: Cloud sessions bieten Accept edits, Plan und Auto. Alte Aussage überholt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:275",
+   "old": "Plan mode: one approval covers all steps",
+   "new": "Plan wird vorgelegt, nichts geändert bis Freigabe; bei Freigabe Wahl: auto, automatisch angenommene Änderungen oder Einzelfreigabe",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.262 (Yes, and use auto mode / Yes, auto-accept edits). Präzisierung."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:717",
+   "old": "Windows (PowerShell): Set-Content, Add-Content, Clear-Content, Remove-Item",
+   "new": "Windows (mit aktivem PowerShell-Werkzeug)",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.230: 'When the PowerShell tool is enabled'."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/demos/block-3-demos.md:250",
+   "old": "Sprechtexte inline in den Schritten ('Default mode. Visitor badge ...')",
+   "new": "in Details 'Für Moderierende' verschoben; Plan-Metapher 'security briefing' zu 'Einsatzbesprechung'",
+   "rating": "ok",
+   "reason": "Sinngleich im Moderationsblock vorhanden; unschädlich."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/demos/block-3-demos.md:312",
+   "old": "Recovery: older Claude Code versions may use different flag names for --permission-mode",
+   "new": "",
+   "rating": "ok",
+   "reason": "Unbelegte Vermutung; --permission-mode ist dokumentiert. Ersatz: claude --version prüfen, /plan."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Ohne Flag startet eine neue Sitzung in aktuellen Versionen in auto; Demo startet mit claude --permission-mode default",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.11: 'With Claude Code v2.1.283 or later, auto mode is the built-in starting permission mode'. Zitat stimmt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "auto nicht verfügbar: Organisation per permissions.disableAutoMode, Anthropic kann serverseitig abschalten",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.297, 301 bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "autoMode.hard_deny: Sperrliste, die der Klassifikator nie überstimmt",
+   "rating": "ok",
+   "reason": "auto-mode-config.md: 'autoMode.hard_deny: unconditional security boundaries'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "bypassPermissions: schreibt auch auf geschützte Pfade; schützt nicht gegen Prompt Injection; Admin-Sperre permissions.disableBypassPermissionsMode; Start als root/sudo unter Linux/macOS verweigert außer in erkannter Sandbox; Dev-Container läuft ohne root",
+   "rating": "ok",
+   "reason": "permission-modes.md (Protected-paths-Tabelle 'bypassPermissions: Allowed', Fehlertext root/sudo, devcontainer non-root, Warning-Block) wörtlich belegt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "acceptEdits: Ordner aus --add-dir zählen zum Arbeitsbereich; geschützte Pfade und rm auf kritische Pfade (Arbeitsordner, Home) fragen weiter",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.226-228 und Abschnitt Critical paths (filesystem root, home directory, working directory)."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "dontAsk: Aufruf mit Ask-Regel wird abgelehnt statt gefragt (Falle 'CI-Lauf fragt nicht, sondern der Aufruf fehlt')",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.541."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Regeln in der Projekt-settings.json gelten unabhängig vom Laufzeit-Modus; Ask-Regeln erzwingen Rückfrage auch in auto",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.30, 38, 142."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Wrong-Door-Heist: Hinweis auf exit 2 und absolute Pfade mit Backslash unter Windows (S2.8)",
+   "rating": "ok",
+   "reason": "S2.8 (Z.137, 154) enthält beides; Querverweis."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Quiz, Check-Fragen, Schnellcheck, Mermaid-Entscheidungsbaum, Zutrittsanlagen-Analogie",
+   "rating": "ok",
+   "reason": "Didaktische Zutaten; Baum nutzt nur belegte Aussagen."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Im Detail bypassPermissions / Weiterlesen",
+   "issue": "Verweis auf s4-07-isolation-docker-worktrees.md (S4.7): Datei existiert im Worktree noch nicht (laut chapter-meta.yaml geplant). Vor dem Merge Linkprüfung sicherstellen."
+  },
+  {
+   "rating": "ask",
+   "where": "Quizfrage",
+   "issue": "Die richtige Antwort ist als einzige zweiteilig mit Semikolon (zwei konkrete Fakten); die falschen sind einteilig. Längen ähnlich, Form verrät die Lösung leicht. Optional angleichen."
+  }
+ ]
+}
