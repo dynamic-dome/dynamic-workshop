@@ -1,0 +1,243 @@
+{
+ "id": "S4.10",
+ "verdict": "ask",
+ "counts": {
+  "kept": 55,
+  "changed": 17,
+  "dropped": 5,
+  "new": 6
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1839",
+   "old": "Activate `--verbose`; the hook trace shows match attempts and exit codes inline.",
+   "new": "`claude --debug` oder `/debug` mitten in der Sitzung; das Debug-Log nennt Ereignisse, geprüfte Matcher, Exit-Code und Ausgabe; Ctrl+O zeigt die Transkript-Ansicht.",
+   "rating": "ok",
+   "reason": "Doku hooks#debug-hooks: `claude --debug`, Log unter ~/.claude/debug/<session-id>.txt; hooks-guide nennt /debug mid-session und Ctrl+O fürs Transkript (per curl geprüft)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1852",
+   "old": "Frontmatter parse error: `/doctor` catches this; `/skills` may still list the skill.",
+   "new": "Skill lädt mit leeren Metadaten, `/skill-name` geht noch; Lesefehler zeigt `claude --debug`, `claude plugin validate ~/.claude/skills` findet unlesbares Frontmatter.",
+   "rating": "ok",
+   "reason": "Doku skills#skill-not-triggering: 'Claude Code loads the skill body with empty metadata ... Run with --debug to see the parse error'; plugin validate prüft Skills in einem Verzeichnis (Plugin-CLI-Referenz). Die /doctor-Aussage der Quelle war nicht belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1861",
+   "old": "Skills load live, no restart needed (ohne Ausnahme).",
+   "new": "Live, außer im Bare-Modus; Ausnahmen (neu angelegter Skill-Ordner) verwiesen auf S2.5.",
+   "rating": "ok",
+   "reason": "Doku skills#live-change-detection: 'except in bare mode'; /reload-skills für neu angelegte Top-Level-Ordner."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1872",
+   "old": "`claude plugin validate <name>`",
+   "new": "`claude plugin validate <path>`, braucht Pfad, keinen Namen",
+   "rating": "ok",
+   "reason": "Doku: `claude plugin validate <path> [options]`."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1873",
+   "old": "`/reload-plugins` mostly not necessary (plugin contents load live).",
+   "new": "Nötig nach Änderungen außerhalb des /plugin-Panels, etwa `claude plugin`-Befehl in anderem Terminal.",
+   "rating": "ok",
+   "reason": "Doku Plugin-CLI-Referenz #reload-plugins: 'Run it yourself after plugin changes that happen outside the panel, such as a claude plugin command ...'."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1875",
+   "old": "Relative-Path-Problem: Manifest verweist auf skills/my-skill/SKILL.md, Datei liegt aber in my-skill/SKILL.md.",
+   "new": "Pfad im Manifest zeigt ins Leere (Pfade mit `./`, relativ zum Plugin-Root) oder `skills/` liegt in `.claude-plugin/` statt im Root; validate meldet `Path not found`.",
+   "rating": "ok",
+   "reason": "Doku plugins-reference: 'Path not found', ./-Präfix, alle anderen Dateien gehören ins Plugin-Root, nicht in .claude-plugin/."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1885",
+   "old": "/mcp zeigt authorized/expired/never OAuth-State und letzte Fehlermeldung; `claude mcp get`: command line, env vars, transport.",
+   "new": "/mcp zeigt Verbindungsstatus, Projekt-Freigabe und Serverfehler; `claude mcp get` mit `Issue:`-Zeile.",
+   "rating": "ok",
+   "reason": "Doku debug-your-config und mcp (Server status, Issue:-Zeile). Die OAuth-Spalte der Quelle war nicht belegt; Verlust unschädlich."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1887",
+   "old": "reset-project-choices: Approval-Cache leeren, wenn Claude trotz Ja immer wieder fragt (corrupted approval store).",
+   "new": "Setzt Freigabe-Entscheidungen für .mcp.json-Server zurück; danach fragt Claude Code wieder.",
+   "rating": "ok",
+   "reason": "Doku mcp: 'To reset those approval choices, run claude mcp reset-project-choices'. 'Corrupted store' war unbelegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1889",
+   "old": "401: /mcp öffnen, Re-auth-Link folgen.",
+   "new": "Claude Code erneuert das Token selbst und versucht einmal neu; sonst in /mcp **Re-authenticate**.",
+   "rating": "ok",
+   "reason": "Doku mcp: Refresh und einmaliger Retry, Server erst danach in /mcp markiert; Re-authenticate."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1897",
+   "old": "InstructionsLoaded feuert bei CLAUDE.md, AGENTS.md oder Auto-Memory; Payload `loadedFiles`; Hook `jq '.loadedFiles'`.",
+   "new": "Feuert für CLAUDE.md und .claude/rules/; Felder file_path, memory_type, load_reason; kein Blocken, asynchron; Matcher gegen load_reason; Skript loggt {load_reason, memory_type, file_path}; `loadedFiles` als nicht existent benannt; AGENTS.md nur bei Import über CLAUDE.md.",
+   "rating": "ok",
+   "reason": "Doku hooks#instructionsloaded (per curl geprüft): Felder, Werte, Matcher-Regel und AGENTS.md-Verhalten stimmen; bekannte Korrektur."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1937",
+   "old": "Checkliste 1: Claude fragen oder `--verbose`-Start; 7: `claude --verbose`, Boot-Output.",
+   "new": "1: `/context` unter Memory files, Gegencheck per Frage; 7: `claude --debug`, Log in ~/.claude/debug/<session-id>.txt.",
+   "rating": "ok",
+   "reason": "Doku debug-your-config (/context zeigt Memory files) und hooks#debug-hooks (Logpfad)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1955",
+   "old": ".claude.json/.mcp.json: Claude refuses to write (Protected Paths, Module 3.3).",
+   "new": "Geschützte Pfade: Schreibzugriffe nie automatisch freigegeben, außer in bypassPermissions; Verweis S3.9.",
+   "rating": "ok",
+   "reason": "Doku permission-modes listet .mcp.json und .claude.json als Protected files; permissions: bypassPermissions überspringt Prompts auch dort. Präzisere Fassung."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:592",
+   "old": "Nur `/hooks`, `claude --verbose`, Playbook aus Module 3.7; Hook in ~/.claude/settings.json.",
+   "new": "`/hooks`, `claude --debug`, Checkliste; Hook in projekt-lokaler `.claude/settings.json`.",
+   "rating": "ok",
+   "reason": "--verbose durch --debug ersetzt (Doku); Scope-Wechsel zu projekt-lokal konsistent mit Saboteur-Extra und S2.8, unschädlich."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:615",
+   "old": "Matcher `\"Bash(rm *)\"` als enger Matcher.",
+   "new": "Matcher `\"Bash\"` plus Feld `if: \"Bash(rm *)\"`; `Bash(rm *)` im matcher wird als Regex gelesen und feuert nie.",
+   "rating": "ok",
+   "reason": "Doku hooks#matcher-patterns (Sonderzeichen ergeben JS-Regex) und `if` in Permission-Rule-Syntax (Beispiel \"Bash(rm *)\")."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:632",
+   "old": "`jq -r '.tool // \"unknown\"'`",
+   "new": "`.tool_name`, mit Hinweis auf alten Fehler; Voraussetzung `INPUT=$(cat)`.",
+   "rating": "ok",
+   "reason": "Doku hooks: Feld heißt tool_name; bekannte Korrektur."
+  },
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:775",
+   "old": "Recovery: `claude --verbose` beim Neustart.",
+   "new": "`claude --debug`, Log in ~/.claude/debug/<session-id>.txt.",
+   "rating": "ok",
+   "reason": "Doku hooks#debug-hooks."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1959",
+   "old": "Security-Analogie komplett: Card/Reader/Controller/Wiring/Power mit Zuordnung Prompt/Skill/Hook/Plugin-MCP/Permission.",
+   "new": "Neue Tür-Analogie im 'Bild im Kopf' mit sechs Stufen (Zentrale=CLAUDE.md ... Berechtigungsstufe=Rechte, Karte=Prompt) plus Mermaid-Ablauf; Fail-secure-Absatz erhalten.",
+   "rating": "ok",
+   "reason": "Analogie, keine Faktenaussage; Reihenfolge der Checkliste bleibt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1935",
+   "old": "'most problems are found in the first three'",
+   "new": "",
+   "rating": "ok",
+   "reason": "Unbelegte Häufigkeitsaussage, Verlust unschädlich."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/exercises/block-3-exercises.md:584",
+   "old": "Priority: Should-do; 'Hooks are the most powerful Claude Code feature'; 'every few weeks'.",
+   "new": "",
+   "rating": "ok",
+   "reason": "Werbende bzw. unbelegte Aussagen; Übung bleibt vollständig."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1885",
+   "old": "/mcp-Tabelle mit OAuth state (authorized/expired/never); `claude mcp get`: command line, env vars, transport.",
+   "new": "",
+   "rating": "ok",
+   "reason": "Durch doku-belegte Beschreibung ersetzt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1873",
+   "old": "Hot-reload 'mostly not necessary (plugin contents load live)'.",
+   "new": "",
+   "rating": "ok",
+   "reason": "Durch Doku-Aussage zu /reload-plugins ersetzt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1954",
+   "old": "Auto-Memory-Antipattern: 'stale entry from three weeks ago'.",
+   "new": "",
+   "rating": "ok",
+   "reason": "Nur Beispielzeitraum; Kernaussage (ein veralteter Eintrag) bleibt."
+  },
+  {
+   "status": "new",
+   "source": "neu",
+   "old": "",
+   "new": "Ein `matcher` bei InstructionsLoaded wird gegen `load_reason` geprüft; \"session_start\" loggt nur Startdateien.",
+   "rating": "ok",
+   "reason": "Doku hooks#instructionsloaded: 'The matcher runs against load_reason'."
+  },
+  {
+   "status": "new",
+   "source": "neu",
+   "old": "",
+   "new": "Ctrl+O öffnet die Transkript-Ansicht und zeigt, ob der Hook geblockt oder einen `hook error` gemeldet hat.",
+   "rating": "ok",
+   "reason": "Doku hooks-guide: 'Press Ctrl+O to open the transcript view to check the outcome of a hook run'."
+  },
+  {
+   "status": "new",
+   "source": "neu",
+   "old": "",
+   "new": "Hook im Timeout: Claude Code bricht ab, verwirft Ausgabe, PreToolUse blockt nicht.",
+   "rating": "ok",
+   "reason": "Doku hooks#timeouts; in der Quelle schon als Z.1823 vorhanden, nur Wortlaut ergänzt."
+  },
+  {
+   "status": "new",
+   "source": "neu",
+   "old": "",
+   "new": "Falle 'Mit `--verbose` nach einem Startprotokoll suchen': /context zeigt, was geladen ist, das Debug-Log, was ein Hook tat.",
+   "rating": "ask",
+   "reason": "Implizit neue Verhaltensaussage (--verbose liefert kein Startprotokoll). Doku belegt /context und Debug-Log, sagt aber nichts Ausdrückliches über eine --verbose-Startausgabe. Orchestrator entscheidet: Formulierung positiv fassen (Was zeigt was) oder Beleg nachreichen."
+  },
+  {
+   "status": "new",
+   "source": "neu",
+   "old": "",
+   "new": "Übung Schritt 4: bei einem Wächter-Hook mit Eingabe im echten Format prüfen, dass er noch blockt.",
+   "rating": "ok",
+   "reason": "Didaktische Ergänzung, stützt sich auf Kapitelinhalt, keine neue Tatsache."
+  },
+  {
+   "status": "new",
+   "source": "neu",
+   "old": "",
+   "new": "Falle 'Die falsche Kopie bearbeiten' als eigener Punkt.",
+   "rating": "ok",
+   "reason": "Stammt aus Quelle Z.1861 (anderer Ort der Datei), nur als Falle wiederholt."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Quizfrage",
+   "issue": "Die richtige Antwort ist die längste Option (ca. 115 Zeichen gegenüber 95 bis 105) und steht zudem an erster Stelle: Längen-Hinweis auf die Lösung. Falsche Antworten etwas ausbauen oder die richtige kürzen und die Reihenfolge mischen."
+  }
+ ]
+}
