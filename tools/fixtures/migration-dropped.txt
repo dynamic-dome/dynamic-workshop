@@ -1,0 +1,3 @@
+# Bewusst nicht übernommene Codeblöcke der alten Kursdateien (Basis-Commit ba222d2).
+# Format: <digest> <pfad>:<zeile> <grund>   — die Liste darf nur mit Begründung wachsen und wird von
+# tools/test_migration_ledger.py geprüft. Gründe: Dublette von <ziel>, veraltet laut <beleg>, ersetzt durch <ziel>.

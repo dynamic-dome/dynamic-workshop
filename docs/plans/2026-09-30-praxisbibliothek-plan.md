@@ -70,7 +70,7 @@ S2.20 mit `offers`, community X.1 mit `after`; `_shelves.yaml`, `_placement.yaml
 0,6 × richtig), `skip-check-count`, `links-resolve`, `no-migration-todo`, `sources-https`, `sources-required`
 (lesson/setup), `placement-refs`, `area-unique`, `minimum-path-closed`, `required-ids` (complete). 43 Tests grün.
 
-- [ ] **Nachtrag:** Regel `order-unique` (zwei Kapitel mit gleichem `order`) und Regel `meta-contract` (Task 5), je mit Test.
+- [x] **Nachtrag:** Regeln `order-unique` und `meta-contract` (Frontmatter + Dateiname = `docs/migration/chapter-meta.yaml`), Links und Placement-Verweise auf geplante Kapitel im Teilmodus erlaubt; je mit Test.
 
 ### Task 3: Regale und Einstufungsdaten — Daten und Tests fertig
 
@@ -175,6 +175,9 @@ Generiert (committet): `resources/library/catalog.json`, `resources/library/READ
   Katalog und das Kapitel veraltet; CRLF-Arbeitskopie → `check` sauber; `requires_all` transitiv; `live-workshop.md`
   nennt Sessions 0–4 mit Summen; `analogien.md` enthält jede Kapitel-Analogie genau einmal.
 - [ ] Commit `feat(library): generators for catalog, overviews, paths and meta blocks`.
+
+**Hinweis (Codex Runde 4):** Task 5 schließt mit der Abnahme auf der Fixture-Bibliothek ab; der vollständige
+Produktions-Build (`build` über alle 68 Kapitel, `check`, `validate --complete`) ist **Gate A2 nach Task 8**.
 
 **Gate A (nach Task 5):** Codex-Verifier (read-only) auf Tasks 1–5 gegen Spec §4, §6, §7. Befunde an der Quelle prüfen,
 beheben, erst dann Phase 2.

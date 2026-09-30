@@ -1,7 +1,7 @@
 # Praxisbibliothek statt Kursordner — Design
 
 > Stand: 2026-09-30 · Branch `praxisbibliothek` (Worktree `dynamic_workshop-bibliothek`, ab `ba222d2`)
-> Auftrag und Entscheidungen: Dominic, 2026-09-30 (siehe „Entscheidungen"). Status: v3.1 nach Codex-Runden 1–3 (§15).
+> Auftrag und Entscheidungen: Dominic, 2026-09-30 (siehe „Entscheidungen"). Status: v3.2 — freigegeben durch Codex-Runde 4 (APPROVE-WITH-CHANGES, §15).
 
 ## 1. Auftrag in einem Absatz
 
@@ -545,6 +545,10 @@ Kontrakt-Katalog aus `docs/migration/chapter-meta.yaml` (verbindliche Metadaten 
 damit Task 4 vor Task 5 grün werden kann), `schnellstart.md` und `analogien.md` als Generator-Ausgaben, eine CLI
 (`validate | build | check`), Cockpit-Testumstellung erst mit Task 10–12, `moderieren` nur Session 0–4, Diagramm-Rendern
 als eigener optionaler Schritt.
+
+**Runde 4 (Codex, 2026-09-30): APPROVE-WITH-CHANGES.** Metadaten, Sicherheitsboden, Mindestpfad, Bereiche und die
+vorgerechneten Personas geprüft. P11 ist durch die Verfeinerung von Regel D (bekannte Voraussetzungen → `skip`)
+anders gelöst als vorgeschlagen; der Produktions-Build ist als Gate A2 nach dem Umzug festgelegt.
 
 ## Anhang A — Quellenkarte und Heimat-Zuordnung
 

@@ -153,3 +153,27 @@ def test_cli_single_chapter_exit_codes(lib_dir, capsys):
     edit(lib_dir, HOOK, "<!-- cockpit:example -->\n", "")
     assert bl.main(["validate", "--chapter", str(lib_dir / HOOK)]) == 1
     assert "example-count" in capsys.readouterr().out
+
+
+def test_order_unique(lib_dir):
+    edit(lib_dir, COMMUNITY, "after: S2.13", "after: S2.7")
+    (lib_dir / "x-02-zweites.md").write_text((lib_dir / COMMUNITY).read_text(encoding="utf-8")
+        .replace("id: X.1", "id: X.2").replace("# X.1 ·", "# X.2 ·"), encoding="utf-8")
+    assert "order-unique" in rules(lib_dir)
+
+
+def test_meta_contract(lib_dir):
+    lib = lm.load_library(lib_dir)
+    meta = [dict(c.front, file=c.path.name) for c in lib.chapters]
+    assert [p for p in bl.validate(lib, complete=False, meta=meta) if p.rule == "meta-contract"] == []
+    meta[0]["minutes"] = 99
+    found = [p for p in bl.validate(lib, complete=False, meta=meta) if p.rule == "meta-contract"]
+    assert found and "minutes" in found[0].message
+
+
+def test_links_to_planned_chapters_are_ok_during_migration(lib_dir):
+    edit(lib_dir, HOOK, "[Link](s2-07-demo-events.md)", "[Link](s2-09-geplant.md)")
+    lib = lm.load_library(lib_dir)
+    meta = [dict(c.front, file=c.path.name) for c in lib.chapters] + [{"id": "S2.9", "file": "s2-09-geplant.md"}]
+    assert "links-resolve" not in {p.rule for p in bl.validate(lib, complete=False, meta=meta)}
+    assert "links-resolve" in {p.rule for p in bl.validate(lib, complete=True, meta=meta)}

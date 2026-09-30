@@ -11,6 +11,7 @@
   transferable: false
   aliases:
   - setup
+  file: s0-01-werkstatt-einrichten.md
 - id: S1.1
   type: lesson
   title: 'Erster Kontakt: sofort eine Datei bauen'
@@ -23,6 +24,7 @@
   transferable: false
   aliases:
   - '1.1'
+  file: s1-01-erster-kontakt.md
 - id: S1.2
   type: lesson
   title: 'Coding-Agent statt Chat: das Denkmodell'
@@ -34,6 +36,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s1-02-agent-statt-chat.md
 - id: S1.3
   type: lesson
   title: 'Die Oberflächen: CLI, Desktop, IDE, Web, iOS'
@@ -45,6 +48,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s1-03-oberflaechen.md
 - id: S1.4
   type: lesson
   title: Eingebaute Werkzeuge und ihre Namen
@@ -56,6 +60,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s1-04-werkzeuge.md
 - id: S1.5
   type: lesson
   title: 'Rechte im Alltag: default und acceptEdits'
@@ -67,6 +72,7 @@
   safety_floor: true
   transferable: true
   aliases: []
+  file: s1-05-rechte-im-alltag.md
 - id: S1.6
   type: lesson
   title: Alle Rechte-Modi im Überblick
@@ -78,6 +84,7 @@
   safety_floor: true
   transferable: true
   aliases: []
+  file: s1-06-rechte-modi.md
 - id: S1.7
   type: lesson
   title: Modellwahl und Effort
@@ -89,6 +96,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s1-07-modellwahl-und-effort.md
 - id: S1.8
   type: lesson
   title: Das Kontextfenster verstehen
@@ -101,6 +109,7 @@
   transferable: true
   aliases:
   - '1.2'
+  file: s1-08-kontextfenster.md
 - id: S1.9
   type: lesson
   title: Kontext steuern mit /compact und /rewind
@@ -112,6 +121,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s1-09-kontext-steuern.md
 - id: S1.10
   type: lesson
   title: 'CLAUDE.md: die Hausordnung des Projekts'
@@ -123,6 +133,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s1-10-claude-md.md
 - id: S1.11
   type: lesson
   title: Alle Gedächtnis-Ebenen im Überblick
@@ -134,6 +145,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s1-11-gedaechtnis-ebenen.md
 - id: S1.12
   type: lesson
   title: Imports, --add-dir und AGENTS.md
@@ -145,6 +157,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s1-12-imports-und-agents-md.md
 - id: S1.13
   type: lesson
   title: Vager und präziser Auftrag im Vergleich
@@ -157,6 +170,7 @@
   transferable: true
   aliases:
   - '1.3'
+  file: s1-13-vager-und-praeziser-auftrag.md
 - id: S1.14
   type: lesson
   title: Plan-Modus und schrittweises Vorgehen
@@ -169,6 +183,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s1-14-plan-modus.md
 - id: S1.15
   type: lesson
   title: Output Styles und Personas
@@ -180,6 +195,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s1-15-output-styles.md
 - id: S1.16
   type: lesson
   title: 'Git in einem Fluss: Branch, Commit, PR'
@@ -193,6 +209,7 @@
   transferable: true
   aliases:
   - '1.4'
+  file: s1-16-git-in-einem-fluss.md
 - id: S1.17
   type: lesson
   title: Git-Befehle in der Sitzung
@@ -204,6 +221,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s1-17-git-befehle.md
 - id: S1.18
   type: lesson
   title: Worktrees als Testlabor
@@ -215,6 +233,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s1-18-worktrees.md
 - id: S1.19
   type: lesson
   title: 'Kosten im Blick: /cost, /usage und Budgetgrenzen'
@@ -227,6 +246,7 @@
   transferable: false
   aliases:
   - '1.5'
+  file: s1-19-kosten-im-blick.md
 - id: S1.20
   type: practice
   title: 'Praxis-Station Session 1: eine Übung wählen'
@@ -243,6 +263,7 @@
   - S1.13
   - S1.16
   - S1.18
+  file: s1-20-praxis-station-1.md
 - id: S2.1
   type: lesson
   title: Skills sind Dienstanweisungen, Commands sind Knöpfe
@@ -255,6 +276,7 @@
   transferable: true
   aliases:
   - '2.1'
+  file: s2-01-skills-und-commands.md
 - id: S2.2
   type: lesson
   title: Eine SKILL.md schreiben
@@ -266,6 +288,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s2-02-skill-schreiben.md
 - id: S2.3
   type: lesson
   title: Skills oder Commands, und wer sie auslösen darf
@@ -277,6 +300,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s2-03-wer-skills-ausloest.md
 - id: S2.4
   type: lesson
   title: Mitgelieferte Skills
@@ -288,6 +312,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s2-04-mitgelieferte-skills.md
 - id: S2.5
   type: lesson
   title: 'Lebendige Prompts: Argumente und dynamischer Inhalt'
@@ -299,6 +324,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s2-05-lebendige-prompts.md
 - id: S2.6
   type: lesson
   title: 'Hooks als Sensoren: die drei Eckpfeiler'
@@ -311,6 +337,7 @@
   transferable: true
   aliases:
   - '2.2'
+  file: s2-06-hooks-als-sensoren.md
 - id: S2.7
   type: lesson
   title: Die wichtigsten Hook-Ereignisse
@@ -322,6 +349,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s2-07-hook-ereignisse.md
 - id: S2.8
   type: lesson
   title: Einen Hook einrichten, der wirklich blockt
@@ -333,6 +361,7 @@
   safety_floor: true
   transferable: false
   aliases: []
+  file: s2-08-hook-einrichten.md
 - id: S2.9
   type: lesson
   title: Hook-Typen und Hooks in Komponenten
@@ -344,6 +373,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s2-09-hook-typen.md
 - id: S2.10
   type: lesson
   title: Hook-Ausgaben und das Secure Diff Gate
@@ -355,6 +385,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s2-10-hook-ausgaben.md
 - id: S2.11
   type: lesson
   title: 'Plugins: ein Bündel schnüren'
@@ -368,6 +399,7 @@
   transferable: false
   aliases:
   - '2.3'
+  file: s2-11-plugins-buendeln.md
 - id: S2.12
   type: lesson
   title: Plugin-Lebenszyklus, Scopes und Marketplaces
@@ -379,6 +411,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s2-12-plugin-lebenszyklus.md
 - id: S2.13
   type: lesson
   title: Lieferkettenrisiken bei Plugins
@@ -390,6 +423,7 @@
   safety_floor: true
   transferable: true
   aliases: []
+  file: s2-13-plugin-lieferkette.md
 - id: S2.14
   type: lesson
   title: 'MCP: der Integrationsstecker'
@@ -402,6 +436,7 @@
   transferable: true
   aliases:
   - '2.4'
+  file: s2-14-mcp-stecker.md
 - id: S2.15
   type: lesson
   title: 'MCP einrichten: Transporte, Scopes, CLI'
@@ -413,6 +448,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s2-15-mcp-einrichten.md
 - id: S2.16
   type: lesson
   title: 'MCP im Detail: OAuth, Ausgabegrenzen, Protokoll'
@@ -424,6 +460,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s2-16-mcp-im-detail.md
 - id: S2.17
   type: lesson
   title: MCP-Sicherheit und ein eigener Server
@@ -435,6 +472,7 @@
   safety_floor: true
   transferable: true
   aliases: []
+  file: s2-17-mcp-sicherheit.md
 - id: S2.18
   type: lesson
   title: 'RAG und NotebookLM: dem Agenten Baupläne geben'
@@ -447,6 +485,7 @@
   transferable: true
   aliases:
   - '2.5'
+  file: s2-18-rag-und-notebooklm.md
 - id: S2.19
   type: lesson
   title: Grenzen von RAG und Datenschutz
@@ -458,6 +497,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s2-19-rag-grenzen.md
 - id: S2.20
   type: practice
   title: 'Praxis-Station Session 2: eine Übung wählen'
@@ -475,6 +515,7 @@
   - S2.11
   - S2.14
   - S2.18
+  file: s2-20-praxis-station-2.md
 - id: S3.1
   type: lesson
   title: Was ist ein Agent? Spezialisierung statt Allrounder
@@ -487,6 +528,7 @@
   transferable: true
   aliases:
   - '3.1'
+  file: s3-01-was-ist-ein-agent.md
 - id: S3.2
   type: lesson
   title: Eingebaute Subagenten nutzen
@@ -498,6 +540,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s3-02-eingebaute-subagenten.md
 - id: S3.3
   type: lesson
   title: Einen eigenen Subagenten definieren
@@ -509,6 +552,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s3-03-eigener-subagent.md
 - id: S3.4
   type: lesson
   title: 'Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie'
@@ -520,6 +564,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s3-04-orchestrierungsmuster.md
 - id: S3.5
   type: lesson
   title: Hintergrund-Sitzungen und Agent Teams
@@ -531,6 +576,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s3-05-hintergrund-und-teams.md
 - id: S3.6
   type: lesson
   title: 'Devil''s Advocate: eine adversariale Prüf-Pipeline'
@@ -544,6 +590,7 @@
   aliases:
   - '3.3'
   - 3.3a
+  file: s3-06-devils-advocate.md
 - id: S3.7
   type: lesson
   title: Die eingebauten Reviews
@@ -555,6 +602,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s3-07-eingebaute-reviews.md
 - id: S3.8
   type: lesson
   title: Rechte für autonome Läufe
@@ -567,6 +615,7 @@
   transferable: true
   aliases:
   - 3.3b
+  file: s3-08-rechte-fuer-autonomie.md
 - id: S3.9
   type: lesson
   title: Geschützte Pfade und Sandbox-Stufen
@@ -578,6 +627,7 @@
   safety_floor: true
   transferable: true
   aliases: []
+  file: s3-09-geschuetzte-pfade-und-sandbox.md
 - id: S3.10
   type: lesson
   title: Netzwerk und Skills härten
@@ -589,6 +639,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s3-10-netzwerk-und-skills-haerten.md
 - id: S3.11
   type: lesson
   title: Datenschutz, Aufbewahrung und regulierte Branchen
@@ -600,6 +651,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s3-11-datenschutz-und-compliance.md
 - id: S3.12
   type: lesson
   title: 'Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen'
@@ -612,6 +664,7 @@
   transferable: false
   aliases:
   - '3.4'
+  file: s3-12-zeitgesteuert-arbeiten.md
 - id: S3.13
   type: lesson
   title: 'Autonome Loops absichern: Budget und Worktree'
@@ -624,6 +677,7 @@
   safety_floor: true
   transferable: true
   aliases: []
+  file: s3-13-autonome-loops-absichern.md
 - id: S3.14
   type: lesson
   title: 'Self-Improve-Loop: was geht und wo es endet'
@@ -635,6 +689,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s3-14-self-improve-loop.md
 - id: S3.15
   type: practice
   title: 'Praxis-Station Session 3: eine Übung wählen'
@@ -648,6 +703,7 @@
   offers:
   - S3.4
   - S3.6
+  file: s3-15-praxis-station-3.md
 - id: S4.1
   type: lesson
   title: Das richtige Modell pro Phase
@@ -661,6 +717,7 @@
   transferable: true
   aliases:
   - '3.2'
+  file: s4-01-modell-pro-phase.md
 - id: S4.2
   type: lesson
   title: Codex-Schwarm und die Datenfluss-Grenze
@@ -672,6 +729,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s4-02-codex-schwarm.md
 - id: S4.3
   type: lesson
   title: 'Headless: claude -p als Pipeline-Stufe'
@@ -684,6 +742,7 @@
   transferable: true
   aliases:
   - '3.6'
+  file: s4-03-headless.md
 - id: S4.4
   type: lesson
   title: CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff
@@ -695,6 +754,7 @@
   safety_floor: true
   transferable: true
   aliases: []
+  file: s4-04-ci-zugang-und-kosten.md
 - id: S4.5
   type: lesson
   title: CI-Pipelines bauen mit GitHub Actions und GitLab
@@ -706,6 +766,7 @@
   safety_floor: false
   transferable: false
   aliases: []
+  file: s4-05-ci-pipelines.md
 - id: S4.6
   type: lesson
   title: 'Unterwegs: Remote Control und /teleport'
@@ -718,6 +779,7 @@
   transferable: false
   aliases:
   - '3.5'
+  file: s4-06-remote-und-teleport.md
 - id: S4.7
   type: lesson
   title: Isolation mit Docker und Worktrees
@@ -729,6 +791,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s4-07-isolation-docker-worktrees.md
 - id: S4.8
   type: capstone
   title: Abschlussprojekt mit Bewertung
@@ -742,6 +805,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s4-08-abschlussprojekt.md
 - id: S4.9
   type: lesson
   title: 'Fehlersuche: /debug, --verbose, /doctor'
@@ -754,6 +818,7 @@
   transferable: false
   aliases:
   - '3.7'
+  file: s4-09-fehlersuche-werkzeuge.md
 - id: S4.10
   type: lesson
   title: Diagnose Schritt für Schritt
@@ -766,6 +831,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: s4-10-diagnose-schritt-fuer-schritt.md
 - id: X.1
   type: community
   title: 'Community-Skills: wer baut was, das wirklich hilft'
@@ -777,6 +843,7 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: x-01-community-skills.md
 - id: X.2
   type: community
   title: Mit Claude Code lernen
@@ -788,3 +855,4 @@
   safety_floor: false
   transferable: true
   aliases: []
+  file: x-02-lernen-mit-claude-code.md

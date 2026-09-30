@@ -30,6 +30,9 @@ import library_model as lm  # noqa: E402
 
 ROOT = TOOLS.parent
 DEFAULT_LIBRARY = ROOT / "resources" / "library"
+CHAPTER_META = ROOT / "docs" / "migration" / "chapter-meta.yaml"
+CONTRACT_FIELDS = ("id", "type", "title", "shelf", "level", "minutes", "requires", "safety_floor", "transferable",
+                   "aliases", "offers", "after")
 
 REQUIRED_IDS = (["S0.1"] + [f"S1.{n}" for n in range(1, 21)] + [f"S2.{n}" for n in range(1, 21)]
                 + [f"S3.{n}" for n in range(1, 16)] + [f"S4.{n}" for n in range(1, 11)] + ["X.1", "X.2"])
@@ -113,7 +116,7 @@ def _check_front(ch, add):
         add("frontmatter-schema", "'offers' ist nur für Praxis-Stationen erlaubt")
 
 
-def _check_body(ch, add):
+def _check_body(ch, add, planned=frozenset()):
     t = ch.type if ch.type in ALLOWED else "lesson"
     for title in ch.section_order:
         if title not in ALLOWED[t]:
@@ -166,6 +169,8 @@ def _check_body(ch, add):
         if re.match(r"^[a-z]+:", target) or target.startswith("#"):
             continue
         file_part = target.split("#", 1)[0]
+        if file_part in planned:
+            continue
         if file_part and not (ch.path.parent / file_part).resolve().exists():
             add("links-resolve", f"Link-Ziel existiert nicht: {target}")
 
@@ -208,7 +213,7 @@ def _check_graph(lib, by_id, report):
         visit(cid, [])
 
 
-def _check_placement(lib, by_id, report):
+def _check_placement(lib, by_id, report, planned_ids=frozenset()):
     placement = lib.placement or {}
     path = lib.root / "_placement.yaml"
     add = report(path)
@@ -225,14 +230,14 @@ def _check_placement(lib, by_id, report):
     area_ids = {a.get("id") for a in areas}
     for area in areas:
         for cid in area.get("chapters", []) or []:
-            if cid not in by_id:
+            if cid not in by_id and cid not in planned_ids:
                 add("placement-refs", f"Bereich {area.get('id')}: Kapitel {cid} gibt es nicht")
             if cid in seen:
                 add("area-unique", f"{cid} steht in den Bereichen {seen[cid]} und {area.get('id')}")
             seen[cid] = area.get("id")
     minimum = list(placement.get("minimum_path", []) or [])
     for cid in minimum:
-        if cid not in by_id:
+        if cid not in by_id and cid not in planned_ids:
             add("placement-refs", f"minimum_path nennt {cid}, das es nicht gibt")
     closure, todo = set(), [c for c in minimum if c in by_id]
     while todo:
@@ -249,12 +254,33 @@ def _check_placement(lib, by_id, report):
             add("placement-refs", f"Szenario {sc.get('id')}: unbekannter Bereich {sc.get('area')}")
         if sc.get("correct") not in option_ids:
             add("placement-refs", f"Szenario {sc.get('id')}: correct ist keine Option-ID")
-        if sc.get("chapter") not in by_id:
+        if sc.get("chapter") not in by_id and sc.get("chapter") not in planned_ids:
             add("placement-refs", f"Szenario {sc.get('id')}: Kapitel {sc.get('chapter')} gibt es nicht")
 
 
-def validate(lib, *, complete: bool) -> list:
+def load_meta(path=CHAPTER_META):
+    import yaml
+    return yaml.safe_load(Path(path).read_text(encoding="utf-8")) if Path(path).exists() else None
+
+
+def _check_contract(ch, entry, add):
+    if entry is None:
+        add("meta-contract", f"{ch.id} fehlt in docs/migration/chapter-meta.yaml")
+        return
+    if ch.path.name != entry.get("file"):
+        add("meta-contract", f"Dateiname laut Metadaten: {entry.get('file')}")
+    for key in CONTRACT_FIELDS:
+        want = entry.get(key, [] if key in ("offers", "aliases", "requires") else None)
+        have = ch.front.get(key, [] if key in ("offers", "aliases", "requires") else None)
+        if want != have:
+            add("meta-contract", f"{key}: Metadaten {want!r}, Kapitel {have!r}")
+
+
+def validate(lib, *, complete: bool, meta=None) -> list:
+    """meta: binding chapter metadata (list of dicts) or None to skip the contract rule."""
     problems = []
+    meta_by_id = {e["id"]: e for e in meta} if meta else None
+    planned = frozenset() if complete or not meta else frozenset(e["file"] for e in meta)
 
     def report(path):
         rel = _rel(path)
@@ -288,9 +314,21 @@ def validate(lib, *, complete: bool) -> list:
             add("filename", f"Dateiname {ch.path.name} passt nicht zu {ch.id} (erwartet {expected}<slug>.md)")
         if ch.shelf not in shelves:
             add("shelf-exists", f"Regal {ch.shelf!r} fehlt in _shelves.yaml")
-        _check_body(ch, add)
+        _check_body(ch, add, planned)
+        if meta_by_id is not None:
+            _check_contract(ch, meta_by_id.get(ch.id), add)
+    orders = {}
+    for ch in lib.chapters:
+        try:
+            o = ch.order
+        except ValueError:
+            continue
+        if o in orders:
+            report(ch.path)("order-unique", f"Reihenfolge {o} hat schon {orders[o]} (after anpassen)")
+        orders.setdefault(o, ch.id)
     _check_graph(lib, by_id, report)
-    _check_placement(lib, by_id, report)
+    planned_ids = frozenset() if complete or not meta else frozenset(e["id"] for e in meta)
+    _check_placement(lib, by_id, report, planned_ids)
     if complete:
         missing = [cid for cid in REQUIRED_IDS if cid not in by_id]
         if missing:
@@ -318,8 +356,10 @@ def main(argv=None) -> int:
             chapter = args.chapter.resolve()
             lib = lm.load_library(chapter.parent)
             rel = _rel(chapter)
-            return _print([p for p in validate(lib, complete=False) if p.path == rel])
-        return _print(validate(lm.load_library(args.root), complete=args.complete))
+            meta = load_meta() if chapter.parent == DEFAULT_LIBRARY.resolve() else None
+            return _print([p for p in validate(lib, complete=False, meta=meta) if p.path == rel])
+        meta = load_meta() if args.root.resolve() == DEFAULT_LIBRARY.resolve() else None
+        return _print(validate(lm.load_library(args.root), complete=args.complete, meta=meta))
     return 2
 
 
