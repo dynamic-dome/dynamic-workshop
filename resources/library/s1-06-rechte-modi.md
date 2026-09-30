@@ -106,7 +106,7 @@ Die nächste Sitzung zeigt dann `⏸ manual mode on` in der Statusleiste.
 In der CLI wechselst du mit `Shift+Tab`. Aus `auto` springt der erste Druck nach `default`, danach läuft der Zyklus `default` → `acceptEdits` → `plan` → zurück zu `default`. Nicht jeder Modus steckt in diesem Zyklus:
 
 - **`auto`** erscheint, wenn er verfügbar ist, und steht am Ende.
-- **`bypassPermissions`** erscheint nur, wenn du die Sitzung damit freigeschaltet hast, etwa mit `--permission-mode bypassPermissions`, `--dangerously-skip-permissions` oder `--allow-dangerously-skip-permissions`. Das dritte Flag nimmt den Modus in den Zyklus auf, ohne ihn zu aktivieren.
+- **`bypassPermissions`** erscheint nur, wenn du die Sitzung damit freigeschaltet hast, etwa mit `--permission-mode bypassPermissions`, `--dangerously-skip-permissions`, `--allow-dangerously-skip-permissions` oder `permissions.defaultMode: "bypassPermissions"` in den User-, `--settings`- oder Managed-Settings. Das dritte Flag nimmt den Modus in den Zyklus auf, ohne ihn zu aktivieren.
 - **`dontAsk`** erscheint nie im Zyklus; du setzt ihn beim Start mit `--permission-mode dontAsk`.
 
 Die Statusleiste zeigt den aktiven Modus: `⏸ manual mode on`, `⏵⏵ accept edits on`, `⏸ plan mode on`, `⏵⏵ auto mode on`, `⏵⏵ don't ask on` oder `⏵⏵ bypass permissions on`. In VS Code klickst du auf die Modus-Anzeige unten im Eingabefeld, in der Desktop-App auf die Modus-Auswahl neben dem Senden-Knopf. `/permissions` verwaltet Regeln, keinen Modus ([S1.5](s1-05-rechte-im-alltag.md)).
@@ -115,7 +115,7 @@ Die Statusleiste zeigt den aktiven Modus: `⏸ manual mode on`, `⏵⏵ accept e
 
 - **`auto`:** Ein Klassifikator-Modell prüft Aktionen, bevor sie laufen, und blockt, was über deinen Auftrag hinausgeht. Er senkt die Zahl der Rückfragen, garantiert aber keine Sicherheit. Voraussetzungen und Grenzen: [S3.8](s3-08-rechte-fuer-autonomie.md).
 - **`dontAsk`:** fragt nie. Was eine Rückfrage bräuchte, lehnt Claude Code ab. Es läuft nur, was auch in Manual keine Freigabe braucht (etwa Lesen im Arbeitsordner), und was deine Allow-Regeln abdecken.
-- **`bypassPermissions`:** nimmt alles an, auch Schreibzugriffe auf geschützte Pfade wie `.git` ([S3.9](s3-09-geschuetzte-pfade-und-sandbox.md)). Nur für isolierte Container und VMs, in denen Claude Code deinem Host nicht schaden kann.
+- **`bypassPermissions`:** nimmt fast alles an, auch Schreibzugriffe auf geschützte Pfade wie `.git` ([S3.9](s3-09-geschuetzte-pfade-und-sandbox.md)); Deny-Regeln blocken weiter, ausdrückliche Ask-Regeln und `rm` auf kritische Pfade fragen noch ([S3.8](s3-08-rechte-fuer-autonomie.md)). Nur für isolierte Container und VMs, in denen Claude Code deinem Host nicht schaden kann.
 
 ### Cloud-Sitzungen
 

@@ -131,7 +131,8 @@ SAFETY_CHECK = [
 @pytest.mark.parametrize("script", SAFETY_CHECK)
 @pytest.mark.parametrize(
     "command",
-    ["rm -rf /tmp/test-directory", "git push --force origin main", "psql -c 'DROP TABLE users'"],
+    ["rm -rf /tmp/test-directory", "git push --force origin main", "git push -f origin main",
+     "psql -c 'DROP TABLE users'"],
 )
 def test_safety_check_blocks_destructive_bash_commands_with_exit_2(script, command):
     result = run(script, pre_bash(command))
@@ -168,7 +169,8 @@ def test_safety_check_blocks_destructive_powershell_commands_with_exit_2(script,
 
 
 @pytest.mark.parametrize("script", SAFETY_CHECK)
-@pytest.mark.parametrize("command", ["Get-ChildItem -Recurse -Force", "git status", "Get-Content .\\README.md"])
+@pytest.mark.parametrize("command", ["Get-ChildItem -Recurse -Force", "git status", "Get-Content .\\README.md",
+                                     "git push origin feature-f"])
 def test_safety_check_allows_harmless_powershell_commands(script, command):
     result = run(script, pre_powershell(command))
 

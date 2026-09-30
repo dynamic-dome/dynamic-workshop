@@ -109,12 +109,12 @@ claude --bare -p "Categorize" --output-format json
 `--bare` bringt dir:
 
 - **schnelleren Kaltstart:** keine automatische Erkennung von Hooks, Skills, eigenen Commands, Subagenten, Plugins, MCP-Servern, Auto-Memory oder CLAUDE.md
-- **gleiches Verhalten überall:** Aus dem Host oder dem ausgecheckten Repo läuft nichts, was du nicht selbst übergibst
+- **gleiches Verhalten überall:** Hooks, Skills, eigene Commands, Subagenten, Plugins und `.mcp.json`-Server aus dem Host oder dem ausgecheckten Repo laufen nicht, außer du übergibst sie selbst. Der `env`-Block und Helper wie `awsAuthRefresh` aus den Settings-Dateien des Projekts gelten aber weiter
 - **nur ausdrücklich übergebenen Kontext:** Was der Schritt braucht, gibst du mit `--append-system-prompt-file`, `--add-dir`, `--mcp-config`, `--settings`, `--agents` oder `--plugin-dir` mit. Einen Skill kannst du weiterhin ausdrücklich mit `/skill-name` aufrufen.
 
 „Nur das Modell" heißt dabei nicht „ohne Werkzeuge": Auch mit `--bare` hat Claude Bash sowie Werkzeuge zum Lesen und Bearbeiten von Dateien.
 
-**Warum das für die Sicherheit zählt:** Ohne `--bare` führt eine `-p`-Sitzung die Hooks aus der `.claude/settings.json` des Projekts aus und verbindet die Server aus seiner `.mcp.json`, auch in einem Ordner, dem du nie vertraut hast, und ohne Vertrauensdialog. In einer CI, die Code von Beitragenden auscheckt, hält `--bare` deren Hooks von deinem Runner fern.
+**Warum das für die Sicherheit zählt:** Ohne `--bare` führt eine `-p`-Sitzung die Hooks aus der `.claude/settings.json` des Projekts aus und verbindet die Server aus seiner `.mcp.json`, auch in einem Ordner, dem du nie vertraut hast, und ohne Vertrauensdialog. In einer CI, die Code von Beitragenden auscheckt, hält `--bare` deren Hooks von deinem Runner fern. Ganz fremdem Code gibst du zusätzlich `--setting-sources user` mit: Dann liest Claude Code weder die Settings-Dateien noch die `.mcp.json` des Projekts, also auch nicht dessen `env`-Block und Helper.
 
 **Haken bei der Anmeldung:** `--bare` meldet sich **nur** über `ANTHROPIC_API_KEY` oder einen `apiKeyHelper` an. Es liest weder OAuth noch den Schlüsselbund des Systems noch `CLAUDE_CODE_OAUTH_TOKEN` (das Token aus `claude setup-token`). Eine `--bare`-Pipeline braucht also einen API-Key (Weg A) oder Zugangsdaten eines Cloud-Anbieters. Federation-Profile liest `--bare` ebenfalls nicht.
 

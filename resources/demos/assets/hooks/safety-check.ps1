@@ -26,7 +26,7 @@ $command = [string]$data.tool_input.command
 $dangerous = @(
   'rm\s+-rf',
   'git push.*--force',
-  'git push.*-f(\s|$)',
+  'git push.*\s-f(\s|$)',
   'DROP TABLE',
   'truncate.*--yes',
   'mkfs\.',

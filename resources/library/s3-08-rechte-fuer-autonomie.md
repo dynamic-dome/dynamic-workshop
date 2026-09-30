@@ -96,7 +96,7 @@ Tipps für CI: Kombiniere `--permission-mode dontAsk` mit `--max-budget-usd` als
 
 `bypassPermissions`, auch über `--dangerously-skip-permissions`, schaltet Rückfragen und Sicherheitsprüfungen ab, auch für Schreibzugriffe auf geschützte Pfade. Ganz alles ist es trotzdem nicht: Deny-Regeln blocken weiter, und ausdrückliche Ask-Regeln sowie `rm` auf kritische Pfade wie `rm -rf ~` fragen auch hier nach. Allow-Regeln wirken in diesem Modus nicht. Gegen Prompt Injection oder ungewollte Aktionen schützt er nicht.
 
-Unter Linux und macOS verweigert Claude Code den Start in diesem Modus als root oder unter `sudo`, außer in einer erkannten Sandbox, denn der Modus ist für kurzlebige Wegwerf-Container gedacht. Nutze ihn in Docker oder Inception ([S4.7](s4-07-isolation-docker-worktrees.md)), nie auf einer laufenden Workstation. Admins sperren ihn mit `permissions.disableBypassPermissionsMode` auf `"disable"` in den Managed Settings.
+Unter Linux und macOS verweigert Claude Code den Start in diesem Modus als root oder unter `sudo`, außer in einer erkannten Sandbox, denn der Modus ist für kurzlebige Wegwerf-Container gedacht; die Doku nennt Container, VMs oder Dev-Container ohne Internetzugang, und Geheimnisse gehören dann nicht hinein. Nutze ihn in Docker oder Inception ([S4.7](s4-07-isolation-docker-worktrees.md)), nie auf einer laufenden Workstation. Admins sperren ihn mit `permissions.disableBypassPermissionsMode` auf `"disable"` in den Managed Settings.
 
 ### Regeln über Allow und Deny auf Bash hinaus
 

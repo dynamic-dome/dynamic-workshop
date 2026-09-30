@@ -141,7 +141,7 @@ allowed-tools: Read Grep Bash     # Intent scoping (not hard security!)
 context: fork                     # Run in an isolated subagent context (official skill field)
 agent: Explore                    # WHICH subagent TYPE runs the fork (Explore/Plan/general-purpose/custom) — not a model
 model: sonnet                     # Model for this skill, incl. the forked context
-user-invocable: true              # Show in /skills list (false = background knowledge)
+user-invocable: true              # Visible in the / menu (false = only Claude can load it)
 ---
 ```
 

@@ -155,6 +155,8 @@ Jetzt kann Claude Code `get_user_count` und `list_active_features` als Tools auf
 }
 ```
 
+Ein Team-Dienst, der Datenbankabfragen anbietet, braucht eine Anmeldung: OAuth über `/mcp` oder ein Token im Header, etwa `"headers": {"Authorization": "Bearer ${TEAM_MCP_TOKEN}"}`. Das Token steht dabei als Umgebungsvariable in der Datei, nie im Klartext in der eingecheckten `.mcp.json`.
+
 **Typische Kandidaten für einen eigenen Server:**
 
 - interne API-Gateways (Jira, ServiceNow, internes Wiki)

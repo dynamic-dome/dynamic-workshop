@@ -45,7 +45,7 @@ Die Doku führt über 30 Ereignisse und für jedes, was `exit 2` bewirkt (Tabell
 
 | Aufgabe | So |
 |---|---|
-| PowerShell-Skript eintragen | `"command": "pwsh -File $HOME/.claude/hooks/safety-check.ps1"`, mit Windows PowerShell 5.1 `powershell -File …`; kein `chmod` nötig |
+| PowerShell-Skript eintragen | `"command": "pwsh -NoProfile -ExecutionPolicy Bypass -File $HOME/.claude/hooks/safety-check.ps1"`, mit Windows PowerShell 5.1 `powershell -NoProfile -ExecutionPolicy Bypass -File …`; kein `chmod` nötig |
 | Befehl direkt in PowerShell | `"shell": "powershell"` am Handler; Claude Code nimmt `pwsh.exe`, sonst `powershell.exe` |
 | Eingabe lesen | `[Console]::In.ReadToEnd() \| ConvertFrom-Json`, der Befehl steht in `$data.tool_input.command` |
 | Shell-Befehle abfangen | matcher `Bash\|PowerShell`: Wo das PowerShell-Tool aktiv ist, laufen Shell-Befehle darüber, und ein Hook nur auf `Bash` feuert dort nie |

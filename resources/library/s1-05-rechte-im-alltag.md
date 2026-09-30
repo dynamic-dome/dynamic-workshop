@@ -95,7 +95,7 @@ Der Modus setzt die Grundstufe. Mit Regeln in `settings.json` schaltest du einze
 
 - `"Read"`, `"Glob"` und `"Grep"` meinen das ganze Werkzeug, `"Bash(npm test)"` genau diesen einen Befehl.
 - `"Bash(rm *)"` trifft jeden Befehl, der mit `rm` und einem Leerzeichen beginnt. `"Bash(curl*)"` hat kein Leerzeichen vor dem `*` und trifft damit alles, was mit `curl` beginnt.
-- Claude Code prüft zuerst `deny`, dann `ask`, dann `allow`; die erste passende Regel entscheidet. Eine Deny-Regel sperrt in jedem Modus. Das `rm`, das `acceptEdits` sonst still durchwinkt, ist mit dieser Datei also gesperrt. Ask-Regeln lernst du in [S3.8](s3-08-rechte-fuer-autonomie.md) kennen.
+- Claude Code prüft zuerst `deny`, dann `ask`, dann `allow`; die erste passende Regel entscheidet. Eine Deny-Regel sperrt in jedem Modus. Das `rm`, das `acceptEdits` sonst still durchwinkt, wird mit dieser Datei also abgelehnt, in der Form, in der Claude es üblicherweise schreibt. Eine Bash-Regel prüft aber den Befehlstext, sie ist keine Grenze um das Programm: `/bin/rm …` oder `bash -c 'rm …'` trifft sie nicht. Unter Windows löscht Claude über das PowerShell-Tool; dafür ergänzt du `"PowerShell(Remove-Item *)"` (Aliase wie `rm` und `del` zählen mit). Muss eine Sperre wirklich halten, brauchst du Sandbox oder Hook ([S3.9](s3-09-geschuetzte-pfade-und-sandbox.md), [S2.8](s2-08-hook-einrichten.md)). Ask-Regeln lernst du in [S3.8](s3-08-rechte-fuer-autonomie.md) kennen.
 - `/permissions` öffnet einen Dialog mit allen Regeln und der `settings.json`, aus der jede stammt. Dort kannst du Regeln auch anlegen und entfernen. Den Modus wechselt `/permissions` nicht.
 
 Dieselbe Regel-Syntax nutzt auch das `if`-Feld von Hooks ([S2.8](s2-08-hook-einrichten.md)).
@@ -153,7 +153,7 @@ Du kannst sagen, was `default` und `acceptEdits` ohne Rückfrage erlauben, eine 
 
 1. Was läuft in `acceptEdits` ohne Rückfrage, das in `default` nachfragen würde, und was fragt in beiden Modi weiter?
 2. In welchem Modus startet eine neue interaktive Sitzung ohne Flag, und wie startest du gezielt in Manual?
-3. Warum sperrt `"deny": ["Bash(rm *)"]` das Löschen auch in `acceptEdits`?
+3. Warum hält `"deny": ["Bash(rm *)"]` auch in `acceptEdits`, und welche Formen des Löschens trifft die Regel nicht?
 
 <details><summary>Quizfrage</summary>
 

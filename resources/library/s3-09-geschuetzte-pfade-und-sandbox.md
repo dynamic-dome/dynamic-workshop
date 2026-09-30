@@ -100,6 +100,8 @@ Du schaltest sie in der Sitzung mit `/sandbox` ein. Sie gilt für Bash-, PowerSh
 
 `/sandbox` ist kein Rechte-Modus. Der Modus entscheidet, ob ein Aufruf läuft und ob du vorher gefragt wirst; die Sandbox begrenzt, was ein Shell-Befehl danach erreicht. Deshalb ergänzen sich beide: Read- und Edit-Deny-Regeln greifen bei Claudes Datei-Werkzeugen und bei Shell-Befehlen, die Claude Code als Dateibefehle erkennt, aber nicht bei einem Skript, das Dateien selbst öffnet. Eine Sperre, die jeden Prozess trifft, liefert erst die Sandbox.
 
+Zwei Grenzen der Sandbox musst du kennen. Erstens hat sie eine Ausweichklappe: Scheitert ein Befehl an der Sandbox, darf Claude ihn mit `dangerouslyDisableSandbox` außerhalb wiederholen; der Versuch läuft dann durch den normalen Rechte-Ablauf (in Manual fragt Claude Code dich, in `auto` entscheidet der Klassifikator). Mit `"allowUnsandboxedCommands": false` in den Sandbox-Einstellungen schaltest du die Klappe ab; `/sandbox` zeigt das als **Strict sandbox mode**. Zweitens ist die Sandbox laut Doku keine vollständige Isolationsgrenze: Der Proxy prüft Domains anhand des Hostnamens, ohne TLS aufzubrechen, und breit freigegebene Domains wie `github.com` können Wege für Datenabfluss öffnen. Für eine harte Grenze bei unbeaufsichtigten Läufen nimmst du einen Container oder eine VM ([S4.7](s4-07-isolation-docker-worktrees.md)).
+
 **Stufe 1: Git-Worktrees (leicht)**
 
 Eigener Arbeitsordner, gleiches Dateisystem. Schützt den Hauptbranch vor Fehlern des Agenten. Fast kein Aufwand: `claude --worktree` oder `/batch`. Mehr dazu in [S1.18](s1-18-worktrees.md) und [S4.7](s4-07-isolation-docker-worktrees.md).

@@ -181,7 +181,7 @@ fi
 DANGEROUS_PATTERNS=(
   'rm[[:space:]]+-rf'
   'git push.*--force'
-  'git push.*-f([[:space:]]|$)'
+  'git push.*[[:space:]]-f([[:space:]]|$)'
   'DROP TABLE'
   'truncate.*--yes'
   'mkfs\.'
@@ -394,7 +394,7 @@ $command = [string]$data.tool_input.command
 $dangerous = @(
   'rm\s+-rf',
   'git push.*--force',
-  'git push.*-f(\s|$)',
+  'git push.*\s-f(\s|$)',
   'DROP TABLE',
   'truncate.*--yes',
   'mkfs\.',
@@ -456,7 +456,7 @@ Unter **Windows** trägst du stattdessen das PowerShell-Skript ein (der `command
         "hooks": [
           {
             "type": "command",
-            "command": "pwsh -File $HOME/.claude/hooks/safety-check.ps1"
+            "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File $HOME/.claude/hooks/safety-check.ps1"
           }
         ]
       }
@@ -465,7 +465,7 @@ Unter **Windows** trägst du stattdessen das PowerShell-Skript ein (der `command
 }
 ```
 
-Hast du nur Windows PowerShell 5.1, nimm `powershell -File ...` statt `pwsh -File ...`.
+Hast du nur Windows PowerShell 5.1, nimm `powershell -NoProfile -ExecutionPolicy Bypass -File ...` statt `pwsh ...`. `-NoProfile` überspringt dein PowerShell-Profil, `-ExecutionPolicy Bypass` lässt PowerShell das lokale Skript ausführen; ohne das bricht Windows PowerShell mit Standard-Richtlinie ab, und der Hook fällt still offen.
 
 Hat die settings.json schon Inhalt, **führe** den neuen Eintrag in das bestehende Array `hooks.PreToolUse` ein. Kopiere keinen ganzen neuen `hooks`-Block über den alten, das würde andere Hooks und Rechte löschen. Prüf danach mit `python -m json.tool ~/.claude/settings.json` (`python3` unter macOS/Linux).
 
@@ -526,7 +526,7 @@ Add-Content -Path "$HOME/.claude/audit.log" -Value "[$timestamp] BASH: $command"
 exit 0
 ```
 
-Trag es mit `"command": "pwsh -File $HOME/.claude/hooks/audit-log.ps1"` ein (oder `powershell -File ...`).
+Trag es mit `"command": "pwsh -NoProfile -ExecutionPolicy Bypass -File $HOME/.claude/hooks/audit-log.ps1"` ein (oder `powershell -NoProfile -ExecutionPolicy Bypass -File ...`).
 
 In der settings.json sieht das so aus:
 
@@ -570,7 +570,7 @@ cat ~/.claude/audit.log
 **Geschafft, wenn:**
 
 - [ ] `~/.claude/hooks/safety-check.sh` existiert und ausführbar ist (`chmod +x`), **oder** unter Windows `~/.claude/hooks/safety-check.ps1` existiert (kein `chmod` nötig)
-- [ ] `~/.claude/settings.json` einen gültigen Abschnitt `hooks.PreToolUse` hat, der auf dein Skript zeigt (`bash …safety-check.sh` oder `pwsh -File …safety-check.ps1`)
+- [ ] `~/.claude/settings.json` einen gültigen Abschnitt `hooks.PreToolUse` hat, der auf dein Skript zeigt (`bash …safety-check.sh` oder `pwsh -NoProfile -ExecutionPolicy Bypass -File …safety-check.ps1`)
 - [ ] Claudes Versuch, `rm -rf` auszuführen, von deinem Hook geblockt wird
 - [ ] `echo "hello"` ohne Hook-Warnung durchläuft
 - [ ] (Bonus) `~/.claude/audit.log` mit jedem Befehl von Claude wächst
@@ -589,7 +589,7 @@ cat ~/.claude/audit.log
 
 - **Der Hook feuert, blockt aber nicht.** Prüf zwei Dinge. (1) Das Skript muss bei gefährlichen Mustern mit **`exit 2`** enden. `exit 1` und jeder andere Code ungleich null zeigen nur einen Hook-Fehler, der Befehl läuft trotzdem. (2) Der Befehl muss aus `tool_input.command` kommen. Ein Feld `command` auf oberster Ebene ist leer, also passt nie ein Muster.
 - **Plötzlich wird jeder Bash-Befehl geblockt.** Das Skript konnte seine Eingabe nicht lesen und ist absichtlich geschlossen gefallen. Meist fehlt `jq`: Installier es oder nimm die PowerShell-Variante. Das ist die sichere Fehlerrichtung; ein Hook, der bei einem Lesefehler still alles durchlässt, wäre die gefährliche.
-- **Der Hook läuft gar nicht.** Fehlt `chmod +x` (nur bash/Git Bash), der Shebang oder stimmt der Pfad in `settings.json` nicht, ist der Wächter still aus, und die Aktion läuft. Unter Windows ohne Git Bash trägst du die `.ps1` mit `pwsh -File` ein, nicht `bash ...`. Steht unter Windows im matcher nur `"Bash"`, feuert der Hook nie, weil Claude dort das PowerShell-Tool nutzt: trag `"Bash|PowerShell"` ein. `/hooks` zeigt, welche Hooks registriert sind.
+- **Der Hook läuft gar nicht.** Fehlt `chmod +x` (nur bash/Git Bash), der Shebang oder stimmt der Pfad in `settings.json` nicht, ist der Wächter still aus, und die Aktion läuft. Unter Windows ohne Git Bash trägst du die `.ps1` mit `pwsh -NoProfile -ExecutionPolicy Bypass -File` ein, nicht `bash ...`. Steht unter Windows im matcher nur `"Bash"`, feuert der Hook nie, weil Claude dort das PowerShell-Tool nutzt: trag `"Bash|PowerShell"` ein. `/hooks` zeigt, welche Hooks registriert sind.
 - **Der Matcher ist zu breit.** `".*"` oder gar kein Matcher trifft jedes Tool. Wähl einen engeren, etwa `"Bash|PowerShell"` für Shell-Befehle oder `"Write|Edit"` für Dateiänderungen.
 - **Die settings.json ist nach dem Bearbeiten kein gültiges JSON.** Prüf sie:
 

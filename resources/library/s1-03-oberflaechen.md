@@ -74,7 +74,7 @@ Installiert als Terminalbefehl `claude`. Startest du ihn, bekommst du eine inter
 
 ### Desktop-App
 
-Claude Code gibt es auch als Desktop-App (macOS und Windows, Linux als Beta). Sie nutzt dieselbe Engine wie die CLI, mit Dateizugriff, Befehlsausführung und Git, aber mit einer grafischen Oberfläche auf deinem eigenen Rechner. Praktisch für alle, die lieber mit Fenstern als mit einem Terminal arbeiten. Einige reine CLI-Funktionen fehlen dafür, etwa Skripting und das Agent SDK. Die Web-App auf claude.ai/code ist etwas anderes; sie läuft in der Cloud (siehe unten).
+Claude Code gibt es auch als Desktop-App (macOS und Windows, Linux als Beta). Sie nutzt dieselbe Engine wie die CLI, mit Dateizugriff, Befehlsausführung und Git, aber mit einer grafischen Oberfläche, vor allem auf deinem eigenen Rechner (Cloud- und SSH-Sitzungen kann sie auch). Praktisch für alle, die lieber mit Fenstern als mit einem Terminal arbeiten. Einige reine CLI-Funktionen fehlen dafür, etwa Skripting und das Agent SDK. Die Web-App auf claude.ai/code ist etwas anderes; sie läuft in der Cloud (siehe unten).
 
 ### IDE-Erweiterungen: VS Code und JetBrains
 

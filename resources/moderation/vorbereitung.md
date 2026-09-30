@@ -187,8 +187,8 @@ Trag den Hook in `~/.claude/settings.json` ein. Nimm den `command`, der zu deine
 }
 ```
 
-> **Windows:** Ersetze den Wert von `command` durch `"pwsh -File $HOME/.claude/hooks/security-check.ps1"` (oder
-> `powershell -File ...` für Windows PowerShell 5.1). Willst du die bash-Variante, installiere **Git Bash und `jq`**
+> **Windows:** Ersetze den Wert von `command` durch `"pwsh -NoProfile -ExecutionPolicy Bypass -File $HOME/.claude/hooks/security-check.ps1"` (oder
+> `powershell -NoProfile -ExecutionPolicy Bypass -File ...` für Windows PowerShell 5.1). Willst du die bash-Variante, installiere **Git Bash und `jq`**
 > (siehe [S0.1](../library/s0-01-werkstatt-einrichten.md)) und behalte den Befehl `bash ...`. Der matcher bleibt in
 > beiden Fällen `Bash|PowerShell`: Unter Windows laufen Shell-Befehle meist über das PowerShell-Tool, ein Hook nur
 > auf `Bash` feuert dort nie ([S2.8](../library/s2-08-hook-einrichten.md)).

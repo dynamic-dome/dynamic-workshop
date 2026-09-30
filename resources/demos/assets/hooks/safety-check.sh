@@ -25,7 +25,7 @@ fi
 DANGEROUS_PATTERNS=(
   'rm[[:space:]]+-rf'
   'git push.*--force'
-  'git push.*-f([[:space:]]|$)'
+  'git push.*[[:space:]]-f([[:space:]]|$)'
   'DROP TABLE'
   'truncate.*--yes'
   'mkfs\.'
