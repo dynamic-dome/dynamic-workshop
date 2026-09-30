@@ -1,0 +1,8 @@
+{"id": "X.2", "verdict": "pass",
+ "counts": {"kept": 62, "changed": 0, "dropped": 0, "new": 3},
+ "items": [
+  {"status": "new", "source": "teach/SKILL.md (Teaching Workspace, Lessons)", "old": "(keine Aussage über Schreibrolle des Tutors)", "new": "x-02:103 \"Lektionen schreibt der Tutor nicht selbst. Er führt dich durch die Kapitel der Bibliothek\"", "rating": "ok", "reason": "Abgeleitet aus skills/workshop/SKILL.md (Tutor liest Katalog und Kapitel, erzeugt keine Lektionen) und Spec §9; kein neuer Fakt."},
+  {"status": "new", "source": "teach/SKILL.md (Teaching Workspace: current directory)", "old": "Treat the current directory as a teaching workspace", "new": "x-02:50 \"startest du Claude Code für jedes Thema in einem eigenen Ordner\"", "rating": "ok", "reason": "Folgerung aus 'current directory' plus 'One mission per workspace' (MISSION-FORMAT.md, community-facts caveats_de)."},
+  {"status": "new", "source": "code.claude.com/docs/en/skills.md:141,187,423", "old": "(Plugin-Name nicht in teach-Quelle)", "new": "x-02:50,111 \"/mattpocock-skills:teach\" und \"/dynamic-workshop:workshop\"", "rating": "ok", "reason": "Per curl geprüft: 'plugin skills are namespaced as /plugin-name:skill-name'; Plugin-Namen aus community-facts (mattpocock-skills@mattpocock) und .claude-plugin/plugin.json (dynamic-workshop). --plugin-dir ebenfalls in plugins.md belegt, HOW-TO-USE:39 identisch."}
+ ],
+ "style": []}
