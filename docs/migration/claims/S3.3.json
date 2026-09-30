@@ -1,0 +1,189 @@
+{
+ "id": "S3.3",
+ "verdict": "pass",
+ "counts": {
+  "kept": 28,
+  "changed": 6,
+  "dropped": 1,
+  "new": 15
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:212",
+   "old": "allowed_tools renamed to tools; old YAML still parses as legacy alias",
+   "new": "Das Feld heißt tools, nicht allowed_tools; allowed_tools steht nicht in der Frontmatter-Referenz, verlass dich nicht darauf, sonst erbt der Agent womöglich alle Tools",
+   "rating": "ok",
+   "reason": "Die Legacy-Alias-Behauptung ist in der aktuellen Frontmatter-Referenz (sub-agents.md, Feldtabelle) nicht belegt; unbekannte Felder werden laut Doku still ignoriert. Vorsichtigere Neuformulierung ist sachlich richtig."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:243",
+   "old": "--agents '[{\"name\":\"reviewer\",...}]' (JSON-Array mit name)",
+   "new": "--agents '{\"reviewer\":{\"description\":...,\"prompt\":...}}' (Objekt, Schlüssel = Name)",
+   "rating": "ok",
+   "reason": "Doku sub-agents.md (CLI-defined subagents), per curl geprüft: 'Each key is the name', Felder description und prompt; die Array-Form war falsch."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:233",
+   "old": "color: cyan / magenta / yellow / ...",
+   "new": "red, blue, green, yellow, purple, orange, pink oder cyan",
+   "rating": "ok",
+   "reason": "Doku-Feldtabelle color nennt genau diese acht Werte; magenta ist nicht dabei. Per curl geprüft."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:230",
+   "old": "background: Always run this subagent as a background session",
+   "new": "true hält den Subagenten im Hintergrund, auch wenn Claude ihn im Vordergrund starten will",
+   "rating": "ok",
+   "reason": "Doku: 'keep this subagent in the background even when Claude asks to run it in the foreground'. Präziser, sinngleich."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:232",
+   "old": "effort: low / high / xhigh / max",
+   "new": "low, medium, high, xhigh oder max; überschreibt Sitzungs-Effort, Stufen hängen vom Modell ab",
+   "rating": "ok",
+   "reason": "Doku-Feldtabelle effort listet medium mit. Per curl geprüft."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:234",
+   "old": "initialPrompt: Auto-submitted first user turn (useful for background: true agents)",
+   "new": "wird als erste Eingabe gesendet, wenn der Agent als Hauptagent der Sitzung läuft (--agent)",
+   "rating": "ok",
+   "reason": "Doku: 'when this agent runs as the main session agent (via --agent or the agent setting)'. Der Verweis auf background:true entfällt, in der Doku nicht belegt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:236",
+   "old": "Plugin authors must request elevated capabilities through the install manifest — not through the agent frontmatter.",
+   "new": "",
+   "rating": "ok",
+   "reason": "In der Doku nicht belegt; die Doku nennt als Ausweg nur: Agent-Datei nach .claude/agents/ kopieren oder permissions.allow ergänzen. Das Kapitel übernimmt genau das. Weglassen der unbelegten Manifest-Aussage ist gewollt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Pflichtfelder sind nur name und description; Text unter dem Frontmatter ist der System-Prompt",
+   "rating": "ok",
+   "reason": "Doku: 'Only name and description are required'; Body = system prompt. Per curl geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Ablageorte .claude/agents/ (Projekt, Team per Repo) und ~/.claude/agents/ (alle Projekte); Projekt vor Benutzer, Plugins niedrigste Priorität",
+   "rating": "ok",
+   "reason": "Doku-Prioritätstabelle: managed 1, --agents 2, Projekt 3, Benutzer 4, Plugin 5 (niedrigste); Versionskontrolle für Teams ebenfalls belegt. Vereinfachung korrekt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Subagent bekommt nur seinen System-Prompt plus Umgebungsangaben wie Arbeitsverzeichnis, nicht den Claude-Code-System-Prompt",
+   "rating": "ok",
+   "reason": "Doku wörtlich: 'Subagents receive only this system prompt plus basic environment details like the working directory, not the Claude Code system prompt.'"
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "description kurz halten, Details in den System-Prompt; 'use proactively' ermuntert zu eigenständiger Delegation",
+   "rating": "ok",
+   "reason": "Doku: 'keep them short ... move detail into each subagent's system prompt' und 'include phrases like \"use proactively\"'. Per curl geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "model: Aliase inkl. fable, inherit; ohne Angabe in der Regel Modell des Hauptgesprächs",
+   "rating": "ok",
+   "reason": "Doku-Feldtabelle und 'Choose a model' (Reihenfolge endet beim Hauptgesprächs-Modell); 'in der Regel' deckt die Env-Variable ab."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "tools weggelassen: erbt alle Tools, die Subagenten zur Verfügung stehen",
+   "rating": "ok",
+   "reason": "Doku: 'Inherits every tool available to subagents if omitted.'"
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "maxTurns: bei Erreichen wird das Ergebnis als unvollständig markiert zurückgegeben",
+   "rating": "ok",
+   "reason": "Doku: 'returns its output marked as partial' (ab v2.1.246). Fehlender Versionshinweis unschädlich."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Plugin-Subagenten ignorieren zusätzlich initialPrompt; Ausweg Datei kopieren oder permissions.allow (sitzungsweit)",
+   "rating": "ok",
+   "reason": "Doku-Feldtabelle (initialPrompt 'Ignored for plugin subagents') und Warnblock zu Plugin-Subagents. Per curl geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Abschnitt 'Einen Subagenten gezielt aufrufen': Nennung im Auftrag, @-Erwähnung (@agent-code-explorer), claude --agent code-explorer",
+   "rating": "ok",
+   "reason": "Doku 'Invoke subagents explicitly': @-mention, @agent-<name>, --agent <name> (Hauptgespräch übernimmt Tool-Grenzen und Modell). Per curl geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "--agents: nur für diese Sitzung, prompt entspricht dem Body",
+   "rating": "ok",
+   "reason": "Doku CLI-defined subagents: 'exist only for that session', 'prompt ... equivalent to the markdown body'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Fallen: unbekannte Felder still ignoriert, camelCase; Skills nutzen allowed-tools",
+   "rating": "ok",
+   "reason": "Doku: 'Multi-word field names use camelCase ... ignores a field it doesn't recognize without reporting an error'. allowed-tools in skills.md vorhanden."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle: permissionMode ignoriert, wenn Hauptgespräch in bypassPermissions/acceptEdits/auto läuft; bypassPermissions nur, wenn Hauptgespräch es hat",
+   "rating": "ok",
+   "reason": "Doku 'Permission modes' wörtlich bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle: neuer agents-Ordner wird erst nach Neustart beobachtet",
+   "rating": "ok",
+   "reason": "Doku: Watcher deckt nur beim Start vorhandene Verzeichnisse ab. Per curl geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle: Seit v2.1.198 öffnet /agents keinen Assistenten mehr",
+   "rating": "ok",
+   "reason": "Doku: 'As of v2.1.198, the /agents command no longer opens the interactive creation wizard'. Per curl geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Feldtabelle: mcpServers (Servername oder eigene Definition), skills (voller Inhalt vorab), memory, isolation, disallowedTools",
+   "rating": "ok",
+   "reason": "Formulierungen entsprechen der Doku-Feldtabelle."
+  }
+ ],
+ "style": []
+}

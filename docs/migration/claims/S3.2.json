@@ -1,0 +1,123 @@
+{
+ "id": "S3.2",
+ "verdict": "ask",
+ "counts": {
+  "kept": 8,
+  "changed": 3,
+  "dropped": 2,
+  "new": 8
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:159",
+   "old": "Plan: Strategic planner — produces multi-step implementation plans without writing code",
+   "new": "Plan: Recherche-Agent für den Plan-Modus: sammelt nur lesend Kontext, bevor Claude dir den Plan vorlegt; schreibt keinen Code",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur. sub-agents.md: 'A research agent used during plan mode to gather context before presenting a plan.' (Tools: read-only, Write/Edit denied). Live per curl geprüft. Quelle beschrieb Plan fälschlich als Planschreiber; Falle im Kapitel benennt das."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:160",
+   "old": "general-purpose: falls back to a balanced toolset when no specialized agent matches; Catch-all when you're not sure which custom agent fits",
+   "new": "Vielseitiger Agent für komplexe Mehrschritt-Aufgaben, die Erkunden und Handeln brauchen; hat alle Tools, die Subagenten zur Verfügung stehen",
+   "rating": "ok",
+   "reason": "Doku (Live geprüft): 'A capable agent for complex, multi-step tasks that require both exploration and action', 'every tool available to subagents'. Die Quell-Aussage 'balanced toolset/Catch-all' ist so nicht belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:163",
+   "old": "You can also force one with Agent(subagent_type=\"Explore\", prompt=...).",
+   "new": "Willst du einen bestimmten Typ, nenn ihn im Auftrag; Claude entscheidet weiterhin selbst, ob es delegiert. Verbindliches Anfordern: Verweis auf S3.3 (@-Erwähnung).",
+   "rating": "ok",
+   "reason": "Doku 'Invoke subagents explicitly': 'Natural language: name the subagent in your prompt; Claude decides whether to delegate' und '@-mention: guarantees the subagent runs'. Die Quelle ('force' per Agent()-Aufruf im Prompt) war falsch. S3.3 Z.117 beschreibt die @-Erwähnung, Verweis trägt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:157",
+   "old": "Explore: ... builds dependency graphs",
+   "new": "",
+   "rating": "ok",
+   "reason": "Nicht in der Doku belegt (Purpose: file discovery, code search, codebase exploration); unschädliche Streichung."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:165",
+   "old": "Most workshop demos focus on custom subagents below",
+   "new": "Die meisten Vorführungen dieses Regals drehen sich um eigene Subagenten (S3.3)",
+   "rating": "ok",
+   "reason": "Nur umformuliert auf Regal statt Workshop; hier als Vollständigkeits-Notiz, kein Verlust."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Explore und Plan überspringen CLAUDE.md und Git-Status-Schnappschuss; alle anderen eingebauten und eigenen Subagenten laden beides",
+   "rating": "ok",
+   "reason": "Doku (Live geprüft): 'Explore and Plan skip your CLAUDE.md files and the git status snapshot... Every other built-in and custom subagent loads both'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Beide übernehmen das Modell des Hauptgesprächs; Explore auf der Claude API höchstens Opus",
+   "rating": "ok",
+   "reason": "Doku: Explore 'inherits from the main conversation, capped at Opus on the Claude API'; Plan 'inherits from the main conversation'. Nur Alias/Rolle, keine Modellgeneration."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Explore und Plan sind Einmal-Aufträge ohne Agent-ID, nicht fortsetzbar; general-purpose oder eigener Subagent für Etappen",
+   "rating": "ok",
+   "reason": "Doku Resume subagents: 'The built-in Explore and Plan agents are one-shot and return no agent ID, so Claude can't resume them. Use general-purpose or a custom subagent...'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Falle 'Explore lässt sich nicht fortsetzen': neuer Explore-Lauf, 'Der Verlauf des alten ist weg, in deinem Gespräch steht nur seine Zusammenfassung'",
+   "rating": "ask",
+   "reason": "Nicht-Fortsetzbarkeit belegt, 'Verlauf ist weg' aber Ableitung: Doku nennt Transkripte unter ~/.claude/projects/.../subagents/agent-<id>.jsonl (Persistenz). Besser: 'Claude kann den alten Lauf nicht fortsetzen'. Kleine Überspitzung, Orchestrator entscheidet."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "claude-code-guide als Helfer für Fragen zu Claude Code, wird meist automatisch gerufen",
+   "rating": "ok",
+   "reason": "Doku 'Other'-Tab: 'claude-code-guide | Haiku | When you ask questions about Claude Code features'; 'typically invoked automatically'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Im Verlauf erscheint die Delegation als Zeile mit Subagent-Name und kurzer Aufgabenbeschreibung",
+   "rating": "ok",
+   "reason": "Doku: 'the delegation appears as a tool call row showing the subagent's name followed by a short task description'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Im Plan-Modus gibt Claude Recherche an Plan ab, damit Suchergebnisse im eigenen Kontextfenster bleiben",
+   "rating": "ok",
+   "reason": "Doku: 'delegates research to the Plan subagent so that exploration output stays in a separate context window'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Skill mit context: fork wählt per Feld agent den Subagent-Typ (Verweis S2.2)",
+   "rating": "ok",
+   "reason": "skills.md: 'agent: Which subagent type to use when context: fork is set'; deckt sich mit s2-02 Z.138."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Check / Quizfrage",
+   "issue": "Richtige Antwort ist mit ca. 118 Zeichen die längste Option (Falsch-Optionen ca. 100 bis 110); leichter Längenhinweis, ggf. eine Falsch-Option um einen Halbsatz verlängern."
+  }
+ ]
+}
