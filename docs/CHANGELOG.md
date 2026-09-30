@@ -27,4 +27,6 @@ Der Kurs wird vom linearen 4-Session-Aufbau zur deutschsprachigen Praxisbiblioth
   PowerShell-Tool nie), die Schutz-Vorlagen kennen PowerShell-Befehle; CI-Beispiele mit offiziellem Installer und
   minimalen `permissions`; NotebookLM-Befehle der tatsächlich genutzten CLI (`notebooklm-py`).
 - **Prüfung:** Spec in vier Codex-Runden bis zur Freigabe, Gate-A-Verifier auf die Werkzeuge, Aussagen-Matrix je Kapitel
-  durch unabhängige Prüfer, Snippet-Ledger gegen den Basis-Commit `ba222d2`.
+  durch unabhängige Prüfer, Snippet-Ledger gegen den Basis-Commit `ba222d2`. Schlussprüfung (Gate B/C) durch drei
+  unabhängige Prüfer: Stichprobe von 10 Kapiteln, alle 9 Sicherheitsboden-Kapitel, Werkzeuge; Befunde behoben, alle
+  drei am Ende `pass`. Monatslauf live gegen die Doku: nur der bewusste Haiku-4.5-Hinweis bleibt rot.

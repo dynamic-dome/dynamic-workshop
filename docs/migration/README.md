@@ -42,6 +42,21 @@ begründet gestrichen ist.
   schrieb Teleport das Handy zu, capstone versprach einen anderen Auftrag, automation Budget-Grenzen ohne `-p`).
 - **Validator:** `python tools/build_library.py validate --complete` ohne Befunde (70 Kapitel).
 
+## Schlussprüfung (Gate B und C, 2026-09-30)
+
+Der Codex-Verifier konnte in seiner Sandbox keine Befehle ausführen und wurde abgebrochen; an seiner Stelle prüften
+drei unabhängige Sonnet-Prüfer:
+
+- **Stichprobe** S1.3, S1.9, S1.14, S2.3, S2.15, S3.2, S3.10, S4.2, S4.6, X.2 gegen die Quelle und die Live-Doku: `pass`
+  (kein verlorener Lehrinhalt; zwei niedrige Punkte in S1.3 und S2.3 behoben).
+- **Sicherheitsboden** (alle neun Kapitel, Hook-Vorlagen ausgeführt): zuerst `fix` mit drei mittleren Befunden
+  (Bash-Deny-Regel keine Programmgrenze, `--bare` lässt env-Block und Helper durch, Sandbox-Ausweichklappe fehlte),
+  dazu PowerShell-Hooks ohne `-ExecutionPolicy Bypass`; nach drei Runden `pass`.
+- **Werkzeuge** (Engine gegen Spec §6.3, 400 Zufallsläufe Python/JS, Cockpit-Sicherheit, Ledger, Monatslauf): zuerst
+  `fix` (override-prereq bei `later`, Fremdquelle nach Ausfall, kursweite Ausnahmen), nach der Korrektur `pass`.
+- **Monatslauf live** fand zusätzlich einen im Diagramm umbrochenen Variablennamen und einen selbst eingeführten
+  Fehler (gleichnamige Doku-Seiten überdeckten sich); beides behoben.
+
 ## Stichprobe des Orchestrators (2026-09-30)
 
 - **Zitate in den Matrizen:** Ein Skript zog aus jeder Matrix bis zu drei geänderte oder neue Aussagen, deren
