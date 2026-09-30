@@ -1,8 +1,8 @@
 ---
 name: workshop
 description: >
-  Tutor und Moderations-Co-Pilot für die Claude Code Praxisbibliothek. /workshop start stuft dich ein
-  (Ziel, Warum, Zeit, Stand), legt einen Lernordner mit MISSION.md an und berechnet deinen persönlichen Pfad;
+  Tutor und Moderations-Co-Pilot für die Claude Code Praxisbibliothek. /workshop start stuft dich mit einem
+  Auswahl-Bildschirm ein (Erfahrung, Ziel, Zeit, Lernordner), berechnet deinen persönlichen Pfad und startet das erste Kapitel;
   /workshop next führt durch das nächste Kapitel, /workshop learn <ID> durch ein bestimmtes, /workshop review
   fragt mit Abstand ab, /workshop guide <ID|S1–S4> unterstützt Moderierende.
 when_to_use: >
@@ -42,7 +42,7 @@ und sag, dass die Antwort von dort stammt. Unterscheide immer eingebaute Funktio
 
 ## Lernordner
 
-Beim ersten `start` fragst du, wo der Lernordner liegen soll (Vorschlag: `~/cc-workshop/lernen`). Darin:
+Wo der Lernordner liegt, fragt der Schnelleinstieg beim ersten `start` mit (Vorschlag: `~/cc-workshop/lernen`). Darin:
 
 | Datei | Inhalt |
 |---|---|
@@ -61,7 +61,7 @@ Notizen. Der Ordner bleibt lokal; nichts davon geht an andere Dienste.
 | Aufruf | Ablauf |
 |---|---|
 | `/workshop` | Übersicht: Regale aus dem Katalog (Titel + Kapitelzahl), drei Wege (Einstufung, Live-Pfad, Stöbern), die Aufrufe. |
-| `/workshop start` | Einstufung (unten). Gibt es schon eine Mission, frag: weitermachen, anpassen oder neu? |
+| `/workshop start` | Einstufung (unten): ein Auswahl-Bildschirm, dann das erste Kapitel. Gibt es schon eine Einstufung, frag: weitermachen, anpassen oder neu? |
 | `/workshop next` | Nächstes Kapitel des Pfads: erstes Kapitel mit Status `work`/`skim` aus `lernpfad`, das in `fortschritt.json` nicht erledigt ist. |
 | `/workshop learn <ID>` | Ein bestimmtes Kapitel (`S2.8`, `X.1`). Alte Modulnummern (`2.2`) über das Feld `aliases` im Katalog auflösen; findest du nichts, nenn die nächsten Treffer. |
 | `/workshop review` | Abruf mit Abstand (unten). |
@@ -69,29 +69,52 @@ Notizen. Der Ordner bleibt lokal; nichts davon geht an andere Dienste.
 
 ## Einstufung (`start`)
 
-1. **Mission** (2–4 Fragen, eine nach der anderen): Warum willst du das lernen? Woran merkst du, dass es geklappt hat?
-   Was begrenzt dich (Zeit, Rechte im Job, Werkzeuge)? Was willst du bewusst **nicht**? Bleibt die Antwort vage
-   („einfach besser werden"), frag einmal konkret nach („Bei welcher Aufgabe diese Woche?"), dann schreib
-   `MISSION.md`. Nie länger als eine Bildschirmseite.
-2. **Ziel**: Zeig die Ziele aus `placement.goals` als nummerierte Liste; die Person nennt ein oder zwei Nummern.
-3. **Zeit**: `placement.times` als Auswahl (AskUserQuestion mit vier Optionen passt genau).
-4. **Stand**: Je Bereich aus `placement.areas` die Aussage (`statement`) — Antworten „neu", „gehört davon",
-   „schon gemacht", „weiß nicht" (= neu). Frag in Gruppen zu höchstens vier Bereichen (AskUserQuestion, bis zu vier
-   Fragen je Aufruf). Verhaltensaussagen, keine Wissensfragen.
-5. **Optional: Blick aufs Setup.** Nur wenn die Person zustimmt, und nur lesend. Sag vorher genau, was du ansiehst:
-   `claude --version`, ob `~/.claude/settings.json` Hooks enthält, ob es `~/.claude/skills/` gibt, ob das aktuelle
-   Projekt eine `CLAUDE.md` hat. Die Beobachtung ist ein **Vorschlag** („Du hast drei Hooks — stimmt ‚schon gemacht'
-   bei Hooks?"), die Person entscheidet.
-6. **Optional: Mini-Szenarien** aus `placement.scenarios`, eins nach dem anderen, Optionen in zufälliger
-   Reihenfolge. Nach der Antwort: die `explanation` zeigen — kein „falsch", sondern „Das verwechseln viele".
-7. **Rechnen**: `einstufung.json` schreiben (IDs genau wie im Katalog), dann
+Nach **einem** Auswahl-Bildschirm soll das erste Kapitel laufen. Frag nichts, was Katalog oder Engine selbst
+entscheiden: Jede Frage hat eine Antwort für „weiß nicht", die Engine füllt Lücken mit `default_goal` und
+`default_time`, und die Schnellchecks der Kapitel prüfen den Stand unterwegs nach. Mehr Fragen nur auf Wunsch.
+
+0. **Schon angefangen?** Liegt im aktuellen Ordner oder in `~/cc-workshop/lernen` eine `einstufung.json` (oder nennt
+   die Person in Schritt 1 einen Ordner mit einer), frag nur: weitermachen (→ `next`), anpassen oder neu?
+1. **Schnelleinstieg — ein AskUserQuestion-Aufruf mit vier Fragen.** Davor ein Satz („Vier Klicks, dann geht's los;
+   nichts davon ist endgültig."), keine weitere Vorrede.
+   - **Erfahrung:** „Wie gut kennst du Claude Code?" — Noch gar nicht · Ein paar Mal ausprobiert · Nutze es
+     regelmäßig · Baue eigene Skills, Hooks oder Agenten.
+   - **Ziel:** „Was willst du damit?" — „Weiß ich noch nicht, zeig mir erst mal was" (keine Angabe, die Engine nimmt
+     `default_goal`) · `alltag` · `team` + `security` · `automation` + `agents`, beschriftet mit den `label`s aus
+     `placement.goals`. Die übrigen Ziele (`einschaetzen`, `moderieren`) nennt die Frage als Freitext-Möglichkeit.
+   - **Zeit:** die vier `placement.times` mit ihren `label`s; Freitext „weiß nicht" = keine Angabe (`default_time`).
+   - **Lernordner:** `~/cc-workshop/lernen` (Empfohlen) · aktueller Ordner; ein anderer Pfad per Freitext.
+2. **Stand — nur so viel, wie die Erfahrung trägt.** Je Bereich aus `placement.areas` die Aussage (`statement`),
+   Antworten „neu" (`0`), „gehört davon" (`1`), „schon gemacht" (`2`), „weiß nicht" (`null`, zählt als neu); Gruppen
+   zu höchstens vier Bereichen je AskUserQuestion-Aufruf. Verhaltensaussagen, keine Wissensfragen.
+   - *Noch gar nicht:* keine Fragen, alle Bereiche `null`.
+   - *Ein paar Mal ausprobiert:* nur die Grundbereiche — Bereiche, deren erstes Kapitel auf einem Regal aus
+     `placement.base_shelves` steht (zwei Aufrufe); alle anderen `null`.
+   - *Regelmäßig* oder *eigene Bausteine:* alle Bereiche.
+3. **Schärfen — nur bei „regelmäßig" oder „eigene Bausteine"**, und nur wenn die Person auf die Frage „Willst du die
+   Einstufung schärfen?" Ja sagt:
+   - **Blick aufs Setup**, nur lesend. Sag vorher genau, was du ansiehst: `claude --version`, ob
+     `~/.claude/settings.json` Hooks enthält, ob es `~/.claude/skills/` gibt, ob das aktuelle Projekt eine `CLAUDE.md`
+     hat. Die Beobachtung ist ein **Vorschlag** („Du hast drei Hooks — stimmt ‚schon gemacht' bei Hooks?"), die Person
+     entscheidet.
+   - **Mini-Szenarien** aus `placement.scenarios`, eins nach dem anderen, Optionen in zufälliger Reihenfolge. Nach der
+     Antwort: die `explanation` zeigen — kein „falsch", sondern „Das verwechseln viele".
+4. **Rechnen**: `einstufung.json` schreiben (IDs genau wie im Katalog), dann
    `python "${CLAUDE_PLUGIN_ROOT}/tools/placement.py" --catalog "${CLAUDE_PLUGIN_ROOT}/resources/library/catalog.json" --answers "<lernordner>/einstufung.json" --format md --link-base "${CLAUDE_PLUGIN_ROOT}/resources/library/"`
    (unter Windows ggf. `python3` → `python`). Ausgabe als `lernpfad.md` speichern. Meldet die Engine einen Fehler
    in den Antworten, korrigiere die Antwortdatei, nicht den Pfad.
-8. **Ergebnis**: Etappen und Umfang nennen, die erste Etappe mit Begründung je Kapitel zeigen, Warnungen vorlesen.
-   Für Bereiche mit „schon gemacht" je ein Lernprotokoll „Vorwissen: …" anlegen (siehe Format). Dann anbieten:
-   `/workshop next`. Die Person kann einzelne Kapitel übersteuern — trag das unter `overrides` in `einstufung.json`
-   ein und rechne neu.
+5. **Mission vorbefüllen**: `MISSION.md` im Format von [MISSION-FORMAT.md](MISSION-FORMAT.md) aus den Klicks —
+   „Warum" aus dem Ziel, „Rahmen" aus Zeit und Erfahrung; „Daran merke ich es" und „Bewusst nicht" bleiben
+   „noch offen". Liegt im Lernordner schon eine `MISSION.md`, übernimm sie. Vor dem ersten Kapitel keine Mission-Fragen.
+6. **Ergebnis kurz, dann los**: Umfang in einem Satz (Etappen, Stunden), Warnungen vorlesen, die ersten drei Kapitel
+   mit Begründung; der ganze Pfad steht in `lernpfad.md`. Für Bereiche mit „schon gemacht" je ein Lernprotokoll
+   „Vorwissen: …" anlegen (siehe Format). Dann **direkt** mit dem ersten Kapitel beginnen wie bei `next`, außer die
+   Person will erst den Pfad ansehen. Einzelne Kapitel übersteuern: unter `overrides` in `einstufung.json` eintragen
+   und neu rechnen.
+7. **Mission schärfen, nach dem ersten erledigten Kapitel** (erster Eintrag in `fortschritt.json`): eine Frage,
+   überspringbar — „Gibt es eine konkrete Aufgabe, bei der Claude Code dir helfen soll?" Bleibt die Antwort vage,
+   frag einmal nach („Bei welcher Aufgabe diese Woche?"), dann ergänze `MISSION.md`. Überspringt die Person, frag
+   nicht wieder; die Mission kann sie jederzeit selbst ändern.
 
 ## Ein Kapitel durchgehen (`next`, `learn`)
 
@@ -108,7 +131,8 @@ Lies das Kapitel ganz, dann gehe nach **Typ** vor (Abschnitte, die das Kapitel n
 4. **Check**: die Abruffragen aus dem Kapitel **ohne** Spickzettel stellen, dann das Quiz (Optionen gemischt).
    Rückmeldung mit Begründung aus dem Kapitel.
 5. **Abschluss**: Hauptquelle nennen (`sources[0]`), Pfad zur Kapiteldatei für die Vertiefung, nächstes Kapitel.
-   Erledigt wird ein Kapitel erst, wenn die Person es sagt oder die Übung gelaufen ist.
+   Erledigt wird ein Kapitel erst, wenn die Person es sagt oder die Übung gelaufen ist. War es das erste erledigte
+   Kapitel, folgt die Mission-Frage (Einstufung, Schritt 7).
 
 `skim` heißt: nur Schritt 2 und 4. Nach jedem Kapitel `fortschritt.json` aktualisieren; ein Lernprotokoll nur bei
 echter Evidenz (siehe Format).

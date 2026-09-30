@@ -119,7 +119,7 @@ Plugin-Skills tragen den Plugin-Namen als Präfix. Der volle Aufruf ist `/dynami
 | Aufruf | Was passiert |
 |---|---|
 | `/workshop` | Übersicht: die Regale, drei Wege (Einstufung, Live-Pfad, Stöbern) und die Aufrufe |
-| `/workshop start` | Lernordner anlegen (Vorschlag `~/cc-workshop/lernen`), Mission im Gespräch, Einstufung nach Ziel, Zeit und Stand, optional und nur mit deinem Ja ein lesender Blick auf dein Setup; daraus `lernpfad.md` und Lernprotokolle für genanntes Vorwissen |
+| `/workshop start` | ein Auswahl-Bildschirm (Erfahrung, Ziel, Zeit, Lernordner mit Vorschlag `~/cc-workshop/lernen`), Fragen zum Stand nur so viele, wie deine Erfahrung trägt, bei viel Erfahrung auf Wunsch ein lesender Blick auf dein Setup; daraus `lernpfad.md`, eine vorbefüllte `MISSION.md` und Lernprotokolle für genanntes Vorwissen. Danach beginnt direkt das erste Kapitel |
 | `/workshop next` | das nächste offene Kapitel deines Pfads, im Ablauf seines Kapiteltyps |
 | `/workshop learn <ID>` | ein bestimmtes Kapitel, etwa `S2.8` oder `X.1`; alte Modulnummern wie `2.2` gehen auch |
 | `/workshop review` | Abruf mit Abstand über erledigte Kapitel |
@@ -138,7 +138,7 @@ Im Lernordner liegen:
 
 So kehren die Bausteine im Tutor wieder:
 
-- **Mission:** eine deutsche Fassung der Vorlage mit Warum, Daran merke ich es, Rahmen und Bewusst nicht. Bleibt deine Antwort vage, fragt der Tutor einmal konkret nach: „Bei welcher Aufgabe diese Woche?"
+- **Mission:** eine deutsche Fassung der Vorlage mit Warum, Daran merke ich es, Rahmen und Bewusst nicht. Anders als `teach` fragt der Tutor sie nicht vorab ab: Er füllt sie aus deinen Klicks vor und fragt erst nach deinem ersten Kapitel nach einer konkreten Aufgabe, wenn du gesehen hast, was Claude Code kann. Bleibt deine Antwort vage, fragt er einmal nach: „Bei welcher Aufgabe diese Woche?"
 - **Lernprotokolle:** nur bei Evidenz, etwa wenn du beide Schnellcheck-Fragen sicher beantwortest oder die Übung gelaufen ist. Erledigt ist ein Kapitel erst, wenn du es sagst oder die Übung gelaufen ist. So sieht ein Protokoll aus:
 
 ```md
@@ -194,7 +194,7 @@ Prüf die Datei dann gegen die Regeln: Steht unter „Warum" ein konkretes Ziel 
 
 ### Übung 2: mit dem Tutor starten
 
-Lade das Plugin wie oben (die Einrichtung steht in der [Anleitung](../../HOW-TO-USE.md)) und ruf `/dynamic-workshop:workshop start` auf. Nenn als Lernordner den Ordner mit deiner `MISSION.md`. Findet der Tutor die Mission, fragt er, ob du weitermachen, anpassen oder neu beginnen willst. Geh die Einstufung durch und öffne danach `lernpfad.md`: Welche Kapitel stehen in der ersten Etappe, und mit welcher Begründung?
+Lade das Plugin wie oben (die Einrichtung steht in der [Anleitung](../../HOW-TO-USE.md)) und ruf `/dynamic-workshop:workshop start` auf. Nenn als Lernordner den Ordner mit deiner `MISSION.md`. Findet der Tutor die Mission, übernimmt er sie, statt eine neue vorzubefüllen; liegt dort schon eine Einstufung, fragt er, ob du weitermachen, anpassen oder neu beginnen willst. Geh die Einstufung durch und öffne danach `lernpfad.md`: Welche Kapitel stehen in der ersten Etappe, und mit welcher Begründung?
 
 ### Übung 3: die Quelle prüfen
 

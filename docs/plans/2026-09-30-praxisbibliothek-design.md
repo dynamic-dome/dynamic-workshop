@@ -431,7 +431,7 @@ Abstand (Speicherstärke statt Scheingewandtheit), gleich lange Quizantworten, G
 | Aufruf | Verhalten |
 |---|---|
 | `/workshop` | Übersicht: Regale, drei Einstiege |
-| `/workshop start` | Lernordner anlegen (Vorschlag `~/cc-workshop/lernen`), `MISSION.md` im teach-Format, Einstufung im Dialog, optional (nur mit Zustimmung, nur lesend) Blick auf das echte Setup, `einstufung.json` → `placement.py` → `lernpfad.md`, erste Lernprotokolle für genanntes Vorwissen |
+| `/workshop start` | Schnelleinstieg auf einem Auswahl-Bildschirm (Erfahrung, Ziel, Zeit, Lernordner mit Vorschlag `~/cc-workshop/lernen`), Stand-Fragen nur so viele, wie die Erfahrung trägt (Neulinge: keine), bei viel Erfahrung auf Wunsch (nur lesend) Blick auf das echte Setup und Mini-Szenarien, `einstufung.json` → `placement.py` → `lernpfad.md`, `MISSION.md` im teach-Format aus den Klicks vorbefüllt und nach dem ersten Kapitel mit einer Frage geschärft, erste Lernprotokolle für genanntes Vorwissen, dann direkt das erste Kapitel (geändert nach dem ersten Owner-Durchlauf am 2026-09-30: Mission-Freitext vorab und 14 Stand-Fragen waren für Neulinge zu lang) |
 | `/workshop next` | nächstes Kapitel aus Pfad + Lernprotokollen, Ablauf je Kapiteltyp (§4.3; fehlende Abschnitte werden übersprungen): Schnellcheck → Auf einen Blick → Bild im Kopf → selbst machen (im eigenen Terminal, Tutor prüft Ergebnis) → Check → Lernprotokoll, wenn Evidenz |
 | `/workshop learn <ID\|Alias>` | bestimmtes Kapitel im selben Ablauf |
 | `/workshop review` | Abruf über erledigte Kapitel mit Abstand, gemischt; Fehler → Wiederholung vormerken |

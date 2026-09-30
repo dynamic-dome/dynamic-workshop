@@ -26,6 +26,9 @@ Nicht „Claude Code verstehen", sondern z. B. „Unsere Code-Reviews mit Claude
 
 Regeln:
 
+- **Erst vorbefüllen, dann schärfen.** Beim `start` füllt der Tutor die Mission aus den Klicks des Schnelleinstiegs
+  vor („Daran merke ich es" und „Bewusst nicht" bleiben „noch offen"). Nach dem ersten erledigten Kapitel fragt er
+  einmal nach einer konkreten Aufgabe — dann weiß die Person, was Claude Code kann, und antwortet genauer.
 - **Konkret statt allgemein.** Bleibt es vage, einmal nachfragen: „Bei welcher Aufgabe diese Woche?"
 - **Kurz.** Passt nicht mehr auf eine Bildschirmseite? Dann ist es ein Plan, keine Mission.
 - **Ändert sich das Ziel,** passe die Datei an — nach Rückfrage — und lege ein Lernprotokoll dazu an.
