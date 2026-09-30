@@ -1,0 +1,7 @@
+{"id":"S1.2","verdict":"pass","counts":{"kept":27,"changed":1,"dropped":0,"new":2},
+"items":[
+{"status":"changed","source":"resources/modules/block-1-foundations.md:305","old":"Since March 2026, Computer Use allows Claude to control the desktop on macOS, Windows, and Linux; separate feature, not enabled by default.","new":"Mit Computer Use steuert Claude Maus und Tastatur und macht Screenshots (in der CLI nur unter macOS als Research Preview, in der Desktop-App unter macOS und Windows); standardmäßig abgeschaltet.","rating":"ok","reason":"Korrektur gegen Doku geprüft: computer-use.md nennt 'research preview on macOS', 'off by default', Tabelle Desktop 'macOS and Windows' / CLI 'macOS only', 'not available on Linux or Windows' in der CLI. Alte Quellaussage (Linux) war falsch."},
+{"status":"new","source":"","old":"","new":"mit Claude in Chrome steuert es deinen Browser (als weitere standardmäßig abgeschaltete Funktion)","rating":"ok","reason":"Doku (chrome.md, how-claude-code-works.md) belegt Claude in Chrome als Erweiterung für Browser-Interaktion; Einrichtung nötig, also nicht Standard."},
+{"status":"new","source":"","old":"","new":"Querverweise: Claude hat in S1.1 hello.py selbst geschrieben und ausgeführt; Rechte-Modi in S1.5/S1.6","rating":"ok","reason":"Verknüpfung zu Schwesterkapiteln, s1-01 enthält hello.py; Desktop-/IDE-/Web-Analogien der Quelle (Zeilen 156-197) stehen nun in s1-03-oberflaechen.md (Zeile 31-37), daher kein Verlust."}
+],
+"style":[]}
