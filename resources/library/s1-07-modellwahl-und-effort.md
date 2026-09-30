@@ -8,7 +8,7 @@ minutes: 15
 requires: [S1.1]
 safety_floor: false
 transferable: false
-outcome: "Ich kann für eine Aufgabe Modell-Tier und Effort-Stufe begründet wählen und beides mit /model und /effort oder beim Start mit --model und --effort umstellen."
+outcome: "Ich kann für eine Aufgabe Modell-Tier und Effort-Stufe begründet wählen und beides mit /model und /effort oder schon beim Start per Flag umstellen."
 sources:
   - https://code.claude.com/docs/en/model-config
   - https://code.claude.com/docs/en/commands

@@ -213,7 +213,9 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
     changelog = fetch_checked(fetcher, sources["Changelog"][0], "changelog")
     live_cockpit = fetch_checked(fetcher, cockpit_url, "cockpit") if cockpit_url else None
 
-    by_name = {d.url.rsplit("/", 1)[-1]: d for d in docs}
+    by_name = {}
+    for doc in docs:  # the first listed page wins: plugins/cli-reference.md must not shadow cli-reference.md
+        by_name.setdefault(doc.url.rsplit("/", 1)[-1], doc)
     missing = [name for name in REQUIRED_DOCS if name not in by_name]
     if missing:
         raise SourceError("Kanon-Quellenliste ohne " + ", ".join(missing))

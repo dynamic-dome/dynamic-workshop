@@ -233,7 +233,7 @@ def parse_canon_foreign(text):
     """[(url, chapter)] of the `- Fremdprojekt: <url> (<chapter>)` lines; ValueError on a line without a chapter."""
     found = []
     for line in text.splitlines():
-        if "Fremdprojekt:" not in line:
+        if "fremdprojekt:" not in line.lower():
             continue  # any spelling that mentions the kind must be the exact form, or the source goes unwatched
         match = FOREIGN_LINE.match(line)
         if not match:

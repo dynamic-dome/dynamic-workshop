@@ -250,6 +250,16 @@ def test_foreign_pages_never_document_claude_code_identifiers():
     assert any("--metadata" in f.text for f in levels(result, "rot"))
 
 
+def test_docs_with_the_same_file_name_do_not_shadow_each_other():
+    """docs/en/cli-reference.md and docs/en/plugins/cli-reference.md: the permission modes come from the first."""
+    cli = pages()[BASE + "cli-reference.md"] + "\n| `--permission-mode` | Accepts `default`, `plan`, or `manual` | x |\n"
+    plugin_cli = "# Plugin CLI\n| `--strict` | Fail on warnings too |\n" + PAD
+    available = pages(**{BASE + "cli-reference.md": cli, BASE + "plugins/cli-reference.md": plugin_cli})
+    course = {"m.md": "Start `claude --permission-mode manual`, then `claude plugin validate . --strict`.\n"}
+    result = run(course=course, canon_text=canon(docs=DOCS + ["plugins/cli-reference.md"]), available=available)
+    assert levels(result, "rot") == []
+
+
 def test_redirect_to_another_host_is_yellow():
     result = run(final={BASE + "env-vars.md": "https://elsewhere.example/env-vars.md"})
     assert any(f.key == f"redirect-host:{BASE}env-vars.md" for f in levels(result, "gelb"))
@@ -336,7 +346,7 @@ def test_real_canon_is_machine_readable():
         assert model.model_id.startswith("claude-") and model.alias in {"fable", "opus", "sonnet", "haiku"}
         assert re.fullmatch(r"(Not sooner than )?[A-Z][a-z]+ \d{1,2}, \d{4}", model.retirement), model.retirement
     sources = cx.parse_canon_sources(text)
-    assert len(sources["Doku"]) == 13
+    assert len(sources["Doku"]) == 14
     assert all(url.startswith("https://") for urls in sources.values() for url in urls)
     names = {url.rsplit("/", 1)[-1] for url in sources["Doku"]}
     assert {"model-deprecations.md", "model-config.md", "permission-modes.md"} <= names

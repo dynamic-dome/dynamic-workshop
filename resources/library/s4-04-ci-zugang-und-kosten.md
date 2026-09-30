@@ -74,7 +74,7 @@ flowchart TD
   Q1 -- "ja" --> A["Weg A: ANTHROPIC_API_KEY<br/>und --bare"]
   Q1 -- "nein" --> Q2{"Secret für mehrere Repos<br/>oder ein Team?"}
   Q2 -- "ja" --> A
-  Q2 -- "nein" --> B["Weg B möglich: CLAUDE_CODE_OAUTH_TOKEN<br/>nur ohne --bare"]
+  Q2 -- "nein" --> B["Weg B möglich:<br/>CLAUDE_CODE_OAUTH_TOKEN<br/>nur ohne --bare"]
 ```
 
 > **Vorrang-Falle:** Sind beide gesetzt, gewinnt `ANTHROPIC_API_KEY` gegen `CLAUDE_CODE_OAUTH_TOKEN`; im `-p`-Modus wird ein vorhandener Key immer genutzt. Ein vergessener Key in der Runner-Umgebung schiebt eine „Abo"-Pipeline still in die API-Abrechnung. `claude auth status` zeigt, welche Zugangsdaten Claude Code nehmen würde (`"authMethod": "api_key"` oder `"oauth_token"`); ob sie gültig sind, prüft es nicht.

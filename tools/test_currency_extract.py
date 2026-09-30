@@ -177,7 +177,8 @@ def test_foreign_sources_name_their_chapter_and_fail_closed():
     assert cx.parse_canon_foreign(CANON) == []
     assert cx.parse_canon_sources(text) == cx.parse_canon_sources(CANON)
     for bad in ("- Fremdprojekt: https://pi.test/docs\n", "  - Fremdprojekt: https://pi.test/docs (X.3)\n",
-                "* Fremdprojekt: https://pi.test/docs (X.3)\n", "-  Fremdprojekt: https://pi.test/docs (X.3)\n"):
+                "* Fremdprojekt: https://pi.test/docs (X.3)\n", "-  Fremdprojekt: https://pi.test/docs (X.3)\n",
+                "- fremdprojekt: https://pi.test/docs (X.3)\n"):
         with pytest.raises(ValueError):
             cx.parse_canon_foreign(CANON + bad)
 

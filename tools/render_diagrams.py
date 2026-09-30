@@ -3,6 +3,7 @@
 
   python tools/render_diagrams.py            # renders missing/changed diagrams, removes orphans
   python tools/render_diagrams.py --check    # exit 1 if an SVG is missing for a Mermaid block
+  python tools/render_diagrams.py --force    # re-render every diagram (after changing THEME or the config)
 
 Uses Playwright (Chromium) and Mermaid; Mermaid is downloaded once to tools/.cache/ (not committed). The SVGs are
 committed in resources/library/diagrams/<key>.svg, key = build_cockpit.diagram_key(source), so builds stay offline and
@@ -74,7 +75,7 @@ def render(items):
         page.add_script_tag(path=str(mermaid_js()))
         page.evaluate("cfg => mermaid.initialize(cfg)", {
             "startOnLoad": False, "securityLevel": "strict", "theme": "base", "themeVariables": THEME,
-            "flowchart": {"htmlLabels": False, "curve": "basis"}, "htmlLabels": False,
+            "flowchart": {"htmlLabels": False, "curve": "basis", "wrappingWidth": 320}, "htmlLabels": False,
         })
         for n, (key, (cid, source)) in enumerate(sorted(items.items())):
             result = page.evaluate("""async ([id, src]) => {
@@ -96,13 +97,14 @@ def main(argv=None):
         pass
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--force", action="store_true", help="alle Diagramme neu rendern (nach einer Theme-Änderung)")
     parser.add_argument("--root", type=Path, default=LIBRARY)
     args = parser.parse_args(argv)
     lib = lm.load_library(args.root)
     wanted = diagrams(lib)
     folder = args.root / "diagrams"
     have = {p.stem for p in folder.glob("*.svg")} if folder.exists() else set()
-    missing = {k: v for k, v in wanted.items() if k not in have}
+    missing = {k: v for k, v in wanted.items() if args.force or k not in have}
     orphans = have - set(wanted)
     if args.check:
         for k, (cid, _) in sorted(missing.items()):

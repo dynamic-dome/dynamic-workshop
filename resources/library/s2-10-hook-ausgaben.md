@@ -88,7 +88,7 @@ exit 0
 
 **Einsatz:** API-Keys, Tokens oder personenbezogene Daten aus Tool-Ausgaben entfernen, bevor Claude sie in sein Reasoning übernimmt (und womöglich in spätere Nachrichten). **Grenze:** Der Befehl ist schon gelaufen, und die Telemetrie zeichnet die Originalausgabe auf. Willst du verhindern, dass etwas überhaupt passiert, nimm einen PreToolUse-Hook.
 
-> **Windows:** Die Hook-Beispiele in diesem Kapitel sind in bash geschrieben (`jq`, `case`). Unter Windows führst du sie über Git Bash aus oder portierst sie nach `.ps1` (stdin lesen mit `[Console]::In.ReadToEnd() | ConvertFrom-Json`, JSON ausgeben mit `ConvertTo-Json -Depth 5`) und trägst sie mit `pwsh -File ...` ein. Das Bash- und PowerShell-Paar findest du in [S2.8](s2-08-hook-einrichten.md).
+> **Windows:** Die Hook-Beispiele in diesem Kapitel sind in bash geschrieben (`jq`, `case`). Unter Windows führst du sie über Git Bash aus oder portierst sie nach `.ps1` (stdin lesen mit `[Console]::In.ReadToEnd() | ConvertFrom-Json`, JSON ausgeben mit `ConvertTo-Json -Depth 5`) und trägst sie mit `pwsh -NoProfile -ExecutionPolicy Bypass -File ...` ein (warum die Flags nötig sind, steht in S2.8). Das Bash- und PowerShell-Paar findest du in [S2.8](s2-08-hook-einrichten.md).
 
 ### Weiche Warnungen statt harter Sperre
 

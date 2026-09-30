@@ -63,7 +63,7 @@ claude --worktree feature/x
 | `"head"` | deinem lokalen `HEAD` | Der Worktree trägt deinen Zwischenstand |
 
 - Einen Branch-Namen kannst du nicht eintragen; für einen bestimmten Branch nimm `git worktree add`.
-- Ein Flag `--worktree-base-ref` gibt es nicht. Für einen einzelnen Aufruf: `claude --settings '{"worktree":{"baseRef":"head"}}' --worktree <name>`.
+- Ein eigenes Flag für die Basis gibt es nicht, auch wenn ältere Kursunterlagen eines nannten. Für einen einzelnen Aufruf: `claude --settings '{"worktree":{"baseRef":"head"}}' --worktree <name>`.
 - Ohne Remote, oder wenn `origin/HEAD` weder lokal vorliegt noch abrufbar ist, fällt `"fresh"` auf deinen lokalen `HEAD` zurück.
 - Der Standard war nicht immer `"fresh"` (Changelog 2.1.133). Laufen auf euren Rechnern verschiedene CLI-Versionen, setz den Wert ausdrücklich.
 - Gitignorierte Dateien wie `.env` fehlen im neuen Worktree; eine `.worktreeinclude` im Projekt-Root kopiert sie mit.

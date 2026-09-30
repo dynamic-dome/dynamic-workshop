@@ -124,7 +124,7 @@ Die Reihenfolge dafür gibt die Doku vor:
 | `contextVisibility` | `all` | Zitate, Thread-Verlauf und Weitergeleitetes erreichen das Modell so, wie sie ankommen. Die Allowlist regelt, wer etwas auslöst, nicht, was das Modell mitliest. |
 | Nachrichten über Kanalgrenzen | erlaubt | Ein Agent mit Nachrichten-Werkzeug darf aus einer Telegram-Sitzung nach Discord schreiben, wenn das Ziel eingerichtet ist. |
 
-Das Muster (Schlussfolgerung aus dieser Tabelle): Die Standardwerte halten den Eingang zu. Was ein zugelassener Absender oder ein eingeschleuster Text anstößt, läuft aber mit offenen Werkzeugen, und genau dort setzen die meisten Risiken unten an. Ob du von den Standardwerten abgewichen bist, zeigt laut Doku `openclaw security audit`; mit `--deep` versucht der Befehl zusätzlich eine Live-Probe des Gateways.
+Das Muster (Schlussfolgerung aus dieser Tabelle): Die Standardwerte halten den Eingang zu. Was ein zugelassener Absender oder ein eingeschleuster Text anstößt, läuft aber mit offenen Werkzeugen, und genau dort setzen die meisten Risiken unten an. Ob du von den Standardwerten abgewichen bist, zeigt laut Doku `openclaw security audit`; `openclaw security audit --deep` versucht zusätzlich eine Live-Probe des Gateways.
 
 ### Was schiefgehen kann
 

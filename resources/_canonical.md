@@ -75,6 +75,8 @@ Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, So
 
 - Ist `auto` für die Session nicht verfügbar (Modell, Einstellung, serverseitig aus), startet sie in Manual.
 - Die erste Session nach Installation oder Upgrade kann abweichen; die nächste folgt der Tabelle.
+- Changelog 2.1.285: `claude -p` und das Python-SDK starten bei Drittanbietern oder abgeschalteter Telemetrie ohne
+  konfigurierten Modus ebenfalls in `auto`; die Doku-Tabelle oben nennt das noch nicht (Stand 2026-09-30).
 - Kapitel S1.6, die Karte „Rechte“ und der Mentor verweisen hierher, statt den Startmodus selbst zu nennen.
 
 ## Struktur
@@ -100,6 +102,7 @@ Der Monatslauf (`tools/currency_check.py`) liest genau diese Liste.
 - Doku: https://code.claude.com/docs/en/model-config.md
 - Doku: https://code.claude.com/docs/en/mcp.md
 - Doku: https://code.claude.com/docs/en/skills.md
+- Doku: https://code.claude.com/docs/en/plugins/cli-reference.md
 - Doku: https://code.claude.com/docs/en/settings.md
 - Doku: https://platform.claude.com/docs/en/models/overview.md
 - Doku: https://platform.claude.com/docs/en/about-claude/model-deprecations.md

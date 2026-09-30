@@ -368,7 +368,7 @@
    "minutes": 15,
    "offers": [],
    "order": 1070,
-   "outcome": "Ich kann für eine Aufgabe Modell-Tier und Effort-Stufe begründet wählen und beides mit /model und /effort oder beim Start mit --model und --effort umstellen.",
+   "outcome": "Ich kann für eine Aufgabe Modell-Tier und Effort-Stufe begründet wählen und beides mit /model und /effort oder schon beim Start per Flag umstellen.",
    "quiz": {
     "correct": "Haikus Kontextfenster ist deutlich kleiner als das der anderen Tiers, bei so vielen Dateien fallen frühe Inhalte heraus.",
     "q": "Jemand analysiert eine Firmware-Codebasis mit 800 Dateien mit `haiku`, weil es das günstigste Tier ist. Warum kann das scheitern, obwohl Haiku für einfache Aufgaben empfohlen wird?",
