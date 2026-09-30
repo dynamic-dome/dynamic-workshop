@@ -253,7 +253,7 @@ ASSET_MARKER = re.compile(r"tested asset: (resources/demos/assets/hooks/[\w.-]+)
 FENCE = re.compile(r"^```[\w-]*\n(.*?)^```", re.S | re.M)
 LIVE_MD = [
     p for p in (ROOT / "resources").rglob("*.md")
-    if not p.relative_to(ROOT).as_posix().startswith(("resources/review-", "resources/archive/"))
+    if not p.relative_to(ROOT).as_posix().startswith("resources/media/")
 ]
 
 
@@ -337,8 +337,19 @@ def _normalise(text: str) -> str:
     return "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").strip().split("\n"))
 
 
+# Copyable assets and the one chapter each lives in (the library keeps every snippet once; secure-diff-gate is
+# copied as a file, not pasted, and has its own behaviour tests above).
+SNIPPET_HOME = {
+    "safety-check.sh": "s2-08-hook-einrichten.md",
+    "safety-check.ps1": "s2-08-hook-einrichten.md",
+    "redact-output.sh": "s2-10-hook-ausgaben.md",
+    "token-firewall.sh": "s2-10-hook-ausgaben.md",
+    "sensitive-data-scanner.sh": "s3-11-datenschutz-und-compliance.md",
+}
+
+
 def test_every_marked_course_snippet_matches_its_tested_asset():
-    checked = 0
+    homes = {}
     for md in LIVE_MD:
         for block in FENCE.findall(md.read_text(encoding="utf-8")):
             marker = ASSET_MARKER.search(block)
@@ -349,7 +360,6 @@ def test_every_marked_course_snippet_matches_its_tested_asset():
             assert _normalise(block) == _normalise(asset.read_text(encoding="utf-8")), (
                 f"{md.relative_to(ROOT)}: snippet drifted from {marker.group(1)}"
             )
-            checked += 1
+            homes.setdefault(asset.name, []).append(md.name)
 
-    # Exercise 2.2 (sh + ps1), Bonus 2.6, Bonus 3.8, Module 2.2 (safety + redact)
-    assert checked >= 6
+    assert homes == {name: [home] for name, home in SNIPPET_HOME.items()}, homes

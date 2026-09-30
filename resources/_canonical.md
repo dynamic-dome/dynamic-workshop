@@ -77,10 +77,12 @@ Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, So
 
 ## Struktur
 
-- **4 Sessions / 65 Lerneinheiten (LE)** – Welle-F-Restrukturierung (`session-plan.md` ist die Ablauf-SSoT).
-- Session 1 = Block 1 (Foundations, S1.1–S1.20). Session 2 = Block 2 (Ecosystem, S2.1–S2.20).
-  Session 3 = Block 3 Advanced Kern (S3.1–S3.15). Session 4 = Block 3 Advanced Bonus (S4.1–S4.10).
-- 17 Module (5+5+7) über 3 Blöcke bleiben die Volltext-Quelle; die 65-LE-Landkarte ist die Navigations-Schicht darüber.
+- **Quellenhoheit:** Lehrinhalte stehen nur in den Kapiteln unter `resources/library/` (eine Datei je Kapitel,
+  IDs `S0.1`–`S4.10` und `X.1`–`X.4`); Regale, Einstufung und Reihenfolge in `_shelves.yaml` und `_placement.yaml`.
+- Der Live-Workshop ist ein Pfad durch die Bibliothek: Session 0 (Werkstatt), Sessions 1–4 (`S1.*`–`S4.*`); Ablauf
+  und Moderation in `resources/paths/live-workshop.md` (generiert) und `resources/moderation/handbuch.md`.
+- Die alten Module, Demos und Übungen (Stand `ba222d2`) sind in die Kapitel umgezogen; ihre Review-Archive liegen
+  unter `docs/reviews/`.
 
 ## Quellen
 

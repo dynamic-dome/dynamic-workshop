@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 COCKPIT = ROOT / "resources" / "claude-code-workshop-ui.html"
 LIVE_MD = [
     p for p in (ROOT / "resources").rglob("*.md")
-    if not p.relative_to(ROOT).as_posix().startswith(("resources/review-", "resources/archive/"))
+    if not p.relative_to(ROOT).as_posix().startswith("resources/media/")
 ]
 LIVE_FILES = LIVE_MD + [COCKPIT, ROOT / "agents" / "workshop-mentor.md"]
 

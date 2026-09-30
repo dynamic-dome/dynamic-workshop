@@ -11,7 +11,7 @@
 - Die Quelle: die Heimat-Bereiche des Kapitels aus `docs/migration/ownership.json` → `packs[<ID>]`, gelesen aus dem
   Basis-Commit mit `git show ba222d2:<datei>` (nur die angegebenen Zeilen).
 - Bekannte, **gewollte** Korrekturen: Spec `docs/plans/2026-09-30-praxisbibliothek-design.md` Anhang B (Liste der
-  Widersprüche) und die Hook-Fakten aus `resources/review-2026-09-28/05-bewertung.md` (H-01 bis H-17).
+  Widersprüche) und die Hook-Fakten aus `docs/reviews/2026-09-28/05-bewertung.md` (H-01 bis H-17).
 
 ## Vorgehen
 

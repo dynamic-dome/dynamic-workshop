@@ -1,7 +1,7 @@
 > **Transkript der aufgenommenen Videos, Stand der Aufnahme: drei Sessions — nicht an den heutigen Aufbau angepasst.**
 >
 > Der Text unten ist wörtlich übernommen. Heute läuft der Workshop in vier Sessions, der Ablauf steht im
-> [Moderations-Handbuch](handbuch.md) und im [Live-Pfad](../paths/live-workshop.md). Die Mediendateien liegen künftig
+> [Moderations-Handbuch](handbuch.md) und im [Live-Pfad](../paths/live-workshop.md). Die Mediendateien liegen
 > in `resources/media/`: die Folien der drei Videos (`video-1-was-ist-claude-code.pptx`,
 > `video-2-security-analogie.pptx`, `video-3-grenzenlose-werkstatt.pptx`), `workshop-intro-video.mp4` und
 > `workshop-intro-podcast.mp3`. Das Deck für den Workshop ist `resources/media/claude-code-praxisbibliothek.pptx`.
