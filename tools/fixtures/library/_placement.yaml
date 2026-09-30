@@ -4,6 +4,7 @@ base_shelves: [hooks]
 minimum_path: [S2.7, S2.8]
 quickstart_warn_minutes: 180
 default_goal: alltag
+chapter_goals: {}
 default_time: abende
 times:
   - {id: schnellstart, label: Schnellstart, stage_minutes: null}

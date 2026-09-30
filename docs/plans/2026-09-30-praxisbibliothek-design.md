@@ -271,7 +271,8 @@ Notation: r(c) = Stand des Bereichs von Kapitel c nach Szenario-Deckel (Kapitel 
   ∪ `core`- und `deep-dive`-Kapitel der Schwerpunkt-Regale aller gewählten Ziele ∪ bei `gruendlich` deren `bonus`-Kapitel
   ∪ jede Praxis-Station, deren `offers` ein Kapitel aus R mit r < 2 enthält (die Station zeigt dann nur diese Übungen)
   ∪ `capstone`, wenn ein Ziel `agents` oder `einschaetzen` ist
-  ∪ X-Kapitel, wenn ein Ziel nicht `einschaetzen` ist.
+  ∪ X-Kapitel, wenn ein Ziel nicht `einschaetzen` ist — außer das Kapitel steht in `chapter_goals`: dann nur, wenn
+  eines der dort genannten Ziele gewählt ist (X.3 Pi, X.4 OpenClaw: `agents`, `security`, `einschaetzen`).
 - Kapitel außerhalb R: `later`, Grund `after-quickstart` (bei `schnellstart`) bzw. `not-goal`.
 
 **Schritt B — Status in R.**

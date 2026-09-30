@@ -6,6 +6,10 @@ base_shelves: [start, permissions, context, prompting, git, cost, troubleshootin
 minimum_path: [S0.1, S1.1, S1.2, S1.5, S1.6, S1.10, S1.13, S1.14, S1.16, S1.19]
 quickstart_warn_minutes: 180
 default_goal: alltag
+# Community-Kapitel, die nur für bestimmte Ziele relevant sind (sonst: alle Ziele außer Nur-Einschätzen)
+chapter_goals:
+  X.3: [agents, security, einschaetzen]
+  X.4: [agents, security, einschaetzen]
 default_time: abende
 
 times:

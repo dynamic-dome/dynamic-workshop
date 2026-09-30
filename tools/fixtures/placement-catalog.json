@@ -952,6 +952,20 @@
    "type": "lesson"
   },
   {
+   "area": null,
+   "id": "X.3",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 3025,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
    "area": "agents",
    "id": "S3.3",
    "level": "core",
@@ -1379,6 +1393,20 @@
    "type": "lesson"
   },
   {
+   "area": null,
+   "id": "X.4",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 4065,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
    "area": "git",
    "id": "S4.7",
    "level": "bonus",
@@ -1655,6 +1683,18 @@
    "cost",
    "troubleshooting"
   ],
+  "chapter_goals": {
+   "X.3": [
+    "agents",
+    "security",
+    "einschaetzen"
+   ],
+   "X.4": [
+    "agents",
+    "security",
+    "einschaetzen"
+   ]
+  },
   "default_goal": "alltag",
   "default_time": "abende",
   "goals": [

@@ -856,3 +856,27 @@
   transferable: true
   aliases: []
   file: x-02-lernen-mit-claude-code.md
+- id: X.3
+  type: community
+  title: 'Der minimale Agent: Pi als Spiegel'
+  shelf: community
+  level: bonus
+  minutes: 15
+  after: S3.2
+  requires: []
+  safety_floor: false
+  transferable: true
+  aliases: []
+  file: x-03-pi-als-spiegel.md
+- id: X.4
+  type: community
+  title: 'Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann'
+  shelf: community
+  level: bonus
+  minutes: 15
+  after: S4.6
+  requires: []
+  safety_floor: false
+  transferable: true
+  aliases: []
+  file: x-04-agenten-im-dauerbetrieb.md

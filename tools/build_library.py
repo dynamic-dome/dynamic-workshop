@@ -35,7 +35,7 @@ CONTRACT_FIELDS = ("id", "type", "title", "shelf", "level", "minutes", "requires
                    "aliases", "offers", "after")
 
 REQUIRED_IDS = (["S0.1"] + [f"S1.{n}" for n in range(1, 21)] + [f"S2.{n}" for n in range(1, 21)]
-                + [f"S3.{n}" for n in range(1, 16)] + [f"S4.{n}" for n in range(1, 11)] + ["X.1", "X.2"])
+                + [f"S3.{n}" for n in range(1, 16)] + [f"S4.{n}" for n in range(1, 11)] + ["X.1", "X.2", "X.3", "X.4"])
 
 ALL = set(lm.SECTION_ORDER)
 # Allowed and required H2 sections per chapter type (spec 4.3).
@@ -287,6 +287,13 @@ def _check_placement(lib, by_id, report, planned_ids=frozenset()):
                 todo.append(req)
     for req in sorted(closure - set(minimum)):
         add("minimum-path-closed", f"minimum_path braucht auch seine Voraussetzung {req}")
+    goal_ids = {g.get("id") for g in placement.get("goals", []) or []}
+    for cid, limited in (placement.get("chapter_goals") or {}).items():
+        if cid not in by_id and cid not in planned_ids:
+            add("placement-refs", f"chapter_goals nennt {cid}, das es nicht gibt")
+        for g in limited or []:
+            if g not in goal_ids:
+                add("placement-refs", f"chapter_goals {cid}: unbekanntes Ziel {g}")
     for sc in placement.get("scenarios", []) or []:
         option_ids = {o.get("id") for o in sc.get("options", []) or []}
         if sc.get("area") not in area_ids:

@@ -130,8 +130,10 @@ def place(catalog, answers):
                 relevant.add(c["id"])
             elif c["type"] == "capstone" and ({"agents", "einschaetzen"} & set(goals)):
                 relevant.add(c["id"])
-            elif c["type"] == "community" and any(g != "einschaetzen" for g in goals):
-                relevant.add(c["id"])
+            elif c["type"] == "community":
+                limited = (rules.get("chapter_goals") or {}).get(c["id"])
+                if (set(limited) & set(goals)) if limited else any(g != "einschaetzen" for g in goals):
+                    relevant.add(c["id"])
         later_reason = "not-goal"
 
     # --- B: status inside R -------------------------------------------------
