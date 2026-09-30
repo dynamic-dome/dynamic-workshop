@@ -1,11 +1,17 @@
 #!/bin/bash
-# safety-check.sh - PreToolUse hook (matcher "Bash"): block destructive shell commands.
+# safety-check.sh - PreToolUse hook (matcher "Bash|PowerShell"): block destructive shell commands.
 # tested asset: resources/demos/assets/hooks/safety-check.sh
 #
 # Contract (official hooks reference):
-#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command.
+#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command
+#     (the Bash and the PowerShell tool use the same field).
 #   - exit 2 = BLOCK: the command does not run, and stderr is shown to Claude as the reason.
-#   - exit 0 = allow. Any OTHER exit code (1, 127, ...) does NOT block: the command runs anyway.
+#   - exit 0 = no objection: the normal permission flow decides.
+#   - Any OTHER exit code (1, 127, ...) does NOT block: the command runs anyway.
+#   - On Windows, shell commands usually run through the PowerShell tool. A hook with
+#     matcher "Bash" alone never fires there, so register it as "Bash|PowerShell".
+#   - The patterns are examples, not complete protection: combine hooks with permission
+#     rules and a sandbox.
 
 INPUT=$(cat)
 
@@ -15,7 +21,7 @@ if ! COMMAND=$(printf '%s' "$INPUT" | jq -er '.tool_input.command // ""' 2>/dev/
   exit 2
 fi
 
-# Dangerous patterns (extended regex, case-insensitive)
+# Dangerous patterns (extended regex, case-insensitive); the last four are PowerShell and cmd
 DANGEROUS_PATTERNS=(
   'rm[[:space:]]+-rf'
   'git push.*--force'
@@ -25,6 +31,10 @@ DANGEROUS_PATTERNS=(
   'mkfs\.'
   'dd[[:space:]]+if=.*of=/dev/'
   '> /dev/sd'
+  '(^|[^[:alnum:]-])(Remove-Item|rm|ri|del|erase|rmdir|rd)[[:space:]].*-Recurse'
+  '(^|[^[:alnum:]-])(rd|rmdir)[[:space:]]+/s'
+  'Format-Volume'
+  'Clear-Disk'
 )
 
 for PATTERN in "${DANGEROUS_PATTERNS[@]}"; do
@@ -37,5 +47,5 @@ for PATTERN in "${DANGEROUS_PATTERNS[@]}"; do
   fi
 done
 
-# All checks passed - allow the command
+# All checks passed - no objection
 exit 0

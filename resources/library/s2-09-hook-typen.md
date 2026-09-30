@@ -47,14 +47,14 @@ Hooks führen nicht nur Shell-Befehle aus. Es gibt fünf Typen:
 | **agent** | Startet einen Subagenten zur Bewertung | Mehrstufige Prüflogik |
 | **mcp_tool** | Ruft ein MCP-Tool direkt auf | Nachricht an Slack über MCP, Push an ein Monitoring-Dashboard, strukturierte externe Aktion ohne Umweg über die Shell |
 
-**Beispiel: ein prompt-Hook**, der bewertet, ob ein Bash-Befehl sicher ist:
+**Beispiel: ein prompt-Hook**, der bewertet, ob ein Shell-Befehl sicher ist (`Bash|PowerShell`, damit er auch unter Windows mit dem PowerShell-Tool greift, [S2.8](s2-08-hook-einrichten.md)):
 
 ```json
 {
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           {
             "type": "prompt",

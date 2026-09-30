@@ -148,6 +148,33 @@ def test_safety_check_allows_harmless_command(script):
     assert result.stderr.strip() == ""
 
 
+def pre_powershell(command: str) -> dict:
+    """The PowerShell tool sends the same fields as Bash, the command in tool_input.command (hooks.md)."""
+    return {**pre_bash(command), "tool_name": "PowerShell"}
+
+
+@pytest.mark.parametrize("script", SAFETY_CHECK)
+@pytest.mark.parametrize(
+    "command",
+    ["Remove-Item -Path .\\build -Recurse -Force", "rm .\\build -Recurse", "cmd /c rd /s /q build",
+     "Format-Volume -DriveLetter D", "Get-ChildItem x | Remove-Item -Recurse"],
+)
+def test_safety_check_blocks_destructive_powershell_commands_with_exit_2(script, command):
+    """On Windows the hook is registered as Bash|PowerShell, so it must know PowerShell's destructive forms."""
+    result = run(script, pre_powershell(command))
+
+    assert result.returncode == BLOCK
+    assert "SAFETY HOOK" in result.stderr
+
+
+@pytest.mark.parametrize("script", SAFETY_CHECK)
+@pytest.mark.parametrize("command", ["Get-ChildItem -Recurse -Force", "git status", "Get-Content .\\README.md"])
+def test_safety_check_allows_harmless_powershell_commands(script, command):
+    result = run(script, pre_powershell(command))
+
+    assert result.returncode == 0
+
+
 @pytest.mark.parametrize("script", SAFETY_CHECK)
 def test_safety_check_fails_closed_when_input_is_unreadable(script):
     """A safety gate that cannot read its input must not silently wave the call through."""
@@ -300,6 +327,9 @@ def hook_config_problems(text: str) -> list:
             continue
         for event, groups in hooks.items():
             for group in groups:
+                if event == "PreToolUse" and group.get("matcher") == "Bash":
+                    problems.append("PreToolUse: matcher \"Bash\" alone never fires with the Windows PowerShell tool "
+                                    "(hooks.md) - use \"Bash|PowerShell\"")
                 extra = set(group) - HOOK_GROUP_KEYS
                 if extra:
                     problems.append(f"{event}: matcher group has {sorted(extra)} (belongs on the handler?)")
@@ -321,6 +351,9 @@ def test_guard_catches_the_old_mistakes():
     )
     assert len(find_wrong_idioms(old)) >= 3
     assert hook_config_problems(old)
+    bash_only = '```json\n{"hooks": {"PreToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "x"}]}]}}\n```\n'
+    assert any("PowerShell" in p for p in hook_config_problems(bash_only))
+    assert hook_config_problems(bash_only.replace('"Bash"', '"Bash|PowerShell"')) == []
 
 
 @pytest.mark.parametrize("path", LIVE_FILES, ids=lambda p: p.relative_to(ROOT).as_posix())

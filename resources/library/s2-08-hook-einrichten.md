@@ -61,7 +61,7 @@ Der Aufbau hat drei Ebenen: welches Ereignis (`PreToolUse`), welches Tool (`matc
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           {
             "type": "command",
@@ -99,8 +99,11 @@ Der Aufbau hat drei Ebenen: welches Ereignis (`PreToolUse`), welches Tool (`matc
 
 Der `matcher` bestimmt, auf welche Tool-Aufrufe der Hook reagiert. Wie er ausgewertet wird, hängt von seinem Inhalt ab:
 
-- Enthält er **nur Buchstaben, Ziffern, `_` und `|`**, gilt er als exakter Name oder als Liste mit `|`. `"Bash"` trifft nur das Bash-Tool, `"Bash|Edit|Write"` jedes der drei.
+- Enthält er **nur Buchstaben, Ziffern, `_`, `-`, Leerzeichen, `,` und `|`**, gilt er als exakter Name oder als Liste exakter Namen (getrennt mit `|` oder `,`). `"Bash"` trifft nur das Bash-Tool, `"Bash|Edit|Write"` jedes der drei.
+- `"*"`, `""` oder gar kein `matcher` treffen alle Tools.
 - Enthält er **irgendein anderes Sonderzeichen**, gilt er als JavaScript-Regex. `".*"` trifft alle Tools; auch `"Bash|^Edit$"` ist ein Regex, sobald `.` oder `^`/`$` vorkommen.
+
+> **Windows: `Bash|PowerShell`.** Unter Windows laufen Shell-Befehle meist über das PowerShell-Tool: Mit Git Bash ist es für claude.ai- und Console-Konten standardmäßig an, ohne Git Bash gibt es gar kein Bash-Tool. Ein Hook mit `"matcher": "Bash"` feuert dann nie, obwohl dein Skript im Test einwandfrei blockt. Für Hooks, die Shell-Befehle prüfen, schreibst du deshalb `"Bash|PowerShell"`; beide Tools liefern den Befehl in `tool_input.command`. Das Skript muss dann auch PowerShell-Befehle erkennen, etwa `Remove-Item -Recurse`.
 
 ### if: feiner filtern mit Rechte-Regel-Syntax
 
@@ -119,7 +122,7 @@ Zusätzlich kannst du ein `if`-Feld setzen. Es filtert mit der **Syntax der Rech
 }
 ```
 
-Dieser Hook feuert nur bei Bash-Aufrufen, die zur Rechte-Regel `Bash(git *)` passen, also nur bei git-Befehlen. Die `if`-Syntax folgt denselben Mustern wie `permissions.allow` und `permissions.deny` ([S1.5](s1-05-rechte-im-alltag.md)). Ausgewertet wird sie nur bei Tool-Ereignissen (`PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`, `PermissionDenied`).
+Dieser Hook feuert nur bei Bash-Aufrufen, die zur Rechte-Regel `Bash(git *)` passen, also nur bei git-Befehlen. Eine `if`-Regel trifft immer nur die Aufrufe eines Tools: Sollen unter Windows auch git-Befehle über PowerShell zählen, setzt du den matcher auf `"Bash|PowerShell"` und gibst PowerShell einen zweiten Handler mit `"if": "PowerShell(git *)"`. Die `if`-Syntax folgt denselben Mustern wie `permissions.allow` und `permissions.deny` ([S1.5](s1-05-rechte-im-alltag.md)). Ausgewertet wird sie nur bei Tool-Ereignissen (`PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`, `PermissionDenied`).
 
 ### Was der Hook bekommt
 
@@ -138,21 +141,27 @@ Bei Edit stehen in `tool_input` die Felder `file_path`, `old_string` und `new_st
 
 ### Ein echter Wächter: safety-check.sh
 
-Dieser Hook blockt jeden Bash-Befehl, der zu einem zerstörerischen Muster wie `rm -rf` oder `git push --force` passt. Es ist dasselbe getestete Skript, das du unten in „Selbst machen" einrichtest.
+Dieser Hook blockt jeden Shell-Befehl, der zu einem zerstörerischen Muster wie `rm -rf`, `git push --force` oder `Remove-Item -Recurse` passt. Es ist dasselbe getestete Skript, das du unten in „Selbst machen" einrichtest.
 
-> **Windows:** Das Beispiel ist Bash + `jq`. Unter Windows führst du es über Git Bash aus oder nimmst die PowerShell-Variante aus „Selbst machen" (`resources/demos/assets/hooks/safety-check.ps1`). Kopiere keine Bash-Heredocs in PowerShell.
+> **Windows:** Das Beispiel ist Bash + `jq`. Unter Windows führst du es über Git Bash aus oder nimmst die PowerShell-Variante aus „Selbst machen" (`resources/demos/assets/hooks/safety-check.ps1`). Kopiere keine Bash-Heredocs in PowerShell. Eingetragen wird es in beiden Fällen mit `"matcher": "Bash|PowerShell"`.
 
 **`~/.claude/hooks/safety-check.sh`:**
 
 ```bash
 #!/bin/bash
-# safety-check.sh - PreToolUse hook (matcher "Bash"): block destructive shell commands.
+# safety-check.sh - PreToolUse hook (matcher "Bash|PowerShell"): block destructive shell commands.
 # tested asset: resources/demos/assets/hooks/safety-check.sh
 #
 # Contract (official hooks reference):
-#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command.
+#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command
+#     (the Bash and the PowerShell tool use the same field).
 #   - exit 2 = BLOCK: the command does not run, and stderr is shown to Claude as the reason.
-#   - exit 0 = allow. Any OTHER exit code (1, 127, ...) does NOT block: the command runs anyway.
+#   - exit 0 = no objection: the normal permission flow decides.
+#   - Any OTHER exit code (1, 127, ...) does NOT block: the command runs anyway.
+#   - On Windows, shell commands usually run through the PowerShell tool. A hook with
+#     matcher "Bash" alone never fires there, so register it as "Bash|PowerShell".
+#   - The patterns are examples, not complete protection: combine hooks with permission
+#     rules and a sandbox.
 
 INPUT=$(cat)
 
@@ -162,7 +171,7 @@ if ! COMMAND=$(printf '%s' "$INPUT" | jq -er '.tool_input.command // ""' 2>/dev/
   exit 2
 fi
 
-# Dangerous patterns (extended regex, case-insensitive)
+# Dangerous patterns (extended regex, case-insensitive); the last four are PowerShell and cmd
 DANGEROUS_PATTERNS=(
   'rm[[:space:]]+-rf'
   'git push.*--force'
@@ -172,6 +181,10 @@ DANGEROUS_PATTERNS=(
   'mkfs\.'
   'dd[[:space:]]+if=.*of=/dev/'
   '> /dev/sd'
+  '(^|[^[:alnum:]-])(Remove-Item|rm|ri|del|erase|rmdir|rd)[[:space:]].*-Recurse'
+  '(^|[^[:alnum:]-])(rd|rmdir)[[:space:]]+/s'
+  'Format-Volume'
+  'Clear-Disk'
 )
 
 for PATTERN in "${DANGEROUS_PATTERNS[@]}"; do
@@ -184,7 +197,7 @@ for PATTERN in "${DANGEROUS_PATTERNS[@]}"; do
   fi
 done
 
-# All checks passed - allow the command
+# All checks passed - no objection
 exit 0
 ```
 
@@ -237,7 +250,7 @@ Die Struktur durchgehen:
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           {
             "type": "command",
@@ -347,13 +360,19 @@ chmod +x ~/.claude/hooks/safety-check.sh
 Auf einem reinen Windows-Rechner gibt es kein `chmod`, `bash` braucht Git Bash im `PATH`, und `jq` fehlt meist. Nimm stattdessen dieses PowerShell-Gegenstück (getestet im Repo als [`resources/demos/assets/hooks/safety-check.ps1`](../demos/assets/hooks/safety-check.ps1)). Leg `~/.claude/hooks/safety-check.ps1` an:
 
 ```powershell
-# safety-check.ps1 - PreToolUse hook (matcher "Bash"): block destructive shell commands.
+# safety-check.ps1 - PreToolUse hook (matcher "Bash|PowerShell"): block destructive shell commands.
 # tested asset: resources/demos/assets/hooks/safety-check.ps1
 #
 # Contract (official hooks reference):
-#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command.
+#   - Claude Code sends the event as JSON on stdin; the shell command is in tool_input.command
+#     (the Bash and the PowerShell tool use the same field).
 #   - exit 2 = BLOCK: the command does not run, and stderr is shown to Claude as the reason.
-#   - exit 0 = allow. Any OTHER exit code (1, ...) does NOT block: the command runs anyway.
+#   - exit 0 = no objection: the normal permission flow decides.
+#   - Any OTHER exit code (1, ...) does NOT block: the command runs anyway.
+#   - On Windows, shell commands usually run through the PowerShell tool. A hook with
+#     matcher "Bash" alone never fires there, so register it as "Bash|PowerShell".
+#   - The patterns are examples, not complete protection: combine hooks with permission
+#     rules and a sandbox.
 
 $raw = [Console]::In.ReadToEnd()
 
@@ -365,7 +384,7 @@ catch {
 }
 $command = [string]$data.tool_input.command
 
-# Dangerous patterns (same set as the bash version)
+# Dangerous patterns (same set as the bash version); the last four are PowerShell and cmd
 $dangerous = @(
   'rm\s+-rf',
   'git push.*--force',
@@ -374,7 +393,11 @@ $dangerous = @(
   'truncate.*--yes',
   'mkfs\.',
   'dd\s+if=.*of=/dev/',
-  '> /dev/sd'
+  '> /dev/sd',
+  '(^|[^\w-])(Remove-Item|rm|ri|del|erase|rmdir|rd)\s.*-Recurse',
+  '(^|[^\w-])(rd|rmdir)\s+/s',
+  'Format-Volume',
+  'Clear-Disk'
 )
 
 foreach ($pattern in $dangerous) {
@@ -388,7 +411,7 @@ foreach ($pattern in $dangerous) {
   }
 }
 
-# All checks passed - allow the command
+# All checks passed - no objection
 exit 0
 ```
 
@@ -403,7 +426,7 @@ Trag den Hook in `~/.claude/settings.json` ein:
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           {
             "type": "command",
@@ -423,7 +446,7 @@ Unter **Windows** trägst du stattdessen das PowerShell-Skript ein (der `command
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           {
             "type": "command",
@@ -506,7 +529,7 @@ In der settings.json sieht das so aus:
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           {
             "type": "command",
@@ -517,7 +540,7 @@ In der settings.json sieht das so aus:
     ],
     "PostToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           {
             "type": "command",
@@ -560,8 +583,8 @@ cat ~/.claude/audit.log
 
 - **Der Hook feuert, blockt aber nicht.** Prüf zwei Dinge. (1) Das Skript muss bei gefährlichen Mustern mit **`exit 2`** enden. `exit 1` und jeder andere Code ungleich null zeigen nur einen Hook-Fehler, der Befehl läuft trotzdem. (2) Der Befehl muss aus `tool_input.command` kommen. Ein Feld `command` auf oberster Ebene ist leer, also passt nie ein Muster.
 - **Plötzlich wird jeder Bash-Befehl geblockt.** Das Skript konnte seine Eingabe nicht lesen und ist absichtlich geschlossen gefallen. Meist fehlt `jq`: Installier es oder nimm die PowerShell-Variante. Das ist die sichere Fehlerrichtung; ein Hook, der bei einem Lesefehler still alles durchlässt, wäre die gefährliche.
-- **Der Hook läuft gar nicht.** Fehlt `chmod +x` (nur bash/Git Bash), der Shebang oder stimmt der Pfad in `settings.json` nicht, ist der Wächter still aus, und die Aktion läuft. Unter Windows ohne Git Bash trägst du die `.ps1` mit `pwsh -File` ein, nicht `bash ...`. `/hooks` zeigt, welche Hooks registriert sind.
-- **Der Matcher ist zu breit.** `".*"` oder gar kein Matcher trifft jedes Tool. Wähl einen engeren, etwa `"Bash"` oder `"Write|Edit"` für Dateiänderungen.
+- **Der Hook läuft gar nicht.** Fehlt `chmod +x` (nur bash/Git Bash), der Shebang oder stimmt der Pfad in `settings.json` nicht, ist der Wächter still aus, und die Aktion läuft. Unter Windows ohne Git Bash trägst du die `.ps1` mit `pwsh -File` ein, nicht `bash ...`. Steht unter Windows im matcher nur `"Bash"`, feuert der Hook nie, weil Claude dort das PowerShell-Tool nutzt: trag `"Bash|PowerShell"` ein. `/hooks` zeigt, welche Hooks registriert sind.
+- **Der Matcher ist zu breit.** `".*"` oder gar kein Matcher trifft jedes Tool. Wähl einen engeren, etwa `"Bash|PowerShell"` für Shell-Befehle oder `"Write|Edit"` für Dateiänderungen.
 - **Die settings.json ist nach dem Bearbeiten kein gültiges JSON.** Prüf sie:
 
 ```bash

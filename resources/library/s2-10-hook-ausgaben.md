@@ -287,6 +287,8 @@ exit 0
 }
 ```
 
+> **Windows:** Läuft Claude über das PowerShell-Tool, sieht dieser Filter die Ausgabe nicht, denn sein matcher ist `Bash`. Er ersetzt die Ausgabe in der Form des Bash-Tools; wie die Ausgabe des PowerShell-Tools aussieht, beschreibt die Hook-Doku nicht. Prüf das mit einem Log-Hook, bevor du den matcher erweiterst.
+
 **Schritt 3: testen.** Bitte Claude, die Testsuite laufen zu lassen. Vergleiche den verbrauchten Kontext mit und ohne Filter.
 
 **Geschafft, wenn:**
