@@ -32,6 +32,8 @@ Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon B
 - **Haiku-Risiko:** Haiku 4.5 kann frühestens am 15.10.2026 abgeschaltet werden. Wer `haiku` für Massenarbeit nutzt,
   prüft vor dem Einsatz mit `/model`, worauf der Alias auflöst.
 - API-Alias von Haiku 4.5: `claude-haiku-4-5`.
+- **Mindest-CLI je Generation** (Changelog: „Added Claude … now the default … model"): Fable 5.1 ab 2.1.257,
+  Opus 5.5 ab 2.1.280, Sonnet 5.5 ab 2.1.284. Ältere CLIs lösen die Aliase auf ältere Generationen auf.
 
 ## Aliase und ihre Auflösung (Quelle: model-config.md)
 

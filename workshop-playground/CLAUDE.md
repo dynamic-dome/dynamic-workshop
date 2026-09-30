@@ -47,7 +47,7 @@ Do NOT use this code in production.
 
 ## Intentional Vulnerabilities (for Block 3.3 Demos)
 
-This playground contains three deliberately planted vulnerabilities used in workshop demos and exercises:
+This playground contains five deliberately planted vulnerabilities used in workshop demos and exercises:
 
 1. **Command Injection** — `backup_database()` in `access_control.py:~140`
    - `subprocess.run(f"cp {DB_FILE} {filename}", shell=True)` with unvalidated CLI input

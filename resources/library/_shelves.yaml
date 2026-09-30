@@ -13,9 +13,9 @@
   zone: Grundlagen
   purpose: Festlegen, was der Agent ohne Rückfrage darf — vom Alltag bis zum autonomen Lauf.
   intro: >-
-    Rechte-Modi sind die Freigabestufen deines Agenten, wie Zutrittsebenen in einem Gebäude. Du lernst die Alltagsmodi,
-    alle sechs Modi im Überblick und später die Einstellungen für autonome Läufe: geschützte Pfade, Sandbox und
-    Vertrauensgrenzen.
+    Rechte-Modi sind die Freigabestufen deines Agenten, wie Zutrittsebenen in einem Gebäude. Du lernst die Alltagsmodi
+    und alle sechs Modi im Überblick, erkennst, in welchem Modus deine Sitzung startet, und stellst für Läufe ohne dich
+    Regeln, geschützte Pfade und Sandbox-Stufen ein.
 - id: context
   title: Kontext & Gedächtnis
   zone: Grundlagen
@@ -28,8 +28,9 @@
   zone: Grundlagen
   purpose: Aufgaben so beschreiben, dass Claude sie zuverlässig und überprüfbar umsetzt.
   intro: >-
-    Ein guter Auftrag nennt Ziel, Grenzen, Quellen und den Prüfschritt — wie ein Wartungsauftrag für eine bestimmte Tür
-    statt „mach mal den Eingang". Dazu kommen Plan-Modus und der Wechsel zwischen Erklären, Vorschlagen und Ausführen.
+    Ein guter Auftrag nennt Ort, Ursache, Grenze und Erfolgskriterium, wie ein Wartungsauftrag für eine bestimmte Tür
+    statt „mach mal den Eingang“. Bei größeren Aufgaben holst du erst einen Plan und gibst ihn frei; mit Output Styles
+    legst du fest, wie Claude antwortet.
 - id: git
   title: Git & Worktrees
   zone: Grundlagen
@@ -92,22 +93,25 @@
   zone: Fortgeschritten
   purpose: Wiederkehrende Aufgaben planen und autonome Läufe sicher begrenzen.
   intro: >-
-    Automatisierte Patrouillen brauchen Stopp-Regeln. Du planst Aufgaben mit `/loop`, `/goal`, `/schedule` und Routinen
-    und sicherst jeden autonomen Lauf mit Budget, Rundenlimit und Worktree ab.
+    Automatisierte Patrouillen brauchen Stopp-Regeln. Du wählst zwischen `/loop` (Takt, solange die Sitzung offen ist),
+    `/goal` (bis eine Bedingung erfüllt ist) und `/schedule` (Routine in der Cloud) und sicherst unbeaufsichtigte Läufe
+    ab: mit Worktree, und bei `claude -p` mit Budget und Rundenlimit.
 - id: headless-ci
   title: Headless & CI/CD
   zone: Fortgeschritten
   purpose: Claude Code als Stufe in Skripten und Pipelines einsetzen.
   intro: >-
-    Mit `claude -p` wird der Agent zur Pipeline-Stufe: JSON rein, JSON raus, Kosten gedeckelt. Du wählst die passenden
-    Zugangsdaten für CI, verstehst `--bare` und baust eine Pipeline, die fremden Code nicht mit deinen Hooks ausführt.
+    Mit `claude -p` wird der Agent zur Pipeline-Stufe: Eingabe über stdin, Ausgabe als Text oder JSON, dazu ein
+    Exit-Code. Du wählst die passenden Zugangsdaten für CI, deckelst Kosten und Runden und setzt `--bare`, damit Hooks
+    und MCP-Server aus einem fremden Repo nicht auf deinem Runner laufen.
 - id: remote-isolation
   title: Remote, Docker, Isolation
   zone: Fortgeschritten
   purpose: Vom Handy aus steuern und riskante Arbeit in Container oder Worktrees einsperren.
   intro: >-
-    Fernzugriff und Isolation gehören zusammen: Remote Control und Teleport holen die Sitzung aufs Handy, Docker und
-    Worktrees sperren riskante Experimente in eine Kammer.
+    Fernzugriff und Isolation gehören zusammen. Mit Remote Control steuerst du eine Sitzung auf deinem Rechner vom Handy
+    oder Browser aus, `/teleport` holt eine Cloud-Sitzung ins Terminal. Worktrees und Container sperren riskante Arbeit
+    ein: Der Worktree schützt deinen Branch, der Container deinen Rechner.
 - id: troubleshooting
   title: Fehlersuche
   zone: Betrieb & Abschluss
@@ -120,8 +124,9 @@
   zone: Betrieb & Abschluss
   purpose: Die Bausteine zu einem eigenen, begrenzten Agenten-Workflow zusammensetzen und bewerten.
   intro: >-
-    Im Abschlussprojekt entwirfst und baust du einen Agenten-Workflow für ein echtes Szenario — mit Rollen, Rechten,
-    Stopp-Bedingungen und einer Bewertungsrubrik, mit der du dich selbst einschätzen kannst.
+    Im Abschlussprojekt setzt du die Bausteine zu einem kleinen, echten Build zusammen: Im Playground lieferst du in 35
+    bis 45 Minuten ein Feature oder einen Fix, einen Guardrail, eine enge Verifikation und eine PR-fertige Übergabe.
+    Eine Rubrik zeigt dir, wo du stehst.
 - id: practice
   title: Praxis-Stationen
   zone: Begleitend
@@ -134,5 +139,7 @@
   zone: Begleitend
   purpose: Leute und Skills kennenlernen, die wirklich helfen, und mit Claude Code selbst lernen.
   intro: >-
-    Nicht alles muss man selbst bauen. Dieses Regal stellt belegte Skill-Sammlungen aus der Community vor, zeigt, wie
-    du fremde Skills vor der Installation prüfst, und wie Claude Code dich beim Lernen begleiten kann.
+    Nicht alles muss man selbst bauen. Dieses Regal stellt belegte Skill-Sammlungen aus der Community vor, zeigt, wie du
+    fremde Skills vor der Installation prüfst und wie Claude Code dich beim Lernen begleitet. Zwei Blicke über den
+    Tellerrand: was ein minimaler Agent über Claude Code verrät und was im Dauerbetrieb von Agenten schiefgehen kann.
+    Die Einträge tragen einen Stand.

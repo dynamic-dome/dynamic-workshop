@@ -121,7 +121,11 @@ Du hast drei Wege, dazu einen vierten für Selbstlernende:
 ## notebooklm-Skill
 
 Der User-Skill `notebooklm` 🔧 gehört nicht zum offiziellen Claude Code. Er wird in der Demo und der Übung von
-[S2.18](../library/s2-18-rag-und-notebooklm.md) genutzt.
+[S2.18](../library/s2-18-rag-und-notebooklm.md) genutzt und ruft die Kommandozeile `notebooklm` auf. Die stammt aus
+`notebooklm-py`, laut PyPI einer inoffiziellen Bibliothek zur Automatisierung von Google NotebookLM (MIT,
+[github.com/teng-lin/notebooklm-py](https://github.com/teng-lin/notebooklm-py)), geprüft mit Version 0.8.2:
+`pip install notebooklm-py`, dann einmal `notebooklm login`. Wie jedes fremde Werkzeug mit Zugriff auf ein Konto
+prüfst du es vorher ([S2.13](../library/s2-13-plugin-lieferkette.md)).
 
 **Option A: Skill von dir als Moderation.** Du gibst den Teilnehmenden einen Tarball oder eine lokale Kopie; sie entpacken
 sie nach `~/.claude/skills/notebooklm/`.
@@ -195,20 +199,18 @@ Die Demo in [S2.18](../library/s2-18-rag-und-notebooklm.md) nutzt ein vorbereite
 `claude-code-docs` mit der offiziellen Claude-Code-Dokumentation als Quellen. Leg es vor Session 2 an:
 
 ```bash
-# CLI variant (if notebooklm CLI is available)
-notebooklm create "claude-code-docs"
-notebooklm add-source https://code.claude.com/docs/en/overview --notebook claude-code-docs
-notebooklm add-source https://code.claude.com/docs/en/skills --notebook claude-code-docs
-notebooklm add-source https://code.claude.com/docs/en/hooks --notebook claude-code-docs
+# notebooklm-py CLI, checked with 0.8.2: --use makes the new notebook the current one
+notebooklm create "claude-code-docs" --use
+notebooklm source add https://code.claude.com/docs/en/overview
+notebooklm source add https://code.claude.com/docs/en/skills
+notebooklm source add https://code.claude.com/docs/en/hooks
 ```
 
-Die Befehle hängen vom Werkzeug ab: Die Kursquellen nennen für das Hinzufügen zwei Schreibweisen, und das
-Python-Paket `notebooklm-py` (geprüft mit Version 0.8.2) kennt kein `add-source`. Dort heißt es
-`notebooklm source add <url>`, und es wirkt auf das aktive Notebook (`notebooklm create "claude-code-docs" --use`).
-Prüf die Syntax vorher mit `notebooklm --help`.
+Ältere Kursquellen schrieben `notebooklm add-source …`; das kennt die CLI nicht (mehr). Prüf die Syntax deiner
+Version mit `notebooklm --help`.
 
-Oder du nimmst die Web-Oberfläche: notebooklm.google.com → Notebook anlegen → „claude-code-docs" → Webquellen
-hinzufügen.
+Oder du nimmst die Web-Oberfläche: notebooklm.google.com (leitet heute auf notebook.google.com weiter) → Notebook
+anlegen → „claude-code-docs" → Webquellen hinzufügen.
 
 ## Playwright-MCP vorab laden
 

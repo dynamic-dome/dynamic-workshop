@@ -26,7 +26,7 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quell
 | Skill führt keinen Shell-Befehl aus | Ist `disableSkillShellExecution` gesetzt? | Setting entfernen; `` !`befehl` ``-Syntax prüfen; Regel in `/permissions` prüfen |
 | Hook feuert nie | Zeigt `/hooks` ihn? | Nein: Hooks stehen unter `"hooks"` in `settings.json`, nicht in einer eigenen Datei. Ja: `matcher` ist ein String (`"Edit\|Write"`), kein Array, und Tool-Namen sind groß geschrieben (`Bash`); dann `claude --debug` |
 | Hook blockt alles | Ist der `matcher` zu breit (`".*"` oder leer)? | enger fassen, etwa `"Bash"` oder `"Edit\|Write"` |
-| Schutz-Hook lässt alles durch | Endet er mit `exit 2`? | Nur Exit 2 blockt. Absturz, jeder andere Code und Timeout lassen die Aktion laufen ([S2.8](../library/s2-08-hook-einrichten.md)) |
+| Schutz-Hook lässt alles durch | Endet er mit `exit 2`? | Von den Exit-Codes blockt nur 2 (eine JSON-Entscheidung kann ebenfalls blocken). Absturz, jeder andere Code und Timeout lassen die Aktion laufen ([S2.8](../library/s2-08-hook-einrichten.md)) |
 | Hook-Skript läuft nicht | Läuft es von Hand? | ausführbar (`chmod +x`), Shebang, Pfad; Windows ohne Git Bash: PowerShell-Variante registrieren ([S2.8](../library/s2-08-hook-einrichten.md)) |
 | Hook hängt, Sitzung friert | Wartet das Skript auf Eingabe? | `timeout` am Handler setzen (Standard für `command`: 600 s, bei `UserPromptSubmit` 30 s); ein abgelaufener `PreToolUse`-Hook blockt nicht; `Ctrl+C`, sonst Terminal neu und `claude --resume` |
 | Plugin fehlt | Zeigt `claude plugin list` es? | Manifest liegt in `.claude-plugin/plugin.json`; `claude plugin validate <pfad>` |
