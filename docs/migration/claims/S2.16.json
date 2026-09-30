@@ -1,0 +1,131 @@
+{
+ "id": "S2.16",
+ "verdict": "ask",
+ "counts": {
+  "kept": 22,
+  "changed": 6,
+  "dropped": 1,
+  "new": 7
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1151-1161",
+   "old": "Über dem Limit (25k Token) wird die Ausgabe abgeschnitten (truncated)",
+   "new": "Ergebnis ohne Bilder wird als Datei gespeichert, im Gespräch steht der Pfad (Kap. Z.26, 76)",
+   "rating": "ok",
+   "reason": "Doku mcp.md Z.1270: \"Claude Code saves it to a file and replaces it in the conversation with a message that names the file path\". Zitat stimmt, korrigiert die alte Fehlaussage."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1159",
+   "old": "Per-tool override: Set via _meta[\"anthropic/maxResultSizeChars\"] (Hinweis: 'use the _meta override on the specific MCP tool')",
+   "new": "Gesetzt vom Serverautor im tools/list-Eintrag, gilt für Text, nicht für Bilder; bei fremden Servern MAX_MCP_OUTPUT_TOKENS",
+   "rating": "ok",
+   "reason": "Doku Z.1281/1295/1298 (\"setting _meta[...] in the tool's tools/list response entry\", \"ask the server author\"). Präzisierung stimmt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1145",
+   "old": "--callback-port: Required when corporate firewalls only allow specific ports",
+   "new": "Legt den Port fest, passend zu vorab registrierter Redirect-URI http://localhost:PORT/callback; geht auch allein",
+   "rating": "ok",
+   "reason": "Doku Z.807-809: \"fix the port so it matches a pre-registered redirect URI of the form http://localhost:PORT/callback\"; \"use --callback-port on its own\". Firewall-Begründung der Quelle ist nicht in der Doku."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1134-1147",
+   "old": "--client-secret \"team-shared-secret\" als Wertflag; Secret per env var oder Secret-Manager übergeben; Beispiel notion mit Port 9876",
+   "new": "--client-secret ohne Wert (verdeckte Eingabe, CI: MCP_CLIENT_SECRET); Doku-Beispiel my-server, Port 8080",
+   "rating": "ok",
+   "reason": "Doku Z.836-869 (\"The --client-secret flag prompts for the secret with masked input\", \"MCP_CLIENT_SECRET=your-secret claude mcp add ...\"). Korrigiert falsche Flag-Syntax der Quelle."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1236",
+   "old": "Wiederverbindung: Backoff 1s, 2s, 4s, ... gedeckelt bei 30s; Calls in flight liefern transienten Fehler",
+   "new": "bis zu fünf Versuche, 1 s verdoppelnd; danach failed, manuell über /mcp; stdio wird nicht neu verbunden",
+   "rating": "ok",
+   "reason": "Doku Z.361-367: \"up to five attempts, starting at a one-second delay and doubling it each time\"; \"Claude Code doesn't reconnect [stdio] automatically\". Die 30-s-Kappe und die Aussage zu Calls in flight stehen nicht in der Doku."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1234",
+   "old": "list_changed: Server darf Tools hinzufügen oder entfernen",
+   "new": "Tools, Prompts und Ressourcen",
+   "rating": "ok",
+   "reason": "Doku Z.346: \"dynamically update their available tools, prompts, and resources\"."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-2-ecosystem.md:1246",
+   "old": "Nicht argv parsen oder git rev-parse aufrufen; die Variable ist maßgeblich",
+   "new": "(fehlt; stattdessen: stabile Pfade statt Arbeitsverzeichnis)",
+   "rating": "ok",
+   "reason": "Unbelegte Handlungsanweisung der Quelle, unschädliche Straffung. Kernaussage (CLAUDE_PROJECT_DIR als verlässlicher Weg) bleibt (Z.91-99)."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Z.48: ohne Vorgabe zufälliger freier Callback-Port; Anmeldung per /mcp",
+   "rating": "ok",
+   "reason": "Doku Z.807: \"By default, Claude Code picks a random available port\"."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Z.50: Fehlermeldung \"Incompatible auth server: does not support dynamic client registration\"; Dynamic Client Registration",
+   "rating": "ok",
+   "reason": "Doku Z.820 wörtlich."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Z.63, 65: Secret im Schlüsselbund (macOS) oder Credentials-Datei; öffentlicher Client nur --client-id; Flags nur für HTTP/SSE, nicht stdio",
+   "rating": "ok",
+   "reason": "Doku Z.884-888 wörtlich belegt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Z.76, 104: MAX_MCP_OUTPUT_TOKENS=50000 hebt das Maximum, Warnschwelle fest; Bilder ausgenommen",
+   "rating": "ok",
+   "reason": "Doku Z.407, 1266-1269, 1275."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Z.89: /mcp zeigt Server als ausstehend; nach fünf Fehlversuchen failed, manueller Retry",
+   "rating": "ok",
+   "reason": "Doku Z.367 wörtlich."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Z.91, 99: CLAUDE_PROJECT_DIR ist dieselbe Variable wie bei Hooks; bleibt gleich bei Änderung der Arbeitsverzeichnisse",
+   "rating": "ok",
+   "reason": "Doku Z.117-119 wörtlich."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Z.103: Test-Ergebnis: --client-secret \"team-shared-secret\" notion URL legte im Test einen Server namens team-shared-secret mit URL notion an; Fehlermeldung \"No TTY available to prompt for client secret. Set MCP_CLIENT_SECRET env var instead.\"",
+   "rating": "ask",
+   "reason": "Weder in der Quelle noch in mcp.md (grep \"No TTY\" leer). Wörtliches Fehlerzitat und Testbehauptung ohne Beleg im Repo; der Prüfer konnte sie nicht reproduzieren, ohne die Konfiguration zu verändern. Orchestrator: Beleg nachreichen lassen oder auf Doku-Aussage (Prompt, MCP_CLIENT_SECRET) kürzen."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Check / Quizfrage",
+   "issue": "Die richtige Antwort ist mit 112 Zeichen die längste; die Falschantworten haben ca. 100 bis 108 Zeichen. Schwacher Längenhinweis, ggf. angleichen."
+  }
+ ]
+}
