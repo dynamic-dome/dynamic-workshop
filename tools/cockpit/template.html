@@ -117,7 +117,7 @@
     .way:hover { border-color: var(--accent); }
     .way strong { font-size: 18px; }
     .way span { color: var(--ink-2); font-size: 15px; }
-    .resume { margin-top: 24px; padding: 14px 18px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 var(--radius) var(--radius) 0; }
+    .resume { margin-top: 24px; padding: 14px 18px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); }
     .facts { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 28px; color: var(--ink-2); }
     .facts b { display: block; font-size: 26px; color: var(--ink); font-variant-numeric: tabular-nums; }
 
@@ -148,7 +148,7 @@
     .scenario .opts { display: grid; gap: 6px; margin-top: 8px; }
     .scenario .opts button { text-align: left; border: 1px solid var(--line); background: var(--surface-2); padding: 8px 12px; border-radius: var(--radius); }
     .scenario .opts button[aria-pressed="true"] { border-color: var(--accent); }
-    .explain { margin-top: 10px; padding: 10px 12px; border-left: 3px solid var(--skim); background: var(--surface-2); }
+    .explain { margin-top: 10px; padding: 10px 12px; border-radius: var(--radius); background: var(--surface-2); }
 
     /* ---------- status chips ---------- */
     .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 1px 9px; border-radius: 99px; border: 1px solid var(--line); white-space: nowrap; }
@@ -214,16 +214,16 @@
     .chapter { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 36px; }
     .chapter-main { min-width: 0; }
     .meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 18px; }
-    .outcome { font-size: 18px; color: var(--ink-2); border-left: 3px solid var(--accent); padding-left: 14px; margin: 16px 0 24px; max-width: 70ch; }
+    .outcome { font-size: 18px; color: var(--ink-2); margin: 16px 0 24px; max-width: 70ch; }
     .block { margin: 26px 0; max-width: 74ch; }
     .block > h2 { font-size: 15px; letter-spacing: .02em; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
     .quick { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; }
     .quick ul { margin: 6px 0 12px; padding-left: 20px; }
-    .analogy { background: var(--surface); border-radius: var(--radius); padding: 14px 18px; border-left: 3px solid var(--skim); }
+    .analogy { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; }
     .code { position: relative; }
     pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; overflow-x: auto; font: 14px/1.5 var(--mono); white-space: pre; }
     code { font-family: var(--mono); font-size: .92em; }
-    :not(pre) > code { background: var(--surface-2); border: 1px solid var(--line); padding: 0 5px; border-radius: 4px; }
+    :not(pre) > code { background: var(--surface-2); border: 1px solid var(--line); padding: 0 5px; border-radius: 4px; overflow-wrap: anywhere; }
     .copy { position: absolute; top: 8px; right: 8px; font-size: 13px; padding: 3px 10px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); }
     .quiz { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; background: var(--surface); }
     .quiz .opts { display: grid; gap: 8px; margin: 10px 0; }
@@ -242,9 +242,9 @@
     .prose details summary { cursor: pointer; color: var(--ink-2); }
     .prose blockquote { margin: 12px 0; padding: 4px 14px; border-left: 3px solid var(--line); color: var(--ink-2); }
     .diagram { background: #1b2127; border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; overflow-x: auto; } /* SVGs are rendered dark */
-    .diagram svg { max-width: 100%; height: auto; }
+    .diagram svg { display: block; max-width: none; height: auto; margin: 0 auto; } /* natural size, the box scrolls */
     aside.side { position: sticky; top: 76px; align-self: start; display: grid; gap: 14px; }
-    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; min-width: 0; overflow-wrap: anywhere; }
     .panel h2 { font-size: 14px; margin: 0 0 8px; color: var(--muted); font-weight: 600; }
     .panel ul { margin: 0; padding-left: 18px; }
     .pager { display: flex; justify-content: space-between; gap: 10px; margin-top: 36px; }
@@ -262,7 +262,7 @@
     }
     @media (max-width: 900px) {
       .start-grid { grid-template-columns: 1fr; }
-      .chapter { grid-template-columns: 1fr; }
+      .chapter { grid-template-columns: minmax(0, 1fr); }
       aside.side { position: static; }
       .rows li { grid-template-columns: 1fr; gap: 4px; }
       .rows .min { text-align: left; }
@@ -513,6 +513,12 @@
 
     // ---------- data ----------
     const DATA = LIBRARY || { chapters: [], shelves: [], placement: { goals: [], times: [], areas: [], scenarios: [], reasons: {}, warnings: {} }, diagrams: {} };
+    // Diagram styles are shipped once per distinct block (tools/build_cockpit.py share_diagram_styles)
+    if (DATA.diagram_css && Object.keys(DATA.diagram_css).length) {
+      const sheet = document.createElement("style");
+      sheet.textContent = Object.values(DATA.diagram_css).join("\n");
+      document.head.appendChild(sheet);
+    }
     const CH = {};
     DATA.chapters.forEach(c => { CH[c.id] = c; });
     const ORDERED = DATA.chapters.slice().sort((a, b) => a.order - b.order);

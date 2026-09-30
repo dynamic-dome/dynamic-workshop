@@ -1,7 +1,7 @@
 # Schreib-Brief: Kapitel der Praxisbibliothek umziehen
 
 > Für die Schreib-Agenten des Umzugs (Plan Task 7/8). Spec: `docs/plans/2026-09-30-praxisbibliothek-design.md` §4.
-> Arbeitsort: Worktree `C:\Users\domes\Desktop\Claude-Projekte\dynamic_workshop-bibliothek` (Branch `praxisbibliothek`).
+> Arbeitsort: Worktree des Branches `praxisbibliothek` (Repo-Root) (Branch `praxisbibliothek`).
 > **Du übersetzt und ordnest. Du erfindest nichts.**
 
 ## Was du bekommst

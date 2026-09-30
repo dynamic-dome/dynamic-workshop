@@ -5,6 +5,8 @@ Source of truth: code.claude.com/docs/en/authentication.md and headless.md (fetc
 `CLAUDE_CODE_OAUTH_TOKEN`; `--bare` never reads it and authenticates only via `ANTHROPIC_API_KEY` or an
 `apiKeyHelper`. Until 2026-09-29 the course combined the two, which does not authenticate (review H-10).
 """
+import html
+import json
 import re
 from pathlib import Path
 
@@ -35,7 +37,8 @@ WRONG_CLAIMS = {
     "claims --bare works with federation (path C)": re.compile(r"--bare` means path A or C|path A \(or C\)"),
 }
 FENCE = re.compile(r"^```[\w-]*\n(.*?)^```", re.S | re.M)
-JS_EXAMPLE = re.compile(r'example:\s*"((?:[^"\\]|\\.)*)"')
+DATA_PREFIX = "const LIBRARY = "
+HTML_CODE = re.compile(r"<code[^>]*>(.*?)</code>", re.S)
 BARE_INVOCATION = re.compile(r"\bclaude\b[^\n#]*?--bare\b")  # the flag on a claude call, not in a comment
 OAUTH_CREDENTIAL = re.compile(r"CLAUDE_CODE_OAUTH_TOKEN\s*[:=]|claude_code_oauth_token\s*:|setup-token")
 API_KEY_CREDENTIAL = re.compile(r"ANTHROPIC_API_KEY|apiKeyHelper|anthropic_api_key")
@@ -45,9 +48,23 @@ def find_wrong_claims(text: str) -> list:
     return [label for label, rx in WRONG_CLAIMS.items() if rx.search(text)]
 
 
+def cockpit_library(text: str) -> dict:
+    """The generated cockpit carries its data as one JSON literal: `const LIBRARY = {...};` (tools/build_cockpit.py)."""
+    start = text.find(DATA_PREFIX)
+    if start < 0:
+        return {}
+    data, _end = json.JSONDecoder().raw_decode(text[start + len(DATA_PREFIX):])
+    return data if isinstance(data, dict) else {}
+
+
 def snippets(path: Path, text: str) -> list:
     if path.suffix == ".html":
-        return [raw.encode().decode("unicode_escape", errors="ignore") for raw in JS_EXAMPLE.findall(text)]
+        found = []
+        for chapter in cockpit_library(text).get("chapters", []):
+            if chapter.get("example"):
+                found.append(chapter["example"])
+            found += [html.unescape(code) for code in HTML_CODE.findall(chapter.get("html") or "")]
+        return found
     return FENCE.findall(text)
 
 
@@ -75,11 +92,11 @@ def test_guard_catches_the_old_mistakes():
         "| `CLAUDE_MODEL` | Set default model |\n"
         "```bash\nclaude --bare -p \"Review\" --max-budget-usd 0.50\n# once on the workstation:\nclaude setup-token\n```\n"
     )
-    old_cockpit = (
-        'example: "# CI-Runner mit allen 4 Bausteinen kombiniert:\\nclaude --bare -p \\"Review this diff\\" \\\\\\n'
-        '  --output-format json\\n# Token-Einrichtung einmalig auf der Workstation:\\nclaude setup-token",\n'
-        'example: "env:\\n    CLAUDE_CI_CREDENTIAL_PLACEHOLDER: ${{ secrets.CLAUDE_CI_CREDENTIAL_PLACEHOLDER }}",\n'
-    )
+    old_cockpit = DATA_PREFIX + json.dumps({"chapters": [
+        {"example": "# CI-Runner mit allen 4 Bausteinen kombiniert:\nclaude --bare -p \"Review this diff\" \\\n"
+                    "  --output-format json\n# Token-Einrichtung einmalig auf der Workstation:\nclaude setup-token",
+         "html": "<pre><code>env:\n    CLAUDE_CI_CREDENTIAL_PLACEHOLDER: ${{ secrets.X }}</code></pre>"},
+    ]}) + ";"
 
     old_turn_limit = (
         "The current CLI offers no hard turn-limit flag anymore.\n"
@@ -109,11 +126,14 @@ def test_guard_accepts_the_correct_patterns():
 
 
 def test_cockpit_examples_are_found():
-    """The HTML extractor must actually see the cockpit examples, or the live check proves nothing."""
-    examples = snippets(COCKPIT, COCKPIT.read_text(encoding="utf-8"))
+    """The extractor must actually see the cockpit's examples and chapter code, or the live check proves nothing."""
+    text = COCKPIT.read_text(encoding="utf-8")
+    chapters = cockpit_library(text).get("chapters", [])
+    marked = sum("<!-- cockpit:example -->" in p.read_text(encoding="utf-8")
+                 for p in (ROOT / "resources" / "library").glob("*.md"))
 
-    assert len(examples) >= 50
-    assert any(BARE_INVOCATION.search(e) for e in examples)
+    assert len([c for c in chapters if c.get("example")]) == marked >= 50
+    assert any(BARE_INVOCATION.search(e) for e in snippets(COCKPIT, text))
 
 
 @pytest.mark.parametrize("path", LIVE_FILES, ids=lambda p: p.relative_to(ROOT).as_posix())

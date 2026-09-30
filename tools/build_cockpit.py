@@ -26,7 +26,7 @@ TEMPLATE = TOOLS / "cockpit" / "template.html"
 ARTEFACT = ROOT / "resources" / "claude-code-workshop-ui.html"
 REPO_URL = "https://github.com/dynamic-dome/dynamic-workshop/blob/main/"
 DATA_MARKER = "/*@@LIBRARY_DATA@@*/"
-MAX_BYTES = 1_500_000
+MAX_BYTES = 3_000_000  # single offline file; gzip on the wire is about a seventh (measured 2026-09-30)
 CHAPTER_FILE = re.compile(r"^(?:s[0-4]-\d{2}|x-\d{2})-[a-z0-9-]+\.md$")
 
 ALLOWED = {
@@ -155,6 +155,46 @@ def diagram_key(source):
     return hashlib.sha256(source.strip().encode("utf-8")).hexdigest()[:8]
 
 
+def natural_size(svg):
+    """Mermaid writes width="100%": a wide flowchart then shrinks to column width and its 15 px labels become
+    unreadable. Give the SVG its viewBox size instead; the .diagram box scrolls horizontally when it is wider."""
+    match = re.search(r'viewBox="[\d.\s-]*?\s([\d.]+)\s([\d.]+)"', svg)
+    if not match:
+        return svg
+    width, height = (round(float(v)) for v in match.groups())
+    svg = re.sub(r'(<svg\b[^>]*?)\swidth="100%"', r"\1", svg, count=1)
+    return svg.replace("<svg", f'<svg width="{width}" height="{height}"', 1)
+
+
+STYLE_BLOCK = re.compile(r"<style>(.*?)</style>", re.S)
+GEOMETRY = re.compile(r'(\s(?:d|x|y|x1|x2|y1|y2|cx|cy|r|rx|ry|width|height|transform|points|viewBox)=")([^"]*)(")')
+LONG_NUMBER = re.compile(r"(\d+\.\d{2})\d+")
+
+
+def share_diagram_styles(diagrams):
+    """Mermaid repeats an id-scoped <style> block in every SVG (a fifth of its bytes), though there are only a few
+    distinct ones. Rescope each block to a class, ship every distinct block once and round geometry to two decimals
+    (text such as version numbers stays untouched). Returns ({key: svg}, {class: css})."""
+    shared, css = {}, {}
+    for key, svg in diagrams.items():
+        svg = natural_size(svg)
+        match = STYLE_BLOCK.search(svg)
+        if match:
+            rules = re.sub(rf"#d{key}(?![\w-])", "#MMD", match.group(1))
+            # ids with a suffix (url(#d<key>-gradient)) only serve the unused "neo" look; neutral name, same rule
+            rules = re.sub(rf"#d{key}(?=[\w-])", "#mmd", rules)
+            cls = "mmd-" + hashlib.sha256(rules.encode("utf-8")).hexdigest()[:6]
+            css[cls] = rules.replace("#MMD", "." + cls)
+            svg = svg[:match.start()] + svg[match.end():]
+            if re.search(r'<svg\b[^>]*\sclass="', svg):
+                svg = re.sub(r'(<svg\b[^>]*?\sclass=")([^"]*)"', lambda m: f'{m.group(1)}{m.group(2)} {cls}"', svg,
+                             count=1)
+            else:
+                svg = svg.replace("<svg", f'<svg class="{cls}"', 1)
+        shared[key] = GEOMETRY.sub(lambda m: m.group(1) + LONG_NUMBER.sub(r"\1", m.group(2)) + m.group(3), svg)
+    return shared, css
+
+
 def chapter_markdown_for_cockpit(text):
     """Strip front matter, H1, meta block and the quiz (the cockpit renders the quiz itself)."""
     text = text.replace("\r\n", "\n")
@@ -224,21 +264,28 @@ def cockpit_data(lib, catalog, diagrams=None):
             entry["quiz_html"] = {"q": inline_html(q["q"], ids_by_file), "correct": inline_html(q["correct"], ids_by_file),
                                   "wrong": [inline_html(w, ids_by_file) for w in q["wrong"]]}
         entry["full_url"] = REPO_URL + "resources/library/" + ch.path.name
-    data["diagrams"] = diagrams
+    data["diagrams"], data["diagram_css"] = share_diagram_styles(diagrams)
     return data
 
 
 def render(lib, catalog, template_text=None, diagrams=None):
-    """Template + data -> artefact text. Falls back to GitHub links when the file would exceed MAX_BYTES."""
+    """Template + data -> artefact text. Over MAX_BYTES the diagrams go first (Mermaid source instead), then the full
+    chapter text (link to the GitHub version instead): reading matters more than pictures."""
     template_text = template_text if template_text is not None else TEMPLATE.read_text(encoding="utf-8")
     if DATA_MARKER not in template_text:
         raise ValueError("Template ohne Datenmarker " + DATA_MARKER)
-    data = cockpit_data(lib, catalog, diagrams)
-    text = template_text.replace(DATA_MARKER + "null", script_safe_json(data), 1)
+
+    def fill(data):
+        return template_text.replace(DATA_MARKER + "null", script_safe_json(data), 1)
+
+    text = fill(cockpit_data(lib, catalog, diagrams))
+    if len(text.encode("utf-8")) > MAX_BYTES and diagrams:
+        text = fill(cockpit_data(lib, catalog, {}))
     if len(text.encode("utf-8")) > MAX_BYTES:
+        data = cockpit_data(lib, catalog, {})
         for entry in data["chapters"]:
             entry["html"] = None
-        text = template_text.replace(DATA_MARKER + "null", script_safe_json(data), 1)
+        text = fill(data)
     problems = artefact_problems(text)
     if problems:
         raise ValueError("Cockpit-Artefakt verletzt Vorgaben: " + "; ".join(problems))

@@ -394,7 +394,12 @@ richtige, Quizfragen würfeln bei jedem Render neu, kein „weiter, wo ich war",
   bereinigt (keine `<script>`, keine `on*`-Attribute; der Generator prüft, dass im Artefakt genau ein `<script>` steht).
 - **Barrierefreiheit:** Status nie nur per Farbe, `aria-pressed`/`aria-current`/`aria-live`, Labels an allen
   Eingaben, Tastatur ohne Modifier-Kollision, Schrift ≥ 13 px, Kontrast ≥ 4,5:1 für Text.
-- **Größenregel:** Wird die Datei mit Volltext > 1,5 MB, zeigt „ganzes Kapitel lesen" auf die GitHub-Fassung.
+- **Größenregel (v3.3, gemessen 2026-09-30):** Grenze 3 MB für die Einzeldatei. Mit Volltext aller 70 Kapitel und
+  61 Diagrammen sind es 2,6 MB (gzip rund 0,5 MB); ohne Diagramme wären es schon 1,55 MB, die frühere Grenze von
+  1,5 MB hätte also stets den Volltext gekostet. Diagramme werden beim Einbetten verschlankt (die id-gebundenen
+  Mermaid-Stilblöcke als zwei gemeinsame Blöcke statt 61, Geometrie auf zwei Nachkommastellen) und behalten ihre
+  natürliche Größe; der Diagramm-Kasten scrollt waagerecht. Über der Grenze fallen zuerst die Diagramme weg
+  (Mermaid-Quelltext), erst dann der Volltext („ganzes Kapitel lesen" zeigt auf die GitHub-Fassung).
 - **Abwerfbar (Plan Task 13 und Volltext):** Fehlen vorgerenderte SVG-Diagramme oder der Volltext, zeigt die
   Kapitelansicht Mermaid-Quelltext bzw. den GitHub-Link; keine andere Funktion hängt davon ab.
 - **Look:** SOC-Anker (dunkel, Amber) bleibt, aber ruhiger; Status-Farben aus der geprüften Status-Palette.
@@ -612,7 +617,7 @@ Alle adressiert der Neubau.
 
 | Wer | Projekt | Lizenz (Beleg) | Installation (Beleg) | Passt zu |
 |---|---|---|---|---|
-| Matt Pocock | `mattpocock/skills` | MIT (LICENSE lokal + raw) | `claude plugin marketplace add mattpocock/skills`, dann `claude plugin install mattpocock-skills@mattpocock` (README Z. 49–57) | X.1, X.2 (`teach`, `grilling`, `tdd`, `handoff`, `writing-great-skills`) |
+| Matt Pocock | `mattpocock/skills` | MIT (LICENSE lokal + raw) | `claude plugin marketplace add mattpocock/skills`, dann `claude plugin install mattpocock-skills@mattpocock` (README Z. 49–57); außerdem `mattpocock-skills@claude-plugins-official` (marketplace.json des offiziellen Marketplace, per `sha` festgelegt; Prüfer X.1, 2026-09-30) | X.1, X.2 (`teach`, `grilling`, `tdd`, `handoff`, `writing-great-skills`) |
 | Jesse Vincent | `obra/superpowers` | MIT (LICENSE im Plugin-Cache + raw) | `/plugin install superpowers@claude-plugins-official` (README Z. 52–81) | X.1; Verifikation/Planung (S3.4, S3.6) |
 | Anthropic | `anthropics/skills` | gemischt: `skill-creator` Apache-2.0, Dokument-Skills source-available (LICENSE.txt je Skill) | `/plugin marketplace add anthropics/skills` | X.1; Skill-Bau (S2.2) |
 | Anthropic | `anthropics/claude-plugins-official` | Apache-2.0 für das Verzeichnis, Plugins einzeln | registrierter Marketplace | X.1; Lieferkette (S2.13) |

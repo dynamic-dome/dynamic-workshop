@@ -25,6 +25,9 @@ def test_fence_parser_and_normalization():
     assert [(line, lang) for line, lang, _ in blocks] == [(2, "bash"), (6, "")]
     assert ml.normalize("\n  x  \r\ny\n\n") == "  x\ny"
     assert ml.digest("echo hi\n") == ml.digest("echo hi   \r\n")
+    # a block that sat in a list item (common indentation) is the same snippet when it moves to column 0
+    assert ml.digest("   mkdir x\n     cd x\n") == ml.digest("mkdir x\n  cd x\n")
+    assert ml.digest("mkdir x\n  cd x\n") != ml.digest("mkdir x\ncd x\n")
 
 
 def test_old_snippets_come_from_the_base_commit():
@@ -41,7 +44,6 @@ def test_dropped_entries_have_reasons():
             assert len(parts) == 3 and len(parts[0]) == 16 and parts[2].strip(), line
 
 
-@pytest.mark.xfail(strict=False, reason="Migration läuft; ab Task 9 Pflicht (xfail entfernen)")
 def test_every_old_snippet_is_kept_or_dropped_with_reason():
     _, _, _, missing = ml.ledger()
     assert not missing, f"{len(missing)} Snippets fehlen, z. B. {missing[0].path}:{missing[0].line}"

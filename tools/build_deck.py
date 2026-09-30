@@ -266,7 +266,7 @@ def slide_map(prs, cat):
 def slide_floor(prs, cat):
     floor = [c for c in cat["chapters"] if c.get("safety_floor")]
     s = blank(prs, "Neun Kapitel empfehlen wir allen, auch Fortgeschrittenen, mindestens zum Überfliegen. Das Wichtigste: "
-                   "Nur exit 2 blockt, ein abstürzender Hook lässt die Aktion durch. Und claude -p ohne --bare führt die Hooks "
+                   "Von den Exit-Codes blockt nur 2, ein abstürzender Hook lässt die Aktion durch. Und claude -p ohne --bare führt die Hooks "
                    "eines fremden Repos aus.")
     title(s, "Sicherheitsboden", f"{len(floor)} Kapitel, die niemand auslässt",
           "Wer ein Feature nutzt, liest dessen Sicherheitskapitel — auch ohne passendes Ziel.")
@@ -330,7 +330,7 @@ def diagram_modes(s, x, y):
 
 
 def diagram_hooks(s, x, y):
-    text(s, x, y, Inches(5), Inches(0.4), "Hook-Lebenslauf: nur exit 2 blockt", size=16, bold=True, color=INK2)
+    text(s, x, y, Inches(5), Inches(0.4), "Hook-Lebenslauf: von den Exit-Codes blockt nur 2", size=16, bold=True, color=INK2)
     node(s, x, y + Inches(0.6), Inches(2.3), Inches(0.8), "PreToolUse", "Ereignis + matcher")
     arrow(s, x + Inches(2.35), y + Inches(1.0), x + Inches(2.85), y + Inches(1.0))
     node(s, x + Inches(2.9), y + Inches(0.6), Inches(2.3), Inches(0.8), "Skript", "liest tool_input")
@@ -436,7 +436,7 @@ def build(catalog_path=CATALOG, out=OUT):
                   "Aufträge, Git, Kosten.", diagram_modes,
                   "Session 1 beginnt mit einem Bau-Erfolg in den ersten Minuten, danach die Rechte-Modi als Zutrittsebenen.")
     slide_session(prs, cat, 2, "Das Ökosystem", "Skills, Hooks, Plugins, MCP und Wissensquellen — erweitern und kontrollieren.",
-                  diagram_hooks, "Session 2: Erweitern mit Kontrolle. Merksatz für Hooks: nur exit 2 blockt.")
+                  diagram_hooks, "Session 2: Erweitern mit Kontrolle. Merksatz für Hooks: von den Exit-Codes blockt nur 2.")
     slide_session(prs, cat, 3, "Fortgeschritten: Kern", "Spezialisierte Agenten, adversariale Prüfung, sichere Automation.",
                   diagram_patterns, "Session 3: Agenten spezialisieren, gegenprüfen lassen, autonome Läufe begrenzen.")
     slide_session(prs, cat, 4, "Fortgeschritten: Kür", "Modell pro Phase, Headless und CI, Isolation, Abschlussprojekt, "

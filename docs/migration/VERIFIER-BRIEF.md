@@ -2,7 +2,7 @@
 
 > Für die Prüfer-Agenten des Umzugs (Plan Task 7/8, Spec §12.5). Du bist **unabhängig** vom Schreiber und prüfst,
 > ob beim Übersetzen und Ordnen Fakten verloren gingen, sich verändert haben oder neu erfunden wurden.
-> Arbeitsort: Worktree `C:\Users\domes\Desktop\Claude-Projekte\dynamic_workshop-bibliothek`. Du änderst **nur** deine
+> Arbeitsort: Worktree des Branches `praxisbibliothek` (Repo-Root). Du änderst **nur** deine
 > Matrix-Datei `docs/migration/claims/<ID>.json`, sonst nichts.
 
 ## Eingaben

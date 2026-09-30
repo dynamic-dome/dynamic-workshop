@@ -15,6 +15,7 @@ import hashlib
 import json
 import os
 import re
+import textwrap
 import subprocess
 import sys
 
@@ -54,7 +55,8 @@ def normalize(text: str) -> str:
         lines.pop(0)
     while lines and not lines[-1]:
         lines.pop()
-    return "\n".join(lines)
+    # A fence inside a list item is indented as a whole; moving it to column 0 does not change the snippet.
+    return textwrap.dedent("\n".join(lines))
 
 
 def digest(text: str) -> str:

@@ -65,6 +65,55 @@ def test_mermaid_becomes_source_or_diagram_placeholder():
     assert f'data-diagram="{key}"' in with_svg
 
 
+def test_diagrams_keep_their_natural_width_so_wide_charts_scroll_instead_of_shrinking():
+    svg = '<svg id="d1" width="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1572.66 293.97"><g/></svg>'
+    sized = bc.natural_size(svg)
+    assert 'width="1573"' in sized and 'height="294"' in sized and 'width="100%"' not in sized
+    assert bc.natural_size("<svg><g/></svg>") == "<svg><g/></svg>"  # no viewBox: untouched
+
+
+FLOW_STYLE = ("<style>#d{k}{{font-size:15px;fill:#e9edf1;}}#d{k} .node rect{{fill:#222a31;}}"
+              "#d{k} [data-look=neo].node rect{{stroke:url(#d{k}-gradient);}}</style>")
+
+
+def _svg(key, extra=""):
+    return (f'<svg id="d{key}" width="100%" class="flowchart" viewBox="0 0 400.123456 100.5">'
+            f'{FLOW_STYLE.format(k=key)}<path d="M 1.23456789 2.5"/>{extra}</svg>')
+
+
+def test_diagram_styles_are_shipped_once_and_numbers_are_rounded():
+    shared, css = bc.share_diagram_styles({"aaaa1111": _svg("aaaa1111"), "bbbb2222": _svg("bbbb2222")})
+    assert len(css) == 1
+    [(cls, rules)] = css.items()
+    assert rules.startswith(f".{cls}{{font-size:15px") and f".{cls} .node rect" in rules and "#d" not in rules
+    for key, svg in shared.items():
+        assert "<style" not in svg and f'class="flowchart {cls}"' in svg and f'id="d{key}"' in svg
+        assert 'd="M 1.23 2.5"' in svg and 'width="400"' in svg
+
+
+def _fixture_render(monkeypatch, max_bytes, diagram_bytes):
+    lm = _load("library_model")
+    lg = _load("library_generate")
+    lib = lm.load_library(FIXTURES)
+    cat = lg.catalog(lib)
+    text = (FIXTURES / "s2-08-demo-hook.md").read_text(encoding="utf-8")
+    key = bc.diagram_key(text.split("```mermaid\n", 1)[1].split("```", 1)[0])
+    monkeypatch.setattr(bc, "MAX_BYTES", max_bytes)
+    art = bc.render(lib, cat, diagrams={key: _svg(key, "<g>" + "x" * diagram_bytes + "</g>")})
+    start = art.index("const LIBRARY = ") + len("const LIBRARY = ")
+    return json.JSONDecoder().raw_decode(art[start:])[0]
+
+
+def test_oversized_artefact_drops_diagrams_before_the_full_text(monkeypatch):
+    roomy = _fixture_render(monkeypatch, 10_000_000, 400_000)
+    assert roomy["diagrams"] and all(c["html"] for c in roomy["chapters"])
+    tight = _fixture_render(monkeypatch, 300_000, 400_000)
+    assert tight["diagrams"] == {} and all(c["html"] for c in tight["chapters"])
+    assert 'class="diagram-source"' in next(c["html"] for c in tight["chapters"] if c["id"] == "S2.8")
+    tiny = _fixture_render(monkeypatch, 1_000, 400_000)
+    assert all(c["html"] is None and c["full_url"].startswith("https://") for c in tiny["chapters"])
+
+
 def test_script_safe_json_cannot_close_the_script():
     text = bc.script_safe_json({"x": "</script><script>alert(1)</script>", "y": "a b"})
     assert "</script" not in text and " " not in text

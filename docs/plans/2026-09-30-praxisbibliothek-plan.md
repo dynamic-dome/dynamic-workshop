@@ -289,7 +289,7 @@ beheben, erst dann Phase 2.
   hinaus leistet) und `x-04-agenten-im-dauerbetrieb.md` (X.4, after S4.6: Gateway, Zugangsdaten, Härtung, Not-Aus,
   typische Betriebsfehler), Typ `community`, Stufe `bonus`, relevant nur für die Ziele `agents`, `security`,
   `einschaetzen` (Regel in `_placement.yaml`, Vektoren ergänzen).
-- [ ] Quellen: offizielle Doku/Repos (per curl/WebFetch belegt, Lizenz), `~/Desktop/pi-agent/` und das OpenClaw-Vault
+- [ ] Quellen: offizielle Doku/Repos (per curl/WebFetch belegt, Lizenz), private Notizen des Owners und das OpenClaw-Vault
   (nur verallgemeinerte Lehren). **Sweep vor Commit:** keine Hosts, IPs, Bot-/Gruppennamen, Pfade der privaten Instanz.
 - [ ] Doku-URLs in die Quellenliste des Kanons (`resources/_canonical.md`), damit der Monatslauf sie mitprüft; Kapitel
   tragen „Geprüft: <Datum>".
@@ -302,7 +302,7 @@ beheben, erst dann Phase 2.
 
 - [ ] `python tools/build_library.py validate --complete` · `python tools/build_library.py check` · `python -m pytest tools -q` · `python tools/lint_currency.py` · `python tools/currency_check.py --state-dir .currency/manual` (erwartet: nur Haiku-Retirement rot; Cockpit-Abweichung zur Website ist erwartet, bis der Owner exportiert) · `cd workshop-playground && python -m pytest -q`.
 - [ ] Codex-Verifier (Gate C) gegen Spec + Plan über den ganzen Branch; jeden Befund an der Quelle prüfen, beheben.
-- [ ] Sweep vor Owner-Push: private Pfade/Hosts/Namen (`grep -rn "Users/domes\|domes\|192.168\." -- resources docs tools README.md HOW-TO-USE.md`).
+- [ ] Sweep vor Owner-Push: private Pfade/Hosts/Namen (lokaler Benutzerpfad, Hostnamen, Bot- und Gruppennamen per `grep` über alle Dateien, die `git ls-files` zeigt).
 - [ ] Wiki-TODO und DCO nachziehen, Session-Summary, Bericht an Dominic mit Screenshots und offenen Owner-Schritten.
 
 ---
