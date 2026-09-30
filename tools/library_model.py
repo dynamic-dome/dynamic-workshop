@@ -10,8 +10,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 import re
+import sys
 
 import yaml
+
+_TOOLS = str(Path(__file__).resolve().parent)
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)
+import catalog_core as _core  # noqa: E402
 
 SECTION_ORDER = [
     "Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail", "Vorführen",
@@ -20,8 +26,8 @@ SECTION_ORDER = [
 CHAPTER_TYPES = ("lesson", "setup", "practice", "capstone", "community")
 LEVELS = ("core", "deep-dive", "bonus")
 
-SESSION_ID = re.compile(r"^S([0-4])\.([1-9][0-9]?)$")
-EXTRA_ID = re.compile(r"^X\.([1-9][0-9]?)$")
+SESSION_ID = _core.SESSION_ID
+EXTRA_ID = _core.EXTRA_ID
 FENCE = re.compile(r"^\s*(```|~~~)")
 H2 = re.compile(r"^## (.+?)\s*$")
 META_START, META_END = "<!-- meta:start -->", "<!-- meta:end -->"
@@ -103,15 +109,8 @@ class Library:
 
 
 def order_of(chapter_id: str, after: str | None) -> int:
-    """Teaching order: S<s>.<p> -> s*1000 + p*10; X.<n> -> order_of(after) + 5."""
-    match = SESSION_ID.match(chapter_id or "")
-    if match:
-        return int(match.group(1)) * 1000 + int(match.group(2)) * 10
-    if EXTRA_ID.match(chapter_id or ""):
-        if not after:
-            raise ValueError(f"{chapter_id}: X-Kapitel brauchen 'after'")
-        return order_of(after, None) + 5
-    raise ValueError(f"unbekannte Kapitel-ID: {chapter_id!r}")
+    """Teaching order (single definition in catalog_core)."""
+    return _core.order_of(chapter_id, after)
 
 
 def _read(path: Path) -> str:

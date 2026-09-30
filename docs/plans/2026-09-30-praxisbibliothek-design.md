@@ -265,7 +265,8 @@ Notation: r(c) = Stand des Bereichs von Kapitel c nach Szenario-Deckel (Kapitel 
   enthält). Sonst nichts.
 - sonst, Ziel `moderieren` gewählt: R = alle Kapitel mit Session 0–4 (der Live-Workshop); X-Kapitel sind dann `later`
   mit Grund `not-goal` und werden im Pfad als eigenes Regal verlinkt.
-- sonst: R = `core`-Kapitel der Grundregale (`start`, `permissions`, `context`, `prompting`, `git`, `cost`)
+- sonst: R = `core`-Kapitel der Grundregale (`start`, `permissions`, `context`, `prompting`, `git`, `cost`,
+  `troubleshooting` — Fehlersuche braucht jede Person)
   ∪ `core`- und `deep-dive`-Kapitel der Schwerpunkt-Regale aller gewählten Ziele ∪ bei `gruendlich` deren `bonus`-Kapitel
   ∪ jede Praxis-Station, deren `offers` ein Kapitel aus R mit r < 2 enthält (die Station zeigt dann nur diese Übungen)
   ∪ `capstone`, wenn ein Ziel `agents` oder `einschaetzen` ist
@@ -273,7 +274,8 @@ Notation: r(c) = Stand des Bereichs von Kapitel c nach Szenario-Deckel (Kapitel 
 - Kapitel außerhalb R: `later`, Grund `after-quickstart` (bei `schnellstart`) bzw. `not-goal`.
 
 **Schritt B — Status in R.**
-- Lesson/Setup mit Bereich: r = 0 → `work`; r = 1 → `skim` (`deep-dive` → `work`); r = 2 → `skip`.
+- Lesson/Setup mit Bereich: r = 0 → `work`; r = 1 → `skim` (`deep-dive` → `work`; Setup → `work`, ohne Installation
+  geht nichts); r = 2 → `skip`.
 - Ohne Bereich: Praxis-Station → `work`; Capstone → `work` (bei Nur-Einschätzen `skim`); Community → `skim`.
 - Nur-Einschätzen: `work` → `skim` für alle Kapitel ohne Sicherheitsboden.
 
@@ -285,7 +287,8 @@ S2.17 (MCP-Sicherheit), S3.8, S3.9 (Rechte für Autonomie, geschützte Pfade, Sa
 Budget + Worktree), S4.4 (`-p` ohne `--bare` führt fremde Hooks aus; CI-Zugangsdaten).
 
 **Schritt D — Voraussetzungen.** Für jedes Kapitel mit `work`/`skim` wird jede transitive Voraussetzung
-(`requires_all` im Katalog) mit Status `later` zu `skim` (Grund `prerequisite`). Ein Durchlauf genügt, weil
+(`requires_all` im Katalog) mit Status `later` zu `skim` (Grund `prerequisite`) — außer ihr Bereich hat r = 2,
+dann wird sie `skip` (Grund `known`; die Person kann es schon). Ein Durchlauf genügt, weil
 `requires_all` bereits transitiv ist. `skip` bleibt `skip`.
 
 **Schritt E — Übersteuerung.** Die Wahl der lernenden Person je Kapitel gilt zuletzt und schlägt alles, auch den

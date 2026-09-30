@@ -82,7 +82,7 @@ Option höchstens in 2 von 6 Szenarien die längste, vollständige Reason-/Warni
 
 **Interfaces (Produces, gelesen von Engine und Oberflächen):**
 - `times[].id` ∈ {`schnellstart` (stage_minutes null), `stunde` 60, `abende` 150, `gruendlich` 180}; `default_time:
-  abende`; `default_goal: alltag`; `skim_factor: 0.3`; `quickstart_warn_minutes: 180`
+  abende`; `default_goal: alltag`; `skim_percent: 30` (ganzzahlig: skim = ⌈minutes · 30 / 100⌉, gleich in Python und JS); `quickstart_warn_minutes: 180`
 - `minimum_path: [S0.1, S1.1, S1.2, S1.5, S1.6, S1.10, S1.13, S1.14, S1.16, S1.19]` (unter `requires` geschlossen)
 - Reason-Codes: `new, heard, deep-focus, known, scenario-gap, safety-floor, prerequisite, not-goal, after-quickstart,
   practice, capstone, community, assess, override`; Warning-Codes: `override-safety, override-prereq, quickstart-long`
@@ -279,6 +279,19 @@ beheben, erst dann Phase 2.
 - [ ] PowerPoint-Export nach PNG (`%TEMP%/workshop-qa/deck/`), Kontaktbogen ansehen, Überläufe beheben.
 - [ ] `tools/test_workshop_tooling.py`: Deck hat erwartete Folienzahl und Titel aus dem Katalog.
 - [ ] Commit `feat(deck): overview deck generated from the catalog`.
+
+### Task 16b: Über den Tellerrand — Pi Agent und OpenClaw (Owner-Idee 2026-09-30, nach der Migration)
+
+- [ ] Zwei Community-Kapitel `x-03-pi-als-spiegel.md` (X.3, after S3.2: was ein Harness ist, was Claude Code darüber
+  hinaus leistet) und `x-04-agenten-im-dauerbetrieb.md` (X.4, after S4.6: Gateway, Zugangsdaten, Härtung, Not-Aus,
+  typische Betriebsfehler), Typ `community`, Stufe `bonus`, relevant nur für die Ziele `agents`, `security`,
+  `einschaetzen` (Regel in `_placement.yaml`, Vektoren ergänzen).
+- [ ] Quellen: offizielle Doku/Repos (per curl/WebFetch belegt, Lizenz), `~/Desktop/pi-agent/` und das OpenClaw-Vault
+  (nur verallgemeinerte Lehren). **Sweep vor Commit:** keine Hosts, IPs, Bot-/Gruppennamen, Pfade der privaten Instanz.
+- [ ] Doku-URLs in die Quellenliste des Kanons (`resources/_canonical.md`), damit der Monatslauf sie mitprüft; Kapitel
+  tragen „Geprüft: <Datum>".
+- [ ] Prüfer-Agent (Aussagen-Matrix gegen die Quellen), Validator, `chapter-meta.yaml`, Kontrakt-Katalog und Golden
+  neu erzeugen; Commit `docs(library): beyond Claude Code — Pi and OpenClaw`.
 
 ## Phase 6 — Abnahme
 

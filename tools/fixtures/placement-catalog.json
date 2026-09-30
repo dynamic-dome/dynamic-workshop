@@ -1,0 +1,2020 @@
+{
+ "chapters": [
+  {
+   "area": "basics",
+   "id": "S0.1",
+   "level": "core",
+   "minutes": 20,
+   "offers": [],
+   "order": 10,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": 0,
+   "shelf": "start",
+   "type": "setup"
+  },
+  {
+   "area": null,
+   "id": "X.2",
+   "level": "bonus",
+   "minutes": 12,
+   "offers": [],
+   "order": 15,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
+   "area": "basics",
+   "id": "S1.1",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 1010,
+   "requires": [
+    "S0.1"
+   ],
+   "requires_all": [
+    "S0.1"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "start",
+   "type": "lesson"
+  },
+  {
+   "area": "basics",
+   "id": "S1.2",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 1020,
+   "requires": [
+    "S1.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "start",
+   "type": "lesson"
+  },
+  {
+   "area": "basics",
+   "id": "S1.3",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 1030,
+   "requires": [
+    "S1.2"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "start",
+   "type": "lesson"
+  },
+  {
+   "area": "basics",
+   "id": "S1.4",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 1040,
+   "requires": [
+    "S1.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "start",
+   "type": "lesson"
+  },
+  {
+   "area": "permissions",
+   "id": "S1.5",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 1050,
+   "requires": [
+    "S1.2"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2"
+   ],
+   "safety_floor": true,
+   "session": 1,
+   "shelf": "permissions",
+   "type": "lesson"
+  },
+  {
+   "area": "permissions",
+   "id": "S1.6",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 1060,
+   "requires": [
+    "S1.5"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5"
+   ],
+   "safety_floor": true,
+   "session": 1,
+   "shelf": "permissions",
+   "type": "lesson"
+  },
+  {
+   "area": "cost",
+   "id": "S1.7",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 1070,
+   "requires": [
+    "S1.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "cost",
+   "type": "lesson"
+  },
+  {
+   "area": "context",
+   "id": "S1.8",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 1080,
+   "requires": [
+    "S1.2"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "context",
+   "type": "lesson"
+  },
+  {
+   "area": "context",
+   "id": "S1.9",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 1090,
+   "requires": [
+    "S1.8"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.8"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "context",
+   "type": "lesson"
+  },
+  {
+   "area": "context",
+   "id": "S1.10",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 1100,
+   "requires": [
+    "S1.2"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "context",
+   "type": "lesson"
+  },
+  {
+   "area": "context",
+   "id": "S1.11",
+   "level": "deep-dive",
+   "minutes": 18,
+   "offers": [],
+   "order": 1110,
+   "requires": [
+    "S1.10"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "context",
+   "type": "lesson"
+  },
+  {
+   "area": "context",
+   "id": "S1.12",
+   "level": "deep-dive",
+   "minutes": 12,
+   "offers": [],
+   "order": 1120,
+   "requires": [
+    "S1.10"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "context",
+   "type": "lesson"
+  },
+  {
+   "area": "prompting",
+   "id": "S1.13",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 1130,
+   "requires": [
+    "S1.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "prompting",
+   "type": "lesson"
+  },
+  {
+   "area": "prompting",
+   "id": "S1.14",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 1140,
+   "requires": [
+    "S1.5",
+    "S1.13"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "prompting",
+   "type": "lesson"
+  },
+  {
+   "area": "prompting",
+   "id": "S1.15",
+   "level": "deep-dive",
+   "minutes": 12,
+   "offers": [],
+   "order": 1150,
+   "requires": [
+    "S1.13"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.13"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "prompting",
+   "type": "lesson"
+  },
+  {
+   "area": "git",
+   "id": "S1.16",
+   "level": "core",
+   "minutes": 18,
+   "offers": [],
+   "order": 1160,
+   "requires": [
+    "S1.5",
+    "S1.13"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "git",
+   "type": "lesson"
+  },
+  {
+   "area": "git",
+   "id": "S1.17",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 1170,
+   "requires": [
+    "S1.16"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "git",
+   "type": "lesson"
+  },
+  {
+   "area": "git",
+   "id": "S1.18",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 1180,
+   "requires": [
+    "S1.16"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "git",
+   "type": "lesson"
+  },
+  {
+   "area": "cost",
+   "id": "S1.19",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 1190,
+   "requires": [
+    "S1.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1"
+   ],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "cost",
+   "type": "lesson"
+  },
+  {
+   "area": null,
+   "id": "S1.20",
+   "level": "core",
+   "minutes": 15,
+   "offers": [
+    "S1.1",
+    "S1.10",
+    "S1.13",
+    "S1.16",
+    "S1.18"
+   ],
+   "order": 1200,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": 1,
+   "shelf": "practice",
+   "type": "practice"
+  },
+  {
+   "area": "skills",
+   "id": "S2.1",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 2010,
+   "requires": [
+    "S1.10"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "skills",
+   "type": "lesson"
+  },
+  {
+   "area": "skills",
+   "id": "S2.2",
+   "level": "core",
+   "minutes": 18,
+   "offers": [],
+   "order": 2020,
+   "requires": [
+    "S2.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10",
+    "S2.1"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "skills",
+   "type": "lesson"
+  },
+  {
+   "area": "skills",
+   "id": "S2.3",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 2030,
+   "requires": [
+    "S2.2"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10",
+    "S2.1",
+    "S2.2"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "skills",
+   "type": "lesson"
+  },
+  {
+   "area": "skills",
+   "id": "S2.4",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 2040,
+   "requires": [
+    "S2.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10",
+    "S2.1"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "skills",
+   "type": "lesson"
+  },
+  {
+   "area": "skills",
+   "id": "S2.5",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 2050,
+   "requires": [
+    "S2.2"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10",
+    "S2.1",
+    "S2.2"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "skills",
+   "type": "lesson"
+  },
+  {
+   "area": "hooks",
+   "id": "S2.6",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 2060,
+   "requires": [
+    "S1.5"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "hooks",
+   "type": "lesson"
+  },
+  {
+   "area": "hooks",
+   "id": "S2.7",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 2070,
+   "requires": [
+    "S2.6"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.6"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "hooks",
+   "type": "lesson"
+  },
+  {
+   "area": "hooks",
+   "id": "S2.8",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 2080,
+   "requires": [
+    "S2.7"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.6",
+    "S2.7"
+   ],
+   "safety_floor": true,
+   "session": 2,
+   "shelf": "hooks",
+   "type": "lesson"
+  },
+  {
+   "area": "hooks",
+   "id": "S2.9",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 2090,
+   "requires": [
+    "S2.8"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.6",
+    "S2.7",
+    "S2.8"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "hooks",
+   "type": "lesson"
+  },
+  {
+   "area": "hooks",
+   "id": "S2.10",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 2100,
+   "requires": [
+    "S2.8"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.6",
+    "S2.7",
+    "S2.8"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "hooks",
+   "type": "lesson"
+  },
+  {
+   "area": "plugins",
+   "id": "S2.11",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 2110,
+   "requires": [
+    "S2.2",
+    "S2.6"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.10",
+    "S2.1",
+    "S2.2",
+    "S2.6"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "plugins",
+   "type": "lesson"
+  },
+  {
+   "area": "plugins",
+   "id": "S2.12",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 2120,
+   "requires": [
+    "S2.11"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.10",
+    "S2.1",
+    "S2.2",
+    "S2.6",
+    "S2.11"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "plugins",
+   "type": "lesson"
+  },
+  {
+   "area": "plugins",
+   "id": "S2.13",
+   "level": "deep-dive",
+   "minutes": 10,
+   "offers": [],
+   "order": 2130,
+   "requires": [
+    "S2.12"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.10",
+    "S2.1",
+    "S2.2",
+    "S2.6",
+    "S2.11",
+    "S2.12"
+   ],
+   "safety_floor": true,
+   "session": 2,
+   "shelf": "plugins",
+   "type": "lesson"
+  },
+  {
+   "area": null,
+   "id": "X.1",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 2135,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
+   "area": "mcp",
+   "id": "S2.14",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 2140,
+   "requires": [
+    "S1.5"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "mcp-knowledge",
+   "type": "lesson"
+  },
+  {
+   "area": "mcp",
+   "id": "S2.15",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 2150,
+   "requires": [
+    "S2.14"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.14"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "mcp-knowledge",
+   "type": "lesson"
+  },
+  {
+   "area": "mcp",
+   "id": "S2.16",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 2160,
+   "requires": [
+    "S2.15"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.14",
+    "S2.15"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "mcp-knowledge",
+   "type": "lesson"
+  },
+  {
+   "area": "mcp",
+   "id": "S2.17",
+   "level": "deep-dive",
+   "minutes": 18,
+   "offers": [],
+   "order": 2170,
+   "requires": [
+    "S2.15"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.14",
+    "S2.15"
+   ],
+   "safety_floor": true,
+   "session": 2,
+   "shelf": "mcp-knowledge",
+   "type": "lesson"
+  },
+  {
+   "area": "mcp",
+   "id": "S2.18",
+   "level": "core",
+   "minutes": 18,
+   "offers": [],
+   "order": 2180,
+   "requires": [
+    "S2.14"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.14"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "mcp-knowledge",
+   "type": "lesson"
+  },
+  {
+   "area": "mcp",
+   "id": "S2.19",
+   "level": "deep-dive",
+   "minutes": 10,
+   "offers": [],
+   "order": 2190,
+   "requires": [
+    "S2.18"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S2.14",
+    "S2.18"
+   ],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "mcp-knowledge",
+   "type": "lesson"
+  },
+  {
+   "area": null,
+   "id": "S2.20",
+   "level": "core",
+   "minutes": 18,
+   "offers": [
+    "S2.2",
+    "S2.8",
+    "S2.10",
+    "S2.11",
+    "S2.14",
+    "S2.18"
+   ],
+   "order": 2200,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": 2,
+   "shelf": "practice",
+   "type": "practice"
+  },
+  {
+   "area": "agents",
+   "id": "S3.1",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 3010,
+   "requires": [
+    "S1.2"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "agents",
+   "type": "lesson"
+  },
+  {
+   "area": "agents",
+   "id": "S3.2",
+   "level": "core",
+   "minutes": 10,
+   "offers": [],
+   "order": 3020,
+   "requires": [
+    "S3.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S3.1"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "agents",
+   "type": "lesson"
+  },
+  {
+   "area": "agents",
+   "id": "S3.3",
+   "level": "core",
+   "minutes": 18,
+   "offers": [],
+   "order": 3030,
+   "requires": [
+    "S3.2"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S3.1",
+    "S3.2"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "agents",
+   "type": "lesson"
+  },
+  {
+   "area": "agents",
+   "id": "S3.4",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 3040,
+   "requires": [
+    "S3.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S3.1"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "agents",
+   "type": "lesson"
+  },
+  {
+   "area": "agents",
+   "id": "S3.5",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 3050,
+   "requires": [
+    "S3.4"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S3.1",
+    "S3.4"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "agents",
+   "type": "lesson"
+  },
+  {
+   "area": "review",
+   "id": "S3.6",
+   "level": "core",
+   "minutes": 18,
+   "offers": [],
+   "order": 3060,
+   "requires": [
+    "S3.4"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S3.1",
+    "S3.4"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "security",
+   "type": "lesson"
+  },
+  {
+   "area": "review",
+   "id": "S3.7",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 3070,
+   "requires": [
+    "S1.16"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "security",
+   "type": "lesson"
+  },
+  {
+   "area": "permissions",
+   "id": "S3.8",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 3080,
+   "requires": [
+    "S1.6"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.6"
+   ],
+   "safety_floor": true,
+   "session": 3,
+   "shelf": "permissions",
+   "type": "lesson"
+  },
+  {
+   "area": "permissions",
+   "id": "S3.9",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 3090,
+   "requires": [
+    "S3.8"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.6",
+    "S3.8"
+   ],
+   "safety_floor": true,
+   "session": 3,
+   "shelf": "permissions",
+   "type": "lesson"
+  },
+  {
+   "area": "permissions",
+   "id": "S3.10",
+   "level": "deep-dive",
+   "minutes": 12,
+   "offers": [],
+   "order": 3100,
+   "requires": [
+    "S3.9"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.6",
+    "S3.8",
+    "S3.9"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "security",
+   "type": "lesson"
+  },
+  {
+   "area": "review",
+   "id": "S3.11",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 3110,
+   "requires": [
+    "S3.9"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.6",
+    "S3.8",
+    "S3.9"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "security",
+   "type": "lesson"
+  },
+  {
+   "area": "automation",
+   "id": "S3.12",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 3120,
+   "requires": [
+    "S2.4"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10",
+    "S2.1",
+    "S2.4"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "automation",
+   "type": "lesson"
+  },
+  {
+   "area": "automation",
+   "id": "S3.13",
+   "level": "core",
+   "minutes": 12,
+   "offers": [],
+   "order": 3130,
+   "requires": [
+    "S3.12",
+    "S1.19"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10",
+    "S1.19",
+    "S2.1",
+    "S2.4",
+    "S3.12"
+   ],
+   "safety_floor": true,
+   "session": 3,
+   "shelf": "automation",
+   "type": "lesson"
+  },
+  {
+   "area": "automation",
+   "id": "S3.14",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 3140,
+   "requires": [
+    "S3.13"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.10",
+    "S1.19",
+    "S2.1",
+    "S2.4",
+    "S3.12",
+    "S3.13"
+   ],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "automation",
+   "type": "lesson"
+  },
+  {
+   "area": null,
+   "id": "S3.15",
+   "level": "core",
+   "minutes": 15,
+   "offers": [
+    "S3.4",
+    "S3.6"
+   ],
+   "order": 3150,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": 3,
+   "shelf": "practice",
+   "type": "practice"
+  },
+  {
+   "area": "cost",
+   "id": "S4.1",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 4010,
+   "requires": [
+    "S1.7",
+    "S3.4"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.7",
+    "S3.1",
+    "S3.4"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "cost",
+   "type": "lesson"
+  },
+  {
+   "area": "agents",
+   "id": "S4.2",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 4020,
+   "requires": [
+    "S4.1"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.7",
+    "S3.1",
+    "S3.4",
+    "S4.1"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "agents",
+   "type": "lesson"
+  },
+  {
+   "area": "automation",
+   "id": "S4.3",
+   "level": "deep-dive",
+   "minutes": 15,
+   "offers": [],
+   "order": 4030,
+   "requires": [
+    "S1.13"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.13"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "headless-ci",
+   "type": "lesson"
+  },
+  {
+   "area": "automation",
+   "id": "S4.4",
+   "level": "deep-dive",
+   "minutes": 18,
+   "offers": [],
+   "order": 4040,
+   "requires": [
+    "S4.3"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.13",
+    "S4.3"
+   ],
+   "safety_floor": true,
+   "session": 4,
+   "shelf": "headless-ci",
+   "type": "lesson"
+  },
+  {
+   "area": "automation",
+   "id": "S4.5",
+   "level": "deep-dive",
+   "minutes": 18,
+   "offers": [],
+   "order": 4050,
+   "requires": [
+    "S4.4"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.13",
+    "S4.3",
+    "S4.4"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "headless-ci",
+   "type": "lesson"
+  },
+  {
+   "area": "automation",
+   "id": "S4.6",
+   "level": "bonus",
+   "minutes": 12,
+   "offers": [],
+   "order": 4060,
+   "requires": [
+    "S1.3"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.3"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "remote-isolation",
+   "type": "lesson"
+  },
+  {
+   "area": "git",
+   "id": "S4.7",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 4070,
+   "requires": [
+    "S1.18"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13",
+    "S1.16",
+    "S1.18"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "remote-isolation",
+   "type": "lesson"
+  },
+  {
+   "area": null,
+   "id": "S4.8",
+   "level": "bonus",
+   "minutes": 25,
+   "offers": [],
+   "order": 4080,
+   "requires": [
+    "S3.4",
+    "S3.8",
+    "S3.13"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.6",
+    "S1.10",
+    "S1.19",
+    "S2.1",
+    "S2.4",
+    "S3.1",
+    "S3.4",
+    "S3.8",
+    "S3.12",
+    "S3.13"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "capstone",
+   "type": "capstone"
+  },
+  {
+   "area": "troubleshooting",
+   "id": "S4.9",
+   "level": "core",
+   "minutes": 15,
+   "offers": [],
+   "order": 4090,
+   "requires": [
+    "S1.4"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.4"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "troubleshooting",
+   "type": "lesson"
+  },
+  {
+   "area": "troubleshooting",
+   "id": "S4.10",
+   "level": "core",
+   "minutes": 18,
+   "offers": [],
+   "order": 4100,
+   "requires": [
+    "S4.9",
+    "S2.8"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.4",
+    "S1.5",
+    "S2.6",
+    "S2.7",
+    "S2.8",
+    "S4.9"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "troubleshooting",
+   "type": "lesson"
+  }
+ ],
+ "placement": {
+  "areas": [
+   {
+    "chapters": [
+     "S0.1",
+     "S1.1",
+     "S1.2",
+     "S1.3",
+     "S1.4"
+    ],
+    "id": "basics",
+    "label": "Grundlagen",
+    "statement": "Ich habe Claude Code schon für eine echte Aufgabe genutzt und das Ergebnis selbst geprüft."
+   },
+   {
+    "chapters": [
+     "S1.5",
+     "S1.6",
+     "S3.8",
+     "S3.9",
+     "S3.10"
+    ],
+    "id": "permissions",
+    "label": "Rechte & Freigaben",
+    "statement": "Ich weiß, welchen Rechte-Modus ich für ein fremdes Repo wähle, und habe allow/deny-Regeln gesetzt."
+   },
+   {
+    "chapters": [
+     "S1.8",
+     "S1.9",
+     "S1.10",
+     "S1.11",
+     "S1.12"
+    ],
+    "id": "context",
+    "label": "Kontext & Gedächtnis",
+    "statement": "Ich pflege eine CLAUDE.md und weiß, wann ich /compact nehme und wann eine neue Session."
+   },
+   {
+    "chapters": [
+     "S1.13",
+     "S1.14",
+     "S1.15"
+    ],
+    "id": "prompting",
+    "label": "Aufträge formulieren",
+    "statement": "Ich schreibe Aufträge mit Ziel, Grenzen und Prüfschritt und nutze den Plan-Modus."
+   },
+   {
+    "chapters": [
+     "S1.16",
+     "S1.17",
+     "S1.18",
+     "S4.7"
+    ],
+    "id": "git",
+    "label": "Git & Worktrees",
+    "statement": "Ich lasse Claude auf einem Branch arbeiten, prüfe den Diff selbst und nutze Worktrees."
+   },
+   {
+    "chapters": [
+     "S1.7",
+     "S1.19",
+     "S4.1"
+    ],
+    "id": "cost",
+    "label": "Modelle & Kosten",
+    "statement": "Ich lese /cost bzw. /usage und deckele autonome Läufe mit Budget und Rundenlimit."
+   },
+   {
+    "chapters": [
+     "S2.1",
+     "S2.2",
+     "S2.3",
+     "S2.4",
+     "S2.5"
+    ],
+    "id": "skills",
+    "label": "Skills & Commands",
+    "statement": "Ich habe einen eigenen Skill oder Slash-Command geschrieben und benutzt."
+   },
+   {
+    "chapters": [
+     "S2.6",
+     "S2.7",
+     "S2.8",
+     "S2.9",
+     "S2.10"
+    ],
+    "id": "hooks",
+    "label": "Hooks",
+    "statement": "Ich habe einen Hook gebaut, der eine Aktion wirklich blockt."
+   },
+   {
+    "chapters": [
+     "S2.11",
+     "S2.12",
+     "S2.13"
+    ],
+    "id": "plugins",
+    "label": "Plugins",
+    "statement": "Ich habe Plugins geprüft, installiert oder selbst gebündelt."
+   },
+   {
+    "chapters": [
+     "S2.14",
+     "S2.15",
+     "S2.16",
+     "S2.17",
+     "S2.18",
+     "S2.19"
+    ],
+    "id": "mcp",
+    "label": "MCP & Wissensquellen",
+    "statement": "Ich habe einen MCP-Server angebunden und weiß, mit welchen Rechten er läuft."
+   },
+   {
+    "chapters": [
+     "S3.1",
+     "S3.2",
+     "S3.3",
+     "S3.4",
+     "S3.5",
+     "S4.2"
+    ],
+    "id": "agents",
+    "label": "Agenten & Orchestrierung",
+    "statement": "Ich habe Subagenten definiert oder mehrere Agenten parallel arbeiten lassen."
+   },
+   {
+    "chapters": [
+     "S3.6",
+     "S3.7",
+     "S3.11"
+    ],
+    "id": "review",
+    "label": "Gegenprüfung",
+    "statement": "Ich lasse Agenten-Ergebnisse gezielt gegenprüfen, bevor ich sie übernehme."
+   },
+   {
+    "chapters": [
+     "S3.12",
+     "S3.13",
+     "S3.14",
+     "S4.3",
+     "S4.4",
+     "S4.5",
+     "S4.6"
+    ],
+    "id": "automation",
+    "label": "Automation & Headless",
+    "statement": "Ich habe Claude Code zeitgesteuert oder headless (claude -p) laufen lassen."
+   },
+   {
+    "chapters": [
+     "S4.9",
+     "S4.10"
+    ],
+    "id": "troubleshooting",
+    "label": "Fehlersuche",
+    "statement": "Ich finde selbst heraus, warum ein Hook, Skill oder MCP-Server nicht greift."
+   }
+  ],
+  "base_shelves": [
+   "start",
+   "permissions",
+   "context",
+   "prompting",
+   "git",
+   "cost",
+   "troubleshooting"
+  ],
+  "default_goal": "alltag",
+  "default_time": "abende",
+  "goals": [
+   {
+    "focus_shelves": [
+     "context",
+     "prompting",
+     "git",
+     "skills"
+    ],
+    "id": "alltag",
+    "label": "Meinen Entwickler-Alltag beschleunigen"
+   },
+   {
+    "focus_shelves": [
+     "permissions",
+     "context",
+     "hooks",
+     "plugins",
+     "security"
+    ],
+    "id": "team",
+    "label": "Claude Code sicher im Team einführen"
+   },
+   {
+    "focus_shelves": [
+     "automation",
+     "headless-ci",
+     "cost",
+     "hooks"
+    ],
+    "id": "automation",
+    "label": "Aufgaben automatisieren und in CI einbauen"
+   },
+   {
+    "focus_shelves": [
+     "agents",
+     "automation",
+     "remote-isolation",
+     "mcp-knowledge"
+    ],
+    "id": "agents",
+    "label": "Eigene Agenten-Systeme bauen"
+   },
+   {
+    "focus_shelves": [
+     "permissions",
+     "hooks",
+     "security",
+     "plugins",
+     "mcp-knowledge"
+    ],
+    "id": "security",
+    "label": "Sicherheit und Compliance im Griff haben"
+   },
+   {
+    "focus_shelves": [],
+    "id": "einschaetzen",
+    "label": "Einschätzen, ob und wie wir es einsetzen (Tech Lead)"
+   },
+   {
+    "focus_shelves": [],
+    "id": "moderieren",
+    "label": "Den Workshop selbst moderieren"
+   }
+  ],
+  "minimum_path": [
+   "S0.1",
+   "S1.1",
+   "S1.2",
+   "S1.5",
+   "S1.6",
+   "S1.10",
+   "S1.13",
+   "S1.14",
+   "S1.16",
+   "S1.19"
+  ],
+  "quickstart_warn_minutes": 180,
+  "reasons": {
+   "after-quickstart": "Nach dem Schnellstart, wenn du weitermachen willst.",
+   "assess": "Zum Einschätzen reicht der Überblick.",
+   "capstone": "Abschlussprojekt für dein Ziel.",
+   "community": "Leute und Skills, die weiterhelfen.",
+   "deep-focus": "Vertiefung in deinem Schwerpunkt.",
+   "heard": "Du hast davon gehört — überfliegen reicht.",
+   "known": "Kennst du schon — der Schnellcheck reicht.",
+   "new": "Neu für dich — durcharbeiten.",
+   "not-goal": "Gehört nicht zu deinem Ziel — jederzeit in der Bibliothek.",
+   "override": "Deine eigene Wahl.",
+   "practice": "Praxis-Station mit Übungen zu deinen Kapiteln.",
+   "prerequisite": "Voraussetzung für ein späteres Kapitel deines Pfads.",
+   "safety-floor": "Sicherheitsboden — dieses Kapitel lassen wir nicht aus.",
+   "scenario-gap": "Das Mini-Szenario zeigte hier eine Lücke."
+  },
+  "scenarios": [
+   {
+    "area": "hooks",
+    "chapter": "S2.8",
+    "correct": "a",
+    "explanation": "Nur Exit-Code 2 blockt. Jeder andere Code meldet einen Fehler, und die Aktion läuft weiter — ein kaputter Schutz-Hook ist ein offener Schutz-Hook. Das verwechseln viele; Kapitel S2.8 zeigt es.",
+    "id": "hook-crash",
+    "options": [
+     {
+      "id": "a",
+      "text": "Er läuft weiter, nur eine Fehlermeldung erscheint"
+     },
+     {
+      "id": "b",
+      "text": "Er wird blockiert, bis du den Hook reparierst"
+     },
+     {
+      "id": "c",
+      "text": "Claude fragt dich, ob er trotzdem laufen soll"
+     },
+     {
+      "id": "d",
+      "text": "Die ganze Session bricht sofort mit einem Fehler ab"
+     }
+    ],
+    "question": "Dein Schutz-Hook bricht mit einem Syntaxfehler ab (Exit-Code 1). Was passiert mit dem Tool-Aufruf?"
+   },
+   {
+    "area": "automation",
+    "chapter": "S4.4",
+    "correct": "a",
+    "explanation": "Ohne --bare führt eine -p-Sitzung die Hooks aus .claude/settings.json aus und verbindet die Server aus .mcp.json — auch in einem Ordner, dem du nie vertraut hast. Kapitel S4.4 zeigt, wie CI das verhindert.",
+    "id": "foreign-repo-headless",
+    "options": [
+     {
+      "id": "a",
+      "text": "Hooks und MCP-Server aus dem Repo laufen mit"
+     },
+     {
+      "id": "b",
+      "text": "Nichts, -p lädt keine Projekt-Dateien"
+     },
+     {
+      "id": "c",
+      "text": "Claude verweigert den Start ohne Freigabe"
+     },
+     {
+      "id": "d",
+      "text": "Nur die CLAUDE.md wird gelesen, sonst nichts"
+     }
+    ],
+    "question": "Du startest claude -p ohne --bare in einem frisch geklonten, fremden Repo. Was kann passieren?"
+   },
+   {
+    "area": "cost",
+    "chapter": "S1.19",
+    "correct": "a",
+    "explanation": "Budget und Rundenlimit sind zwei getrennte Grenzen; beide gelten nur im Print-Modus (-p). Beobachten allein hält einen Lauf nicht an. Kapitel S1.19 und S4.4 zeigen beide Flags.",
+    "id": "autonomous-limits",
+    "options": [
+     {
+      "id": "a",
+      "text": "--max-budget-usd für Kosten, --max-turns für Runden"
+     },
+     {
+      "id": "b",
+      "text": "Nur /cost beobachten und notfalls von Hand abbrechen"
+     },
+     {
+      "id": "c",
+      "text": "Effort auf low, dann reicht das Budget von allein"
+     },
+     {
+      "id": "d",
+      "text": "Ein kleineres Modell wählen, das begrenzt die Runden"
+     }
+    ],
+    "question": "Ein autonomer -p-Lauf soll weder zu teuer werden noch endlos laufen. Was setzt du?"
+   },
+   {
+    "area": "permissions",
+    "chapter": "S1.6",
+    "correct": "a",
+    "explanation": "Der Plan-Modus liest und plant, ändert aber nichts, bis du den Plan freigibst. Die anderen Modi erlauben Änderungen oder Befehle ohne Rückfrage. Kapitel S1.6 vergleicht alle Modi.",
+    "id": "foreign-repo-start",
+    "options": [
+     {
+      "id": "a",
+      "text": "Plan-Modus: lesen, planen, ändern erst nach Freigabe"
+     },
+     {
+      "id": "b",
+      "text": "bypassPermissions, damit keine Rückfragen mehr stören"
+     },
+     {
+      "id": "c",
+      "text": "acceptEdits, weil Git jede Änderung rückgängig macht"
+     },
+     {
+      "id": "d",
+      "text": "auto, weil der Klassifikator Gefährliches erkennt"
+     }
+    ],
+    "question": "Du willst ein fremdes Repo erst verstehen, ohne dass etwas geändert wird. Womit startest du?"
+   },
+   {
+    "area": "context",
+    "chapter": "S1.10",
+    "correct": "a",
+    "explanation": "Frühe Absprachen können beim Komprimieren verloren gehen. Was in CLAUDE.md steht, wird bei jedem Start geladen. Kapitel S1.10 zeigt, was hineingehört.",
+    "id": "lost-agreement",
+    "options": [
+     {
+      "id": "a",
+      "text": "Absprache in CLAUDE.md festhalten, dann neu starten"
+     },
+     {
+      "id": "b",
+      "text": "Die Absprache im Chat einfach mehrfach wiederholen"
+     },
+     {
+      "id": "c",
+      "text": "Effort auf max stellen, dann merkt es sich mehr"
+     },
+     {
+      "id": "d",
+      "text": "Einfach weitermachen, das korrigiert sich von selbst"
+     }
+    ],
+    "question": "Nach langer Session hält sich Claude nicht mehr an eine frühe Absprache. Was hilft am zuverlässigsten?"
+   },
+   {
+    "area": "review",
+    "chapter": "S3.6",
+    "correct": "a",
+    "explanation": "Ein grüner Bericht ist kein Beweis, ausgeführter Code ist einer. Auch ein zweiter Agent liefert nur einen weiteren Bericht. Kapitel S3.6 baut daraus eine Prüf-Pipeline.",
+    "id": "green-report",
+    "options": [
+     {
+      "id": "a",
+      "text": "Die Tests selbst laufen lassen und die Ausgabe lesen"
+     },
+     {
+      "id": "b",
+      "text": "Nichts, Subagenten berichten grundsätzlich korrekt"
+     },
+     {
+      "id": "c",
+      "text": "Einen zweiten Subagenten fragen, ob es wirklich stimmt"
+     },
+     {
+      "id": "d",
+      "text": "Die Zahl direkt in die Commit-Nachricht übernehmen"
+     }
+    ],
+    "question": "Ein Subagent meldet „alle 40 Tests grün\". Was tust du, bevor du das übernimmst?"
+   }
+  ],
+  "skim_percent": 30,
+  "times": [
+   {
+    "id": "schnellstart",
+    "label": "Nur ein paar Stunden insgesamt — zeig mir das Wichtigste",
+    "stage_minutes": null
+   },
+   {
+    "id": "stunde",
+    "label": "Immer mal eine Stunde",
+    "stage_minutes": 60
+   },
+   {
+    "id": "abende",
+    "label": "Ein paar Abende à zwei bis drei Stunden",
+    "stage_minutes": 150
+   },
+   {
+    "id": "gruendlich",
+    "label": "Gründlich, in Blöcken von etwa drei Stunden",
+    "stage_minutes": 180
+   }
+  ],
+  "version": 1,
+  "warnings": {
+   "override-prereq": "Ein Kapitel in deinem Pfad baut auf einem Kapitel auf, das du übersprungen hast.",
+   "override-safety": "Du hast ein Sicherheitsboden-Kapitel heruntergestuft. Das ist deine Entscheidung — lies es mindestens kurz.",
+   "quickstart-long": "Dein Schnellstart dauert länger als drei Stunden — plane zwei Sitzungen ein."
+  }
+ },
+ "shelves": [
+  {
+   "id": "start",
+   "title": "Erste Schritte & Denkmodell"
+  },
+  {
+   "id": "permissions",
+   "title": "Rechte & Freigaben"
+  },
+  {
+   "id": "context",
+   "title": "Kontext & Gedächtnis"
+  },
+  {
+   "id": "prompting",
+   "title": "Aufträge formulieren"
+  },
+  {
+   "id": "git",
+   "title": "Git & Worktrees"
+  },
+  {
+   "id": "cost",
+   "title": "Modelle & Kosten"
+  },
+  {
+   "id": "skills",
+   "title": "Skills & Commands"
+  },
+  {
+   "id": "hooks",
+   "title": "Hooks"
+  },
+  {
+   "id": "plugins",
+   "title": "Plugins"
+  },
+  {
+   "id": "mcp-knowledge",
+   "title": "MCP & Wissensquellen"
+  },
+  {
+   "id": "agents",
+   "title": "Agenten & Orchestrierung"
+  },
+  {
+   "id": "security",
+   "title": "Gegenprüfung & Compliance"
+  },
+  {
+   "id": "automation",
+   "title": "Automation & Loops"
+  },
+  {
+   "id": "headless-ci",
+   "title": "Headless & CI/CD"
+  },
+  {
+   "id": "remote-isolation",
+   "title": "Remote, Docker, Isolation"
+  },
+  {
+   "id": "troubleshooting",
+   "title": "Fehlersuche"
+  },
+  {
+   "id": "capstone",
+   "title": "Abschlussprojekt"
+  },
+  {
+   "id": "practice",
+   "title": "Praxis-Stationen"
+  },
+  {
+   "id": "community",
+   "title": "Community & Lernen"
+  }
+ ],
+ "version": 1
+}
