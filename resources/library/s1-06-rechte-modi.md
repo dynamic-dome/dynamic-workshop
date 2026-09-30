@@ -32,7 +32,7 @@ aliases: []
 
 Die sechs Rechte-Modi verschieben die Prüfung schrittweise weg von dir: In `default`, `acceptEdits` und `plan` fragt Claude Code dich, in `auto` prüft ein zweites Modell (der Klassifikator), in `dontAsk` gelten nur deine vorab geschriebenen Regeln, in `bypassPermissions` prüft niemand. `bypassPermissions` gehört deshalb ausschließlich in einen isolierten Container oder eine VM.
 
-Neue interaktive Sitzungen im Terminal und in VS Code starten ab v2.1.283 in `auto`, sofern er verfügbar ist; `claude -p` startet in `default`. Welcher Modus gerade gilt, zeigt die Statusleiste, und `Shift+Tab` wechselt ihn.
+Neue interaktive Sitzungen im Terminal und in VS Code starten ab v2.1.283 in `auto`, sofern er verfügbar ist; `claude -p` startet in `default` (ab CLI 2.1.285 bei Drittanbietern oder abgeschalteter Telemetrie in `auto`, siehe [Kanon](../_canonical.md#rechte-startmodus-quelle-permission-modesmd-which-mode-a-session-starts-in)). Welcher Modus gerade gilt, zeigt die Statusleiste, und `Shift+Tab` wechselt ihn.
 
 ## Bild im Kopf
 

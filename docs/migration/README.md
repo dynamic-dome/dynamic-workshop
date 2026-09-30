@@ -36,7 +36,7 @@ begründet gestrichen ist.
   korrigierte CI-YAML-Blöcke in S4.5, Quiz-Längenhinweise); die unabhängige Nachprüfung ergab `pass`.
 - **X.1:** acht `ask`-Punkte, die der Prüfer selbst an den Primärquellen bestätigt hatte (README, `marketplace.json`,
   LICENSE); übernommen, der README-Installationsweg ergänzt, Spec-Anhang D nachgezogen.
-- **Snippet-Ledger:** 355 alte Codeblöcke, alle erfasst; 60 begründet gestrichen (Dubletten, laut Doku veraltet oder
+- **Snippet-Ledger:** 357 alte Codeblöcke (auch in Blockzitaten), alle erfasst; 63 begründet gestrichen (Dubletten, laut Doku veraltet oder
   korrigiert, durch den Windows-Hook-Fix ersetzt), Liste in `tools/fixtures/migration-dropped.txt`.
 - **Regal-Intros:** vier sachlich falsche Intros korrigiert (headless-ci drehte die Gefahr um, remote-isolation
   schrieb Teleport das Handy zu, capstone versprach einen anderen Auftrag, automation Budget-Grenzen ohne `-p`).

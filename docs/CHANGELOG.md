@@ -6,8 +6,8 @@ Der Kurs wird vom linearen 4-Session-Aufbau zur deutschsprachigen Praxisbiblioth
 
 - **Bibliothek:** 70 Kapitel (65 Lerneinheiten, neu S0.1 Werkstatt einrichten, X.1 Community-Skills, X.2 Mit Claude Code
   lernen, X.3 Pi als Spiegel, X.4 Agenten im Dauerbetrieb mit OpenClaw) in 19 Regalen, fester Aufbau je Kapiteltyp,
-  Kapitel als einzige Quelle; Modul-, Demo- und Übungsdateien entfallen (Snippet-Ledger: 355 von 355 alten Codeblöcken
-  erfasst, 60 begründet gestrichen).
+  Kapitel als einzige Quelle; Modul-, Demo- und Übungsdateien entfallen (Snippet-Ledger: 357 von 357 alten Codeblöcken
+  erfasst, auch in Blockzitaten; 63 begründet gestrichen).
 - **Einstufung:** Ziel, Warum, Sitzungslänge, Stand in 14 Bereichen, freiwillige Mini-Szenarien; deterministische Engine
   (`tools/placement.py`, JS-Port im Cockpit, 17 Personas als Vertrag), Sicherheitsboden für neun Kapitel; X.3/X.4 nur
   für die Ziele Agenten, Sicherheit und Einschätzen (`chapter_goals`).

@@ -61,7 +61,7 @@ Findest du Katalog oder Kapitel nicht, sag das und antworte **nicht** aus dem Ge
   `--max-budget-usd` und `--max-turns` gelten nur mit `-p`. → S4.3, S4.4
 - **Rechte-Modi** und ihr Startmodus: laut Kapitel S1.6 und Kanon, nicht aus dem Gedächtnis.
 - **Windows:** Shell-Beispiele sind POSIX-first — Git Bash oder die PowerShell-Varianten; `python` statt `python3`;
-  Hooks als `.ps1` über `pwsh -File …`. Getestete Hook-Dateien liegen in `resources/demos/assets/hooks/`. → S0.1
+  Hooks als `.ps1` über `pwsh -NoProfile -ExecutionPolicy Bypass -File …` (sonst fällt der Hook unter Windows PowerShell still offen, S2.8). Getestete Hook-Dateien liegen in `resources/demos/assets/hooks/`. → S0.1
 - **Playground:** `workshop-playground/access_control.py` hat fünf absichtlich eingebaute Schwachstellen (nicht
   reparieren, sie sind Übungsmaterial), darunter eine fail-open-Domänenlogik. → S3.6
 - **Modellnamen:** Aliase `opus`, `sonnet`, `haiku`, `fable` und Rollen; Generationen und Preise nur mit Verweis auf
