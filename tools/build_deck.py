@@ -116,11 +116,11 @@ def title(slide, eyebrow, heading, sub=None):
         text(slide, Inches(0.7), Inches(1.72), Inches(11.5), Inches(0.6), sub, size=17, color=INK2)
 
 
-def node(slide, x, y, w, h, label, sub=None, fill=SURFACE, color=INK, line=LINE, size=15):
+def node(slide, x, y, w, h, label, sub=None, fill=SURFACE, color=INK, line=LINE, size=16):
     box(slide, x, y, w, h, fill=fill, line=line)
     paras = [[(label, {"bold": True, "size": size, "color": color})]]
     if sub:
-        paras.append([(sub, {"size": size - 3, "color": INK2})])
+        paras.append([(sub, {"size": max(14, size - 2), "color": INK2})])
     text(slide, x + Inches(0.15), y, w - Inches(0.3), h, paras, align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
 
 
@@ -188,26 +188,31 @@ def slide_agent(prs):
              ("Freigabe", "Rechte-Modus entscheidet"), ("Ergebnis", "Diff, Ausgabe, Tests")],
          Inches(0.7), Inches(2.9), Inches(2.1), Inches(1.3), Inches(0.42))
     arrow(s, Inches(12.3), Inches(4.3), Inches(12.3), Inches(5.1))
-    node(s, Inches(7.4), Inches(5.1), Inches(5.2), Inches(1.0), "Du prüfst selbst", "Ein grüner Bericht ist kein Beweis — "
-         "ausgeführter Code ist einer.", fill=RAISE, line=ACCENT)
+    node(s, Inches(7.4), Inches(5.1), Inches(5.2), Inches(1.0), "Du prüfst selbst", "Ein grüner Bericht beweist nichts, "
+         "ausgeführter Code schon.", fill=RAISE, line=ACCENT)
     text(s, Inches(0.7), Inches(5.2), Inches(6.2), Inches(1.2), [[("Chat: ", {"bold": True}), ("gibt Ratschläge, du setzt um.", {})],
          [("Agent: ", {"bold": True}), ("setzt um, du steuerst die Freigaben.", {})]], size=18, color=INK2, spacing=6)
 
 
-def slide_ways(prs):
+def slide_ways(prs, cat):
     s = blank(prs, "Drei Einstiege, je nach Zeit und Vorlieben. Alle drei führen in dieselben Kapitel.")
     title(s, "Einstieg", "Drei Wege in die Bibliothek")
-    ways = [("Einstufung", "Fünf Minuten: Ziel, Zeit, was du schon kannst. Ergebnis: dein Pfad in Etappen.",
-             "Cockpit · /workshop start · einstufung.md"),
-            ("Fertiger Pfad", "Schnellstart, ein Pfad je Ziel oder die vier Live-Sessions.", "resources/paths/"),
-            ("Stöbern", "Regale als Gebäudeplan. Jedes Kapitel beginnt mit einem Schnellcheck.", "resources/library/")]
-    for i, (head, body, where) in enumerate(ways):
+    # the figure on each card is information (time, paths, chapters), not decoration; status colours stay reserved
+    # paths as library_generate writes them: Schnellstart, one per goal (moderieren is the live workshop), live workshop
+    paths = 2 + sum(g["id"] != "moderieren" for g in cat["placement"]["goals"])
+    ways = [("5 Min", "Einstufung", "Ziel, Zeit, was du schon kannst. Ergebnis: dein Pfad in Etappen.",
+             ["Cockpit, Tutor oder", "einstufung.md"]),
+            (f"{paths} Pfade", "Fertiger Pfad",
+             "Schnellstart, ein Pfad je Ziel oder die vier Live-Sessions.", ["resources/paths/"]),
+            (f"{len(cat['chapters'])} Kapitel", "Stöbern", "Regale als Gebäudeplan. Jedes Kapitel beginnt mit einem "
+             "Schnellcheck.", ["resources/library/"])]
+    for i, (figure, head, body, where) in enumerate(ways):
         x = Inches(0.7) + i * Inches(4.05)
-        box(s, x, Inches(2.5), Inches(3.75), Inches(3.6), fill=SURFACE, line=LINE)
-        box(s, x + Inches(0.3), Inches(2.8), Inches(0.62), Inches(0.62), fill=[ACCENT, SKIM, DONE][i], shape=MSO_SHAPE.OVAL)
-        text(s, x + Inches(0.3), Inches(3.6), Inches(3.2), Inches(0.5), head, size=24, bold=True)
-        text(s, x + Inches(0.3), Inches(4.2), Inches(3.2), Inches(1.2), body, size=16, color=INK2)
-        text(s, x + Inches(0.3), Inches(5.45), Inches(3.2), Inches(0.4), where, size=13, color=MUTED, font=MONO)
+        box(s, x, Inches(2.3), Inches(3.75), Inches(4.0), fill=SURFACE, line=LINE)
+        text(s, x + Inches(0.3), Inches(2.55), Inches(3.2), Inches(0.7), figure, size=32, bold=True, color=ACCENT)
+        text(s, x + Inches(0.3), Inches(3.35), Inches(3.2), Inches(0.5), head, size=24, bold=True)
+        text(s, x + Inches(0.3), Inches(3.95), Inches(3.2), Inches(1.2), body, size=16, color=INK2)
+        text(s, x + Inches(0.3), Inches(5.35), Inches(3.3), Inches(0.8), where, size=14, color=MUTED, font=MONO)
 
 
 def slide_placement(prs, cat):
@@ -223,9 +228,9 @@ def slide_placement(prs, cat):
     legend = [("durcharbeiten", WORK), ("überfliegen", SKIM), ("Schnellcheck reicht", MUTED), ("später", LINE)]
     text(s, Inches(0.7), Inches(4.7), Inches(6), Inches(0.4), "Je Kapitel ein Status mit Begründung:", size=16, color=INK2)
     for i, (label, col) in enumerate(legend):
-        x = Inches(0.7) + i * Inches(2.2)
+        x = Inches(0.7) + i * Inches(2.6)
         box(s, x, Inches(5.25), Inches(0.28), Inches(0.28), fill=col, shape=MSO_SHAPE.OVAL)
-        text(s, x + Inches(0.4), Inches(5.2), Inches(1.8), Inches(0.4), label, size=15)
+        text(s, x + Inches(0.4), Inches(5.2), Inches(2.1), Inches(0.38), label, size=15, anchor=MSO_ANCHOR.MIDDLE)
     text(s, Inches(0.7), Inches(6.0), Inches(11.8), Inches(0.8), "Etappen folgen immer der Lehrreihenfolge; die Zeitangabe "
          "schneidet sie in Sitzungen. Voraussetzungen kommen automatisch mit.", size=15, color=MUTED)
 
@@ -241,19 +246,20 @@ def slide_map(prs, cat):
     count = {}
     for c in cat["chapters"]:
         count[c["shelf"]] = count.get(c["shelf"], 0) + 1
-    y = Inches(2.0)
-    row_h = Inches(0.95)
+    y = Inches(1.8)
+    row_h = Inches(1.04)
+    left, right, gap = Inches(2.55), Inches(12.63), Inches(0.1)
     for zone in zones:
         shelves = [sh for sh in cat["shelves"] if sh.get("zone") == zone]
-        text(s, Inches(0.7), y + Inches(0.2), Inches(2.0), Inches(0.6), zone, size=15, bold=True, color=INK2)
-        x = Inches(2.8)
-        width = min(Inches(1.72), int((Inches(12.6) - Inches(2.8)) / max(len(shelves), 1)) - Inches(0.12))
+        text(s, Inches(0.7), y + Inches(0.25), Inches(1.8), Inches(0.6), zone, size=16, bold=True, color=INK2)
+        x = left
+        width = min(Inches(1.9), int((right - left) / max(len(shelves), 1)) - gap)
         for sh in shelves:
-            box(s, x, y, width, row_h - Inches(0.15), fill=SURFACE, line=LINE, radius=0.04)
-            text(s, x + Inches(0.1), y + Inches(0.06), width - Inches(0.2), Inches(0.5), sh["title"], size=12, bold=True)
-            text(s, x + Inches(0.1), y + Inches(0.5), width - Inches(0.2), Inches(0.3), f"{count.get(sh['id'], 0)} Kapitel",
-                 size=11, color=MUTED)
-            x += width + Inches(0.12)
+            box(s, x, y, width, row_h - Inches(0.12), fill=SURFACE, line=LINE, radius=0.04)
+            text(s, x + Inches(0.1), y + Inches(0.07), width - Inches(0.16), Inches(0.55), sh["title"], size=14, bold=True)
+            text(s, x + Inches(0.1), y + Inches(0.6), width - Inches(0.16), Inches(0.28), f"{count.get(sh['id'], 0)} Kapitel",
+                 size=14, color=MUTED)
+            x += width + gap
         y += row_h
 
 
@@ -276,52 +282,55 @@ def slide_session(prs, cat, session, name, mission, diagram, notes):
     chapters = [c for c in cat["chapters"] if c.get("session") == session]
     s = blank(prs, notes)
     minutes = sum(c["minutes"] for c in chapters if c["level"] == "core")
-    title(s, f"Session {session} · {len(chapters)} Kapitel · Kern {minutes} Min", name, mission)
-    # chapter list (left): ID column + title column with hanging indent, row height by title length
-    top, bottom = Inches(2.45), Inches(6.45)
-    col_w, title_w, chars_per_line = Inches(3.4), Inches(2.62), 33
-    listed = chapters if len(chapters) <= 12 else [c for c in chapters if c["level"] == "core"]
-    rest = [c for c in chapters if c not in listed]
-    x, yy, column = Inches(0.7), top, 0
-    chars_per_line = 36
-    for c in listed:
-        lines = 1 + (len(c.get("title", "")) - 1) // chars_per_line
-        row = Inches(0.21) * lines + Inches(0.1)
-        if yy + row > bottom:
-            column += 1
-            x, yy = x + col_w, top
-        if column > 1:  # never a third column: the diagram lives there
-            rest.insert(len(rest) - len([r for r in rest if r["order"] > c["order"]]), c)
-            continue
-        colr = INK if c["level"] == "core" else (INK2 if c["level"] == "deep-dive" else MUTED)
-        text(s, x, yy, Inches(0.7), Inches(0.3), c["id"], size=11, color=ACCENT, font=MONO)
-        text(s, x + Inches(0.62), yy, title_w + Inches(0.06), row, c.get("title", ""), size=11, color=colr,
-             bold=c["level"] == "core")
+    title(s, f"Session {session} · {len(chapters)} Kapitel · Kern {hours(minutes)}", name, mission)
+    # agenda by shelf (left), readable from the back row; the chapter titles live in the cockpit and the paths
+    yy = Inches(2.5)
+    for shelf, group in agenda(cat, chapters):
+        span = id_span(group)
+        row = Inches(0.56) if len(span) <= 15 else Inches(0.8)  # 15 mono characters fit the ID column
+        text(s, Inches(0.7), yy, Inches(3.05), row, shelf, size=16, bold=True, anchor=MSO_ANCHOR.MIDDLE)
+        text(s, Inches(3.8), yy, Inches(1.75), row, span, size=14, color=ACCENT, font=MONO, anchor=MSO_ANCHOR.MIDDLE)
+        text(s, Inches(5.6), yy, Inches(1.7), row, f"{sum(c['minutes'] for c in group)} Min", size=14, color=MUTED,
+             anchor=MSO_ANCHOR.MIDDLE)
         yy += row
-    if rest:
-        text(s, Inches(0.7), Inches(6.5), Inches(6.6), Inches(0.35),
-             [[("Weitere: ", {"bold": True, "color": INK2}),
-               (" · ".join(c["id"] for c in sorted(rest, key=lambda r: r["order"])), {"font": MONO})]],
-             size=11, color=MUTED)
-    text(s, Inches(0.7), Inches(6.95), Inches(6.5), Inches(0.3), "fett = Kern · normal = Vertiefung · grau = Kür", size=11,
-         color=MUTED)
     diagram(s, Inches(7.55), Inches(2.5))
 
 
+def agenda(cat, chapters):
+    """[(shelf title, chapters)] in teaching order, one row per shelf."""
+    titles = {sh["id"]: sh["title"] for sh in cat["shelves"]}
+    rows = {}
+    for c in sorted(chapters, key=lambda c: c["order"]):
+        rows.setdefault(c["shelf"], []).append(c)
+    return [(titles.get(shelf, shelf), group) for shelf, group in rows.items()]
+
+
+def id_span(group):
+    """'S1.8–S1.12' for a gapless run of one session, else the IDs joined by commas."""
+    ids = [c["id"] for c in group]
+    head = {i.split(".")[0] for i in ids}
+    nums = [int(i.split(".")[1]) for i in ids]
+    if len(ids) > 2 and len(head) == 1 and nums == list(range(nums[0], nums[0] + len(nums))):
+        return f"{ids[0]}–{ids[-1]}"
+    return ", ".join(ids)
+
+
 def diagram_modes(s, x, y):
-    modes = [("Manual (default)", "nur Lesen"), ("acceptEdits", "+ Datei-Änderungen"), ("plan", "lesen, planen"),
-             ("auto", "Klassifikator prüft"), ("dontAsk", "nur Vorab-Erlaubtes"), ("bypassPermissions", "alles — nur in VMs")]
-    text(s, x, y, Inches(5), Inches(0.4), "Sechs Rechte-Modi — wie Zutrittsebenen", size=15, bold=True, color=INK2)
+    # permission-modes.md, table "What runs without asking" (checked 2026-09-30), ordered from least to most
+    modes = [("plan", "lesen und planen"), ("Manual (default)", "Lesen, sonst Rückfrage"),
+             ("dontAsk", "nur Vorab-Erlaubtes"), ("acceptEdits", "+ Dateiänderungen"),
+             ("auto", "Klassifikator prüft"), ("bypassPermissions", "alles — nur in VMs")]
+    text(s, x, y, Inches(5), Inches(0.4), "Sechs Rechte-Modi — wie Zutrittsebenen", size=16, bold=True, color=INK2)
     for i, (m, d) in enumerate(modes):
         yy = y + Inches(0.55) + i * Inches(0.63)
-        box(s, x + i * Inches(0.18), yy, Inches(4.4), Inches(0.52), fill=[SURFACE, SURFACE, SURFACE, RAISE, RAISE, RAISE][i],
+        box(s, x + i * Inches(0.12), yy, Inches(4.9), Inches(0.52), fill=[SURFACE, SURFACE, SURFACE, RAISE, RAISE, RAISE][i],
             line=WARN if i == 5 else LINE)
-        text(s, x + i * Inches(0.18) + Inches(0.15), yy, Inches(4.1), Inches(0.52),
-             [[(m + "  ", {"font": MONO, "size": 13, "bold": True}), (d, {"size": 13, "color": INK2})]], anchor=MSO_ANCHOR.MIDDLE)
+        text(s, x + i * Inches(0.12) + Inches(0.15), yy, Inches(4.65), Inches(0.52),
+             [[(m + "  ", {"font": MONO, "size": 14, "bold": True}), (d, {"size": 14, "color": INK2})]], anchor=MSO_ANCHOR.MIDDLE)
 
 
 def diagram_hooks(s, x, y):
-    text(s, x, y, Inches(5), Inches(0.4), "Hook-Lebenslauf: nur exit 2 blockt", size=15, bold=True, color=INK2)
+    text(s, x, y, Inches(5), Inches(0.4), "Hook-Lebenslauf: nur exit 2 blockt", size=16, bold=True, color=INK2)
     node(s, x, y + Inches(0.6), Inches(2.3), Inches(0.8), "PreToolUse", "Ereignis + matcher")
     arrow(s, x + Inches(2.35), y + Inches(1.0), x + Inches(2.85), y + Inches(1.0))
     node(s, x + Inches(2.9), y + Inches(0.6), Inches(2.3), Inches(0.8), "Skript", "liest tool_input")
@@ -331,20 +340,20 @@ def diagram_hooks(s, x, y):
         bx = x + i * Inches(1.77)
         arrow(s, x + Inches(4.05), y + Inches(1.45), bx + Inches(0.8), y + Inches(2.15))
         box(s, bx, y + Inches(2.2), Inches(1.65), Inches(1.05), fill=SURFACE, line=col)
-        text(s, bx + Inches(0.12), y + Inches(2.2), Inches(1.45), Inches(1.05), [[(a, {"bold": True, "size": 13, "color": col})],
-             [(b, {"size": 11, "color": INK2})]], anchor=MSO_ANCHOR.MIDDLE)
+        text(s, bx + Inches(0.12), y + Inches(2.2), Inches(1.45), Inches(1.05), [[(a, {"bold": True, "size": 15, "color": col})],
+             [(b, {"size": 14, "color": INK2})]], anchor=MSO_ANCHOR.MIDDLE)
     text(s, x, y + Inches(3.55), Inches(5.3), Inches(0.8), "Ein kaputter Schutz-Hook ist ein offener Schutz-Hook.",
          size=16, color=INK, bold=True)
 
 
 def diagram_patterns(s, x, y):
-    text(s, x, y, Inches(5), Inches(0.4), "Drei Orchestrierungsmuster", size=15, bold=True, color=INK2)
+    text(s, x, y, Inches(5), Inches(0.4), "Drei Orchestrierungsmuster", size=16, bold=True, color=INK2)
     labels = [("Fan-out", "parallel, dann zusammenführen"), ("Pipeline", "Stufe für Stufe"), ("Hierarchie", "Leitstelle verteilt")]
     for i, (a, b) in enumerate(labels):
         yy = y + Inches(0.6) + i * Inches(1.45)
-        text(s, x, yy, Inches(1.6), Inches(0.6), [[(a, {"bold": True, "size": 14})], [(b, {"size": 11, "color": INK2})]])
+        text(s, x, yy, Inches(1.6), Inches(0.6), [[(a, {"bold": True, "size": 16})], [(b, {"size": 14, "color": INK2})]])
         if i == 0:
-            node(s, x + Inches(1.8), yy + Inches(0.25), Inches(0.7), Inches(0.5), "A", size=12)
+            node(s, x + Inches(1.8), yy + Inches(0.25), Inches(0.7), Inches(0.5), "A", size=14)
             for k in range(3):
                 arrow(s, x + Inches(2.55), yy + Inches(0.5), x + Inches(3.1), yy + Inches(0.1) + k * Inches(0.4))
                 box(s, x + Inches(3.15), yy - Inches(0.05) + k * Inches(0.4), Inches(0.9), Inches(0.32), fill=RAISE)
@@ -354,26 +363,27 @@ def diagram_patterns(s, x, y):
                 if k < 3:
                     arrow(s, x + Inches(2.52) + k * Inches(0.95), yy + Inches(0.5), x + Inches(2.73) + k * Inches(0.95), yy + Inches(0.5))
         else:
-            node(s, x + Inches(2.8), yy - Inches(0.05), Inches(1.0), Inches(0.42), "Leitung", size=11)
+            node(s, x + Inches(2.8), yy - Inches(0.05), Inches(1.1), Inches(0.42), "Leitung", size=14)
             for k in range(3):
                 arrow(s, x + Inches(3.3), yy + Inches(0.4), x + Inches(2.0) + k * Inches(1.2), yy + Inches(0.75))
                 box(s, x + Inches(1.6) + k * Inches(1.2), yy + Inches(0.78), Inches(0.8), Inches(0.3), fill=RAISE)
 
 
 def diagram_ci(s, x, y):
-    text(s, x, y, Inches(5), Inches(0.4), "Claude als Pipeline-Stufe", size=15, bold=True, color=INK2)
-    node(s, x, y + Inches(0.6), Inches(1.4), Inches(0.9), "Diff / Aufgabe", "stdin")
-    arrow(s, x + Inches(1.45), y + Inches(1.05), x + Inches(1.8), y + Inches(1.05))
-    node(s, x + Inches(1.85), y + Inches(0.6), Inches(1.7), Inches(0.9), "claude -p", "--output-format json", fill=RAISE, line=ACCENT)
-    arrow(s, x + Inches(3.6), y + Inches(1.05), x + Inches(3.95), y + Inches(1.05))
-    node(s, x + Inches(4.0), y + Inches(0.6), Inches(1.3), Inches(0.9), "Urteil", "JSON")
+    text(s, x, y, Inches(5), Inches(0.4), "Claude als Pipeline-Stufe", size=16, bold=True, color=INK2)
+    node(s, x, y + Inches(0.6), Inches(1.25), Inches(0.9), "Diff / Aufgabe", "stdin")
+    arrow(s, x + Inches(1.3), y + Inches(1.05), x + Inches(1.6), y + Inches(1.05))
+    node(s, x + Inches(1.65), y + Inches(0.6), Inches(2.1), Inches(0.9), "claude -p", "--output-format json", fill=RAISE,
+         line=ACCENT)
+    arrow(s, x + Inches(3.8), y + Inches(1.05), x + Inches(4.1), y + Inches(1.05))
+    node(s, x + Inches(4.15), y + Inches(0.6), Inches(1.15), Inches(0.9), "Urteil", "JSON")
     rules = ["--max-budget-usd und --max-turns begrenzen Kosten und Runden (nur -p)",
              "Fremder Code: --bare mit API-Key, sonst laufen die Hooks des Repos",
              "Zugang: API-Key, Abo-Token nur ohne --bare, oder OIDC-Federation"]
     for i, r in enumerate(rules):
         yy = y + Inches(1.9) + i * Inches(0.75)
-        box(s, x, yy + Inches(0.1), Inches(0.22), Inches(0.22), fill=ACCENT, shape=MSO_SHAPE.OVAL)
-        text(s, x + Inches(0.4), yy, Inches(4.9), Inches(0.7), r, size=13, color=INK2)
+        box(s, x + Inches(0.04), yy + Inches(0.12), Inches(0.14), Inches(0.14), fill=MUTED, shape=MSO_SHAPE.OVAL)
+        text(s, x + Inches(0.4), yy, Inches(4.9), Inches(0.7), r, size=14, color=INK2)
 
 
 def slide_verify(prs):
@@ -389,10 +399,11 @@ def slide_verify(prs):
 def slide_tutor(prs):
     s = blank(prs, "Lernen mit Claude Code über Claude Code: Der Tutor stuft ein, führt Kapitel für Kapitel und fragt mit "
                    "Abstand ab. Angelehnt an Matt Pococks Skill teach.")
-    title(s, "Tutor", "Mit Claude Code lernen: /workshop", "Der Lernordner ist das Gedächtnis: Mission, Pfad, Fortschritt, Lernprotokolle.")
-    cmds = [("/workshop start", "Einstufung, Mission, persönlicher Pfad"), ("/workshop next", "das nächste Kapitel deines Pfads"),
-            ("/workshop learn S2.8", "ein bestimmtes Kapitel"), ("/workshop review", "Abruf mit Abstand"),
-            ("/workshop guide S3", "Co-Pilot für Moderierende")]
+    title(s, "Tutor", "Mit Claude Code lernen: der Workshop-Tutor",
+          "Aufruf als Plugin-Skill: /dynamic-workshop:workshop <modus>. Der Lernordner ist das Gedächtnis.")
+    cmds = [("start", "Einstufung, Mission, persönlicher Pfad"), ("next", "das nächste Kapitel deines Pfads"),
+            ("learn S2.8", "ein bestimmtes Kapitel"), ("review", "Abruf mit Abstand"),
+            ("guide S3", "Co-Pilot für Moderierende")]
     for i, (c, d) in enumerate(cmds):
         y = Inches(2.6) + i * Inches(0.78)
         box(s, Inches(0.7), y, Inches(4.2), Inches(0.62), fill=SURFACE, line=LINE)
@@ -404,7 +415,7 @@ def slide_end(prs):
     s = blank(prs, "Zum Abschluss die drei Einstiege noch einmal. Fragen gehen an den Mentor-Agenten oder an die offizielle Doku.")
     text(s, Inches(0.8), Inches(2.0), Inches(11), Inches(1.2), "Los geht's.", size=54, bold=True)
     text(s, Inches(0.8), Inches(3.3), Inches(11), Inches(2.0),
-         [[("Einstufung: ", {"bold": True}), ("Lern-Cockpit oder /workshop start", {})],
+         [[("Einstufung: ", {"bold": True}), ("Lern-Cockpit oder /dynamic-workshop:workshop start", {})],
           [("Fertige Pfade: ", {"bold": True}), ("resources/paths/", {"font": MONO})],
           [("Alle Kapitel: ", {"bold": True}), ("resources/library/README.md", {"font": MONO})]], size=22, color=INK2, spacing=10)
     text(s, Inches(0.8), Inches(6.2), Inches(11), Inches(0.5), "Stand von Modellen und CLI: resources/_canonical.md",
@@ -417,7 +428,7 @@ def build(catalog_path=CATALOG, out=OUT):
     prs.slide_width, prs.slide_height = W, H
     slide_title(prs, cat)
     slide_agent(prs)
-    slide_ways(prs)
+    slide_ways(prs, cat)
     slide_placement(prs, cat)
     slide_map(prs, cat)
     slide_floor(prs, cat)
