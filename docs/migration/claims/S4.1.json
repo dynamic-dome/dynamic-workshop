@@ -1,0 +1,85 @@
+{
+ "id": "S4.1",
+ "verdict": "pass",
+ "counts": {
+  "kept": 27,
+  "changed": 1,
+  "dropped": 2,
+  "new": 6
+ },
+ "items": [
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:435",
+   "old": "Haiku catches 80% of issues at ~25% of Opus cost (price ratio from the canon)",
+   "new": "Pro Token kostet ein Review durch Haiku etwa ein Viertel; Quote ausdrücklich nicht belegt, selbst messen",
+   "rating": "ok",
+   "reason": "Die 80-%-Quote war unbelegt; der Preisanteil (Viertel) bleibt, die Streichung ist eine gewollte Entschärfung."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:433",
+   "old": "bad plans are 10x more costly downstream",
+   "new": "ein schlechter Plan kostet dich später in Umsetzung und Review",
+   "rating": "ok",
+   "reason": "Unbelegter Faktor 10x entfernt, Aussage qualitativ erhalten; unschädliche Korrektur."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:437",
+   "old": "Across 200 PRs per month, that compounds.",
+   "new": "Über viele Pull Requests im Monat summiert sich das.",
+   "rating": "ok",
+   "reason": "Konkrete Zahl 200 zu 'viele' verallgemeinert, Sinn erhalten."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Abschnitt 'Eingebaut: opusplan': opusplan nutzt im Plan-Modus opus, wechselt für die Umsetzung automatisch zu sonnet; --model gilt nur für die gestartete Sitzung",
+   "rating": "ok",
+   "reason": "Per curl gegen code.claude.com/docs/en/model-config.md geprüft: 'In plan mode: uses opus ... In execution mode: automatically switches to sonnet'; 'The --model flag ... apply only to the session you launch with them'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Falle: Jeder Wechsel zwischen Plan-Modus und Umsetzung mit opusplan ist ein Modellwechsel, jedes Modell hat eigenen Cache",
+   "rating": "ok",
+   "reason": "Per curl gegen prompt-caching.md geprüft: 'each plan-mode toggle is a model switch and starts a fresh cache' und 'Each model has its own cache'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Falle: Haikus Kontextfenster ist kleiner als das der anderen Tiers; gezielte Diffs geben",
+   "rating": "ok",
+   "reason": "Gedeckt durch _canonical.md (Haiku 200K) und S1.7; Verweis auf S1.7 gesetzt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Haiku macht die erste Prüfrunde, Abnahme und strittige Punkte beim Opus-Tier; Haiku als einziger Prüfer ist eine Falle; Mermaid-Fluss mit Rücksprung bei eindeutigen Befunden",
+   "rating": "ok",
+   "reason": "Synthese aus der Quelle ('Review with Haiku first, escalate disagreements to Opus', Opus entscheidet accept/change/reject); Rücksprung im Diagramm ist didaktische Ergänzung, keine neue Faktenbehauptung."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Die Prüfung startest du in einer eigenen Sitzung (claude --model haiku / claude --model opus als Beispielblock)",
+   "rating": "ok",
+   "reason": "--model-Flag per Doku belegt (model-config.md: 'launch with claude --model <alias|name>'); Sitzungsaufteilung ist Empfehlung, kein Fakt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Wie viele Befunde Haiku allein findet, hängt von der Aufgabe ab; eine feste Quote belegt dieser Kurs nicht.",
+   "rating": "ok",
+   "reason": "Ersatz für die gestrichene 80-%-Quote, bewusst ehrliche Einschränkung."
+  }
+ ],
+ "style": []
+}
