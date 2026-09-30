@@ -70,7 +70,7 @@ def test_placement_cli_named_in_skill_exists_with_the_used_flags():
 def test_manifest_describes_the_library():
     data = json.loads(MANIFEST.read_text(encoding="utf-8"))
     assert data["name"] == "dynamic-workshop"
-    assert "68 Kapitel" in data["description"] and "/workshop start" in data["description"]
+    assert "70 Kapitel" in data["description"] and "/workshop start" in data["description"]
     assert "17 modules" not in data["description"]
 
 

@@ -1,6 +1,6 @@
 # Claude Code Praxisbibliothek
 
-> Claude Code lernen nach deinem Stand: 68 Kapitel in 19 Regalen — von der ersten Datei bis zur abgesicherten
+> Claude Code lernen nach deinem Stand: 70 Kapitel in 19 Regalen — von der ersten Datei bis zur abgesicherten
 > Agenten-Pipeline. Eine kurze Einstufung zeigt dir, welche Kapitel zu deinem Ziel passen; du musst nicht alles lesen.
 
 Dieses Repository ist die Materialbasis hinter der Workshop-Seite von DoMe Dynamics
@@ -35,7 +35,7 @@ Wie du damit lernst, moderierst oder das Material pflegst: [HOW-TO-USE.md](HOW-T
   verhindern bekannte Falschaussagen, ein [Übungs-Playground](workshop-playground/) mit fünf eingebauten Schwachstellen.
 - **Einstufung ohne Druck:** Verhaltensfragen statt Wissensabfrage, freiwillige Mini-Szenarien, Empfehlung mit Begründung.
 - **Tutor im Stil von `teach`:** Lernordner mit Mission und Lernprotokollen, Abruf mit Abstand ([X.2](resources/library/x-02-lernen-mit-claude-code.md)).
-- **Community-Regal:** belegte Skill-Sammlungen und eine Prüfliste für fremde Skills ([X.1](resources/library/x-01-community-skills.md)).
+- **Community-Regal:** belegte Skill-Sammlungen und eine Prüfliste für fremde Skills ([X.1](resources/library/x-01-community-skills.md)), dazu zwei Blicke über den Tellerrand: ein minimaler Agent als Spiegel ([X.3](resources/library/x-03-pi-als-spiegel.md)) und was bei Agenten im Dauerbetrieb schiefgehen kann ([X.4](resources/library/x-04-agenten-im-dauerbetrieb.md)).
 
 ## Stand
 
