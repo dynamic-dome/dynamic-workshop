@@ -1,0 +1,149 @@
+{
+ "id": "S1.15",
+ "verdict": "pass",
+ "counts": {
+  "kept": 10,
+  "changed": 5,
+  "dropped": 3,
+  "new": 9
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:706",
+   "old": "Befehl `/output-styles`; drei eingebaute Styles Concise, Detailed, JSON",
+   "new": "Befehl `/output-style`; eingebaute Styles Default, Proactive, Concise, Explanatory, Learning",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur. Belegt gegen code.claude.com/docs/en/output-styles.md: 'run `/output-style <style>`', 'Claude Code starts in the Default style', vier weitere eingebaute Styles. Das Kapitel warnt in den Fallen ausdrücklich vor den alten Namen."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:709",
+   "old": "Detailed: volle Erklärungen, Begründungen, Randfälle; gut für Code-Review und Design-Diskussionen",
+   "new": "(fehlt; ersetzt durch Explanatory/Learning)",
+   "rating": "ok",
+   "reason": "Style existiert laut Doku nicht. Das Kapitel nennt Detailed in den Fallen als nicht vorhanden."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:710",
+   "old": "JSON: maschinenlesbare Ausgabe als Output Style, passend zu `claude -p --output-format json`",
+   "new": "Maschinenlesbare Ausgabe ist kein Output Style; dafür `claude -p --output-format json` (S4.3)",
+   "rating": "ok",
+   "reason": "Die Kernaussage (JSON-Ausgabe über -p --output-format json) bleibt erhalten, nur die falsche Style-Zuordnung entfällt. Die Doku listet keinen JSON-Style."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:708",
+   "old": "Concise: minimale Prosa, Stichpunkte, Einzeiler; gut für Brainstorming und Statuschecks",
+   "new": "Concise: Antworten beginnen mit dem Ergebnis, ohne Einleitung, Schritt-für-Schritt-Erzählung und Schlusszusammenfassung",
+   "rating": "ok",
+   "reason": "Gegen output-styles.md geprüft: 'first sentence of a response states what happened ... leaves out the lead-in, the step-by-step narration, and the closing recap'. Die alte Beschreibung (Stichpunkte) stimmt nicht mit der Doku."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:712",
+   "old": "Wechsel mit `/output-styles detailed`; Änderung gilt für den Rest der Sitzung",
+   "new": "`/output-style concise`; Wahl wird in `.claude/settings.local.json` gespeichert und gilt auch in späteren Sitzungen; wirkt ab der nächsten Nachricht",
+   "rating": "ok",
+   "reason": "Doku: 'The command and both menus save your choice to `.claude/settings.local.json`' und 'Claude uses the new style starting with your next message'. Gewollte Korrektur der Persistenz."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:725",
+   "old": "`--system-prompt-file`: ersetzt 'the additive section' mit Dateiinhalt, für mehrabsätzige Personas",
+   "new": "ersetzt den Standard-Systemprompt ganz; Werkzeugführung und Sicherheitshinweise fallen weg",
+   "rating": "ok",
+   "reason": "Doku cli-reference.md: '--system-prompt-file | Load system prompt from a file, replacing the default prompt'. Die alte Formulierung war unpräzise; der Bedeutungswechsel ist die gewollte Korrektur."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:722",
+   "old": "Hinweis 'Nicht mit dem Entwurf des Prompts für CI vermengen' mit Verweis auf Modul 3.6",
+   "new": "Abschnitt 'Interaktive Personas und CI getrennt halten' mit Verweis auf S4.4",
+   "rating": "ok",
+   "reason": "Kein Verlust: Aussage und Warnung stehen im Kapitel, der Verweis zeigt auf das Zielkapitel S4.4. Das Ziel existiert und behandelt die System-Prompt-Flags in CI (Zeilen 121-127)."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:702",
+   "old": "Lernziel-Zeile 'Ich kann jetzt: ...'",
+   "new": "Frontmatter `outcome` und Check",
+   "rating": "ok",
+   "reason": "Formatvorgabe, kein Sachfakt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Proactive-Style und sein Verhältnis zum Rechte-Modus; Learning-Style mit `TODO(human)`; Explanatory mit `Insight`-Blöcken",
+   "rating": "ok",
+   "reason": "Alle Aussagen stehen in output-styles.md (Built-in-Tabelle, Abschnitte Proactive/Explanatory/Learning; 'Switching to the Proactive style doesn't change your permission mode')."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Standard-Style Default; das Modell bleibt dasselbe, nur die Anweisungen ändern sich",
+   "rating": "ok",
+   "reason": "Die Modell-Aussage steht in der Quelle (Zeile 706), der Default-Style in der Doku."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Umschalten auch über `/config` und Output style; `/output-style` ohne Argument listet die Styles",
+   "rating": "ok",
+   "reason": "Wörtlich in output-styles.md: 'With no argument, the command lists the styles ... marks the current one' und 'run `/config` and select Output style'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Versionsangaben: `/output-style` ab v2.1.269, Concise ab v2.1.237",
+   "rating": "ok",
+   "reason": "Beide Zahlen stehen in output-styles.md ('Requires Claude Code v2.1.269 or later', 'Requires Claude Code v2.1.237 or later')."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Geschwister-Flags `--system-prompt` und `--append-system-prompt-file`; alle wirken interaktiv und mit -p",
+   "rating": "ok",
+   "reason": "cli-reference.md: 'All five work in both interactive and non-interactive modes'; Flag-Beschreibungen stimmen."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Eigene Output Styles in `.claude/output-styles/` bzw. `~/.claude/output-styles/` für wechselnde oder geteilte Personas; CLAUDE.md für Projektkonventionen",
+   "rating": "ok",
+   "reason": "output-styles.md (Pfade User/Project) und cli-reference.md Z.158 ('For persistent personas you can switch between and share across a project, use output styles. For project conventions ... CLAUDE.md')."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Falle: Output Style ist keine Garantie, dafür Hook (S2.8)",
+   "rating": "ok",
+   "reason": "Wörtlich gedeckt durch die Note in output-styles.md: 'doesn't guarantee that something always happens ... use a hook'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "`/voice`: hold = Taste (standardmäßig Leertaste) halten; tap = einmal zum Starten, einmal zum Senden",
+   "rating": "ok",
+   "reason": "voice-dictation.md: 'Hold Space to start recording'; 'tap once to start ... and again to send'. Präzisiert die Quelle, widerspricht ihr nicht."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Bild im Kopf (Leitstellen-Operator) und Mermaid-Diagramm",
+   "rating": "ok",
+   "reason": "Didaktische Analogie; Diagramminhalt entspricht den oben belegten Fakten (Standard bleibt bei Style und append, file ersetzt, nur dieser Start)."
+  }
+ ],
+ "style": []
+}
