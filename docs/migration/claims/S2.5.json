@@ -1,0 +1,133 @@
+{
+ "id": "S2.5",
+ "verdict": "pass",
+ "counts": {
+  "kept": 24,
+  "changed": 3,
+  "dropped": 0,
+  "new": 12
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:148",
+   "old": "`$1`, `$2`, ..., `$N` | Positional arguments by index",
+   "new": "`$0`, `$1`, …, `$N` ab 0 gezählt, Langform `$ARGUMENTS[0]`",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur der Indexierung. Doku: `$N` ist Kurzform für `$ARGUMENTS[N]`, `$0` = erstes Argument, `$1` = zweites."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:175",
+   "old": "`$1 = strict`",
+   "new": "`$0 = strict`, `$1 = auth-service`; Zeile `First positional: $1` als falsch beschriftet markiert",
+   "rating": "ok",
+   "reason": "Folge der 0-basierten Zählung; Beispielcode bleibt wörtlich, Fehler wird offen benannt. Doku-Beleg wie oben."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:151",
+   "old": "`${CLAUDE_EFFORT}` Current effort level (`low`/`high`/`xhigh`/`max`)",
+   "new": "`low`, `medium`, `high`, `xhigh` oder `max`",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur (Anhang B: `/effort`-Stufen). Doku nennt `low, medium, high, xhigh, max`."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-2-ecosystem.md:152",
+   "old": "",
+   "new": "`${CLAUDE_SKILL_DIR}`: bei Plugin-Skills der Unterordner des Skills, nicht die Plugin-Wurzel",
+   "rating": "ok",
+   "reason": "Doku-Beleg vorhanden (Tabelle Substitutionen). Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Verweis auf `${CLAUDE_PROJECT_DIR}` und (nur Plugin-Skills) `${CLAUDE_PLUGIN_ROOT}`",
+   "rating": "ok",
+   "reason": "Beide in der Doku-Tabelle. Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "benannte Argumente in derselben Reihenfolge wie `arguments:`; mehrwortige Werte in Anführungszeichen (`/my-skill \"hello world\" second`); ohne Platzhalter hängt Claude Code `ARGUMENTS: <Wert>` an",
+   "rating": "ok",
+   "reason": "Wörtlich in der Doku. Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Inline-Form nur am Zeilenanfang oder nach Leerzeichen; `KEY=!`cmd`` bleibt Text",
+   "rating": "ok",
+   "reason": "Wörtlich in der Doku. Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Scheitert ein Befehl, bricht der ganze Aufruf ab; bash: Exit != 0 Fehler, Exit 1 bei Such-/Vergleichsbefehlen normal; `|| true`",
+   "rating": "ok",
+   "reason": "Doku-Abschnitt 'When an injected command fails'. (Der Zusatz 'Exit 2+ scheitert' fehlt im Kapitel, unschädlich.) Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Befehle fragen nie nach Freigabe; deny-Regel bricht ab; außerhalb auto-Modus bricht auch jeder nicht erlaubte Befehl ab; `allowed-tools` kann erlauben, deny/ask haben Vorrang; im auto-Modus Anweisung an Claude, Befehl selbst auszuführen",
+   "rating": "ok",
+   "reason": "Doku-Abschnitt 'Permission checks on injected commands'. Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Kehrseite: Befehle laufen mit deinen Rechten vor dem Modell; Claude kann sie nicht ablehnen; fremder Skill mit `allowed-tools` läuft ohne Rückfrage",
+   "rating": "ok",
+   "reason": "Folgt aus der Doku (Ausführung vor dem Modell, allowed-tools pre-approve). Die Formulierung 'kann nicht ablehnen' ist Schlussfolgerung, sachlich korrekt. Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Platzhaltertext `[shell command execution disabled by policy]`; gilt für Nutzer-, Projekt-, Plugin-, zusätzliche Verzeichnisse; mitgelieferte/verwaltete Skills ausgenommen; Managed Settings nicht überschreibbar",
+   "rating": "ok",
+   "reason": "Wörtlich in der Doku. 'in jeder settings.json' ist Doku-konform ('in settings'). Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Ausnahmen der Live-Erkennung: `/reload-skills` bei neuem Top-Level-Ordner; `/reload-plugins` für `hooks/`, `.mcp.json`, `agents/`",
+   "rating": "ok",
+   "reason": "Wörtlich in der Doku ('output-styles/' ausgelassen, unschädlich). Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Fallen: `Shell command failed for pattern …` mit `[stderr]`; `Shell command permission check failed for pattern …`; `/permissions`",
+   "rating": "ok",
+   "reason": "Meldungen wörtlich in der Doku; `/permissions` ist ein vorhandener Befehl. Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Windows: `shell: bash` ohne Git Bash scheitert vor Befehlsausführung; `shell: powershell` nutzt PowerShell-Tool, ohne Git Bash Standard",
+   "rating": "ok",
+   "reason": "Doku-Abschnitt 'How injected commands run' und Frontmatter-Tabelle. Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Erweiterte Analogie ('Die Karte ... Wer die Abfrage manipulieren kann ...'), Mermaid-Ablauf",
+   "rating": "ok",
+   "reason": "Didaktische Ausarbeitung der Quell-Analogie, keine neuen Fakten. Per curl gegen https://code.claude.com/docs/en/skills.md geprüft."
+  }
+ ],
+ "style": []
+}
