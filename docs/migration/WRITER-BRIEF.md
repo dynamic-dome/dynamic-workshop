@@ -118,6 +118,33 @@ optional Weiterlesen. Keinen Meta-Block schreiben — den erzeugt der Generator.
 10. **Nur deine Dateien** in `resources/library/` anlegen. Keine anderen Dateien ändern, nichts committen,
     `tools/fixtures/migration-dropped.txt` nicht anfassen (Streichungen schlägst du im Bericht vor).
 
+## Nachträge aus dem Pilot (Hooks-Regal, 2026-09-30) — verbindlich
+
+11. **Codeblöcke per Skript einsetzen**, nicht abtippen: lies den Block mit `git show ba222d2:<datei>` und schreibe ihn
+    unverändert in dein Kapitel (z. B. mit einem kleinen Python-Skript). So weicht kein Byte ab.
+12. **Der alte Cockpit-Text ist eine Quelle wie jede andere**, keine Wahrheit: Im Pilot waren 3 von 5 Quiz-/Konzepttexten
+    fachlich falsch. Prüfe ihn gegen die Heimat-Bereiche und die Spec-Korrekturen.
+13. **Offizielle Doku gegenprüfen ist erlaubt und erwünscht**, wenn dir eine Aussage zweifelhaft vorkommt:
+    `curl -sL https://code.claude.com/docs/en/<seite>.md` (Markdown im Wortlaut, nicht WebFetch). Jede so begründete
+    Änderung kommt mit dem wörtlichen Zitat unter `corrections[].evidence` in deinen Bericht. Ohne Zitat keine Änderung.
+14. **Leere Platzhalter-Snippets** (z. B. ein Codeblock, der nur einen Kommentar wie `# Add a simple logging hook`
+    enthält) und echte Dubletten darfst du weglassen. Jeder weggelassene Block steht dann mit Digest (aus
+    `migration_ledger.py --chapter`), Quelle und Grund unter `drop_proposals`. „Ledger grün" heißt für dich: kein
+    fehlender Block außer denen in `drop_proposals`. Die Streichliste pflegt der Orchestrator.
+15. **`cockpit:example`**: Hat das Kapitel eine Übung, steht der Marker in „Selbst machen"; sonst in „Im Detail" oder
+    „Vorführen". Hat der Heimat-Bereich gar keinen Codeblock, darfst du das Beispiel aus dem Cockpit-Text nehmen
+    (nach Prüfung) — vermerke das unter `notes`.
+16. **Talking Points ziehen mit ihrer Demo um.** Gehören Demo-Schritte einem anderen Kapitel als die Sprechpunkte,
+    stehen beide dort, wo die Schritte stehen; das andere Kapitel verlinkt.
+17. **„Auf einen Blick"**: Der erste Absatz erscheint allein im Cockpit. Bei `safety_floor: true` muss die
+    Sicherheitsaussage in diesem ersten Absatz stehen; ein zweiter Absatz ist erlaubt.
+18. **Quiz**: Die richtige Antwort ist nicht die längste — in höchstens 40 % aller Quizfragen der Bibliothek darf sie
+    es sein (der Validator prüft das über die ganze Bibliothek). Formuliere die falschen Antworten gleich konkret.
+19. **Keine Links auf Referenzkarten** (`resources/reference/…`) — die entstehen später und werden dann ergänzt.
+    Links auf noch nicht geschriebene Kapitel sind in Ordnung (Dateiname aus `chapter-meta.yaml`).
+20. Voraussetzungen und Links auf **noch nicht geschriebene Kapitel** meldet der Validator während des Umzugs nicht;
+    alle anderen Befunde müssen weg.
+
 ## Prüfen, bevor du fertig bist
 
 ```text
@@ -127,9 +154,8 @@ python -m pytest tools/test_course_hooks.py tools/test_course_ci_auth.py tools/t
 python tools/lint_currency.py
 ```
 
-Alle vier müssen grün sein. Beim Ledger ist ein Snippet nur dann „ok", wenn es unverändert irgendwo im neuen Bestand
-steht; fehlende Snippets entweder übernehmen oder im Bericht als Streichung vorschlagen (mit Grund: Dublette von
-<wo>, veraltet laut <Beleg>).
+Alle vier müssen grün sein (Ledger: siehe Regel 14). Beim Ledger ist ein Snippet nur dann „ok", wenn es unverändert
+irgendwo im neuen Bestand steht.
 
 ## Rückgabe (JSON)
 

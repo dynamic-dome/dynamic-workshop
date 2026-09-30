@@ -1,0 +1,11 @@
+{"id":"S2.7","verdict":"ask",
+"counts":{"kept":15,"changed":1,"dropped":0,"new":3},
+"items":[
+{"status":"changed","source":"resources/modules/block-2-ecosystem.md:455","old":"UserPromptSubmit: Prompt validation, auto-append context (current branch, ticket ID), redact secrets","new":"Prompt prüfen, Kontext ergänzen (aktueller Branch, Ticket-ID), Prompts mit Secrets abweisen; dazu Absatz 'UserPromptSubmit schreibt nicht um' (Z. 75)","rating":"ok","reason":"Gewollte, an der offiziellen Doku belegte Korrektur: UserPromptSubmit kann den Prompt nicht ersetzen, nur additionalContext danebenlegen oder abweisen; 'redact' war falsch."},
+{"status":"new","source":"","old":"","new":"Z.75: 'Tool-Ausgaben schwärzen kannst du mit PostToolUse (S2.10)'","rating":"ask","reason":"Nicht in der Quelle (dort PostToolUse nur 'react, log, follow-ups'). Stimmt nur eingeschränkt (Schwärzen der Tool-Ausgabe nur für bestimmte Tools, z.B. MCP, per updatedMCPToolOutput; bei eingebauten Tools nicht). Orchestrator soll gegen S2.10 bzw. Hook-Fakten H-xx prüfen oder Halbsatz streichen."},
+{"status":"new","source":"","old":"","new":"Z.77-79: PreCompact-Absatz (Kontext wird zusammengefasst, was nur im Kontext stand, ist danach bestenfalls zusammengefasst)","rating":"ok","reason":"Erläuterung der Quellenzeile 'Persist critical state before it gets summarized away', keine neue Faktenbehauptung."},
+{"status":"new","source":"","old":"","new":"Z.81-94: settings.json-Beispiel mit SessionStart/UserPromptSubmit/PreCompact (echo >> ~/.claude/session.log, Platzhalterskripte) und Fallen-Liste Z.96-100 (Ereignis vs. Typ: command/http/prompt; Stop feuert nach jeder Antwort)","rating":"ok","reason":"Didaktisches Zusatzmaterial, konsistent mit Quelle (Stop = nach Antwort, SessionEnd = sauberes Ende) und Schema (hooks-Array mit type/command); Skripte als Platzhalter gekennzeichnet."}
+],
+"style":[
+{"rating":"ask","where":"Check / Quizfrage","issue":"Die richtige Antwort (Z.114, ca. 150 Zeichen) ist die längste der vier Optionen (Falsch-Optionen ca. 120-140 Zeichen) und enthält als einzige eine Begründung mit Doppelpunkt; leichter Längen-Hinweis auf die Lösung, Falschantworten angleichen."}
+]}

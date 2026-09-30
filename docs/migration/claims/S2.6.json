@@ -1,0 +1,14 @@
+{"id":"S2.6","verdict":"ask",
+"counts":{"kept":21,"changed":0,"dropped":0,"new":7},
+"items":[
+{"status":"new","source":"(keine Quelle; Kapitel s2-06:87)","old":"","new":"Hooks sind keine Policy-Durchsetzung, sondern Best-Effort-Wächter.","rating":"ok","reason":"Inhaltlich belegt durch s2-08-hook-einrichten.md:29 und :211 (Hooks keine harte Grenze); Sicherheitsaussage, schadet nicht."},
+{"status":"new","source":"(keine Quelle; s2-06:64)","old":"","new":"Ein PreToolUse-Hook für Bash bekommt den Aufruf als JSON auf stdin.","rating":"ok","reason":"Stimmt, konsistent mit s2-08:126 und dem Beispielcode (INPUT=$(cat))."},
+{"status":"new","source":"(keine Quelle; s2-06:79)","old":"","new":"Fehlt jq, bleibt COMMAND leer und der Befehl läuft durch; die getestete Fassung in S2.8 blockt in diesem Fall.","rating":"ok","reason":"Belegt durch s2-08:160-161 und :196; gewollte Hook-Korrektur (Fehlerrichtung)."},
+{"status":"new","source":"(keine Quelle; s2-06:50)","old":"","new":"Weitere Hook-Typen wie http oder prompt zeigt S2.9.","rating":"ok","reason":"Verweis; Hook-Typen stehen in CLAUDE.md und s2-09:38 (Fünf Hook-Typen)."},
+{"status":"new","source":"(keine Quelle; s2-06:103)","old":"","new":"Stop feuert nach jeder Antwort; für das Sitzungsende gibt es SessionEnd (S2.7).","rating":"ok","reason":"Konsistent mit Quelle (Stop = wenn Claude Antwort beendet) und s2-07:26; Falle/Abgrenzung."},
+{"status":"new","source":"(keine Quelle; s2-06:120)","old":"","new":"Quizfalle: Blocken geht ausschließlich über permissions.deny (als falsche Antwort).","rating":"ok","reason":"Distraktor, nicht als Fakt behauptet; Länge der richtigen Antwort (109 Zeichen) liegt zwischen den falschen (98-118), kein Längenhinweis."},
+{"status":"new","source":"(keine Quelle; s2-06:110)","old":"","new":"Check-Frage 1: Wann ist ein Hook besser als ein Skill?","rating":"ask","reason":"Kapitel beantwortet die Frage nicht ausdrücklich (nur Sprechpunkt 'feuern bei Ereignissen, nicht auf Zuruf'; Skill-Vergleich steht nicht im Kapitel). Orchestrator entscheidet: Antwortanker ergänzen oder Frage ersetzen."}
+],
+"style":[
+{"rating":"ask","where":"Check","issue":"Frage 1 (Hook vs. Skill) ohne Antwort im Kapitel; Skills sind Voraussetzung nur indirekt (requires nur S1.5)."}
+]}

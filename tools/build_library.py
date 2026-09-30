@@ -59,6 +59,7 @@ QUIZZES = {"lesson": (1, 1), "setup": (0, 1), "practice": (0, 0), "capstone": (0
 SOURCES_REQUIRED = {"lesson", "setup"}
 QUIZ_TELL_MAX = 1.35   # correct answer at most 1.35 x mean length of the wrong ones
 QUIZ_TELL_MIN = 0.6    # every wrong answer at least 0.6 x the correct one
+QUIZ_LONGEST_SHARE = 0.4  # library-wide: correct answer strictly longest in at most 40 % of quizzes
 FILENAME = re.compile(r"^(?:s([0-4])-(\d{2})|x-(\d{2}))-[a-z0-9]+(?:-[a-z0-9]+)*\.md$")
 QUIZ_SUMMARY = re.compile(r"<details><summary>Quizfrage</summary>")
 
@@ -211,15 +212,17 @@ def _check_body(ch, add, planned=frozenset()):
             add("links-resolve", f"Anker #{fragment} gibt es in {dest.name} nicht")
 
 
-def _check_graph(lib, by_id, report):
+def _check_graph(lib, by_id, report, planned_orders=None):
     for ch in lib.chapters:
         add = report(ch.path)
+        planned_orders = planned_orders or {}
         for req in ch.requires:
-            if req not in by_id:
+            if req not in by_id and req not in planned_orders:
                 add("requires-exist", f"Voraussetzung {req} gibt es nicht")
                 continue
             try:
-                if by_id[req].order >= ch.order:
+                req_order = by_id[req].order if req in by_id else planned_orders[req]
+                if req_order >= ch.order:
                     add("requires-backward", f"Voraussetzung {req} steht nicht vor {ch.id}")
             except ValueError:
                 pass
@@ -362,10 +365,23 @@ def validate(lib, *, complete: bool, meta=None) -> list:
         if o in orders:
             report(ch.path)("order-unique", f"Reihenfolge {o} hat schon {orders[o]} (after anpassen)")
         orders.setdefault(o, ch.id)
-    _check_graph(lib, by_id, report)
+    planned_orders = {}
+    if not complete and meta:
+        import catalog_core
+        for e in meta:
+            try:
+                planned_orders[e["id"]] = catalog_core.order_of(e["id"], e.get("after"))
+            except (KeyError, ValueError):
+                continue
+    _check_graph(lib, by_id, report, planned_orders)
     planned_ids = frozenset() if complete or not meta else frozenset(e["id"] for e in meta)
     _check_placement(lib, by_id, report, planned_ids)
     if complete:
+        quizzes = [c.quiz for c in lib.chapters if c.quiz and c.quiz.closed and len(c.quiz.wrong) == 3]
+        longest = sum(1 for q in quizzes if len(q.correct) > max(len(w) for w in q.wrong))
+        if quizzes and longest / len(quizzes) > QUIZ_LONGEST_SHARE:
+            report(lib.root)("quiz-longest-share", f"richtige Antwort ist in {longest} von {len(quizzes)} Quizfragen die "
+                             f"längste (erlaubt ≤ {int(QUIZ_LONGEST_SHARE * 100)} %)")
         missing = [cid for cid in REQUIRED_IDS if cid not in by_id]
         if missing:
             report(lib.root)("required-ids", "fehlende Kapitel: " + ", ".join(missing))

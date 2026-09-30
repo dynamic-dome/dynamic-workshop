@@ -212,3 +212,20 @@ def test_github_slug():
     assert bl.github_slug("Selbst machen") == "selbst-machen"
     assert bl.github_slug("Für Moderierende: `exit 2`!") == "für-moderierende-exit-2"
     assert bl.github_slug("Rechte & Freigaben") == "rechte--freigaben"
+
+
+def test_requires_on_planned_chapters_are_ok_during_migration(lib_dir):
+    edit(lib_dir, EVENTS, "requires: []", "requires: [S1.5]")
+    lib = lm.load_library(lib_dir)
+    meta = [dict(c.front, file=c.path.name) for c in lib.chapters] + [{"id": "S1.5", "file": "s1-05-x.md"}]
+    partial = {p.rule for p in bl.validate(lib, complete=False, meta=meta)}
+    assert "requires-exist" not in partial
+    assert "requires-exist" in {p.rule for p in bl.validate(lib, complete=True, meta=meta)}
+
+
+def test_quiz_longest_share_is_checked_library_wide(lib_dir):
+    # both fixture quizzes: make the correct answer the longest in each -> 2 of 2 = 100 %
+    edit(lib_dir, HOOK, "- **Richtig:** Exit-Code 2 blockt den Aufruf", "- **Richtig:** Exit-Code 2 blockt den Aufruf ganz")
+    edit(lib_dir, EVENTS, "- **Richtig:** Bevor ein Werkzeug ausgeführt wird", "- **Richtig:** Bevor ein Werkzeug ausgeführt wird!!")
+    found = {p.rule for p in bl.validate(lm.load_library(lib_dir), complete=True)}
+    assert "quiz-longest-share" in found
