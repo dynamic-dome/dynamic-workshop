@@ -1,0 +1,123 @@
+{
+ "id": "S3.11",
+ "verdict": "ask",
+ "counts": {
+  "kept": 46,
+  "changed": 5,
+  "dropped": 0,
+  "new": 8
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:844-909 (Network, ca. Z.862)",
+   "old": "Network: data is 'not encrypted at rest' according to docs",
+   "new": "TLS 1.2+ in transit; at rest je Anbieter (Anthropic-API AES-256, Bedrock AES-256/KMS, Google CMEK, Foundry je Hosting)",
+   "rating": "ok",
+   "reason": "Doku data-usage.md (Zeilen 78-87) belegt die Tabelle je Anbieter; alte Aussage ist überholt. Geprüft per curl."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:~896 (Grundsatz 1) / ~884 (EU allgemein)",
+   "old": "Disable Auto-Memory for sensitive sessions with `--bare`; 'Use `--bare` for sensitive runs'",
+   "new": "`autoMemoryEnabled: false`, `/memory`-Schalter oder `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`; `--bare` ist kein Schalter, sondern Skript-/-p-Modus",
+   "rating": "ok",
+   "reason": "Anhang B der Spec (--bare ist kein Memory-Schalter); memory.md Z.485-493 und cli-reference (--bare) per curl bestätigt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:~908 (Vorbehalt)",
+   "old": "opt for ... human approval gates, ZDR, `--bare`",
+   "new": "menschliche Freigabe, ZDR, Auto-Memory aus",
+   "rating": "ok",
+   "reason": "Folgeänderung der --bare-Korrektur."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:~880 (Tabelle Free/Pro/Max, Team/Enterprise)",
+   "old": "Zeilen 'Free/Pro/Max' und 'Team/Enterprise'",
+   "new": "Zeile 'Team, Enterprise, API'; Training nur, wenn erlaubt; Einstellung unter claude.ai/settings/data-privacy-controls",
+   "rating": "ok",
+   "reason": "data-usage.md Z.12-16, 44-50: Commercial = Team, Enterprise, API; Link belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:~884,~888,~894,~896,~900 (Modulverweise)",
+   "old": "Module 3.7, 3.6, 3.2, 'above in this module', Bonus Exercise 3.8, Module 3.3",
+   "new": "Kapitelverweise S4.10 (enthält InstructionsLoaded/Memory-Drift), S4.3, S4.2, S3.10, S2.18, S2.8, S2.17, S2.13",
+   "rating": "ok",
+   "reason": "Umstellung auf LE-IDs gewollt; Ziele existieren in resources/library und passen inhaltlich (S4.10 enthält InstructionsLoaded)."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "ZDR nicht im Standard-Enterprise-Plan, nicht per Admin-Einstellung aktivierbar, Anthropic schaltet je Organisation frei; Aufbewahrung trotz ZDR bei Gesetz/Missbrauch; Cloud-Sitzungen, Remote Control, /feedback abgeschaltet; nur direkte Anthropic-Plattform",
+   "rating": "ok",
+   "reason": "zero-data-retention.md Z.9-12, 22, 29, 54-62, 76 per curl bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Lokale Sitzungsprotokolle im Klartext unter ~/.claude/projects/, 30 Tage, cleanupPeriodDays",
+   "rating": "ok",
+   "reason": "data-usage.md Z.56 wörtlich."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Metriken enthalten nie Code, Prompts, Dateipfade; Telemetrie aus ändert das Training nicht",
+   "rating": "ok",
+   "reason": "data-usage.md Z.106 ('Metrics never include your code, prompts, or file paths'); zweite Hälfte folgt aus Plan-Tabelle (Z.12-16)."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "ZDR deckt MCP-Server/Integrationen, claude.ai-Chat, Cowork nicht ab; gilt nur bei Anmeldung in der ZDR-Organisation",
+   "rating": "ok",
+   "reason": "zero-data-retention.md Z.34, 42-50 bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle: --bare liest das Abo-Login nicht, sondern API-Schlüssel oder Cloud-Anbieter-Zugangsdaten",
+   "rating": "ok",
+   "reason": "headless.md Z.43-49 per curl bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle: exit 1 statt exit 2 lässt den Schreibzugriff durch; Erklärtext nach dem Hook-Code (Write/Edit-Felder, fail closed, Treffer nicht ausgeben)",
+   "rating": "ok",
+   "reason": "Stammt aus Kommentaren im getesteten Hook und Erfolgskriterium (Exercise 3.8, Z.~535-545, 571) und Hook-Fakten H-xx."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Verweis auf Extra in S3.6 (EN-50131-Audit-Trail)",
+   "rating": "ok",
+   "reason": "S3.6 Z.115 enthält den Punkt und verweist zurück."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Check-Fragen und Quiz (Firmware-Review EN 50131 mit vier Antworten)",
+   "rating": "ok",
+   "reason": "Pflichtteil; keine neuen Fakten, Distraktoren stimmen mit Kapitelinhalt überein."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Check / Quizfrage",
+   "issue": "Die richtige Antwort ist die längste und einzige mit Aufzählung (Enterprise, ZDR, Auto-Memory, Gate, kein /autofix-pr); die Distraktoren sind deutlich knapper. Längen-Hinweis auf die Lösung; Distraktoren angleichen."
+  }
+ ]
+}

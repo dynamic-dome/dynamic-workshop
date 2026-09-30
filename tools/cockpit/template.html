@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Code Workshop Lern-Cockpit</title>
+  <meta name="description" content="Claude Code Praxisbibliothek: Einstufung, persönlicher Lernpfad und Kapitel.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314181c'/%3E%3Crect x='14' y='12' width='36' height='42' rx='3' fill='none' stroke='%23e0a526' stroke-width='4'/%3E%3Ccircle cx='42' cy='34' r='3.5' fill='%23e0a526'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #14181c;
+      --surface: #1b2127;
+      --surface-2: #222a31;
+      --raise: #2a333c;
+      --ink: #e9edf1;
+      --ink-2: #b4bec8;
+      --muted: #8995a1;
+      --line: #313b45;
+      --accent: #e0a526;
+      --accent-ink: #1a1405;
+      --focus: #f2c14e;
+      --work: #fab219;
+      --skim: #5aa0ec;
+      --skip: #9aa4ae;
+      --later: #5d6873;
+      --done: #2fb344;
+      --warn: #ec835a;
+      --code-bg: #0f1316;
+      --shadow: 0 1px 0 rgba(0, 0, 0, .25);
+      --radius: 6px;
+      --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+      --mono: "Cascadia Code", "Cascadia Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+    }
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f3f4f2;
+      --surface: #ffffff;
+      --surface-2: #f7f7f5;
+      --raise: #ecedea;
+      --ink: #15191d;
+      --ink-2: #444c55;
+      --muted: #69727c;
+      --line: #d5d8d4;
+      --accent: #9a6a00;
+      --accent-ink: #ffffff;
+      --focus: #9a6a00;
+      --work: #a86b00;
+      --skim: #1f63b5;
+      --skip: #636c75;
+      --later: #9aa1a8;
+      --done: #1d7f2c;
+      --warn: #b3502a;
+      --code-bg: #f1f2ef;
+      --shadow: 0 1px 0 rgba(0, 0, 0, .06);
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans);
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+    a:hover { color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+    button, input, textarea, select { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .gap-top { margin-top: 10px; }
+    .skip-link { position: absolute; left: -999px; top: 8px; background: var(--accent); color: var(--accent-ink); padding: 6px 12px; z-index: 10; }
+    .skip-link:focus { left: 12px; }
+
+    /* ---------- header ---------- */
+    .top {
+      position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(6px); border-bottom: 1px solid var(--line);
+    }
+    .top-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 16px; padding: 10px 20px; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; letter-spacing: .01em; text-decoration: none; }
+    .brand-mark { width: 26px; height: 30px; border: 3px solid var(--accent); border-radius: 3px; position: relative; flex: none; }
+    .brand-mark::after { content: ""; position: absolute; right: 4px; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+    .brand small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; line-height: 1.2; }
+    .nav { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+    .nav button {
+      border: 1px solid transparent; background: none; padding: 6px 12px; border-radius: var(--radius); color: var(--ink-2);
+    }
+    .nav button:hover { background: var(--surface-2); color: var(--ink); }
+    .nav button[aria-current="page"] { border-color: var(--line); background: var(--surface); color: var(--ink); }
+    .theme { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 6px 10px; color: var(--ink-2); }
+
+    .notice { max-width: 1180px; margin: 12px auto 0; padding: 10px 14px; border: 1px solid var(--warn); border-radius: var(--radius); color: var(--ink); background: color-mix(in srgb, var(--warn) 12%, var(--surface)); }
+    .notice[hidden] { display: none; }
+
+    main { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+    h1 { font-size: 34px; line-height: 1.15; margin: 0 0 12px; font-weight: 650; letter-spacing: -.01em; }
+    h2 { font-size: 22px; line-height: 1.3; margin: 32px 0 10px; font-weight: 620; }
+    h3 { font-size: 18px; margin: 24px 0 8px; font-weight: 620; }
+    p { margin: 0 0 12px; }
+    .lead { font-size: 19px; color: var(--ink-2); max-width: 64ch; }
+    .muted { color: var(--muted); }
+    .small { font-size: 14px; }
+    .measure { max-width: 72ch; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--surface);
+      padding: 9px 16px; border-radius: var(--radius); color: var(--ink); text-decoration: none;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--ink); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+    .btn.primary:hover { filter: brightness(1.06); }
+    .btn[disabled] { opacity: .5; cursor: not-allowed; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    /* ---------- start ---------- */
+    .start-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+    .way { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+    .way:hover { border-color: var(--accent); }
+    .way strong { font-size: 18px; }
+    .way span { color: var(--ink-2); font-size: 15px; }
+    .resume { margin-top: 24px; padding: 14px 18px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); }
+    .facts { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 28px; color: var(--ink-2); }
+    .facts b { display: block; font-size: 26px; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+    /* ---------- placement ---------- */
+    .steps { display: flex; gap: 8px; margin: 8px 0 24px; flex-wrap: wrap; }
+    .steps li { list-style: none; padding: 4px 12px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); font-size: 14px; }
+    .steps li[aria-current="step"] { border-color: var(--accent); color: var(--ink); }
+    .steps li.done { color: var(--ink-2); }
+    .steps { padding: 0; }
+    fieldset { border: 0; padding: 0; margin: 0 0 20px; }
+    legend { font-weight: 600; margin-bottom: 10px; font-size: 18px; }
+    .choices { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+    .choice { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); background: var(--surface); padding: 12px 14px; border-radius: var(--radius); cursor: pointer; }
+    .choice:hover { border-color: var(--ink-2); }
+    .choice input { margin-top: 5px; accent-color: var(--accent); }
+    .choice:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
+    textarea { width: 100%; min-height: 84px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; }
+    .areas { display: grid; gap: 10px; }
+    .area { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 12px 14px; }
+    .area p { margin: 0 0 8px; }
+    .area .label { color: var(--muted); font-size: 13px; }
+    .scale { display: flex; gap: 6px; flex-wrap: wrap; }
+    .scale label { border: 1px solid var(--line); border-radius: 99px; padding: 3px 12px; font-size: 14px; cursor: pointer; }
+    .scale input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .scale label:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--ink); }
+    .scale label:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 2px; }
+    .scenario { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px; }
+    .scenario .opts { display: grid; gap: 6px; margin-top: 8px; }
+    .scenario .opts button { text-align: left; border: 1px solid var(--line); background: var(--surface-2); padding: 8px 12px; border-radius: var(--radius); }
+    .scenario .opts button[aria-pressed="true"] { border-color: var(--accent); }
+    .explain { margin-top: 10px; padding: 10px 12px; border-radius: var(--radius); background: var(--surface-2); }
+
+    /* ---------- status chips ---------- */
+    .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 1px 9px; border-radius: 99px; border: 1px solid var(--line); white-space: nowrap; }
+    .ico { width: 14px; height: 14px; vertical-align: -2px; flex: none; }
+    .meta, .legend, .row { align-items: center; }
+    .chip .dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; flex: none; }
+    .st-work { color: var(--work); }
+    .st-skim { color: var(--skim); }
+    .st-skip { color: var(--skip); }
+    .st-later { color: var(--later); }
+    .st-done { color: var(--done); }
+    .chip.st-skim .dot { background: transparent; border: 2px solid currentColor; }
+    .chip.st-skip .dot { border-radius: 2px; }
+    .chip.st-later .dot { background: transparent; border: 2px dashed currentColor; }
+    .chip.safe { color: var(--ink-2); }
+
+    /* ---------- path ---------- */
+    .summary { display: flex; gap: 24px; flex-wrap: wrap; padding: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin: 18px 0; }
+    .summary b { font-variant-numeric: tabular-nums; }
+    .warning { padding: 10px 14px; border: 1px solid var(--warn); border-radius: var(--radius); margin: 8px 0; background: color-mix(in srgb, var(--warn) 10%, var(--surface)); }
+    .stage { margin: 26px 0; }
+    .stage-head { display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+    .stage-head h2 { margin: 0; font-size: 20px; }
+    .rows { list-style: none; padding: 0; margin: 0; }
+    .rows li { display: grid; grid-template-columns: 150px minmax(0, 1fr) 70px 170px; gap: 12px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+    .rows .title { min-width: 0; }
+    .rows .title a { font-weight: 560; }
+    .rows .why { display: block; color: var(--muted); font-size: 14px; }
+    .rows .min { color: var(--ink-2); font-variant-numeric: tabular-nums; text-align: right; }
+    .rows select { width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 4px 6px; font-size: 14px; }
+    .rows li.is-done .title a { text-decoration: line-through; text-decoration-color: var(--done); }
+    details.more { margin-top: 20px; }
+    details.more summary { cursor: pointer; color: var(--ink-2); }
+
+    /* ---------- library: floor plan ---------- */
+    .legend { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 20px; }
+    .plan { border: 1px solid var(--line); border-radius: 10px; background: repeating-linear-gradient(0deg, transparent 0 23px, color-mix(in srgb, var(--line) 35%, transparent) 23px 24px), repeating-linear-gradient(90deg, transparent 0 23px, color-mix(in srgb, var(--line) 35%, transparent) 23px 24px), var(--surface-2); padding: 18px; }
+    .floor { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-bottom: 2px solid var(--line); }
+    .floor:last-child { border-bottom: 0; }
+    .floor-name { font-weight: 620; color: var(--ink-2); padding-top: 6px; }
+    .floor-name small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+    .rooms { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+    .room { background: var(--surface); border: 2px solid var(--line); border-radius: 4px; padding: 10px 12px 12px; position: relative; }
+    .room h3 { margin: 0 0 2px; font-size: 16px; }
+    .room p { margin: 0 0 10px; color: var(--muted); font-size: 13px; line-height: 1.4; }
+    .doors { display: flex; flex-wrap: wrap; gap: 6px; }
+    .door {
+      min-width: 54px; padding: 4px 8px 4px 10px; border: 1px solid var(--line); border-left: 4px solid var(--later);
+      background: var(--surface-2); border-radius: 2px 6px 6px 2px; font: 13px/1.3 var(--mono); text-align: left; position: relative;
+    }
+    .door:hover { border-color: var(--ink-2); }
+    .door.st-work { border-left-color: var(--work); color: var(--ink); }
+    .door.st-skim { border-left-color: var(--skim); color: var(--ink); }
+    .door.st-skip { border-left-color: var(--skip); color: var(--ink-2); }
+    .door.st-later { border-left-color: var(--later); color: var(--muted); }
+    .door.is-done { border-left-color: var(--done); }
+    .door.is-done::after { content: "✓"; position: absolute; right: 4px; top: 2px; color: var(--done); font-size: 12px; }
+    .door .floor-mark { color: var(--accent); }
+    .door-tip { font-family: var(--sans); }
+
+    /* ---------- chapter ---------- */
+    .crumbs { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+    .chapter { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 36px; }
+    .chapter-main { min-width: 0; }
+    .meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 18px; }
+    .outcome { font-size: 18px; color: var(--ink-2); margin: 16px 0 24px; max-width: 70ch; }
+    .block { margin: 26px 0; max-width: 74ch; }
+    .block > h2 { font-size: 15px; letter-spacing: .02em; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+    .quick { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; }
+    .quick ul { margin: 6px 0 12px; padding-left: 20px; }
+    .analogy { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; }
+    .code { position: relative; }
+    pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; overflow-x: auto; font: 14px/1.5 var(--mono); white-space: pre; }
+    code { font-family: var(--mono); font-size: .92em; }
+    :not(pre) > code { background: var(--surface-2); border: 1px solid var(--line); padding: 0 5px; border-radius: 4px; overflow-wrap: anywhere; }
+    .copy { position: absolute; top: 8px; right: 8px; font-size: 13px; padding: 3px 10px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); }
+    .quiz { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; background: var(--surface); }
+    .quiz .opts { display: grid; gap: 8px; margin: 10px 0; }
+    .quiz .opts button { text-align: left; border: 1px solid var(--line); background: var(--surface-2); padding: 9px 12px; border-radius: var(--radius); }
+    .quiz .opts button.right { border-color: var(--done); }
+    .quiz .opts button.wrong { border-color: var(--warn); }
+    .feedback { min-height: 1.6em; margin: 0; }
+    .full { margin-top: 30px; border-top: 1px solid var(--line); padding-top: 12px; }
+    .full summary { cursor: pointer; font-weight: 600; }
+    .prose { max-width: 74ch; }
+    .prose table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 10px 0 18px; display: block; overflow-x: auto; }
+    .prose th, .prose td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; }
+    .prose th { background: var(--surface-2); }
+    .prose .align-right { text-align: right; } .prose .align-center { text-align: center; }
+    .prose details { border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 12px; margin: 12px 0; background: var(--surface); }
+    .prose details summary { cursor: pointer; color: var(--ink-2); }
+    .prose blockquote { margin: 12px 0; padding: 4px 14px; border-left: 3px solid var(--line); color: var(--ink-2); }
+    .diagram { background: #1b2127; border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; overflow-x: auto; } /* SVGs are rendered dark */
+    .diagram svg { display: block; max-width: none; height: auto; margin: 0 auto; } /* natural size, the box scrolls */
+    aside.side { position: sticky; top: 76px; align-self: start; display: grid; gap: 14px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; min-width: 0; overflow-wrap: anywhere; }
+    .panel h2 { font-size: 14px; margin: 0 0 8px; color: var(--muted); font-weight: 600; }
+    .panel ul { margin: 0; padding-left: 18px; }
+    .pager { display: flex; justify-content: space-between; gap: 10px; margin-top: 36px; }
+    .pager a { max-width: 48%; }
+
+    /* ---------- review ---------- */
+    .review-q { margin: 18px 0; }
+
+    @media (max-width: 700px) {
+      .top-inner { padding: 8px 14px; gap: 6px 10px; }
+      .nav { order: 3; width: 100%; margin-left: 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+      .nav button { flex: none; padding: 5px 10px; }
+      .theme { margin-left: auto; padding: 4px 8px; font-size: 14px; }
+      main { padding: 20px 14px 60px; }
+    }
+    @media (max-width: 900px) {
+      .start-grid { grid-template-columns: 1fr; }
+      .chapter { grid-template-columns: minmax(0, 1fr); }
+      aside.side { position: static; }
+      .rows li { grid-template-columns: 1fr; gap: 4px; }
+      .rows .min { text-align: left; }
+      .floor { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+    @media print { .top, .nav, aside.side, .copy, .pager { display: none; } body { background: #fff; color: #000; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt</a>
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="?screen=start" data-screen="start"><span class="brand-mark" aria-hidden="true"></span><span>Claude Code Praxisbibliothek<small>Lernen nach deinem Stand</small></span></a>
+      <nav class="nav" aria-label="Bereiche">
+        <button type="button" data-screen="start">Start</button>
+        <button type="button" data-screen="einstufung">Einstufung</button>
+        <button type="button" data-screen="pfad">Mein Pfad</button>
+        <button type="button" data-screen="bibliothek">Bibliothek</button>
+        <button type="button" data-screen="wiederholen">Wiederholen</button>
+      </nav>
+      <button type="button" class="theme" data-action="theme" aria-label="Hell oder dunkel umschalten">Hell/Dunkel</button>
+    </div>
+  </header>
+  <p class="notice" id="storageNotice" hidden>Dein Browser erlaubt hier keinen lokalen Speicher. Du kannst alles nutzen, aber Fortschritt und Einstufung gehen beim Schließen verloren.</p>
+  <main id="main" tabindex="-1"></main>
+  <div class="sr-only" aria-live="polite" id="live"></div>
+  <script>
+    "use strict";
+    const LIBRARY = /*@@LIBRARY_DATA@@*/null;
+
+    /*@@ENGINE_START@@*/
+    const RANK = { later: 0, skip: 1, skim: 2, work: 3 };
+    function skimMinutes(minutes, percent) { return Math.ceil((minutes * percent) / 100); }
+    function stageMinutes(chapter, status, percent) {
+      return status === "work" ? chapter.minutes : skimMinutes(chapter.minutes, percent);
+    }
+    function normalizeAnswers(catalog, answers) {
+      const rules = catalog.placement;
+      answers = answers || {};
+      const goalIds = rules.goals.map(g => g.id);
+      const timeIds = rules.times.map(t => t.id);
+      const scenarios = {};
+      (rules.scenarios || []).forEach(s => { scenarios[s.id] = s; });
+      const chapterIds = new Set(catalog.chapters.map(c => c.id));
+      let goals = (answers.goals && answers.goals.length) ? Array.from(new Set(answers.goals)) : [rules.default_goal];
+      goals.forEach(g => { if (!goalIds.includes(g)) throw new Error("unbekanntes Ziel: " + g); });
+      goals = goals.slice(0, 2);
+      const time = answers.time || rules.default_time;
+      if (!timeIds.includes(time)) throw new Error("unbekannte Zeitangabe: " + time);
+      const rating = {};
+      rules.areas.forEach(a => { rating[a.id] = 0; });
+      Object.entries(answers.areas || {}).forEach(([a, v]) => {
+        if (!(a in rating)) throw new Error("unbekannter Bereich: " + a);
+        if (v === null || v === undefined) return;
+        if (![0, 1, 2].includes(v)) throw new Error("Stand für " + a + " muss 0, 1, 2 oder null sein");
+        rating[a] = v;
+      });
+      const wrongAreas = new Set();
+      Object.entries(answers.scenarios || {}).forEach(([sid, opt]) => {
+        if (!(sid in scenarios)) throw new Error("unbekanntes Szenario: " + sid);
+        if (opt === null || opt === undefined) return;
+        if (!scenarios[sid].options.some(o => o.id === opt)) throw new Error("Szenario " + sid + ": unbekannte Option " + opt);
+        if (opt !== scenarios[sid].correct) wrongAreas.add(scenarios[sid].area);
+      });
+      const overrides = {};
+      Object.entries(answers.overrides || {}).forEach(([cid, st]) => {
+        if (!chapterIds.has(cid)) throw new Error("Übersteuerung für unbekanntes Kapitel " + cid);
+        if (!(st in RANK)) throw new Error("Übersteuerung " + cid + ": unbekannter Status " + st);
+        overrides[cid] = st;
+      });
+      return { goals, time, rating, wrongAreas, overrides };
+    }
+    function place(catalog, answers) {
+      const rules = catalog.placement;
+      const chapters = catalog.chapters.slice().sort((a, b) => a.order - b.order);
+      const byId = {};
+      chapters.forEach(c => { byId[c.id] = c; });
+      const a = normalizeAnswers(catalog, answers);
+      const goals = a.goals, time = a.time, overrides = a.overrides;
+      const effective = {}, gapAreas = new Set();
+      Object.entries(a.rating).forEach(([k, v]) => { effective[k] = a.wrongAreas.has(k) ? Math.min(v, 1) : v; });
+      a.wrongAreas.forEach(k => { if (a.rating[k] === 2) gapAreas.add(k); });
+      const goalRules = {};
+      rules.goals.forEach(g => { goalRules[g.id] = g; });
+      const focus = new Set();
+      goals.forEach(g => (goalRules[g].focus_shelves || []).forEach(s => focus.add(s)));
+      const base = new Set(rules.base_shelves);
+      const onlyAssess = goals.length === 1 && goals[0] === "einschaetzen";
+      const percent = rules.skim_percent;
+      const r = c => (c.area ? effective[c.area] : null);
+
+      let relevant, laterReason;
+      if (time === "schnellstart") {
+        relevant = new Set(rules.minimum_path);
+        laterReason = "after-quickstart";
+      } else if (goals.includes("moderieren")) {
+        relevant = new Set(chapters.filter(c => c.session !== null && c.session !== undefined).map(c => c.id));
+        laterReason = "not-goal";
+      } else {
+        relevant = new Set();
+        chapters.forEach(c => {
+          if (c.type !== "lesson" && c.type !== "setup") return;
+          if (c.level === "core" && base.has(c.shelf)) relevant.add(c.id);
+          if (focus.has(c.shelf) && (c.level === "core" || c.level === "deep-dive" || (c.level === "bonus" && time === "gruendlich"))) relevant.add(c.id);
+        });
+        chapters.forEach(c => {
+          if (c.type === "practice" && c.offers.some(o => relevant.has(o) && (r(byId[o]) || 0) < 2)) relevant.add(c.id);
+          else if (c.type === "capstone" && (goals.includes("agents") || goals.includes("einschaetzen"))) relevant.add(c.id);
+          else if (c.type === "community") {
+            const limited = (rules.chapter_goals || {})[c.id];
+            if (limited ? limited.some(g => goals.includes(g)) : goals.some(g => g !== "einschaetzen")) relevant.add(c.id);
+          }
+        });
+        laterReason = "not-goal";
+      }
+
+      const status = {}, reason = {};
+      chapters.forEach(c => {
+        const cid = c.id;
+        if (!relevant.has(cid)) { status[cid] = "later"; reason[cid] = laterReason; return; }
+        const t = c.type;
+        let st, rs;
+        if ((t === "lesson" || t === "setup") && c.area) {
+          const rv = r(c);
+          if (rv === 0) { st = "work"; rs = "new"; }
+          else if (rv === 1 && t === "setup") { st = "work"; rs = "new"; }
+          else if (rv === 1) {
+            if (c.level === "deep-dive") { st = "work"; rs = "deep-focus"; } else { st = "skim"; rs = "heard"; }
+            if (gapAreas.has(c.area)) rs = "scenario-gap";
+          } else { st = "skip"; rs = "known"; }
+        } else if (t === "lesson" || t === "setup") { st = "work"; rs = "new"; }
+        else if (t === "practice") { st = "work"; rs = "practice"; }
+        else if (t === "capstone") { st = onlyAssess ? "skim" : "work"; rs = "capstone"; }
+        else { st = "skim"; rs = "community"; }
+        if (onlyAssess && st === "work" && !c.safety_floor && t !== "setup") { st = "skim"; rs = "assess"; }
+        status[cid] = st; reason[cid] = rs;
+      });
+
+      chapters.forEach(c => {
+        if (!c.safety_floor) return;
+        const rv = r(c) || 0;
+        if (relevant.has(c.id) || rv === 2) {
+          const floor = rv < 2 ? "work" : "skim";
+          if (RANK[floor] > RANK[status[c.id]]) { status[c.id] = floor; reason[c.id] = "safety-floor"; }
+        }
+      });
+
+      function prerequisites(frozen) {
+        chapters.forEach(c => {
+          if (status[c.id] !== "work" && status[c.id] !== "skim") return;
+          c.requires_all.forEach(p => {
+            if (!frozen.has(p) && status[p] === "later") {
+              if ((r(byId[p]) || 0) === 2) { status[p] = "skip"; reason[p] = "known"; }
+              else { status[p] = "skim"; reason[p] = "prerequisite"; }
+            }
+          });
+        });
+      }
+      prerequisites(new Set());
+
+      const computed = Object.assign({}, status);
+      Object.entries(overrides).forEach(([cid, st]) => { status[cid] = st; reason[cid] = "override"; });
+      prerequisites(new Set(Object.keys(overrides)));
+      const warnings = [];
+      Object.keys(overrides).forEach(cid => {
+        if (byId[cid].safety_floor && RANK[status[cid]] < RANK[computed[cid]]) warnings.push({ code: "override-safety", ids: [cid] });
+      });
+      chapters.forEach(c => {
+        if (status[c.id] !== "work" && status[c.id] !== "skim") return;
+        c.requires_all.forEach(p => {
+          if (p in overrides && (status[p] === "skip" || status[p] === "later") && computed[p] !== "skip") {
+            warnings.push({ code: "override-prereq", ids: [p, c.id] });
+          }
+        });
+      });
+
+      const budget = rules.times.find(t => t.id === time).stage_minutes;
+      const stageOf = {}, stages = [];
+      let n = 1, acc = 0, workMin = 0, skimMin = 0;
+      chapters.forEach(c => {
+        const st = status[c.id];
+        if (st !== "work" && st !== "skim") return;
+        const m = stageMinutes(c, st, percent);
+        if (st === "work") workMin += m; else skimMin += m;
+        if (acc > 0 && budget !== null && acc + m > budget) { stages.push({ n, minutes: acc }); n += 1; acc = 0; }
+        stageOf[c.id] = n;
+        acc += m;
+      });
+      if (acc > 0) stages.push({ n, minutes: acc });
+      if (time === "schnellstart" && workMin + skimMin > rules.quickstart_warn_minutes) warnings.push({ code: "quickstart-long", ids: [] });
+
+      const order = {};
+      chapters.forEach(c => { order[c.id] = c.order; });
+      warnings.forEach(w => { w.ids.sort((x, y) => order[x] - order[y]); });
+      const cmpIds = (x, y) => {
+        for (let i = 0; i < Math.min(x.length, y.length); i++) { if (order[x[i]] !== order[y[i]]) return order[x[i]] - order[y[i]]; }
+        return x.length - y.length;
+      };
+      warnings.sort((x, y) => (x.code < y.code ? -1 : x.code > y.code ? 1 : cmpIds(x.ids, y.ids)));
+      return {
+        version: 1,
+        chapters: chapters.map(c => ({ id: c.id, status: status[c.id], reason: reason[c.id], stage: stageOf[c.id] === undefined ? null : stageOf[c.id], override: c.id in overrides })),
+        stages,
+        totals: { work_min: workMin, skim_min: skimMin },
+        warnings,
+      };
+    }
+    /*@@ENGINE_END@@*/
+
+    // ---------- storage (fail-soft) ----------
+    const PROGRESS_KEY = "ccWorkshopUiState";
+    const PROFILE_KEY = "ccWorkshopProfileV1";
+    const THEME_KEY = "ccWorkshopTheme";
+    const memory = {};
+    let storageOk = true;
+    function readJson(key) {
+      try {
+        const raw = window.localStorage.getItem(key);
+        const value = raw ? JSON.parse(raw) : null;
+        return value && typeof value === "object" && !Array.isArray(value) ? value : null;
+      } catch (err) {
+        storageOk = false;
+        return memory[key] || null;
+      }
+    }
+    function writeJson(key, value) {
+      memory[key] = value;
+      try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (err) { storageOk = false; showStorageNotice(); }
+    }
+    function removeKey(key) {
+      delete memory[key];
+      try { window.localStorage.removeItem(key); } catch (err) { storageOk = false; }
+    }
+    function showStorageNotice() { const n = document.getElementById("storageNotice"); if (n) n.hidden = storageOk; }
+
+    function loadProgress() {
+      const p = readJson(PROGRESS_KEY) || {};
+      if (!p.done || typeof p.done !== "object") p.done = {};
+      if (!p.doneAt || typeof p.doneAt !== "object") p.doneAt = {};
+      return p;
+    }
+    let progress = loadProgress();
+    let profile = readJson(PROFILE_KEY);
+    function saveProgress() { writeJson(PROGRESS_KEY, progress); }
+    function saveProfile() { if (profile) writeJson(PROFILE_KEY, profile); else removeKey(PROFILE_KEY); }
+
+    // ---------- data ----------
+    const DATA = LIBRARY || { chapters: [], shelves: [], placement: { goals: [], times: [], areas: [], scenarios: [], reasons: {}, warnings: {} }, diagrams: {} };
+    // Diagram styles are shipped once per distinct block (tools/build_cockpit.py share_diagram_styles)
+    if (DATA.diagram_css && Object.keys(DATA.diagram_css).length) {
+      const sheet = document.createElement("style");
+      sheet.textContent = Object.values(DATA.diagram_css).join("\n");
+      document.head.appendChild(sheet);
+    }
+    const CH = {};
+    DATA.chapters.forEach(c => { CH[c.id] = c; });
+    const ORDERED = DATA.chapters.slice().sort((a, b) => a.order - b.order);
+    const RULES = DATA.placement;
+    const SHELF = {};
+    DATA.shelves.forEach(s => { SHELF[s.id] = s; });
+    const LEVEL = { core: "Kern", "deep-dive": "Vertiefung", bonus: "Kür" };
+    const SHIELD = '<svg class="ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 1.5 2.5 3.6v4.1c0 3.2 2.3 5.6 5.5 6.8 3.2-1.2 5.5-3.6 5.5-6.8V3.6Z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+    function rich(c, key) { return c[key + "_html"] !== undefined ? c[key + "_html"] : esc(c[key]); }
+    function reasonText(code) { return RULES.reasons && RULES.reasons[code] ? RULES.reasons[code] : ""; }
+    const STATUS = { work: "durcharbeiten", skim: "überfliegen", skip: "Schnellcheck reicht", later: "später", done: "erledigt" };
+
+    // ---------- helpers ----------
+    function esc(s) { return String(s === null || s === undefined ? "" : s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[ch])); }
+    function $(sel, root) { return (root || document).querySelector(sel); }
+    function hoursText(minutes) {
+      if (minutes < 60) return "etwa " + minutes + " Minuten";
+      const value = Math.floor((minutes * 2 + 30) / 60) / 2;
+      const number = String(value).replace(".", ",");
+      return value === 1 ? "etwa 1 Stunde" : "etwa " + number + " Stunden";
+    }
+    function stagesText(n) { return n === 1 ? "1 Etappe" : n + " Etappen"; }
+    function shuffle(items) {
+      const copy = items.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function announce(text) { const live = document.getElementById("live"); if (live) { live.textContent = ""; window.setTimeout(() => { live.textContent = text; }, 30); } }
+    function chip(status, extra) {
+      return `<span class="chip st-${status}${extra ? " " + extra : ""}"><span class="dot" aria-hidden="true"></span>${esc(STATUS[status])}</span>`;
+    }
+    function chapterLink(c) { return `<a href="?run=${esc(c.id)}" data-chapter="${esc(c.id)}">${esc(c.id)} · ${esc(c.title)}</a>`; }
+
+    function currentResult() {
+      if (!profile || !profile.answers) return null;
+      try { return place(DATA, profile.answers); } catch (err) { return null; }
+    }
+    function statusMap(result) {
+      const map = {};
+      if (result) result.chapters.forEach(c => { map[c.id] = c; });
+      return map;
+    }
+    function pathOrder(result) {
+      if (!result) return ORDERED.map(c => c.id);
+      return result.chapters.filter(c => c.status === "work" || c.status === "skim").map(c => c.id);
+    }
+
+    // ---------- router ----------
+    const state = { screen: "start", chapter: null, step: 0, draft: null };
+    function readLocation() {
+      const params = new URLSearchParams(window.location.search);
+      const run = params.get("run") || params.get("section");
+      if (run && CH[run]) { state.screen = "kapitel"; state.chapter = run; return; }
+      const screen = params.get("screen");
+      state.screen = ["start", "einstufung", "pfad", "bibliothek", "wiederholen"].includes(screen) ? screen : "start";
+    }
+    function go(screen, chapter, push) {
+      state.screen = screen;
+      state.chapter = chapter || null;
+      if (screen === "einstufung") { state.step = 0; state.draft = null; }
+      const url = screen === "kapitel" ? `?run=${encodeURIComponent(chapter)}` : `?screen=${screen}`;
+      if (push !== false) { try { window.history.pushState({}, "", url); } catch (err) { /* file:// in some browsers */ } }
+      render();
+      const main = document.getElementById("main");
+      window.scrollTo(0, 0);
+      if (main) main.focus({ preventScroll: true });
+    }
+
+    // ---------- views ----------
+    function renderStart() {
+      const total = ORDERED.reduce((sum, c) => sum + c.minutes, 0);
+      const doneCount = ORDERED.filter(c => progress.done[c.id]).length;
+      const last = progress.lastId && CH[progress.lastId] ? CH[progress.lastId] : null;
+      return `
+        <h1>Lerne Claude Code nach deinem Stand.</h1>
+        <p class="lead">${ORDERED.length} Kapitel in ${DATA.shelves.length} Regalen — von der ersten Datei bis zu abgesicherten Agenten-Pipelines. Du musst nicht alles lesen: Sag uns kurz, wo du stehst und wohin du willst, dann bekommst du deinen Pfad.</p>
+        ${last ? `<div class="resume"><strong>Weiter, wo du warst:</strong> ${chapterLink(last)}</div>` : ""}
+        <div class="start-grid">
+          <button type="button" class="way" data-screen="einstufung"><strong>Einstufung in fünf Minuten</strong><span>Ziel, Zeit und was du schon kannst. Keine Noten, jederzeit änderbar.</span><span class="btn primary">Einstufung starten</span></button>
+          <button type="button" class="way" data-action="live-path"><strong>Den Live-Workshop-Pfad nehmen</strong><span>Alle Kapitel in der Reihenfolge der vier moderierten Sessions.</span><span class="btn">Pfad übernehmen</span></button>
+          <button type="button" class="way" data-screen="bibliothek"><strong>In der Bibliothek stöbern</strong><span>Alle Regale als Gebäudeplan. Jedes Kapitel beginnt mit einem Schnellcheck.</span><span class="btn">Zur Bibliothek</span></button>
+        </div>
+        <div class="facts">
+          <div><b>${ORDERED.length}</b>Kapitel</div>
+          <div><b>${Math.round(total / 60)} h</b>Gesamtumfang</div>
+          <div><b>${doneCount}</b>erledigt</div>
+          <div><b>${profile ? "ja" : "nein"}</b>Einstufung gespeichert</div>
+        </div>
+`;
+    }
+
+    function draftAnswers() {
+      if (!state.draft) {
+        const base = profile && profile.answers ? JSON.parse(JSON.stringify(profile.answers)) : { version: 1, goals: [], time: RULES.default_time, areas: {}, scenarios: {}, overrides: {} };
+        state.draft = { answers: base, why: profile ? profile.why || "" : "", scenarioOrder: {} };
+      }
+      return state.draft;
+    }
+    const STEP_TITLES = ["Ziel", "Warum und Zeit", "Was du schon kannst", "Mini-Szenarien"];
+    function renderPlacement() {
+      const d = draftAnswers();
+      const a = d.answers;
+      const steps = STEP_TITLES.map((t, i) => `<li${i === state.step ? ' aria-current="step"' : ""}${i < state.step ? ' class="done"' : ""}>${i + 1}. ${esc(t)}</li>`).join("");
+      let body = "";
+      if (state.step === 0) {
+        body = `<fieldset><legend>Wofür willst du Claude Code lernen? (höchstens zwei)</legend><div class="choices">` +
+          RULES.goals.map(g => `<label class="choice"><input type="checkbox" name="goal" value="${esc(g.id)}"${a.goals.includes(g.id) ? " checked" : ""}><span>${esc(g.label)}</span></label>`).join("") +
+          `</div></fieldset><p class="muted small">Nichts gewählt? Dann nehmen wir „${esc(RULES.goals.find(g => g.id === RULES.default_goal).label)}".</p>`;
+      } else if (state.step === 1) {
+        body = `<fieldset><legend>Warum willst du das lernen? (freiwillig)</legend><label class="muted small" for="why">Bleibt nur in deinem Browser und erinnert dich später an dein Ziel.</label><textarea id="why" name="why" placeholder="Zum Beispiel: Ich will Code-Reviews in unserem Team mit Claude beschleunigen, ohne Sicherheitslücken zu riskieren.">${esc(d.why)}</textarea></fieldset>` +
+          `<fieldset><legend>Wie viel Zeit hast du?</legend><div class="choices">` +
+          RULES.times.map(t => `<label class="choice"><input type="radio" name="time" value="${esc(t.id)}"${a.time === t.id ? " checked" : ""}><span>${esc(t.label)}</span></label>`).join("") +
+          `</div></fieldset>`;
+      } else if (state.step === 2) {
+        const scale = [["0", "neu für mich"], ["1", "gehört davon"], ["2", "schon gemacht"], ["", "weiß nicht"]];
+        body = `<p class="measure">Lies jede Aussage und wähle, was auf dich zutrifft. „Weiß nicht" ist völlig in Ordnung — dann zeigen wir dir das Kapitel.</p><div class="areas">` +
+          RULES.areas.map(ar => {
+            const v = a.areas[ar.id];
+            const cur = v === null || v === undefined ? "" : String(v);
+            return `<div class="area" role="group" aria-labelledby="ar-${esc(ar.id)}"><span class="label">${esc(ar.label)}</span><p id="ar-${esc(ar.id)}">${esc(ar.statement)}</p><div class="scale">` +
+              scale.map(([val, lab]) => `<label><input type="radio" name="area-${esc(ar.id)}" value="${val}"${cur === val ? " checked" : ""}>${esc(lab)}</label>`).join("") + `</div></div>`;
+          }).join("") + `</div>`;
+      } else {
+        body = `<p class="measure">Kein Test — ein Spiegel. Jede Frage zeigt einen typischen Stolperstein. Liegst du daneben, empfehlen wir dir das passende Kapitel, auch wenn du den Bereich schon kennst. Du kannst diesen Schritt überspringen.</p>` +
+          RULES.scenarios.map(sc => {
+            if (!d.scenarioOrder[sc.id]) d.scenarioOrder[sc.id] = shuffle(sc.options.map(o => o.id));
+            const chosen = a.scenarios[sc.id];
+            const opts = d.scenarioOrder[sc.id].map(oid => sc.options.find(o => o.id === oid)).map(o => `<button type="button" data-action="scenario" data-sid="${esc(sc.id)}" data-oid="${esc(o.id)}" aria-pressed="${chosen === o.id}">${esc(o.text)}</button>`).join("");
+            const answered = chosen !== undefined && chosen !== null;
+            const verdict = answered ? (chosen === sc.correct ? "Stimmt." : "Nicht ganz.") : "";
+            return `<div class="scenario"><strong>${esc(sc.question)}</strong><div class="opts">${opts}</div>${answered ? `<div class="explain" role="status"><strong>${verdict}</strong> ${esc(sc.explanation)}</div>` : ""}</div>`;
+          }).join("");
+      }
+      const last = state.step === STEP_TITLES.length - 1;
+      return `<h1>Einstufung</h1><p class="lead">Fünf Minuten, keine Noten. Das Ergebnis ist eine Empfehlung, die du jederzeit änderst.</p>
+        <ol class="steps" aria-label="Schritte">${steps}</ol>
+        <form id="placementForm" novalidate>${body}</form>
+        <div class="row">
+          ${state.step > 0 ? '<button type="button" class="btn" data-action="step-back">Zurück</button>' : ""}
+          <button type="button" class="btn primary" data-action="${last ? "finish" : "step-next"}">${last ? "Meinen Pfad zeigen" : "Weiter"}</button>
+          ${last ? '<button type="button" class="btn" data-action="finish">Szenarien überspringen</button>' : ""}
+        </div>`;
+    }
+    function collectStep() {
+      const d = draftAnswers();
+      const form = document.getElementById("placementForm");
+      if (!form) return true;
+      if (state.step === 0) {
+        const goals = Array.from(form.querySelectorAll("input[name=goal]:checked")).map(i => i.value);
+        if (goals.length > 2) { announce("Bitte höchstens zwei Ziele wählen."); return false; }
+        d.answers.goals = goals;
+      } else if (state.step === 1) {
+        const why = form.querySelector("#why");
+        d.why = why ? why.value.slice(0, 1000) : "";
+        const t = form.querySelector("input[name=time]:checked");
+        d.answers.time = t ? t.value : RULES.default_time;
+      } else if (state.step === 2) {
+        RULES.areas.forEach(ar => {
+          const c = form.querySelector(`input[name="area-${ar.id}"]:checked`);
+          d.answers.areas[ar.id] = c && c.value !== "" ? Number(c.value) : null;
+        });
+      }
+      return true;
+    }
+    function finishPlacement() {
+      if (!collectStep()) return;
+      const d = draftAnswers();
+      const answers = Object.assign({ version: 1 }, d.answers);
+      if (!answers.goals.length) answers.goals = [RULES.default_goal];
+      profile = { v: 1, at: new Date().toISOString(), why: d.why, answers };
+      saveProfile();
+      state.draft = null;
+      go("pfad");
+      announce("Dein Pfad ist bereit.");
+    }
+
+    function renderPath() {
+      const result = currentResult();
+      if (!result) {
+        return `<h1>Mein Pfad</h1><p class="lead">Noch keine Einstufung. Mach sie in fünf Minuten oder nimm den Pfad des Live-Workshops.</p>
+          <div class="row"><button type="button" class="btn primary" data-screen="einstufung">Einstufung starten</button><button type="button" class="btn" data-action="live-path">Live-Workshop-Pfad nehmen</button></div>`;
+      }
+      const total = result.totals.work_min + result.totals.skim_min;
+      const doneCount = result.chapters.filter(c => (c.status === "work" || c.status === "skim") && progress.done[c.id]).length;
+      const recommended = result.chapters.filter(c => c.status === "work" || c.status === "skim").length;
+      const goalLabels = profile.answers.goals.map(g => (RULES.goals.find(x => x.id === g) || {}).label || g).join(" · ");
+      const warn = result.warnings.map(w => `<div class="warning" role="note">⚠ ${esc(RULES.warnings[w.code] || w.code)}${w.ids.length ? " (" + w.ids.map(esc).join(" → ") + ")" : ""}</div>`).join("");
+      const row = c => {
+        const ch = CH[c.id];
+        const done = !!progress.done[c.id];
+        const options = ["work", "skim", "skip", "later"].map(s => `<option value="${s}"${c.status === s ? " selected" : ""}>${esc(STATUS[s])}</option>`).join("");
+        return `<li class="${done ? "is-done" : ""}">
+          <span>${done ? chip("done") : chip(c.status)}${ch.safety_floor ? ` <span class="chip safe" title="Sicherheitsboden">${SHIELD}<span class="sr-only">Sicherheitsboden</span></span>` : ""}</span>
+          <span class="title">${chapterLink(ch)}<span class="why">${esc(reasonText(c.reason))}${c.override ? " (deine Wahl)" : ""}</span></span>
+          <span class="min">${c.status === "work" ? ch.minutes : skimMinutes(ch.minutes, RULES.skim_percent)} Min</span>
+          <span><label class="sr-only" for="ov-${esc(c.id)}">Empfehlung für ${esc(c.id)} ändern</label><select id="ov-${esc(c.id)}" data-action="override" data-id="${esc(c.id)}">${options}</select></span>
+        </li>`;
+      };
+      const stages = result.stages.map(s => `<section class="stage"><div class="stage-head"><h2>Etappe ${s.n}</h2><span class="muted">${esc(hoursText(s.minutes))}</span></div><ul class="rows">${result.chapters.filter(c => c.stage === s.n).map(row).join("")}</ul></section>`).join("");
+      const skipped = result.chapters.filter(c => c.status === "skip");
+      const later = result.chapters.filter(c => c.status === "later");
+      return `<h1>Mein Pfad</h1>
+        <p class="lead">Ziel: ${esc(goalLabels)}.${profile.why ? " Dein Warum: „" + esc(profile.why) + "“" : ""}</p>
+        <div class="summary"><span><b>${stagesText(result.stages.length)}</b></span><span>zusammen <b>${esc(hoursText(total))}</b></span><span><b>${doneCount}</b> von ${recommended} erledigt</span></div>
+        ${warn}
+        <div class="row"><button type="button" class="btn" data-screen="einstufung">Einstufung ändern</button><button type="button" class="btn" data-action="reset-overrides">Eigene Änderungen zurücknehmen</button><button type="button" class="btn" data-action="reset-profile">Einstufung löschen</button></div>
+        ${stages}
+        ${skipped.length ? `<details class="more"><summary>Schnellcheck reicht (${skipped.length})</summary><ul class="rows">${skipped.map(row).join("")}</ul></details>` : ""}
+        ${later.length ? `<details class="more"><summary>Später oder nicht dein Ziel (${later.length})</summary><ul class="rows">${later.map(row).join("")}</ul></details>` : ""}`;
+    }
+
+    function renderLibrary() {
+      const map = statusMap(currentResult());
+      const zones = [];
+      DATA.shelves.forEach(s => { if (!zones.includes(s.zone)) zones.push(s.zone); });
+      const legend = ["work", "skim", "skip", "later", "done"].map(s => chip(s)).join("") + ` <span class="chip safe">${SHIELD} Sicherheitsboden</span>`;
+      const floors = zones.map(z => {
+        const shelves = DATA.shelves.filter(s => s.zone === z);
+        const rooms = shelves.map(s => {
+          const doors = ORDERED.filter(c => c.shelf === s.id).map(c => {
+            const st = map[c.id] ? map[c.id].status : "later";
+            const done = progress.done[c.id];
+            return `<a class="door st-${st}${done ? " is-done" : ""}" href="?run=${esc(c.id)}" data-chapter="${esc(c.id)}" title="${esc(c.title)} — ${esc(done ? STATUS.done : STATUS[st])}, ${c.minutes} Min">${esc(c.id)}${c.safety_floor ? ` <span class="floor-mark">${SHIELD}</span>` : ""}<span class="sr-only"> ${esc(c.title)}, ${esc(done ? STATUS.done : STATUS[st])}</span></a>`;
+          }).join("");
+          return `<section class="room" aria-labelledby="room-${esc(s.id)}"><h3 id="room-${esc(s.id)}">${esc(s.title)}</h3><p>${esc(s.purpose)}</p><div class="doors">${doors}</div></section>`;
+        }).join("");
+        return `<div class="floor"><div class="floor-name">${esc(z)}<small>${shelves.length} ${shelves.length === 1 ? "Regal" : "Regale"}</small></div><div class="rooms">${rooms}</div></div>`;
+      }).join("");
+      return `<h1>Bibliothek</h1>
+        <p class="lead">Der Gebäudeplan der Bibliothek: Stockwerke sind Themenzonen, Räume sind Regale, jede Tür ist ein Kapitel. ${map && Object.keys(map).length ? "Die Farbe zeigt deine Empfehlung." : "Mach die Einstufung, dann zeigen die Türen deine Empfehlung."}</p>
+        <div class="legend" aria-label="Legende">${legend}</div>
+        <div class="plan">${floors}</div>`;
+    }
+
+    function quizBlock(c, idPrefix) {
+      if (!c.quiz) return "";
+      const qh = c.quiz_html || { q: esc(c.quiz.q), correct: esc(c.quiz.correct), wrong: c.quiz.wrong.map(esc) };
+      const options = shuffle([{ html: qh.correct, right: true }].concat(qh.wrong.map(w => ({ html: w, right: false }))));
+      return `<div class="quiz" data-quiz="${esc(c.id)}"><strong>${qh.q}</strong><div class="opts">` +
+        options.map(o => `<button type="button" data-action="quiz" data-id="${esc(c.id)}" data-correct="${o.right ? "1" : "0"}">${o.html}</button>`).join("") +
+        `</div><p class="feedback" id="${idPrefix}-fb-${esc(c.id)}" aria-live="polite"></p></div>`;
+    }
+    function renderChapter(id) {
+      const c = CH[id];
+      if (!c) return `<h1>Kapitel nicht gefunden</h1><p><button type="button" class="btn" data-screen="bibliothek">Zur Bibliothek</button></p>`;
+      progress.lastId = id; saveProgress();
+      const result = currentResult();
+      const map = statusMap(result);
+      const mine = map[id];
+      const order = pathOrder(result);
+      const pos = order.indexOf(id);
+      const prev = pos > 0 ? CH[order[pos - 1]] : (pos === -1 ? ORDERED[ORDERED.indexOf(c) - 1] : null);
+      const next = pos >= 0 && pos < order.length - 1 ? CH[order[pos + 1]] : (pos === -1 ? ORDERED[ORDERED.indexOf(c) + 1] : null);
+      const shelf = SHELF[c.shelf] || { title: c.shelf };
+      const done = !!progress.done[id];
+      const reqs = c.requires.map(r => CH[r]).filter(Boolean);
+      const diagramHtml = html => html.replace(/<div class="diagram" data-diagram="([0-9a-f]{8})"><\/div>/g, (m, key) => DATA.diagrams && DATA.diagrams[key] ? `<div class="diagram">${DATA.diagrams[key]}</div>` : m);
+      const full = c.html ? `<details class="full"><summary>Ganzes Kapitel lesen</summary><div class="prose">${diagramHtml(c.html)}</div></details>` : (c.full_url ? `<p class="full"><a href="${esc(c.full_url)}" target="_blank" rel="noopener noreferrer">Ganzes Kapitel auf GitHub lesen</a></p>` : "");
+      return `<p class="crumbs"><a href="?screen=bibliothek" data-screen="bibliothek">Bibliothek</a> › ${esc(shelf.title)}</p>
+        <div class="chapter"><div class="chapter-main">
+          <h1>${esc(c.id)} · ${esc(c.title)}</h1>
+          <div class="meta"><span class="chip">${esc(LEVEL[c.level] || c.level)}</span><span class="chip">${c.minutes} Min</span>${c.safety_floor ? `<span class="chip safe">${SHIELD} Sicherheitsboden</span>` : ""}${mine ? chip(mine.status) : ""}${done ? chip("done") : ""}</div>
+          <p class="outcome">${rich(c, "outcome")}</p>
+          ${c.skip_check && c.skip_check.length ? `<section class="block quick" aria-labelledby="h-quick"><h2 id="h-quick">Schnellcheck</h2><ul>${(c.skip_check_html || c.skip_check.map(esc)).map(q => `<li>${q}</li>`).join("")}</ul><div class="row"><button type="button" class="btn" data-action="can-skip" data-id="${esc(id)}">Beides sicher ja — überspringen</button><span class="muted small">Sonst lies weiter.</span></div></section>` : ""}
+          ${c.glance ? `<section class="block"><h2>Auf einen Blick</h2><p>${rich(c, "glance")}</p></section>` : ""}
+          ${c.analogy ? `<section class="block"><h2>Bild im Kopf</h2><div class="analogy">${rich(c, "analogy")}</div></section>` : ""}
+          ${c.example ? `<section class="block"><h2>Ausprobieren</h2><div class="code"><button type="button" class="copy" data-action="copy" data-id="${esc(id)}">Kopieren</button><pre><code>${esc(c.example)}</code></pre></div></section>` : ""}
+          ${c.checkpoint || c.quiz ? `<section class="block"><h2>Check</h2>${c.checkpoint ? `<p>${rich(c, "checkpoint")}</p>` : ""}${quizBlock(c, "ch")}</section>` : ""}
+          ${full}
+          <nav class="pager" aria-label="Kapitel blättern">${prev ? `<a href="?run=${esc(prev.id)}" data-chapter="${esc(prev.id)}">← ${esc(prev.id)} ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="?run=${esc(next.id)}" data-chapter="${esc(next.id)}">${esc(next.id)} ${esc(next.title)} →</a>` : ""}</nav>
+        </div>
+        <aside class="side">
+          <div class="panel"><button type="button" class="btn ${done ? "" : "primary"}" data-action="toggle-done" data-id="${esc(id)}" aria-pressed="${done}">${done ? "Als offen markieren" : "Als erledigt markieren"}</button>
+          ${mine ? `<p class="small muted gap-top">${esc(reasonText(mine.reason))}</p>` : ""}</div>
+          ${reqs.length ? `<div class="panel"><h2>Baut auf</h2><ul>${reqs.map(r => `<li>${chapterLink(r)}</li>`).join("")}</ul></div>` : ""}
+          ${c.sources && c.sources.length ? `<div class="panel"><h2>Offizielle Quellen</h2><ul>${c.sources.map(s => `<li><a href="${esc(s)}" target="_blank" rel="noopener noreferrer">${esc(s.replace(/^https:\/\//, ""))}</a></li>`).join("")}</ul></div>` : ""}
+          <div class="panel"><h2>Regal</h2><p class="small">${esc(shelf.title)} — ${esc(shelf.purpose || "")}</p></div>
+        </aside></div>`;
+    }
+
+    function renderReview() {
+      const done = ORDERED.filter(c => progress.done[c.id] && c.quiz);
+      if (!done.length) return `<h1>Wiederholen</h1><p class="lead">Hier fragen wir dich später nach Kapiteln, die du erledigt hast — mit Abstand, damit es hängen bleibt. Markiere zuerst ein Kapitel als erledigt.</p>`;
+      const picked = done.slice().sort((a, b) => (progress.doneAt[a.id] || "").localeCompare(progress.doneAt[b.id] || "")).slice(0, 5);
+      return `<h1>Wiederholen</h1><p class="lead">Fünf Fragen zu Kapiteln, die du am längsten nicht gesehen hast. Abrufen aus dem Gedächtnis festigt mehr als erneutes Lesen.</p>` +
+        shuffle(picked).map(c => `<div class="review-q"><p class="small muted">${chapterLink(c)}</p>${quizBlock(c, "rv")}</div>`).join("");
+    }
+
+    function render() {
+      document.querySelectorAll(".nav button").forEach(b => {
+        const active = b.dataset.screen === state.screen || (state.screen === "kapitel" && b.dataset.screen === "bibliothek");
+        if (active) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+      });
+      const main = document.getElementById("main");
+      let html = "";
+      if (state.screen === "einstufung") html = renderPlacement();
+      else if (state.screen === "pfad") html = renderPath();
+      else if (state.screen === "bibliothek") html = renderLibrary();
+      else if (state.screen === "wiederholen") html = renderReview();
+      else if (state.screen === "kapitel") html = renderChapter(state.chapter);
+      else html = renderStart();
+      main.innerHTML = html;
+      document.title = (state.screen === "kapitel" && CH[state.chapter] ? CH[state.chapter].id + " · " + CH[state.chapter].title + " — " : "") + "Claude Code Workshop Lern-Cockpit";
+      showStorageNotice();
+    }
+
+    // ---------- events ----------
+    function setOverride(id, value) {
+      if (!profile) return;
+      const result = currentResult();
+      const computedStatus = result ? result.chapters.find(c => c.id === id).status : null;
+      profile.answers.overrides = profile.answers.overrides || {};
+      if (value === computedStatus && !(id in profile.answers.overrides)) return;
+      profile.answers.overrides[id] = value;
+      saveProfile();
+      render();
+      announce("Empfehlung für " + id + " geändert.");
+    }
+    document.addEventListener("click", event => {
+      const target = event.target.closest("[data-action], [data-screen], [data-chapter]");
+      if (!target) return;
+      if (target.matches("a[data-chapter]") || target.matches("a[data-screen]")) {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.button === 1) return;
+        event.preventDefault();
+      }
+      if (target.dataset.chapter && target.tagName === "A") { go("kapitel", target.dataset.chapter); return; }
+      if (target.dataset.screen && !target.dataset.action) { go(target.dataset.screen); return; }
+      const action = target.dataset.action;
+      const id = target.dataset.id;
+      if (action === "theme") {
+        const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+        document.documentElement.dataset.theme = next;
+        writeJson(THEME_KEY, { theme: next });
+      } else if (action === "live-path") {
+        profile = { v: 1, at: new Date().toISOString(), why: profile ? profile.why || "" : "", answers: { version: 1, goals: ["moderieren"], time: RULES.default_time, areas: {}, scenarios: {}, overrides: {} } };
+        saveProfile(); go("pfad");
+      } else if (action === "step-next") {
+        if (collectStep()) { state.step = Math.min(state.step + 1, STEP_TITLES.length - 1); render(); $("#main").focus(); }
+      } else if (action === "step-back") {
+        collectStep(); state.step = Math.max(0, state.step - 1); render(); $("#main").focus();
+      } else if (action === "finish") {
+        finishPlacement();
+      } else if (action === "scenario") {
+        const d = draftAnswers();
+        d.answers.scenarios[target.dataset.sid] = target.dataset.oid;
+        const y = window.scrollY; render(); window.scrollTo(0, y);
+      } else if (action === "quiz") {
+        const box = target.closest(".quiz");
+        box.querySelectorAll("button").forEach(b => { b.classList.remove("right", "wrong"); b.removeAttribute("aria-pressed"); });
+        const right = target.dataset.correct === "1";
+        target.classList.add(right ? "right" : "wrong");
+        target.setAttribute("aria-pressed", "true");
+        const fb = box.querySelector(".feedback");
+        fb.textContent = right ? "Richtig." : "Nicht ganz — lies den Abschnitt noch einmal oder frag nach.";
+      } else if (action === "toggle-done") {
+        if (progress.done[id]) { delete progress.done[id]; delete progress.doneAt[id]; }
+        else { progress.done[id] = true; progress.doneAt[id] = new Date().toISOString(); }
+        saveProgress(); render(); announce(progress.done[id] ? id + " erledigt." : id + " wieder offen.");
+      } else if (action === "can-skip") {
+        if (profile) setOverride(id, "skip");
+        const order = pathOrder(currentResult());
+        const pos = order.indexOf(id);
+        const next = pos >= 0 && pos < order.length - 1 ? order[pos + 1] : (ORDERED[ORDERED.findIndex(c => c.id === id) + 1] || {}).id;
+        if (next) go("kapitel", next);
+      } else if (action === "copy") {
+        const text = CH[id] ? CH[id].example : "";
+        const done = () => { target.textContent = "Kopiert"; window.setTimeout(() => { target.textContent = "Kopieren"; }, 1500); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => { target.textContent = "Bitte markieren"; });
+        else target.textContent = "Bitte markieren";
+      } else if (action === "reset-overrides") {
+        if (profile) { profile.answers.overrides = {}; saveProfile(); render(); announce("Eigene Änderungen zurückgenommen."); }
+      } else if (action === "reset-profile") {
+        if (target.dataset.confirm === "1") { profile = null; saveProfile(); go("start"); announce("Einstufung gelöscht."); }
+        else { target.dataset.confirm = "1"; target.textContent = "Wirklich löschen? Nochmal klicken"; }
+      }
+    });
+    document.addEventListener("change", event => {
+      const t = event.target;
+      if (t.matches("select[data-action=override]")) setOverride(t.dataset.id, t.value);
+      if (t.matches("input[name=goal]")) {
+        const checked = document.querySelectorAll("input[name=goal]:checked");
+        if (checked.length > 2) { t.checked = false; announce("Höchstens zwei Ziele."); }
+      }
+    });
+    document.addEventListener("keydown", event => {
+      if (state.screen !== "kapitel" || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      const tag = (event.target.tagName || "").toLowerCase();
+      if (["input", "textarea", "select", "button", "a"].includes(tag)) return;
+      const link = event.key === "ArrowRight" ? $(".pager a:last-child") : event.key === "ArrowLeft" ? $(".pager a:first-child") : null;
+      if (link && link.dataset.chapter) { event.preventDefault(); go("kapitel", link.dataset.chapter); }
+    });
+    window.addEventListener("popstate", () => { readLocation(); render(); });
+
+    // ---------- start ----------
+    const theme = readJson(THEME_KEY);
+    if (theme && theme.theme === "light") document.documentElement.dataset.theme = "light";
+    readLocation();
+    render();
+  </script>
+</body>
+</html>

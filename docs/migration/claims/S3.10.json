@@ -1,0 +1,117 @@
+{
+ "id": "S3.10",
+ "verdict": "pass",
+ "counts": {
+  "kept": 8,
+  "changed": 2,
+  "dropped": 0,
+  "new": 11
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:803",
+   "old": "Both live in `settings.json` (project or managed scope)",
+   "new": "`deniedDomains` in jeder Settings-Datei; `autoMode` nur in ~/.claude/settings.json, Managed Settings, --settings, nicht in .claude/settings.json im Repo",
+   "rating": "ok",
+   "reason": "Korrektur des Quellfehlers; Beleg auto-mode-config.md (Z.68-72: 'doesn't read autoMode from project settings'), settings-reference (deniedDomains Scope Any file) per curl geprueft."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:802",
+   "old": "`autoMode.hard_deny` — Unconditional block-list for auto mode, overrides Claude's classifier",
+   "new": "Regeln fuer den Klassifikator, die weder Nutzerbitte noch allow-Ausnahme aufweicht; Eintraege sind Saetze",
+   "rating": "ok",
+   "reason": "Praezisierung, Doku (auto-mode-config Z.223): 'block unconditionally. User intent and allow exceptions don't apply'. Wortlaut 'overrides the classifier' war ungenau."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Gesperrte Domain bleibt gesperrt trotz passendem allowedDomains-Platzhalter; gleiche Schreibweise (Domain, Muster, IP, :port)",
+   "rating": "ok",
+   "reason": "settings-reference Z.2594 per curl bestaetigt (wortgleich sinngemaess)."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "deniedDomains wird aus allen Quellen gemerged, auch bei allowManagedDomainsOnly; Entwickler koennen verschaerfen",
+   "rating": "ok",
+   "reason": "settings-reference Z.2610 bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "hard_deny-Eintraege sind Prosa-Saetze; Tool-Muster gehoeren in permissions.deny (greift vor Klassifikator)",
+   "rating": "ok",
+   "reason": "auto-mode-config Z.219 bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "\"$defaults\" gehoert in die Liste; ohne ersetzt die Liste die eingebauten Regeln, Datenabfluss-Regel faellt weg",
+   "rating": "ok",
+   "reason": "auto-mode-config Z.262-265 bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "autoMode-Lesequellen ~/.claude/settings.json, Managed, --settings/Agent SDK; nicht .claude/settings(.local).json, Grund: fremdes Repo darf keine eigenen Ausnahmen mitbringen",
+   "rating": "ok",
+   "reason": "auto-mode-config Z.60-72 bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Entwickler koennen Eintraege ergaenzen, keine Managed-Eintraege entfernen; permissions.deny in Managed greift vor dem Klassifikator (zweites Tor)",
+   "rating": "ok",
+   "reason": "auto-mode-config Z.74 und Z.77 bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "`claude auto-mode config` zeigt wirksame Regeln",
+   "rating": "ok",
+   "reason": "auto-mode-config Z.300ff: Subcommands defaults/config bestaetigt (config = effektive Konfiguration)."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Ersatztext `[shell command execution disabled by policy]`, auch mehrzeilige Bloecke; gilt fuer Nutzer-/Projekt-/Plugin-/Zusatzverzeichnis-Quellen; Bundled und Managed ausgenommen; true in Managed nicht ueberschreibbar",
+   "rating": "ok",
+   "reason": "settings-reference Z.4180-4184 und skills.md Z.673 bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Shell-Befehle laufen vor Uebergabe des Skill-Inhalts an Claude, Ausgabe wird eingesetzt",
+   "rating": "ok",
+   "reason": "Standardverhalten dynamic context injection (skills.md), konsistent mit Quelle 'at skill-load time'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Sandbox: deniedDomains nur fuer Befehle in der Sandbox (/sandbox)",
+   "rating": "ok",
+   "reason": "settings-reference Z.772 'for sandboxed commands' bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Skill(<name>)-Regeln in permissions.allow fuer geprueften Skills",
+   "rating": "ok",
+   "reason": "Ausformulierung von Quelle 'permissions.allow for explicitly approved skills'; Syntax in S3.8 belegt."
+  }
+ ],
+ "style": []
+}

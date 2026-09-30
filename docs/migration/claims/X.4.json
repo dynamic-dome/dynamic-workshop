@@ -1,0 +1,11 @@
+{"id":"X.4","verdict":"pass",
+ "counts":{"kept":131,"changed":0,"dropped":0,"new":3},
+ "items":[
+  {"status":"new","source":"resources/library/x-04-agenten-im-dauerbetrieb.md:101","old":"","new":"Das heißt für dich: Die Grenzen stellst du ein.","rating":"ok","reason":"Schlussfolgerung aus den belegten SECURITY.md-Zitaten (Prompt Injection ohne Grenzumgehung, vom Betreiber installiertes Plugin); als Folgerung formuliert, keine Tatsachenbehauptung über das Projekt."},
+  {"status":"new","source":"resources/library/x-04-agenten-im-dauerbetrieb.md:219","old":"","new":"Heißt: Solange du den Token dort nicht widerrufst, kann jede Kopie, die noch irgendwo liegt, ihn weiter benutzen.","rating":"ok","reason":"Folgerung aus dem belegten Zitat (channels logout ist kein Widerruf beim Anbieter); als Folgerung markiert."},
+  {"status":"new","source":"resources/library/x-04-agenten-im-dauerbetrieb.md:121","old":"","new":"Das Muster (Schlussfolgerung aus dieser Tabelle): Die Standardwerte halten den Eingang zu ... die meisten Risiken unten an.","rating":"ok","reason":"Ausdrücklich als Schlussfolgerung gekennzeichnet; Prämissen je Tabellenzeile belegt. Ebenso die Schluss:-Markierungen in der Risikotabelle (Kosten, Speicher)."}
+ ],
+ "style":[
+  {"rating":"ok","where":"Weiterlesen","issue":"Link https://docs.openclaw.ai/install (HTTP 200) steht nicht in sources:; reiner Verweis, keine Tatsachenaussage. Optional in sources aufnehmen."},
+  {"rating":"ok","where":"gesamt","issue":"Alle 131 Zitate aus facts-X.4.json live per curl gefunden (0 Fehltreffer, nach Normalisierung von Markdown/Anführungszeichen). Claude-Code-Aussagen gegen cli-reference.md (--max-budget-usd, --max-turns, print-only), memory.md (MEMORY.md in jede Session), channels/remote-control und Kapitel S1.11, S1.19, S2.17, S3.13, S4.6 geprüft. validate grün, Datenschutz-Grep leer, Wort Narbe nicht vorhanden, Prüfdatum 30.09.2026 vorhanden, keine Personenpronomen, keine Stern-/Nutzerzahlen, keine Wertung gegenüber Claude Code, Typ community ohne Schnellcheck/Vorführen/Quiz, genau ein cockpit:example, Meta stimmt mit chapter-meta.yaml. Didaktik: klare übertragbare Lehre (Text von außen = Eingabe mit Rechten; Gegenmittel je Risiko; Notaus), mit Claude-Code-Entsprechungen."}
+ ]}

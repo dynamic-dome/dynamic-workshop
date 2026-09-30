@@ -1,0 +1,224 @@
+{
+ "id": "S4.5",
+ "verdict": "ask",
+ "counts": {
+  "kept": 44,
+  "changed": 13,
+  "dropped": 0,
+  "new": 12
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1550",
+   "old": "curl -fsSL https://code.claude.com/install.sh | bash (GitHub-Workflow)",
+   "new": "Hinweis: Installer liegt unter https://claude.ai/install.sh; der Codeblock selbst zeigt weiter die alte Adresse",
+   "rating": "ok",
+   "reason": "Per curl geprueft: code.claude.com/install.sh antwortet 302/301 auf eine HTML-Seite; setup.md:43 und gitlab-ci-cd.md:84 nennen claude.ai/install.sh. Korrektur stimmt. Siehe style-Eintrag zum unkorrigierten Codeblock."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1565",
+   "old": "gh pr comment ohne GH_TOKEN",
+   "new": "Hinweis: Schritt mit GitHub CLI braucht GH_TOKEN, z. B. secrets.GITHUB_TOKEN",
+   "rating": "ok",
+   "reason": "Stimmt fachlich (gh in Actions braucht GH_TOKEN); steht in der GitHub-CLI-Doku, nicht in den Claude-Code-Seiten (dort per grep nicht belegt). Inhaltlich korrekt, unschaedlich."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1566",
+   "old": "jq -r '.summary' /tmp/review.json",
+   "new": "Hinweis: ohne --json-schema steht die Antwort in .result; eigenes Feld nur mit Schema unter .structured_output",
+   "rating": "ok",
+   "reason": "headless.md:159 (jq -r '.result') und :142 (structured_output) belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1595",
+   "old": "export PATH=\"$HOME/.claude/bin:$PATH\"",
+   "new": "Hinweis: Installer legt claude unter ~/.local/bin ab; export PATH=\"$HOME/.local/bin:$PATH\"",
+   "rating": "ok",
+   "reason": "gitlab-ci-cd.md:85-86 belegt."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: GitLab, Hinweis Alpine-Pakete)",
+   "old": "-",
+   "new": "Alpine braucht libgcc, libstdc++, ripgrep und USE_BUILTIN_RIPGREP=0",
+   "rating": "ok",
+   "reason": "setup.md:143 belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1637",
+   "old": "IAM permissions for bedrock:InvokeModel on the Anthropic model IDs only",
+   "new": "Rechte aus der Bedrock-Anleitung, darunter bedrock:InvokeModel und bedrock:InvokeModelWithResponseStream, beschraenkt auf die Claude-Modelle",
+   "rating": "ok",
+   "reason": "amazon-bedrock.md:408-409 listet beide Actions; Erweiterung korrekt."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: Option B)",
+   "old": "-",
+   "new": "WebFetch fragt weiter bei api.anthropic.com an, ausser skipWebFetchPreflight: true",
+   "rating": "ok",
+   "reason": "network-config.md:238 belegt."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: Option A)",
+   "old": "-",
+   "new": "downloads.claude.ai fuer den Installer steht in der Netzwerk-Doku",
+   "rating": "ok",
+   "reason": "network-config.md:220 belegt."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: Option C)",
+   "old": "-",
+   "new": "Vertex AI heisst in der Doku heute 'Agent Platform' von Google Cloud",
+   "rating": "ok",
+   "reason": "google-vertex-ai.md:5-7 und headless.md:49 belegt."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: GitHub Actions)",
+   "old": "-",
+   "new": "Offizielle Action anthropics/claude-code-action@v1; /install-github-app richtet App, Secret, Workflow ein",
+   "rating": "ok",
+   "reason": "github-actions.md:22, 193 belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1541",
+   "old": "--bare fuer sauberen Lauf; Abo-Token: --bare weglassen und nur fuer vertrauenswuerdige PRs",
+   "new": "Zusatz: --bare liest API-Key, apiKeyHelper oder Cloud-Zugangsdaten, nie Abo-Token; ohne --bare fuehrt -p Hooks und MCP-Server des ausgecheckten Repos aus",
+   "rating": "ok",
+   "reason": "headless.md:41 und :49 belegen beides."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1684",
+   "old": "/cost shows spend for the current interactive session",
+   "new": "/usage (Alias /cost) zeigt die Kosten der laufenden Sitzung",
+   "rating": "ok",
+   "reason": "commands.md:77, 162: /cost ist Alias von /usage."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1686",
+   "old": "aggregates API spend across all calls under your token",
+   "new": "Usage-Seite fasst Ausgaben aller Aufrufe mit deinen Keys zusammen",
+   "rating": "ok",
+   "reason": "Sinngleich, praeziser."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: CI-Kosten, Eigenes Logging)",
+   "old": "-",
+   "new": "Fuer einen einzelnen Lauf reicht --output-format json mit total_cost_usd",
+   "rating": "ok",
+   "reason": "headless.md:104 belegt."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: CI-Kosten, OpenTelemetry)",
+   "old": "-",
+   "new": "Die Werte von OTEL_RESOURCE_ATTRIBUTES duerfen keine Leerzeichen enthalten",
+   "rating": "ok",
+   "reason": "monitoring-usage.md:409 'No spaces allowed'."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: Token-Rotation, API-Key)",
+   "old": "-",
+   "new": "Ein geloeschtes CI-Secret macht den Key nicht ungueltig: auch in der Console loeschen",
+   "rating": "ok",
+   "reason": "Fachlich zwingend (Key lebt bei Anthropic), sicherheitsrelevante Ergaenzung, keine Doku-Stelle noetig."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: Pre-Commit-Hook)",
+   "old": "-",
+   "new": "Ein Git-Pre-Commit-Hook bricht bei jedem Exit-Code != 0 ab, ein PreToolUse-Hook von Claude Code blockt nur mit exit 2",
+   "rating": "ask",
+   "reason": "Git-Seite stimmt, deckt sich mit 05-bewertung.md Z. 27. 'nur' ist unscharf: hooks.md:780 sagt, dass JSON-Entscheidungsfelder ebenfalls blocken; nur Exit 2 ist von JSON nicht ueberschreibbar. Vorschlag: 'mit exit 2 (oder per JSON-Entscheidung)'. Orchestrator entscheidet."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1675",
+   "old": "Windows: PowerShell-Fassung 'git diff --cached | claude --bare -p \"...\" --output-format json'",
+   "new": "Einzeilige Fassung mit zusaetzlich --max-budget-usd 0.10",
+   "rating": "ok",
+   "reason": "Sinngleich, Budgetflag ergaenzt, konsistent mit dem Hook."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:449-452",
+   "old": "--max-budget-usd 0.10 as a hard cap, worst-case cost of a commit attempt is one dime",
+   "new": "im schlimmsten Fall etwa zehn Cent (die Antwort, die die Grenze ueberschreitet, wird noch bezahlt, siehe S4.4)",
+   "rating": "ok",
+   "reason": "Praezisierung; in s4-04 Z. 82 so belegt."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: Uebung, Voraussetzung)",
+   "old": "-",
+   "new": "ANTHROPIC_API_KEY noetig, da --bare kein Abo nutzt; nur Abo: --bare im Wegwerf-Repo weglassen; Hook blockt sonst jeden Commit",
+   "rating": "ok",
+   "reason": "headless.md:43-49. Folge (Hook blockt, weil Ausgabe nicht mit OK beginnt) aus dem Hookcode ableitbar."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:487-494",
+   "old": "Success Check: every Module 3.6 flag (--bare, --max-budget-usd, --output-format) appears",
+   "new": "--bare nur 'wenn du einen API-Key hast'",
+   "rating": "ok",
+   "reason": "Folgt aus der neuen Voraussetzung."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: Fuer Schnelle)",
+   "old": "-",
+   "new": "Ergebnis liegt im Stretch in .structured_output",
+   "rating": "ok",
+   "reason": "headless.md:142."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1713",
+   "old": "Use a sandboxed runner if you need full automation",
+   "new": "Runner in einer Sandbox (Link S3.8)",
+   "rating": "ok",
+   "reason": "Verweisziel existiert (s3-08-rechte-fuer-autonomie.md); Sandbox-Thema liegt eher in S3.9, S3.8 nennt sie nur am Rande, unschaedlich."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1515-1526",
+   "old": "/autofix-pr: Safety note plus When-to-use-Liste (5 Punkte) plus Branch-Protection-Hinweis als Zitatblock",
+   "new": "Safety note bleibt; Liste als Fliesstext gekuerzt, Details per Link auf S1.17",
+   "rating": "ok",
+   "reason": "Alle Punkte und Branch-Protection stehen im Fliesstext; S1.17 Z. 99-104 fuehrt sie vollstaendig. Kein Verlust."
+  },
+  {
+   "status": "new",
+   "source": "n/a (Kapitel: Quizfrage)",
+   "old": "-",
+   "new": "Quizfrage zu /autofix-pr bei Produktions-Deploys",
+   "rating": "ok",
+   "reason": "Deckt sich mit der Sicherheitsaussage der Quelle; siehe style-Eintrag zur Antwortlaenge."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "GitHub-Actions- und GitLab-Codeblock",
+   "issue": "Die kopierbaren YAML-Bloecke enthalten weiter die als falsch erkannten Stellen (code.claude.com/install.sh, jq '.summary', PATH ~/.claude/bin, gh ohne GH_TOKEN). Nur die Hinweisboxen davor korrigieren. Wer den Block kopiert, bekommt kaputten Code; besser im Block beheben. Schreiber hat die Vorlage bewusst verbatim gelassen, Orchestrator entscheidet."
+  },
+  {
+   "rating": "ask",
+   "where": "Quizfrage",
+   "issue": "Die richtige Antwort ist mit 135 Zeichen etwas laenger als die Falsch-Antworten (131/124/126): leichter Laengenhinweis auf die Loesung. Richtige kuerzen oder Falsch-Antworten angleichen."
+  }
+ ]
+}

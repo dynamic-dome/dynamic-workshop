@@ -1,0 +1,45 @@
+{
+ "id": "S2.10",
+ "verdict": "fix",
+ "counts": {
+  "kept": 58,
+  "changed": 1,
+  "dropped": 0,
+  "new": 3
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:703-709 (u.a. 'the same routing as exit 2')",
+   "old": "Blocken geht auch per hookSpecificOutput.permissionDecision \"deny\" (derselbe Weg wie exit 2).",
+   "new": "s2-10-hook-ausgaben.md:316 (Check): \"warum nur `exit 2` blockt\"",
+   "rating": "fix",
+   "reason": "Widerspricht dem Kapitel selbst (Z. 93: permissionDecision deny blockt ebenfalls) und der Quelle. Formulierung auf 'warum exit 2 (oder deny) blockt, ein weiches Signal nicht' ändern."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "s2-10-hook-ausgaben.md:312: Beispielpfad C:\\proj\\secrets\\db.txt und Falle 'Vergleich auf secrets/ greift unter Windows nicht'",
+   "rating": "ok",
+   "reason": "Folgt direkt aus der Quelle (Demo 2.2b: Gate normalisiert Windows-Backslashes; früherer Einzeiler erkannte nichts); Beispielpfad ist Illustration."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "s2-10-hook-ausgaben.md:34-45: Mermaid-Sequenzdiagramm (Gate blockt Write auf .env, redact-output.sh schwärzt Bash-Ausgabe)",
+   "rating": "ok",
+   "reason": "Veranschaulicht nur Quellaussagen, keine neuen Fakten."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "s2-10-hook-ausgaben.md:327-329: Quiz-Distraktoren (u.a. 'updatedToolOutput wirkt ausschließlich bei MCP-Tools')",
+   "rating": "ok",
+   "reason": "Bewusst falsche Antworten, als Distraktor erkennbar falsch gegenüber Z. 55; Längen der Antworten ausgeglichen."
+  }
+ ],
+ "style": []
+}

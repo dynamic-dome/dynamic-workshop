@@ -1,0 +1,109 @@
+{
+ "id": "S1.6",
+ "verdict": "pass",
+ "counts": {
+  "kept": 8,
+  "changed": 1,
+  "dropped": 2,
+  "new": 9
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:142",
+   "old": "Cloud sessions only support two permission modes, acceptEdits and plan; auto, dontAsk, bypassPermissions not available.",
+   "new": "Cloud-Sitzungen bieten Accept edits, Plan und Auto an (Auto nur, wenn Organisation und Modell es erlauben); Bypass permissions gibt es nicht (Z.116).",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur. permission-modes.md (curl geprueft): 'Cloud sessions: Accept edits, Plan, and Auto ... Auto mode appears only when your organization allows it and the selected model supports it. Bypass permissions isn't available.'"
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:142",
+   "old": "...because cloud sessions don't have a trusted-VM boundary the way your local machine does.",
+   "new": "",
+   "rating": "ok",
+   "reason": "Begruendung ist in der Doku nicht belegt; die Korrektur des Kernsatzes ersetzt sie. Kein Fakt verloren."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:142",
+   "old": "If your workflow depends on `auto`, stay local.",
+   "new": "",
+   "rating": "ok",
+   "reason": "Folgt aus der Korrektur: Auto ist in Cloud-Sitzungen verfuegbar, der Rat waere falsch."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Abschnitt 'default heisst jetzt Manual': Manual in CLI, --help, VS Code/JetBrains, Desktop; Wert bleibt default; manual-Alias ab v2.1.200 (Z.67-69)",
+   "rating": "ok",
+   "reason": "Belegt: permission-modes.md 'named Manual in the CLI ... The CLI accepts manual as an alias ... require Claude Code v2.1.200 or later.'"
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Startmodus-Reihenfolge Flag > permissions.defaultMode > eingebaut; -p/SDK und disableAutoMode = default; auto nicht verfuegbar -> Manual (Z.71-85)",
+   "rating": "ok",
+   "reason": "Belegt: 'takes the permission mode from the first of these that applies', Tabelle 'claude -p or Agent SDK: default', 'disableAutoMode ... default', 'auto isn't available ... starts the session in Manual'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Beispiel ~/.claude/settings.json defaultMode default; Statusleiste '⏸ manual mode on' (Z.85-96)",
+   "rating": "ok",
+   "reason": "Belegt: Doku-Beispiel 'Save it in ~/.claude/settings.json' und 'shows ⏸ manual mode on'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Umschalten: Shift+Tab-Zyklus, auto am Ende, bypassPermissions nur freigeschaltet (3 Flags, --allow- nimmt ohne Aktivierung auf), dontAsk nie im Zyklus, Statusleisten-Texte (Z.98-106)",
+   "rating": "ok",
+   "reason": "Belegt wortgleich durch 'During a session: press Shift+Tab ...' und die drei Aufzaehlungspunkte. Auslassung von permissions.defaultMode:bypassPermissions als weiterem Weg ist durch 'etwa' gedeckt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "acceptEdits: Dateisystem-Befehle mkdir, rm, mv im Arbeitsordner; plan: Befehle, die der Klassifikator freigibt, wenn auto verfuegbar; Deny-Regeln blocken in jedem Modus (Z.59-65)",
+   "rating": "ok",
+   "reason": "Belegt: 'common filesystem Bash commands: mkdir, touch, rm, rmdir, mv, cp, and sed'; Tabelle plan; 'Deny rules block in every mode, including bypassPermissions'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "auto: senkt Rueckfragen, garantiert keine Sicherheit; dontAsk laeuft nur, was in Manual keine Freigabe braucht plus Allow-Regeln; bypassPermissions nimmt auch Schreibzugriffe auf geschuetzte Pfade wie .git an (Z.110-112)",
+   "rating": "ok",
+   "reason": "Belegt: 'reduces permission prompts but does not guarantee safety'; dontAsk-Abschnitt 'Claude still runs actions that need no approval in Manual mode'; Protected-Paths-Regel (.git gelistet, nur bypassPermissions ausgenommen)."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Cloud: defaultMode dontAsk/bypassPermissions aus Settings werden still ignoriert; Accept edits steht an Stelle von Manual (Z.116-118)",
+   "rating": "ok",
+   "reason": "Belegt: 'ignored silently' und 'Accept edits corresponds to default mode: cloud sessions pre-approve file edits regardless of mode'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Typische Fallen: defaultMode auto in Projekt-settings.json wirkt nicht, bypassPermissions dort startet in Manual; Empfehlung ~/.claude/settings.json (Z.122)",
+   "rating": "ok",
+   "reason": "Belegt: 'If you set auto in .claude/settings.json ... doesn't take effect ... bypassPermissions ... starts in Manual mode. Move it to ~/.claude/settings.json.'"
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "'/permissions verwaltet Regeln, keinen Modus' (Z.106)",
+   "rating": "ok",
+   "reason": "Belegt durch permissions.md: 'view and manage ... tool permissions with /permissions. The dialog lists all permission rules'; Modus-Wechsel laut Doku ueber Shift+Tab/Flags/Settings, nicht ueber /permissions."
+  }
+ ],
+ "style": []
+}

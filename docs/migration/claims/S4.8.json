@@ -1,0 +1,115 @@
+{
+ "id": "S4.8",
+ "verdict": "ask",
+ "counts": {
+  "kept": 58,
+  "changed": 5,
+  "dropped": 1,
+  "new": 6
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:518",
+   "old": "The same pattern with `claude remote-control` and Channels (MCP-push) is the future-default.",
+   "new": "Dasselbe Muster gibt es offiziell: `claude remote-control` und Channels (MCP-Push, noch Research Preview).",
+   "rating": "ok",
+   "reason": "Prognose 'future-default' durch belegbare Aussage ersetzt; Kanon-Linie der Channels als Research Preview."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1281",
+   "old": "Hooks | Standing orders requiring authorization",
+   "new": "Hooks | Zutritts- und Alarmsensoren, die bei jedem Ereignis auslösen (S2.6)",
+   "rating": "ok",
+   "reason": "Analogie auf die Sensor-Metapher von S2.6 angeglichen; Bedeutung (Hook feuert ereignisgesteuert) korrekt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1279",
+   "old": "Worktrees | Locked rooms within the same building",
+   "new": "Worktrees | Prüfstand: ein Nachbau, getrennt von der echten Anlage",
+   "rating": "ok",
+   "reason": "Analogie umformuliert, Isolationsaussage bleibt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:727",
+   "old": "Circuit Breaker: PostToolUse Hook detecting 3x same error",
+   "new": "PostToolUseFailure-Hook, der dreimal denselben Fehler erkennt",
+   "rating": "ok",
+   "reason": "Gewollte Hook-Korrektur; hooks.md listet PostToolUseFailure als 'After a tool call fails' (per curl geprüft)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:736",
+   "old": "Agent Team as Virtual Dev Org: TeamCreate + SendMessage + Sonnet teammates",
+   "new": "Agent Teams (experimentell) + SendMessage + Sonnet-Teammitglieder",
+   "rating": "ok",
+   "reason": "Tool-Name durch Feature-Bezeichnung mit Experimentell-Hinweis ersetzt; unschädlich."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/capstone-exit-assessment.md (Self-Efficacy-Check Ein-/Ausgang)",
+   "old": "Session Entry / Exit Self-Efficacy Check, 1-5 Skala",
+   "new": "",
+   "rating": "ok",
+   "reason": "Liegt nicht in den Heimat-Bereichen von S4.8 (ownership.json) und gehört zur Session-Moderation; kein Verlust im Kapitel."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Typische Fallen: 'Nur exit 2 blockt; jeder andere Exit-Code und ein Timeout lassen die Aktion laufen. Den Bash-Befehl liest der Hook aus tool_input.command.'",
+   "rating": "ok",
+   "reason": "Gewollt (H-01, H-02, H-04); hooks.md per curl geprüft: 'Exit 2 means a blocking error', 'any exit code other than 2' nicht blockierend, tool_input.command im Beispiel."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Warum jeder Agent einen Worktree bekommt: eigener Dateistand auf eigenem Branch.",
+   "rating": "ok",
+   "reason": "worktrees.md: 'separate working directory with its own files and branch'; Subagent-Worktrees branchen ebenfalls."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Falle: Playground-Schwachstelle nur auf Branch/Worktree fixen; Zitat 'Do NOT fix them in this playground — they are the teaching target.'",
+   "rating": "ok",
+   "reason": "Zitat wörtlich in workshop-playground/CLAUDE.md:75; Hinweis sinnvoll."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Blaupausen-Spalte 'Kapitel' mit Querverweisen (S2.10, S3.6, S3.8, S4.3, S1.10, S2.12, S3.4, S1.4, S2.2, S4.6, S3.5)",
+   "rating": "ok",
+   "reason": "Reine Navigation; Zielkapitel in chapter-meta vorhanden."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Gruppe/Allein-Format: allein bewertest du dich selbst mit der Rubrik; Fan-out/Pipeline-Etikettierung im Diagramm-Text",
+   "rating": "ok",
+   "reason": "Didaktische Ergänzung ohne neue Fakten; Begriffe konsistent mit S3.4."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Quizfrage zum Worktree-Grund plus Check-Fragen 1-3",
+   "rating": "ok",
+   "reason": "Pflichtteil; Antworten ähnlich lang (kein Längen-Hinweis), falsche Optionen plausibel."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Links",
+   "issue": "s4-05, s4-06, s4-07, s4-09, s4-10 existieren in resources/library noch nicht; Dateinamen stimmen mit chapter-meta.yaml überein, Linkprüfung erst nach Fertigstellung dieser Kapitel sinnvoll."
+  }
+ ]
+}

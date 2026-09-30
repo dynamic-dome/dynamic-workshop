@@ -1,0 +1,12 @@
+{"id":"S4.2","verdict":"ask","counts":{"kept":44,"changed":2,"dropped":0,"new":3},
+"items":[
+{"status":"changed","source":"resources/demos/block-3-demos.md:126","old":"Mention `codex auth login` is required outside the workshop.","new":"Erwähne, dass außerhalb des Workshops eine Anmeldung mit `codex login` nötig ist. (library/s4-02-codex-schwarm.md:157)","rating":"ask","reason":"Befehl geändert. `codex login` ist der reale Codex-CLI-Befehl, steht aber weder in Spec Anhang B noch in H-01..H-17, und es gibt kein Doku-Zitat (Codex gehört nicht zu code.claude.com). Orchestrator soll entscheiden, ob gewollte Korrektur."},
+{"status":"changed","source":"resources/modules/block-3-advanced.md:444","old":"Anthropic's data policies (Block 3.3 retention table)","new":"Die Datenregeln von Anthropic (Aufbewahrung und Training, siehe S3.11) (library/s4-02-codex-schwarm.md:61)","rating":"ok","reason":"Verweis auf neue Kapitelstruktur; S3.11 existiert als Datei in links/Weiterlesen."},
+{"status":"new","source":"resources/exercises/block-3-exercises.md:99","old":"Your use case: Where in your current work would you use a Codex Swarm? What task would benefit ...?","new":"… Und darf der Code dafür überhaupt an OpenAI gehen (Abschnitt „Datenfluss\")? (library/s4-02-codex-schwarm.md:173)","rating":"ok","reason":"Didaktische Verbindung zur Datenfluss-Grenze, keine neue Sachaussage."},
+{"status":"new","source":"-","old":"","new":"Vorbedingung Demo: „Dazu das Plugin `multi-model-orchestrator`.\" (library:117)","rating":"ok","reason":"Folgt aus Recovery-Note der Quelle (Plugin nicht installiert) und Modul-Aussage, dass es ein eigenes Plugin ist."},
+{"status":"new","source":"-","old":"","new":"Quizfrage mit Distraktor `--max-budget-usd`, Mermaid-Diagramm, Analogie Montageteam (library:31-55, 186-195)","rating":"ok","reason":"Pflichtteile/Didaktik. `--max-budget-usd` ist als Distraktor-Flag verwendet, nicht als Behauptung über Verhalten; Antwort deckt sich mit Quelle."}
+],
+"style":[
+{"rating":"ask","where":"Check, Frage 2","issue":"Fragt „was jeder kostet\", aber die Kapiteltext nennt Kosten nur für Option 1 (Sonnet, Kosten steigen etwas). Für Option 2 und 3 fehlt die Aussage. Entweder Frage kürzen oder Text ergänzen (Quelle gibt nichts her)."},
+{"rating":"ask","where":"Im Detail, Datenfluss, Option 1","issue":"Quelle: Sonnet übernimmt die 'bulk implementation'; Kapitel: 'die Umsetzung'. Unschädlich, aber leicht gröber."}
+]}

@@ -1,0 +1,157 @@
+{
+ "id": "S2.3",
+ "verdict": "pass",
+ "counts": {
+  "kept": 28,
+  "changed": 4,
+  "dropped": 2,
+  "new": 12
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:401",
+   "old": "allowed-tools: Suggests which tools this skill needs; scoping intent (not a hard security boundary)",
+   "new": "allowed-tools gibt die Tools frei: Claude darf sie im Turn des Skill-Aufrufs ohne Rückfrage nutzen; Freigabe endet mit der nächsten Nachricht; nichts wird eingeschränkt",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur, belegt: skills.md Frontmatter-Tabelle 'Tools Claude can use without asking permission during the turn that invokes this skill. The grant clears when you send your next message.' und 'It does not restrict which tools are available'. Kommentar im YAML bleibt bewusst stehen und wird im Text als irreführend benannt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:412",
+   "old": "allowed-tools: Scoping intent (not a hard security boundary!)",
+   "new": "Wann einsetzen: Wenige, eng benannte Tools für einen Ablauf, den du selbst auslöst",
+   "rating": "ok",
+   "reason": "Folgt aus der belegten Korrektur; Empfehlung ist Formulierungshilfe."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-2-ecosystem.md:415",
+   "old": "model: Cost control: haiku for simple skills",
+   "new": "Zeile in Tabelle zusammengefasst zu 'context, agent, model' mit Verweis auf S2.2",
+   "rating": "ok",
+   "reason": "Fakt steht in s2-02-skill-schreiben.md:132 ('Für einfache Skills spart haiku Kosten'), Ziel vorhanden."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-2-ecosystem.md:413-414",
+   "old": "context: fork / agent: <type> Wirkungs- und Einsatz-Zeilen",
+   "new": "Verweis auf Feldtabelle in S2.2",
+   "rating": "ok",
+   "reason": "Inhalt in s2-02-skill-schreiben.md:137-138 vorhanden; YAML-Beispiel im neuen Kapitel bleibt identisch."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:416",
+   "old": "user-invocable: false: Hides from command list, only auto-triggered",
+   "new": "Verschwindet aus dem /-Menü; nur Claude kann ihn laden, du nicht",
+   "rating": "ok",
+   "reason": "Präzisierung, belegt: skills.md 'Claude Code hides it from the / menu and doesn't run it when you type /name'."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:299",
+   "old": "Since v2.x merged into a single concept",
+   "new": "Seit v2.x zusammengelegt; Command-Datei ist das ältere Format und funktioniert weiter",
+   "rating": "ok",
+   "reason": "Kern gleich; Zusatz belegt durch skills.md Z.149."
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "Eine Command-Datei kennt `name` und `paths` nicht, alle anderen Frontmatter-Felder schon",
+   "rating": "ok",
+   "reason": "Belegt: skills.md 'supports the same frontmatter except name and paths'."
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "Für Neues einen Skill nehmen, weil nur ein Skill-Ordner Zusatzdateien mitbringen kann",
+   "rating": "ok",
+   "reason": "Belegt: skills.md 'Prefer a skill for new work, since skills also support supporting files'."
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "Tragen Skill und Command-Datei denselben Namen, gewinnt der Skill",
+   "rating": "ok",
+   "reason": "Belegt: skills.md Tabelle 'A skill and a file in .claude/commands/ | The skill'."
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "Mit disable-model-invocation: true steht die Beschreibung nicht in Claudes Kontext; versucht Claude den Aufruf trotzdem, blockt Claude Code ihn",
+   "rating": "ok",
+   "reason": "Belegt: skills.md 'Description not in context' und 'If Claude tries anyway, Claude Code blocks the call'."
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "Command-Dateien liegen auch in .claude/commands/ im Projekt",
+   "rating": "ok",
+   "reason": "Belegt: skills.md Z.149 und Namenstabelle."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-2-ecosystem.md:246",
+   "old": "(Quelle zeigt user_invocable: true unkommentiert)",
+   "new": "Warnblock: user_invocable mit Unterstrich unbekannt, Feldnamen mit Bindestrich außer when_to_use, unbekannte Felder still ignoriert",
+   "rating": "ok",
+   "reason": "Belegt: skills.md 'Field names use lowercase words separated by hyphens, except when_to_use' und 'ignores a field it doesn't recognize without reporting an error'. Korrigiert Fehler der Quelle."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-2-ecosystem.md:244",
+   "old": "(Quelle zeigt name: commit im Command-Frontmatter)",
+   "new": "name gilt in Command-Datei nicht; commit.md wird zu /commit",
+   "rating": "ok",
+   "reason": "Belegt: skills.md 'except name and paths' und Tabelle 'File under .claude/commands/ → file name without extension'."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-2-ecosystem.md:247-252",
+   "old": "(Quelle zeigt arguments als Objektliste mit description/required)",
+   "new": "arguments ist Liste von Namen oder String mit Leerzeichen; Objekte nennt die Referenz nicht",
+   "rating": "ok",
+   "reason": "Belegt: skills.md 'Accepts a space-separated string or a YAML list'. Korrigiert Quellfehler."
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "allowed-tools eines Projekt-Skills wirkt auch in einem -p-Lauf in nie vertrautem Ordner; fremde Repos vorher prüfen",
+   "rating": "ok",
+   "reason": "Belegt: skills.md 'including in a -p run in a folder you've never trusted'."
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "disallowed-tools oder deny-Regeln, um Tools wirklich wegzunehmen",
+   "rating": "ok",
+   "reason": "Belegt: skills.md disallowed-tools-Zeile und 'add deny rules'."
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "Falle: user-invocable: false versteckt nur vor dir, nicht vor Claude; dafür disable-model-invocation: true",
+   "rating": "ok",
+   "reason": "Belegt: skills.md 'With user-invocable: false, you can't invoke the skill, but Claude still can.'"
+  },
+  {
+   "status": "new",
+   "source": "keine",
+   "old": "",
+   "new": "Falle: Skill springt zu oft an, Beschreibung schärfen oder disable-model-invocation: true",
+   "rating": "ok",
+   "reason": "Didaktische Folgerung aus belegtem Verhalten; keine neue Tatsachenbehauptung."
+  }
+ ],
+ "style": []
+}

@@ -1,0 +1,131 @@
+{
+ "id": "S1.3",
+ "verdict": "pass",
+ "counts": {
+  "kept": 24,
+  "changed": 4,
+  "dropped": 3,
+  "new": 7
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:146-150",
+   "old": "/mobile pushes the current conversation to the iOS App (requires logged-in mobile session)",
+   "new": "/mobile zeigt nur einen QR-Code zum Installieren der Claude-App (Aliase /ios, /android); die Sitzung wandert nicht mit",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur. commands.md (curl geprüft): '/mobile | Show QR code to download the Claude mobile app. Aliases: /ios, /android'."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:146-150",
+   "old": "/chrome opens the current conversation in claude.ai/code in your default browser",
+   "new": "/chrome richtet Claude in Chrome ein (Browser-Steuerung für Web-Tests), hat mit claude.ai/code nichts zu tun",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur. commands.md: '/chrome | Configure Claude in Chrome settings'."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:132",
+   "old": "Both (VS Code and JetBrains) expose a mode-indicator UI at the bottom of the prompt box, switch with one click instead of /permissions",
+   "new": "Modusanzeige nur in VS Code; JetBrains startet claude im integrierten Terminal, Modi per Shift+Tab",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur. permission-modes.md: 'The JetBrains plugin runs Claude Code in the IDE terminal, so switching permission modes works the same as in the CLI: press Shift+Tab'; jetbrains.md: 'The plugin runs the claude command in your IDE's integrated terminal'. Der Teilsatz 'statt /permissions zu tippen' entfällt folgenlos."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:152",
+   "old": "Use case: start on the CLI, /mobile when leaving the office, /chrome back into the web app at another machine",
+   "new": "Wechsel nur über /desktop; Remote Control (/remote-control) und /teleport verwiesen auf S4.6",
+   "rating": "ok",
+   "reason": "Folge der /mobile- und /chrome-Korrektur; der Anwendungsfall war auf falschen Befehlen gebaut. /remote-control und /teleport laut commands.md belegt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:142",
+   "old": "Cloud sessions only support acceptEdits and plan; auto, dontAsk, bypassPermissions not available (no trusted-VM boundary)",
+   "new": "Nur Verweis: 'In Cloud-Sitzungen stehen nicht alle Rechte-Modi zur Verfügung; welche es sind, steht in S1.6'",
+   "rating": "ok",
+   "reason": "Ziel vorhanden: s1-06-rechte-modi.md Zeile 114-118 (Accept edits, Plan, Auto; Bypass nicht; dontAsk/bypass aus Settings ignoriert). Die Altaussage war falsch: permission-modes.md nennt Cloud: 'Accept edits, Plan, and Auto ... Bypass permissions isn't available'. Die Begründung 'trusted-VM' steht in keiner Doku-Stelle, Wegfall gewollt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:132",
+   "old": "Liste der Modi (default / acceptEdits / plan / auto / bypassPermissions) im Nebensatz",
+   "new": "-",
+   "rating": "ok",
+   "reason": "Gehört zu S1.6 (alle Modi), dort vollständig; hier unschädliche Straffung."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:132",
+   "old": "JetBrains-IDE-Liste inkl. Rider",
+   "new": "'u. a. für IntelliJ IDEA, PyCharm, WebStorm und GoLand'",
+   "rating": "ok",
+   "reason": "Rider entfällt aus der Beispielliste, 'u. a.' deckt es ab; jetbrains.md nennt als Beispiele IntelliJ, PyCharm, WebStorm 'and more'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Desktop-App: 'Linux als Beta'",
+   "rating": "ok",
+   "reason": "desktop.md: 'Get Claude for Linux (beta)'. Zusammen mit Quelle 'Mac/Windows' erweiterte Plattformangabe, belegt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Desktop: 'Einige reine CLI-Funktionen fehlen, etwa Skripting und das Agent SDK'",
+   "rating": "ok",
+   "reason": "desktop.md Tabelle: 'Scripting and automation | --print, Agent SDK | Not available'; platforms.md: 'scripting and the Agent SDK are CLI-only'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "/desktop erscheint nur unter macOS und x64-Windows mit Claude-Abo; Beispielzeile im Codeblock",
+   "rating": "ok",
+   "reason": "commands.md: '/desktop | ... Requires macOS or x64 Windows and a Claude subscription'; desktop.md: 'not available with API key authentication ...'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Mobil: 'Tab Code der Claude-App', 'Eine eigene Claude-Code-App gibt es nicht', Claude-App auch für Android; Sitzungen 'standardmäßig' auf Anthropics Infrastruktur",
+   "rating": "ok",
+   "reason": "mobile.md: 'Claude Code doesn't have a separate mobile app: cloud sessions and Remote Control ... live in the Code tab', 'iOS and Android'; claude-code-on-the-web.md: 'By default it runs on infrastructure Anthropic manages'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "JetBrains-Plugin startet claude im integrierten Terminal und verbindet sich damit",
+   "rating": "ok",
+   "reason": "jetbrains.md: 'The plugin runs the claude command in your IDE's integrated terminal and connects to it.'"
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Desktop-App: Diffs grafisch prüfen (Beispiel beim Wechsel, Quizfrage)",
+   "rating": "ok",
+   "reason": "desktop.md: 'use Desktop when you want to ... review changes visually'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Kapitelteile Bild im Kopf (Desktop-Schreibtisch, Web/Handy-Analogie), Tabelle 'Welche Oberfläche wofür?', Fallen, Quiz, Mermaid",
+   "rating": "ok",
+   "reason": "Didaktische Analogien und Zusammenfassung vorhandener Aussagen; Tabelle inhaltsgleich zu Quelle und Doku (platforms.md). Keine neuen Fakten."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Quizfrage",
+   "issue": "Nur die richtige Antwort nennt die Bedingung 'unter macOS oder x64-Windows mit Claude-Abo'; Längenunterschied gering (ca. 106 vs. 96-113 Zeichen), aber die Zusatzbedingung kann als Lösungshinweis gelesen werden. Nicht blockierend."
+  }
+ ]
+}

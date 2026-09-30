@@ -132,6 +132,7 @@ CANON_HEADER = re.compile(r"^Geprüft:\s*(\d{4}-\d{2}-\d{2})\s*[·|]\s*CLI\s+(\d
 CANON_TABLE_HEAD = re.compile(r"^\|\s*Modell\s*\|\s*ID\s*\|\s*Alias\s*\|\s*Tier\s*\|\s*Status\s*\|\s*Retirement[^|]*\|.*$", re.M)
 DEPRECATIONS_HEAD = re.compile(r"^\|\s*API model name\s*\|\s*Current state\s*\|.*$", re.M)
 SOURCE_LINE = re.compile(r"^- (Doku|CLI-Version|Changelog):\s*(https://\S+)\s*$", re.M)
+FOREIGN_LINE = re.compile(r"^- Fremdprojekt:\s*(https://\S+)\s+\((S\d\.\d+|X\.\d+)\)\s*$")
 ALIAS_ROW = re.compile(r"^\|\s*\*\*`([^`]+)`\*\*\s*\|", re.M)
 MODE_ROW = re.compile(r"^\|\s*((?:\[?`[A-Za-z]+`\]?(?:\([^)]*\))?(?:,\s*)?)+)\s*\|", re.M)
 MODE_FLAG_ROW = re.compile(r"^\|\s*`--permission-mode`\s*\|(.*)$", re.M)
@@ -228,6 +229,19 @@ def parse_canon_sources(text):
     return sources
 
 
+def parse_canon_foreign(text):
+    """[(url, chapter)] of the `- Fremdprojekt: <url> (<chapter>)` lines; ValueError on a line without a chapter."""
+    found = []
+    for line in text.splitlines():
+        if "fremdprojekt:" not in line.lower():
+            continue  # any spelling that mentions the kind must be the exact form, or the source goes unwatched
+        match = FOREIGN_LINE.match(line)
+        if not match:
+            raise ValueError(f"Kanon: Fremdprojekt-Zeile ohne Kapitel: {line}")
+        found.append((match.group(1), match.group(2)))
+    return found
+
+
 def version_tuple(version):
     return tuple(int(part) for part in version.split("."))
 
@@ -283,14 +297,26 @@ def normalize_cockpit(text):
     return "\n".join(line for line in lines if not PROVENANCE.match(line))
 
 
+def normalize_foreign(text):
+    """Readable text of a third-party page: scripts, styles, comments and tags dropped, whitespace collapsed.
+
+    Build hashes and markup changes of a docs site then do not count as a content change."""
+    text = re.sub(r"<(script|style)\b.*?</\1\s*>", " ", text, flags=re.S | re.I)
+    text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
+    text = re.sub(r"<[^>]+>", " ", text)
+    return " ".join(text.split())
+
+
 def parse_exceptions(text):
     entries = {}
     for number, raw in enumerate(text.splitlines(), 1):
         line = raw.strip()
         if not line or line.startswith("#"):
             continue
-        value, sep, reason = line.partition("|")
-        if not sep or len(reason.strip()) < 3:
-            raise ValueError(f"Ausnahme Zeile {number}: Format 'bezeichner | grund' (Grund mindestens 3 Zeichen)")
-        entries[value.strip()] = reason.strip()
+        parts = [part.strip() for part in line.split("|", 2)]
+        files = frozenset(f.strip() for f in parts[1].split(",") if f.strip()) if len(parts) == 3 else frozenset()
+        if len(parts) != 3 or not files or len(parts[2]) < 3:
+            raise ValueError(f"Ausnahme Zeile {number}: Format 'bezeichner | datei[, datei] | grund' "
+                             "(mindestens eine Datei, Grund mindestens 3 Zeichen)")
+        entries[parts[0]] = {"files": files, "reason": parts[2]}
     return entries

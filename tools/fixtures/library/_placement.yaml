@@ -1,0 +1,19 @@
+version: 1
+skim_percent: 30
+base_shelves: [hooks]
+minimum_path: [S2.7, S2.8]
+quickstart_warn_minutes: 180
+default_goal: alltag
+chapter_goals: {}
+default_time: abende
+times:
+  - {id: schnellstart, label: Schnellstart, stage_minutes: null}
+  - {id: abende, label: Ein paar Abende, stage_minutes: 150}
+goals:
+  - {id: alltag, label: Alltag beschleunigen, focus_shelves: [hooks]}
+areas:
+  - {id: hooks, label: Hooks, statement: "Ich habe einen Hook gebaut, der wirklich blockt.", chapters: [S2.7, S2.8]}
+scenarios: []
+reasons:
+  not-goal: Nicht Teil deines Ziels.
+warnings: {}

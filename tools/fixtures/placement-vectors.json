@@ -1,0 +1,894 @@
+{
+ "_about": "Spezifikation der Einstufung (Spec §6.3) als Personas. 'expect' ist von Hand aus Spec und docs/migration/chapter-meta.yaml abgeleitet, nicht aus dem Code. 'same_as' verlangt identische Ausgabe.",
+ "personas": [
+  {
+   "id": "P01",
+   "title": "Anfänger, alltag, abende",
+   "answers": {
+    "goals": [
+     "alltag"
+    ],
+    "time": "abende"
+   },
+   "expect": {
+    "status": {
+     "S0.1": [
+      "work",
+      "new"
+     ],
+     "X.2": [
+      "skim",
+      "community"
+     ],
+     "X.1": [
+      "skim",
+      "community"
+     ],
+     "S1.9": [
+      "work",
+      "new"
+     ],
+     "S1.20": [
+      "work",
+      "practice"
+     ],
+     "S2.20": [
+      "work",
+      "practice"
+     ],
+     "S3.15": [
+      "later",
+      "not-goal"
+     ],
+     "S2.1": [
+      "work",
+      "new"
+     ],
+     "S2.5": [
+      "work",
+      "new"
+     ],
+     "S3.8": [
+      "work",
+      "new"
+     ],
+     "S4.8": [
+      "later",
+      "not-goal"
+     ],
+     "S4.9": [
+      "work",
+      "new"
+     ],
+     "S4.10": [
+      "work",
+      "new"
+     ],
+     "S2.8": [
+      "skim",
+      "prerequisite"
+     ],
+     "S2.6": [
+      "skim",
+      "prerequisite"
+     ],
+     "X.3": [
+      "later",
+      "not-goal"
+     ],
+     "X.4": [
+      "later",
+      "not-goal"
+     ]
+    },
+    "first_stage": [
+     "S0.1",
+     "X.2",
+     "S1.1",
+     "S1.2",
+     "S1.3",
+     "S1.4",
+     "S1.5",
+     "S1.6",
+     "S1.7",
+     "S1.8",
+     "S1.9"
+    ],
+    "first_stage_minutes": 144,
+    "warnings": []
+   }
+  },
+  {
+   "id": "P02",
+   "title": "Anfänger, Schnellstart",
+   "answers": {
+    "time": "schnellstart"
+   },
+   "expect": {
+    "recommended": [
+     "S0.1",
+     "S1.1",
+     "S1.2",
+     "S1.5",
+     "S1.6",
+     "S1.10",
+     "S1.13",
+     "S1.14",
+     "S1.16",
+     "S1.19"
+    ],
+    "status": {
+     "S1.3": [
+      "later",
+      "after-quickstart"
+     ],
+     "X.2": [
+      "later",
+      "after-quickstart"
+     ],
+     "S1.5": [
+      "work",
+      "new"
+     ]
+    },
+    "stages": 1,
+    "first_stage_minutes": 152,
+    "warnings": []
+   }
+  },
+  {
+   "id": "P03",
+   "title": "Alles schon gemacht, Ziel Sicherheit",
+   "answers": {
+    "goals": [
+     "security"
+    ],
+    "areas": {
+     "basics": 2,
+     "permissions": 2,
+     "context": 2,
+     "prompting": 2,
+     "git": 2,
+     "cost": 2,
+     "skills": 2,
+     "hooks": 2,
+     "plugins": 2,
+     "mcp": 2,
+     "agents": 2,
+     "review": 2,
+     "automation": 2,
+     "troubleshooting": 2
+    }
+   },
+   "expect": {
+    "status": {
+     "S0.1": [
+      "skip",
+      "known"
+     ],
+     "S2.6": [
+      "skip",
+      "known"
+     ],
+     "S1.5": [
+      "skim",
+      "safety-floor"
+     ],
+     "S1.6": [
+      "skim",
+      "safety-floor"
+     ],
+     "S2.8": [
+      "skim",
+      "safety-floor"
+     ],
+     "S2.13": [
+      "skim",
+      "safety-floor"
+     ],
+     "S2.17": [
+      "skim",
+      "safety-floor"
+     ],
+     "S3.8": [
+      "skim",
+      "safety-floor"
+     ],
+     "S3.9": [
+      "skim",
+      "safety-floor"
+     ],
+     "S3.13": [
+      "skim",
+      "safety-floor"
+     ],
+     "S4.4": [
+      "skim",
+      "safety-floor"
+     ],
+     "S1.20": [
+      "later",
+      "not-goal"
+     ],
+     "S2.20": [
+      "later",
+      "not-goal"
+     ],
+     "X.1": [
+      "skim",
+      "community"
+     ],
+     "X.2": [
+      "skim",
+      "community"
+     ]
+    },
+    "recommended": [
+     "X.2",
+     "S1.5",
+     "S1.6",
+     "S2.8",
+     "S2.13",
+     "X.1",
+     "S2.17",
+     "X.3",
+     "S3.8",
+     "S3.9",
+     "S3.13",
+     "S4.4",
+     "X.4"
+    ],
+    "warnings": []
+   }
+  },
+  {
+   "id": "P04",
+   "title": "Nur einschätzen, gründlich",
+   "answers": {
+    "goals": [
+     "einschaetzen"
+    ],
+    "time": "gruendlich"
+   },
+   "expect": {
+    "status": {
+     "S0.1": [
+      "work",
+      "new"
+     ],
+     "S1.1": [
+      "skim",
+      "assess"
+     ],
+     "S1.10": [
+      "skim",
+      "assess"
+     ],
+     "S1.5": [
+      "work",
+      "new"
+     ],
+     "S1.6": [
+      "work",
+      "new"
+     ],
+     "S3.8": [
+      "work",
+      "new"
+     ],
+     "S3.9": [
+      "work",
+      "new"
+     ],
+     "S4.8": [
+      "skim",
+      "capstone"
+     ],
+     "S1.20": [
+      "skim",
+      "assess"
+     ],
+     "X.1": [
+      "later",
+      "not-goal"
+     ],
+     "X.2": [
+      "later",
+      "not-goal"
+     ],
+     "S2.6": [
+      "skim",
+      "prerequisite"
+     ],
+     "S4.10": [
+      "skim",
+      "assess"
+     ]
+    },
+    "warnings": []
+   }
+  },
+  {
+   "id": "P05",
+   "title": "Automation, Grundlagen gemacht, Hooks neu, Hook-Szenario falsch",
+   "answers": {
+    "goals": [
+     "automation"
+    ],
+    "areas": {
+     "basics": 2,
+     "hooks": 0
+    },
+    "scenarios": {
+     "hook-crash": "b"
+    }
+   },
+   "expect": {
+    "status": {
+     "S0.1": [
+      "skip",
+      "known"
+     ],
+     "S1.1": [
+      "skip",
+      "known"
+     ],
+     "S1.4": [
+      "skip",
+      "known"
+     ],
+     "S2.6": [
+      "work",
+      "new"
+     ],
+     "S2.8": [
+      "work",
+      "new"
+     ],
+     "S2.9": [
+      "work",
+      "new"
+     ],
+     "S2.10": [
+      "work",
+      "new"
+     ],
+     "S4.3": [
+      "work",
+      "new"
+     ],
+     "S4.4": [
+      "work",
+      "new"
+     ],
+     "S4.5": [
+      "work",
+      "new"
+     ],
+     "S3.12": [
+      "work",
+      "new"
+     ]
+    },
+    "warnings": []
+   }
+  },
+  {
+   "id": "P06",
+   "title": "Sicherheit, Übersteuerung S2.8 auf überspringen",
+   "answers": {
+    "goals": [
+     "security"
+    ],
+    "overrides": {
+     "S2.8": "skip"
+    }
+   },
+   "expect": {
+    "status": {
+     "S2.8": [
+      "skip",
+      "override"
+     ],
+     "S2.9": [
+      "work",
+      "new"
+     ],
+     "S2.10": [
+      "work",
+      "new"
+     ],
+     "S4.10": [
+      "work",
+      "new"
+     ]
+    },
+    "overridden": [
+     "S2.8"
+    ],
+    "warnings": [
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S2.8",
+       "S2.9"
+      ]
+     },
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S2.8",
+       "S2.10"
+      ]
+     },
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S2.8",
+       "S4.10"
+      ]
+     },
+     {
+      "code": "override-safety",
+      "ids": [
+       "S2.8"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "P07",
+   "title": "Alltag, Übersteuerung S1.16 auf überspringen",
+   "answers": {
+    "goals": [
+     "alltag"
+    ],
+    "overrides": {
+     "S1.16": "skip"
+    }
+   },
+   "expect": {
+    "status": {
+     "S1.16": [
+      "skip",
+      "override"
+     ],
+     "S1.17": [
+      "work",
+      "new"
+     ],
+     "S1.18": [
+      "work",
+      "new"
+     ]
+    },
+    "warnings": [
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S1.16",
+       "S1.17"
+      ]
+     },
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S1.16",
+       "S1.18"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "P08",
+   "title": "Team und Agenten, alles neu",
+   "answers": {
+    "goals": [
+     "team",
+     "agents"
+    ]
+   },
+   "expect": {
+    "status": {
+     "S2.6": [
+      "work",
+      "new"
+     ],
+     "S2.11": [
+      "work",
+      "new"
+     ],
+     "S2.13": [
+      "work",
+      "new"
+     ],
+     "S3.6": [
+      "work",
+      "new"
+     ],
+     "S3.1": [
+      "work",
+      "new"
+     ],
+     "S3.5": [
+      "work",
+      "new"
+     ],
+     "S3.12": [
+      "work",
+      "new"
+     ],
+     "S4.8": [
+      "work",
+      "capstone"
+     ],
+     "S4.6": [
+      "later",
+      "not-goal"
+     ],
+     "S4.2": [
+      "later",
+      "not-goal"
+     ],
+     "S2.14": [
+      "work",
+      "new"
+     ]
+    },
+    "warnings": []
+   }
+  },
+  {
+   "id": "P09",
+   "title": "Moderieren",
+   "answers": {
+    "goals": [
+     "moderieren"
+    ]
+   },
+   "expect": {
+    "status": {
+     "S4.2": [
+      "work",
+      "new"
+     ],
+     "S4.8": [
+      "work",
+      "capstone"
+     ],
+     "S3.14": [
+      "work",
+      "new"
+     ],
+     "S3.15": [
+      "work",
+      "practice"
+     ],
+     "X.1": [
+      "later",
+      "not-goal"
+     ],
+     "X.2": [
+      "later",
+      "not-goal"
+     ]
+    },
+    "all_session_chapters_recommended": true,
+    "warnings": []
+   }
+  },
+  {
+   "id": "P10",
+   "title": "Nur Ziel angegeben",
+   "answers": {
+    "goals": [
+     "alltag"
+    ]
+   },
+   "expect": {
+    "same_as": "P01"
+   }
+  },
+  {
+   "id": "P11",
+   "title": "Alltag, MCP schon im Einsatz",
+   "answers": {
+    "goals": [
+     "alltag"
+    ],
+    "areas": {
+     "mcp": 2
+    }
+   },
+   "expect": {
+    "status": {
+     "S2.17": [
+      "skim",
+      "safety-floor"
+     ],
+     "S2.14": [
+      "skip",
+      "known"
+     ],
+     "S2.15": [
+      "skip",
+      "known"
+     ],
+     "S2.16": [
+      "later",
+      "not-goal"
+     ]
+    },
+    "warnings": []
+   }
+  },
+  {
+   "id": "P12",
+   "title": "Alles 'weiß nicht', Ziel Automation",
+   "answers": {
+    "goals": [
+     "automation"
+    ],
+    "areas": {
+     "basics": null,
+     "permissions": null,
+     "context": null,
+     "prompting": null,
+     "git": null,
+     "cost": null,
+     "skills": null,
+     "hooks": null,
+     "plugins": null,
+     "mcp": null,
+     "agents": null,
+     "review": null,
+     "automation": null,
+     "troubleshooting": null
+    }
+   },
+   "expect": {
+    "same_as_answers": {
+     "goals": [
+      "automation"
+     ]
+    }
+   }
+  },
+  {
+   "id": "P13",
+   "title": "Team, Grundlagen gehört, Zeitfrage übersprungen",
+   "answers": {
+    "goals": [
+     "team"
+    ],
+    "areas": {
+     "basics": 1
+    }
+   },
+   "expect": {
+    "status": {
+     "S0.1": [
+      "work",
+      "new"
+     ],
+     "S1.1": [
+      "skim",
+      "heard"
+     ],
+     "S1.5": [
+      "work",
+      "new"
+     ],
+     "S4.9": [
+      "work",
+      "new"
+     ]
+    },
+    "max_stage_minutes": 150,
+    "warnings": []
+   }
+  },
+  {
+   "id": "P14",
+   "title": "Alltag, immer mal eine Stunde",
+   "answers": {
+    "goals": [
+     "alltag"
+    ],
+    "time": "stunde"
+   },
+   "expect": {
+    "first_stage": [
+     "S0.1",
+     "X.2",
+     "S1.1",
+     "S1.2",
+     "S1.3"
+    ],
+    "first_stage_minutes": 60,
+    "max_stage_minutes": 60,
+    "warnings": []
+   }
+  },
+  {
+   "id": "P15",
+   "title": "Schnellstart, alles schon gemacht",
+   "answers": {
+    "time": "schnellstart",
+    "areas": {
+     "basics": 2,
+     "permissions": 2,
+     "context": 2,
+     "prompting": 2,
+     "git": 2,
+     "cost": 2
+    }
+   },
+   "expect": {
+    "recommended": [
+     "S1.5",
+     "S1.6",
+     "S3.8",
+     "S3.9"
+    ],
+    "status": {
+     "S1.5": [
+      "skim",
+      "safety-floor"
+     ],
+     "S3.8": [
+      "skim",
+      "safety-floor"
+     ],
+     "S1.16": [
+      "skip",
+      "known"
+     ]
+    },
+    "stages": 1,
+    "warnings": []
+   }
+  },
+  {
+   "id": "P16",
+   "title": "Agenten-Ziel sieht Pi und OpenClaw, Alltag nicht",
+   "answers": {
+    "goals": [
+     "agents"
+    ]
+   },
+   "expect": {
+    "status": {
+     "X.3": [
+      "skim",
+      "community"
+     ],
+     "X.4": [
+      "skim",
+      "community"
+     ],
+     "X.1": [
+      "skim",
+      "community"
+     ]
+    },
+    "warnings": []
+   }
+  },
+  {
+   "id": "P17",
+   "title": "Nur einschätzen sieht Pi und OpenClaw",
+   "answers": {
+    "goals": [
+     "einschaetzen"
+    ]
+   },
+   "expect": {
+    "status": {
+     "X.3": [
+      "skim",
+      "community"
+     ],
+     "X.4": [
+      "skim",
+      "community"
+     ],
+     "X.1": [
+      "later",
+      "not-goal"
+     ]
+    },
+    "warnings": []
+   }
+  },
+  {
+   "id": "P18",
+   "title": "Voraussetzung selbst auf später gesetzt, obwohl ein Kapitel sie braucht",
+   "answers": {
+    "goals": [
+     "alltag"
+    ],
+    "overrides": {
+     "S2.15": "work",
+     "S2.14": "later"
+    }
+   },
+   "expect": {
+    "status": {
+     "S2.14": [
+      "later",
+      "override"
+     ],
+     "S2.15": [
+      "work",
+      "override"
+     ]
+    },
+    "overridden": [
+     "S2.14",
+     "S2.15"
+    ],
+    "warnings": [
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S2.14",
+       "S2.15"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "P19",
+   "title": "Team-Ziel allein: Pi und OpenClaw später, Community-Skills überfliegen",
+   "answers": {
+    "goals": [
+     "team"
+    ]
+   },
+   "expect": {
+    "status": {
+     "X.3": [
+      "later",
+      "not-goal"
+     ],
+     "X.4": [
+      "later",
+      "not-goal"
+     ],
+     "X.1": [
+      "skim",
+      "community"
+     ]
+    },
+    "warnings": []
+   }
+  },
+  {
+   "id": "P20",
+   "title": "Einschätzen plus Team: Pi und OpenClaw gehören dazu",
+   "answers": {
+    "goals": [
+     "einschaetzen",
+     "team"
+    ]
+   },
+   "expect": {
+    "status": {
+     "X.3": [
+      "skim",
+      "community"
+     ],
+     "X.4": [
+      "skim",
+      "community"
+     ]
+    },
+    "warnings": []
+   }
+  }
+ ]
+}

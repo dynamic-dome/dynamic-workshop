@@ -1,0 +1,55 @@
+# Pfad: Meinen Entwickler-Alltag beschleunigen
+
+<!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
+
+Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
+
+**Umfang:** 4 Etappen, zusammen etwa 8 Stunden (455 Min durcharbeiten, 23 Min überfliegen).
+
+## Etappe 1 (~144 Min)
+
+- [S0.1 Werkstatt einrichten](../library/s0-01-werkstatt-einrichten.md) — durcharbeiten
+- [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) — überfliegen
+- [S1.1 Erster Kontakt: sofort eine Datei bauen](../library/s1-01-erster-kontakt.md) — durcharbeiten
+- [S1.2 Coding-Agent statt Chat: das Denkmodell](../library/s1-02-agent-statt-chat.md) — durcharbeiten
+- [S1.3 Die Oberflächen: CLI, Desktop, IDE, Web, iOS](../library/s1-03-oberflaechen.md) — durcharbeiten
+- [S1.4 Eingebaute Werkzeuge und ihre Namen](../library/s1-04-werkzeuge.md) — durcharbeiten
+- [S1.5 Rechte im Alltag: default und acceptEdits](../library/s1-05-rechte-im-alltag.md) 🛡 — durcharbeiten
+- [S1.6 Alle Rechte-Modi im Überblick](../library/s1-06-rechte-modi.md) 🛡 — durcharbeiten
+- [S1.7 Modellwahl und Effort](../library/s1-07-modellwahl-und-effort.md) — durcharbeiten
+- [S1.8 Das Kontextfenster verstehen](../library/s1-08-kontextfenster.md) — durcharbeiten
+- [S1.9 Kontext steuern mit /compact und /rewind](../library/s1-09-kontext-steuern.md) — durcharbeiten
+
+## Etappe 2 (~150 Min)
+
+- [S1.10 CLAUDE.md: die Hausordnung des Projekts](../library/s1-10-claude-md.md) — durcharbeiten
+- [S1.11 Alle Gedächtnis-Ebenen im Überblick](../library/s1-11-gedaechtnis-ebenen.md) — durcharbeiten
+- [S1.12 Imports, --add-dir und AGENTS.md](../library/s1-12-imports-und-agents-md.md) — durcharbeiten
+- [S1.13 Vager und präziser Auftrag im Vergleich](../library/s1-13-vager-und-praeziser-auftrag.md) — durcharbeiten
+- [S1.14 Plan-Modus und schrittweises Vorgehen](../library/s1-14-plan-modus.md) — durcharbeiten
+- [S1.15 Output Styles und Personas](../library/s1-15-output-styles.md) — durcharbeiten
+- [S1.16 Git in einem Fluss: Branch, Commit, PR](../library/s1-16-git-in-einem-fluss.md) — durcharbeiten
+- [S1.17 Git-Befehle in der Sitzung](../library/s1-17-git-befehle.md) — durcharbeiten
+- [S1.18 Worktrees als Testlabor](../library/s1-18-worktrees.md) — durcharbeiten
+- [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](../library/s1-19-kosten-im-blick.md) — durcharbeiten
+
+## Etappe 3 (~136 Min)
+
+- [S1.20 Praxis-Station Session 1: eine Übung wählen](../library/s1-20-praxis-station-1.md) — durcharbeiten
+- [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) — durcharbeiten
+- [S2.2 Eine SKILL.md schreiben](../library/s2-02-skill-schreiben.md) — durcharbeiten
+- [S2.3 Skills oder Commands, und wer sie auslösen darf](../library/s2-03-wer-skills-ausloest.md) — durcharbeiten
+- [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — durcharbeiten
+- [S2.5 Lebendige Prompts: Argumente und dynamischer Inhalt](../library/s2-05-lebendige-prompts.md) — durcharbeiten
+- [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — überfliegen
+- [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — überfliegen
+- [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — überfliegen
+- [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
+- [S2.20 Praxis-Station Session 2: eine Übung wählen](../library/s2-20-praxis-station-2.md) — durcharbeiten
+- [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) 🛡 — durcharbeiten
+
+## Etappe 4 (~48 Min)
+
+- [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
+- [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
+- [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten

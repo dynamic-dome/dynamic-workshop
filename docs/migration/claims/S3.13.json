@@ -1,0 +1,141 @@
+{
+ "id": "S3.13",
+ "verdict": "ask",
+ "counts": {
+  "kept": 17,
+  "changed": 3,
+  "dropped": 3,
+  "new": 10
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1019",
+   "old": "When the cap is hit, Claude stops gracefully and reports the budget exhaustion.",
+   "new": "danach stoppt der Lauf; Subagenten zählen mit, kein weiterer Subagent startet (Z.59)",
+   "rating": "ok",
+   "reason": "Gegen cli-reference.md geprüft: Zeile --max-budget-usd sagt 'before stopping', Subagent-Ausgaben zählen, 'spawning another subagent fails'. 'gracefully/reports' ist nicht belegt und entfällt zu Recht."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1026",
+   "old": "Both /schedule and /loop accept the --worktree flag",
+   "new": "--worktree ist ein Flag von claude selbst, nicht von /loop oder /schedule (Z.83)",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur. worktrees.md: 'Pass --worktree or -w with a name to create an isolated worktree', Branch worktree-<name> unter .claude/worktrees/<name>/. Die beiden Altbeispiele werden in den Fallen als nicht tragend eingeordnet (Z.142-152)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:419",
+   "old": "Start this demo in a session launched with a hard cap, e.g.: claude --max-budget-usd 1.00",
+   "new": "Eine interaktive Sitzung mit claude --max-budget-usd 1.00 ist nicht gedeckelt; harte Grenze nur an -p-Lauf, Demo begrenzt die eine Iteration (Z.105, 138)",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur, belegt: cli-reference.md 'Maximum dollar amount to spend on API calls before stopping (print mode only)'. Die Quelle behauptete fälschlich eine Deckelung."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1010",
+   "old": "Both /loop and /agentic-os:run-loop can burn tokens in a tight cycle",
+   "new": "Z.55 nennt /loop, /goal und Self-Improve-Loops, nicht run-loop",
+   "rating": "ok",
+   "reason": "run-loop gehört zu S3.14 (verlinkt); Bedeutung der Aussage bleibt erhalten."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1019",
+   "old": "difference between a $5 lesson and a $500 surprise",
+   "new": "-",
+   "rating": "ok",
+   "reason": "Rhetorische Zahl ohne Beleg, unschädliche Straffung."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1046",
+   "old": "Channels ... audit-logged via the MCP layer",
+   "new": "-",
+   "rating": "ok",
+   "reason": "Unbelegte Aussage; in channels.md nicht zu finden. Weglassen ist richtig."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "--max-turns: 'endet der Lauf mit einem Fehler'; CLI-Referenz dokumentiert, claude --help listet es nicht (Z.60)",
+   "rating": "ok",
+   "reason": "cli-reference.md: 'Limit the number of agentic turns (print mode only). Exits with an error when the limit is reached.' Lokales claude --help zeigt --max-budget-usd, aber kein --max-turns."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "/goal mit -p läuft in einem Aufruf bis zum Ende (Z.32, 71)",
+   "rating": "ok",
+   "reason": "goal.md: 'Setting a goal with -p runs the loop to completion in a single invocation'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Runden-/Zeitklausel in /goal, weiche Grenze (Z.77)",
+   "rating": "ok",
+   "reason": "goal.md: 'include a turn or time clause in the condition, such as or stop after 20 turns. Claude reports progress against that clause each turn and the evaluator judges it from the conversation.'"
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Esc stoppt selbst getakteten Loop; feste Intervalle laufen bis Löschen oder 7 Tage (Z.78); /loop feuert nur, solange Claude Code läuft und untätig ist (Z.71)",
+   "rating": "ok",
+   "reason": "scheduled-tasks.md: 'press Esc'; 'Recurring tasks automatically expire 7 days after creation'; 'Tasks only fire while Claude Code is running and idle'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "/goal ändert den Rechte-Modus nicht; Standardmodus fragt weiter (Z.79)",
+   "rating": "ok",
+   "reason": "goal.md: 'A goal doesn't change your permission mode ... In Manual mode, Claude still asks before tool calls that your settings don't already allow'. Standardmodus = manual mode."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "worktree.baseRef: fresh (Standard) = Standardbranch auf dem Remote, head = lokaler HEAD; Haupt-Checkout-Sperre auch für Subagenten (Z.83-85)",
+   "rating": "ok",
+   "reason": "worktrees.md: '\"fresh\" (default): branch from the repository's default branch on the remote'; 'Claude Code blocks an Edit, Write, or NotebookEdit that targets a path in the main checkout'; 'same enforcement covers every subagent'. Quelle nannte nur baseRef ohne Werte."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "Channels: Ereignisse nur bei offener Sitzung, --channels, Sender-Allowlist, Rechte-Relay erlaubt jedem Antwortberechtigten Freigabe (Z.93-97)",
+   "rating": "ok",
+   "reason": "channels.md: 'Events only arrive while the session is open'; 'Anyone who can reply through the channel can approve or deny tool use in your session'; --channels und 'sender allowlist' belegt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "/schedule legt Routine in der Cloud an (frischer Klon vom Standardbranch, claude/-Branches) (Z.152)",
+   "rating": "ok",
+   "reason": "routines.md: 'cloned at the start of a run, starting from the default branch. Claude creates claude/-prefixed branches'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "/schedule stellt vor dem Speichern Rückfragen, die in einem -p-Lauf niemand beantwortet (Z.152)",
+   "rating": "ask",
+   "reason": "routines.md sagt nur 'Claude walks through the same information the web form collects'; die Folgerung für -p ist nicht ausdrücklich belegt. Der Schreiber sollte ein Zitat liefern oder auf 'nicht belegt' abschwächen."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "-",
+   "new": "In der Self-Improve-Demo liest man /cost vorher und nachher (Z.105)",
+   "rating": "ok",
+   "reason": "Demo-Anweisung, keine Verhaltensaussage; /cost ist Kanon aus S1.19."
+  }
+ ],
+ "style": []
+}

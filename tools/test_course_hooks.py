@@ -131,7 +131,8 @@ SAFETY_CHECK = [
 @pytest.mark.parametrize("script", SAFETY_CHECK)
 @pytest.mark.parametrize(
     "command",
-    ["rm -rf /tmp/test-directory", "git push --force origin main", "psql -c 'DROP TABLE users'"],
+    ["rm -rf /tmp/test-directory", "git push --force origin main", "git push -f origin main",
+     "psql -c 'DROP TABLE users'"],
 )
 def test_safety_check_blocks_destructive_bash_commands_with_exit_2(script, command):
     result = run(script, pre_bash(command))
@@ -146,6 +147,34 @@ def test_safety_check_allows_harmless_command(script):
 
     assert result.returncode == 0
     assert result.stderr.strip() == ""
+
+
+def pre_powershell(command: str) -> dict:
+    """The PowerShell tool sends the same fields as Bash, the command in tool_input.command (hooks.md)."""
+    return {**pre_bash(command), "tool_name": "PowerShell"}
+
+
+@pytest.mark.parametrize("script", SAFETY_CHECK)
+@pytest.mark.parametrize(
+    "command",
+    ["Remove-Item -Path .\\build -Recurse -Force", "rm .\\build -Recurse", "cmd /c rd /s /q build",
+     "Format-Volume -DriveLetter D", "Get-ChildItem x | Remove-Item -Recurse"],
+)
+def test_safety_check_blocks_destructive_powershell_commands_with_exit_2(script, command):
+    """On Windows the hook is registered as Bash|PowerShell, so it must know PowerShell's destructive forms."""
+    result = run(script, pre_powershell(command))
+
+    assert result.returncode == BLOCK
+    assert "SAFETY HOOK" in result.stderr
+
+
+@pytest.mark.parametrize("script", SAFETY_CHECK)
+@pytest.mark.parametrize("command", ["Get-ChildItem -Recurse -Force", "git status", "Get-Content .\\README.md",
+                                     "git push origin feature-f"])
+def test_safety_check_allows_harmless_powershell_commands(script, command):
+    result = run(script, pre_powershell(command))
+
+    assert result.returncode == 0
 
 
 @pytest.mark.parametrize("script", SAFETY_CHECK)
@@ -253,7 +282,7 @@ ASSET_MARKER = re.compile(r"tested asset: (resources/demos/assets/hooks/[\w.-]+)
 FENCE = re.compile(r"^```[\w-]*\n(.*?)^```", re.S | re.M)
 LIVE_MD = [
     p for p in (ROOT / "resources").rglob("*.md")
-    if not p.relative_to(ROOT).as_posix().startswith(("resources/review-", "resources/archive/"))
+    if not p.relative_to(ROOT).as_posix().startswith("resources/media/")
 ]
 
 
@@ -300,6 +329,9 @@ def hook_config_problems(text: str) -> list:
             continue
         for event, groups in hooks.items():
             for group in groups:
+                if event == "PreToolUse" and group.get("matcher") == "Bash":
+                    problems.append("PreToolUse: matcher \"Bash\" alone never fires with the Windows PowerShell tool "
+                                    "(hooks.md) - use \"Bash|PowerShell\"")
                 extra = set(group) - HOOK_GROUP_KEYS
                 if extra:
                     problems.append(f"{event}: matcher group has {sorted(extra)} (belongs on the handler?)")
@@ -321,6 +353,9 @@ def test_guard_catches_the_old_mistakes():
     )
     assert len(find_wrong_idioms(old)) >= 3
     assert hook_config_problems(old)
+    bash_only = '```json\n{"hooks": {"PreToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "x"}]}]}}\n```\n'
+    assert any("PowerShell" in p for p in hook_config_problems(bash_only))
+    assert hook_config_problems(bash_only.replace('"Bash"', '"Bash|PowerShell"')) == []
 
 
 @pytest.mark.parametrize("path", LIVE_FILES, ids=lambda p: p.relative_to(ROOT).as_posix())
@@ -337,8 +372,19 @@ def _normalise(text: str) -> str:
     return "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").strip().split("\n"))
 
 
+# Copyable assets and the one chapter each lives in (the library keeps every snippet once; secure-diff-gate is
+# copied as a file, not pasted, and has its own behaviour tests above).
+SNIPPET_HOME = {
+    "safety-check.sh": "s2-08-hook-einrichten.md",
+    "safety-check.ps1": "s2-08-hook-einrichten.md",
+    "redact-output.sh": "s2-10-hook-ausgaben.md",
+    "token-firewall.sh": "s2-10-hook-ausgaben.md",
+    "sensitive-data-scanner.sh": "s3-11-datenschutz-und-compliance.md",
+}
+
+
 def test_every_marked_course_snippet_matches_its_tested_asset():
-    checked = 0
+    homes = {}
     for md in LIVE_MD:
         for block in FENCE.findall(md.read_text(encoding="utf-8")):
             marker = ASSET_MARKER.search(block)
@@ -349,7 +395,6 @@ def test_every_marked_course_snippet_matches_its_tested_asset():
             assert _normalise(block) == _normalise(asset.read_text(encoding="utf-8")), (
                 f"{md.relative_to(ROOT)}: snippet drifted from {marker.group(1)}"
             )
-            checked += 1
+            homes.setdefault(asset.name, []).append(md.name)
 
-    # Exercise 2.2 (sh + ps1), Bonus 2.6, Bonus 3.8, Module 2.2 (safety + redact)
-    assert checked >= 6
+    assert homes == {name: [home] for name, home in SNIPPET_HOME.items()}, homes

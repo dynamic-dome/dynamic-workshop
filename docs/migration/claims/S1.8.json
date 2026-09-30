@@ -1,0 +1,107 @@
+{
+ "id": "S1.8",
+ "verdict": "pass",
+ "counts": {
+  "kept": 24,
+  "changed": 3,
+  "dropped": 2,
+  "new": 6
+ },
+ "items": [
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:347",
+   "old": "Size: Up to 1 million tokens for Claude Opus (roughly 750,000 words, or about 5,000 pages of text)",
+   "new": "Die Größe hängt vom Modell ab; aktuelle Werte im Kanon (_canonical.md)",
+   "rating": "ok",
+   "reason": "Kontextgrößen gehören laut CLAUDE.md nur in den Kanon (dort 1M je Modell). Der Kernsatz 'klingt riesig, füllt sich aber schnell' bleibt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:565",
+   "old": "Preserves recent turns in full",
+   "new": "Aufträge und wichtige Code-Stellen bleiben erhalten; Zusammenfassung ersetzt den wörtlichen Verlauf",
+   "rating": "ok",
+   "reason": "Ersetzt durch die offizielle Formulierung (how-claude-code-works: 'Your requests and key code snippets are preserved; detailed instructions from early in the conversation may be lost'), von mir per curl bestätigt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:346",
+   "old": "Auto-compression: Claude summarizes the oldest parts of the conversation",
+   "new": "Zuerst räumt Claude Code ältere Tool-Ausgaben ab, dann fasst es bei Bedarf das Gespräch zusammen",
+   "rating": "ok",
+   "reason": "Doku (how-claude-code-works, When context fills up): 'It clears older tool outputs first, then summarizes the conversation if needed.' Wörtlich bestätigt; präzisiert die Quelle."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:573",
+   "old": "You see a \"compressing context...\" message",
+   "new": "Es erscheint die Meldung \"Conversation compacted\"",
+   "rating": "ok",
+   "reason": "Doku context-window.md: 'You see a \"Conversation compacted\" message.' Wörtlich bestätigt; Quelle war falsch."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:346",
+   "old": "persistent external memory (CLAUDE.md, memory files) ... are reloaded fresh each session",
+   "new": "CLAUDE.md und Auto-Memory lädt Claude Code nach einer Verdichtung neu von der Platte, und in jeder neuen Session sowieso",
+   "rating": "ok",
+   "reason": "Erweitert um 'nach Verdichtung'; Doku context-window.md: 'System prompt, CLAUDE.md, memory, and MCP tools reload automatically' nach Compaction. Bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Schon vor deiner ersten Eingabe lädt Claude Code die Namen der MCP-Tools und die Beschreibungen der Skills; /context zeigt den Platzbedarf",
+   "rating": "ok",
+   "reason": "Doku context-window.md: 'MCP tool names listed so Claude knows what is available' und 'One-line descriptions of available skills'; how-claude-code-works: 'run /context to see what's using space'. Bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Falle: Auch ein großes Fenster füllt sich; je voller, desto eher vergisst Claude frühere Anweisungen oder macht mehr Fehler",
+   "rating": "ok",
+   "reason": "best-practices.md: 'Claude may start \"forgetting\" earlier instructions or making more mistakes.' Bestätigt."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Übung Auflösung: In access_control.py stecken fünf Schwachstellen, Liste in workshop-playground/CLAUDE.md",
+   "rating": "ok",
+   "reason": "Gegengeprüft: workshop-playground/CLAUDE.md listet 5 Einträge (Command Injection, Hardcoded Credentials, Path Traversal, Log-Injection, Fail-OPEN). Die Quellübung hat diese Auflösung nicht; sie ist richtig und didaktisch sinnvoll."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Schritt 3 Kommando 'Tipp /clear' und Frage aus Schritt 1 nochmal; Übungsschritte mit Kopfzeilen Ziel/Analogie/Schritt",
+   "rating": "ok",
+   "reason": "Inhaltsgleich zu Strike-List 714-723 (Schritte 1-4 verdichtet zu 1-3), nur Formumstellung auf Kapitel-Muster; Zielverweise RAG S2.18 und Agenten S3.1 entsprechen 'Block 2/Block 3'."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Check-Fragen, Quizfrage (Verdichtung als Ursache), Schnellcheck, Fallen-Liste, Mermaid-Diagramm mit 'Memory' im Kontext",
+   "rating": "ok",
+   "reason": "Pflichtteile laut Spec; Inhalt deckt sich mit den geprüften Aussagen (Memory-Eintrag in Kontext aus Quelle Zeile 'Memory items loaded at session start')."
+  },
+  {
+   "status": "new",
+   "source": "",
+   "old": "",
+   "new": "Zeilennummer-Alias '1.2' und Querverweise auf S1.9/S1.10/S1.11",
+   "rating": "ok",
+   "reason": "Verweise existieren in chapter-meta.yaml (S1.9 requires S1.8, S1.10, S1.11 Dateinamen vorhanden); keine neue Fachaussage."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "Übung, Auflösung",
+   "issue": "workshop-playground/CLAUDE.md Zeile 50 sagt 'three deliberately planted vulnerabilities', listet aber fünf. Das Kapitel nennt fünf (stimmt mit der Liste); die Zeile im Playground widerspricht dem. Nicht Sache dieses Kapitels, nur Hinweis an den Orchestrator."
+  }
+ ]
+}

@@ -15,6 +15,7 @@ import json
 import re
 import sys
 import urllib.request
+from urllib.parse import urlsplit
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -29,7 +30,7 @@ EXCEPTIONS = ROOT / "tools" / "currency_exceptions.txt"
 STATE_DIR = ROOT / ".currency"
 
 TIMEOUT_S = 30
-MIN_BYTES = {"doc": 5_000, "cli": 200, "changelog": 100_000, "cockpit": 100_000}
+MIN_BYTES = {"doc": 5_000, "cli": 200, "changelog": 100_000, "cockpit": 100_000, "foreign": 500}
 MIN_FLAGS, MIN_ENV, MIN_DEPRECATIONS, MIN_ALIASES, MIN_MODES = 80, 150, 10, 3, 5
 RETIREMENT_WARN_DAYS = 60
 CANON_INFO_DAYS, CANON_RED_DAYS = 45, 90
@@ -118,9 +119,14 @@ def _collect_course(course):
 
 def _check_course(by_value, exceptions, union, aliases, modes):
     findings = []
+    taught_in = {}
     for (kind, value), where in sorted(by_value.items()):
+        taught_in.setdefault(value, set()).update(w.rsplit(":", 1)[0] for w in where)
         if value in exceptions:
-            continue
+            # an exception covers only the files it names: the same string elsewhere is checked like any other
+            where = [w for w in where if w.rsplit(":", 1)[0] not in exceptions[value]["files"]]
+            if not where:
+                continue
         denial = cx.denied_in_docs(value, union)
         if denial:
             findings.append(Finding("rot", f"denied:{kind}:{value}",
@@ -130,11 +136,11 @@ def _check_course(by_value, exceptions, union, aliases, modes):
             findings.append(Finding("rot", f"missing:{kind}:{value}",
                                     f"{KIND_LABEL[kind]} `{value}` steht im Kurs, aber in keiner Doku-Quelle",
                                     tuple(sorted(set(where)))))
-    taught = {value for _kind, value in by_value}
     for value in sorted(exceptions):
-        if value not in taught:
+        if not taught_in.get(value, set()) & exceptions[value]["files"]:
             findings.append(Finding("rot", f"orphan-exception:{value}",
-                                    f"Ausnahme `{value}` kommt im Kurs nicht mehr vor: aus currency_exceptions.txt streichen"))
+                                    f"Ausnahme `{value}` kommt in ihren Dateien nicht mehr vor: in currency_exceptions.txt "
+                                    "anpassen oder streichen"))
     return findings
 
 
@@ -197,6 +203,7 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
         checked, cli_canon = cx.parse_canon_header(canon_text)
         canon_models = cx.parse_canon_models(canon_text)
         sources = cx.parse_canon_sources(canon_text)
+        foreign = cx.parse_canon_foreign(canon_text)
         exceptions = cx.parse_exceptions(exceptions_text)
     except ValueError as exc:
         raise SourceError(str(exc)) from exc
@@ -206,7 +213,9 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
     changelog = fetch_checked(fetcher, sources["Changelog"][0], "changelog")
     live_cockpit = fetch_checked(fetcher, cockpit_url, "cockpit") if cockpit_url else None
 
-    by_name = {d.url.rsplit("/", 1)[-1]: d for d in docs}
+    by_name = {}
+    for doc in docs:  # the first listed page wins: plugins/cli-reference.md must not shadow cli-reference.md
+        by_name.setdefault(doc.url.rsplit("/", 1)[-1], doc)
     missing = [name for name in REQUIRED_DOCS if name not in by_name]
     if missing:
         raise SourceError("Kanon-Quellenliste ohne " + ", ".join(missing))
@@ -263,13 +272,32 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
             findings.append(Finding("info", f"doc-new:{kind}:{_short(' '.join(new))}",
                                     f"Neu in der Doku ({KIND_LABEL[kind]}): " + ", ".join(new)))
 
+    # Third-party pages (community chapters) are only watched for changes; their text never joins `union`, so they
+    # cannot make an undocumented Claude Code flag look documented. An outage there must not stop the monthly run.
+    chapter_of, foreign_got = {}, []
+    for url, chapter in foreign:
+        chapter_of[url] = chapter
+        try:
+            foreign_got.append(fetch_checked(fetcher, url, "foreign"))
+        except SourceError as exc:
+            findings.append(Finding("gelb", f"foreign-unreadable:{url}",
+                                    f"Fremdprojekt-Quelle nicht lesbar ({exc}) — Kapitel {chapter} von Hand prüfen", (url,)))
+
     known_sources = previous.get("sources", {})
     rows = []
-    for got in docs + [cli, changelog] + ([live_cockpit] if live_cockpit else []):
-        sha = _sha(got.text)
+    for got in docs + [cli, changelog] + ([live_cockpit] if live_cockpit else []) + foreign_got:
+        sha = _sha(cx.normalize_foreign(got.text) if got.url in chapter_of else got.text)
         changed = got.url in known_sources and known_sources[got.url]["sha256"] != sha
         rows.append((got.url, got.final_url, len(got.text.encode("utf-8")), sha, changed))
-        if got.final_url != got.url:
+        if changed and got.url in chapter_of:
+            findings.append(Finding("gelb", f"foreign-changed:{got.url}:{sha[:12]}",
+                                    f"Fremdprojekt-Quelle geändert — Kapitel {chapter_of[got.url]} gegen die Quelle "
+                                    "prüfen und das Prüfdatum erneuern", (got.url,)))
+        if got.final_url != got.url and urlsplit(got.final_url).netloc != urlsplit(got.url).netloc:
+            findings.append(Finding("gelb", f"redirect-host:{got.url}",
+                                    f"Quelle auf einen anderen Host umgeleitet: {got.url} -> {got.final_url} (prüfen, "
+                                    "ob das noch die offizielle Quelle ist)", (got.final_url,)))
+        elif got.final_url != got.url:
             findings.append(Finding("info", f"redirect:{got.url}",
                                     f"Quelle umgezogen: {got.url} -> {got.final_url} (Kanon-Quellenliste nachziehen)"))
 
@@ -280,7 +308,11 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
         "cli_latest": cli_latest,
         "doc_flag": sorted(doc_ids["flag"]),
         "doc_env": sorted(doc_ids["env"]),
-        "sources": {url: {"sha256": sha, "final_url": final} for url, final, _size, sha, _changed in rows},
+        "sources": {
+            # an unreadable third-party page keeps its last hash, so a change during the outage is still reported
+            **{url: known_sources[url] for url in chapter_of if url in known_sources},
+            **{url: {"sha256": sha, "final_url": final} for url, final, _size, sha, _changed in rows},
+        },
         "finding_keys": sorted(f.key for f in findings if f.level in ("rot", "gelb")),
     }
     return RunResult(exit_code, findings, state, rows, unparsed, checked, age, cli_canon, cli_latest)

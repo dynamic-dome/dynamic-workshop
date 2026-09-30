@@ -110,6 +110,9 @@ def test_installer_updates_clean_checkout_fast_forward_only(tmp_path: Path):
 
     assert second.returncode == 0, second.stdout + second.stderr
     assert _git("rev-parse", "HEAD", cwd=checkout) == expected_head
+    # plugins/create.md: --plugin-dir takes the plugin root (the folder holding .claude-plugin/), not .claude-plugin
+    [launch] = [line for line in second.stdout.splitlines() if "--plugin-dir" in line]
+    assert ".claude-plugin" not in launch and "dynamic-workshop" in launch
     # This static guard complements the behavioral update check: a plain pull
     # could also update but would violate the approved no-merge contract.
     assert "--ff-only" in INSTALLER.read_text(encoding="utf-8")
@@ -205,3 +208,61 @@ def test_doctor_requires_git_checkout_and_valid_plugin_manifest():
     assert "plugin.json" in source
     assert "ConvertFrom-Json" in source
     assert "dynamic-workshop" in source
+
+
+def _deck(tmp_path: Path):
+    pptx = pytest.importorskip("pptx", reason="python-pptx nicht installiert")
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("build_deck", ROOT / "tools" / "build_deck.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["build_deck"] = module
+    spec.loader.exec_module(module)
+    catalog = ROOT / "tools" / "fixtures" / "placement-catalog.json"
+    out, count = module.build(catalog, tmp_path / "deck.pptx")
+    return module, module.load_catalog(catalog), pptx.Presentation(out), count
+
+
+def _texts(slide):
+    return [sh for sh in slide.shapes if sh.has_text_frame and sh.text_frame.text.strip()]
+
+
+def test_deck_is_built_from_the_catalog_with_readable_type(tmp_path: Path):
+    module, cat, prs, count = _deck(tmp_path)
+    assert count == len(prs.slides) == 13
+    first = " ".join(sh.text_frame.text for sh in _texts(prs.slides[0]))
+    assert str(len(cat["chapters"])) in first and str(len(cat["shelves"])) in first
+    for number, slide in enumerate(prs.slides, 1):
+        assert slide.notes_slide.notes_text_frame.text.strip(), f"Folie {number} ohne Sprechernotiz"
+        for shape in _texts(slide):
+            assert shape.left + shape.width <= prs.slide_width and shape.top + shape.height <= prs.slide_height, (
+                number, shape.text_frame.text[:40])
+            for paragraph in shape.text_frame.paragraphs:
+                for run in paragraph.runs:
+                    assert run.font.size.pt >= 14, (number, run.text)
+    everything = " ".join(sh.text_frame.text for slide in prs.slides for sh in _texts(slide))
+    assert "/workshop" not in everything.replace("/dynamic-workshop:workshop", ""), "Plugin-Skills brauchen den Präfix"
+
+
+def test_session_agenda_covers_every_chapter_of_the_session(tmp_path: Path):
+    module, cat, prs, _count = _deck(tmp_path)
+    for session in (1, 2, 3, 4):
+        slide = next(s for s in prs.slides if any(sh.text_frame.text.startswith(f"Session {session} ·")
+                                                   for sh in _texts(s)))
+        shown = " ".join(sh.text_frame.text for sh in _texts(slide))
+        chapters = [c for c in cat["chapters"] if c.get("session") == session]
+        for shelf, group in module.agenda(cat, chapters):
+            assert shelf in shown and module.id_span(group) in shown
+        assert sum(len(g) for _s, g in module.agenda(cat, chapters)) == len(chapters)
+
+
+def test_id_span_compresses_only_gapless_runs():
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("build_deck", ROOT / "tools" / "build_deck.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    ids = lambda *names: [{"id": n} for n in names]  # noqa: E731
+    assert module.id_span(ids("S1.8", "S1.9", "S1.10", "S1.11")) == "S1.8–S1.11"
+    assert module.id_span(ids("S1.5", "S1.6")) == "S1.5, S1.6"
+    assert module.id_span(ids("S3.6", "S3.7", "S3.10")) == "S3.6, S3.7, S3.10"

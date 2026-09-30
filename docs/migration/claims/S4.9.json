@@ -1,0 +1,133 @@
+{
+ "id": "S4.9",
+ "verdict": "pass",
+ "counts": {
+  "kept": 16,
+  "changed": 5,
+  "dropped": 3,
+  "new": 7
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1771-1775",
+   "old": "/debug hat feste Schwerpunkte: hook-firing, mcp-handshake, instructions-loaded, skill-not-triggering",
+   "new": "Das Argument ist eine freie Beschreibung des Problems; feste Schwerpunkte kennt die Doku nicht",
+   "rating": "ok",
+   "reason": "Doku commands.md: '/debug [description] ... Optionally describe the issue to focus the analysis'; keine Schwerpunktliste. Das Kapitel benennt die Korrektur offen."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1765",
+   "old": "/debug aktiviert ausführliches Trace-Logging, Claude meldet inline, welche Skills/Trigger/Hooks/Tools/Konfigurationsdateien betrachtet wurden",
+   "new": "/debug schaltet das Debug-Log ein und lässt Claude Log und Einstellungspfade auswerten; zeichnet erst ab dem Aufruf auf",
+   "rating": "ok",
+   "reason": "Doku debug-your-config.md: 'Enables debug logging for the session and prompts Claude to diagnose using the log output and settings paths'; commands.md: 'starts capturing logs from that point forward'."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1789",
+   "old": "claude --verbose zeigt beim Sessionstart die Boot-Sequenz (gemergte CLAUDE.md, Plugins, Skills, Hooks, MCP-Handshakes)",
+   "new": "--verbose zeigt jeden Zug vollständig und übersteuert viewMode; ausdrücklich kein Startprotokoll",
+   "rating": "ok",
+   "reason": "Doku cli-reference.md: '--verbose: Enable verbose logging, shows full turn-by-turn output. Overrides the viewMode setting for this session'. Korrektur im Kapitel offen benannt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1795-1803",
+   "old": "/doctor ist nicht interaktiv, druckt nur einen Bericht; prüft u.a. abgelaufene OAuth-Tokens, unerreichbare MCP-Server, widersprüchliche Schutzpfad-Regeln, kaputte Plugin-Manifeste",
+   "new": "/doctor meldet zuerst, fragt vor Änderungen, kann reparieren; prüft Installation/PATH/Einstellungsdateien, ungenutzte Extensions, langsame Hooks, neue Version, CLAUDE.md, doppelte Subagent-Namen; reiner Bericht nur als claude doctor im Terminal",
+   "rating": "ok",
+   "reason": "Doku commands.md: 'Reports findings first and asks for confirmation before changing anything'; 'claude doctor prints read-only installation diagnostics'. OAuth/MCP-Erreichbarkeit/Regelkonflikte stehen nicht in der Doku; Kapitel verweist auf /mcp und claude plugin validate (letzteres per plugins-reference.md belegt)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-3-advanced.md:1805-1809",
+   "old": "Tabelle: 'Warum feuerte dieser Hook?' -> /debug hook-firing; 'Was hat Claude beim Start geladen?' -> --verbose; 'Ist meine Konfiguration gültig?' -> /doctor",
+   "new": "Hook-Frage -> /debug oder claude --debug; 'Was geladen?' -> /context, /skills, /hooks, /mcp, /permissions",
+   "rating": "ok",
+   "reason": "Folge der doku-belegten Korrekturen (debug-your-config.md Tabelle /context, /skills, /hooks, /mcp, /permissions, /doctor, /debug; hooks.md: --debug-Log hält Matcher und Exit-Code fest). Merksatz 'beschreibt/verordnet/ermittelt' bleibt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1767",
+   "old": "/debug 'replays the routing decision' aus Modul 2.1",
+   "new": "",
+   "rating": "ok",
+   "reason": "Nicht durch Doku gedeckt; Verweis auf Skill-Felder steht über S2.3. Kein Verlust."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-3-advanced.md:1745",
+   "old": "'the order of inspection separates ten minutes from two hours'",
+   "new": "",
+   "rating": "ok",
+   "reason": "Rhetorik; die Schichtenreihenfolge ist nach S4.10 verschoben (dort vorhanden)."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/demos/block-3-demos.md:711-724",
+   "old": "Demo 3.7 Schritt 4: /debug skill-not-triggering, Prompt 'Greet the user.' wiederholen, Trace vorlesen, erste Ursache paths-Filter",
+   "new": "Nur Verweis auf S4.10 Schritt 4",
+   "rating": "ok",
+   "reason": "Demo liegt vollständig in s4-10 (Zeilen 230-242, mit Hinweis, dass die Trace-Zeilen sinngemäß sind). Ownership: Heimat der Demo ist S4.10."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "claude doctor im Terminal; --debug mit =-Filter (--debug='mcp,startup'); Log in ~/.claude/debug/<session-id>.txt; --debug-file <path>",
+   "rating": "ok",
+   "reason": "Belegt: cli-reference.md (--debug, --debug-file, '=' form), debug-your-config.md (Pfad), commands.md/cli-reference.md (claude doctor)."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "--verbose zeigt Abschlussmeldungen von Hintergrund-Hooks",
+   "rating": "ok",
+   "reason": "Belegt: hooks.md 'Async hook completion notifications are suppressed by default. To see them, ... start Claude Code with --verbose'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "/doctor bietet an, Modus auto zum Standard zu machen und häufig abgelehnte Nur-Lese-Befehle vorab freizugeben",
+   "rating": "ok",
+   "reason": "Belegt: commands.md '/doctor ... Also offers to make auto mode your default and to pre-approve frequently denied read-only commands'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "/doctor prüft ungenutzte Skills/MCP/Plugins nach Kontextkosten, langsame Hooks, neuere Version, doppelte Subagent-Namen, CLAUDE.md-Doppelungen",
+   "rating": "ok",
+   "reason": "Belegt: commands.md und debug-your-config.md."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "/context, /permissions als Werkzeuge für 'Was ist geladen?'",
+   "rating": "ok",
+   "reason": "Belegt: debug-your-config.md Tabelle."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "claude plugin validate für Plugins",
+   "rating": "ok",
+   "reason": "Belegt: plugins-reference.md ('claude plugin validate is the authoritative check for a manifest')."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Sicherheitsanalogie: Bestandsliste/Selbsttest/Ereignisprotokoll den Werkzeugen zugeordnet; Mermaid-Entscheidungsbaum",
+   "rating": "ok",
+   "reason": "Didaktische Zuordnung, keine neue Faktenaussage; Kanon-Analogie Sensor->Verkabelung->Zentrale->Übertragung bleibt."
+  }
+ ],
+ "style": []
+}

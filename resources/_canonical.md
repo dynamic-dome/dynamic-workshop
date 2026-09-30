@@ -32,6 +32,8 @@ Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon B
 - **Haiku-Risiko:** Haiku 4.5 kann frühestens am 15.10.2026 abgeschaltet werden. Wer `haiku` für Massenarbeit nutzt,
   prüft vor dem Einsatz mit `/model`, worauf der Alias auflöst.
 - API-Alias von Haiku 4.5: `claude-haiku-4-5`.
+- **Mindest-CLI je Generation** (Changelog: „Added Claude … now the default … model"): Fable 5.1 ab 2.1.257,
+  Opus 5.5 ab 2.1.280, Sonnet 5.5 ab 2.1.284. Ältere CLIs lösen die Aliase auf ältere Generationen auf.
 
 ## Aliase und ihre Auflösung (Quelle: model-config.md)
 
@@ -63,12 +65,28 @@ Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, So
   mit `medium`. Im Kurs gilt das Claude-Code-Verhalten.
 - `max` gilt nur für die laufende Session, außer über `CLAUDE_CODE_EFFORT_LEVEL`.
 
+## Rechte-Startmodus (Quelle: permission-modes.md, „Which mode a session starts in“)
+
+| Wie du Claude Code startest | Eingebauter Startmodus |
+|---|---|
+| Eine Settings-Datei setzt `disableAutoMode` auf `"disable"` | `default` (Manual) |
+| `claude -p` oder Agent SDK | `default` (Manual) |
+| Terminal oder VS Code-Erweiterung | `auto` ab CLI 2.1.283; davor `auto` nur auf Pro, Max, Team, sonst `default` |
+
+- Ist `auto` für die Session nicht verfügbar (Modell, Einstellung, serverseitig aus), startet sie in Manual.
+- Die erste Session nach Installation oder Upgrade kann abweichen; die nächste folgt der Tabelle.
+- Changelog 2.1.285: `claude -p` und das Python-SDK starten bei Drittanbietern oder abgeschalteter Telemetrie ohne
+  konfigurierten Modus ebenfalls in `auto`; die Doku-Tabelle oben nennt das noch nicht (Stand 2026-09-30).
+- Kapitel S1.6, die Karte „Rechte“ und der Mentor verweisen hierher, statt den Startmodus selbst zu nennen.
+
 ## Struktur
 
-- **4 Sessions / 65 Lerneinheiten (LE)** – Welle-F-Restrukturierung (`session-plan.md` ist die Ablauf-SSoT).
-- Session 1 = Block 1 (Foundations, S1.1–S1.20). Session 2 = Block 2 (Ecosystem, S2.1–S2.20).
-  Session 3 = Block 3 Advanced Kern (S3.1–S3.15). Session 4 = Block 3 Advanced Bonus (S4.1–S4.10).
-- 17 Module (5+5+7) über 3 Blöcke bleiben die Volltext-Quelle; die 65-LE-Landkarte ist die Navigations-Schicht darüber.
+- **Quellenhoheit:** Lehrinhalte stehen nur in den Kapiteln unter `resources/library/` (eine Datei je Kapitel,
+  IDs `S0.1`–`S4.10` und `X.1`–`X.4`); Regale, Einstufung und Reihenfolge in `_shelves.yaml` und `_placement.yaml`.
+- Der Live-Workshop ist ein Pfad durch die Bibliothek: Session 0 (Werkstatt), Sessions 1–4 (`S1.*`–`S4.*`); Ablauf
+  und Moderation in `resources/paths/live-workshop.md` (generiert) und `resources/moderation/handbuch.md`.
+- Die alten Module, Demos und Übungen (Stand `ba222d2`) sind in die Kapitel umgezogen; ihre Review-Archive liegen
+  unter `docs/reviews/`.
 
 ## Quellen
 
@@ -84,8 +102,22 @@ Der Monatslauf (`tools/currency_check.py`) liest genau diese Liste.
 - Doku: https://code.claude.com/docs/en/model-config.md
 - Doku: https://code.claude.com/docs/en/mcp.md
 - Doku: https://code.claude.com/docs/en/skills.md
+- Doku: https://code.claude.com/docs/en/plugins/cli-reference.md
 - Doku: https://code.claude.com/docs/en/settings.md
 - Doku: https://platform.claude.com/docs/en/models/overview.md
 - Doku: https://platform.claude.com/docs/en/about-claude/model-deprecations.md
 - CLI-Version: https://registry.npmjs.org/@anthropic-ai/claude-code/latest
 - Changelog: https://code.claude.com/docs/en/changelog.md
+
+Fremdprojekte der Community-Kapitel: Der Monatslauf meldet eine inhaltliche Änderung oder einen Ausfall gelb und nennt
+das Kapitel; ihr Text zählt nie als Beleg für Claude-Code-Bezeichner.
+
+- Fremdprojekt: https://pi.dev/ (X.3)
+- Fremdprojekt: https://pi.dev/docs/latest/security (X.3)
+- Fremdprojekt: https://pi.dev/docs/latest/cli (X.3)
+- Fremdprojekt: https://pi.dev/docs/latest/extensions (X.3)
+- Fremdprojekt: https://docs.openclaw.ai/gateway/security/trust-model.md (X.4)
+- Fremdprojekt: https://docs.openclaw.ai/gateway/security/hardened-baseline.md (X.4)
+- Fremdprojekt: https://docs.openclaw.ai/gateway/security/operator-incident-response.md (X.4)
+- Fremdprojekt: https://docs.openclaw.ai/gateway/heartbeat.md (X.4)
+- Fremdprojekt: https://docs.openclaw.ai/cli/channels.md (X.4)

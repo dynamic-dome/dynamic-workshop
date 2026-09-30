@@ -1,0 +1,125 @@
+{
+ "id": "S2.15",
+ "verdict": "pass",
+ "counts": {
+  "kept": 21,
+  "changed": 6,
+  "dropped": 1,
+  "new": 7
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1083",
+   "old": "${VAR} ... Fails if unset.",
+   "new": "Ist VAR nicht gesetzt, lädt die Konfiguration trotzdem: Claude Code warnt in claude mcp list und /mcp und übernimmt den Text ${VAR} unverändert.",
+   "rating": "ok",
+   "reason": "Korrektur, belegt: mcp.md 'Unset variables without a default' (the config still loads ... warning ... unexpanded ${VAR} text as-is); Zeile 293 gleich."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1184",
+   "old": "${VAR:-default} ... falls back to default if VAR is unset or empty.",
+   "new": "... oder default, wenn VAR nicht gesetzt ist.",
+   "rating": "ok",
+   "reason": "Doku: '${VAR:-default}: expands to VAR if set, otherwise uses default'; 'or empty' steht dort nicht, Korrektur belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1098",
+   "old": "claude mcp add --transport http --header \"Authorization: Bearer xxx\" myapi https://api.example.com/mcp",
+   "new": "claude mcp add --transport http myapi https://api.example.com/mcp --header \"Authorization: Bearer xxx\"",
+   "rating": "ok",
+   "reason": "Doku mcp.md Z.79-80 setzt --header hinter die URL; Fallen-Eintrag erklärt den Grund (Variadic-Flag)."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1104",
+   "old": "claude mcp add --transport stdio --env GITHUB_TOKEN=xxx github -- npx ...",
+   "new": "claude mcp add --env GITHUB_TOKEN=xxx --transport stdio github -- npx ...",
+   "rating": "ok",
+   "reason": "Doku mcp.md Z.128 und Z.144: --env nimmt mehrere Paare, andere Option muss zwischen --env und Servername stehen. Wirkung des Befehls gleich."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1118",
+   "old": "claude --strict-mcp-config   # ONLY use servers from config (no others)",
+   "new": "claude --mcp-config servers.json --strict-mcp-config   # ONLY use servers from that file (no others)",
+   "rating": "ok",
+   "reason": "cli-reference.md: --strict-mcp-config 'Only use MCP servers from --mcp-config'; Kombination ist die dokumentierte Form."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-2-ecosystem.md:1177",
+   "old": "MCP servers can also be configured in .mcp.json (project-level) or ~/.claude/.mcp.json (user-level)",
+   "new": "Team-Server in .mcp.json im Projektordner (project); local und user in ~/.claude.json; Fallen-Eintrag: .claude/.mcp.json und ~/.claude/.mcp.json werden nicht gelesen",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur, belegt: mcp.md Scope-Tabelle (Local/User = ~/.claude.json, Project = .mcp.json) und Z.589."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-2-ecosystem.md:1077",
+   "old": "SSE was deprecated in early 2026 ... more resource-efficient and doesn't require HTTP/2",
+   "new": "Der SSE-Transport ist zugunsten von Streamable HTTP abgekündigt.",
+   "rating": "ok",
+   "reason": "Nur unbelegte Datums- und Effizienzdetails entfallen (mcp.md sagt nur 'deprecated'); Kernaussage (SSE veraltet, http nehmen, SSE nur für alte Server) bleibt."
+  },
+  {
+   "status": "new",
+   "source": "mcp.md + changelog.md",
+   "old": "",
+   "new": "Seit Claude Code 0.2.49 heißt project jetzt local und global user; Scope project mit .mcp.json seit 0.2.50.",
+   "rating": "ok",
+   "reason": "Changelog: 0.2.50 'New MCP project scope ... .mcp.json', 0.2.49 'previous project scope is now local and global scope is now user'. Selbst per curl geprüft."
+  },
+  {
+   "status": "new",
+   "source": "mcp.md",
+   "old": "",
+   "new": "'local' bei MCP ist nicht .claude/settings.local.json; lokale MCP-Server stehen in ~/.claude.json.",
+   "rating": "ok",
+   "reason": "Wörtlich in mcp.md Z.527 belegt."
+  },
+  {
+   "status": "new",
+   "source": "mcp.md",
+   "old": "",
+   "new": "In JSON-Konfigurationen heißt http auch streamable-http.",
+   "rating": "ok",
+   "reason": "mcp.md Z.83 (type akzeptiert streamable-http als Alias); Quelle nannte es 'a.k.a.'. S2.16 führt es aus."
+  },
+  {
+   "status": "new",
+   "source": "mcp.md",
+   "old": "",
+   "new": "Server aus .mcp.json erst nach Bestätigung in interaktiver Sitzung; Status '⏸ Pending approval'; claude mcp get zeigt 'Issue:' bei '✘ Failed to connect'.",
+   "rating": "ok",
+   "reason": "mcp.md Z.248, 276, 577 belegt. reset-project-choices stand schon in der Quelle."
+  },
+  {
+   "status": "new",
+   "source": "npm registry",
+   "old": "",
+   "new": "@modelcontextprotocol/server-github, -slack, -postgres sind auf npm als 'no longer supported' markiert; Doku zeigt für GitHub HTTP-Server mit Token im Header.",
+   "rating": "ok",
+   "reason": "Selbst per npm-Registry geprüft: alle drei 'deprecated: Package no longer supported'. GitHub-HTTP-Beispiel mcp.md Z.690."
+  },
+  {
+   "status": "new",
+   "source": "mcp.md",
+   "old": "",
+   "new": "Token direkt im Befehl landet in Shell-History und im Klartext in ~/.claude.json.",
+   "rating": "ok",
+   "reason": "Shell-History ist zwangsläufig; ~/.claude.json als Speicherort der Scopes local/user belegt (mcp.md Z.518-524). Sicherheitsrat ohne neuen Produktfakt."
+  },
+  {
+   "status": "new",
+   "source": "mcp.md",
+   "old": "",
+   "new": "Quizfrage, Fallen-Liste, Übungsverweis auf S2.14",
+   "rating": "ok",
+   "reason": "Pflichtteile bzw. Verweise; Fallen-Inhalte sind oben einzeln belegt."
+  }
+ ],
+ "style": []
+}

@@ -1,0 +1,10 @@
+{"id":"S2.9","verdict":"fix","counts":{"kept":19,"changed":0,"dropped":0,"new":4},
+"items":[
+{"status":"new","source":"s2-09-hook-typen.md:72","old":"","new":"prompt und agent fragen ein Modell: kostet Tokens und Zeit, Urteil kann von Lauf zu Lauf anders ausfallen; für feste Regeln bleibt command besser.","rating":"ok","reason":"Keine Quelle, aber fachlich aus der Natur der Typen ableitbar (Quelle: prompt = Claude-Bewertung, agent = Subagent) und unschädlich; vom Schreiber als Wahlhilfe gedacht."},
+{"status":"new","source":"s2-09-hook-typen.md:73","old":"","new":"Ein http-Hook sendet das JSON des Ereignisses als POST an die URL; Tool-Eingaben verlassen den Rechner.","rating":"ok","reason":"Neue Verhaltensaussage, Schreiber nennt die Hooks-Referenz als Beleg; deckt sich mit der Doku. Quelle sagte nur 'Sends HTTP request to a URL'."},
+{"status":"new","source":"s2-09-hook-typen.md:74","old":"","new":"mcp_tool braucht einen MCP-Server (Verweis S2.14/S2.15).","rating":"ok","reason":"Folgt aus 'Invokes an MCP tool'; Querverweise existieren in der Bibliothek."},
+{"status":"new","source":"s2-09-hook-typen.md:114","old":"","new":"Was sicher geblockt werden muss, gehört in einen command-Hook mit exit 2 (S2.8).","rating":"ok","reason":"Konsistent mit Hook-Fakten (Blockieren per exit 2) und Kapitel S2.8; keine Quelle in diesem Bereich, aber korrekt."}
+],
+"style":[
+{"rating":"fix","where":"Check / Quizfrage (Zeile 128-131)","issue":"Die richtige Antwort ist die längste (ca. 150 Zeichen gegenüber ca. 120-135 bei den falschen) und enthält die meisten Begründungsdetails; das verrät die Lösung. Falsche Antworten auf ähnliche Länge und Detailtiefe bringen oder die richtige kürzen."}
+]}

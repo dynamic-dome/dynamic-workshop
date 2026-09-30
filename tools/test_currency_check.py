@@ -25,7 +25,7 @@ DOCS = ["cli-reference.md", "env-vars.md", "model-deprecations.md", "model-confi
 OPUS = ("Claude Opus 5.5", "claude-opus-5-5", "opus", "Opus", "Active", "Not sooner than September 22, 2027")
 
 
-def canon(checked="2026-09-29", cli="2.1.284", rows=(OPUS,), docs=DOCS):
+def canon(checked="2026-09-29", cli="2.1.284", rows=(OPUS,), docs=DOCS, foreign=()):
     table = "\n".join(f"| {n} | `{i}` | `{a}` | {t} | {s} | {r} | 1M | 4 | 20 | Rolle |" for n, i, a, t, s, r in rows)
     listed = "\n".join(f"- Doku: {BASE}{d}" for d in docs)
     return (
@@ -33,6 +33,7 @@ def canon(checked="2026-09-29", cli="2.1.284", rows=(OPUS,), docs=DOCS):
         "| Modell | ID | Alias | Tier | Status | Retirement frühestens | Kontext | In $/1M | Out $/1M | Rolle |\n"
         "|---|---|---|---|---|---|---|---|---|---|\n" + table + "\n\n## Quellen\n\n" + listed +
         f"\n- CLI-Version: https://npm.test/latest\n- Changelog: {BASE}changelog.md\n"
+        + "".join(f"- Fremdprojekt: {url} ({chapter})\n" for url, chapter in foreign)
     )
 
 
@@ -106,9 +107,26 @@ def test_undocumented_course_flag_is_red_with_location():
 
 def test_exception_suppresses_and_orphaned_exception_is_red():
     course = {"x.md": "Run `--door 3` in exercise 1.\n"}
-    assert run(course=course, exceptions="--door | Übungsparameter\n").exit_code == 0
-    orphan = run(exceptions="--orphan | git-Flag\n")
+    assert run(course=course, exceptions="--door | x.md | Übungsparameter\n").exit_code == 0
+    orphan = run(exceptions="--orphan | m.md | git-Flag\n")
     assert [f.key for f in levels(orphan, "rot")] == ["orphan-exception:--orphan"]
+
+
+def test_exception_only_covers_its_own_files():
+    """An exception for an exercise parameter must not hide the same string used as a Claude Code flag elsewhere."""
+    course = {"x.md": "Run `--door 3` in exercise 1.\n", "y.md": "Start with `claude --door -p hi`.\n"}
+    result = run(course=course, exceptions="--door | x.md | Übungsparameter\n")
+    [finding] = levels(result, "rot")
+    assert finding.key == "missing:flag:--door" and finding.where == ("y.md:1",)
+
+
+def test_foreign_source_outage_keeps_its_last_hash():
+    text = canon(foreign=[(PI, "X.3")])
+    first = run(canon_text=text, available=pages(**{PI: PI_PAGE}))
+    outage = run(canon_text=text, previous=first.state)
+    assert outage.state["sources"][PI] == first.state["sources"][PI]
+    changed = run(canon_text=text, available=pages(**{PI: PI_PAGE.replace("four", "seven")}), previous=outage.state)
+    assert any("X.3" in f.text for f in levels(changed, "gelb"))
 
 
 @pytest.mark.parametrize("body", ["/docs/en/models/overview.md", "<!doctype html><html>" + "x" * 6000])
@@ -204,6 +222,49 @@ def test_cockpit_comparison_ignores_provenance_but_reports_real_differences():
     assert [f.key.split(":")[0] for f in levels(differs, "rot")] == ["cockpit-differs"]
 
 
+PI = "https://pi.test/docs"
+PI_PAGE = "<html><body><script>var build = 1;</script><p>Pi has four tools.</p>" + PAD + "</body></html>"
+
+
+def test_changed_foreign_source_is_yellow_and_names_the_chapter():
+    text = canon(foreign=[(PI, "X.3")])
+    first = run(canon_text=text, available=pages(**{PI: PI_PAGE}))
+    assert first.exit_code == 0 and PI in first.state["sources"]
+    same = run(canon_text=text, available=pages(**{PI: PI_PAGE.replace("build = 1", "build = 2")}), previous=first.state)
+    assert levels(same, "gelb") == []
+    moved = run(canon_text=text, available=pages(**{PI: PI_PAGE.replace("four", "seven")}), previous=first.state)
+    [finding] = levels(moved, "gelb")
+    assert "X.3" in finding.text and finding.where == (PI,) and moved.exit_code == 1
+
+
+def test_unreachable_foreign_source_is_yellow_not_a_source_error():
+    result = run(canon_text=canon(foreign=[(PI, "X.3")]))
+    [finding] = levels(result, "gelb")
+    assert "X.3" in finding.text and "nicht lesbar" in finding.text
+
+
+def test_foreign_pages_never_document_claude_code_identifiers():
+    page = PI_PAGE.replace("four tools", "the flag `--metadata`")
+    result = run(course={"b3.md": "Pass `--metadata` here.\n"}, canon_text=canon(foreign=[(PI, "X.3")]),
+                 available=pages(**{PI: page}))
+    assert any("--metadata" in f.text for f in levels(result, "rot"))
+
+
+def test_docs_with_the_same_file_name_do_not_shadow_each_other():
+    """docs/en/cli-reference.md and docs/en/plugins/cli-reference.md: the permission modes come from the first."""
+    cli = pages()[BASE + "cli-reference.md"] + "\n| `--permission-mode` | Accepts `default`, `plan`, or `manual` | x |\n"
+    plugin_cli = "# Plugin CLI\n| `--strict` | Fail on warnings too |\n" + PAD
+    available = pages(**{BASE + "cli-reference.md": cli, BASE + "plugins/cli-reference.md": plugin_cli})
+    course = {"m.md": "Start `claude --permission-mode manual`, then `claude plugin validate . --strict`.\n"}
+    result = run(course=course, canon_text=canon(docs=DOCS + ["plugins/cli-reference.md"]), available=available)
+    assert levels(result, "rot") == []
+
+
+def test_redirect_to_another_host_is_yellow():
+    result = run(final={BASE + "env-vars.md": "https://elsewhere.example/env-vars.md"})
+    assert any(f.key == f"redirect-host:{BASE}env-vars.md" for f in levels(result, "gelb"))
+
+
 def test_redirect_is_reported_as_info():
     result = run(final={BASE + "env-vars.md": BASE + "moved/env-vars.md"})
     assert any(f.key == f"redirect:{BASE}env-vars.md" for f in levels(result, "info"))
@@ -285,7 +346,7 @@ def test_real_canon_is_machine_readable():
         assert model.model_id.startswith("claude-") and model.alias in {"fable", "opus", "sonnet", "haiku"}
         assert re.fullmatch(r"(Not sooner than )?[A-Z][a-z]+ \d{1,2}, \d{4}", model.retirement), model.retirement
     sources = cx.parse_canon_sources(text)
-    assert len(sources["Doku"]) == 13
+    assert len(sources["Doku"]) == 14
     assert all(url.startswith("https://") for urls in sources.values() for url in urls)
     names = {url.rsplit("/", 1)[-1] for url in sources["Doku"]}
     assert {"model-deprecations.md", "model-config.md", "permission-modes.md"} <= names

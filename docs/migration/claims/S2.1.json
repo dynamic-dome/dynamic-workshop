@@ -1,0 +1,10 @@
+{"id":"S2.1","verdict":"pass",
+"counts":{"kept":14,"changed":0,"dropped":0,"new":5},
+"items":[
+{"status":"new","source":"-","old":"","new":"s2-01:54 / 26: Claude lädt einen Skill selbst, wenn die Anfrage zur Beschreibung passt","rating":"ok","reason":"Belegt: skills.md 'the description helps Claude decide when to load the skill automatically'."},
+{"status":"new","source":"-","old":"","new":"s2-01:60: Commands und Skills technisch zusammengelegt; .claude/commands/deploy.md und .claude/skills/deploy/SKILL.md erzeugen beide /deploy","rating":"ok","reason":"Wörtlich belegt: skills.md 'Custom commands have been merged into skills. A file at .claude/commands/deploy.md and a skill at .claude/skills/deploy/SKILL.md both create /deploy'. Korrigiert zugleich die alte Zweiteilung der Quelle."},
+{"status":"new","source":"-","old":"","new":"s2-01:64: Abschnitt Skill oder CLAUDE.md; Skill-Inhalt wird erst bei Benutzung geladen","rating":"ok","reason":"Belegt: skills.md 'Create a skill when you keep pasting the same instructions... a skill's body loads only when it's used'."},
+{"status":"new","source":"-","old":"","new":"s2-01:68-77: /skills listet verfügbare Skills; /tdd nur bei installiertem TDD-Skill","rating":"ok","reason":"Belegt: commands.md '/skills | List available skills'. Demo-Ergänzung ohne neuen Faktenanspruch."},
+{"status":"new","source":"-","old":"","new":"s2-01:85: Fallen: Skill ist keine Garantie, Hook für garantierte Ereignisreaktion (Verweis S2.6)","rating":"ok","reason":"Konsistent mit Hook-Kanon; nur Verweis und Faustregel, kein neuer Befehl oder Flag."}
+],
+"style":[]}

@@ -5,7 +5,7 @@ Zwei Regeln (Design: docs/plans/2026-09-29-phase2-aktualhaltung-design.md):
 1. Generationsregel: Modellgenerationen (etwa "Opus 5.5" oder claude-sonnet-5-5) stehen nur in
    resources/_canonical.md. Ausnahme nur mit `version-pinned: <Grund>` in derselben Zeile.
 2. Stale-Gate: das Pruefdatum im Kanon ist hoechstens 90 Tage alt (ab 45 Tagen Warnung).
-Ausgeklammert: docs/, review-Archive, resources/archive/, .agent-memory, HANDOFF.md, tools/, lokaler Zustand.
+Ausgeklammert: docs/ (Pläne, Migration, Review-Archive unter docs/reviews/), .agent-memory, tools/, lokaler Zustand.
 Exit 0 = sauber, Exit 1 = Drift oder Kanon zu alt/unlesbar.
 
 Aufruf (aus dem Repo-Root):  python tools/lint_currency.py
@@ -43,24 +43,16 @@ EXCLUDE_DIRS = (
     ".superpowers",
     "docs",
     "tools",
-    os.path.join("resources", "archive"),
 )
 # Ordner, die an jeder Stelle uebersprungen werden
 PRUNE_ANYWHERE = (".git", "node_modules", "__pycache__", ".pytest_cache")
 # Ausgeklammerte einzelne Dateien
 EXCLUDE_FILES = (
     os.path.join("resources", "_canonical.md"),  # definiert die Fakten absichtlich
-    "HANDOFF.md",  # datierte Agenten-Uebergabe vom 2026-06-21, kein Kursinhalt
 )
 
 
-# Datierte Review-Archive (resources/review-YYYY-MM-DD/...) sind Befunde, kein Kursinhalt.
-REVIEW_ARCHIVE = re.compile(r"^resources/review-[^/]+/")
-
-
 def is_excluded(rel):
-    if REVIEW_ARCHIVE.match(rel.replace(os.sep, "/")):
-        return True
     rel_norm = rel.replace("/", os.sep)
     for d in EXCLUDE_DIRS:
         if rel_norm.startswith(d + os.sep) or rel_norm == d:

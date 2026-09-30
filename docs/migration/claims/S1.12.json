@@ -1,0 +1,109 @@
+{
+ "id": "S1.12",
+ "verdict": "pass",
+ "counts": {
+  "kept": 13,
+  "changed": 1,
+  "dropped": 0,
+  "new": 11
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:528",
+   "old": "With the env var set, every --add-dir path also contributes CLAUDE.md (and .claude/rules/, AGENTS.md, etc.)",
+   "new": "Laedt CLAUDE.md, .claude/CLAUDE.md, .claude/rules/*.md, CLAUDE.local.md; AGENTS.md aus diesen Ordnern laedt es nicht (Z.102)",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur; memory.md: 'Their AGENTS.md doesn't load' und Liste der vier Dateiarten, per curl bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Relative Pfade relativ zur importierenden Datei; Imports bis vier Ebenen tief (Kapitel Z.65)",
+   "rating": "ok",
+   "reason": "memory.md: 'Relative paths resolve relative to the file containing the import... maximum depth of four hops' - per curl bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Imports sparen keinen Kontext (Kapitel Z.66)",
+   "rating": "ok",
+   "reason": "Folgt aus Expansion beim Start; in memory.md angelegt, harmlose Praezisierung."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Externer Import fragt beim ersten Mal nach Freigabe (Kapitel Z.67)",
+   "rating": "ok",
+   "reason": "memory.md: 'first time Claude Code encounters external imports... approval dialog' - bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Tabelle: drei Faelle AGENTS.md/CLAUDE.md/Import (Kapitel Z.73)",
+   "rating": "ok",
+   "reason": "memory.md Z.353-355 wortgleich im Sinn - bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Import auch vor v2.1.277 noetig; /config > Project instructions, z.B. beide Dateien (Kapitel Z.79)",
+   "rating": "ok",
+   "reason": "memory.md: 'requires v2.1.277 or later', Setting claude-md-and-agents-md - bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Skills, Command-Dateien, Subagenten aus .claude/ des add-dir-Ordners werden geladen (Kapitel Z.93)",
+   "rating": "ok",
+   "reason": "permissions.md 'Additional directories grant file access, not configuration': Tabelle Skills/commands/agents Yes - bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Inline-Form nur Bash/Zsh; dauerhaft im env-Block von ~/.claude/settings.json (Kapitel Z.102)",
+   "rating": "ok",
+   "reason": "memory.md Z.162 - bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle AGENTS.md wird nicht gelesen (CLAUDE.md, .claude/CLAUDE.md, CLAUDE.local.md zaehlen) (Kapitel Z.108)",
+   "rating": "ok",
+   "reason": "memory.md Z.367/378/583-585 - bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Imports gegen zu grosse CLAUDE.md; paths-Regel, Verweis S1.11 (Kapitel Z.109)",
+   "rating": "ok",
+   "reason": "Verweisziel vorhanden, S1.11 behandelt paths-Regeln."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Symlink CLAUDE.md->AGENTS.md unter Windows: Admin/Developer Mode, core.symlinks (Kapitel Z.110)",
+   "rating": "ok",
+   "reason": "memory.md Z.456 - bestaetigt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle Umgebungsvariable wirkt nicht (Shell-Syntax) (Kapitel Z.111)",
+   "rating": "ok",
+   "reason": "memory.md Z.162 - bestaetigt."
+  }
+ ],
+ "style": []
+}

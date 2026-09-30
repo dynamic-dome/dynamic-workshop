@@ -27,11 +27,10 @@ def test_live_files_skips_history_tooling_and_local_state(tmp_path):
     root = _tree(tmp_path, {
         "README.md": "x",
         "agents/mentor.md": "x",
-        "resources/modules/m.md": "x",
+        "resources/library/s1-01.md": "x",
         "resources/_canonical.md": "x",
-        "HANDOFF.md": "x",
-        "resources/archive/old.html": "x",
-        "resources/review-2026-09-28/01.md": "x",
+        "docs/reviews/2026-06-21/HANDOFF.md": "x",
+        "docs/reviews/2026-09-28/01.md": "x",
         "docs/plans/p.md": "x",
         "tools/fixtures/currency/f.md": "x",
         "tools/currency_exceptions.txt": "x",
@@ -45,7 +44,13 @@ def test_live_files_skips_history_tooling_and_local_state(tmp_path):
 
     rels = [rel for rel, _full in lint.live_files(str(root))]
 
-    assert rels == ["README.md", "agents/mentor.md", "resources/modules/m.md"]
+    assert rels == ["README.md", "agents/mentor.md", "resources/library/s1-01.md"]
+
+
+def test_a_review_left_in_resources_is_linted_like_live_content():
+    """Review archives live in docs/reviews/; one dropped into resources/ is not silently skipped."""
+    assert not lint.is_excluded("resources/review-2031-01-01/00-SCHEMA.md")
+    assert lint.is_excluded("docs/reviews/2026-09-28/01-welt-delta.md")
 
 
 def test_currency_state_dir_is_git_ignored():

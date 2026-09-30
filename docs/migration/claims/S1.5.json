@@ -1,0 +1,133 @@
+{
+ "id": "S1.5",
+ "verdict": "pass",
+ "counts": {
+  "kept": 14,
+  "changed": 3,
+  "dropped": 3,
+  "new": 8
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:269-270",
+   "old": "set via `claude --permission-mode <mode>` or `/permissions`",
+   "new": "/permissions wechselt den Modus nicht; Modus per Shift+Tab oder --permission-mode",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur; belegt: commands.md '/permissions | Manage allow, ask, and deny rules...' (kein Moduswechsel), permission-modes.md Shift+Tab-Zyklus."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:296",
+   "old": "`claude --allowedTools \"Read,Glob,Grep\"` — only these tools are available.",
+   "new": "Flag lässt Werkzeuge ohne Rückfrage laufen, schränkt nicht ein; `--tools` begrenzt",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur; cli-reference.md: '--allowedTools | Tools that execute without prompting... To restrict which tools are available, use --tools instead.'"
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:272-282",
+   "old": "acceptEdits: common filesystem Bash (mkdir/touch/rm/mv) auto-approved",
+   "new": "mkdir, touch, rm, mv im Arbeitsordner; Liste/Windows-Variante nach S3.8",
+   "rating": "ok",
+   "reason": "Bedeutung gleich, Detail verschoben nach S3.8 (existiert); permission-modes.md bestätigt rm/mv/mkdir/touch."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:270",
+   "old": "Permission modes (6 levels ...)",
+   "new": "Drei Alltagsmodi; Karte aller sechs Modi in S1.6",
+   "rating": "ok",
+   "reason": "Bewusst nach S1.6 verlegt (Link vorhanden)."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:282",
+   "old": "plan: Shows full plan upfront, approves all steps at once (Security briefing analogy)",
+   "new": "plan: liest, schreibt Plan, ändert nichts bis Freigabe; Details S1.14",
+   "rating": "ok",
+   "reason": "Sinngleich, Plan-Modus gehört zu S1.14; Analogie nicht lehrrelevant."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/modules/block-1-foundations.md:266-268",
+   "old": "'Ich kann jetzt'-Zeile mit LE-Marker",
+   "new": "outcome im Frontmatter",
+   "rating": "ok",
+   "reason": "Migrationsmetadaten, durch outcome ersetzt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Neue interaktive Sitzungen starten in aktuellen Versionen in auto, sofern verfügbar; default = Manual; ab v2.1.200 auch `manual`; Statusleiste `⏸ manual mode on`, `⏵⏵ accept edits on`",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur (Anhang B/Kanon); belegt: permission-modes.md 'The built-in auto default requires Claude Code v2.1.228 ...', 'named Manual in the CLI...requires v2.1.200', Zeile 130 Statusleisten-Strings."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Regelreihenfolge deny, ask, allow; erste Übereinstimmung entscheidet; Deny sperrt in jedem Modus",
+   "rating": "ok",
+   "reason": "permissions.md: 'Rules are evaluated in order: deny, then ask, then allow. The first match...'; permission-modes.md: 'Deny rules block in every mode'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Bash(rm *) vs Bash(curl*) Leerzeichen-Semantik; Bash(ls *) trifft ls -la, nicht lsof; Bash(npm test) nur exakt, Varianten Bash(npm test *)",
+   "rating": "ok",
+   "reason": "permissions.md Zeilen 169-177: 'Bash(ls *) ... lsof doesn't match. Bash(ls*) ... matches lsof too'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Write(secrets/**) wird angenommen, aber nie geprüft; Edit(secrets/**) nehmen",
+   "rating": "ok",
+   "reason": "permissions.md Z.331: 'Claude Code accepts the rule but never consults it... Use Edit(docs/**) in place of Write(docs/**)' (v2.1.210+)."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "/permissions-Dialog zeigt Regeln und settings.json-Quelle, Regeln anlegen/entfernen",
+   "rating": "ok",
+   "reason": "permissions.md Z.46: 'The dialog lists all permission rules and the settings.json file each rule comes from.'"
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Hooks-`if`-Feld nutzt dieselbe Regel-Syntax",
+   "rating": "ok",
+   "reason": "hooks.md: '\"if\": \"Bash(rm *)\"'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Hilfen gegen Rückfragen: /fewer-permission-prompts, /sandbox (auto-allow)",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.54 nennt /sandbox auto-allow; /fewer-permission-prompts ist gebündelter Skill (Skill-Liste, Quelle b2)."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "default fragt bei Lesen nicht, bei Anlegen/Ändern, anderen Shell-Befehlen und Netz nach; acceptEdits: .git/geschützte Pfade und Pfade außerhalb fragen weiter",
+   "rating": "ok",
+   "reason": "permission-modes.md Z.9 und 'Paths outside that scope, writes to protected paths ... still prompt'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Übung jetzt in zwei Runden (default und acceptEdits) mit erwartetem Verhalten",
+   "rating": "ok",
+   "reason": "Didaktische Erweiterung; Verhalten konsistent mit Doku (rm in acceptEdits auto-approved)."
+  }
+ ],
+ "style": []
+}

@@ -1,0 +1,7 @@
+{"id":"X.3","verdict":"ask",
+"counts":{"kept":85,"changed":0,"dropped":0,"new":2},
+"items":[
+{"status":"new","source":"resources/library/x-03-pi-als-spiegel.md:218","old":"facts-X.3.json: Extension laeuft im Pi-Prozess mit denselben Rechten (extensions); Pi baut sich auf Wunsch selbst um (pi.dev)","new":"\"Das gilt auch fuer eine Extension, die Pi auf deinen Wunsch selbst schreibt.\"","rating":"ask","reason":"Kombination zweier belegter Zitate (beide live gefunden), aber der Satz selbst steht nirgends; logisch zulaessig, der Orchestrator entscheidet, ob ein Beleg oder eine Abschwaechung (\"Eine Extension, die Pi selbst schreibt, ist ebenfalls eine Extension\") noetig ist."},
+{"status":"new","source":"resources/library/x-03-pi-als-spiegel.md:134","old":"facts: --tools ersetzt Standardauswahl durch Allowlist (pi.dev cli); Claude: --tools schraenkt eingebaute Werkzeuge ein (cli-reference)","new":"\"Ein Werkzeug, das nicht eingeschaltet ist, kann das Modell nicht aufrufen. Beide Harnesses haben dafuer --tools.\"","rating":"ok","reason":"Folgerung aus beiden --tools-Belegen (live bestaetigt); eigene Einordnung als gröbste Rechtestufe ist als Denkmodell erkennbar."}
+],
+"style":[]}

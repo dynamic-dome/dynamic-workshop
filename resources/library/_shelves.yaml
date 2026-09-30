@@ -1,0 +1,145 @@
+# Regale der Praxisbibliothek, in Lernreihenfolge. Einzige Quelle für Titel und Einleitung der Regale.
+# Spec: docs/plans/2026-09-30-praxisbibliothek-design.md, Abschnitt 5.
+- id: start
+  title: Erste Schritte & Denkmodell
+  zone: Grundlagen
+  purpose: Claude Code einrichten, sofort etwas bauen und verstehen, was ein Coding-Agent anders macht als ein Chat.
+  intro: >-
+    Hier baust du zuerst etwas und erklärst es danach. Du richtest die Werkstatt ein, lässt Claude Code eine erste
+    Datei schreiben und ausführen und lernst das Denkmodell, auf dem alles andere aufbaut: Ein Agent handelt in deiner
+    Umgebung, und jede Freigabe hat echte Folgen.
+- id: permissions
+  title: Rechte & Freigaben
+  zone: Grundlagen
+  purpose: Festlegen, was der Agent ohne Rückfrage darf — vom Alltag bis zum autonomen Lauf.
+  intro: >-
+    Rechte-Modi sind die Freigabestufen deines Agenten, wie Zutrittsebenen in einem Gebäude. Du lernst die Alltagsmodi
+    und alle sechs Modi im Überblick, erkennst, in welchem Modus deine Sitzung startet, und stellst für Läufe ohne dich
+    Regeln, geschützte Pfade und Sandbox-Stufen ein.
+- id: context
+  title: Kontext & Gedächtnis
+  zone: Grundlagen
+  purpose: Steuern, was Claude weiß — im Gespräch, im Projekt und über Sitzungen hinweg.
+  intro: >-
+    Das Kontextfenster ist der Arbeitsspeicher des Agenten, CLAUDE.md seine Hausordnung. Du lernst, wann du
+    komprimierst, wann du neu anfängst und wie du Regeln so ablegst, dass sie bei jedem Start gelten.
+- id: prompting
+  title: Aufträge formulieren
+  zone: Grundlagen
+  purpose: Aufgaben so beschreiben, dass Claude sie zuverlässig und überprüfbar umsetzt.
+  intro: >-
+    Ein guter Auftrag nennt Ort, Ursache, Grenze und Erfolgskriterium, wie ein Wartungsauftrag für eine bestimmte Tür
+    statt „mach mal den Eingang“. Bei größeren Aufgaben holst du erst einen Plan und gibst ihn frei; mit Output Styles
+    legst du fest, wie Claude antwortet.
+- id: git
+  title: Git & Worktrees
+  zone: Grundlagen
+  purpose: Änderungen des Agenten sicher auf Branches führen, prüfen und parallel ausprobieren.
+  intro: >-
+    Git ist die Sicherheitsleine: Jede Änderung landet auf einem Branch, du liest den Diff selbst, und Worktrees geben
+    dir abgeschlossene Testräume für parallele Versuche.
+- id: cost
+  title: Modelle & Kosten
+  zone: Grundlagen
+  purpose: Das passende Modell und Effort wählen und die Kosten im Blick behalten.
+  intro: >-
+    Nicht jede Aufgabe braucht das stärkste Modell. Du lernst, Modell und Effort nach Aufgabe zu wählen, deinen
+    Verbrauch zu lesen und autonome Läufe mit Budget- und Rundenlimit zu deckeln.
+- id: skills
+  title: Skills & Commands
+  zone: Erweitern
+  purpose: Wiederkehrende Abläufe als Skills und Befehle festhalten, statt sie jedes Mal neu zu erklären.
+  intro: >-
+    Skills sind die Dienstanweisungen deines Agenten, Commands die Knöpfe dazu. Du schreibst eine eigene SKILL.md,
+    steuerst, wer sie auslösen darf, und machst Prompts mit Argumenten und dynamischem Inhalt lebendig.
+- id: hooks
+  title: Hooks
+  zone: Erweitern
+  purpose: Aktionen des Agenten automatisch prüfen, blocken oder protokollieren.
+  intro: >-
+    Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können eine Aktion stoppen — aber nur mit
+    `exit 2`. Ein abstürzender Hook ist ein offener Hook. Dieses Regal zeigt, wie du Hooks baust, denen du trauen kannst.
+- id: plugins
+  title: Plugins
+  zone: Erweitern
+  purpose: Skills, Hooks, Agenten und MCP-Server als ein Paket bündeln, verteilen und prüfen.
+  intro: >-
+    Ein Plugin bündelt, was zusammengehört, und macht es teilbar. Du lernst den Aufbau, Scopes und Marketplaces — und
+    warum ein fremdes Plugin fremder Code mit deinen Rechten ist.
+- id: mcp-knowledge
+  title: MCP & Wissensquellen
+  zone: Erweitern
+  purpose: Externe Werkzeuge und Wissen anbinden, ohne die Kontrolle abzugeben.
+  intro: >-
+    MCP ist der Integrationsstecker zu Browsern, Datenbanken und Diensten; RAG und NotebookLM geben dem Agenten
+    Baupläne statt Vermutungen. Beides läuft mit echten Rechten und echten Daten — deshalb gehören Sicherheit und
+    Datenschutz mit in dieses Regal.
+- id: agents
+  title: Agenten & Orchestrierung
+  zone: Fortgeschritten
+  purpose: Spezialisierte Subagenten definieren und mehrere Agenten sinnvoll zusammenarbeiten lassen.
+  intro: >-
+    Statt eines Allrounders arbeiten spezialisierte Rollen mit klaren Grenzen, wie Teams in einer Leitstelle. Du nutzt
+    eingebaute Subagenten, definierst eigene und wählst das passende Muster: Fan-out, Pipeline oder Hierarchie.
+- id: security
+  title: Gegenprüfung & Compliance
+  zone: Fortgeschritten
+  purpose: Agenten-Ergebnisse adversarial prüfen und Anforderungen regulierter Umgebungen erfüllen.
+  intro: >-
+    Ein grüner Bericht ist kein Beweis. Hier lässt du Code von einer adversarialen Pipeline angreifen, nutzt die
+    eingebauten Reviews und härtest Netzwerk, Skills und Datenflüsse für regulierte Branchen.
+- id: automation
+  title: Automation & Loops
+  zone: Fortgeschritten
+  purpose: Wiederkehrende Aufgaben planen und autonome Läufe sicher begrenzen.
+  intro: >-
+    Automatisierte Patrouillen brauchen Stopp-Regeln. Du wählst zwischen `/loop` (Takt, solange die Sitzung offen ist),
+    `/goal` (bis eine Bedingung erfüllt ist) und `/schedule` (Routine in der Cloud) und sicherst unbeaufsichtigte Läufe
+    ab: mit Worktree, und bei `claude -p` mit Budget und Rundenlimit.
+- id: headless-ci
+  title: Headless & CI/CD
+  zone: Fortgeschritten
+  purpose: Claude Code als Stufe in Skripten und Pipelines einsetzen.
+  intro: >-
+    Mit `claude -p` wird der Agent zur Pipeline-Stufe: Eingabe über stdin, Ausgabe als Text oder JSON, dazu ein
+    Exit-Code. Du wählst die passenden Zugangsdaten für CI, deckelst Kosten und Runden und setzt `--bare`, damit Hooks
+    und MCP-Server aus einem fremden Repo nicht auf deinem Runner laufen.
+- id: remote-isolation
+  title: Remote, Docker, Isolation
+  zone: Fortgeschritten
+  purpose: Vom Handy aus steuern und riskante Arbeit in Container oder Worktrees einsperren.
+  intro: >-
+    Fernzugriff und Isolation gehören zusammen. Mit Remote Control steuerst du eine Sitzung auf deinem Rechner vom Handy
+    oder Browser aus, `/teleport` holt eine Cloud-Sitzung ins Terminal. Worktrees und Container sperren riskante Arbeit
+    ein: Der Worktree schützt deinen Branch, der Container deinen Rechner.
+- id: troubleshooting
+  title: Fehlersuche
+  zone: Betrieb & Abschluss
+  purpose: Schicht für Schicht herausfinden, warum ein Hook, Skill, Plugin oder MCP-Server nicht greift.
+  intro: >-
+    Die Diagnose-Werkzeuge machen aus der Blackbox einen Glaskasten. Du gehst Schicht für Schicht vor — erst
+    Sichtbarkeit, dann Hypothese, dann der kleinste reproduzierbare Test.
+- id: capstone
+  title: Abschlussprojekt
+  zone: Betrieb & Abschluss
+  purpose: Die Bausteine zu einem eigenen, begrenzten Agenten-Workflow zusammensetzen und bewerten.
+  intro: >-
+    Im Abschlussprojekt setzt du die Bausteine zu einem kleinen, echten Build zusammen: Im Playground lieferst du in 35
+    bis 45 Minuten ein Feature oder einen Fix, einen Guardrail, eine enge Verifikation und eine PR-fertige Übergabe.
+    Eine Rubrik zeigt dir, wo du stehst.
+- id: practice
+  title: Praxis-Stationen
+  zone: Begleitend
+  purpose: Eine passende Übung auswählen und selbst lösen.
+  intro: >-
+    Jede Station sammelt die Übungen ihrer Session. Wähle eine, die zu deinem Pfad passt, und löse sie im Playground
+    oder in deinem eigenen Repo. Die Übungen stehen in ihren Kapiteln; die Station hilft beim Auswählen.
+- id: community
+  title: Community & Lernen
+  zone: Begleitend
+  purpose: Leute und Skills kennenlernen, die wirklich helfen, und mit Claude Code selbst lernen.
+  intro: >-
+    Nicht alles muss man selbst bauen. Dieses Regal stellt belegte Skill-Sammlungen aus der Community vor, zeigt, wie du
+    fremde Skills vor der Installation prüfst und wie Claude Code dich beim Lernen begleitet. Zwei Blicke über den
+    Tellerrand: was ein minimaler Agent über Claude Code verrät und was im Dauerbetrieb von Agenten schiefgehen kann.
+    Die Einträge tragen einen Stand.

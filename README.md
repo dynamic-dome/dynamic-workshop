@@ -1,194 +1,53 @@
-# Claude Code Workshop
+# Claude Code Praxisbibliothek
 
-> Praxisnaher Workshop fuer Entwickler, die Claude Code produktiv einsetzen wollen.
-> 4 Sessions, 17 Module → 65 Lerneinheiten (Block 1: 5, Block 2: 5, Block 3: 7; Block 3 auf Session 3+4 verteilt), demo-lastig mit optionalen Hands-on-Uebungen.
+> Claude Code lernen nach deinem Stand: 70 Kapitel in 19 Regalen — von der ersten Datei bis zur abgesicherten
+> Agenten-Pipeline. Eine kurze Einstufung zeigt dir, welche Kapitel zu deinem Ziel passen; du musst nicht alles lesen.
 
-Dieses Repository ist die Materialbasis hinter der DoMe-Dynamics-Workshop-Seite:
+Dieses Repository ist die Materialbasis hinter der Workshop-Seite von DoMe Dynamics
+([dynamic-dome.com/workshop](https://dynamic-dome.com/workshop)). Die Website ist das Schaufenster, hier liegt das Material:
+Kapitel, getestete Vorlagen, Übungs-Playground, Lern-Cockpit, Tutor-Plugin und Moderationsunterlagen.
 
-- **Website:** https://dynamic-dome.com/workshop - kuratierter Ueberblick und Arbeitsprobe
-- **Repo:** Material, Demos, Exercises, Mentor-Agent und Playground
-- **Kontext:** Teil der DoMe-Dynamics-Werkstattlinie: Werkstatt -> DCO -> Workshop
+## Für wen
 
-Die Website zeigt, warum der Workshop als Engineering-Arbeitsprobe zaehlt. Dieses Repo zeigt, womit er konkret funktioniert.
+- **Entwicklerinnen und Entwickler**, die Claude Code produktiv und sicher einsetzen wollen — Programmiererfahrung ja,
+  Erfahrung mit Coding-Agenten nicht nötig.
+- **Tech Leads**, die einschätzen wollen, ob und wie ihr Team Claude Code einführt.
+- **Moderierende**, die daraus einen Workshop in vier Sessions halten.
 
-> **📌 Stand & Versionen (zentraler Anker).** Kursaufbau: 4 Sessions / 65 Lerneinheiten. Modell- und CLI-Stand: siehe `Geprüft:` in [resources/_canonical.md](resources/_canonical.md). Getestet gegen eine aktuelle Claude-Code-CLI; Modelle: Der Kurs nennt Aliase (`fable`, `opus`, `sonnet`, `haiku`) und Rollen; Generationen, Preise und Kontextgrößen stehen nur im [Kanon](resources/_canonical.md). **Modellnamen, CLI-Flags und Versionsnummern ändern sich laufend** — im Zweifel `/model`, `/release-notes` und `claude --version` gegen dein Material prüfen, statt den hier genannten Zahlen blind zu vertrauen. Einzelne Dateien tragen eigene „Stand"-Zeilen; diese hier ist die maßgebliche Referenz.
+## Drei Wege hinein
 
----
+| Weg | So geht's |
+|---|---|
+| **Einstufung** (empfohlen) | Im Lern-Cockpit [`resources/claude-code-workshop-ui.html`](resources/claude-code-workshop-ui.html) (im Browser öffnen), mit dem Tutor `/dynamic-workshop:workshop start` in Claude Code oder zum Selbermachen in [`einstufung.md`](resources/library/einstufung.md). Fünf Minuten, keine Noten. |
+| **Fertiger Pfad** | [Schnellstart, ein Pfad je Ziel oder die vier Live-Sessions](resources/paths/README.md). |
+| **Stöbern** | [Die Bibliothek](resources/library/README.md) mit Regal-Karte. Jedes Kapitel beginnt mit einem Schnellcheck. |
 
-## Fuer wen ist das?
+Wie du damit lernst, moderierst oder das Material pflegst: [HOW-TO-USE.md](HOW-TO-USE.md).
 
-- **Selbstlerner** — Du willst Claude Code eigenstaendig lernen und suchst strukturiertes Material mit Demos und Uebungen.
-- **Moderatoren** — Du willst den Workshop fuer dein Team oder deine Community halten und brauchst fertige Unterlagen.
-- **Reviewer / Tech Leads** — Du willst einschaetzen, ob hier nur Folien liegen oder ein reproduzierbarer Lernpfad mit Demos, Recovery-Notes und Playground existiert.
+## Was drin steckt
 
-Vorkenntnisse: Programmiererfahrung vorhanden, aber keine Erfahrung mit Coding Agents noetig.
+- **Kapitel mit festem Aufbau:** Schnellcheck → Auf einen Blick → Bild im Kopf → Im Detail → Vorführen →
+  Selbst machen → Typische Fallen → Check → Weiterlesen, mit der offiziellen Doku als Primärquelle.
+- **Bilder aus der Sicherheitstechnik:** Rechte-Modi als Zutrittsebenen, Hooks als Türsensoren, Worktrees als Testlabor.
+- **Sicherheitsboden:** Neun Kapitel empfehlen wir auch Fortgeschrittenen — etwa, dass nur `exit 2` einen Hook blocken
+  lässt und `claude -p` ohne `--bare` die Hooks eines fremden Repos ausführt.
+- **Getestet statt behauptet:** Kopierbare Hooks sind [getestete Vorlagen](resources/demos/assets/hooks/), Wächter-Tests
+  verhindern bekannte Falschaussagen, ein [Übungs-Playground](workshop-playground/) mit fünf eingebauten Schwachstellen.
+- **Einstufung ohne Druck:** Verhaltensfragen statt Wissensabfrage, freiwillige Mini-Szenarien, Empfehlung mit Begründung.
+- **Tutor im Stil von `teach`:** Lernordner mit Mission und Lernprotokollen, Abruf mit Abstand ([X.2](resources/library/x-02-lernen-mit-claude-code.md)).
+- **Community-Regal:** belegte Skill-Sammlungen und eine Prüfliste für fremde Skills ([X.1](resources/library/x-01-community-skills.md)), dazu zwei Blicke über den Tellerrand: ein minimaler Agent als Spiegel ([X.3](resources/library/x-03-pi-als-spiegel.md)) und was bei Agenten im Dauerbetrieb schiefgehen kann ([X.4](resources/library/x-04-agenten-im-dauerbetrieb.md)).
 
----
+## Stand
 
-## Quick Start
+Modelle, Preise und der geprüfte CLI-Stand stehen an genau einer Stelle: [`resources/_canonical.md`](resources/_canonical.md).
+Im Material stehen Aliase (`opus`, `sonnet`, `haiku`, `fable`) und Rollen. Eine monatliche Prüfung vergleicht die im Kurs
+genannten Flags, Variablen und Hook-Ereignisse mit der offiziellen Doku. Im Zweifel gelten `/model`, `/release-notes`
+und `claude --version` auf deinem Rechner.
 
-### Als Selbstlerner
-
-1. `resources/prerequisites.md` durcharbeiten (Installation, Auth, Tools)
-2. Fuer Selbstlernen/Moderation `resources/claude-code-workshop-ui.html` im Browser oeffnen: interaktive 48-Section-Route mit 65-LE-Gesamtkarte, Folien, Uebungen, Bewertung und Quiz. Fuer die Live-3-Personen-Session gilt `resources/live-3-person-mode.md` statt Completion-Dashboard.
-3. `resources/workshop-guide.md` als **Haupt-Navigation** und Lern-Routine nutzen (ersetzt den Moderator); `WORKSHOP_EINFUEHRUNG.md` gibt die Kurz-Orientierung
-4. Block fuer Block durcharbeiten:
-   - `resources/modules/block-1-foundations.md` lesen
-   - `resources/demos/block-1-demos.md` nachvollziehen
-   - `resources/exercises/block-1-exercises.md` ausprobieren
-5. Trainer-Ersatz-Ressourcen (wenn du allein arbeitest und niemand zum Fragen da ist):
-   - `resources/faq.md` — Konzeptfragen ("warum/wann nutze ich X?")
-   - `resources/troubleshooting.md` — wenn etwas klemmt (Fehlermeldungen, Hooks, Plugins)
-   - `resources/glossary.md` — unklare Begriffe nachschlagen
-   - `resources/cheatsheet.md` + `resources/quick-reference.md` — Referenz / Schnellzugriff
-6. Weiter mit Session 2, 3 und 4
-
-### Als Reviewer
-
-1. Website-Ueberblick lesen: https://dynamic-dome.com/workshop
-2. `resources/session-plan.md` pruefen: Ablauf, Timing, Session-Logik
-3. `resources/modules/` und `resources/demos/` gegenlesen: fachliche Tiefe und Demo-Faehigkeit
-4. Playground testen: `cd workshop-playground && pip3 install -r requirements.txt && python3 -m pytest -v` (Windows: `pip`/`python` statt `pip3`/`python3`)
-5. `agents/workshop-mentor.md` pruefen: guide/learn-Modus und didaktische Rueckfragen
-
-### Als Moderator
-
-1. `resources/prerequisites.md` **vorab an Teilnehmer schicken** (min. 1 Woche vorher)
-2. Eigene Installation pruefen: `claude --version`, `python3 --version` (Windows: `python --version`), `git --version`
-3. Playground testen: `cd workshop-playground && pip3 install -r requirements.txt && python3 -m pytest -v` (Windows: `pip`/`python` statt `pip3`/`python3`)
-4. Optional — Workshop-Plugin installieren und `/workshop guide 1.1` testen
-5. Praesentationsfolien: `claude-code-workshop.pptx` als visuellen Einstieg nutzen
-6. Pro Session: Folien → Demos vorführen → Teilnehmer ueben lassen → Q&A
-
----
-
-## Kursstruktur
-
-### Session 1 — Foundations (~3h)
-
-> "Was ist Claude Code und warum sollte mich das interessieren?"
-
-| Modul | Thema | Highlight-Demo |
-|-------|-------|----------------|
-| **1.1** | Was ist Claude Code? | Log-Parser in 3 Minuten bauen |
-| **1.2** | Context & Memory | CLAUDE.md anlegen, `/compact` + `/cost` zeigen |
-| **1.3** | Effective Prompting | Vager vs. praeziser Prompt Side-by-Side |
-| **1.4** | Git Integration | Branch → Feature → Commit → PR in einem Flow |
-| **1.5** | Cost Engineering & Effort Management | `/cost`, `/usage`, `/insights` und Effort-Level als Kosten-Hebel |
-
-### Session 2 — Ecosystem (~3h)
-
-> "Wie macht man Claude Code richtig maechtig?"
-
-| Modul | Thema | Highlight-Demo |
-|-------|-------|----------------|
-| **2.1** | Skills & Commands | Eigenen Security-Skill live bauen |
-| **2.2** | Hooks | Hook der `rm -rf` blockiert |
-| **2.3** | Plugins | Plugin-Anatomie durchgehen |
-| **2.4** | MCP | Playwright: Claude steuert einen Browser |
-| **2.5** | RAG & NotebookLM | Knowledge Base erstellen und abfragen |
-
-### Session 3 — Advanced (~3h)
-
-> Multi-Agent-Workflows, Security, Automation, CI/CD und Troubleshooting.
-
-| Modul | Thema | Highlight-Demo |
-|-------|-------|----------------|
-| **3.1** | Agents | 2 parallele Agents auf echtem Task |
-| **3.2** | Multi-Model Pipelines | Codex Swarm baut CLI-Tool |
-| **3.3** | Security & Adversarial | Devil's Advocate Swarm auf vulnerablem Code |
-| **3.4** | Automation | Self-Improve Loop: Vorher/Nachher |
-| **3.5** | Full Stack Architecture | Gruppen-Discussion: Design your Workflow (Capstone) |
-| **3.6** | CI/CD & Headless Mode | `claude -p` mit `--output-format json` als Pipeline-Stage |
-| **3.7** | Troubleshooting & Debugging | `/debug`, `/doctor`, `claude --verbose` Layer-fuer-Layer |
-
-Jeder Block hat passende Dateien unter `resources/modules/`, `resources/demos/` und `resources/exercises/`.
-
----
-
-## Wie das Repo in DoMe Dynamics passt
-
-Die Workshop-Seite auf DoMe Dynamics ist bewusst kein Buchungsangebot, sondern ein sichtbarer Lab-Stand. Das Repo ist der Nachweis dahinter:
+## Einordnung
 
 | Ebene | Rolle |
-|-------|-------|
-| `Werkstatt` | Erklaert, wie aus einzelnen Tools ein persoenlicher Arbeitsmodus wurde. |
-| `DCO` | Zeigt ein gebautes agentisches System mit Toolgrenzen, Dashboard und Freigaben. |
-| `dynamic_workshop` | Uebersetzt diese Praxis in ein Curriculum fuer Entwicklerteams. |
-
-Damit ist der Workshop nicht nur "Lehre ueber Claude Code", sondern eine Enablement-Schicht ueber realer Agentenpraxis.
-
----
-
-## Verzeichnisstruktur
-
-```
-dynamic_workshop/
-├── README.md                       ← Du bist hier
-├── HOW-TO-USE.md                   ← Agent-/User-Wegweiser und kanonische Einstiegspfade
-├── WORKSHOP_EINFUEHRUNG.md         ← Orientierung und Einstieg
-├── CLAUDE.md                       ← Projektkontext fuer Claude Code
-├── claude-code-workshop.pptx       ← Praesentationsfolien
-├── resources/
-│   ├── prerequisites.md            ← Setup-Anleitung (vorab verteilen!)
-│   ├── cheatsheet.md               ← Referenz-Karte (CLI, Shortcuts, Commands)
-│   ├── workshop-guide.md           ← Leitfaden fuer Selbststudium
-│   ├── modules/
-│   │   ├── block-1-foundations.md   ← Lehrmaterial: Foundations
-│   │   ├── block-2-ecosystem.md     ← Lehrmaterial: Ecosystem
-│   │   └── block-3-advanced.md      ← Lehrmaterial: Advanced
-│   ├── demos/
-│   │   ├── block-1-demos.md         ← Demo-Scripts Block 1
-│   │   ├── block-2-demos.md         ← Demo-Scripts Block 2
-│   │   └── block-3-demos.md         ← Demo-Scripts Block 3
-│   └── exercises/
-│       ├── block-1-exercises.md     ← Uebungen Block 1
-│       ├── block-2-exercises.md     ← Uebungen Block 2
-│       └── block-3-exercises.md     ← Uebungen Block 3
-├── workshop-playground/             ← Demo-Repo mit 3 Vulnerabilities
-│   ├── access_control.py
-│   ├── test_access_control.py
-│   └── requirements.txt
-├── .claude-plugin/                  ← Plugin-Manifest
-├── skills/                          ← Workshop-Skill (guide/learn Logik)
-├── agents/                          ← Workshop-Mentor Agent
-└── commands/                        ← /workshop Command
-```
-
----
-
-## Workshop-Plugin (optional)
-
-Dieses Repo ist gleichzeitig ein Claude-Code-Plugin mit zwei Modi:
-
-- **`/workshop guide 1.1`** — Moderator-Modus: Talking Points, Demo-Scripts, Timing
-- **`/workshop learn 1.1`** — Lern-Modus: Interaktive Erklaerungen mit Verifikation
-
-**Installation:** Repo klonen, dann in Claude Code als lokales Plugin einbinden.
-Modulnummern: `1.1`–`1.5`, `2.1`–`2.5`, `3.1`–`3.7`
-
----
-
-## Workshop Playground
-
-Das Verzeichnis `workshop-playground/` enthaelt ein kleines Python-Projekt mit **5 absichtlich eingebauten Sicherheitsluecken** (Command Injection, Hardcoded Credential, Path Traversal, Log-Injection und fail-OPEN Domain-Logik). Es dient als realistisches Uebungsobjekt fuer Demos und Exercises.
-
-```bash
-cd workshop-playground
-pip3 install -r requirements.txt   # Windows: pip install -r requirements.txt
-python3 -m pytest -v               # Windows: python -m pytest -v
-```
-
----
-
-## Materialien auf einen Blick
-
-| Ich will... | Starte hier |
-|-------------|-------------|
-| Alles installieren | `resources/prerequisites.md` |
-| Den Workshop verstehen | `WORKSHOP_EINFUEHRUNG.md` |
-| Selbst durcharbeiten | `resources/workshop-guide.md` |
-| Oeffentlichen Kontext sehen | https://dynamic-dome.com/workshop |
-| Schnell nachschlagen | `resources/cheatsheet.md` |
-| Live praesentieren | `claude-code-workshop.pptx` + `resources/demos/` |
-| Ueben | `resources/exercises/` + `workshop-playground/` |
+|---|---|
+| Werkstatt | wie aus einzelnen Werkzeugen ein persönlicher Arbeitsmodus wurde |
+| DCO | ein gebautes agentisches System mit Werkzeuggrenzen, Dashboard und Freigaben |
+| Praxisbibliothek | übersetzt diese Praxis in einen Lernweg für Entwicklerteams |
