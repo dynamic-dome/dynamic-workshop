@@ -90,7 +90,9 @@ python tools/lint_currency.py                       # Modellgenerationen nur im 
   Golden-Datei bewusst neu schreiben. Python-Engine (`tools/placement.py`) und JS-Port im Cockpit müssen gleich bleiben
   — `tools/test_placement_js.py` prüft das.
 - **Aktualität:** `python tools/currency_check.py --state-dir .currency/manual` vergleicht Kurs-Bezeichner mit der
-  offiziellen Doku (Bericht unter `.currency/manual/reports/`). Danach `Geprüft:` im Kanon setzen.
+  offiziellen Doku (Bericht unter `.currency/manual/reports/`). Danach `Geprüft:` im Kanon setzen. Fremdprojekte der
+  Community-Kapitel stehen im Kanon als `- Fremdprojekt: <url> (<Kapitel>)`; ändert sich eine dieser Seiten, meldet der
+  Lauf das gelb mit Kapitel — dann das Kapitel gegen die Quelle prüfen und sein „Stand:"-Datum erneuern.
 - **Deck:** `python tools/build_deck.py` baut den Foliensatz aus dem Katalog.
 - **Diagramme fürs Cockpit** (optional): `python tools/render_diagrams.py`; ohne SVG zeigt das Cockpit den
   Mermaid-Quelltext.

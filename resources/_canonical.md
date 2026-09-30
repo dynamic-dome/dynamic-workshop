@@ -101,3 +101,16 @@ Der Monatslauf (`tools/currency_check.py`) liest genau diese Liste.
 - Doku: https://platform.claude.com/docs/en/about-claude/model-deprecations.md
 - CLI-Version: https://registry.npmjs.org/@anthropic-ai/claude-code/latest
 - Changelog: https://code.claude.com/docs/en/changelog.md
+
+Fremdprojekte der Community-Kapitel: Der Monatslauf meldet eine inhaltliche Änderung oder einen Ausfall gelb und nennt
+das Kapitel; ihr Text zählt nie als Beleg für Claude-Code-Bezeichner.
+
+- Fremdprojekt: https://pi.dev/ (X.3)
+- Fremdprojekt: https://pi.dev/docs/latest/security (X.3)
+- Fremdprojekt: https://pi.dev/docs/latest/cli (X.3)
+- Fremdprojekt: https://pi.dev/docs/latest/extensions (X.3)
+- Fremdprojekt: https://docs.openclaw.ai/gateway/security/trust-model.md (X.4)
+- Fremdprojekt: https://docs.openclaw.ai/gateway/security/hardened-baseline.md (X.4)
+- Fremdprojekt: https://docs.openclaw.ai/gateway/security/operator-incident-response.md (X.4)
+- Fremdprojekt: https://docs.openclaw.ai/gateway/heartbeat.md (X.4)
+- Fremdprojekt: https://docs.openclaw.ai/cli/channels.md (X.4)
