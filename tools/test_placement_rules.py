@@ -23,6 +23,7 @@ def test_shelves_match_spec_order():
     assert [s["id"] for s in SHELVES] == SPEC_SHELVES
     for shelf in SHELVES:
         assert shelf["title"] and shelf["purpose"] and len(shelf["intro"]) > 80
+        assert shelf["zone"] in ("Grundlagen", "Erweitern", "Fortgeschritten", "Betrieb & Abschluss", "Begleitend")
 
 
 def test_fourteen_areas_one_area_per_chapter():

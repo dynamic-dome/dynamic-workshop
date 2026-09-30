@@ -2,6 +2,7 @@
 # Spec: docs/plans/2026-09-30-praxisbibliothek-design.md, Abschnitt 5.
 - id: start
   title: Erste Schritte & Denkmodell
+  zone: Grundlagen
   purpose: Claude Code einrichten, sofort etwas bauen und verstehen, was ein Coding-Agent anders macht als ein Chat.
   intro: >-
     Hier baust du zuerst etwas und erklärst es danach. Du richtest die Werkstatt ein, lässt Claude Code eine erste
@@ -9,6 +10,7 @@
     Umgebung, und jede Freigabe hat echte Folgen.
 - id: permissions
   title: Rechte & Freigaben
+  zone: Grundlagen
   purpose: Festlegen, was der Agent ohne Rückfrage darf — vom Alltag bis zum autonomen Lauf.
   intro: >-
     Rechte-Modi sind die Freigabestufen deines Agenten, wie Zutrittsebenen in einem Gebäude. Du lernst die Alltagsmodi,
@@ -16,48 +18,56 @@
     Vertrauensgrenzen.
 - id: context
   title: Kontext & Gedächtnis
+  zone: Grundlagen
   purpose: Steuern, was Claude weiß — im Gespräch, im Projekt und über Sitzungen hinweg.
   intro: >-
     Das Kontextfenster ist der Arbeitsspeicher des Agenten, CLAUDE.md seine Hausordnung. Du lernst, wann du
     komprimierst, wann du neu anfängst und wie du Regeln so ablegst, dass sie bei jedem Start gelten.
 - id: prompting
   title: Aufträge formulieren
+  zone: Grundlagen
   purpose: Aufgaben so beschreiben, dass Claude sie zuverlässig und überprüfbar umsetzt.
   intro: >-
     Ein guter Auftrag nennt Ziel, Grenzen, Quellen und den Prüfschritt — wie ein Wartungsauftrag für eine bestimmte Tür
     statt „mach mal den Eingang". Dazu kommen Plan-Modus und der Wechsel zwischen Erklären, Vorschlagen und Ausführen.
 - id: git
   title: Git & Worktrees
+  zone: Grundlagen
   purpose: Änderungen des Agenten sicher auf Branches führen, prüfen und parallel ausprobieren.
   intro: >-
     Git ist die Sicherheitsleine: Jede Änderung landet auf einem Branch, du liest den Diff selbst, und Worktrees geben
     dir abgeschlossene Testräume für parallele Versuche.
 - id: cost
   title: Modelle & Kosten
+  zone: Grundlagen
   purpose: Das passende Modell und Effort wählen und die Kosten im Blick behalten.
   intro: >-
     Nicht jede Aufgabe braucht das stärkste Modell. Du lernst, Modell und Effort nach Aufgabe zu wählen, deinen
     Verbrauch zu lesen und autonome Läufe mit Budget- und Rundenlimit zu deckeln.
 - id: skills
   title: Skills & Commands
+  zone: Erweitern
   purpose: Wiederkehrende Abläufe als Skills und Befehle festhalten, statt sie jedes Mal neu zu erklären.
   intro: >-
     Skills sind die Dienstanweisungen deines Agenten, Commands die Knöpfe dazu. Du schreibst eine eigene SKILL.md,
     steuerst, wer sie auslösen darf, und machst Prompts mit Argumenten und dynamischem Inhalt lebendig.
 - id: hooks
   title: Hooks
+  zone: Erweitern
   purpose: Aktionen des Agenten automatisch prüfen, blocken oder protokollieren.
   intro: >-
     Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können eine Aktion stoppen — aber nur mit
     `exit 2`. Ein abstürzender Hook ist ein offener Hook. Dieses Regal zeigt, wie du Hooks baust, denen du trauen kannst.
 - id: plugins
   title: Plugins
+  zone: Erweitern
   purpose: Skills, Hooks, Agenten und MCP-Server als ein Paket bündeln, verteilen und prüfen.
   intro: >-
     Ein Plugin bündelt, was zusammengehört, und macht es teilbar. Du lernst den Aufbau, Scopes und Marketplaces — und
     warum ein fremdes Plugin fremder Code mit deinen Rechten ist.
 - id: mcp-knowledge
   title: MCP & Wissensquellen
+  zone: Erweitern
   purpose: Externe Werkzeuge und Wissen anbinden, ohne die Kontrolle abzugeben.
   intro: >-
     MCP ist der Integrationsstecker zu Browsern, Datenbanken und Diensten; RAG und NotebookLM geben dem Agenten
@@ -65,54 +75,63 @@
     Datenschutz mit in dieses Regal.
 - id: agents
   title: Agenten & Orchestrierung
+  zone: Fortgeschritten
   purpose: Spezialisierte Subagenten definieren und mehrere Agenten sinnvoll zusammenarbeiten lassen.
   intro: >-
     Statt eines Allrounders arbeiten spezialisierte Rollen mit klaren Grenzen, wie Teams in einer Leitstelle. Du nutzt
     eingebaute Subagenten, definierst eigene und wählst das passende Muster: Fan-out, Pipeline oder Hierarchie.
 - id: security
   title: Gegenprüfung & Compliance
+  zone: Fortgeschritten
   purpose: Agenten-Ergebnisse adversarial prüfen und Anforderungen regulierter Umgebungen erfüllen.
   intro: >-
     Ein grüner Bericht ist kein Beweis. Hier lässt du Code von einer adversarialen Pipeline angreifen, nutzt die
     eingebauten Reviews und härtest Netzwerk, Skills und Datenflüsse für regulierte Branchen.
 - id: automation
   title: Automation & Loops
+  zone: Fortgeschritten
   purpose: Wiederkehrende Aufgaben planen und autonome Läufe sicher begrenzen.
   intro: >-
     Automatisierte Patrouillen brauchen Stopp-Regeln. Du planst Aufgaben mit `/loop`, `/goal`, `/schedule` und Routinen
     und sicherst jeden autonomen Lauf mit Budget, Rundenlimit und Worktree ab.
 - id: headless-ci
   title: Headless & CI/CD
+  zone: Fortgeschritten
   purpose: Claude Code als Stufe in Skripten und Pipelines einsetzen.
   intro: >-
     Mit `claude -p` wird der Agent zur Pipeline-Stufe: JSON rein, JSON raus, Kosten gedeckelt. Du wählst die passenden
     Zugangsdaten für CI, verstehst `--bare` und baust eine Pipeline, die fremden Code nicht mit deinen Hooks ausführt.
 - id: remote-isolation
   title: Remote, Docker, Isolation
+  zone: Fortgeschritten
   purpose: Vom Handy aus steuern und riskante Arbeit in Container oder Worktrees einsperren.
   intro: >-
     Fernzugriff und Isolation gehören zusammen: Remote Control und Teleport holen die Sitzung aufs Handy, Docker und
     Worktrees sperren riskante Experimente in eine Kammer.
 - id: troubleshooting
   title: Fehlersuche
+  zone: Betrieb & Abschluss
   purpose: Schicht für Schicht herausfinden, warum ein Hook, Skill, Plugin oder MCP-Server nicht greift.
   intro: >-
     Die Diagnose-Werkzeuge machen aus der Blackbox einen Glaskasten. Du gehst Schicht für Schicht vor — erst
     Sichtbarkeit, dann Hypothese, dann der kleinste reproduzierbare Test.
 - id: capstone
   title: Abschlussprojekt
+  zone: Betrieb & Abschluss
   purpose: Die Bausteine zu einem eigenen, begrenzten Agenten-Workflow zusammensetzen und bewerten.
   intro: >-
     Im Abschlussprojekt entwirfst und baust du einen Agenten-Workflow für ein echtes Szenario — mit Rollen, Rechten,
     Stopp-Bedingungen und einer Bewertungsrubrik, mit der du dich selbst einschätzen kannst.
 - id: practice
   title: Praxis-Stationen
+  zone: Begleitend
   purpose: Eine passende Übung auswählen und selbst lösen.
   intro: >-
     Jede Station sammelt die Übungen ihrer Session. Wähle eine, die zu deinem Pfad passt, und löse sie im Playground
     oder in deinem eigenen Repo. Die Übungen stehen in ihren Kapiteln; die Station hilft beim Auswählen.
 - id: community
   title: Community & Lernen
+  zone: Begleitend
   purpose: Leute und Skills kennenlernen, die wirklich helfen, und mit Claude Code selbst lernen.
   intro: >-
     Nicht alles muss man selbst bauen. Dieses Regal stellt belegte Skill-Sammlungen aus der Community vor, zeigt, wie

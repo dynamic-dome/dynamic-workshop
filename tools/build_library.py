@@ -336,6 +336,40 @@ def validate(lib, *, complete: bool, meta=None) -> list:
     return problems
 
 
+def _norm(text: str) -> str:
+    return text.replace("\r\n", "\n")
+
+
+def build(root, *, write: bool, complete: bool = False) -> int:
+    """Validate, then write (build) or compare (check) all generated files."""
+    import library_generate as gen
+
+    root = Path(root).resolve()
+    lib = lm.load_library(root)
+    meta = load_meta() if root == DEFAULT_LIBRARY.resolve() else None
+    problems = validate(lib, complete=complete, meta=meta)
+    if problems:
+        print("Build abgebrochen, der Validator meldet Befunde:")
+        return _print(problems)
+    outputs = gen.build_outputs(lib)
+    stale = []
+    for path, text in sorted(outputs.items()):
+        current = _norm(path.read_text(encoding="utf-8")) if path.exists() else None
+        if current != _norm(text):
+            stale.append(path)
+            if write:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8", newline="\n")
+    for path in stale:
+        print(("geschrieben: " if write else "veraltet: ") + _rel(path))
+    if write:
+        print(f"{len(stale)} von {len(outputs)} Dateien aktualisiert.")
+        return 0
+    print("OK — alle generierten Dateien aktuell." if not stale else
+          f"{len(stale)} Datei(en) veraltet — python tools/build_library.py build")
+    return 1 if stale else 0
+
+
 def _print(problems) -> int:
     for p in problems:
         print(p)
@@ -350,7 +384,13 @@ def main(argv=None) -> int:
     v.add_argument("--root", type=Path, default=DEFAULT_LIBRARY)
     v.add_argument("--chapter", type=Path)
     v.add_argument("--complete", action="store_true")
+    for name in ("build", "check"):
+        sp = sub.add_parser(name)
+        sp.add_argument("--root", type=Path, default=DEFAULT_LIBRARY)
+        sp.add_argument("--complete", action="store_true", help="auch Vollständigkeit prüfen")
     args = parser.parse_args(argv)
+    if args.cmd in ("build", "check"):
+        return build(args.root, write=args.cmd == "build", complete=args.complete)
     if args.cmd == "validate":
         if args.chapter:
             chapter = args.chapter.resolve()

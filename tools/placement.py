@@ -21,6 +21,19 @@ RANK = {"later": 0, "skip": 1, "skim": 2, "work": 3}
 STATUSES = tuple(RANK)
 
 
+def hours_text(minutes):
+    """German: 'etwa 1 Stunde', 'etwa 2,5 Stunden', 'etwa 45 Minuten'."""
+    if minutes < 60:
+        return f"etwa {minutes} Minuten"
+    value = ((minutes * 2 + 30) // 60) / 2  # half hours, rounded half up (no banker's rounding)
+    number = f"{value:.1f}".rstrip("0").rstrip(".").replace(".", ",")
+    return f"etwa {number} Stunde" if value == 1 else f"etwa {number} Stunden"
+
+
+def stages_text(n):
+    return "1 Etappe" if n == 1 else f"{n} Etappen"
+
+
 def _minutes(chapter, status, percent):
     if status == "work":
         return chapter["minutes"]
@@ -248,8 +261,8 @@ def to_markdown(catalog, result):
     meta = {c["id"]: c for c in catalog["chapters"]}
     label = {"work": "durcharbeiten", "skim": "überfliegen", "skip": "Schnellcheck reicht", "later": "später"}
     out = ["# Dein Lernpfad", ""]
-    hours = (result["totals"]["work_min"] + result["totals"]["skim_min"]) / 60
-    out.append(f"Etappen: {len(result['stages'])} · zusammen etwa {hours:.1f} Stunden.")
+    total = result["totals"]["work_min"] + result["totals"]["skim_min"]
+    out.append(f"{stages_text(len(result['stages']))}, zusammen {hours_text(total)}.")
     for w in result["warnings"]:
         ids = ", ".join(w["ids"])
         out.append(f"> ⚠ {rules['warnings'][w['code']]}" + (f" ({ids})" if ids else ""))
