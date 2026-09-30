@@ -1,0 +1,120 @@
+{
+ "id": "S1.18",
+ "verdict": "ask",
+ "counts": {
+  "kept": 38,
+  "changed": 3,
+  "dropped": 1,
+  "new": 8
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:1052",
+   "old": "Worktree liegt unter <repo>/.claude/worktrees/feature-zone-correlation/ (Schrägstrich wird zu Bindestrich)",
+   "new": "Argument ist der Worktree-Name, kein bestehender Branch; Ordner .claude/worktrees/<name>/, neuer Branch worktree-<name>; Beispiele ohne Schrägstrich",
+   "rating": "ok",
+   "reason": "Wörtlich belegt in code.claude.com/docs/en/worktrees.md: 'created under `.claude/worktrees/<name>/` ... on a new branch named `worktree-<name>`'. Die alte Schrägstrich-zu-Bindestrich-Aussage steht nicht in der Doku und fällt weg."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:1056",
+   "old": "fresh hilft, dass zwei parallele Agenten nicht auf den nicht committeten Arbeiten des anderen aufbauen",
+   "new": "jeder Agent bekommt einen Ausgangspunkt wie auf dem Remote, statt auf lokalen, noch nicht gepushten Commits aufzubauen",
+   "rating": "ok",
+   "reason": "Alte Begründung war sachlich unscharf (Worktrees teilen keine uncommitteten Änderungen); neue deckt sich mit der Doku zu baseRef 'fresh' vs. 'head'."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:1054",
+   "old": "Standard-Drift: frühe CLI-Versionen head, neuere fresh",
+   "new": "'Der Standard hat sich zwischen CLI-Versionen verschoben'; ohne Richtungsangabe",
+   "rating": "ok",
+   "reason": "Unschädliche Straffung; die Doku nennt fresh als Standard, die Verschiebungsrichtung ist dort nicht belegt."
+  },
+  {
+   "status": "dropped",
+   "source": "resources/demos/block-1-demos.md:473",
+   "old": "No stashing, no cleanup, no accidental changes to main",
+   "new": "Kein Stash, keine versehentlichen Änderungen an meinem Branch",
+   "rating": "ok",
+   "reason": "Nur 'no cleanup' fehlt, unschädliche Straffung eines Sprechtextes."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Steckt beim Beenden noch Arbeit im Worktree, fragt Claude Code, ob du ihn behalten oder entfernen willst",
+   "rating": "ok",
+   "reason": "Doku: 'The worktree has work in it: Claude prompts you to keep or remove the worktree.'"
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "worktree.baseRef: fresh/head-Definitionen, Settings-Beispiel, kein Branch-Name möglich, ohne Remote Rückfall auf lokales HEAD, Subagent-Worktrees folgen der Einstellung",
+   "rating": "ok",
+   "reason": "Doku (worktrees.md, Abschnitt Choose the base branch): 'You can't set `worktree.baseRef` to a branch name', 'If no remote is configured ... falls back to your current local `HEAD`', 'Subagent worktrees use the same base branch as `--worktree`'. settings-reference.md nennt fresh = origin/<default-branch>."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle: .claude/worktrees/ in .gitignore eintragen, sonst ungetrackte Dateien",
+   "rating": "ok",
+   "reason": "Doku: 'Add `.claude/worktrees/` to your `.gitignore` so worktree contents don't appear as untracked files'."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "git worktree add: ohne -b muss der Branch existieren, mit -b neuer Branch ab aktuellem HEAD; git worktree list / remove ../<ordner>",
+   "rating": "ok",
+   "reason": "Korrektes Git-Verhalten (git-worktree-Doku); list steht in der Demo-Quelle, remove und -b-Erklärung sind Ergänzungen. Die ursprüngliche Beispielzeile ohne -b bleibt erhalten und wird nun erklärt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Falle: --orphan hilft nicht, legt leeren Worktree mit neuem Branch ohne Commits an",
+   "rating": "ok",
+   "reason": "Korrektes Git-Verhalten; --orphan ist in 05-bewertung.md als Fremd-Flag mit Ausnahme geführt."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Tabellenkopf und Abschnitt 'Wann sich ein Worktree lohnt' mit Bezug auf S4.7, S3.13; Bonus-Hinweis, Voraussetzung Ordner exercise-1.4-git",
+   "rating": "ok",
+   "reason": "Verweise und Vorbereitung; exercise-1.4-git steht in der Quelle der Übung 1.4 (block-1-exercises.md:401)."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Fehlerfall-Rezept: bei vorhandenem Branch Worktree entfernen und erneut versuchen; alternativ -b weglassen",
+   "rating": "ok",
+   "reason": "Neue Recovery-Zeile, fachlich vertretbar; siehe Stilhinweis zur Reihenfolge."
+  },
+  {
+   "status": "new",
+   "source": "-",
+   "old": "",
+   "new": "Mermaid-Diagramm und Quizfrage (ungepushte Commits, fresh)",
+   "rating": "ok",
+   "reason": "Pflichtteile bzw. Veranschaulichung, inhaltlich deckungsgleich mit den belegten Aussagen."
+  }
+ ],
+ "style": [
+  {
+   "rating": "ask",
+   "where": "In einem Schritt: claude --worktree",
+   "issue": "Das Codebeispiel nutzt weiterhin feature/zone-correlation, der Text nennt aber offizielle Beispiele ohne Schrägstrich. Ob ein Schrägstrich im Namen unterstützt wird, belegt die Doku nicht; besser feature-zone-correlation als Beispiel."
+  },
+  {
+   "rating": "ask",
+   "where": "Vorführen, Wenn etwas schiefgeht",
+   "issue": "'Worktree entfernen und erneut versuchen' behebt 'Branch existiert schon' nicht, weil git worktree remove den Branch nicht löscht; der zweite Satz (-b weglassen) trifft die eigentliche Lösung. Reihenfolge umdrehen oder ersten Satz streichen."
+  }
+ ]
+}
