@@ -32,6 +32,7 @@ FENCE = re.compile(r"^\s*(```|~~~)")
 H2 = re.compile(r"^## (.+?)\s*$")
 META_START, META_END = "<!-- meta:start -->", "<!-- meta:end -->"
 EXAMPLE_MARKER = "<!-- cockpit:example -->"
+GENERATED_NAMES = ("README.md", "einstufung.md")  # generated into the library folder by build_library
 LINK = re.compile(r"\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 QUIZ_BLOCK = re.compile(r"<details><summary>Quizfrage</summary>(.*?)</details>", re.S)
 QUIZ_QUESTION = re.compile(r"^\*\*Frage:\*\*\s*(.+?)\s*$", re.M)
@@ -51,6 +52,8 @@ class Quiz:
     question: str
     correct: str
     wrong: list
+    n_correct: int = 1
+    closed: bool = True
 
 
 @dataclass
@@ -241,13 +244,17 @@ def _example(text: str):
 
 
 def _quiz(check_text: str):
-    block = QUIZ_BLOCK.search(check_text or "")
+    text = check_text or ""
+    block = QUIZ_BLOCK.search(text)
     if not block:
+        if "<details><summary>Quizfrage</summary>" in text:
+            return Quiz("", "", [], 0, closed=False)  # opened but never closed
         return None
     inner = block.group(1)
-    question, right = QUIZ_QUESTION.search(inner), QUIZ_RIGHT.search(inner)
+    question = QUIZ_QUESTION.search(inner)
+    rights = QUIZ_RIGHT.findall(inner)
     wrong = QUIZ_WRONG.findall(inner)
-    return Quiz(question.group(1) if question else "", right.group(1) if right else "", wrong)
+    return Quiz(question.group(1) if question else "", rights[0] if rights else "", wrong, len(rights))
 
 
 def _links(body: str) -> list:
@@ -327,7 +334,11 @@ def load_library(root) -> Library:
     with __import__("os").scandir(root) as entries:
         names = sorted(e.name for e in entries if e.is_file() and e.name.endswith(".md"))
     for name in names:
+        if name in GENERATED_NAMES:
+            continue
         if not re.match(r"^(s[0-4]-\d{2}|x-\d{2})-", name):
+            problems.append(ChapterError(root / name, "Datei gehört nicht in die Bibliothek oder hat einen ungültigen "
+                                         "Kapitel-Dateinamen (erwartet s<s>-<nn>-<slug>.md oder x-<nn>-<slug>.md)"))
             continue
         try:
             chapters.append(parse_chapter(root / name))

@@ -116,6 +116,36 @@ def _check_front(ch, add):
         add("frontmatter-schema", "'offers' ist nur für Praxis-Stationen erlaubt")
 
 
+GENERATED_TARGETS = ("README.md", "einstufung.md", "../paths/README.md", "../paths/live-workshop.md",
+                     "../paths/schnellstart.md", "../reference/analogien.md")
+
+
+def github_slug(text: str) -> str:
+    """Heading anchor as GitHub renders it (lower case, punctuation removed, spaces to hyphens)."""
+    text = re.sub(r"<[^>]+>", "", text).strip().lower()
+    text = re.sub(r"[^\w\- ]", "", text, flags=re.UNICODE)
+    return text.replace(" ", "-")
+
+
+def anchors_of(path: Path) -> set:
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+    found, seen, in_fence = set(), {}, False
+    for line in text.split("\n"):
+        if re.match(r"^\s*(```|~~~)", line):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        m = re.match(r"^#{1,6}\s+(.*?)\s*#*\s*$", line)
+        if m:
+            slug = github_slug(m.group(1))
+            n = seen.get(slug, 0)
+            found.add(slug if n == 0 else f"{slug}-{n}")
+            seen[slug] = n + 1
+        found.update(re.findall(r'<a\s+(?:id|name)="([^"]+)"', line))
+    return found
+
+
 def _check_body(ch, add, planned=frozenset()):
     t = ch.type if ch.type in ALLOWED else "lesson"
     for title in ch.section_order:
@@ -143,8 +173,11 @@ def _check_body(ch, add, planned=frozenset()):
     if n_quiz and "Check" in ch.sections and not QUIZ_SUMMARY.search(ch.sections["Check"]):
         add("quiz-count", "der Quizblock gehört in '## Check'")
     q = ch.quiz
-    if q is not None:
-        if not q.question or not q.correct or len(q.wrong) != 3 or not all(w.strip() for w in q.wrong):
+    if q is not None and not q.closed:
+        add("quiz-shape", "Quizblock ist nicht mit </details> geschlossen")
+    elif q is not None:
+        if (not q.question or not q.correct or q.n_correct != 1 or len(q.wrong) != 3
+                or not all(w.strip() for w in q.wrong)):
             add("quiz-shape", "Quiz braucht **Frage:**, genau eine **Richtig:**- und drei Falsch-Zeilen")
         elif q.correct in q.wrong:
             add("quiz-shape", "richtige Antwort steht auch unter den falschen")
@@ -168,11 +201,14 @@ def _check_body(ch, add, planned=frozenset()):
     for target in ch.links:
         if re.match(r"^[a-z]+:", target) or target.startswith("#"):
             continue
-        file_part = target.split("#", 1)[0]
-        if file_part in planned:
+        file_part, _, fragment = target.partition("#")
+        if file_part in planned or file_part in GENERATED_TARGETS or file_part.startswith("../paths/ziel-"):
             continue
-        if file_part and not (ch.path.parent / file_part).resolve().exists():
+        dest = (ch.path.parent / file_part).resolve() if file_part else ch.path.resolve()
+        if file_part and not dest.exists():
             add("links-resolve", f"Link-Ziel existiert nicht: {target}")
+        elif fragment and dest.suffix == ".md" and fragment not in anchors_of(dest):
+            add("links-resolve", f"Anker #{fragment} gibt es in {dest.name} nicht")
 
 
 def _check_graph(lib, by_id, report):
@@ -397,7 +433,10 @@ def main(argv=None) -> int:
             lib = lm.load_library(chapter.parent)
             rel = _rel(chapter)
             meta = load_meta() if chapter.parent == DEFAULT_LIBRARY.resolve() else None
-            return _print([p for p in validate(lib, complete=False, meta=meta) if p.path == rel])
+            found = [p for p in validate(lib, complete=False, meta=meta) if p.path == rel]
+            if not found and chapter not in {c.path.resolve() for c in lib.chapters}:
+                found = [Problem(rel, "parse", "Datei wurde nicht als Kapitel geladen (Dateiname oder Pfad prüfen)")]
+            return _print(found)
         meta = load_meta() if args.root.resolve() == DEFAULT_LIBRARY.resolve() else None
         return _print(validate(lm.load_library(args.root), complete=args.complete, meta=meta))
     return 2

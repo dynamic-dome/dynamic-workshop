@@ -31,7 +31,7 @@
   {"id": "P04", "title": "Nur einschätzen, gründlich",
    "answers": {"goals": ["einschaetzen"], "time": "gruendlich"},
    "expect": {
-    "status": {"S1.1": ["skim", "assess"], "S1.10": ["skim", "assess"], "S1.5": ["work", "new"], "S1.6": ["work", "new"],
+    "status": {"S0.1": ["work", "new"], "S1.1": ["skim", "assess"], "S1.10": ["skim", "assess"], "S1.5": ["work", "new"], "S1.6": ["work", "new"],
                "S3.8": ["work", "new"], "S3.9": ["work", "new"], "S4.8": ["skim", "capstone"], "S1.20": ["skim", "assess"],
                "X.1": ["later", "not-goal"], "X.2": ["later", "not-goal"], "S2.6": ["skim", "prerequisite"], "S4.10": ["skim", "assess"]},
     "warnings": []}},

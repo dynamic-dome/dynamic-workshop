@@ -241,7 +241,8 @@ Berechnet aus der Quellenkarte, Anhang A.
 ### 6.2 Fragen (`_placement.yaml`, endgültige Liste in Anhang E)
 
 1. **Ziel** (1–2 wählen, 7 Optionen): `alltag` · `team` · `automation` · `agents` · `security` · `einschaetzen` ·
-   `moderieren`. Keine Auswahl = `alltag`; mehr als zwei lässt die Oberfläche nicht zu (Engine nimmt die ersten zwei).
+   `moderieren`. Keine Auswahl = `alltag`; doppelte Angaben zählen einmal; mehr als zwei lässt die Oberfläche nicht zu
+   (Engine nimmt die ersten zwei).
 2. **Warum** (Freitext, optional) und **Zeit** — gemeint ist die Länge einer Lernsitzung, nicht der Gesamtumfang;
    für wenig Gesamtzeit gibt es den Schnellstart:
    `schnellstart` („nur ein paar Stunden insgesamt": Mindestpfad, eine Etappe) · `stunde` (Etappen à 60 Min) ·
@@ -277,7 +278,8 @@ Notation: r(c) = Stand des Bereichs von Kapitel c nach Szenario-Deckel (Kapitel 
 - Lesson/Setup mit Bereich: r = 0 → `work`; r = 1 → `skim` (`deep-dive` → `work`; Setup → `work`, ohne Installation
   geht nichts); r = 2 → `skip`.
 - Ohne Bereich: Praxis-Station → `work`; Capstone → `work` (bei Nur-Einschätzen `skim`); Community → `skim`.
-- Nur-Einschätzen: `work` → `skim` für alle Kapitel ohne Sicherheitsboden.
+- Nur-Einschätzen: `work` → `skim` für alle Kapitel ohne Sicherheitsboden, außer Setup (ohne Installation kein
+  Einschätzen).
 
 **Schritt C — Sicherheitsboden.** Kapitel mit `safety_floor: true` (Liste unten), die in R liegen **oder** deren
 Bereich r = 2 hat (wer ein Feature schon nutzt, liest dessen Sicherheitskapitel auch ohne passendes Ziel): Status
@@ -294,7 +296,8 @@ dann wird sie `skip` (Grund `known`; die Person kann es schon). Ein Durchlauf ge
 **Schritt E — Übersteuerung.** Die Wahl der lernenden Person je Kapitel gilt zuletzt und schlägt alles, auch den
 Sicherheitsboden. Danach Schritt D noch einmal. Warnungen: `override-safety`, wenn ein Sicherheitsboden-Kapitel
 dadurch unter seinen berechneten Status fällt; `override-prereq`, wenn ein `work`/`skim`-Kapitel eine per
-Übersteuerung (nicht per r = 2) übersprungene Voraussetzung hat — mit beiden Kapitel-IDs.
+Übersteuerung (nicht per r = 2) übersprungene Voraussetzung hat — mit beiden Kapitel-IDs. War die Voraussetzung
+schon vor der Übersteuerung `skip` (Bereich r = 2, die Person kann es), gibt es keine Warnung — es fehlt nichts.
 
 **Schritt F — Etappen.** L = alle `work`/`skim`-Kapitel nach `order` (= Lehrreihenfolge; Voraussetzungen stehen
 immer vorher). Minuten: `work` = `minutes`, `skim` = `ceil(minutes × 0,3)`. Budget B aus der Zeitantwort

@@ -175,3 +175,25 @@ def write_golden():  # maintainer helper: python -c "import tools.test_placement
     golden = {p["id"]: run(p["answers"]) for p in VECTORS}
     GOLDEN_PATH.write_text(json.dumps(golden, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
                            encoding="utf-8", newline="\n")
+
+
+def test_duplicate_goals_count_once():
+    assert run({"goals": ["einschaetzen", "einschaetzen"]}) == run({"goals": ["einschaetzen"]})
+
+
+def test_cli_markdown_links_use_link_base(tmp_path):
+    cat = json.loads((FIX / "placement-catalog.json").read_text(encoding="utf-8"))
+    for c in cat["chapters"]:
+        c["file"] = c["id"].lower().replace(".", "-") + "-x.md"
+        c["title"] = "Titel"
+    catalog = tmp_path / "catalog.json"
+    catalog.write_text(json.dumps(cat), encoding="utf-8")
+    path = tmp_path / "a.json"
+    path.write_text(json.dumps({"time": "schnellstart"}), encoding="utf-8")
+    base = [sys.executable, str(ROOT / "tools" / "placement.py"), "--catalog", str(catalog), "--answers", str(path),
+            "--format", "md"]
+    default = subprocess.run(base, capture_output=True, text=True, encoding="utf-8", check=True).stdout
+    assert "(https://github.com/dynamic-dome/dynamic-workshop/blob/main/resources/library/s0-1-x.md)" in default
+    local = subprocess.run(base + ["--link-base", "C:/repo/resources/library/"], capture_output=True, text=True,
+                           encoding="utf-8", check=True).stdout
+    assert "(C:/repo/resources/library/s0-1-x.md)" in local and "https://github.com" not in local

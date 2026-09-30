@@ -1492,9 +1492,9 @@
    {
     "id": "S0.1",
     "override": false,
-    "reason": "assess",
+    "reason": "new",
     "stage": 1,
-    "status": "skim"
+    "status": "work"
    },
    {
     "id": "X.2",
@@ -1878,7 +1878,7 @@
     "id": "S3.13",
     "override": false,
     "reason": "prerequisite",
-    "stage": 1,
+    "stage": 2,
     "status": "skim"
    },
    {
@@ -1948,14 +1948,14 @@
     "id": "S4.8",
     "override": false,
     "reason": "capstone",
-    "stage": 1,
+    "stage": 2,
     "status": "skim"
    },
    {
     "id": "S4.9",
     "override": false,
     "reason": "assess",
-    "stage": 1,
+    "stage": 2,
     "status": "skim"
    },
    {
@@ -1968,17 +1968,17 @@
   ],
   "stages": [
    {
-    "minutes": 180,
+    "minutes": 177,
     "n": 1
    },
    {
-    "minutes": 6,
+    "minutes": 23,
     "n": 2
    }
   ],
   "totals": {
-   "skim_min": 126,
-   "work_min": 60
+   "skim_min": 120,
+   "work_min": 80
   },
   "version": 1,
   "warnings": []

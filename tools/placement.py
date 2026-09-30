@@ -50,7 +50,7 @@ def normalize(catalog, answers):
     scenarios = {s["id"]: s for s in rules.get("scenarios", [])}
     chapter_ids = {c["id"] for c in catalog["chapters"]}
 
-    goals = list(answers.get("goals") or [rules["default_goal"]])
+    goals = list(dict.fromkeys(answers.get("goals") or [rules["default_goal"]]))  # unique, order kept
     for g in goals:
         if g not in goal_ids:
             raise ValueError(f"unbekanntes Ziel: {g!r}")
@@ -162,7 +162,7 @@ def place(catalog, answers):
             st, rs = ("skim" if only_assess else "work"), "capstone"
         else:  # community
             st, rs = "skim", "community"
-        if only_assess and st == "work" and not c["safety_floor"]:
+        if only_assess and st == "work" and not c["safety_floor"] and t != "setup":
             st, rs = "skim", "assess"
         status[cid], reason[cid] = st, rs
 
@@ -256,7 +256,10 @@ def template(catalog):
     }
 
 
-def to_markdown(catalog, result):
+REPO_LIBRARY = "https://github.com/dynamic-dome/dynamic-workshop/blob/main/resources/library/"
+
+
+def to_markdown(catalog, result, link_base=REPO_LIBRARY):
     rules = catalog["placement"]
     meta = {c["id"]: c for c in catalog["chapters"]}
     label = {"work": "durcharbeiten", "skim": "überfliegen", "skip": "Schnellcheck reicht", "later": "später"}
@@ -272,7 +275,7 @@ def to_markdown(catalog, result):
             if ch["stage"] == stage["n"]:
                 title = meta[ch["id"]].get("title", "")
                 file = meta[ch["id"]].get("file", "")
-                name = f"[{ch['id']} {title}]({file})" if file else f"{ch['id']} {title}".strip()
+                name = f"[{ch['id']} {title}]({link_base}{file})" if file else f"{ch['id']} {title}".strip()
                 out.append(f"- {name} — {label[ch['status']]}: {rules['reasons'][ch['reason']]}")
     skipped = [c for c in result["chapters"] if c["status"] == "skip"]
     if skipped:
@@ -291,6 +294,8 @@ def main(argv=None):
     parser.add_argument("--answers", type=Path)
     parser.add_argument("--format", choices=("json", "md"), default="json")
     parser.add_argument("--template", action="store_true")
+    parser.add_argument("--link-base", default=REPO_LIBRARY,
+                        help="Präfix für Kapitel-Links im Markdown (Standard: GitHub; der Tutor übergibt den lokalen Pfad)")
     args = parser.parse_args(argv)
     catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
     if args.template:
@@ -304,7 +309,8 @@ def main(argv=None):
     except ValueError as err:
         print(f"Fehler in den Antworten: {err}", file=sys.stderr)
         return 2
-    print(to_markdown(catalog, result) if args.format == "md" else json.dumps(result, ensure_ascii=False, indent=1))
+    print(to_markdown(catalog, result, args.link_base) if args.format == "md"
+          else json.dumps(result, ensure_ascii=False, indent=1))
     return 0
 
 

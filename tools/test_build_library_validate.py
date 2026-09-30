@@ -177,3 +177,38 @@ def test_links_to_planned_chapters_are_ok_during_migration(lib_dir):
     meta = [dict(c.front, file=c.path.name) for c in lib.chapters] + [{"id": "S2.9", "file": "s2-09-geplant.md"}]
     assert "links-resolve" not in {p.rule for p in bl.validate(lib, complete=False, meta=meta)}
     assert "links-resolve" in {p.rule for p in bl.validate(lib, complete=True, meta=meta)}
+
+
+def test_badly_named_markdown_file_is_reported(lib_dir, capsys):
+    (lib_dir / "s2-8-hook.md").write_text((lib_dir / HOOK).read_text(encoding="utf-8"), encoding="utf-8")
+    assert "parse" in rules(lib_dir)
+    assert bl.main(["validate", "--chapter", str(lib_dir / "s2-8-hook.md")]) == 1
+
+
+def test_generated_files_in_library_are_not_chapters(lib_dir):
+    (lib_dir / "README.md").write_text("# Generiert\n", encoding="utf-8")
+    (lib_dir / "einstufung.md").write_text("# Generiert\n", encoding="utf-8")
+    assert rules(lib_dir) == []
+
+
+def test_unclosed_quiz_is_reported(lib_dir):
+    edit(lib_dir, HOOK, "- Falsch: Nur ein Timeout blockt den Aufruf\n\n</details>", "- Falsch: Nur ein Timeout blockt den Aufruf\n")
+    assert "quiz-shape" in rules(lib_dir)
+
+
+def test_two_correct_answers_are_reported(lib_dir):
+    edit(lib_dir, HOOK, "- Falsch: Exit-Code 1 blockt den Aufruf", "- **Richtig:** Exit-Code 1 blockt den Aufruf")
+    assert "quiz-shape" in rules(lib_dir)
+
+
+def test_broken_anchor_is_reported_and_valid_anchor_passes(lib_dir):
+    edit(lib_dir, HOOK, "[Link](s2-07-demo-events.md)", "[Link](s2-07-demo-events.md#selbst-machen)")
+    assert "links-resolve" not in rules(lib_dir)
+    edit(lib_dir, HOOK, "[Link](s2-07-demo-events.md#selbst-machen)", "[Link](s2-07-demo-events.md#gibt-es-nicht)")
+    assert "links-resolve" in rules(lib_dir)
+
+
+def test_github_slug():
+    assert bl.github_slug("Selbst machen") == "selbst-machen"
+    assert bl.github_slug("Für Moderierende: `exit 2`!") == "für-moderierende-exit-2"
+    assert bl.github_slug("Rechte & Freigaben") == "rechte--freigaben"
