@@ -1,48 +1,35 @@
-# AGENTS.md — Dynamic Workshop
+# AGENTS.md — Claude Code Praxisbibliothek
 
 ## Mission
 
-Einen praxisnahen, demo-lastigen Workshop in 4 aufeinander aufbauenden Sessions entwickeln, der erfahrenen Entwicklern aus dem Bereich Physical Security einen vollumfaenglichen Eindruck von Claude Code vermittelt — von den Grundlagen bis hin zu autonomen Multi-Agent-Systemen.
-
-**Ziel:** Die Teilnehmer sollen nach dem Workshop Claude Code eigenstaendig und produktiv in ihrem Arbeitsalltag einsetzen koennen.
-
-## Workshop-Format
-
-- **4 Sessions à ~3h** (Welle-F-Restrukturierung: 17 Module → 65 Lerneinheiten), jeweils Teaching + Live Demos + optionale Exercises
-- **Session 1 — Foundations:** CLI, Context, Prompting, Git, Cost-Basics (Termin: 10. April 2026)
-- **Session 2 — Ecosystem:** Skills, Hooks, Plugins, MCP, RAG
-- **Session 3 — Advanced Kern:** Agents, adversariale Security, Hardening/Compliance, Automation
-- **Session 4 — Advanced Bonus:** Multi-Model, CI/CD & Headless, Capstone-Architektur, Troubleshooting
-- Zielgruppe: 3 erfahrene Entwickler aus Physical Security (Zutrittskontrolle, Alarmsysteme)
-- Durchgaengige Security-Analogien als didaktisches Mittel
-- **Einstieg immer visuell:** Sessions mit PowerPoint-Praesentation (claude-code-workshop.pptx) starten, dann in Text-Module vertiefen. Teilnehmer wollen sich zuerst ein Bild machen, nicht gleich mit Text ueberflutet werden.
-
-## Regeln
-
-- Bei jeder Inhaltsaenderung an Modulen/Demos/Exercises auch `agents/workshop-mentor.md` aktualisieren
-- Demos > Slides — lieber zeigen als erklaeren
-- Exercises sind optional/Bonus, keine Pflicht-Hausaufgaben
-- Sprache: Deutsch fuer Kommunikation, Englisch fuer Code und Dateinamen
-- Modellgenerationen, Preise, Kontextgrößen und Retirement-Daten nur in `resources/_canonical.md`; im Kurs Aliase
-  (`opus`, `sonnet`, `haiku`, `fable`) und Rollen. Bewusste Ausnahme: `version-pinned: <Grund>` in derselben Zeile.
-  `python tools/lint_currency.py` prüft das.
+Eine deutschsprachige Praxisbibliothek, mit der Entwicklerinnen und Entwickler Claude Code nach ihrem Stand lernen:
+Einstufung → persönlicher Pfad → Kapitel. Zugleich das Material für einen moderierten Workshop in vier Sessions.
+Zielgruppe: vor allem Selbstlernende (öffentlich); der Live-Workshop ist ein Pfad unter mehreren.
 
 ## Struktur
 
-- `resources/modules/` — Teaching Content (3 Bloecke)
-- `resources/demos/` — Demo-Scripts mit Recovery-Notes
-- `resources/exercises/` — Hands-on Uebungen
-- `resources/cheatsheet.md` — Referenz-Karte fuer Teilnehmer
-- `resources/prerequisites.md` — Setup-Anleitung
-- `resources/session-plan.md` — Zeitplan alle 4 Sessions + 65-LE-Landkarte
-- `workshop-playground/` — Demo-Repo mit 5 geplanten Vulnerabilities
-- `agents/workshop-mentor.md` — Mentor-Agent fuer guide/learn Modi
+- `resources/library/` — Kapitel (einzige Quelle für Lehrinhalte), `_shelves.yaml`, `_placement.yaml`;
+  `README.md`, `einstufung.md`, `catalog.json` und die Meta-Blöcke sind generiert
+- `resources/paths/` (generiert) · `resources/reference/` (Karten; `analogien.md` generiert) · `resources/moderation/`
+  · `resources/media/` (Deck, Videos) · `resources/demos/assets/hooks/` (getestete Vorlagen) · `resources/_canonical.md`
+- `resources/claude-code-workshop-ui.html` — Lern-Cockpit, generiert aus `tools/cockpit/template.html`
+- `tools/` — `build_library.py`, `placement.py`, `build_deck.py`, Aktualitäts-Tools, Tests
+- `skills/workshop/`, `agents/workshop-mentor.md` — Tutor-Plugin · `workshop-playground/` — Übungsrepo (5 Schwachstellen)
+- `docs/plans/` (Spec + Plan) · `docs/migration/` (Umzug, Verträge) · `docs/reviews/` (Archive, nicht editieren)
 
-## Deep Research Integration (2026-04-05)
+## Regeln
 
-- 2 Deep Research Reports integriert (50+ offizielle Commands, 15 Use Case Blueprints, vollstaendige Tool/Permission/MCP-Referenz)
-- Cheatsheet ist jetzt die umfassendste Referenz (50+ Commands, 7 neue Sektionen)
-- Alle Module enthalten jetzt: Bundled Skills, 6 Permission Modes, Hook-Typen (command/http/mcp_tool/prompt/agent), Plugin Scopes, MCP Transports/OAuth/Limits, Agent Teams, OS-Sandboxing, Data Retention, CVE-Beispiele
-- 3 neue Demos: Secure Diff Gate (2.2b), Permission Modes (3.3b), CVE-Fix Pipeline (3.3c)
-- 2 neue Exercises: Token Firewall (2.6), HIPAA Guardrails (3.3)
-- 10 Use-Case-Blueprints als Inspiration fuer Architecture Discussion (Exercise 3.5)
+- Inhalte nur in den Kapiteln ändern, danach `python tools/build_library.py build` und `python -m pytest tools -q`.
+  Generierte Dateien nie von Hand ändern.
+- Kapitel: Deutsch mit Umlauten, „du"; Code, Befehle, Dateinamen, Bezeichner Englisch. Aufbau und Typen: Spec §4.
+- Neue oder geänderte Fakten nur mit Beleg aus der offiziellen Doku (`curl -sL https://code.claude.com/docs/en/<seite>.md`,
+  Zitat im Commit). `--help` ist nicht die Referenz.
+- Modellgenerationen, Preise, Kontextgrößen und Retirement-Daten nur in `resources/_canonical.md`; im Material Aliase
+  (`opus`, `sonnet`, `haiku`, `fable`) und Rollen. Ausnahme: `version-pinned: <Grund>` in derselben Zeile.
+  `python tools/lint_currency.py` prüft das.
+- Kopierbare Hooks sind getestete Vorlagen (`tested asset:`); Snippet und Datei bleiben identisch.
+- Einstufung oder Kapitel-Metadaten ändern → Vertragskatalog, Personas und Golden bewusst neu (HOW-TO-USE §3).
+- Tutor und Mentor halten keine Inhaltskopie; sie lesen Katalog und Kapitel.
+- Demos vor Folien; Übungen sind freiwillig. Keine Tests gegen Produktionsdaten.
+
+Anleitung: [HOW-TO-USE.md](HOW-TO-USE.md) · Spec: `docs/plans/2026-09-30-praxisbibliothek-design.md`

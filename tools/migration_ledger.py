@@ -105,7 +105,7 @@ def _walk(root: Path):
 
 def new_digests(root: Path = ROOT, skip_old: bool = True) -> dict:
     """digest -> list of repo-relative files (new corpus: resources/**, skills/**, agents/**, commands/**, root docs)."""
-    old = set(OLD_FILES) if skip_old else set()
+    old = (set(OLD_FILES) - set(NEW_FILES)) if skip_old else set()  # README/HOW-TO-USE are rewritten in place
     found = {}
     files = [root / f for f in NEW_FILES] + [p for r in NEW_ROOTS for p in _walk(root / r)]
     for path in files:
