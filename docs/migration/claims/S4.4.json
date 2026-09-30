@@ -1,0 +1,133 @@
+{
+ "id": "S4.4",
+ "verdict": "pass",
+ "counts": {
+  "kept": 46,
+  "changed": 7,
+  "dropped": 0,
+  "new": 8
+ },
+ "items": [
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:1140-1166",
+   "old": "/insights als Analytics-Dashboard: Kosten pro Projekt/Modell/Tool/Skill, Top-Sessions-Histogramm; Wochenroutine `/insights week`",
+   "new": "/usage (Aliase /cost, /stats) mit Anteilen, Verhaltensmerkern (>=10 %), Loops, d/w-Umschalter; /insights = HTML-Bericht zur Arbeitsweise, verbraucht selbst Tokens",
+   "rating": "ok",
+   "reason": "Gewollte Korrektur. commands.md: '/insights | Generate an HTML report analyzing your recent sessions'; costs.md Z.58-64 (breakdown, 10 % or more, press d or w, approximate, local session history) und Z.89 (tokens count against your plan). Zitate per curl geprüft."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:1158-1160",
+   "old": "Konsole https://console.anthropic.com/usage als Team-Sicht; CI zeigt /insights-Daten nicht",
+   "new": "Usage-Seite der Claude Console https://platform.claude.com/usage; /usage und /insights sehen nur lokale Sitzungen; einzelner Lauf via --output-format json / total_cost_usd",
+   "rating": "ok",
+   "reason": "costs.md Z.116 verlinkt https://platform.claude.com/usage; headless.md Z.104: 'includes total_cost_usd ... client-side estimates'. Geprüft."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:1217-1260 (Team Rules)",
+   "old": "Solo dev $5-10 pro Arbeitstag normal; Pro Plan: Monatsaggregat beobachten",
+   "new": "Keine Dollarzahl; eigene Basislinie mit kleiner Pilotgruppe messen; Abo: Grenze per /usage kennen",
+   "rating": "ok",
+   "reason": "costs.md Z.11: 'start with a small pilot group ... establish a baseline'. Die ungesicherte Zahl 5-10 $ entfällt; Doku nennt durchschnittlich 13 $ pro aktivem Tag, das Kapitel vermeidet bewusst eine Zahl."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:1240-1262",
+   "old": "Cache-TTL pauschal 5 Minuten; /loop alle 30 s bleibt im Cache (0.1x); Subagenten in Folge nutzen den Cache wieder",
+   "new": "TTL 5 min (API-Key/Cloud), Hauptsitzung im Abo 1 h, Subagenten 5 min; Subagent baut eigenen Cache, Fork erbt Präfix",
+   "rating": "ok",
+   "reason": "prompt-caching.md Z.268-273 (Tabelle: Main conversation One hour / Five minutes; Everything else Five minutes) und Z.328-332 (subagent 'doesn't read the parent's cache', fork 'first request reads the parent's cache'). Die /loop-30s-Zeile entfällt ohne Tatsachenverlust; die Subagenten-Aussage war falsch."
+  },
+  {
+   "status": "changed",
+   "source": "resources/modules/block-1-foundations.md:1258-1262",
+   "old": "Cache-Bruch: CLAUDE.md oder geladenen Skill bearbeiten; 'Keep CLAUDE.md stable - every edit invalidates'",
+   "new": "Änderung der CLAUDE.md mitten in der Sitzung bricht den Cache nicht, wirkt aber erst nach /clear, /compact, Neustart",
+   "rating": "ok",
+   "reason": "prompt-caching.md Z.219: 'Editing them mid-session does not invalidate the cache, but the edit also doesn't apply'. Skill-Bearbeitung nicht mehr genannt; Plugins: Z.135 'never invalidates the cache for a plugin's skills, commands, agents, hooks'."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-3-advanced.md:-",
+   "old": "-",
+   "new": "Cache-Brecher: Effort-Wechsel (je nach Modell), MCP-Server mitten in der Sitzung (nur ohne Tool-Search-Zurückstellung), /compact, Claude-Code-Upgrade; `Prompt cache (main)` in /usage",
+   "rating": "ok",
+   "reason": "prompt-caching.md Z.38 (effort), Z.111-114 (tool search defers), Z.194 (upgrade); costs.md Z.40-43 (Prompt cache (main)); costs.md Z.43 'expected rebuild (compaction ...)'. Alles durch Doku gedeckt."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-3-advanced.md:-",
+   "old": "-",
+   "new": "Ausgaben von Subagenten zählen zum Budget; die Antwort, die die Grenze überschreitet, wird noch bezahlt",
+   "rating": "ok",
+   "reason": "cli-reference.md Z.102: 'Spend from subagents counts toward the cap'. Überschreitung: agent-sdk/cost-tracking.md Z.321: 'total_cost_usd and modelUsage include' the response that crossed the budget. Belegt."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-3-advanced.md:-",
+   "old": "-",
+   "new": "--max-turns: 'Ohne das Flag gibt es keine Rundengrenze'",
+   "rating": "ok",
+   "reason": "cli-reference.md Z.103: 'No limit by default.'"
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-3-advanced.md:-",
+   "old": "-",
+   "new": "Mit --bare hat Claude weiterhin Bash sowie Datei-Lese- und Bearbeitungswerkzeuge; Foundry als Cloud-Anbieter",
+   "rating": "ok",
+   "reason": "headless.md Z.51 'In bare mode Claude has access to the Bash, file read, and file edit tools'; Z.49 nennt Microsoft Foundry."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-3-advanced.md:-",
+   "old": "-",
+   "new": "--system-prompt und --system-prompt-file schließen sich aus; --exclude-dynamic-system-prompt-sections wirkt nur mit Standard-Systemprompt",
+   "rating": "ok",
+   "reason": "cli-reference.md Z.152 'mutually exclusive'; Z.88 'Only applies with the default system prompt; ignored when --system-prompt or --system-prompt-file is set'."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-3-advanced.md:-",
+   "old": "-",
+   "new": "Cache-Treffer beim Sonnet-Tier ein Zehntel; erstes Schreiben in den Cache etwas teurer als Input",
+   "rating": "ok",
+   "reason": "platform.claude.com prompt-caching.md Z.260/265: 'standard 0.1x multiplier', '5-minute cache write tokens are 1.25 times the base input tokens price'. Per curl geprüft."
+  },
+  {
+   "status": "new",
+   "source": "resources/modules/block-3-advanced.md:-",
+   "old": "-",
+   "new": "Weg-C-Entscheidungsdiagramm (Mermaid), Wochenroutine-Fragen, Quizfrage, Übung Schritt 1 `claude auth status`",
+   "rating": "ok",
+   "reason": "Inhaltlich aus Quelle und den Tabellenregeln abgeleitet, keine neuen Fakten; `claude auth status` in cli-reference.md Z.27 belegt."
+  },
+  {
+   "status": "changed",
+   "source": "resources/demos/block-3-demos.md:615-649",
+   "old": "Talking Point ('Unix-style tool ... entry ticket to every CI system') und Recovery Note in diesem Kapitel",
+   "new": "Talking Point wandert nach S4.3 (dort Z.130, 'nach Schritt 4 in S4.4'); Recovery Note (setup-token nie live) bleibt hier in 'Für Moderierende'",
+   "rating": "ok",
+   "reason": "Kein Verlust: Talking Point in s4-03-headless.md Z.130 wörtlich übersetzt vorhanden."
+  },
+  {
+   "status": "new",
+   "source": "resources/demos/block-3-demos.md:-",
+   "old": "-",
+   "new": "Zusätzliche Voraussetzung ANTHROPIC_API_KEY für Schritt 4; 'Wenn kein API-Key da ist: Schritt 4 nur als Befehl zeigen'",
+   "rating": "ok",
+   "reason": "Folge der Doku-Korrektur (headless.md Z.43: 'bare mode doesn't use your subscription login'); Anhang-B-konform."
+  },
+  {
+   "status": "changed",
+   "source": "resources/exercises/block-3-exercises.md:469-478",
+   "old": "Bonus-Zeile 'before exit 0 ... real-world frequency and outcome'",
+   "new": "Gleicher Befehl; Zusatz: Zeile notiert nur die Grenze budget=0.10, echter Betrag via total_cost_usd",
+   "rating": "ok",
+   "reason": "Präzisierung, die die Aussage 'cost trace' ehrlich macht; total_cost_usd belegt (headless.md Z.104)."
+  }
+ ],
+ "style": []
+}

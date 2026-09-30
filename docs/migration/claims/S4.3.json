@@ -1,0 +1,19 @@
+{"id":"S4.3","verdict":"ask",
+"counts":{"kept":22,"changed":2,"dropped":2,"new":8},
+"items":[
+{"status":"changed","source":"resources/demos/block-3-demos.md:611","old":"... | jq '.category'","new":"... | jq '.structured_output.category'","rating":"ok","reason":"Gewollte Korrektur: Doku headless.md (Structured output) nennt das Feld structured_output; Schreiber-Zitat geprüft per curl: 'The response includes metadata about the request (session ID, usage, etc.) with the structured output in the `structured_output` field.'"},
+{"status":"changed","source":"resources/demos/block-3-demos.md:567-568","old":"needs only the locally-installed claude — no plugin, no Codex, no Internet, no bridge","new":"kein Plugin, kein Codex, keine Bridge; Netzverbindung zur Claude-API braucht sie wie jeder Aufruf","rating":"ok","reason":"Behebt den Widerspruch 'no Internet' (Aufruf braucht die API); sachlich richtig."},
+{"status":"dropped","source":"resources/modules/block-3-advanced.md:1359","old":"Canonical S4 analogy ... See resources/security-analogies.md","new":"","rating":"ok","reason":"Verweis auf Metadatei, Analogie selbst steht in 'Bild im Kopf'."},
+{"status":"dropped","source":"resources/demos/block-3-demos.md:640-643","old":"entry ticket to every CI system on Earth","new":"Eintrittskarte in jedes CI-System","rating":"ok","reason":"Nur Übertreibung gestrichen, Kernaussage bleibt."},
+{"status":"new","source":"","old":"","new":"Eine frühere Unterhaltung setzt -p nur mit --continue oder --resume fort","rating":"ok","reason":"headless.md Z.343: '--continue ... --resume with a session ID'; belegt."},
+{"status":"new","source":"","old":"","new":"Ohne --bare lädt claude -p denselben Kontext wie interaktiv, inkl. Hooks und MCP-Server des Arbeitsordners","rating":"ok","reason":"headless.md Z.37/41 wörtlich belegt."},
+{"status":"new","source":"","old":"","new":"Ausgabe-Metadaten session_id und usage; ohne Schema Text im Feld result","rating":"ok","reason":"headless.md Z.142 und Z.159 (jq -r '.result'); belegt."},
+{"status":"new","source":"","old":"","new":"Ungültiges Schema: claude bricht mit Fehler ab statt still Prosa zu liefern","rating":"ok","reason":"headless.md Z.152: 'Error: --json-schema is not a valid JSON Schema'; belegt."},
+{"status":"new","source":"","old":"","new":"Gepipte Eingaben auf 10 MB begrenzt, darüber Fehler und Exit-Code ungleich 0; große Eingaben in Datei","rating":"ok","reason":"headless.md Z.107: 'Piped stdin is capped at 10MB ... non-zero status'; belegt."},
+{"status":"new","source":"","old":"","new":"Jeder Aufruf startet frisch, weil CI-Läufe reproduzierbar sein müssen / --bare für CI empfohlen, andere Zugangsdaten","rating":"ok","reason":"Aus Quelle Z.1380 und headless.md Z.62; Verweis auf S4.4, dort vorhanden (Z.30)."},
+{"status":"new","source":"","old":"","new":"Quiz: --bare fehlt -> langsamerer, rechnerabhängiger Job (Hooks/Skills/MCP laden mit)","rating":"ok","reason":"Konsistent mit headless.md Z.37 (--bare reduziert Startzeit, überspringt Auto-Discovery)."},
+{"status":"new","source":"","old":"","new":"Pre-Commit-/CI-Verweis auf S4.5 (Exit-Code-Reaktion, Pipelines)","rating":"ok","reason":"Reiner Verweis; hinweis: Datei s4-05-ci-pipelines.md existiert im Worktree noch nicht, Links erst nach deren Anlage auflösbar (Linkcheck beim Build)."}
+],
+"style":[
+{"rating":"ask","where":"Quizfrage","issue":"Die richtige Antwort ist die längste der vier Optionen (Längen-Hinweis auf die Lösung, Brief Z.32); leicht kürzen oder Distraktoren angleichen."}
+]}
