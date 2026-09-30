@@ -1,0 +1,206 @@
+# Einstufung: Fragen, Bereiche, Ziele, Regeln und Texte. Einzige Quelle für Cockpit, Tutor und einstufung.md.
+# Spec: docs/plans/2026-09-30-praxisbibliothek-design.md, Abschnitt 6 und Anhang E. Engine: tools/placement.py.
+version: 1
+skim_factor: 0.3
+base_shelves: [start, permissions, context, prompting, git, cost]
+minimum_path: [S0.1, S1.1, S1.2, S1.5, S1.6, S1.10, S1.13, S1.14, S1.16, S1.19]
+quickstart_warn_minutes: 180
+default_goal: alltag
+default_time: abende
+
+times:
+  - id: schnellstart
+    label: Nur ein paar Stunden insgesamt — zeig mir das Wichtigste
+    stage_minutes: null
+  - id: stunde
+    label: Immer mal eine Stunde
+    stage_minutes: 60
+  - id: abende
+    label: Ein paar Abende à zwei bis drei Stunden
+    stage_minutes: 150
+  - id: gruendlich
+    label: Gründlich, in Blöcken von etwa drei Stunden
+    stage_minutes: 180
+
+goals:
+  - id: alltag
+    label: Meinen Entwickler-Alltag beschleunigen
+    focus_shelves: [context, prompting, git, skills]
+  - id: team
+    label: Claude Code sicher im Team einführen
+    focus_shelves: [permissions, context, hooks, plugins, security]
+  - id: automation
+    label: Aufgaben automatisieren und in CI einbauen
+    focus_shelves: [automation, headless-ci, cost, hooks]
+  - id: agents
+    label: Eigene Agenten-Systeme bauen
+    focus_shelves: [agents, automation, remote-isolation, mcp-knowledge]
+  - id: security
+    label: Sicherheit und Compliance im Griff haben
+    focus_shelves: [permissions, hooks, security, plugins, mcp-knowledge]
+  - id: einschaetzen
+    label: Einschätzen, ob und wie wir es einsetzen (Tech Lead)
+    focus_shelves: []
+  - id: moderieren
+    label: Den Workshop selbst moderieren
+    focus_shelves: []
+
+areas:
+  - id: basics
+    label: Grundlagen
+    statement: Ich habe Claude Code schon für eine echte Aufgabe genutzt und das Ergebnis selbst geprüft.
+    chapters: [S0.1, S1.1, S1.2, S1.3, S1.4]
+  - id: permissions
+    label: Rechte & Freigaben
+    statement: Ich weiß, welchen Rechte-Modus ich für ein fremdes Repo wähle, und habe allow/deny-Regeln gesetzt.
+    chapters: [S1.5, S1.6, S3.8, S3.9, S3.10]
+  - id: context
+    label: Kontext & Gedächtnis
+    statement: Ich pflege eine CLAUDE.md und weiß, wann ich /compact nehme und wann eine neue Session.
+    chapters: [S1.8, S1.9, S1.10, S1.11, S1.12]
+  - id: prompting
+    label: Aufträge formulieren
+    statement: Ich schreibe Aufträge mit Ziel, Grenzen und Prüfschritt und nutze den Plan-Modus.
+    chapters: [S1.13, S1.14, S1.15]
+  - id: git
+    label: Git & Worktrees
+    statement: Ich lasse Claude auf einem Branch arbeiten, prüfe den Diff selbst und nutze Worktrees.
+    chapters: [S1.16, S1.17, S1.18, S4.7]
+  - id: cost
+    label: Modelle & Kosten
+    statement: Ich lese /cost bzw. /usage und deckele autonome Läufe mit Budget und Rundenlimit.
+    chapters: [S1.7, S1.19, S4.1]
+  - id: skills
+    label: Skills & Commands
+    statement: Ich habe einen eigenen Skill oder Slash-Command geschrieben und benutzt.
+    chapters: [S2.1, S2.2, S2.3, S2.4, S2.5]
+  - id: hooks
+    label: Hooks
+    statement: Ich habe einen Hook gebaut, der eine Aktion wirklich blockt.
+    chapters: [S2.6, S2.7, S2.8, S2.9, S2.10]
+  - id: plugins
+    label: Plugins
+    statement: Ich habe Plugins geprüft, installiert oder selbst gebündelt.
+    chapters: [S2.11, S2.12, S2.13]
+  - id: mcp
+    label: MCP & Wissensquellen
+    statement: Ich habe einen MCP-Server angebunden und weiß, mit welchen Rechten er läuft.
+    chapters: [S2.14, S2.15, S2.16, S2.17, S2.18, S2.19]
+  - id: agents
+    label: Agenten & Orchestrierung
+    statement: Ich habe Subagenten definiert oder mehrere Agenten parallel arbeiten lassen.
+    chapters: [S3.1, S3.2, S3.3, S3.4, S3.5, S4.2]
+  - id: review
+    label: Gegenprüfung
+    statement: Ich lasse Agenten-Ergebnisse gezielt gegenprüfen, bevor ich sie übernehme.
+    chapters: [S3.6, S3.7, S3.11]
+  - id: automation
+    label: Automation & Headless
+    statement: Ich habe Claude Code zeitgesteuert oder headless (claude -p) laufen lassen.
+    chapters: [S3.12, S3.13, S3.14, S4.3, S4.4, S4.5, S4.6]
+  - id: troubleshooting
+    label: Fehlersuche
+    statement: Ich finde selbst heraus, warum ein Hook, Skill oder MCP-Server nicht greift.
+    chapters: [S4.9, S4.10]
+
+# Freiwillig, unbenotet. Eine falsche Antwort deckelt den Bereich auf „gehört davon".
+scenarios:
+  - id: hook-crash
+    area: hooks
+    chapter: S2.8
+    question: Dein Schutz-Hook bricht mit einem Syntaxfehler ab (Exit-Code 1). Was passiert mit dem Tool-Aufruf?
+    options:
+      - {id: a, text: "Er läuft weiter, nur eine Fehlermeldung erscheint"}
+      - {id: b, text: "Er wird blockiert, bis du den Hook reparierst"}
+      - {id: c, text: "Claude fragt dich, ob er trotzdem laufen soll"}
+      - {id: d, text: "Die ganze Session bricht sofort mit einem Fehler ab"}
+    correct: a
+    explanation: >-
+      Nur Exit-Code 2 blockt. Jeder andere Code meldet einen Fehler, und die Aktion läuft weiter — ein kaputter
+      Schutz-Hook ist ein offener Schutz-Hook. Das verwechseln viele; Kapitel S2.8 zeigt es.
+  - id: foreign-repo-headless
+    area: automation
+    chapter: S4.4
+    question: Du startest claude -p ohne --bare in einem frisch geklonten, fremden Repo. Was kann passieren?
+    options:
+      - {id: a, text: "Hooks und MCP-Server aus dem Repo laufen mit"}
+      - {id: b, text: "Nichts, -p lädt keine Projekt-Dateien"}
+      - {id: c, text: "Claude verweigert den Start ohne Freigabe"}
+      - {id: d, text: "Nur die CLAUDE.md wird gelesen, sonst nichts"}
+    correct: a
+    explanation: >-
+      Ohne --bare führt eine -p-Sitzung die Hooks aus .claude/settings.json aus und verbindet die Server aus .mcp.json
+      — auch in einem Ordner, dem du nie vertraut hast. Kapitel S4.4 zeigt, wie CI das verhindert.
+  - id: autonomous-limits
+    area: cost
+    chapter: S1.19
+    question: Ein autonomer -p-Lauf soll weder zu teuer werden noch endlos laufen. Was setzt du?
+    options:
+      - {id: a, text: "--max-budget-usd für Kosten, --max-turns für Runden"}
+      - {id: b, text: "Nur /cost beobachten und notfalls von Hand abbrechen"}
+      - {id: c, text: "Effort auf low, dann reicht das Budget von allein"}
+      - {id: d, text: "Ein kleineres Modell wählen, das begrenzt die Runden"}
+    correct: a
+    explanation: >-
+      Budget und Rundenlimit sind zwei getrennte Grenzen; beide gelten nur im Print-Modus (-p). Beobachten allein hält
+      einen Lauf nicht an. Kapitel S1.19 und S4.4 zeigen beide Flags.
+  - id: foreign-repo-start
+    area: permissions
+    chapter: S1.6
+    question: Du willst ein fremdes Repo erst verstehen, ohne dass etwas geändert wird. Womit startest du?
+    options:
+      - {id: a, text: "Plan-Modus: lesen, planen, ändern erst nach Freigabe"}
+      - {id: b, text: "bypassPermissions, damit keine Rückfragen mehr stören"}
+      - {id: c, text: "acceptEdits, weil Git jede Änderung rückgängig macht"}
+      - {id: d, text: "auto, weil der Klassifikator Gefährliches erkennt"}
+    correct: a
+    explanation: >-
+      Der Plan-Modus liest und plant, ändert aber nichts, bis du den Plan freigibst. Die anderen Modi erlauben
+      Änderungen oder Befehle ohne Rückfrage. Kapitel S1.6 vergleicht alle Modi.
+  - id: lost-agreement
+    area: context
+    chapter: S1.10
+    question: Nach langer Session hält sich Claude nicht mehr an eine frühe Absprache. Was hilft am zuverlässigsten?
+    options:
+      - {id: a, text: "Absprache in CLAUDE.md festhalten, dann neu starten"}
+      - {id: b, text: "Die Absprache im Chat einfach mehrfach wiederholen"}
+      - {id: c, text: "Effort auf max stellen, dann merkt es sich mehr"}
+      - {id: d, text: "Einfach weitermachen, das korrigiert sich von selbst"}
+    correct: a
+    explanation: >-
+      Frühe Absprachen können beim Komprimieren verloren gehen. Was in CLAUDE.md steht, wird bei jedem Start geladen.
+      Kapitel S1.10 zeigt, was hineingehört.
+  - id: green-report
+    area: review
+    chapter: S3.6
+    question: Ein Subagent meldet „alle 40 Tests grün". Was tust du, bevor du das übernimmst?
+    options:
+      - {id: a, text: "Die Tests selbst laufen lassen und die Ausgabe lesen"}
+      - {id: b, text: "Nichts, Subagenten berichten grundsätzlich korrekt"}
+      - {id: c, text: "Einen zweiten Subagenten fragen, ob es wirklich stimmt"}
+      - {id: d, text: "Die Zahl direkt in die Commit-Nachricht übernehmen"}
+    correct: a
+    explanation: >-
+      Ein grüner Bericht ist kein Beweis, ausgeführter Code ist einer. Auch ein zweiter Agent liefert nur einen weiteren
+      Bericht. Kapitel S3.6 baut daraus eine Prüf-Pipeline.
+
+reasons:
+  new: Neu für dich — durcharbeiten.
+  heard: Du hast davon gehört — überfliegen reicht.
+  deep-focus: Vertiefung in deinem Schwerpunkt.
+  known: Kennst du schon — der Schnellcheck reicht.
+  scenario-gap: Das Mini-Szenario zeigte hier eine Lücke.
+  safety-floor: Sicherheitsboden — dieses Kapitel lassen wir nicht aus.
+  prerequisite: Voraussetzung für ein späteres Kapitel deines Pfads.
+  not-goal: Gehört nicht zu deinem Ziel — jederzeit in der Bibliothek.
+  after-quickstart: Nach dem Schnellstart, wenn du weitermachen willst.
+  practice: Praxis-Station mit Übungen zu deinen Kapiteln.
+  capstone: Abschlussprojekt für dein Ziel.
+  community: Leute und Skills, die weiterhelfen.
+  assess: Zum Einschätzen reicht der Überblick.
+  override: Deine eigene Wahl.
+
+warnings:
+  override-safety: Du hast ein Sicherheitsboden-Kapitel heruntergestuft. Das ist deine Entscheidung — lies es mindestens kurz.
+  override-prereq: Ein Kapitel in deinem Pfad baut auf einem Kapitel auf, das du übersprungen hast.
+  quickstart-long: Dein Schnellstart dauert länger als drei Stunden — plane zwei Sitzungen ein.

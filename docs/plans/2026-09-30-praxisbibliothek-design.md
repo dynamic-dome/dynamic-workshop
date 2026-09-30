@@ -1,7 +1,7 @@
 # Praxisbibliothek statt Kursordner — Design
 
 > Stand: 2026-09-30 · Branch `praxisbibliothek` (Worktree `dynamic_workshop-bibliothek`, ab `ba222d2`)
-> Auftrag und Entscheidungen: Dominic, 2026-09-30 (siehe „Entscheidungen"). Status: v3 nach Codex-Runden 1 und 2 (§15).
+> Auftrag und Entscheidungen: Dominic, 2026-09-30 (siehe „Entscheidungen"). Status: v3.1 nach Codex-Runden 1–3 (§15).
 
 ## 1. Auftrag in einem Absatz
 
@@ -77,7 +77,7 @@ resources/
   _canonical.md                bleibt Kanon (Modelle, Preise, Prüfdatum)
   claude-code-workshop-ui.html GENERIERT aus tools/cockpit/template.html + catalog (Pfad bleibt, Website-Export)
 docs/reviews/                  alle Review-Archive (2026-05-21, 06-21, 07-04, 09-28) + HANDOFF.md
-tools/build_library.py         Parser, Validator, Generator (--check für Tests/CI)
+tools/build_library.py         Parser, Validator, Generator (validate | build | check)
 tools/placement.py             Einstufungs-Engine (nur Standardbibliothek), CLI für den Tutor
 tools/cockpit/template.html    Cockpit-Quelle (CSS/JS), Daten werden injiziert
 ```
@@ -263,7 +263,8 @@ Notation: r(c) = Stand des Bereichs von Kapitel c nach Szenario-Deckel (Kapitel 
 **Schritt A — Relevanzmenge R.**
 - `schnellstart`: R = Mindestpfad (`_placement.yaml`, Validator erzwingt, dass er alle eigenen Voraussetzungen
   enthält). Sonst nichts.
-- sonst, Ziel `moderieren` gewählt: R = alle Kapitel.
+- sonst, Ziel `moderieren` gewählt: R = alle Kapitel mit Session 0–4 (der Live-Workshop); X-Kapitel sind dann `later`
+  mit Grund `not-goal` und werden im Pfad als eigenes Regal verlinkt.
 - sonst: R = `core`-Kapitel der Grundregale (`start`, `permissions`, `context`, `prompting`, `git`, `cost`)
   ∪ `core`- und `deep-dive`-Kapitel der Schwerpunkt-Regale aller gewählten Ziele ∪ bei `gruendlich` deren `bonus`-Kapitel
   ∪ jede Praxis-Station, deren `offers` ein Kapitel aus R mit r < 2 enthält (die Station zeigt dann nur diese Übungen)
@@ -332,7 +333,8 @@ Python- und JS-Engine müssen jeden Vektor exakt treffen.
   generierte Blöcke aktuell.
 - **Generieren:** `library/README.md`, `library/einstufung.md`, `library/catalog.json`, `paths/*.md`, Meta-Blöcke in
   Kapiteln, Cockpit (`template.html` + Daten → `resources/claude-code-workshop-ui.html`).
-- `--check`: generiert in den Speicher und vergleicht; Abweichung = Exit 1 (Test und Pflege-Routine).
+- CLI: `python tools/build_library.py validate [--complete] [--chapter <datei>]` · `build` · `check` (generiert in
+  den Speicher und vergleicht zeilenend-normalisiert; Abweichung = Exit 1; das ist der Aufruf in Tests und Abnahme).
 - **Links:** Im Markdown sind relative Links erlaubt und werden auf Existenz geprüft. Beim Cockpit-HTML schreibt der
   Generator um: Link auf ein Kapitel → Cockpit-Route (`?run=S2.8`), jeder andere Repo-Pfad → absolute GitHub-URL
   (`https://github.com/dynamic-dome/dynamic-workshop/blob/main/<pfad>`), externe URLs bleiben. Der Validator prüft
@@ -392,7 +394,7 @@ richtige, Quizfragen würfeln bei jedem Render neu, kein „weiter, wo ich war",
 - **Tests:** Die Wortlaut-Tests (`tools/test_workshop_ui_behavior.py`) werden durch **Verhaltenstests** ersetzt
   (Playwright gegen `127.0.0.1`: Einstufung für 3 Personas → erwarteter Pfad, Kapitel-Navigation, Quiz bucht nichts,
   Storage blockiert → Seite rendert, 0 Konsolenfehler) plus die bleibenden Invarianten: genau ein Inline-Script,
-  `node --check`, keine Flash-/Flicker-Tokens, Fisher-Yates-Mischung, Artefakt = Build (`--check`).
+  `node --check`, keine Flash-/Flicker-Tokens, Fisher-Yates-Mischung, Artefakt = Build (`check`).
   `tools/test_course_ci_auth.py`/`test_course_hooks.py` prüfen die Kapitel (Quelle) direkt; ihre Cockpit-Regex wird
   an das neue Datenformat angepasst, damit das Artefakt weiter mitgeprüft wird.
 
@@ -451,8 +453,10 @@ Fehler** und rät nicht aus dem Modellwissen. Alias-Auflösung: `2.2` → erstes
   Hook-Lebenslauf (Event → Matcher → Exit-Code → blockt/läuft/fail-open), Plugin-Anatomie, MCP-Architektur,
   Orchestrierungsmuster, CI-Stufe, Fehlersuch-Entscheidungsbaum, Regal-Karte. Ideen je Kapitel aus der Quellenkarte;
   nur wo ein Diagramm mehr sagt als ein Absatz.
-- **Cockpit:** dieselben Diagramme als vorab gerenderte SVG (Build mit Playwright + Mermaid, Ergebnis im Repo, damit
-  der Build reproduzierbar und die Datei ohne externe Referenzen bleibt); Renderfehler = Buildfehler.
+- **Cockpit:** dieselben Diagramme als vorab gerenderte SVG. Das Rendern ist ein **eigener, optionaler Schritt**
+  (`python tools/render_diagrams.py`, Playwright + Mermaid, Ergebnis `resources/library/diagrams/<sha8>.svg` im Repo);
+  Renderfehler dort = Exit 1. `build`/`check` rendern nichts: Liegt zu einem Mermaid-Block ein SVG mit passendem
+  Hash vor, bettet das Cockpit es ein, sonst zeigt es den Mermaid-Quelltext und den GitHub-Link.
 - **Deck** (`tools/build_deck.py` neu, Daten aus dem Katalog): Titel · Was ist die Bibliothek · Wie du einsteigst
   (Einstufung) · Regal-Karte · vier Session-Opener · Kern-Denkmodelle · Weiter. Sichtprüfung per PowerPoint-Export
   nach PNG.
@@ -480,7 +484,7 @@ Fehler** und rät nicht aus dem Modellwissen. Alias-Auflösung: `2.2` → erstes
 
 ## 13. Verifikation (Definition of Done)
 
-- `python tools/build_library.py --check` Exit 0; `pytest tools` grün (alte Tests angepasst, neue für Generator,
+- `python tools/build_library.py check` Exit 0; `pytest tools` grün (alte Tests angepasst, neue für Generator,
   Einstufung Py+JS, Ledger); `python tools/lint_currency.py` OK; `currency_check --state-dir .currency/manual` ohne neue
   Rot-Befunde gegenüber dem Stand vor dem Umbau (Haiku-Retirement bleibt erwartet rot).
 - Browser-QA (Playwright, `127.0.0.1`): 0 Konsolenfehler; Einstufung für 3 Personas ergibt die erwarteten Pfade;
@@ -531,6 +535,13 @@ eine Persona-Simulation, die zeigte, dass die Etappen-Priorisierung die Lehrreih
 | R2-9 | Zeitantwort fehlt → nicht bestimmt | berechtigt | Voreinstellung `abende` |
 | R1-2 (Rest) | Übersteuerte Voraussetzung bleibt übersprungen | berechtigt | §6.3 E: Warnung `override-prereq` |
 | R1-10 (Rest) | Volltext/SVG als abwerfbar genannt, aber vorausgesetzt | berechtigt | §8: Fallback ausdrücklich |
+
+**Runde 3 (Codex, 2026-09-30): REJECT — Spec überwiegend gelöst, Plan noch auf v2.** Übernommen: Plan Tasks 1–5 neu
+auf v3 (Zeiten, Defaults, Mindestpfad, 14 Personas, Warnungs-Schema `{code, ids}`), `offers` im Modell und Katalog,
+Kontrakt-Katalog aus `docs/migration/chapter-meta.yaml` (verbindliche Metadaten aller 68 Kapitel, jetzt festgelegt,
+damit Task 4 vor Task 5 grün werden kann), `schnellstart.md` und `analogien.md` als Generator-Ausgaben, eine CLI
+(`validate | build | check`), Cockpit-Testumstellung erst mit Task 10–12, `moderieren` nur Session 0–4, Diagramm-Rendern
+als eigener optionaler Schritt.
 
 ## Anhang A — Quellenkarte und Heimat-Zuordnung
 

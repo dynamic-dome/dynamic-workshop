@@ -1,0 +1,790 @@
+# Verbindliche Kapitel-Metadaten für den Umzug (Owner-Entscheid über Spec v3, 2026-09-30).
+# Schreib-Agenten übernehmen diese Felder unverändert ins Frontmatter; Änderungen nur hier und mit neuem Vektorlauf.
+- id: S0.1
+  type: setup
+  title: Werkstatt einrichten
+  shelf: start
+  level: core
+  minutes: 20
+  requires: []
+  safety_floor: false
+  transferable: false
+  aliases:
+  - setup
+- id: S1.1
+  type: lesson
+  title: 'Erster Kontakt: sofort eine Datei bauen'
+  shelf: start
+  level: core
+  minutes: 12
+  requires:
+  - S0.1
+  safety_floor: false
+  transferable: false
+  aliases:
+  - '1.1'
+- id: S1.2
+  type: lesson
+  title: 'Coding-Agent statt Chat: das Denkmodell'
+  shelf: start
+  level: core
+  minutes: 12
+  requires:
+  - S1.1
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S1.3
+  type: lesson
+  title: 'Die Oberflächen: CLI, Desktop, IDE, Web, iOS'
+  shelf: start
+  level: core
+  minutes: 12
+  requires:
+  - S1.2
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S1.4
+  type: lesson
+  title: Eingebaute Werkzeuge und ihre Namen
+  shelf: start
+  level: core
+  minutes: 12
+  requires:
+  - S1.1
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S1.5
+  type: lesson
+  title: 'Rechte im Alltag: default und acceptEdits'
+  shelf: permissions
+  level: core
+  minutes: 15
+  requires:
+  - S1.2
+  safety_floor: true
+  transferable: true
+  aliases: []
+- id: S1.6
+  type: lesson
+  title: Alle Rechte-Modi im Überblick
+  shelf: permissions
+  level: core
+  minutes: 15
+  requires:
+  - S1.5
+  safety_floor: true
+  transferable: true
+  aliases: []
+- id: S1.7
+  type: lesson
+  title: Modellwahl und Effort
+  shelf: cost
+  level: core
+  minutes: 15
+  requires:
+  - S1.1
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S1.8
+  type: lesson
+  title: Das Kontextfenster verstehen
+  shelf: context
+  level: core
+  minutes: 15
+  requires:
+  - S1.2
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '1.2'
+- id: S1.9
+  type: lesson
+  title: Kontext steuern mit /compact und /rewind
+  shelf: context
+  level: core
+  minutes: 12
+  requires:
+  - S1.8
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S1.10
+  type: lesson
+  title: 'CLAUDE.md: die Hausordnung des Projekts'
+  shelf: context
+  level: core
+  minutes: 15
+  requires:
+  - S1.2
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S1.11
+  type: lesson
+  title: Alle Gedächtnis-Ebenen im Überblick
+  shelf: context
+  level: deep-dive
+  minutes: 18
+  requires:
+  - S1.10
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S1.12
+  type: lesson
+  title: Imports, --add-dir und AGENTS.md
+  shelf: context
+  level: deep-dive
+  minutes: 12
+  requires:
+  - S1.10
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S1.13
+  type: lesson
+  title: Vager und präziser Auftrag im Vergleich
+  shelf: prompting
+  level: core
+  minutes: 15
+  requires:
+  - S1.1
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '1.3'
+- id: S1.14
+  type: lesson
+  title: Plan-Modus und schrittweises Vorgehen
+  shelf: prompting
+  level: core
+  minutes: 15
+  requires:
+  - S1.5
+  - S1.13
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S1.15
+  type: lesson
+  title: Output Styles und Personas
+  shelf: prompting
+  level: deep-dive
+  minutes: 12
+  requires:
+  - S1.13
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S1.16
+  type: lesson
+  title: 'Git in einem Fluss: Branch, Commit, PR'
+  shelf: git
+  level: core
+  minutes: 18
+  requires:
+  - S1.5
+  - S1.13
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '1.4'
+- id: S1.17
+  type: lesson
+  title: Git-Befehle in der Sitzung
+  shelf: git
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S1.16
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S1.18
+  type: lesson
+  title: Worktrees als Testlabor
+  shelf: git
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S1.16
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S1.19
+  type: lesson
+  title: 'Kosten im Blick: /cost, /usage und Budgetgrenzen'
+  shelf: cost
+  level: core
+  minutes: 15
+  requires:
+  - S1.1
+  safety_floor: false
+  transferable: false
+  aliases:
+  - '1.5'
+- id: S1.20
+  type: practice
+  title: 'Praxis-Station Session 1: eine Übung wählen'
+  shelf: practice
+  level: core
+  minutes: 15
+  requires: []
+  safety_floor: false
+  transferable: false
+  aliases: []
+  offers:
+  - S1.1
+  - S1.10
+  - S1.13
+  - S1.16
+  - S1.18
+- id: S2.1
+  type: lesson
+  title: Skills sind Dienstanweisungen, Commands sind Knöpfe
+  shelf: skills
+  level: core
+  minutes: 12
+  requires:
+  - S1.10
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '2.1'
+- id: S2.2
+  type: lesson
+  title: Eine SKILL.md schreiben
+  shelf: skills
+  level: core
+  minutes: 18
+  requires:
+  - S2.1
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S2.3
+  type: lesson
+  title: Skills oder Commands, und wer sie auslösen darf
+  shelf: skills
+  level: core
+  minutes: 12
+  requires:
+  - S2.2
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S2.4
+  type: lesson
+  title: Mitgelieferte Skills
+  shelf: skills
+  level: core
+  minutes: 12
+  requires:
+  - S2.1
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S2.5
+  type: lesson
+  title: 'Lebendige Prompts: Argumente und dynamischer Inhalt'
+  shelf: skills
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S2.2
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S2.6
+  type: lesson
+  title: 'Hooks als Sensoren: die drei Eckpfeiler'
+  shelf: hooks
+  level: core
+  minutes: 15
+  requires:
+  - S1.5
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '2.2'
+- id: S2.7
+  type: lesson
+  title: Die wichtigsten Hook-Ereignisse
+  shelf: hooks
+  level: core
+  minutes: 12
+  requires:
+  - S2.6
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S2.8
+  type: lesson
+  title: Einen Hook einrichten, der wirklich blockt
+  shelf: hooks
+  level: core
+  minutes: 15
+  requires:
+  - S2.7
+  safety_floor: true
+  transferable: false
+  aliases: []
+- id: S2.9
+  type: lesson
+  title: Hook-Typen und Hooks in Komponenten
+  shelf: hooks
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S2.8
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S2.10
+  type: lesson
+  title: Hook-Ausgaben und das Secure Diff Gate
+  shelf: hooks
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S2.8
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S2.11
+  type: lesson
+  title: 'Plugins: ein Bündel schnüren'
+  shelf: plugins
+  level: core
+  minutes: 15
+  requires:
+  - S2.2
+  - S2.6
+  safety_floor: false
+  transferable: false
+  aliases:
+  - '2.3'
+- id: S2.12
+  type: lesson
+  title: Plugin-Lebenszyklus, Scopes und Marketplaces
+  shelf: plugins
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S2.11
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S2.13
+  type: lesson
+  title: Lieferkettenrisiken bei Plugins
+  shelf: plugins
+  level: deep-dive
+  minutes: 10
+  requires:
+  - S2.12
+  safety_floor: true
+  transferable: true
+  aliases: []
+- id: S2.14
+  type: lesson
+  title: 'MCP: der Integrationsstecker'
+  shelf: mcp-knowledge
+  level: core
+  minutes: 15
+  requires:
+  - S1.5
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '2.4'
+- id: S2.15
+  type: lesson
+  title: 'MCP einrichten: Transporte, Scopes, CLI'
+  shelf: mcp-knowledge
+  level: core
+  minutes: 15
+  requires:
+  - S2.14
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S2.16
+  type: lesson
+  title: 'MCP im Detail: OAuth, Ausgabegrenzen, Protokoll'
+  shelf: mcp-knowledge
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S2.15
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S2.17
+  type: lesson
+  title: MCP-Sicherheit und ein eigener Server
+  shelf: mcp-knowledge
+  level: deep-dive
+  minutes: 18
+  requires:
+  - S2.15
+  safety_floor: true
+  transferable: true
+  aliases: []
+- id: S2.18
+  type: lesson
+  title: 'RAG und NotebookLM: dem Agenten Baupläne geben'
+  shelf: mcp-knowledge
+  level: core
+  minutes: 18
+  requires:
+  - S2.14
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '2.5'
+- id: S2.19
+  type: lesson
+  title: Grenzen von RAG und Datenschutz
+  shelf: mcp-knowledge
+  level: deep-dive
+  minutes: 10
+  requires:
+  - S2.18
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S2.20
+  type: practice
+  title: 'Praxis-Station Session 2: eine Übung wählen'
+  shelf: practice
+  level: core
+  minutes: 18
+  requires: []
+  safety_floor: false
+  transferable: false
+  aliases: []
+  offers:
+  - S2.2
+  - S2.8
+  - S2.10
+  - S2.11
+  - S2.14
+  - S2.18
+- id: S3.1
+  type: lesson
+  title: Was ist ein Agent? Spezialisierung statt Allrounder
+  shelf: agents
+  level: core
+  minutes: 12
+  requires:
+  - S1.2
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '3.1'
+- id: S3.2
+  type: lesson
+  title: Eingebaute Subagenten nutzen
+  shelf: agents
+  level: core
+  minutes: 10
+  requires:
+  - S3.1
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S3.3
+  type: lesson
+  title: Einen eigenen Subagenten definieren
+  shelf: agents
+  level: core
+  minutes: 18
+  requires:
+  - S3.2
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S3.4
+  type: lesson
+  title: 'Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie'
+  shelf: agents
+  level: core
+  minutes: 15
+  requires:
+  - S3.1
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S3.5
+  type: lesson
+  title: Hintergrund-Sitzungen und Agent Teams
+  shelf: agents
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S3.4
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S3.6
+  type: lesson
+  title: 'Devil''s Advocate: eine adversariale Prüf-Pipeline'
+  shelf: security
+  level: core
+  minutes: 18
+  requires:
+  - S3.4
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '3.3'
+  - 3.3a
+- id: S3.7
+  type: lesson
+  title: Die eingebauten Reviews
+  shelf: security
+  level: core
+  minutes: 12
+  requires:
+  - S1.16
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S3.8
+  type: lesson
+  title: Rechte für autonome Läufe
+  shelf: permissions
+  level: core
+  minutes: 15
+  requires:
+  - S1.6
+  safety_floor: true
+  transferable: true
+  aliases:
+  - 3.3b
+- id: S3.9
+  type: lesson
+  title: Geschützte Pfade und Sandbox-Stufen
+  shelf: permissions
+  level: core
+  minutes: 15
+  requires:
+  - S3.8
+  safety_floor: true
+  transferable: true
+  aliases: []
+- id: S3.10
+  type: lesson
+  title: Netzwerk und Skills härten
+  shelf: security
+  level: deep-dive
+  minutes: 12
+  requires:
+  - S3.9
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S3.11
+  type: lesson
+  title: Datenschutz, Aufbewahrung und regulierte Branchen
+  shelf: security
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S3.9
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S3.12
+  type: lesson
+  title: 'Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen'
+  shelf: automation
+  level: core
+  minutes: 15
+  requires:
+  - S2.4
+  safety_floor: false
+  transferable: false
+  aliases:
+  - '3.4'
+- id: S3.13
+  type: lesson
+  title: 'Autonome Loops absichern: Budget und Worktree'
+  shelf: automation
+  level: core
+  minutes: 12
+  requires:
+  - S3.12
+  - S1.19
+  safety_floor: true
+  transferable: true
+  aliases: []
+- id: S3.14
+  type: lesson
+  title: 'Self-Improve-Loop: was geht und wo es endet'
+  shelf: automation
+  level: bonus
+  minutes: 15
+  requires:
+  - S3.13
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S3.15
+  type: practice
+  title: 'Praxis-Station Session 3: eine Übung wählen'
+  shelf: practice
+  level: core
+  minutes: 15
+  requires: []
+  safety_floor: false
+  transferable: false
+  aliases: []
+  offers:
+  - S3.4
+  - S3.6
+- id: S4.1
+  type: lesson
+  title: Das richtige Modell pro Phase
+  shelf: cost
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S1.7
+  - S3.4
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '3.2'
+- id: S4.2
+  type: lesson
+  title: Codex-Schwarm und die Datenfluss-Grenze
+  shelf: agents
+  level: bonus
+  minutes: 15
+  requires:
+  - S4.1
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S4.3
+  type: lesson
+  title: 'Headless: claude -p als Pipeline-Stufe'
+  shelf: headless-ci
+  level: deep-dive
+  minutes: 15
+  requires:
+  - S1.13
+  safety_floor: false
+  transferable: true
+  aliases:
+  - '3.6'
+- id: S4.4
+  type: lesson
+  title: CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff
+  shelf: headless-ci
+  level: deep-dive
+  minutes: 18
+  requires:
+  - S4.3
+  safety_floor: true
+  transferable: true
+  aliases: []
+- id: S4.5
+  type: lesson
+  title: CI-Pipelines bauen mit GitHub Actions und GitLab
+  shelf: headless-ci
+  level: deep-dive
+  minutes: 18
+  requires:
+  - S4.4
+  safety_floor: false
+  transferable: false
+  aliases: []
+- id: S4.6
+  type: lesson
+  title: 'Unterwegs: Remote Control und /teleport'
+  shelf: remote-isolation
+  level: bonus
+  minutes: 12
+  requires:
+  - S1.3
+  safety_floor: false
+  transferable: false
+  aliases:
+  - '3.5'
+- id: S4.7
+  type: lesson
+  title: Isolation mit Docker und Worktrees
+  shelf: remote-isolation
+  level: bonus
+  minutes: 15
+  requires:
+  - S1.18
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S4.8
+  type: capstone
+  title: Abschlussprojekt mit Bewertung
+  shelf: capstone
+  level: bonus
+  minutes: 25
+  requires:
+  - S3.4
+  - S3.8
+  - S3.13
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: S4.9
+  type: lesson
+  title: 'Fehlersuche: /debug, --verbose, /doctor'
+  shelf: troubleshooting
+  level: core
+  minutes: 15
+  requires:
+  - S1.4
+  safety_floor: false
+  transferable: false
+  aliases:
+  - '3.7'
+- id: S4.10
+  type: lesson
+  title: Diagnose Schritt für Schritt
+  shelf: troubleshooting
+  level: core
+  minutes: 18
+  requires:
+  - S4.9
+  - S2.8
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: X.1
+  type: community
+  title: 'Community-Skills: wer baut was, das wirklich hilft'
+  shelf: community
+  level: bonus
+  minutes: 15
+  after: S2.13
+  requires: []
+  safety_floor: false
+  transferable: true
+  aliases: []
+- id: X.2
+  type: community
+  title: Mit Claude Code lernen
+  shelf: community
+  level: bonus
+  minutes: 12
+  after: S0.1
+  requires: []
+  safety_floor: false
+  transferable: true
+  aliases: []
