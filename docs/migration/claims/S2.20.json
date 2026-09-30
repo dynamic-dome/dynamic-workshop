@@ -1,0 +1,9 @@
+{"id":"S2.20","verdict":"pass",
+"counts":{"kept":14,"changed":1,"dropped":0,"new":3},
+"items":[
+{"status":"changed","source":"resources/exercises/block-2-exercises.md:1041","old":"A safety hook that protects every future Claude Code session automatically","new":"einen Safety-Hook, der ab jetzt jede Claude-Code-Sitzung automatisch mitbewacht, nach bestem Bemühen (S2.8)","rating":"ok","reason":"Gewollte Abschwächung: Hooks sind kein garantierter Schutz (Hook-Fakten Bewertung H-xx); Verweis auf S2.8."},
+{"status":"new","source":"","old":"","new":"Im Workshop nimmst du dir eine Übung vor, die anderen sind fürs Selbststudium; im Workshop hat die Station 18 Minuten.","rating":"ok","reason":"18 Min. = minutes in chapter-meta.yaml; 'mindestens eine Übung aus der Praxis-Station' steht in moderation/handbuch.md:61,94. Keine neue Sachaussage."},
+{"status":"new","source":"","old":"","new":"Spalte 'Du brauchst' der Auswahltabelle (z. B. jq für bash-Fassung, sonst PowerShell; Node.js mit npx; Quellen, die auf Google-Server dürfen)","rating":"ok","reason":"jq/PowerShell-Variante (Quelle Z.176,233), npx (Z.5), NotebookLM auf notebooklm.google.com (Z.840); Datenschutzhinweis ist Formulierungshilfe, kein Faktum."},
+{"status":"new","source":"","old":"","new":"Modulnummern-Zuordnung 2.1=S2.1–S2.5, 2.2=S2.6–S2.10, 2.3=S2.11–S2.13, 2.4=S2.14–S2.17, 2.5=S2.18–S2.19; Plugin kann Hooks und MCP-Server mitbringen","rating":"ok","reason":"Navigationshilfe der Migration; Plugin-Aussage verweist auf S2.11. Diagramm und Schichtsatz stammen aus modules/block-2-ecosystem.md:1474-1494 (kept)."}
+],
+"style":[]}
