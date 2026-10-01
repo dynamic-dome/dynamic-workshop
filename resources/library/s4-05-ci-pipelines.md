@@ -342,7 +342,7 @@ Bau jetzt absichtlich ein Problem ein: eine Zeile `print("DEBUG")`, ein fest ein
 
 **Nachdenken:** Beantworte nach fünf oder mehr Commits mit aktivem Hook diese Fragen in deinen Notizen:
 
-1. **Kosten:** Wie viele Tokens hat ein Aufruf ungefähr verbraucht? Schau in einer interaktiven Sitzung mit `/usage` nach oder auf der Usage-Seite der Claude Console. War die Grenze von 0,10 $ fast erreicht, oder blieb der Lauf deutlich darunter?
+1. **Kosten:** Wie viele Tokens hat ein Aufruf ungefähr verbraucht? Schau in einer interaktiven Sitzung mit `/usage` nach oder auf der Usage-Seite der Claude Console. War die gesetzte Budgetgrenze fast erreicht, oder blieb der Lauf deutlich darunter?
 2. **Genauigkeit:** Hat der Hook ein Problem gefunden, das du sonst committet hättest? Hat er falschen Alarm geschlagen und dir Zeit gekostet?
 3. **Tempo:** Hat der Hook deinen Commit-Ablauf spürbar gebremst? Wenn ja, was würdest du eintauschen: weniger Prüfungen, kürzere Prompts, ein schnelleres Modell mit `--model haiku`?
 4. **Praxistauglichkeit:** Würdest du den Hook in einem echten Projekt einschalten? Schreib je drei Punkte dafür und dagegen auf.
@@ -366,7 +366,7 @@ Was bei deiner ersten Claude-Anbindung in CI schiefgeht und wie du es behebst:
 | Anmeldefehler, obwohl `CLAUDE_CODE_OAUTH_TOKEN` gesetzt ist | Der Job läuft mit `--bare`, und `--bare` liest das Abo-Token nie | Stell den Job auf einen API-Key um (Weg A); lass `--bare` nur bei vertrauenswürdigem Code weg (Weg B) |
 | Anmeldefehler bei einem Job, der früher lief | Das Abo-Token hat sein Jahr hinter sich, oder der API-Key wurde gesperrt | Neues Token oder neuen Key erzeugen und das CI-Secret ersetzen |
 | Die Pipeline rechnet über die API ab, obwohl du ein Abo-Token eingerichtet hast | Ein übrig gebliebener `ANTHROPIC_API_KEY` in der Runner-Umgebung hat Vorrang vor `CLAUDE_CODE_OAUTH_TOKEN` | Den Key aus der Job-Umgebung entfernen; `claude auth status` muss `"authMethod": "oauth_token"` zeigen |
-| Unerwartete 10 $ für einen einzigen Lauf | Eine Schleife ohne Budgetgrenze | `--max-budget-usd` bei **jedem** CI-Aufruf setzen |
+| Ein einzelner Lauf kostet unerwartet viel | Eine Schleife ohne Budgetgrenze | `--max-budget-usd` bei **jedem** CI-Aufruf setzen |
 | Das nachgelagerte `jq` scheitert an der Ausgabe | Freie Prosa statt JSON | `--output-format json` und `--json-schema` ergänzen |
 | Die Persona schwankt von Lauf zu Lauf | Der Standard-Systemprompt ändert sich mit den geladenen Skills | `--bare` plus `--system-prompt-file` für eine feste Persona |
 | Der Runner hängt und wartet auf Eingabe | Interaktiver Modus statt `-p` | In CI immer `claude -p "..."`, nie `claude` ohne `-p` |

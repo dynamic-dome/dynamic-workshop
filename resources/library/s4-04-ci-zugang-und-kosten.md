@@ -242,7 +242,7 @@ So triffst du den Cache öfter:
 - **Mach das Opus-Tier mit `xhigh` nicht zur Voreinstellung.** Das ist eine der teuersten Kombinationen und selten gerechtfertigt.
 - **Lass `/loop` oder `/goal` nicht ohne Kostengrenze laufen** ([S3.13](s3-13-autonome-loops-absichern.md)). Die Kosten können sich still vervielfachen.
 - **Lass die CLAUDE.md nicht unbegrenzt wachsen.** Jedes Token darin zahlst du in jeder Sitzung, für immer.
-- **Rechtfertige laufende Ausgaben nicht mit „Heute sind schon 20 $ weg, dann kann ich auch weitermachen".** Nimm das frühe Stoppsignal als Hilfe, nicht als Störung.
+- **Rechtfertige laufende Ausgaben nicht mit „Heute ist schon so viel weg, dann kann ich auch weitermachen".** Nimm das frühe Stoppsignal als Hilfe, nicht als Störung.
 
 ## Vorführen
 

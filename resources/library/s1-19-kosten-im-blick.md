@@ -64,7 +64,7 @@ Für den Verbrauch hat Claude Code einen Befehl: `/usage`. `/cost` und `/stats` 
 | `/usage` im Abo (Pro, Max, Team, Enterprise) | Was hat meinen Verbrauch getrieben? | Nutzungsbalken, Aktivität und eine Aufschlüsselung auf Skills, Subagents, Plugins und MCP-Server; `d` und `w` wechseln zwischen den letzten 24 Stunden und 7 Tagen. |
 | `/insights` | Wie arbeite ich, und wo hakt es? | Ein HTML-Bericht über deine letzten Sitzungen: woran du arbeitest, wo es Reibung gibt, was du ausprobieren könntest. Kein Kostenbericht; der Bericht verbraucht selbst Tokens. |
 
-Den Dollarbetrag rechnet Claude Code lokal aus den Tokens zum Listenpreis aus. Er ist eine Schätzung; verbindlich ist die Usage-Seite der [Claude Console](https://platform.claude.com/usage). Mit einem Pro- oder Max-Abo ist der Betrag für die Abrechnung nicht relevant, zum Vergleich von Modellen und Stufen taugt er trotzdem. `/clear` setzt die Summen zurück, die nächste Sitzung beginnt wieder bei 0 $.
+Den Dollarbetrag rechnet Claude Code lokal aus den Tokens zum Listenpreis aus. Er ist eine Schätzung; verbindlich ist die Usage-Seite der [Claude Console](https://platform.claude.com/usage). Mit einem Pro- oder Max-Abo ist der Betrag für die Abrechnung nicht relevant, zum Vergleich von Modellen und Stufen taugt er trotzdem. `/clear` setzt die Summen zurück, die nächste Sitzung beginnt wieder bei null.
 
 Eine nützliche Gewohnheit: Wirf einen Blick auf `/cost`, wann immer du etwas Nicht-Triviales getan hast, etwa einen Refactor über mehrere Dateien, eine lange Planungsrunde oder einen Recherche-Umweg. Das dauert zwei Sekunden und erspart dir am Ende der Woche die Frage „Wie viel habe ich eigentlich ausgegeben?“
 
@@ -269,7 +269,7 @@ Oder ein kleiner eigener Skill, der den passenden Aufruf kapselt. Skills kommen 
 **Hinweise:**
 
 - Wenn dir die Modelle neu sind: Fang für den Fehler mit Sonnet und `medium` an, für das Code-Review mit Sonnet und `low`, für die Doku mit Haiku (ohne Effort). Experimentiere von dort aus.
-- `--max-budget-usd` ist eine billige Versicherung: Schon 1,00 $ bei einem Routine-`-p`-Lauf fängt davonlaufende Schleifen ab, ohne normale Arbeit zu stören.
+- `--max-budget-usd` ist eine billige Versicherung: Schon eine niedrige Grenze bei einem Routine-`-p`-Lauf fängt davonlaufende Schleifen ab, ohne normale Arbeit zu stören.
 - Optimier nicht zu früh. Es geht nicht darum, Cent-Beträge herauszuquetschen, sondern darum, bewusst zu wählen, statt aus Versehen immer für Opus mit xhigh zu zahlen.
 
 ## Typische Fallen
