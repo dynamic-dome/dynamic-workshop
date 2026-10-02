@@ -4,7 +4,7 @@
 > Agenten-Pipeline. Eine kurze Einstufung zeigt dir, welche Kapitel zu deinem Ziel passen; du musst nicht alles lesen.
 
 Dieses Repository ist die Materialbasis hinter der Workshop-Seite von DoMe Dynamics
-([dynamic-dome.com/workshop](https://dynamic-dome.com/workshop)). Die Website ist das Schaufenster, hier liegt das Material:
+([dynamic-dome.com/systeme/workshop](https://dynamic-dome.com/systeme/workshop/)). Die Website ist das Schaufenster, hier liegt das Material:
 Kapitel, getestete Vorlagen, Übungs-Playground, Lern-Cockpit, Tutor-Plugin und Moderationsunterlagen.
 
 ## Für wen
