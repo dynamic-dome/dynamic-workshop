@@ -124,6 +124,9 @@ def place(catalog, answers):
             if c["shelf"] in focus and (c["level"] in ("core", "deep-dive")
                                         or (c["level"] == "bonus" and time == "gruendlich")):
                 relevant.add(c["id"])
+            # gezielte Ausnahme: chapter_goals holt Lesson/Setup-Kapitel zusätzlich in R
+            if set((rules.get("chapter_goals") or {}).get(c["id"]) or []) & set(goals):
+                relevant.add(c["id"])
         for c in chapters:
             if c["type"] == "practice" and any(
                     o in relevant and (r(by_id[o]) or 0) < 2 for o in c["offers"]):

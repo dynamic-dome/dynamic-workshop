@@ -11,6 +11,6 @@ Jeder Pfad ist eine Empfehlung für jemanden, der neu im Thema ist. Mit der [Ein
 | [Claude Code sicher im Team einführen](ziel-team.md) | 4 | 9,5 Stunden |
 | [Aufgaben automatisieren und in CI einbauen](ziel-automation.md) | 4 | 8,5 Stunden |
 | [Eigene Agenten-Systeme bauen](ziel-agents.md) | 4 | 9,5 Stunden |
-| [Sicherheit und Compliance im Griff haben](ziel-security.md) | 5 | 10,5 Stunden |
+| [Sicherheit und Compliance im Griff haben](ziel-security.md) | 5 | 11 Stunden |
 | [Einschätzen, ob und wie wir es einsetzen (Tech Lead)](ziel-einschaetzen.md) | 2 | 3,5 Stunden |
 | [Live-Workshop (moderiert)](live-workshop.md) | 4 Sessions | — |

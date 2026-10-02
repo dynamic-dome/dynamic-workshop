@@ -269,6 +269,8 @@ Notation: r(c) = Stand des Bereichs von Kapitel c nach Szenario-Deckel (Kapitel 
 - sonst: R = `core`-Kapitel der Grundregale (`start`, `permissions`, `context`, `prompting`, `git`, `cost`,
   `troubleshooting` — Fehlersuche braucht jede Person)
   ∪ `core`- und `deep-dive`-Kapitel der Schwerpunkt-Regale aller gewählten Ziele ∪ bei `gruendlich` deren `bonus`-Kapitel
+  ∪ Lesson-/Setup-Kapitel, die in `chapter_goals` stehen, wenn eines der dort genannten Ziele gewählt ist (gezielte
+  Ausnahme: S3.13 und S4.4 für `security`, damit der Sicherheitsboden nicht an den Schwerpunkt-Regalen hängt)
   ∪ jede Praxis-Station, deren `offers` ein Kapitel aus R mit r < 2 enthält (die Station zeigt dann nur diese Übungen)
   ∪ `capstone`, wenn ein Ziel `agents` oder `einschaetzen` ist
   ∪ X-Kapitel, wenn ein Ziel nicht `einschaetzen` ist — außer das Kapitel steht in `chapter_goals`: dann nur, wenn

@@ -177,6 +177,29 @@ def write_golden():  # maintainer helper: python -c "import tools.test_placement
                            encoding="utf-8", newline="\n")
 
 
+CHAPTER_GOAL_CASES = [
+    ({"goals": ["security"]}, {"S3.13": True, "S4.4": True}),
+    ({"goals": ["alltag"]}, {"S3.13": False, "S4.4": False}),
+    ({"goals": ["alltag", "security"]}, {"S3.13": True, "S4.4": True}),
+    ({"goals": ["security"], "time": "schnellstart"}, {"S3.13": False, "S4.4": False}),
+    ({"goals": ["security", "moderieren"]}, None),
+]
+
+
+def test_chapter_goals_pull_safety_chapters_into_security_path():
+    for answers, expect in CHAPTER_GOAL_CASES:
+        ch = by_chapter(run(answers))
+        if expect is None:  # moderieren: Zweig unverändert, kein Sicherheits-Zusatz durch chapter_goals
+            assert run(answers) == run({"goals": ["moderieren"]})
+            continue
+        for cid, included in expect.items():
+            assert (ch[cid]["status"] != "later") is included, (answers, cid)
+
+
+def test_chapter_goals_security_schnellstart_unchanged():
+    assert run({"goals": ["security"], "time": "schnellstart"}) == run({"goals": ["alltag"], "time": "schnellstart"})
+
+
 def test_duplicate_goals_count_once():
     assert run({"goals": ["einschaetzen", "einschaetzen"]}) == run({"goals": ["einschaetzen"]})
 

@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 5 Etappen, zusammen etwa 10,5 Stunden (589 Min durcharbeiten, 38 Min überfliegen).
+**Umfang:** 5 Etappen, zusammen etwa 11 Stunden (619 Min durcharbeiten, 52 Min überfliegen).
 
 ## Etappe 1 (~144 Min)
 
@@ -20,7 +20,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S1.8 Das Kontextfenster verstehen](../library/s1-08-kontextfenster.md) — durcharbeiten
 - [S1.9 Kontext steuern mit /compact und /rewind](../library/s1-09-kontext-steuern.md) — durcharbeiten
 
-## Etappe 2 (~145 Min)
+## Etappe 2 (~149 Min)
 
 - [S1.10 CLAUDE.md: die Hausordnung des Projekts](../library/s1-10-claude-md.md) — durcharbeiten
 - [S1.13 Vager und präziser Auftrag im Vergleich](../library/s1-13-vager-und-praeziser-auftrag.md) — durcharbeiten
@@ -30,6 +30,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S1.20 Praxis-Station Session 1: eine Übung wählen](../library/s1-20-praxis-station-1.md) — durcharbeiten
 - [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) — überfliegen
 - [S2.2 Eine SKILL.md schreiben](../library/s2-02-skill-schreiben.md) — überfliegen
+- [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — überfliegen
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — durcharbeiten
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — durcharbeiten
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — durcharbeiten
@@ -62,9 +63,13 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.10 Netzwerk und Skills härten](../library/s3-10-netzwerk-und-skills-haerten.md) — durcharbeiten
 - [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](../library/s3-11-datenschutz-und-compliance.md) — durcharbeiten
 
-## Etappe 5 (~53 Min)
+## Etappe 5 (~93 Min)
 
+- [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) — überfliegen
+- [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) 🛡 — durcharbeiten
 - [S3.15 Praxis-Station Session 3: eine Übung wählen](../library/s3-15-praxis-station-3.md) — durcharbeiten
+- [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) — überfliegen
+- [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) 🛡 — durcharbeiten
 - [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) — überfliegen
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten

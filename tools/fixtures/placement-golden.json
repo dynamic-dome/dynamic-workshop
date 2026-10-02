@@ -2737,9 +2737,9 @@
    {
     "id": "S2.4",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 2,
+    "status": "skim"
    },
    {
     "id": "S2.5",
@@ -2947,16 +2947,16 @@
    {
     "id": "S3.12",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 4,
+    "status": "skim"
    },
    {
     "id": "S3.13",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "new",
+    "stage": 4,
+    "status": "work"
    },
    {
     "id": "S3.14",
@@ -2969,7 +2969,7 @@
     "id": "S3.15",
     "override": false,
     "reason": "practice",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -2989,16 +2989,16 @@
    {
     "id": "S4.3",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 5,
+    "status": "skim"
    },
    {
     "id": "S4.4",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "new",
+    "stage": 5,
+    "status": "work"
    },
    {
     "id": "S4.5",
@@ -3018,7 +3018,7 @@
     "id": "X.4",
     "override": false,
     "reason": "community",
-    "stage": 4,
+    "stage": 5,
     "status": "skim"
    },
    {
@@ -3056,7 +3056,7 @@
     "n": 1
    },
    {
-    "minutes": 145,
+    "minutes": 149,
     "n": 2
    },
    {
@@ -3064,17 +3064,17 @@
     "n": 3
    },
    {
-    "minutes": 149,
+    "minutes": 146,
     "n": 4
    },
    {
-    "minutes": 33,
+    "minutes": 76,
     "n": 5
    }
   ],
   "totals": {
-   "skim_min": 38,
-   "work_min": 574
+   "skim_min": 52,
+   "work_min": 604
   },
   "version": 1,
   "warnings": [

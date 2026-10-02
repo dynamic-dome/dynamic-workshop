@@ -369,6 +369,8 @@
           if (c.type !== "lesson" && c.type !== "setup") return;
           if (c.level === "core" && base.has(c.shelf)) relevant.add(c.id);
           if (focus.has(c.shelf) && (c.level === "core" || c.level === "deep-dive" || (c.level === "bonus" && time === "gruendlich"))) relevant.add(c.id);
+          const extra = (rules.chapter_goals || {})[c.id];
+          if (extra && extra.some(g => goals.includes(g))) relevant.add(c.id);
         });
         chapters.forEach(c => {
           if (c.type === "practice" && c.offers.some(o => relevant.has(o) && (r(byId[o]) || 0) < 2)) relevant.add(c.id);
