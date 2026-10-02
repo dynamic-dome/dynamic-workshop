@@ -46,8 +46,10 @@ Offene Frage an den Owner: 48 von 70 Kapiteln für zwei Ziele — passt das zu �
 
 ## Fortsetzung (noch nicht getestet)
 
-- [ ] Branch `einstufung-security-ausnahme` prüfen, mergen, pushen; im Test-Klon `git pull` und die Einstufung mit Ziel
-      `security` gegenprüfen (S3.13 und S4.4 im Pfad, nicht unter „später“).
+- [x] Branch `einstufung-security-ausnahme` geprüft (Codex-Verifier read-only: PASS mit Hinweis; Hinweis „Validator
+      prüft nicht, ob ein `chapter_goals`-Wert eine Liste ist“ per Test + Prüfung nachgezogen) und lokal nach `main` gemergt.
+- [ ] Pushen (Owner-OK), dann im Test-Klon `git pull` und die Einstufung mit Ziel `security` gegenprüfen
+      (S3.13 und S4.4 im Pfad, nicht unter „später“).
 - [ ] Tutor-Plugin: `claude --plugin-dir "<Test-Klon>"`, dann `/dynamic-workshop:workshop start`, `next`, `learn S2.8`,
       `review`, `guide S1`. Den neuen Klon nehmen — `~/cc-workshop/dynamic-workshop` steht noch auf `19f42de`.
 - [ ] Cockpit: falsche Antwort im Kapitel-Quiz, „Pfad übernehmen“ (Live-Workshop), „Einstufung ändern“ und
