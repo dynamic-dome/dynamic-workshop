@@ -291,7 +291,10 @@ def _check_placement(lib, by_id, report, planned_ids=frozenset()):
     for cid, limited in (placement.get("chapter_goals") or {}).items():
         if cid not in by_id and cid not in planned_ids:
             add("placement-refs", f"chapter_goals nennt {cid}, das es nicht gibt")
-        for g in limited or []:
+        if not isinstance(limited, list):
+            add("placement-refs", f"chapter_goals {cid}: erwartet eine Liste von Zielen")
+            continue
+        for g in limited:
             if g not in goal_ids:
                 add("placement-refs", f"chapter_goals {cid}: unbekanntes Ziel {g}")
     for sc in placement.get("scenarios", []) or []:

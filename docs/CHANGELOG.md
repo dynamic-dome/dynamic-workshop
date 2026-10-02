@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-02 — Einstufung: Sicherheitsboden bei Ziel Sicherheit
+
+- **Einstufung:** Bei Ziel `security` gehören jetzt auch S3.13 (Autonome Loops absichern) und S4.4 (CI-Zugangsdaten) zum
+  Pfad. Bisher standen sie unter „später — gehört nicht zu deinem Ziel“, obwohl sie den Sicherheitsboden tragen, weil
+  die Schwerpunkt-Regale von `security` `automation` und `headless-ci` nicht enthalten. Umgesetzt als gezielte Ausnahme
+  über `chapter_goals` (Lesson-/Setup-Kapitel kommen zusätzlich in die Relevanzmenge, wenn eines der Ziele gewählt ist;
+  bei Community-Kapiteln bleibt es die Einschränkung). Die Regale des Ziels bleiben unverändert; `schnellstart` und
+  `moderieren` ebenfalls. Python-Engine, JS-Port, Spec §6.3 A und Golden-Datei angepasst.
+
 ## 2026-09-30 — Praxisbibliothek
 
 Der Kurs wird vom linearen 4-Session-Aufbau zur deutschsprachigen Praxisbibliothek (Branch `praxisbibliothek`).

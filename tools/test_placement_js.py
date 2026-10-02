@@ -39,6 +39,30 @@ def test_template_engine_equals_python_golden(tmp_path):
         assert js[pid] == golden[pid], pid
 
 
+def test_js_engine_chapter_goals_equal_python(tmp_path):
+    import importlib.util
+    import sys
+    spec = importlib.util.spec_from_file_location("placement", ROOT / "tools" / "placement.py")
+    placement = importlib.util.module_from_spec(spec)
+    sys.modules["placement"] = placement
+    spec.loader.exec_module(placement)
+    catalog = json.loads((FIX / "placement-catalog.json").read_text(encoding="utf-8"))
+    cases = [{"goals": ["security"]}, {"goals": ["alltag"]}, {"goals": ["alltag", "security"]},
+             {"goals": ["security"], "time": "schnellstart"}, {"goals": ["security", "moderieren"]}]
+    script = tmp_path / "cg.js"
+    script.write_text(engine_source(TEMPLATE.read_text(encoding="utf-8")) + "\nconst catalog = " + json.dumps(catalog)
+                      + ";\nconst cases = " + json.dumps(cases)
+                      + ";\nprocess.stdout.write(JSON.stringify(cases.map(a => place(catalog, a))));\n", encoding="utf-8")
+    out = json.loads(subprocess.run([NODE, str(script)], capture_output=True, text=True, encoding="utf-8",
+                                    check=True).stdout)
+    for answers, js in zip(cases, out):
+        assert js == placement.place(catalog, answers), answers
+    sec = {c["id"]: c["status"] for c in out[0]["chapters"]}
+    ali = {c["id"]: c["status"] for c in out[1]["chapters"]}
+    assert sec["S3.13"] != "later" and sec["S4.4"] != "later"
+    assert ali["S3.13"] == "later" and ali["S4.4"] == "later"
+
+
 def test_js_engine_rejects_unknown_ids(tmp_path):
     catalog = json.loads((FIX / "placement-catalog.json").read_text(encoding="utf-8"))
     script = tmp_path / "bad.js"

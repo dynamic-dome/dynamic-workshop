@@ -123,6 +123,7 @@ def test_parse_error_is_reported(lib_dir):
     ("minimum_path: [S2.7, S2.8]", "minimum_path: [S2.8]", "minimum-path-closed"),
     ("focus_shelves: [hooks]", "focus_shelves: [nirgends]", "placement-refs"),
     ("base_shelves: [hooks]", "base_shelves: [nirgends]", "placement-refs"),
+    ("chapter_goals: {}", "chapter_goals: {S2.8: {alltag: true}}", "placement-refs"),
 ])
 def test_placement_rules(lib_dir, old, new, rule):
     edit(lib_dir, "_placement.yaml", old, new)

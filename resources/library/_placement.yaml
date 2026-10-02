@@ -6,10 +6,16 @@ base_shelves: [start, permissions, context, prompting, git, cost, troubleshootin
 minimum_path: [S0.1, S1.1, S1.2, S1.5, S1.6, S1.10, S1.13, S1.14, S1.16, S1.19]
 quickstart_warn_minutes: 180
 default_goal: alltag
-# Community-Kapitel, die nur für bestimmte Ziele relevant sind (sonst: alle Ziele außer Nur-Einschätzen)
+# Kapitel-Ziele, je nach Kapiteltyp mit anderer Wirkung:
+# - Community-Kapitel: nur für diese Ziele relevant (ersetzt den Standard: alle Ziele außer Nur-Einschätzen).
+# - Lesson/Setup-Kapitel: zusätzlich zur Regal-Regel relevant, wenn eines dieser Ziele gewählt ist
+#   (gezielte Ausnahme, damit ein Sicherheitsboden-Kapitel nicht an den Schwerpunkt-Regalen des Ziels hängt).
+# Nicht bei schnellstart und nicht bei moderieren.
 chapter_goals:
   X.3: [agents, security, einschaetzen]
   X.4: [agents, security, einschaetzen]
+  S3.13: [security]
+  S4.4: [security]
 default_time: abende
 
 times:

@@ -1684,6 +1684,12 @@
    "troubleshooting"
   ],
   "chapter_goals": {
+   "S3.13": [
+    "security"
+   ],
+   "S4.4": [
+    "security"
+   ],
    "X.3": [
     "agents",
     "security",
