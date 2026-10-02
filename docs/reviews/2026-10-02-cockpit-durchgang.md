@@ -2,7 +2,7 @@
 
 > Gemeinsamer Durchgang Owner + Claude Code durch das Lern-Cockpit aus Sicht einer neuen Person.
 > Stand: **unterbrochen**, Fortsetzung siehe unten. Befunde hier sind die einzige Quelle; die DCO-Todos verweisen
-> mit der Befund-Nummer (B1 … B11) auf diese Datei.
+> mit der Befund-Nummer (B1 … B11) auf diese Datei: Sammel-Todo DCO #9563, Einzel-Todos #9564–#9571.
 
 ## Aufbau
 
