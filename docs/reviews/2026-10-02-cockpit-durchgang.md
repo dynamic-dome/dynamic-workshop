@@ -2,7 +2,7 @@
 
 > Gemeinsamer Durchgang Owner + Claude Code durch das Lern-Cockpit aus Sicht einer neuen Person.
 > Stand: **unterbrochen**, Fortsetzung siehe unten. Befunde hier sind die einzige Quelle; die DCO-Todos verweisen
-> mit der Befund-Nummer (B1 … B11) auf diese Datei: Sammel-Todo DCO #9563, Einzel-Todos #9564–#9571.
+> mit der Befund-Nummer (B1 … B12) auf diese Datei: Sammel-Todo DCO #9563, Einzel-Todos #9564–#9572 (#9564 erledigt).
 
 ## Aufbau
 
@@ -41,6 +41,7 @@
 | B9 | Logik, klein | „Wiederholen“ fragt ein gerade erst erledigtes Kapitel sofort ab (widerspricht „Abrufen mit Abstand“); Text sagt „Fünf Fragen“, es kam eine. | Ansicht Wiederholen | Mindestabstand (z. B. 1 Tag) oder Hinweis „noch nichts fällig“; Text an die Anzahl anpassen. |
 | B10 | UX, klein | Nach gespeicherter Einstufung bleibt der Hauptknopf der Startseite „Einstufung starten“. | Startseite | Dann „Weiter zu meinem Pfad“ als Hauptknopf, Einstufung als Nebenknopf. |
 | B11 | UX, klein | Der Knopf „Kopieren“ überdeckt das Zeilenende im Code-Block. | „Ausprobieren“-Block | Knopf über/neben den Block setzen oder rechts Innenabstand reservieren. |
+| B12 | Logik, klein | Der Pfad endet mit einer Mini-Etappe: nach B3 bei `alltag` + `security` Etappe 5 nur S4.10 (18 Min). | Etappen-Aufteilung in `tools/placement.py` und JS-Port | Kleinen Rest (z. B. unter 30 Min) an die letzte Etappe anhängen; Golden bewusst neu. |
 
 Offene Frage an den Owner: 48 von 70 Kapiteln für zwei Ziele — passt das zu „Du musst nicht alles lesen“?
 
@@ -48,8 +49,9 @@ Offene Frage an den Owner: 48 von 70 Kapiteln für zwei Ziele — passt das zu �
 
 - [x] Branch `einstufung-security-ausnahme` geprüft (Codex-Verifier read-only: PASS mit Hinweis; Hinweis „Validator
       prüft nicht, ob ein `chapter_goals`-Wert eine Liste ist“ per Test + Prüfung nachgezogen) und lokal nach `main` gemergt.
-- [ ] Pushen (Owner-OK), dann im Test-Klon `git pull` und die Einstufung mit Ziel `security` gegenprüfen
-      (S3.13 und S4.4 im Pfad, nicht unter „später“).
+- [x] Gepusht (`9f9f72c`), im Test-Klon gezogen und im Cockpit mit der gespeicherten Einstufung gegengeprüft:
+      S3.13 und S4.4 stehen auf „durcharbeiten“ mit Sicherheitsboden-Plakette, S3.12 und S4.3 als Voraussetzung auf
+      „überfliegen“; Pfad jetzt 5 Etappen, etwa 10 Stunden, 52 Kapitel, „später“ 14 → 10.
 - [ ] Tutor-Plugin: `claude --plugin-dir "<Test-Klon>"`, dann `/dynamic-workshop:workshop start`, `next`, `learn S2.8`,
       `review`, `guide S1`. Den neuen Klon nehmen — `~/cc-workshop/dynamic-workshop` steht noch auf `19f42de`.
 - [ ] Cockpit: falsche Antwort im Kapitel-Quiz, „Pfad übernehmen“ (Live-Workshop), „Einstufung ändern“ und
