@@ -142,7 +142,7 @@ Du kannst mit `/cost` den Verbrauch deiner Sitzung ablesen, einen fairen Modellv
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Du hast ein Max-Abo, und `/cost` zeigt am Ende einer Sitzung `Total cost` von 0,42 Dollar. Was bedeutet der Betrag?
+**Frage:** Du hast ein privates Max-Abo ohne Vorgaben einer Organisation, und `/cost` zeigt am Ende einer Sitzung `Total cost` von 0,42 Dollar. Was bedeutet der Betrag?
 
 - **Richtig:** Eine Schätzung aus den Tokens zum Listenpreis; für die Abrechnung im Abo ist sie nicht relevant, zum Vergleich von Läufen taugt sie.
 - Falsch: Den Betrag, den dir Anthropic zusätzlich zur Abo-Gebühr in Rechnung stellt, weil `/cost` die Abrechnung anzeigt.

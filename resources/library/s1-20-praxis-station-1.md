@@ -73,7 +73,7 @@ Create hours.py with a function is_open(hour) that returns True for the hours 8 
 
 4. **Die Prüfung.** Lies jeden Vorschlag, bevor du ihn freigibst. Hat `is_open` einen einzeiligen Docstring? Das war deine Regel aus Schritt 1. Der Testlauf endet mit `OK`.
 5. **Der Commit ([S1.16](s1-16-git-in-einem-fluss.md)).** Gib ein: `Stage only hours.py and test_hours.py, show me git diff --staged, then commit with the message "Add opening hours check".` Lies das Diff, bevor du den Commit freigibst.
-6. **Die Sperre ([S1.5](s1-05-rechte-im-alltag.md)).** Gib ein: `Delete test_hours.py.` Erwartet: Claude Code lehnt den Befehl ab. Die Datei ist ohnehin committet, es wäre also nichts verloren gewesen.
+6. **Die Sperre ([S1.5](s1-05-rechte-im-alltag.md)).** Gib ein: `Delete test_hours.py.` Erwartet: Claude Code lehnt den Befehl ab. Schlägt Claude danach einen anderen Weg vor, etwa über Python, lehn die Rückfrage ab: Die Regel sperrt den Befehl `rm`, nicht das Löschen an sich. Die Datei ist ohnehin committet, es wäre also nichts verloren gewesen.
 7. **Der Blick auf den Kontext ([S1.8](s1-08-kontextfenster.md)).** Gib `/context` ein und lies die Zeile „Messages“: So viel hat dieser Ablauf belegt. Beende die Sitzung mit `/exit`.
 
 **Aufräumen:** Lösch den Ordner `~/cc-workshop/station1` selbst.

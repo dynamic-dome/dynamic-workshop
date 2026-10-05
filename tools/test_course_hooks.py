@@ -238,13 +238,16 @@ def test_safety_check_allows_harmless_powershell_commands(script, command):
     assert result.returncode == 0
 
 
+@pytest.mark.parametrize("stdin", ["this is not json", "", "null", "[1, 2]", '"text"', "5"],
+                         ids=["garbage", "empty", "null", "array", "string", "number"])
 @pytest.mark.parametrize("script", SAFETY_CHECK)
-def test_safety_check_fails_closed_when_input_is_unreadable(script):
-    """A safety gate that cannot read its input must not silently wave the call through."""
+def test_safety_check_fails_closed_when_input_is_unreadable(script, stdin):
+    """A safety gate that cannot read its input must not silently wave the call through. Valid JSON that is no
+    object (null, a list, a bare value) is unreadable too: there is no command to check in it."""
     cmd_result = subprocess.run(
         [BASH, str(script)] if script.suffix == ".sh"
         else [POWERSHELL, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script)],
-        input="this is not json",
+        input=stdin,
         capture_output=True,
         text=True,
         encoding="utf-8",

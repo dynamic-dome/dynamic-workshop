@@ -195,7 +195,9 @@ fünf bis zehn Minuten nachmachen lässt, wird zur Übung nach Regel 3; die Demo
 5. Zeit rechnen (Regel 12) und melden.
 6. `python tools/build_library.py validate --chapter <datei>` ohne Befund. Kein `build`, kein Commit generierter
    Dateien, keine Änderung an `title`, `level`, `requires`, `shelf` oder am Dateinamen.
-7. Zurückmelden: je Kapitel die neue Übung in einem Satz, die gerechnete Zeit, jede neue Tatsachenaussage mit
+7. Überschriften unter „Im Detail“ nur umbenennen, wenn kein anderes Kapitel auf ihren Anker verlinkt
+   (`grep -rn "<dateiname>#" resources`). Sonst die Überschrift behalten oder den Fund melden.
+8. Zurückmelden: je Kapitel die neue Übung in einem Satz, die gerechnete Zeit, jede neue Tatsachenaussage mit
    Doku-Zitat, und was offen blieb.
 
 ## Was Schreiber nicht entscheiden
@@ -214,3 +216,23 @@ in die Rückmeldung.
 - Sitzungen der Übungen starten mit `claude --permission-mode default`, solange die Übung Rückfragen zeigen soll;
   ohne Flag startet eine Sitzung in `auto`.
 - Was aus den Demos als Übung zurückkommen soll, steht im Abschluss von P1 in der Paketliste.
+
+## Aus P7a mitzunehmen (S1.10 bis S1.20, Commit `bacbf60`)
+
+Zehn Übungen eines Schreibers wurden durchgespielt; neun liefen wie geschrieben. Was die Läufe gezeigt haben:
+
+- **Die Doku nennt Beschriftungen, die in der Oberfläche anders heißen können.** Die dritte Antwort der
+  Plan-Freigabe heißt in der Doku „No, keep planning“, in Version 2.1.289 „Tell Claude what to change“. Wer schreibt,
+  zitiert die Doku und sagt dazu, dass es der Wortlaut der Doku ist; die Abnahme gleicht mit der Oberfläche ab.
+- **Ein Korrekturschritt muss etwas verlangen, das der erste Entwurf sicher nicht enthält.** „Do not change
+  log_reader.py“ bewies nichts, weil Claude die Datei nie anfassen wollte. Jetzt verlangt der Schritt eine Funktion
+  an einem bestimmten Ort; das zeigt sich im neuen Plan und im Diff.
+- **Ansichten, die sich öffnen, müssen wieder zugehen.** `/cost`, `/permissions`, `/model` und das Menü von `/rewind`
+  bleiben offen, bis man `Esc` drückt; der nächste Auftrag landet sonst in der Ansicht. Der Schritt nennt das.
+- **Hintergrund-Agenten fragen selbst um Freigabe und brauchen Zeit.** `/review` läuft etwa eine Minute und stellt
+  eine Rückfrage; der Schritt kündigt beides an.
+- **`/context` zählt die Gedächtnis-Dateien, `/context all` nennt sie.**
+- **Anker:** Eine umbenannte Überschrift in S1.17 hinterließ einen toten Link in S4.5. `validate --complete` findet
+  das; der Wächter-Test der echten Bibliothek läuft seitdem vollständig.
+- **Bewährt am Auftrag:** je Kapitel ein Commit, Rückmeldung mit Doku-Zitaten, Minuten nur als Meldung. Der Auftrag
+  steht in `docs/plans/2026-10-05-selbstlern-zuerst-tickets.md` beim Abschluss von P7a.

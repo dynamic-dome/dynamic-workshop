@@ -179,9 +179,9 @@ Du kannst für ein Experiment einen Worktree anlegen, begründen, wann er sich l
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Du lässt Claude in einem Worktree ein Migrationsskript ausprobieren, das gegen deine lokale Entwicklungsdatenbank läuft. Was schützt der Worktree?
+**Frage:** Du lässt Claude in einem Worktree ein Migrationsskript ausprobieren, das sich mit dem Datenbankserver auf deinem Rechner verbindet. Was schützt der Worktree?
 
-- **Richtig:** Nur Dateien und Branch: Die Datenbank ist dieselbe wie im Hauptordner, das Skript kann sie also verändern.
+- **Richtig:** Nur Dateien und Branch: Der Server ist derselbe wie für den Hauptordner, das Skript kann die Datenbank also verändern.
 - Falsch: Alles, denn ein Worktree ist eine abgetrennte Testumgebung mit eigener Kopie der Datenbank und der Dienste.
 - Falsch: Die Datenbank, denn Claude Code startet Befehle in einem Worktree automatisch in einer Sandbox ohne Zugriff.
 - Falsch: Nichts, denn ein Worktree schützt nur lesende Zugriffe, schreibende Dateiänderungen landen im Hauptordner.

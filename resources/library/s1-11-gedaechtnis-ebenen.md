@@ -138,7 +138,7 @@ Administratoren legen eine zentral verwaltete CLAUDE.md an einem Systempfad ab, 
    ```
 5. Starte neu mit `claude --permission-mode acceptEdits` und frag: `Without using any tools, what format do door IDs follow in this project?` Erwartet: `SITE-FLOOR-DOOR`. Die Notiz kam aus dem Auto-Memory.
 6. Frag: `Without using any tools, what must every function name in api/ end with?` Erwartet: Claude kann es nicht wissen. Die Regel ist noch nicht geladen, weil Claude keine Datei in `api/` berührt hat.
-7. Gib ein: `Read api/handler.py and say only "done".` Frag dann die Frage aus Schritt 6 noch einmal. Erwartet: Jetzt nennt Claude `_v1`. Die Regel lud, als Claude die passende Datei las.
+7. Gib ein: `Use the Read tool to read api/handler.py and say only "done".` Frag dann die Frage aus Schritt 6 noch einmal. Erwartet: Jetzt nennt Claude `_v1`. Die Regel lud, als Claude die passende Datei mit dem Read-Werkzeug las. Ein Shell-Befehl wie `cat` hätte sie nicht geladen.
 
 **Aufräumen:** Lösch den Ordner `~/cc-workshop/gedaechtnis` und den Auto-Memory-Ordner aus Schritt 3 selbst.
 

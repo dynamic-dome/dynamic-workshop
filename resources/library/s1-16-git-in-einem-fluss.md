@@ -127,7 +127,7 @@ Die Datei `secrets.txt` gehört nicht zur Änderung und darf nie in einen Commit
 
 ### Extra: ein PR in einem eigenen Test-Repo (etwa 10 Minuten)
 
-Du brauchst die GitHub CLI und ein GitHub-Konto: Die Karte [Werkstatt erweitern](../reference/werkstatt-erweitern.md#github-cli) beschreibt die Installation. Leg auf GitHub ein leeres, privates Test-Repository an, verbinde es als `origin`, und gib im Übungsordner ein: `Push this branch and create a GitHub PR with a short description.` Erwartet: Claude pusht den Branch und meldet die Adresse des PR. Prüf das Diff auf GitHub, bevor du irgendetwas mergst.
+Du brauchst die GitHub CLI und ein GitHub-Konto: Die Karte [Werkstatt erweitern](../reference/werkstatt-erweitern.md#github-cli) beschreibt die Installation. Leg auf GitHub ein leeres, privates Test-Repository an, verbinde es als `origin` und push zuerst deinen Hauptbranch selbst (`git push -u origin main`, bei dir heißt er vielleicht `master`): Ein PR braucht einen Branch, gegen den er gestellt wird. Gib dann im Übungsordner ein: `Push this branch and create a GitHub PR with a short description.` Erwartet: Claude pusht den Branch und meldet die Adresse des PR. Prüf das Diff auf GitHub, bevor du irgendetwas mergst.
 
 ## Typische Fallen
 

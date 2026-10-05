@@ -84,7 +84,7 @@ flowchart TD
 Beide arbeiten am **Gesprächsbaum**, nicht am Git-Baum. Sie sind die Antwort auf „Ich will Ansatz A *und* Ansatz B ausprobieren, ohne den Kontext zu verlieren.“
 
 - `/branch` legt an dieser Stelle eine Abzweigung des Gesprächs an und wechselt hinein. Das Original bleibt erhalten; mit `/resume` kehrst du dorthin zurück.
-- `/fork` kopiert das Gespräch standardmäßig in eine neue Hintergrund-Sitzung ([S3.5](s3-05-hintergrund-und-teams.md)), und du arbeitest hier weiter. Claude Code weist die Kopie an, sich vor Code-Änderungen einen eigenen Worktree anzulegen ([S1.18](s1-18-worktrees.md)).
+- `/fork` kopiert das Gespräch standardmäßig in eine neue Hintergrund-Sitzung ([S3.5](s3-05-hintergrund-und-teams.md)), und du arbeitest hier weiter. Claude Code weist die Kopie an, sich vor Code-Änderungen einen eigenen Worktree anzulegen ([S1.18](s1-18-worktrees.md)), außer sie ist so eingestellt, dass sie an Ort und Stelle bearbeitet.
 - `--fork-session` ist die Variante auf Sitzungsebene: Beim Fortsetzen mit `--resume` oder `--continue` legt Claude Code eine neue Sitzungs-ID an, statt die alte weiterzuführen, etwa `claude --resume abc123 --fork-session`.
 
 ### Ausblick: /autofix-pr und --from-pr

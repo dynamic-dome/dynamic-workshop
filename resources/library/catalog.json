@@ -592,7 +592,7 @@
    "area": "context",
    "checkpoint": "Du kannst eine knappe CLAUDE.md schreiben, nach einem Neustart prüfen, dass Claude sie geladen hat, und erklären, warum sie eine Leitplanke und keine Sperre ist.",
    "demo": "../moderation/vorfuehren/s1-10-claude-md.md",
-   "example": "   Create a CLAUDE.md with exactly these three rules and nothing else:\n   - Every function docstring starts with \"PANEL:\".\n   - Never modify legacy_panel_parser.py.\n   - Use only the Python standard library.",
+   "example": "   Create a CLAUDE.md with exactly these three rules and nothing else:\n   - Every function has a docstring that starts with \"PANEL:\".\n   - Never modify legacy_panel_parser.py.\n   - Use only the Python standard library.",
    "example_lang": "text",
    "file": "s1-10-claude-md.md",
    "glance": "CLAUDE.md ist eine Markdown-Datei, die Claude Code zu Beginn jeder Session automatisch liest: die Hausordnung deines Projekts mit Konventionen, Verboten und allem, was vom Üblichen abweicht. Du schreibst die Regeln einmal und musst sie nicht wiederholen. Halte die Datei knapp.",
@@ -1084,8 +1084,8 @@
    "order": 1180,
    "outcome": "Ich kann mit claude --worktree einen Worktree anlegen, darin arbeiten und ihn beim Beenden entfernen oder behalten, sagen, wann sich ein Worktree lohnt und was er nicht isoliert, und worktree.baseRef als Einstellung für den Abzweigpunkt nennen.",
    "quiz": {
-    "correct": "Nur Dateien und Branch: Die Datenbank ist dieselbe wie im Hauptordner, das Skript kann sie also verändern.",
-    "q": "Du lässt Claude in einem Worktree ein Migrationsskript ausprobieren, das gegen deine lokale Entwicklungsdatenbank läuft. Was schützt der Worktree?",
+    "correct": "Nur Dateien und Branch: Der Server ist derselbe wie für den Hauptordner, das Skript kann die Datenbank also verändern.",
+    "q": "Du lässt Claude in einem Worktree ein Migrationsskript ausprobieren, das sich mit dem Datenbankserver auf deinem Rechner verbindet. Was schützt der Worktree?",
     "wrong": [
      "Alles, denn ein Worktree ist eine abgetrennte Testumgebung mit eigener Kopie der Datenbank und der Dienste.",
      "Die Datenbank, denn Claude Code startet Befehle in einem Worktree automatisch in einer Sandbox ohne Zugriff.",
@@ -1149,7 +1149,7 @@
    "outcome": "Ich kann mit /cost den Verbrauch meiner Sitzung ablesen, dieselbe Aufgabe mit drei Modellen vergleichen, ohne meinen Standard zu ändern, und einen claude -p-Lauf mit --max-budget-usd und --max-turns deckeln.",
    "quiz": {
     "correct": "Eine Schätzung aus den Tokens zum Listenpreis; für die Abrechnung im Abo ist sie nicht relevant, zum Vergleich von Läufen taugt sie.",
-    "q": "Du hast ein Max-Abo, und `/cost` zeigt am Ende einer Sitzung `Total cost` von 0,42 Dollar. Was bedeutet der Betrag?",
+    "q": "Du hast ein privates Max-Abo ohne Vorgaben einer Organisation, und `/cost` zeigt am Ende einer Sitzung `Total cost` von 0,42 Dollar. Was bedeutet der Betrag?",
     "wrong": [
      "Den Betrag, den dir Anthropic zusätzlich zur Abo-Gebühr in Rechnung stellt, weil `/cost` die Abrechnung anzeigt.",
      "Den verbindlichen Betrag, der immer genau mit der Usage-Seite der Claude Console übereinstimmt und dort auftaucht.",

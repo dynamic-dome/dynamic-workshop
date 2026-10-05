@@ -95,7 +95,7 @@ Claude liest die CLAUDE.md als Kontext, nicht als erzwungene Konfiguration. Eine
    <!-- cockpit:example -->
    ```text
    Create a CLAUDE.md with exactly these three rules and nothing else:
-   - Every function docstring starts with "PANEL:".
+   - Every function has a docstring that starts with "PANEL:".
    - Never modify legacy_panel_parser.py.
    - Use only the Python standard library.
    ```

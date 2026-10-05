@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P5: 716).
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7a: 729) und `python tools/build_library.py validate --complete`.
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -31,8 +31,8 @@
 | P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [x] `d03ea85` |
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] `664d5ca` |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [x] `359c9db` und Folge-Commit, siehe Abschluss P5 |
-| P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [ ] |
-| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | [ ] |
+| P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a erledigt, S2.20 und S3.15 folgen mit P7c und P7e |
+| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b bis P7f [ ] |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [ ] |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [ ] |
 
@@ -389,6 +389,34 @@ Codex-Gegenprüfung des Diffs (lesend) ohne offenen Befund; Maßstab-Datei gesch
 
 **Fertig, wenn:** alle fertigen Pfade enden mit S4.11; Python- und JS-Engine treffen alle Vektoren; Suite grün.
 
+### Abschluss P6 (2026-10-05)
+
+- **S4.11 „Abschluss: ein kleiner Build“** (`8a96a4a`): Kern, Typ `capstone`, 30 Minuten (der Plan nannte 25; die
+  Rechnung nach dem Maßstab ergibt 28), Voraussetzungen S1.5, S1.13, S1.16. Drei Missionen an `access_control.py`
+  (leere Namen, Groß- und Kleinschreibung, sortierte Liste), keine davon ist eine der eingebauten Schwachstellen.
+  Guardrail: Push-Sperre in `workshop-playground/.claude/settings.json`, die vor dem Auftrag ausprobiert wird.
+  Übergabe als Commit-Nachricht nach Vorlage; Selbstbewertung an fünf Kriterien mit je einem Beispiel.
+- **Einstufung:** Kern-Kapitel vom Typ `capstone` gehören für jedes Ziel zur Relevanzmenge und in den Mindestpfad;
+  Python-Engine und JS-Port im selben Commit. Tests zuerst (P01, P03, P05 und die neue Invariante „jeder Pfad endet
+  mit S4.11“ waren rot). Vertrag, Personas und Golden bewusst neu; P07 bekommt eine Warnung mehr, weil die Persona
+  S1.16 überspringt, das S4.11 voraussetzt. **Der Schnellstart-Pfad braucht jetzt 205 Minuten; die Warnschwelle liegt
+  bei 240.** Alle sieben erzeugten Pfade enden mit S4.11. 71 Kapitel.
+- **S4.8** ist für eine Person geschrieben: drei Vorschläge für eine Mission, Startzustand, ein bewertetes Beispiel
+  (der Build aus S4.11 an der Rubrik: 15 von 18), Auflösungen, ehrliche 55 Minuten. Das Gruppenformat steht in der
+  Moderationsdatei. Der Tutor gibt bei `capstone` keine Lösungsschritte vor und geht am Ende die Bewertung durch.
+- **Durchgespielt:** S4.11 mit Mission A aus einem Klon dieses Branches (Linux, tmux). Der erste Lauf zeigte zwei
+  Schwächen: Claude ließ `.claude/settings.json` aus dem Commit und verstand unter „Guardrail“ die fachliche Regel.
+  Auftrag und Vorlage nennen jetzt beides ausdrücklich; zweiter Lauf: drei Dateien im Commit, Absatz korrekt.
+  Nicht durchgespielt: die große Übung in S4.8 (unverändert bis auf Missionen und Startzustand; 40 Minuten mit
+  Agenten und Hooks) und die Missionen B und C.
+- **Dabei gefunden:** `pip3 install -r requirements.txt` scheitert auf aktuellen Linux-Systemen und mit
+  Homebrew-Python („externally-managed-environment“, PEP 668). Karte und Anleitung richten den Playground jetzt
+  über eine virtuelle Umgebung ein (ausgeführt: 18 passed).
+- **Verschoben:** Die Stationen nennen in ihren Tabellen Übungen, die P7 umbenennt. S1.20 ist mit P7a neu
+  geschrieben; S2.20 folgt mit P7c, S3.15 mit P7e.
+- **Codex-Gegenprüfung der Regel (lesend):** PASS; ein Hinweis auf eine Testlücke beim JS-Port, die es nicht gibt
+  (`tools/test_placement_js.py` prüft den Port gegen dieselben Golden-Daten).
+
 ---
 
 ## P7 — Ausrollen je Regal-Paket
@@ -398,12 +426,15 @@ Live-Formats im Lernweg, Demo-Inhalt als Übung, wo er trägt.
 
 | Teilpaket | Kapitel | Didaktik-Bericht | Fakten-Bericht |
 |---|---|---|---|
-| P7a | S1.10 bis S1.19 | D2 | F2 |
+| P7a | S1.10 bis S1.19, S1.20 | D2 | F2 |
 | P7b | S2.1 bis S2.10 | D3 | F3 |
-| P7c | S2.11 bis S2.19, X.1 | D4 | F4, F7 |
+| P7c | S2.11 bis S2.19, X.1, S2.20 | D4 | F4, F7 |
 | P7d | S3.1 bis S3.7, X.3 | D5 | F4, F7 |
-| P7e | S3.8 bis S3.14, S4.1, S4.2 | D6 | F1, F5 |
-| P7f | S4.3 bis S4.10, X.4 | D7 | F6, F7 |
+| P7e | S3.8 bis S3.14, S4.1, S4.2, S3.15 | D6 | F1, F5 |
+| P7f | S4.3 bis S4.10 (ohne S4.8), X.4 | D7 | F6, F7 |
+
+Die Stationen S1.20, S2.20 und S3.15 schreibt, wer das Teilpaket abnimmt, nachdem die Übungen des Teilpakets
+feststehen: eine verbindende Aufgabe als Hauptteil, darunter die Tabelle der Übungen (Muster: S1.20).
 
 Ablauf je Teilpaket: Auftrag (Skill `subagent-briefing`) mit Maßstab-Datei, Kapitel-Liste, den beiden Berichten
 und der zugehörigen Moderationsdatei als Quelle für Übungen → ein Sonnet-Schreiber (`model: sonnet`, eigener
@@ -416,6 +447,69 @@ dem anderen. Die Hauptübung je Kapitel wird durchgespielt (siehe P5), nicht vom
 
 **Fertig, wenn:** die Auflösungs- und die Übungsregel im Validator für alle Lektionen gelten (die Pflichtliste aus
 P3 entfällt); Suite grün.
+
+### Auftrag für Schreiber (Vorlage, bewährt in P7a)
+
+Je Teilpaket ein eigener Worktree außerhalb des Repos (`git worktree add ~/AI/worktrees/workshop-p7x -b p7x-schreiber
+selbstlern-zuerst`), ein Agent mit `model: sonnet`. Der Auftrag (Englisch, nach dem Skill `subagent-briefing`) nennt:
+
+1. **Ziel und Arbeitsort:** nur der Worktree; Dateien mit Write/Edit schreiben, keine Heredocs.
+2. **Dateien:** die Kapitel des Teilpakets und `tools/fixtures/standard-chapters.txt` (IDs anhängen); sonst nichts.
+3. **Zuerst lesen:** die Maßstab-Datei ganz, zwei Musterkapitel (S1.5, S1.9), je Kapitel seine Moderationsdatei und
+   die Befunde der beiden Berichte; Doku-Stand unter `~/AI/analysis-artifacts/workshop-review-2026-10-05/docs-cache/`.
+4. **Kontext:** feste Abschnitte, Meta-Block unberührt, genau ein `cockpit:example`, Form von Check und Übung,
+   Wegwerf-Ordner `~/cc-workshop/<thema>`, Voraussetzungen nur Claude Code, Git, Python (sonst Karte „Werkstatt
+   erweitern“), Start mit `--permission-mode default` oder `acceptEdits`, beide Shells, Bilder, Wortlaute der
+   Oberfläche nur aus Doku oder fertigen Kapiteln, keine Modellgenerationen. Dazu die Besonderheiten des Teilpakets.
+5. **Frontmatter:** `outcome` und `minutes` dürfen sich ändern, alles andere nicht.
+6. **Fertig, wenn:** `validate --chapter` je Kapitel nur noch `[meta-contract] minutes` meldet, `lint_currency` OK,
+   `migration_ledger.py --missing` gemeldet (nicht `migration-dropped.txt` ändern), je Kapitel ein Commit auf dem
+   Branch, kein Push.
+7. **Außerhalb des Auftrags:** `build`, generierte Dateien, Moderationsdateien, Hook-Vorlagen, Tests, `docs/`;
+   Kapitel teilen oder umstellen nur als Vorschlag.
+8. **Abbruch:** Validator schon vorher rot; Datei außerhalb des Auftrags nötig; derselbe Schritt zweimal gescheitert;
+   eine Tatsache, an der eine Übung hängt, ist nicht zu belegen. Nichts erfinden.
+9. **Rückgabe:** STATUS, COMMITS, je Kapitel Übung in einem Satz, Minuten alt und neu, Outcome, neue Aussagen mit
+   Doku-Zitat, entfernte Codeblöcke mit Digest und Grund, offene Punkte; VERIFICATION im Wortlaut; SOURCES READ.
+
+Danach übernimmt, wer abnimmt: alle Kapitel lesen, jede Hauptübung durchspielen (tmux auf dem Linux-Rechner,
+`--setting-sources project,local`), Korrekturen, Vertrag (Minuten, Personas, Golden), Ledger-Begründungen, Station,
+`validate --complete`, Suite, lesende Codex-Gegenprüfung, Commit.
+
+### Abschluss P7a (2026-10-05)
+
+- **Schreiber** (Sonnet, Worktree `~/AI/worktrees/workshop-p7a`, Branch `p7a-schreiber`, zehn Commits, rund 390.000
+  Tokens, 15 Minuten): alle zehn Kapitel mit neuer Übung, Auflösungen, Quiz mit echten Fehlvorstellungen; jede neue
+  Aussage mit Doku-Zitat gemeldet. Übernommen als Merge `bacbf60`.
+- **Gelesen und durchgespielt:** alle zehn Hauptübungen und die neue Station, je einmal (Claude Code 2.1.289, Linux,
+  tmux). Neun liefen wie geschrieben. Korrigiert: S1.10 (`/context all` nennt die Dateien, Deny-Regel als nächste
+  harte Sperre), S1.14 (dritte Antwort heißt in der Oberfläche „Tell Claude what to change“; Korrekturschritt verlangt
+  jetzt `to_json` in `report.py`), S1.17 (Diff-Panel ist in breiten Terminals schon offen; `/review` läuft als
+  Hintergrund-Agent mit einer Rückfrage), S1.18 („Keep worktree“, „Remove worktree“), S1.19 (`/cost` öffnet die
+  Ansicht „Usage“, `Esc` schließt sie).
+- **S1.20** ist der Abschluss von Session 1: CLAUDE.md, Deny-Regel, eigener präziser Auftrag, gezielter Commit auf
+  einem Branch; Tabelle der zehn Übungen der Session. Neuer Titel „Praxis-Station Session 1: alles in einem Ablauf“.
+  Durchgespielt (Docstring kam aus der CLAUDE.md, Löschen abgelehnt, zwei Dateien im Commit).
+- **Vertrag:** Minuten S1.11 20, S1.12 20, S1.15 15, S1.16 15, S1.17 20, S1.18 20, S1.20 20; Titel S1.20; P02 von
+  Hand (205 Minuten); Golden. 36 alte Codeblöcke mit Begründung im Ledger.
+- **Wächter:** Ein toter Anker in S4.5 (auf eine umbenannte Überschrift in S1.17) fiel erst bei
+  `validate --complete` auf; der Test der echten Bibliothek läuft jetzt vollständig.
+- **Codex-Gegenprüfung der Kapitel (lesend, zwei Läufe):** beide FAIL, neun Befunde, alle an der Quelle geprüft
+  und acht eingearbeitet: Regel in S1.10 verlangt jetzt einen Docstring; S1.11 nennt das Read-Werkzeug (Pfadregeln
+  laden nicht bei `cat`); S1.15 verspricht den `Insight`-Block nicht mehr für jede Antwort; S1.14 prüft nur
+  `git diff`; das Extra in S1.16 pusht erst den Hauptbranch; `/fork` mit Ausnahme; die Quizfragen in S1.18 und
+  S1.19 nennen den Fall genauer; S1.20 sagt, was die Regel nicht sperrt. Der neunte betraf den JS-Port (siehe P6).
+- **Nicht durchgespielt:** die Extras (PR in S1.16 braucht ein GitHub-Konto; `--system-prompt-file` in S1.15;
+  Worktree von Hand in S1.18; Opus-Lauf in S1.19), alles unter Windows, und die Übungen nach den letzten
+  Wortlaut-Korrekturen (geändert wurden Erwartungstexte und zwei Prompts: „Use the Read tool …“, die Regel mit
+  „has a docstring“).
+- **Offen:** Die Moderationsdateien zu S1.10, S1.13, S1.16, S1.18 und S1.19 beschreiben noch die alten Demos
+  (`demo-1.2`, `validators.py`, „Testbank“); sie verweisen damit auf Übungsstände, die es im Kapitel nicht mehr
+  gibt (→ P8, Moderationsschicht nachziehen). Der Schreiber schlägt vor, S1.11 zu teilen (Auto-Memory gegen übrige
+  Ebenen) und `/voice` aus S1.15 in einen eigenen Hinweis zu legen (→ P8, mit R24).
+- **Vorbereitung P7b:** `safety-check.sh` und `safety-check.ps1` blocken jetzt jede Eingabe, die kein JSON-Objekt
+  ist (Tests zuerst: die Bash-Fassung ließ `null` durch, die PowerShell-Fassung auch leere Eingabe, Listen und
+  bloße Werte). Die Snippets in S2.8 sind mitgezogen.
 
 ---
 

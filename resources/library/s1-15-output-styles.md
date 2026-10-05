@@ -85,7 +85,7 @@ Für Personas, zwischen denen du öfter wechselst oder die das Team teilen soll,
 
 1. Starte `claude --permission-mode default` und gib ein: `Explain what a Python list comprehension is.` Merk dir Länge und Aufbau der Antwort.
 2. Gib `/output-style concise` ein und dieselbe Frage noch einmal. Erwartet: Die Antwort beginnt mit dem Ergebnis und ist kürzer, ohne Einleitung und Schlusszusammenfassung.
-3. Gib `/output-style explanatory` ein und dieselbe Frage noch einmal. Erwartet: Die Antwort enthält einen Block mit der Überschrift `Insight`.
+3. Gib `/output-style explanatory` ein und dieselbe Frage noch einmal. Erwartet: Die Antwort begründet zusätzlich, meist in einem Block mit der Überschrift `Insight`. Fehlt er bei dieser reinen Erklärfrage, bitte um ein Beispiel: `Write a one-line example and explain your choice.`
 4. Gib `/output-style` ohne Argument ein. Erwartet: eine Liste der Styles, der aktive ist markiert. Beende die Sitzung mit `/exit`.
 5. Sieh nach, wo die Wahl gelandet ist: `cat .claude/settings.local.json`, in PowerShell `Get-Content .claude\settings.local.json`. Erwartet: ein Eintrag `outputStyle` mit dem zuletzt gewählten Style.
 6. Starte neu mit dem Flag und frag noch einmal:
@@ -103,7 +103,7 @@ Für Personas, zwischen denen du öfter wechselst oder die das Team teilen soll,
 **Geschafft, wenn:**
 
 - [ ] die Antwort mit `concise` kürzer war als ohne Style
-- [ ] die Antwort mit `explanatory` einen `Insight`-Block hatte
+- [ ] du mit `explanatory` einen `Insight`-Block gesehen hast
 - [ ] `.claude/settings.local.json` den Eintrag `outputStyle` zeigte
 - [ ] das Flag nur in dem einen Start wirkte und der Style danach weiter galt
 

@@ -116,7 +116,7 @@ Du bekommst einen Prüfpunkt, bevor sich etwas ändert, auch ohne Plan-Modus. De
    ```
 
    Erwartet: Claude liest die Dateien und legt einen Plan vor. Er nennt die Dateien, die es ändern will, und fragt, wie es weitergehen soll.
-3. Antworte noch nicht. Öffne ein zweites Terminal im Ordner und führ `git diff` und `git status` aus. Erwartet: keine Änderung an deinen Dateien. Die Sperre hat gehalten.
+3. Antworte noch nicht. Öffne ein zweites Terminal im Ordner und führ `git diff` aus. Erwartet: keine Ausgabe, also keine Änderung an deinen Dateien seit Schritt 1. Die Sperre hat gehalten.
 4. Wähl im ersten Terminal die Antwort zum Nachschärfen (**Tell Claude what to change**, in der Doku „No, keep planning“) und schreib: `Put the JSON formatting in a new function to_json(counts) in report.py and call it from main.py. Do not change log_reader.py.` Erwartet: ein neuer Plan, der jetzt auch `report.py` nennt und `log_reader.py` ausdrücklich unangetastet lässt.
 5. Gib jetzt frei, mit der Option **Yes, manually approve edits**. Bestätige die Änderungen einzeln. Erwartet: Erst jetzt entstehen Änderungen. Beende die Sitzung.
 6. Führ `git diff --stat` und `python main.py --json` aus. Erwartet: Das Diff zeigt `main.py` und `report.py`, nicht `log_reader.py`; in `report.py` steht die Funktion `to_json`, und der Aufruf druckt JSON.
