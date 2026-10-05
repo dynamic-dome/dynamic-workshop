@@ -362,3 +362,55 @@ def test_library_marks_done_chapters_with_or_without_a_placement(browser, site):
     assert page.locator(".door.is-done[data-chapter='S2.7']").count() == 1
     assert "erledigt" in page.locator(".door[data-chapter='S2.7']").inner_text()
     page.close()
+
+
+def test_start_offers_two_ways_for_learners_and_keeps_the_live_path_apart(browser, site):
+    page, errors = open_page(browser, site + "?screen=start")
+    ways = page.locator(".start-grid .way")
+    assert ways.count() == 2
+    assert ways.nth(0).get_attribute("data-screen") == "einstufung"
+    assert ways.nth(1).get_attribute("data-screen") == "bibliothek"
+    live = page.locator("section.for-moderators [data-action=live-path]")
+    assert live.count() == 1 and page.locator(".start-grid [data-action=live-path]").count() == 0
+    assert "Für Moderierende" in page.locator("section.for-moderators").inner_text()
+    live.click()
+    page.wait_for_selector("text=Mein Pfad")
+    assert page.evaluate("JSON.parse(localStorage.getItem('ccWorkshopProfileV1')).answers.goals") == ["moderieren"]
+    assert errors == []
+    page.close()
+
+
+def test_start_with_a_placement_leads_on_to_the_next_open_chapter(browser, site):
+    """B10: after a saved placement the main button was still 'Einstufung starten'."""
+    done = "localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {'S2.7': true}, doneAt: {'S2.7': '2026-10-01T08:00:00.000Z'}}));"
+    page, errors = open_page(browser, site + "?screen=start", init_script=stored_profile() + done)
+    main_button = page.locator(".start-grid .btn.primary")
+    assert main_button.count() == 1
+    assert main_button.inner_text().startswith("Weiter mit S2.8")  # S2.7 is done, S2.8 is next on the path
+    assert page.locator(".start-grid .way").nth(0).get_attribute("data-chapter") == "S2.8"
+    assert page.locator(".start-grid [data-screen=einstufung]").count() == 0
+    assert page.locator("[data-screen=einstufung]", has_text="Einstufung ändern").count() == 1
+    main_button.click()
+    assert page.locator("main h1").inner_text().startswith("S2.8")
+    assert errors == []
+    page.close()
+
+
+def test_start_with_a_finished_path_says_so(browser, site):
+    all_done = "localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {'S2.7': true, 'S2.8': true, 'X.1': true, 'S2.20': true}, doneAt: {}}));"
+    page, errors = open_page(browser, site + "?screen=start", init_script=stored_profile() + all_done)
+    assert "Dein Pfad ist geschafft" in page.locator(".start-grid .way").nth(0).inner_text()
+    assert errors == []
+    page.close()
+
+
+def test_start_does_not_say_the_same_chapter_twice(browser, site):
+    same = "localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {}, doneAt: {}, lastId: 'S2.7'}));"
+    page, _ = open_page(browser, site + "?screen=start", init_script=stored_profile() + same)
+    assert page.locator(".start-grid .btn.primary").inner_text().startswith("Weiter mit S2.7")
+    assert page.locator(".resume").count() == 0
+    page.close()
+    other = "localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {}, doneAt: {}, lastId: 'X.1'}));"
+    page, _ = open_page(browser, site + "?screen=start", init_script=stored_profile() + other)
+    assert "X.1" in page.locator(".resume").inner_text()
+    page.close()

@@ -112,8 +112,11 @@
     .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
     /* ---------- start ---------- */
-    .start-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
-    .way { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+    .start-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+    .way { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 10px; text-align: left; text-decoration: none; }
+    .way .btn { margin-top: auto; }
+    .for-moderators { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .for-moderators h2 { font-size: 16px; margin: 0 0 6px; color: var(--ink-2); }
     .way:hover { border-color: var(--accent); }
     .way strong { font-size: 18px; }
     .way span { color: var(--ink-2); font-size: 15px; }
@@ -609,21 +612,36 @@
       const total = ORDERED.reduce((sum, c) => sum + c.minutes, 0);
       const doneCount = ORDERED.filter(c => progress.done[c.id]).length;
       const last = progress.lastId && CH[progress.lastId] ? CH[progress.lastId] : null;
+      // With a saved placement the first way leads on along the path (B10); the placement becomes a side button.
+      const result = currentResult();
+      const order = result ? pathOrder(result) : [];
+      const next = CH[order.find(id => !progress.done[id])] || null;
+      const onPath = order.filter(id => progress.done[id]).length;
+      const firstWay = !result
+        ? `<button type="button" class="way" data-screen="einstufung"><strong>Einstufung in fünf Minuten</strong><span>Ziel, Zeit und was du schon kannst. Keine Noten, jederzeit änderbar.</span><span class="btn primary">Einstufung starten</span></button>`
+        : next
+          ? `<a class="way" href="?run=${esc(next.id)}" data-chapter="${esc(next.id)}"><strong>Weiter auf deinem Pfad</strong><span>${onPath} von ${order.length} Kapiteln erledigt. Als Nächstes: ${esc(next.title)}.</span><span class="btn primary">Weiter mit ${esc(next.id)}</span></a>`
+          : `<button type="button" class="way" data-screen="pfad"><strong>Dein Pfad ist geschafft</strong><span>Alle ${order.length} empfohlenen Kapitel sind erledigt. In der Bibliothek liegt mehr, und „Wiederholen“ hält es wach.</span><span class="btn primary">Meinen Pfad ansehen</span></button>`;
       return `
         <h1>Lerne Claude Code nach deinem Stand.</h1>
         <p class="lead">${ORDERED.length} Kapitel in ${DATA.shelves.length} Regalen — von der ersten Datei bis zu abgesicherten Agenten-Pipelines. Du musst nicht alles lesen: Sag uns kurz, wo du stehst und wohin du willst, dann bekommst du deinen Pfad.</p>
-        ${last ? `<div class="resume"><strong>Weiter, wo du warst:</strong> ${chapterLink(last)}</div>` : ""}
+        ${last && !(next && next.id === last.id) ? `<div class="resume"><strong>Weiter, wo du warst:</strong> ${chapterLink(last)}</div>` : ""}
         <div class="start-grid">
-          <button type="button" class="way" data-screen="einstufung"><strong>Einstufung in fünf Minuten</strong><span>Ziel, Zeit und was du schon kannst. Keine Noten, jederzeit änderbar.</span><span class="btn primary">Einstufung starten</span></button>
-          <button type="button" class="way" data-action="live-path"><strong>Den Live-Workshop-Pfad nehmen</strong><span>Alle Kapitel in der Reihenfolge der vier moderierten Sessions.</span><span class="btn">Pfad übernehmen</span></button>
-          <button type="button" class="way" data-screen="bibliothek"><strong>In der Bibliothek stöbern</strong><span>Alle Regale als Gebäudeplan. Jedes Kapitel beginnt mit einem Schnellcheck.</span><span class="btn">Zur Bibliothek</span></button>
+          ${firstWay}
+          <button type="button" class="way" data-screen="bibliothek"><strong>In der Bibliothek stöbern</strong><span>Alle Regale als Gebäudeplan, jedes Kapitel mit Übung und Auflösung. Du brauchst dafür keine Einstufung.</span><span class="btn">Zur Bibliothek</span></button>
         </div>
+        ${result ? `<div class="row gap-top"><button type="button" class="btn" data-screen="pfad">Mein Pfad</button><button type="button" class="btn" data-screen="einstufung">Einstufung ändern</button></div>` : ""}
         <div class="facts">
           <div><b>${ORDERED.length}</b>Kapitel</div>
           <div><b>${Math.round(total / 60)} h</b>Gesamtumfang</div>
           <div><b>${doneCount}</b>erledigt</div>
           <div><b>${profile ? "ja" : "nein"}</b>Einstufung gespeichert</div>
         </div>
+        <section class="for-moderators" aria-labelledby="h-moderators">
+          <h2 id="h-moderators">Für Moderierende</h2>
+          <p class="muted measure">Du hältst den Workshop vor einer Gruppe? Der Live-Workshop-Pfad enthält alle Kapitel in der Reihenfolge der vier moderierten Sessions.</p>
+          <button type="button" class="btn" data-action="live-path">Live-Workshop-Pfad übernehmen</button>
+        </section>
 `;
     }
 
@@ -715,8 +733,8 @@
     function renderPath() {
       const result = currentResult();
       if (!result) {
-        return `<h1>Mein Pfad</h1><p class="lead">Noch keine Einstufung. Mach sie in fünf Minuten oder nimm den Pfad des Live-Workshops.</p>
-          <div class="row"><button type="button" class="btn primary" data-screen="einstufung">Einstufung starten</button><button type="button" class="btn" data-action="live-path">Live-Workshop-Pfad nehmen</button></div>`;
+        return `<h1>Mein Pfad</h1><p class="lead">Noch keine Einstufung. Mach sie in fünf Minuten, dann steht hier dein Pfad. Ohne sie findest du jedes Kapitel in der Bibliothek.</p>
+          <div class="row"><button type="button" class="btn primary" data-screen="einstufung">Einstufung starten</button><button type="button" class="btn" data-screen="bibliothek">Zur Bibliothek</button></div>`;
       }
       const total = result.totals.work_min + result.totals.skim_min;
       const doneCount = result.chapters.filter(c => (c.status === "work" || c.status === "skim") && progress.done[c.id]).length;
@@ -904,7 +922,9 @@
         document.documentElement.dataset.theme = next;
         writeJson(THEME_KEY, { theme: next });
       } else if (action === "live-path") {
-        profile = { v: 1, at: new Date().toISOString(), why: profile ? profile.why || "" : "", answers: { version: 1, goals: ["moderieren"], time: RULES.default_time, areas: {}, scenarios: {}, overrides: {} } };
+        // The live path replaces a saved placement: ask once before overwriting it.
+        if (profile && target.dataset.confirm !== "1") { target.dataset.confirm = "1"; target.textContent = "Ersetzt deine Einstufung. Nochmal klicken"; return; }
+        profile ={ v: 1, at: new Date().toISOString(), why: profile ? profile.why || "" : "", answers: { version: 1, goals: ["moderieren"], time: RULES.default_time, areas: {}, scenarios: {}, overrides: {} } };
         saveProfile(); go("pfad");
       } else if (action === "step-next") {
         if (collectStep()) { state.step = Math.min(state.step + 1, STEP_TITLES.length - 1); render(); $("#main").focus(); }
