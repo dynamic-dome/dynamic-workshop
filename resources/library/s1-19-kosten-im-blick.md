@@ -8,7 +8,7 @@ minutes: 15
 requires: [S1.1]
 safety_floor: false
 transferable: false
-outcome: "Ich kann mit /cost (einem anderen Namen für /usage) den Verbrauch meiner Sitzung ablesen, einen claude -p-Lauf mit --max-budget-usd und --max-turns deckeln und vor einem langen Lauf die drei Sparhebel Cache, Effort und Modell pro Phase prüfen."
+outcome: "Ich kann mit /cost den Verbrauch meiner Sitzung ablesen, dieselbe Aufgabe mit drei Modellen vergleichen, ohne meinen Standard zu ändern, und einen claude -p-Lauf mit --max-budget-usd und --max-turns deckeln."
 sources:
   - https://code.claude.com/docs/en/costs
   - https://code.claude.com/docs/en/cli-reference
@@ -21,27 +21,27 @@ aliases: ["1.5"]
 <!-- meta:start -->
 > **Regal:** [Modelle & Kosten](README.md#cost) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** [S1.1 Erster Kontakt: sofort eine Datei bauen](s1-01-erster-kontakt.md)
 >
-> ← [S1.18 Worktrees als Testlabor](s1-18-worktrees.md) · [Bibliothek](README.md) · [S1.20 Praxis-Station Session 1: eine Übung wählen](s1-20-praxis-station-1.md) →
+> ← [S1.18 Worktrees als Testlabor](s1-18-worktrees.md) · [Bibliothek](README.md) · [S1.20 Praxis-Station Session 1: alles in einem Ablauf](s1-20-praxis-station-1.md) →
 <!-- meta:end -->
 
 ## Schnellcheck
 
 - Hast du schon einmal nach einer Sitzung `/cost` geöffnet und daraus eine Modell- oder Effort-Entscheidung abgeleitet?
-- Kannst du ohne Nachschlagen sagen, wann du `--max-budget-usd` setzt und in welchem Modus das Flag überhaupt wirkt?
+- Kannst du ohne Nachschlagen sagen, in welchem Modus `--max-budget-usd` überhaupt wirkt?
 
 ## Auf einen Blick
 
-Für den Anfang reichen drei Dinge: `/cost` (ein anderer Name für `/usage`) zeigt, was die laufende Sitzung bisher gekostet hat; das Standardmodell, das Opus-Tier, ist ein guter Start; und alles, was unbeaufsichtigt als `claude -p` läuft, deckelst du mit `--max-budget-usd` und `--max-turns`. Beide Grenzen wirken nur im Print-Modus (`-p`), nicht in einer interaktiven Sitzung.
+Für den Anfang reichen drei Dinge: `/cost` (ein anderer Name für `/usage`) zeigt, was die laufende Sitzung bisher gekostet hat; Modell und Effort sind die großen Hebel, und du vergleichst sie am besten am selben Auftrag; und alles, was unbeaufsichtigt als `claude -p` läuft, deckelst du mit `--max-budget-usd` und `--max-turns`. Beide Grenzen wirken nur im Print-Modus (`-p`), nicht in einer interaktiven Sitzung.
 
-Vor jedem langen Lauf fragst du dich: Geht das mit Cache, mit weniger Effort oder mit einem günstigeren Modell für diese Phase? Preise, Pipeline-Rechnung und Caching im Detail kommen später in [S4.4](s4-04-ci-zugang-und-kosten.md).
+Preise und Caching im Detail kommen später in [S4.4](s4-04-ci-zugang-und-kosten.md); aktuelle Modelle und Preise führt der [Kanon](../_canonical.md).
 
 ## Bild im Kopf
 
-Ein Wachdienst rechnet mit Stundenzetteln ab. Der Stundenzettel der laufenden Schicht ist `/cost`: Er zeigt, was diese Schicht bisher gekostet hat. Die Budgetgrenze ist das Tank- und Zeitbudget der Nachtstreife, die allein unterwegs ist: Ist es aufgebraucht, kehrt die Streife zurück, statt weiterzufahren. Dieses Budget gilt nur für Streifen ohne Aufsicht, also für `claude -p`-Läufe, nicht für einen Einsatz, bei dem du danebenstehst.
+Ein Wachdienst rechnet mit Stundenzetteln ab. Der Stundenzettel der laufenden Schicht ist `/cost`. Die Budgetgrenze ist das Tank- und Zeitbudget der Nachtstreife, die allein unterwegs ist: Ist es aufgebraucht, kehrt sie zurück. Das gilt nur für Streifen ohne Aufsicht, also für `claude -p`-Läufe, nicht für einen Einsatz, bei dem du danebenstehst.
 
 ```mermaid
 flowchart TB
-  A["/cost bzw. /usage<br/>Sitzung: Kosten, Tokens, Cache"] --> B{"Zu teuer?"}
+  A["/cost bzw. /usage<br/>Sitzung: Kosten, Dauer, Tokens je Modell"] --> B{"Zu teuer?"}
   B -- "nein" --> W["weiterarbeiten"]
   B -- "ja" --> C["Hebel: Cache stabil halten,<br/>Effort an die Aufgabe,<br/>Modell pro Phase"]
   L["Unbeaufsichtigter Lauf:<br/>claude -p"] --> G["--max-budget-usd<br/>--max-turns"]
@@ -50,150 +50,104 @@ flowchart TB
 
 ## Im Detail
 
-### Kosten sind eine Variable
+### Verbrauch ablesen: /cost und /usage
 
-Claude Code kostet Geld, pro Sitzung, pro Tag, pro Team. Wer nicht weiß, was er ausgibt, weiß nicht, wo er optimieren kann. Dieses Kapitel macht Kosten zu einer bewussten Größe statt zu einer Überraschung am Monatsende. Modelle und Effort-Stufen kennst du aus [S1.7](s1-07-modellwahl-und-effort.md); hier geht es darum, was sie in der Praxis kosten und wie du das im Griff behältst.
+Für den Verbrauch hat Claude Code einen Befehl: `/usage`. `/cost` und `/stats` sind andere Namen dafür. Oben zeigt er den Session-Block: Gesamtkosten (`Total cost`), Dauer, Code-Änderungen und die Tokens je Modell. Im Abo (Pro, Max, Team, Enterprise) zeigt er darunter, was deinen Verbrauch getrieben hat, aufgeschlüsselt nach Skills, Subagents, Plugins und MCP-Servern. `/insights` ist dagegen kein Kostenbericht, sondern ein HTML-Bericht über deine Arbeitsweise.
 
-### Verbrauch ablesen: /cost, /usage und /insights
+Den Dollarbetrag rechnet Claude Code lokal aus den Tokens zum Listenpreis aus. Er ist eine Schätzung; verbindlich ist die Usage-Seite der [Claude Console](https://platform.claude.com/usage). Mit einem Pro- oder Max-Abo ist der Betrag für die Abrechnung nicht relevant; zum Vergleich von Modellen und Stufen taugt er trotzdem. `/clear` setzt die Summen zurück, die nächste Sitzung beginnt wieder bei null.
 
-Für den Verbrauch hat Claude Code einen Befehl: `/usage`. `/cost` und `/stats` sind andere Namen dafür. Jede Ansicht beantwortet eine andere Frage:
+### Drei Sparhebel
 
-| Befehl | Frage | Was du siehst |
-|---|---|---|
-| `/cost` bzw. `/usage` | Was hat diese Sitzung bisher gekostet? | Der Session-Block: Gesamtkosten, Dauer, Code-Änderungen und die Kosten je Modell. |
-| `/usage` im Abo (Pro, Max, Team, Enterprise) | Was hat meinen Verbrauch getrieben? | Nutzungsbalken, Aktivität und eine Aufschlüsselung auf Skills, Subagents, Plugins und MCP-Server; `d` und `w` wechseln zwischen den letzten 24 Stunden und 7 Tagen. |
-| `/insights` | Wie arbeite ich, und wo hakt es? | Ein HTML-Bericht über deine letzten Sitzungen: woran du arbeitest, wo es Reibung gibt, was du ausprobieren könntest. Kein Kostenbericht; der Bericht verbraucht selbst Tokens. |
+1. **Stabilen Kontext halten:** Halte `CLAUDE.md` und geladene Skills während eines Arbeitsblocks stabil, damit der Cache greift.
+2. **Effort an die Denklast anpassen:** niedrige oder mittlere Stufen für mechanische Änderungen, hohe nur für Architektur oder heikle Fehlersuche ([S1.7](s1-07-modellwahl-und-effort.md)).
+3. **Ein Modell pro Phase:** Das stärkste Modell nur, wo Urteil zählt; Routinecode schreibt `sonnet`, günstige erste Lesedurchgänge macht `haiku` ([S4.1](s4-01-modell-pro-phase.md)).
 
-Den Dollarbetrag rechnet Claude Code lokal aus den Tokens zum Listenpreis aus. Er ist eine Schätzung; verbindlich ist die Usage-Seite der [Claude Console](https://platform.claude.com/usage). Mit einem Pro- oder Max-Abo ist der Betrag für die Abrechnung nicht relevant, zum Vergleich von Modellen und Stufen taugt er trotzdem. `/clear` setzt die Summen zurück, die nächste Sitzung beginnt wieder bei null.
-
-Eine nützliche Gewohnheit: Wirf einen Blick auf `/cost`, wann immer du etwas Nicht-Triviales getan hast, etwa einen Refactor über mehrere Dateien, eine lange Planungsrunde oder einen Recherche-Umweg. Das dauert zwei Sekunden und erspart dir am Ende der Woche die Frage „Wie viel habe ich eigentlich ausgegeben?“
-
-### Der 5-Minuten-Kern: drei Sparhebel
-
-Diese drei Gewohnheiten brauchst du ab dem ersten Tag, auch ohne die Vertiefung in [S4.4](s4-04-ci-zugang-und-kosten.md):
-
-1. **Stabilen Kontext cachen:** Halte `CLAUDE.md` und geladene Skills während eines Arbeitsblocks stabil. Wiederholte Anfragen innerhalb des Cache-Fensters sind viel günstiger als Kaltstarts.
-2. **Effort an die Denklast anpassen:** `/effort low` oder `medium` für mechanische Änderungen; `xhigh` oder `max` nur für Architektur, Root-Cause-Analyse oder heikle Sicherheitsfragen ([S1.7](s1-07-modellwahl-und-effort.md)).
-3. **Ein Modell pro Phase:** Plane und prüfe mit dem stärksten Modell nur, wo Urteil zählt; Routinecode schreibt Sonnet, günstige erste Lesedurchgänge macht Haiku ([S4.1](s4-01-modell-pro-phase.md)).
-
-Kurzform: Frag dich vor jedem langen Lauf, ob er den Cache nutzen, mit weniger Effort laufen oder ein günstigeres Modell für diese Phase nehmen kann. Wenn ja, stell das um, bevor die Tokens fließen.
+Modell und Effort stellst du für eine einzelne Sitzung mit Start-Flags ein: `claude --model sonnet --effort medium`. `/model <alias>` dagegen speichert deine Wahl als neuen Standard ([S1.7](s1-07-modellwahl-und-effort.md)).
 
 ### Budgetgrenzen für unbeaufsichtigte Läufe
 
-Lässt du Claude lange ohne Aufsicht laufen, können Kosten still davonlaufen. Für Läufe im Print-Modus, also `claude -p` in Skripten, CI und geplanten Jobs, gibt es zwei harte Grenzen:
+`claude -p "<auftrag>"` führt einen einzelnen Auftrag ohne interaktive Sitzung aus, druckt die Antwort und beendet sich (mehr in [S4.3](s4-03-headless.md)). Das ist der Print-Modus. Lässt du Claude so ohne Aufsicht laufen, in Skripten, CI und geplanten Jobs, können Kosten still davonlaufen. Dafür gibt es zwei harte Grenzen:
 
 - `--max-budget-usd 5.00`: harte Obergrenze in Dollar für diesen `-p`-Lauf. Ausgaben von Subagents zählen mit.
 - `--max-turns <n>`: harte Grenze für die Zahl der Agenten-Runden; ist sie erreicht, endet der Lauf mit einem Fehler. Die CLI-Referenz dokumentiert das Flag, `claude --help` listet es nicht.
 
-Beide wirken nur im Print-Modus (`-p`): Das Budget begrenzt davonlaufende Kosten, das Rundenlimit davonlaufende Schleifen. In einer interaktiven Sitzung, auch mit `/loop` oder `/goal`, greifen sie nicht. Für CI und jeden unbeaufsichtigten Ablauf sind sie Pflicht. `claude -p` lernst du in [S4.3](s4-03-headless.md) genauer kennen, die CI-Praxis in [S4.4](s4-04-ci-zugang-und-kosten.md) und das Absichern autonomer Loops in [S3.13](s3-13-autonome-loops-absichern.md).
-
-Beispiel:
+Das Budget begrenzt davonlaufende Kosten, das Rundenlimit davonlaufende Schleifen. In einer interaktiven Sitzung greifen beide nicht. Beispiel:
 
 ```bash
-claude --max-budget-usd 2.00 -p "/loop check deploy status"
+claude -p "run the test suite and summarize failures" --max-budget-usd 2.00 --max-turns 10
 ```
 
-Ist das Limit erreicht, stoppt Claude Code den Lauf, statt weiterzuarbeiten. Prüf in CI den Exit-Status: Ein fehlgeschlagener `-p`-Lauf endet mit einem Code ungleich 0. Das Beispiel zeigt die Form des Aufrufs; `/loop` selbst ist für eine offene Sitzung gedacht. Wie du wiederkehrende Läufe ohne offene Sitzung planst, zeigt [S3.12](s3-12-zeitgesteuert-arbeiten.md).
+Ein fehlgeschlagener `-p`-Lauf endet mit einem Code ungleich 0; prüf das in CI. Das Absichern autonomer Loops steht in [S3.13](s3-13-autonome-loops-absichern.md).
 
 ## Selbst machen
 
-### Übung: den Alltag unter 5 Dollar bringen (etwa 25 Minuten)
+### Übung: dieselbe Aufgabe, drei Modelle (etwa 10 Minuten)
 
-**Priorität:** Sollte man machen; wertvoll, aber verzichtbar, wenn die Zeit knapp ist.
+**Ziel:** Du führst eine kleine Aufgabe nacheinander mit drei Modellen aus, liest jeweils den Verbrauch ab und beurteilst, ob der teurere Lauf sein Geld wert war. Dein Standardmodell bleibt unverändert.
 
-**Ziel:** Für drei Abläufe, die du wirklich nutzt, eine kostenbewusste Konfiguration festlegen. Behandle Modell und Effort nicht mehr als Voreinstellung, sondern wähl sie bewusst.
+**Startzustand:** ein neuer, leerer Ordner `~/cc-workshop/kosten`. Leg ihn an und wechsle hinein (`mkdir -p ~/cc-workshop/kosten && cd ~/cc-workshop/kosten`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\kosten"; Set-Location "$HOME\cc-workshop\kosten"`). Du nutzt nur Start-Flags, die für die jeweilige Sitzung gelten. Gib in diesen Sitzungen weder `/model` noch `/effort` ein, denn beide würden deine Wahl als Standard speichern. Fehlt dir der Zugang zu einem Modell, lass es aus.
 
-**Schritt 1: drei Abläufe aus deinem Alltag wählen**
+Jeder Lauf ist eine neue Sitzung: So fängt `/cost` bei null an.
 
-Nimm drei Dinge, die du regelmäßig mit Claude Code machst oder machen wirst. Beispiele, an deinen Bereich angepasst:
+1. Starte den ersten Lauf und gib den Auftrag ein:
 
-- einen Pull Request mit etwa 100 Zeilen reviewen
-- einen Fehler in einer unbekannten Codebasis beheben
-- Docstrings oder kurze Dokumentation für eine Funktion schreiben
-- einen Parser für ein neues Ereignisprotokoll-Format erzeugen
-- eine Commit-Nachricht nach einer größeren lokalen Änderung entwerfen
+   <!-- cockpit:example -->
+   ```bash
+   claude --model opus --effort xhigh --permission-mode acceptEdits
+   ```
 
-**Schritt 2: je Ablauf Modell, Effort und Flags festlegen**
+   ```text
+   Write palindrome_opus.py with a function is_palindrome(text) that ignores case and spaces, and three assert tests at the bottom.
+   ```
 
-Füll deine eigene Tabelle aus. Die Spalten zählen mehr als die genauen Werte:
+   Erwartet: Claude legt die Datei an. Gib dann `/cost` ein: Es öffnet sich die Ansicht „Usage“, ganz oben steht der Block „Session“ mit der Zeile `Total cost`. Notier den Betrag; es zählt die Größenordnung. Schließ die Ansicht mit `Esc` und beende die Sitzung mit `/exit`.
+2. Zweiter Lauf: `claude --model sonnet --effort medium --permission-mode acceptEdits`. Gleicher Auftrag, Datei `palindrome_sonnet.py`. Dann `/cost`, notieren, `/exit`.
+3. Dritter Lauf: `claude --model haiku --permission-mode acceptEdits`, ohne `--effort`, weil `haiku` keine Effort-Stufen kennt. Datei `palindrome_haiku.py`. Dann `/cost`, notieren, `/exit`.
+4. Vergleiche die drei Beträge. Erwartet: Meist sinken sie von Lauf 1 zu Lauf 3, weil `sonnet` und `haiku` pro Token weniger kosten als `opus` ([Kanon](../_canonical.md)). Einzelne Läufe können abweichen, etwa wegen unterschiedlich langer Antworten. Öffne die drei Dateien und sieh nach, ob sich der Aufpreis bei dieser Aufgabe in der Qualität zeigt.
+5. Prüf, dass dein Standard unverändert ist: Starte `claude` ohne Flags und lies die Kopfzeile. Sie nennt dein gewohntes Modell, nicht `haiku`.
 
-| Ablauf | Modell | Effort | Weitere Flags | Kostenband (grob) |
-|---|---|---|---|---|
-| Code-Review (etwa 100 Zeilen) | ? | ? | ? | ? |
-| Fehler in unbekanntem Code | ? | ? | ? | ? |
-| Doku oder Kommentare schreiben | ? | ? | ? | ? |
-
-**Schritt 3: jede Wahl begründen**
-
-Frag dich für jede Zeile:
-
-- Warum dieses Modell? (Tiefe gegen Tempo gegen Kosten.)
-- Warum diese Stufe? (Denklast der Aufgabe.)
-- Welche Flags helfen? (Vor allem `--max-budget-usd` als Sicherheitsnetz für unbeaufsichtigte `-p`-Läufe.)
-
-**Schritt 4: mit einem echten Lauf prüfen**
-
-Nimm einen Ablauf aus deiner Tabelle, führ ihn einmal mit deiner Konfiguration aus und öffne `/cost`. Passt die Zahl zu dem Kostenband, das du erwartet hast? Wenn nicht, justiere nach. Genaue Dollar-Schätzungen hebst du dir für [S4.4](s4-04-ci-zugang-und-kosten.md) auf, wo Budgetgrenzen in CI und wiederholbare Läufe die Rechnung aussagekräftiger machen.
-
-**Schritt 5: die Konfiguration festhalten**
-
-Halte die Entscheidung fest, damit du sie nächste Woche nicht neu überlegen musst. Zwei sinnvolle Wege, entweder ein Shell-Alias:
-
-<!-- cockpit:example -->
-```bash
-# ~/.bashrc or ~/.zshrc
-alias claude-review='claude --model sonnet --effort medium --max-budget-usd 0.30'
-alias claude-deep='claude --model opus --effort xhigh --max-budget-usd 2.00'
-alias claude-quick='claude --model haiku'   # Haiku has no effort setting
-```
-
-`--max-budget-usd` wirkt nur im Print-Modus: Rufst du `claude-review` interaktiv auf, begrenzt die Zahl nichts; als Kappe greift sie erst bei `claude-review -p "…"`. `--model` und `--effort` gelten nur für die gestartete Sitzung und ändern deinen gespeicherten Standard nicht.
-
-Oder ein kleiner eigener Skill, der den passenden Aufruf kapselt. Skills kommen in Session 2 ([S2.1](s2-01-skills-und-commands.md)); für jetzt reicht ein Alias.
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/kosten` selbst. Es gibt nichts zurückzusetzen.
 
 **Geschafft, wenn:**
 
-- [ ] du eine ausgefüllte Tabelle mit drei Abläufen hast, jeder mit Modell, Effort und grobem Kostenband
-- [ ] jede Zeile eine Begründung in einem Satz hat (nicht nur „fühlte sich richtig an“)
-- [ ] mindestens ein Ablauf live gelaufen und mit `/cost` geprüft ist
-- [ ] du einen Alias oder eine Notiz hast, die deine Konfiguration für künftige Läufe festhält
+- [ ] du drei Werte für `Total cost` notiert hast, je aus einer neuen Sitzung
+- [ ] du sagen kannst, bei welchem Modell du für diese Aufgabe bleiben würdest, und warum
+- [ ] die Kopfzeile von `claude` ohne Flags dein gewohntes Modell nennt
 
-**Zum Nachdenken:**
+### Extra: ein gedeckelter `-p`-Lauf (etwa 3 Minuten)
 
-- Welche Konfiguration war pro Lauf am günstigsten? War die Qualität ausreichend?
-- Wo lag der größte Kostenhebel: bei der Modellwahl, bei der Effort-Stufe oder bei der Länge von `CLAUDE.md`?
-- Würdest du anders einstellen, wenn das Budget von deinem Arbeitgeber statt aus deiner eigenen Tasche käme? Warum?
-- Welche deiner Abläufe brauchen `--max-budget-usd` als hartes Sicherheitsnetz? (Tipp: alles, was unbeaufsichtigt, in CI oder in einer Schleife als `-p`-Lauf läuft.)
-
-**Hinweise:**
-
-- Wenn dir die Modelle neu sind: Fang für den Fehler mit Sonnet und `medium` an, für das Code-Review mit Sonnet und `low`, für die Doku mit Haiku (ohne Effort). Experimentiere von dort aus.
-- `--max-budget-usd` ist eine billige Versicherung: Schon eine niedrige Grenze bei einem Routine-`-p`-Lauf fängt davonlaufende Schleifen ab, ohne normale Arbeit zu stören.
-- Optimier nicht zu früh. Es geht nicht darum, Cent-Beträge herauszuquetschen, sondern darum, bewusst zu wählen, statt aus Versehen immer für Opus mit xhigh zu zahlen.
+Lass im Übungsordner einen Lauf im Print-Modus zusammenfassen: `claude -p "Summarize palindrome_haiku.py in one sentence." --max-turns 3 --max-budget-usd 0.50`. Erwartet: Die Antwort steht im Terminal, und das Programm endet von selbst. Sieh dir den Exit-Status an (`echo $?`, in PowerShell `$LASTEXITCODE`). Setz dann `--max-turns 1` und lies, was passiert: Die Doku sagt, ein erreichtes Rundenlimit endet mit einem Fehler.
 
 ## Typische Fallen
 
-- **Die Budgetgrenze greift nicht.** `--max-budget-usd` und `--max-turns` wirken nur mit `-p`. In einer interaktiven Sitzung, auch mit `/loop` oder `/goal`, begrenzen sie nichts.
-- **`claude -p` läuft endlos.** Setz beide Grenzen, `--max-budget-usd` für die Kosten und `--max-turns <n>` für die Runden. In CI prüfst du vor dem Lauf, dass beide gesetzt sind.
-- **Der Betrag in `/cost` passt nicht zur Rechnung.** Claude Code schätzt zum Listenpreis. Verbindlich ist die Usage-Seite der Claude Console; mit einem Pro- oder Max-Abo ist der Betrag für die Abrechnung nicht relevant.
-- **`/insights` zeigt keine Kosten je Skill.** Der Bericht beschreibt, wie du arbeitest. Welche Skills, Subagents, Plugins und MCP-Server deinen Verbrauch treiben, zeigt im Abo `/usage`.
+- **Die Budgetgrenze greift nicht.** `--max-budget-usd` und `--max-turns` wirken nur mit `-p`. In einer interaktiven Sitzung begrenzen sie nichts.
+- **Der Vergleich ist schief.** Wechselst du in derselben Sitzung das Modell, liest das neue Modell den Verlauf ohne Cache-Treffer neu, und `/cost` zählt alle Läufe zusammen. Starte jeden Lauf neu oder nimm `/clear`.
+- **Du arbeitest nach dem Test mit `haiku` weiter.** `/model haiku` und `/effort` speichern den Standard; zurück kommst du mit `/model default` und `/effort auto`.
 
 ## Check
 
-Du kannst mit `/cost` bzw. `/usage` den Verbrauch deiner Sitzung ablesen, einen `claude -p`-Lauf mit `--max-budget-usd` und `--max-turns` deckeln und vor einem langen Lauf mindestens einen Sparhebel nennen: Cache, Effort oder Modell pro Phase.
+Du kannst mit `/cost` den Verbrauch deiner Sitzung ablesen, einen fairen Modellvergleich aufbauen und einen `claude -p`-Lauf mit `--max-budget-usd` und `--max-turns` deckeln.
 
-1. Was ist der günstigste Weg, damit eine Routineaufgabe nicht zur Kostenüberraschung wird?
+1. Welchen Befehl nutzt du für den Verbrauch deiner laufenden Sitzung, und welche Zeile liest du für den Vergleich ab?
 2. In welchem Modus wirken `--max-budget-usd` und `--max-turns`, und was begrenzt jedes der beiden?
-3. Warum startest du vor einem Modellvergleich mit `/clear` neu?
+3. Warum startest du für jeden Lauf eines Modellvergleichs eine neue Sitzung?
+
+<details><summary>Auflösung</summary>
+
+1. `/cost` (ein anderer Name für `/usage`). Für den Vergleich liest du die Zeile `Total cost` im Session-Block.
+2. Im Print-Modus (`claude -p`), nicht interaktiv. `--max-budget-usd` begrenzt die Kosten in Dollar, `--max-turns` die Zahl der Agenten-Runden.
+3. `/cost` zählt sonst alle Läufe zusammen, und ein neues Modell liest den bisherigen Verlauf ohne Cache-Treffer neu. Beides verfälscht den Vergleich.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Du hast ein Max-Abo und willst wissen, ob ein bestimmter Skill einen großen Teil deines Verbrauchs der letzten Woche ausmacht. Wo schaust du nach?
+**Frage:** Du hast ein Max-Abo, und `/cost` zeigt am Ende einer Sitzung `Total cost` von 0,42 Dollar. Was bedeutet der Betrag?
 
-- **Richtig:** In `/usage`: Die Plan-Ansicht schlüsselt den Verbrauch auf Skills, Subagents, Plugins und MCP-Server auf, `w` zeigt 7 Tage.
-- Falsch: In `/insights`: Der HTML-Bericht listet die Kosten je Skill und je Modell für die letzten sieben Tage übersichtlich als Tabelle auf.
-- Falsch: In `/context`: Das farbige Raster zeigt, welcher Skill wie viel von deinem Wochenbudget verbraucht hat.
-- Falsch: Nirgends in Claude Code: Den Verbrauch je Skill zeigt nur das Dashboard der Claude Console im Browser an.
+- **Richtig:** Eine Schätzung aus den Tokens zum Listenpreis; für die Abrechnung im Abo ist sie nicht relevant, zum Vergleich von Läufen taugt sie.
+- Falsch: Den Betrag, den dir Anthropic zusätzlich zur Abo-Gebühr in Rechnung stellt, weil `/cost` die Abrechnung anzeigt.
+- Falsch: Den verbindlichen Betrag, der immer genau mit der Usage-Seite der Claude Console übereinstimmt und dort auftaucht.
+- Falsch: Einen festen Platzhalter ohne Bezug zu deinen Tokens, den Claude Code für Abos nur zur Anzeige einblendet.
 
 </details>
 

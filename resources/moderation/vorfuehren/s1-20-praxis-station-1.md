@@ -1,6 +1,6 @@
-# Vorführen: S1.20 · Praxis-Station Session 1: eine Übung wählen
+# Vorführen: S1.20 · Praxis-Station Session 1: alles in einem Ablauf
 
-> Demo und Hinweise für Moderierende zum Kapitel [S1.20 · Praxis-Station Session 1: eine Übung wählen](../../library/s1-20-praxis-station-1.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
+> Demo und Hinweise für Moderierende zum Kapitel [S1.20 · Praxis-Station Session 1: alles in einem Ablauf](../../library/s1-20-praxis-station-1.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
 
 **Vor Session 1: Checkliste für die Demos**
 

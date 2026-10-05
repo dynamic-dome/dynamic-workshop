@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 4 Etappen, zusammen etwa 9 Stunden (510 Min durcharbeiten, 30 Min überfliegen).
+**Umfang:** 4 Etappen, zusammen etwa 9,5 Stunden (535 Min durcharbeiten, 30 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -29,12 +29,12 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S1.15 Output Styles und Personas](../library/s1-15-output-styles.md) — durcharbeiten
 - [S1.16 Git in einem Fluss: Branch, Commit, PR](../library/s1-16-git-in-einem-fluss.md) — durcharbeiten
 - [S1.17 Git-Befehle in der Sitzung](../library/s1-17-git-befehle.md) — durcharbeiten
+
+## Etappe 3 (~149 Min)
+
 - [S1.18 Worktrees als Testlabor](../library/s1-18-worktrees.md) — durcharbeiten
-
-## Etappe 3 (~147 Min)
-
 - [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](../library/s1-19-kosten-im-blick.md) — durcharbeiten
-- [S1.20 Praxis-Station Session 1: eine Übung wählen](../library/s1-20-praxis-station-1.md) — durcharbeiten
+- [S1.20 Praxis-Station Session 1: alles in einem Ablauf](../library/s1-20-praxis-station-1.md) — durcharbeiten
 - [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) — überfliegen
 - [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) — durcharbeiten
 - [S2.2 Eine SKILL.md schreiben](../library/s2-02-skill-schreiben.md) — durcharbeiten
@@ -44,11 +44,11 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — überfliegen
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — überfliegen
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — überfliegen
+
+## Etappe 4 (~116 Min)
+
 - [S2.20 Praxis-Station Session 2: eine Übung wählen](../library/s2-20-praxis-station-2.md) — durcharbeiten
 - [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
-
-## Etappe 4 (~93 Min)
-
 - [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) 🛡 — durcharbeiten
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten

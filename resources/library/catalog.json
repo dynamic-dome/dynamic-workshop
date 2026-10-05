@@ -583,34 +583,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein neuer Auftragnehmer bekommt beim Betreten des Geländes die Hausordnung: welche Bereiche er betreten darf, welche gesperrt sind, was bei einem Alarm zu tun ist, wen er anruft. Er liest sie, bevor er mit der Arbeit anfängt, und zwar bei jedem Einsatz.",
-   "answers": null,
+   "analogy": "Ein neuer Auftragnehmer bekommt beim Betreten des Geländes die Hausordnung: welche Bereiche gesperrt sind, was bei einem Alarm zu tun ist. Er liest sie vor der Arbeit, bei jedem Einsatz. Die CLAUDE.md ist diese Hausordnung. Aber wer eine Regel übersieht, kommt trotzdem durch die Tür. Verriegeln kann nur ein Schloss.",
+   "answers": [
+    "Hinein gehören Konventionen, Verbote und Stack-Abweichungen, die man dem Code nicht ansieht. Nicht hinein gehören Geheimnisse, Ableitbares wie Verzeichnislayout und Abhängigkeitslisten, vorübergehender Aufgabenkontext und lange Texte über 200 Zeilen.",
+    "Mit `/context all`: Die Datei steht dann unter **Memory files**. Zusätzlich fragst du ohne Werkzeuge nach einer Regel, die Claude nicht raten kann.",
+    "Claude liest die CLAUDE.md als Kontext, nicht als erzwungene Konfiguration, und hält sich meist daran, aber nicht garantiert. Eine sichere Sperre baust du mit einem Hook."
+   ],
    "area": "context",
    "checkpoint": "Du kannst eine knappe CLAUDE.md schreiben, nach einem Neustart prüfen, dass Claude sie geladen hat, und erklären, warum sie eine Leitplanke und keine Sperre ist.",
    "demo": "../moderation/vorfuehren/s1-10-claude-md.md",
-   "example": "Create a CLAUDE.md for this project. It is a [describe your project — e.g.,\nPython-based alarm management system for commercial buildings].\n\nInclude these conventions:\n- [Your language/framework, e.g., Python 3.11, asyncio]\n- [Your test framework, e.g., pytest with pytest-asyncio]\n- [Any formatting tools you use]\n- [A rule about something that must never be changed — e.g., the legacy panel interface]\n- [A domain-specific convention — e.g., all alarm codes must be in SCREAMING_SNAKE_CASE]\n- [Anything else that's specific to your domain or team]",
-   "example_lang": "",
+   "example": "   Create a CLAUDE.md with exactly these three rules and nothing else:\n   - Every function docstring starts with \"PANEL:\".\n   - Never modify legacy_panel_parser.py.\n   - Use only the Python standard library.",
+   "example_lang": "text",
    "file": "s1-10-claude-md.md",
-   "glance": "CLAUDE.md ist eine Markdown-Datei, die Claude Code zu Beginn jeder Session automatisch liest: die Hausordnung deines Projekts mit Stack, Konventionen und Verboten. Du schreibst die Regeln einmal, und Claude hat sie in jeder Session vor Augen, ohne dass du sie wiederholst. Halte die Datei knapp und schreib nie Geheimnisse hinein.",
+   "glance": "CLAUDE.md ist eine Markdown-Datei, die Claude Code zu Beginn jeder Session automatisch liest: die Hausordnung deines Projekts mit Konventionen, Verboten und allem, was vom Üblichen abweicht. Du schreibst die Regeln einmal und musst sie nicht wiederholen. Halte die Datei knapp.",
    "id": "S1.10",
    "level": "core",
    "minutes": 15,
    "offers": [],
    "order": 1100,
-   "outcome": "Ich kann eine knappe CLAUDE.md mit Stack, Konventionen und Verboten schreiben, ohne Geheimnisse, und nach einem Neustart prüfen, dass Claude sie geladen hat.",
+   "outcome": "Ich kann eine knappe CLAUDE.md mit Stack-Abweichungen, Konventionen und Verboten schreiben, nach einem Neustart mit /context prüfen, dass Claude sie geladen hat, und sagen, warum sie eine Leitplanke und keine Sperre ist.",
    "quiz": {
-    "correct": "Claude hält sich meist daran, aber garantiert ist es nicht; eine sichere Sperre baust du mit einem Hook.",
-    "q": "In deiner CLAUDE.md steht „Never modify legacy_panel_parser.py\". Wie verlässlich schützt diese Zeile die Datei?",
+    "correct": "Die Datei auf das Wesentliche kürzen und die Regel konkret und prüfbar formulieren, denn lange Dateien werden schlechter befolgt.",
+    "q": "Dein Team-Repo hat eine CLAUDE.md mit 600 Zeilen. Claude ignoriert regelmäßig die Regel in Zeile 480. Was hilft zuerst?",
     "wrong": [
-     "Vollständig: Claude Code liest die Zeile als Rechte-Regel und lehnt jeden Edit an der Datei technisch ab.",
-     "Gar nicht: Die CLAUDE.md liest nur `/init`, in normalen Sessions wirkt die Zeile überhaupt nicht.",
-     "Erst nach `/compact`: Vorher steht die CLAUDE.md nicht im Kontext, danach wirkt die Zeile als Sperre."
+     "`/clear` eingeben, weil die CLAUDE.md erst nach einem Leeren des Kontexts mit voller Gewichtung geladen wird.",
+     "Die Datei nach `~/.claude/CLAUDE.md` verschieben, weil Regeln der Nutzerebene wie Rechte-Regeln durchgesetzt werden.",
+     "`/init` erneut laufen lassen, weil es die vorhandene CLAUDE.md durch eine kürzere Fassung überschreibt."
     ]
    },
    "recall": [
-    "Nenne eine Dauerregel, die für dein Team in die CLAUDE.md gehört. Gute Antworten sind dauerhafte Projektregeln, keine einmaligen Aufträge.",
-    "Welche drei Dinge gehören nicht in eine CLAUDE.md, und warum?",
-    "Wie prüfst du, ob Claude deine CLAUDE.md geladen hat?"
+    "Welche Arten von Inhalt gehören in eine CLAUDE.md, und welche nicht?",
+    "Wie prüfst du nach einem Neustart, dass Claude deine CLAUDE.md geladen hat?",
+    "Warum schützt die Regel „Never modify legacy_panel_parser.py“ die Datei nicht sicher, und was baust du, wenn sie sicher geschützt sein muss?"
    ],
    "requires": [
     "S1.2"
@@ -624,8 +628,8 @@
    "session": 1,
    "shelf": "context",
    "skip_check": [
-    "Hast du schon eine CLAUDE.md für ein echtes Projekt geschrieben und nach einem Neustart geprüft, dass Claude die Regeln kennt?",
-    "Kannst du ohne Nachschlagen drei Dinge nennen, die in eine CLAUDE.md gehören, und drei, die nicht hineingehören?"
+    "Hast du schon eine CLAUDE.md geschrieben und nach einem Neustart geprüft, dass Claude sie kennt?",
+    "Kannst du ohne Nachschlagen sagen, warum eine Regel in der CLAUDE.md keine Sperre ist?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/memory",
@@ -637,33 +641,37 @@
   },
   {
    "aliases": [],
-   "analogy": "Denk an einen Wachdienst. Das Wachbuch füllt sich von selbst: Die Streife notiert, was ihr auffällt, ohne dass jemand es anordnet. Das ist das Auto-Memory. Für einzelne Zonen gibt es eigene Anweisungen: Die Regeln für den Serverraum sind nicht die der Empfangshalle, und der Pförtner am Empfang muss die Serverraum-Regeln nicht in jeder Schicht auswendig kennen. Sie liegen erst auf dem Tisch, wenn jemand die Zone betritt. Das sind die Regeln unter `.claude/rules/`.",
-   "answers": null,
+   "analogy": "Zur Hausordnung aus [S1.10](s1-10-claude-md.md) kommen zwei Dinge. Das Wachbuch führt die Streife selbst: Sie notiert, was ihr auffällt, ohne dass jemand es anordnet. Das ist das Auto-Memory. Und für einzelne Zonen hängen Schilder an den Zonentoren: Die Serverraum-Regel liest die Streife erst, wenn sie den Serverraum betritt. Das sind die Regeln unter `.claude/rules/` mit `paths`.",
+   "answers": [
+    "Beim Start lädt Claude Code den Anfang der `MEMORY.md` (die ersten 200 Zeilen oder 25 KB). Die Themen-Dateien liest Claude erst, wenn es sie braucht.",
+    "Eine Regeldatei unter `.claude/rules/` mit `paths: [\"api/**\"]`. Sie lädt, wenn Claude mit Read, Write oder Edit eine passende Datei anfasst.",
+    "Claude Code fügt beide zusammen, keine überschreibt die andere, und Claude kann jede der beiden befolgen. Eine echte Untergrenze setzt das Sicherheitsteam in den Managed Settings, etwa mit `permissions.deny`."
+   ],
    "area": "context",
    "checkpoint": "Du kannst die Gedächtnis-Ebenen neben der CLAUDE.md benennen, sagen, wer sie schreibt und wann sie laden, und erklären, warum keine davon technisch etwas sperrt.",
    "demo": "../moderation/vorfuehren/s1-11-gedaechtnis-ebenen.md",
-   "example": "Remember that my primary working language for communication is [your preference].\nAlso remember that in my projects, door IDs always follow the format SITE-FLOOR-DOOR\n(e.g., MAIN-02-EAST).",
-   "example_lang": "",
+   "example": "   ---\n   paths:\n     - \"api/**/*.py\"\n   ---\n\n   Every function name in api/ ends with _v1.",
+   "example_lang": "markdown",
    "file": "s1-11-gedaechtnis-ebenen.md",
-   "glance": "Neben der CLAUDE.md hat Claude Code weitere Gedächtnis-Ebenen: das Auto-Memory, in das Claude selbst Notizen schreibt, Regeln unter `.claude/rules/`, die nur für passende Pfade laden, deine private `CLAUDE.local.md` und die Managed Policy deiner Organisation. Das Auto-Memory lädt Claude Code in jede Session, und damit geht es als Kontext an Anthropic: Geheimnisse haben dort nichts verloren.",
+   "glance": "Neben der CLAUDE.md hat Claude Code weitere Gedächtnis-Ebenen: das Auto-Memory, in das Claude selbst Notizen schreibt, Regeln unter `.claude/rules/`, die nur für passende Pfade laden, deine private `CLAUDE.local.md` und die Managed Policy deiner Organisation. Alles, was davon im Kontext steht, geht mit deinen Anfragen an Anthropic: Geheimnisse haben in keiner Ebene etwas verloren. Das gilt auch für das Auto-Memory, das Claude ohne dein Zutun füllt.",
    "id": "S1.11",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 20,
    "offers": [],
    "order": 1110,
-   "outcome": "Ich kann Auto-Memory, .claude/rules/, CLAUDE.local.md und die Managed Policy einordnen, sagen, was wohin gehört, und erklären, was bei widersprüchlichen Anweisungen passiert.",
+   "outcome": "Ich kann in meinem Projekt das Auto-Memory nachsehen und eine pfadbezogene Regel unter .claude/rules/ anlegen, CLAUDE.local.md und die Managed Policy einordnen und sagen, was bei widersprüchlichen Anweisungen passiert.",
    "quiz": {
-    "correct": "Die CLAUDE.md pflegst du selbst; ins Auto-Memory schreibt Claude eigene Notizen, auch ohne dass du „merk dir das\" sagst.",
-    "q": "Welche Aussage beschreibt den Unterschied zwischen Auto-Memory und CLAUDE.md richtig?",
+    "correct": "Eine Notiz im Auto-Memory: Du öffnest sie über `/memory` und bearbeitest oder löschst sie.",
+    "q": "Nach einem Neustart „weiß“ Claude etwas Falsches über dein Projekt, das du nie in eine CLAUDE.md geschrieben hast. Was ist die wahrscheinlichste Quelle, und was tust du?",
     "wrong": [
-     "Beide pflegst du von Hand; nur der Ort unterscheidet sich: CLAUDE.md im Repo, Auto-Memory in `.claude/` im Projekt.",
-     "Auto-Memory gibt es nur in Cloud-Sessions, weil es bei Anthropic liegt; die CLAUDE.md ist die lokale Variante davon.",
-     "Beide leisten dasselbe; die CLAUDE.md ist nur das ältere Format und wird in neueren Versionen schrittweise vom Auto-Memory ersetzt."
+     "Eine Notiz im Auto-Memory: Ein `/clear` leert neben dem Gespräch auch dieses Gedächtnis des Projekts.",
+     "Eine Notiz im Auto-Memory: Du startest künftig mit `claude --bare`, dem vorgesehenen Schalter dafür.",
+     "Keine Notiz: Das Auto-Memory entsteht nur nach „Remember that …“, die Quelle ist also ein Irrtum."
     ]
    },
    "recall": [
     "Welchen Teil des Auto-Memory lädt Claude Code beim Start, welchen erst bei Bedarf?",
-    "Wann nimmst du `.claude/rules/` mit `paths` statt einer größeren CLAUDE.md?",
+    "Du willst eine Konvention nur für den Ordner `api/`. Was legst du an, und wann wird sie geladen?",
     "Managed-CLAUDE.md und Projekt-CLAUDE.md widersprechen sich. Was passiert, und wo setzt ein Sicherheitsteam eine echte Untergrenze?"
    ],
    "requires": [
@@ -679,12 +687,13 @@
    "session": 1,
    "shelf": "context",
    "skip_check": [
-    "Hast du schon einmal in `~/.claude/projects/<project>/memory/MEMORY.md` nachgesehen, was Claude über dich oder dein Projekt notiert hat?",
-    "Kannst du ohne Nachschlagen sagen, wann du eine `.claude/rules/`-Datei mit `paths`-Filter statt einer großen CLAUDE.md nimmst?"
+    "Hast du schon einmal in die `MEMORY.md` deines Projekts geschaut und gelesen, was Claude darin über dich notiert hat?",
+    "Kannst du ohne Nachschlagen sagen, wann eine Regel unter `.claude/rules/` mit `paths` lädt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/memory",
-    "https://code.claude.com/docs/en/context-window"
+    "https://code.claude.com/docs/en/context-window",
+    "https://code.claude.com/docs/en/claude-directory"
    ],
    "title": "Alle Gedächtnis-Ebenen im Überblick",
    "transferable": false,
@@ -692,33 +701,37 @@
   },
   {
    "aliases": [],
-   "analogy": "Denk an eine Hausordnung mit Anlagen. Das Hauptdokument ist kurz und verweist auf „Anlage A: Brandschutz\" und „Anlage B: Serverraum\". Zu Einsatzbeginn bekommt der Techniker alles zusammengeheftet, als ein Paket. So arbeiten `@path`-Imports: getrennt pflegbar, beim Start ein Dokument. Leichter wird das Paket dadurch nicht; gelesen wird trotzdem alles.",
-   "answers": null,
+   "analogy": "Denk an eine Hausordnung mit Anlagen. Das Hauptdokument ist kurz und verweist auf „Anlage A: Brandschutz“ und „Anlage B: Serverraum“. Zu Einsatzbeginn bekommt der Techniker alles zusammengeheftet, als ein Paket. So arbeiten `@path`-Imports: getrennt pflegbar, beim Start ein Dokument. Leichter wird das Paket dadurch nicht; gelesen wird trotzdem alles.",
+   "answers": [
+    "Nein. Auch eingebundene Dateien laden beim Start, der Import ordnet die Datei nur.",
+    "Ohne die Variable lädt es keine CLAUDE.md aus dem Ordner. Skills, Command-Dateien und Subagenten aus dem `.claude/`-Ordner lädt es trotzdem, und Dateizugriff gibt es ohnehin.",
+    "Claude liest dann nur noch die CLAUDE.md-Dateien, auch eine `CLAUDE.local.md` zählt, und nicht mehr die AGENTS.md. Abhilfe ist `@AGENTS.md` in einer CLAUDE.md oder die Einstellung unter **Project instructions**."
+   ],
    "area": "context",
-   "checkpoint": "Du kannst erklären, warum `--add-dir` standardmäßig keine CLAUDE.md aus dem fremden Ordner lädt, mit welcher Umgebungsvariable du das änderst und wann Claude eine AGENTS.md von selbst liest.",
+   "checkpoint": "Du kannst sagen, was `--add-dir` lädt und was nicht, wie du die CLAUDE.md des zweiten Ordners einschaltest und wann Claude eine AGENTS.md von selbst liest.",
    "demo": null,
-   "example": "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1 claude --add-dir /path/to/other/project",
-   "example_lang": "bash",
+   "example": "   Create exactly three files. app/docs/style.md with the single line \"Log lines start with EVT|.\" app/CLAUDE.md with the two lines \"# App\" and \"@./docs/style.md\". shared/CLAUDE.md with the single line \"Names of shared helpers start with ZZ_.\"",
+   "example_lang": "text",
    "file": "s1-12-imports-und-agents-md.md",
-   "glance": "Mit `@path` bindest du weitere Dateien in deine CLAUDE.md ein; Claude Code lädt sie beim Start mit. Das ordnet, spart aber keinen Kontext. Hat ein Repo nur eine AGENTS.md, die Anweisungsdatei anderer Coding-Agents wie Codex, liest Claude Code sie direkt; neben einer CLAUDE.md holst du sie mit `@AGENTS.md` dazu, damit alle Werkzeuge aus derselben Quelle lesen. `--add-dir` gibt Claude Dateizugriff auf ein zweites Repo, lädt dessen CLAUDE.md aber nur, wenn du es mit einer Umgebungsvariable ausdrücklich einschaltest.",
+   "glance": "Mit `@path` bindest du weitere Dateien in deine CLAUDE.md ein; Claude Code lädt sie beim Start mit. Das ordnet, spart aber keinen Kontext. Hat ein Repo nur eine AGENTS.md, die Anweisungsdatei anderer Coding-Agents wie Codex, liest Claude Code sie direkt; neben einer CLAUDE.md holst du sie mit `@AGENTS.md` dazu, damit alle Werkzeuge aus derselben Quelle lesen.",
    "id": "S1.12",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 1120,
-   "outcome": "Ich kann eine CLAUDE.md mit @path-Imports aufteilen, eine AGENTS.md einbinden und mit --add-dir ein zweites Repo freigeben, ohne dessen Regeln ungewollt zu laden.",
+   "outcome": "Ich kann eine CLAUDE.md mit @path-Imports aufteilen, mit --add-dir ein zweites Repo freigeben, dessen CLAUDE.md erst auf Wunsch geladen wird, und sagen, wann Claude Code eine AGENTS.md liest.",
    "quiz": {
-    "correct": "Damit Claude die AGENTS.md mitliest; neben einer CLAUDE.md liest es sie sonst nicht, und beide Tools teilen eine Quelle.",
-    "q": "Dein Repo hat eine AGENTS.md für Codex und eine CLAUDE.md. Wozu schreibst du `@AGENTS.md` in die CLAUDE.md?",
+    "correct": "Der Pfad gilt relativ zur importierenden Datei, Claude sucht also in `.claude/docs/`; richtig wäre `@../docs/style.md`.",
+    "q": "Deine `.claude/CLAUDE.md` enthält `@./docs/style.md`, die Datei liegt aber im Projektordner unter `docs/style.md`. Claude kennt ihre Regeln nicht. Woran liegt es?",
     "wrong": [
-     "`@AGENTS.md` schaltet den Multi-Agent-Modus ein, in dem mehrere parallele Subagenten den Inhalt lesen und sich darüber abstimmen.",
-     "`@AGENTS.md` markiert produktionskritische Regeln, die Claude Code mit höherer Priorität befolgt als den Rest.",
-     "`@AGENTS.md` lädt alle MCP-Server-Konfigurationen im Repo; es ist das Gegenstück zur CLAUDE.md für externe Tools."
+     "Der Pfad muss in Anführungszeichen stehen, sonst erkennt Claude Code den Import nicht als Import.",
+     "Claude Code folgt nur einer Importebene, und diese Datei liegt schon eine Ebene zu tief.",
+     "Imports wirken nur für Ordner aus `--add-dir`; im eigenen Projekt brauchst du dafür Regeldateien."
     ]
    },
    "recall": [
     "Spart ein `@path`-Import Kontext? Warum nicht?",
-    "Was lädt Claude Code aus einem `--add-dir`-Ordner auch ohne die Umgebungsvariable?",
+    "Was lädt Claude Code aus einem `--add-dir`-Ordner auch ohne die Umgebungsvariable, und was nicht?",
     "Dein Repo hat nur eine AGENTS.md, und du legst eine `CLAUDE.local.md` an. Was ändert sich?"
    ],
    "requires": [
@@ -735,7 +748,7 @@
    "shelf": "context",
    "skip_check": [
     "Hast du schon einmal eine CLAUDE.md mit `@`-Imports aufgebaut oder eine AGENTS.md eingebunden?",
-    "Kannst du ohne Nachschlagen sagen, ob Claude die CLAUDE.md eines per `--add-dir` hinzugefügten Ordners lädt, und wie du das änderst?"
+    "Kannst du ohne Nachschlagen sagen, was Claude Code aus einem per `--add-dir` hinzugefügten Ordner lädt und was nicht?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/memory",
@@ -749,28 +762,32 @@
    "aliases": [
     "1.3"
    ],
-   "analogy": "Ein Prompt ist ein Wartungsauftrag an einen Techniker, der Zugang zum ganzen Gebäude hat. Einen Zettel „Tür reparieren“ gibst du ihm nicht. Du schreibst, welcher Leser an welcher Tür was nicht tut, was das Log zeigt, wo er zuerst prüft und was er am Ende dokumentiert.",
-   "answers": null,
+   "analogy": "Ein Prompt ist ein Wartungsauftrag an einen Techniker, der Zugang zum ganzen Gebäude hat. Einen Zettel „Tür reparieren“ gibst du ihm nicht. Du schreibst, welcher Leser an welcher Tür was nicht tut, was das Log zeigt, wo er zuerst prüft, was er nicht anfassen soll und was er am Ende dokumentiert.",
+   "answers": [
+    "Ort (Datei, Funktion), Ursache oder Auslöser, Scope-Grenze und Erfolgskriterium.",
+    "Das ist die Scope-Grenze: Ohne sie darf Claude Dinge ändern, mit denen du nicht gerechnet hast, und du verlierst die Kontrolle darüber, was sich ändert.",
+    "Beim Erkunden, wenn du nachsteuern kannst, etwa mit „what would you improve in this file?“. Soll Claude etwas ändern, formulierst du präzise."
+   ],
    "area": "prompting",
    "checkpoint": "Du kannst einen vagen Prompt aus deiner eigenen Arbeit in einen Arbeitsauftrag umschreiben und dabei Ort, Ursache, Scope-Grenze und Erfolgskriterium ausdrücklich nennen.",
    "demo": "../moderation/vorfuehren/s1-13-vager-und-praeziser-auftrag.md",
-   "example": "Write a Python function called validate_ipv4(address: str) -> bool\nin a new file called validators.py in the current directory.\n\nRequirements:\n- Returns True only for valid IPv4 addresses in dotted-decimal notation\n- Valid: four octets 0-255 separated by single dots, no leading zeros\n- Invalid: leading zeros (e.g., 192.168.01.1)\n- Invalid: out-of-range octets (256, -1, or any non-integer)\n- Invalid: wrong number of octets (3 or 5)\n- Invalid: extra whitespace anywhere\n- Invalid: IPv6 addresses\n- Invalid: empty string or None\n- Do not use regex — parse explicitly for code clarity\n- Add a docstring with one valid and one invalid example\n\nThen write pytest tests in tests/test_validators.py covering:\n1. Five valid addresses (including 0.0.0.0 and 255.255.255.255)\n2. Leading zeros in one octet\n3. Octet value 256\n4. Octet value -1\n5. Only 3 octets\n6. 5 octets\n7. Non-numeric characters\n8. Empty string\n9. None input\n10. IPv6 address (e.g., \"2001:db8::1\")",
-   "example_lang": "",
+   "example": "Fix total() in prices.py only. With discount_code \"SAVE10\" it returns a float (1662.3), but prices are whole cents, so test_total_with_code expects the int 1662. Round the discounted total to whole cents. Do not touch format_receipt, the unused import, the function signatures or test_prices.py. Success: python -m unittest prints OK.",
+   "example_lang": "text",
    "file": "s1-13-vager-und-praeziser-auftrag.md",
-   "glance": "Was Claude Code kann, bleibt gleich; wie gut das Ergebnis wird, hängt davon ab, was du ihm mitgibst. Ein guter Auftrag nennt vier Dinge: den Ort (Datei, Zeile), die Ursache oder den Auslöser, die Scope-Grenze (was nicht angefasst wird) und das Erfolgskriterium (welcher Test grün sein muss). Fehlt das, fragt Claude nach oder rät.",
+   "glance": "Was Claude Code kann, bleibt gleich; wie gut das Ergebnis wird, hängt davon ab, was du mitgibst. Ein guter Auftrag nennt vier Dinge: den Ort (Datei, Funktion), die Ursache oder den Auslöser, die Scope-Grenze (was nicht angefasst wird) und das Erfolgskriterium (woran du siehst, dass es stimmt). Fehlt das, fragt Claude nach oder rät. Die vier Bausteine sind das Gerüst dieser Bibliothek; die Doku nennt Verwandtes: Datei, Szenario und Testwünsche angeben, Symptom, vermuteten Ort und das Aussehen von „behoben“ beschreiben.",
    "id": "S1.13",
    "level": "core",
    "minutes": 15,
    "offers": [],
    "order": 1130,
-   "outcome": "Ich kann einen vagen Prompt in einen Arbeitsauftrag mit Datei, Ursache, Scope-Grenze und Erfolgskriterium umformen.",
+   "outcome": "Ich kann einen vagen Prompt in einen Arbeitsauftrag mit Datei, Ursache, Scope-Grenze und Erfolgskriterium umformen und am Diff prüfen, ob Claude innerhalb der Grenze geblieben ist.",
    "quiz": {
-    "correct": "Er nennt Ort, Ursache, Scope-Grenze und Erfolgskriterium; ohne sie rät Claude, egal wie lang der Prompt ist.",
-    "q": "Was unterscheidet einen guten von einem schlechten Prompt am stärksten, unabhängig davon, wie ausführlich er ist?",
+    "correct": "Eine Scope-Grenze: Er sagte nicht, welche Funktionen und Dateien unangetastet bleiben, also war „Clean up“ eine Erlaubnis.",
+    "q": "Du hast „Clean up prices.py and make the tests pass.“ eingegeben. Die Tests sind grün, aber das Diff zeigt Änderungen an drei Funktionen. Was fehlte im Auftrag vor allem?",
     "wrong": [
-     "Seine Länge: Ein längerer Prompt gibt Claude mehr Kontext und liefert deshalb immer bessere Ergebnisse als ein kurzer.",
-     "Seine Sprache: Englische Prompts setzt Claude Code zuverlässiger um, weil sein Training beim Code englisch geprägt ist.",
-     "Sein Ablageort: Steht ein Auftrag in der CLAUDE.md statt im Chat, setzt Claude ihn deutlich genauer und vollständiger um."
+     "Die Ursache: Hätte der Auftrag den Fehler erklärt, dürfte Claude außerhalb der betroffenen Zeile nichts mehr ändern.",
+     "Das Erfolgskriterium: Mit grünen Tests als Ziel hätte Claude weiter aufgeräumt, nur ohne Rückfrage zu stellen.",
+     "Ein längerer Auftrag: Mehr Wörter geben Claude mehr Kontext und verhindern damit Änderungen außerhalb des Fehlers."
     ]
    },
    "recall": [
@@ -789,7 +806,7 @@
    "session": 1,
    "shelf": "prompting",
    "skip_check": [
-    "Hast du schon einmal denselben Auftrag erst vage und dann präzise formuliert und die beiden Ergebnisse verglichen?",
+    "Hast du schon einmal denselben Auftrag erst vage und dann präzise formuliert und die beiden Änderungen verglichen?",
     "Kannst du ohne Nachschlagen die vier Bestandteile eines guten Arbeitsauftrags nennen?"
    ],
    "sources": [
@@ -801,34 +818,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Der Plan-Modus ist das Sicherheitsbriefing vor einer Panel-Neukonfiguration. Der Techniker legt das Änderungsprotokoll auf den Tisch (Propose). Der Schichtleiter streicht zwei riskante Schritte und ergänzt einen Rückfallweg (Refine). Beide zeichnen ab, und erst dann beginnt die Änderung (Execute). Freigegeben wird die ganze Mission, bevor jemand eine Klemme löst.",
-   "answers": null,
+   "analogy": "Der Plan-Modus ist das Sicherheitsbriefing vor einer Panel-Neukonfiguration. Der Techniker erklärt die Lage und legt das Änderungsprotokoll auf den Tisch. Der Schichtleiter streicht zwei riskante Schritte und ergänzt einen Rückfallweg. Beide zeichnen ab, und erst dann beginnt die Änderung. Freigegeben wird die ganze Mission, bevor jemand eine Klemme löst.",
+   "answers": [
+    "Mit `claude --permission-mode plan`, mit `Shift+Tab` oder mit `/plan` vor einem Prompt. Die Statuszeile zeigt `⏸ plan mode on`.",
+    "Bei kleinen Änderungen mit klarem Scope: Kannst du den Diff in einem Satz beschreiben, lass den Plan weg.",
+    "In interaktiven Terminal-Sitzungen, in denen `bypassPermissions` im Modus-Zyklus verfügbar ist. Dann kann eine Bearbeitung ohne Rückfrage laufen, du darfst dich also nicht auf die Sperre verlassen."
+   ],
    "area": "prompting",
    "checkpoint": "Du kannst eine Mehrdatei-Aufgabe im Plan-Modus planen lassen, den Plan mit einer zusätzlichen Grenze nachschärfen und die Umsetzung erst mit einer ausdrücklichen Freigabe starten.",
    "demo": null,
-   "example": "Show me your implementation plan before writing any code. I want to\nreview the approach and the list of files you'll change.",
-   "example_lang": "",
+   "example": "   Add a --json flag to main.py that prints the door counts as JSON instead of text. Show me your plan first.",
+   "example_lang": "text",
    "file": "s1-14-plan-modus.md",
-   "glance": "Bei größeren Aufgaben lässt du Claude erst einen Plan vorlegen und korrigierst ihn, bevor Code entsteht: Explain (Kontext geben), Propose (Vorschlag holen), Refine (korrigieren, Grenzen ergänzen), Execute (umsetzen lassen). Der Plan-Modus baut daraus eine Sperre: Claude liest und plant, Bearbeitungen bleiben blockiert, bis du den Plan freigibst. Kannst du den Diff in einem Satz beschreiben, sparst du dir den Plan.",
+   "glance": "Bei größeren Aufgaben lässt du Claude erst einen Plan vorlegen und korrigierst ihn, bevor Code entsteht. Der Plan-Modus ist dafür ein Rechte-Modus: Claude liest, erkundet und plant, und Bearbeitungen bleiben blockiert, bis du den Plan freigibst. Die Sperre hat eine Ausnahme: In interaktiven Terminal-Sitzungen, in denen `bypassPermissions` im Modus-Zyklus verfügbar ist, setzt Claude Code sie nicht durch ([S1.6](s1-06-rechte-modi.md)). Kannst du den Diff in einem Satz beschreiben, sparst du dir den Plan.",
    "id": "S1.14",
    "level": "core",
    "minutes": 15,
    "offers": [],
    "order": 1140,
-   "outcome": "Ich kann bei einer Mehrdatei-Aufgabe erst im Plan-Modus einen Plan erstellen lassen, ihn korrigieren und Claude erst nach meiner ausdrücklichen Freigabe umsetzen lassen.",
+   "outcome": "Ich kann bei einer Mehrdatei-Aufgabe erst im Plan-Modus einen Plan erstellen lassen, ihn mit einer Vorgabe oder Scope-Grenze korrigieren, Claude erst nach meiner ausdrücklichen Freigabe umsetzen lassen und sagen, wann die Sperre des Plan-Modus nicht hält.",
    "quiz": {
-    "correct": "Bei einer kleinen Änderung mit klarem Scope, deren Diff du in einem einzigen Satz beschreiben kannst.",
-    "q": "Wann ist es richtig, Claude direkt umsetzen zu lassen, statt zuerst den Plan-Modus zu nutzen?",
+    "correct": "Die Antwort zum Nachschärfen wählen und die Grenze nennen („Do not change the config file“), dann den neuen Plan prüfen.",
+    "q": "Der Plan sieht gut aus, aber ein Schritt fasst die Konfigurationsdatei an, die du nicht anfassen willst. Was antwortest du?",
     "wrong": [
-     "Nur wenn die CLAUDE.md keine Verbotsregel enthält, weil Claude solche Grenzen ohne Plan-Modus übergeht.",
-     "Fast immer, weil der Plan-Modus Mehrkosten verursacht und die Qualität der Ergebnisse nicht verbessert.",
-     "Bei jeder Arbeit in einer einzelnen Sitzung, weil sich der Plan-Modus erst mit mehreren Agenten lohnt."
+     "„Sieht gut aus“ antworten, denn Claude lässt den Schritt dann von selbst weg und fragt vor der Änderung nach.",
+     "Den Plan freigeben und die Änderung hinterher mit `/rewind` zurücknehmen, weil ein Checkpoint auch Shell-Befehle erfasst.",
+     "`Shift+Tab` drücken, weil das den Plan mit der Grenze neu schreibt und ihn zugleich zur Umsetzung freigibt."
     ]
    },
    "recall": [
-    "Welche vier Schritte hat das Arbeitsmuster, und in welchem korrigierst du Claude?",
-    "Wie kommst du in den Plan-Modus, und wie verlässt du ihn, ohne den Plan freizugeben?",
-    "Woran erkennst du, dass du dir den Plan sparen kannst?"
+    "Wie startest du im Plan-Modus, und woran erkennst du ihn?",
+    "Wann lohnt sich der Plan-Modus nicht mehr, und woran erkennst du das?",
+    "Unter welcher Bedingung setzt Claude Code die Bearbeitungssperre des Plan-Modus nicht durch, und was folgt daraus für dich?"
    ],
    "requires": [
     "S1.5",
@@ -846,7 +867,7 @@
    "shelf": "prompting",
    "skip_check": [
     "Hast du schon einmal einen Plan von Claude geprüft und korrigiert, bevor Code geschrieben wurde?",
-    "Kannst du ohne Nachschlagen die vier Schritte Explain, Propose, Refine, Execute nennen und sagen, wann sich der Plan-Modus lohnt?"
+    "Kannst du ohne Nachschlagen sagen, wann der Plan-Modus seine Bearbeitungssperre nicht durchsetzt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/permission-modes",
@@ -858,34 +879,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein Output Style ist die Sprechweise eines Leitstellen-Operators: Funkkurzbefehl (Concise), Schichtübergabe mit Begründungen (Explanatory) oder Einarbeitung, bei der die neue Kollegin ein Stück selbst verdrahtet (Learning). Derselbe Operator, dieselbe Dienstanweisung, nur ein anderes Protokoll.",
-   "answers": null,
+   "analogy": "Ein Output Style ist die Sprechweise eines Leitstellen-Operators: Funkkurzbefehl (Concise), Schichtübergabe mit Begründungen (Explanatory) oder Einarbeitung, bei der die neue Kollegin ein Stück selbst verdrahtet (Learning). Derselbe Operator mit derselben Dienstanweisung, nur mit einem anderen Protokoll obendrauf.",
+   "answers": [
+    "Mit `/output-style <style>`, zum Beispiel `/output-style concise`. Claude Code speichert die Wahl in `.claude/settings.local.json` des Projekts.",
+    "Bei `--append-system-prompt` bleibt der Standard-Systemprompt mit Werkzeugführung und Sicherheitshinweisen, dein Text kommt dazu. Bei `--system-prompt-file` bleibt nichts: Nur der Dateiinhalt gilt.",
+    "Ein Output Style ist eine Anweisung, der Claude folgt, und nichts erzwingt sie. Was jedes Mal passieren muss, gehört in einen Hook."
+   ],
    "area": "prompting",
    "checkpoint": "Du kannst erklären, wann du einen Output Style und wann ein System-Prompt-Flag nimmst, und weißt, dass `--system-prompt-file` den Standard-Systemprompt ganz ersetzt.",
    "demo": null,
-   "example": "# Additive: code-review persona that always cites line numbers\nclaude --append-system-prompt \"Always cite line numbers when referring to code. Never propose changes without showing the affected lines first.\"\n\n# Full persona from file: tutor mode for onboarding a new teammate\nclaude --system-prompt-file ~/.claude/personas/tutor.md",
+   "example": "   claude --permission-mode default --append-system-prompt \"Answer in exactly one sentence.\"",
    "example_lang": "bash",
    "file": "s1-15-output-styles.md",
    "glance": "Ein Output Style legt für die ganze Sitzung fest, wie Claude antwortet und arbeitet: knapp (Concise), mit Begründungen (Explanatory), mit kleinen Aufgaben für dich (Learning) oder ohne Rückfragen bei Routine (Proactive). Du wechselst ihn mit `/output-style`. Für eine Rolle beim Start gibt es die System-Prompt-Flags: `--append-system-prompt` ergänzt den Standard-Systemprompt, `--system-prompt-file` ersetzt ihn ganz, samt Werkzeug- und Sicherheitshinweisen.",
    "id": "S1.15",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1150,
-   "outcome": "Ich kann mit /output-style den Antwortstil einer Sitzung umschalten, mit --append-system-prompt oder --system-prompt-file eine Rolle für einen Start setzen und sagen, was dabei vom Standard-Systemprompt übrig bleibt.",
+   "outcome": "Ich kann mit /output-style den Antwortstil einer Sitzung umschalten und sehen, wo Claude Code die Wahl speichert, mit --append-system-prompt eine Rolle für einen Start setzen und sagen, was --system-prompt-file vom Standard-Systemprompt übrig lässt.",
    "quiz": {
-    "correct": "`--append-system-prompt` hängt Text an den Standard-Systemprompt an; `--system-prompt-file` ersetzt ihn ganz durch die Datei.",
-    "q": "Was ist der entscheidende Unterschied zwischen `--append-system-prompt` und `--system-prompt-file`?",
+    "correct": "Claude Code hat die Wahl in `.claude/settings.local.json` des Projekts gespeichert; sie gilt, bis du `/output-style default` eingibst.",
+    "q": "Du hast gestern in einem Projekt `/output-style concise` gewählt. Heute antwortet Claude dort wieder knapp, obwohl du nichts eingestellt hast. Woran liegt das?",
     "wrong": [
-     "`--append-system-prompt` wird gespeichert und gilt in allen Sitzungen; `--system-prompt-file` gilt nur für diesen einen Start.",
-     "`--system-prompt-file` ist die neue Form und `--append-system-prompt` ist veraltet; heute wirken beide Flags genau gleich.",
-     "Beide lassen den Systemprompt unverändert und schieben nur Text in deine erste Nachricht, denn der Systemprompt ist fest."
+     "Das Flag `--append-system-prompt` vom Vortag bleibt in der Projektkonfiguration erhalten und wirkt in jeder späteren Sitzung.",
+     "Ein Output Style gilt immer für alle deine Projekte, denn Claude Code legt ihn in der globalen `~/.claude/settings.json` ab.",
+     "Claude hat den Style in der `CLAUDE.md` des Projekts eingetragen und liest ihn dort bei jedem Start neu."
     ]
    },
    "recall": [
     "Mit welchem Befehl wechselst du den Output Style, und wo speichert Claude Code deine Wahl?",
     "Was bleibt vom Standard-Systemprompt bei `--append-system-prompt`, was bei `--system-prompt-file`?",
-    "Wofür nimmst du `claude -p --output-format json` statt eines Output Styles?"
+    "Warum ist ein Output Style keine Garantie, und was nimmst du, wenn etwas jedes Mal passieren muss?"
    ],
    "requires": [
     "S1.13"
@@ -915,34 +940,38 @@
    "aliases": [
     "1.4"
    ],
-   "analogy": "Stell dir das Schichtbuch einer Leitstelle vor. Jeder Eingriff an einer Anlage bekommt dort einen Eintrag: klein, mit Zeitstempel, nachprüfbar. Ein Commit ist so ein Eintrag. Der Branch ist dein eigener Arbeitsauftrag, auf dem du arbeitest, ohne den laufenden Betrieb zu stören, und der PR ist die Abnahme, bevor die Änderung in den Betrieb geht.",
-   "answers": null,
+   "analogy": "Stell dir das Schichtbuch einer Leitstelle vor. Jeder Eingriff an einer Anlage bekommt dort einen Eintrag: klein, mit Zeitstempel, nachprüfbar. Ein Commit ist so ein Eintrag. Der Branch ist dein eigener Arbeitsauftrag, auf dem du arbeitest, ohne den laufenden Betrieb zu stören, und der PR ist die Abnahme, bevor die Änderung in den Betrieb geht. Den Eintrag schreibt hier Claude, abzeichnen musst du ihn.",
+   "answers": [
+    "Erst die Tests, dann der Diff, dann der Commit. Der Diff steht vor dem Commit, weil du nur dort siehst, was wirklich in den Commit geht, und Claude abnehmen musst du.",
+    "Alle nur, wenn `git status` und der Diff ausschließlich deine Änderung zeigen. Sonst nennst du die Pfade einzeln, damit Fremdes wie eine `.env` nicht mitgeht.",
+    "Eine installierte und angemeldete GitHub CLI (`gh auth login`) und einen Remote, zu dem der Branch gepusht wird."
+   ],
    "area": "git",
-   "checkpoint": "Du kannst einen ganzen Ablauf von Branch über Diff, Tests und Commit bis zum PR in einer Claude-Code-Sitzung führen und weißt, an welchen Stellen du selbst prüfst.",
+   "checkpoint": "Du kannst einen Ablauf von Branch über Tests und Diff bis zum Commit in einer Claude-Code-Sitzung führen und weißt, an welchen Stellen du selbst prüfst.",
    "demo": "../moderation/vorfuehren/s1-16-git-in-einem-fluss.md",
-   "example": "Stage all new and changed files. Then commit with this message:\n\"Add access event log formatter\n\nFormats access control events into human-readable log lines.\nHandles missing card_id gracefully. Tests cover normal case,\nACCESS_DENIED events, and missing card scenarios.\"",
-   "example_lang": "",
+   "example": "   Create log_formatter.py with a function format_access_event(event) that takes a dict with the keys timestamp, door_id, event_type and card_id and returns \"[2024-03-15 09:42:11] DOOR-03 ACCESS_GRANTED (Card: CARD-1047)\". If card_id is missing it prints \"Card: UNKNOWN\". Add unittest tests in test_log_formatter.py for the normal case and the missing card.",
+   "example_lang": "text",
    "file": "s1-16-git-in-einem-fluss.md",
-   "glance": "Claude Code führt Git-Befehle selbst aus: Branch anlegen, Dateien stagen, committen, pushen und mit `gh` einen Pull Request (PR) erstellen, alles in normaler Sprache in einer Sitzung. Claude übernimmt die Mechanik, an zwei Stellen prüfst du selbst: Du liest den Diff vor dem Commit, und du prüfst den PR vor dem Merge.",
+   "glance": "Claude Code führt Git-Befehle selbst aus: Branch anlegen, Dateien stagen, committen, pushen und mit der GitHub CLI `gh` einen Pull Request (PR) erstellen, alles in normaler Sprache in einer Sitzung. Claude übernimmt die Mechanik, an zwei Stellen prüfst du selbst: Du liest den Diff vor dem Commit, und du prüfst den PR vor dem Merge.",
    "id": "S1.16",
    "level": "core",
-   "minutes": 18,
+   "minutes": 15,
    "offers": [],
    "order": 1160,
-   "outcome": "Ich kann in einer Claude-Code-Sitzung einen Branch anlegen, eine Änderung umsetzen lassen, den Diff prüfen, die Tests laufen lassen, gezielt committen und einen PR erstellen lassen.",
+   "outcome": "Ich kann in einer Claude-Code-Sitzung einen Branch anlegen, eine Änderung umsetzen lassen, den Diff prüfen, die Tests laufen lassen und gezielt committen, und ich sage, was Claude zusätzlich für einen PR braucht.",
    "quiz": {
-    "correct": "Den Diff vor dem Commit lesen und den PR vor dem Merge prüfen: Claude tippt die Befehle, abnehmen musst du.",
-    "q": "Claude übernimmt im Ablauf die Git-Mechanik. Welche Schritte bleiben trotzdem bei dir?",
+    "correct": "Git zeigt neue, ungetrackte Dateien in `git diff` nicht; erst nach dem Stagen zeigt `git diff --staged` sie.",
+    "q": "Claude hat eine neue Datei `log_formatter.py` angelegt. Du fragst nach `git diff`, die Ausgabe ist leer. Was bedeutet das?",
     "wrong": [
-     "Nur den Branch-Namen festlegen: Diff, Tests, Commit und Merge erledigt Claude danach ohne jede Prüfung durch dich.",
-     "Die Commit-Nachricht tippen, denn Claude Code darf Commit-Nachrichten aus Sicherheitsgründen nicht selbst schreiben.",
-     "Das Pushen, denn `git push` kann Claude Code nur vorschlagen; ausführen musst du es selbst in deinem Terminal."
+     "Claude hat die Datei nicht geschrieben, sonst würde `git diff` jede Änderung im Ordner sofort anzeigen.",
+     "Claude Code unterdrückt den Diff, bis die Tests laufen und dir einen grünen Lauf melden.",
+     "Das Repository ist beschädigt, weil `git diff` auch neue Dateien zeigen müsste, und du musst es neu anlegen."
     ]
    },
    "recall": [
-    "In welcher Reihenfolge kommen Diff-Prüfung, Tests und Commit, und warum steht der Diff vor dem Commit?",
+    "In welcher Reihenfolge kommen Tests, Diff-Prüfung und Commit, und warum steht die Diff-Prüfung vor dem Commit?",
     "Wann lässt du alle Dateien stagen, und wann nennst du die Pfade einzeln?",
-    "Was brauchst du, damit Claude einen PR anlegen kann?"
+    "Was braucht Claude zusätzlich, damit es einen PR anlegen kann?"
    ],
    "requires": [
     "S1.5",
@@ -959,7 +988,7 @@
    "session": 1,
    "shelf": "git",
    "skip_check": [
-    "Hast du schon einmal einen ganzen Ablauf von Branch über Commit bis PR in einer einzigen Claude-Code-Sitzung durchgezogen?",
+    "Hast du schon einmal einen ganzen Ablauf von Branch über Diff und Tests bis zum Commit in einer einzigen Claude-Code-Sitzung durchgezogen?",
     "Kannst du ohne Nachschlagen sagen, an welcher Stelle du den Diff prüfst und wann du Dateien gezielt statt alle stagen lässt?"
    ],
    "sources": [
@@ -971,34 +1000,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Stell dir das Bedienpult einer Leitstelle vor. Eine Taste zeigt die Übersicht aller Kameras (`/diff`), eine zweite spult die letzten Aktionen zurück (`/rewind`), eine dritte ruft die Abnahme vor der Übergabe auf (`/review`). Dazu kommt ein Relais, das bei einem CI-Alarm selbstständig einen Servicetechniker losschickt (`/autofix-pr`), alles vom selben Pult aus.",
-   "answers": null,
+   "analogy": "Stell dir das Bedienpult einer Leitstelle vor. Eine Taste zeigt, was seit der letzten Übergabe am Stellwerk geändert wurde (`/diff`), eine zweite ruft die Abnahme auf (`/review`), eine dritte spult die letzten Aktionen zurück (`/rewind`). Die Abnahme ersetzt dein eigenes Lesen nicht, und das Zurückspulen kennt nur, was über Claudes Datei-Werkzeuge lief.",
+   "answers": [
+    "`/diff` zeigt dir alle Änderungen im Arbeitsverzeichnis, damit du sie selbst liest. `/review` lässt Claude den aktuellen Diff, eine PR, einen Branch oder einen Pfad auf Fehler prüfen.",
+    "Dateien, die Claude über Bash-Befehle wie `rm`, `mv` oder `cp` geändert hat. Die nimmst du mit Git zurück.",
+    "Ob in deinem Repo eine Automatisierung auf PR-Kommentare reagiert (etwa Atlantis, Terraform Cloud oder GitHub Actions auf `issue_comment`). Claude kann unter deinem GitHub-Konto antworten, und so eine Antwort kann diese Abläufe auslösen."
+   ],
    "area": "git",
-   "checkpoint": "Du kannst für jeden Anlass den passenden Befehl wählen, von `/diff` vor dem Commit bis `claude --from-pr` für die Rückkehr zu einer PR, und begründen, wann `/autofix-pr` tabu ist.",
+   "checkpoint": "Du kannst `/diff`, `/review` und `/rewind` in einem Git-Ablauf einsetzen und weißt, was du vor `/autofix-pr` prüfst.",
    "demo": null,
-   "example": "/review        # reviews the current diff: branch commits ahead of upstream plus uncommitted changes\n/review 1234   # reviews pull request #1234 instead of the current diff",
+   "example": "   Add a function average(numbers) to greet.py that returns sum(numbers) / len(numbers). Also add a function shout(name) that returns greet(name) in upper case.",
    "example_lang": "text",
    "file": "s1-17-git-befehle.md",
-   "glance": "Rund um Git hat Claude Code eigene Slash-Befehle: `/diff` zeigt alle Änderungen vor dem Commit, `/rewind` springt zu einem früheren Stand zurück, und `/review`, ein Alias von `/code-review`, prüft vor dem Merge den aktuellen Diff oder eine PR. `/autofix-pr` lässt eine Cloud-Sitzung deine PR beobachten und Fixes pushen, aber nie bei fehlgeschlagenen Produktions-Deploys, nie bei Security-, Auth- oder Crypto-Code und nie in Repos, deren main-Branch automatisch in Produktion geht.",
+   "glance": "Rund um Git hat Claude Code eigene Slash-Befehle. Im Alltag brauchst du drei: `/diff` zeigt alle Änderungen im Arbeitsverzeichnis, `/review` (ein Alias von `/code-review`) prüft den aktuellen Diff auf Fehler, und `/rewind` springt zu einem früheren Stand zurück. `/branch` und `/fork` verzweigen das Gespräch, nicht die Git-Historie. `/autofix-pr` ist ein Ausblick auf Cloud-Sitzungen: Es lässt Claude deine PR beobachten und Fixes pushen, und Claude kann dabei unter deinem GitHub-Konto antworten.",
    "id": "S1.17",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1170,
-   "outcome": "Ich kann /diff, /rewind, /review, /branch, /fork, --fork-session und --from-pr dem passenden Anlass zuordnen und weiß, wann /autofix-pr nie eingesetzt werden darf.",
+   "outcome": "Ich kann /diff, /review und /rewind in einem Git-Ablauf einsetzen, /branch, /fork, --fork-session und --from-pr dem passenden Anlass zuordnen und sage, was ich vor /autofix-pr prüfe.",
    "quiz": {
-    "correct": "Für eine PR, die Auth- oder Crypto-Code ändert, weil dort selbst ein scheinbarer Lint-Fix einen Fehler einbauen kann.",
-    "q": "Für welche PR ist `/autofix-pr` tabu, auch wenn Branch-Protection-Regeln aktiv sind?",
+    "correct": "Die zwei Commits, die dem Upstream voraus sind, und deine noch nicht committete Änderung.",
+    "q": "Dein Branch hat zwei Commits, die dem Upstream voraus sind, und eine Änderung, die du noch nicht committet hast. Du gibst `/review` ohne Ziel ein. Was prüft Claude?",
     "wrong": [
-     "Für eine PR mit vielen geänderten Dateien, weil die Cloud-Sitzung große Diffs grundsätzlich nicht vollständig laden kann.",
-     "Für eine PR, die nur Tests und Formatierung ändert, weil sich eine Cloud-Sitzung für so kleine Fehler nicht lohnt.",
-     "Für eine PR in einem Repo mit aktivem Linter, weil sich `/autofix-pr` und der Linter sonst gegenseitig Commits überschreiben."
+     "Nur die noch nicht committete Änderung, denn bereits committeter Code gilt als geprüft und bleibt außen vor.",
+     "Nur den letzten Commit, weil `/review` immer genau einen Commit vom Branch-Ende aus betrachtet.",
+     "Die gesamte Historie des Repositorys seit dem ersten Commit, weil `/review` ohne Ziel alles durchsieht."
     ]
    },
    "recall": [
-    "Was verzweigt `/branch`, und was verzweigt es nicht?",
-    "Welche Änderungen stellt `/rewind` nicht wieder her?",
-    "Was zeigt dir `claude --from-pr 1234` an?"
+    "Wofür nimmst du `/diff`, wofür `/review`?",
+    "Welche Änderungen stellt `/rewind` nicht wieder her, und womit nimmst du sie zurück?",
+    "Was prüfst du in deinem Repo, bevor du `/autofix-pr` einschaltest, und warum?"
    ],
    "requires": [
     "S1.16"
@@ -1016,7 +1049,7 @@
    "shelf": "git",
    "skip_check": [
     "Hast du schon einmal `/diff` oder `/review` benutzt, bevor du committet oder gemergt hast?",
-    "Kannst du ohne Nachschlagen sagen, in welchen drei Fällen du `/autofix-pr` nie einsetzen würdest?"
+    "Kannst du ohne Nachschlagen sagen, was `/rewind` nicht zurückholt und womit du das stattdessen rückgängig machst?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/commands",
@@ -1031,34 +1064,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Wenn du eine neue Firmware für einen Controller testen willst, spielst du sie nicht zuerst auf das Live-System. Du hast eine Testbank: einen Nachbau der Produktionsanlage in einem eigenen Raum. Dort spielst du die Firmware auf, testest, prüfst das Verhalten und planst erst dann das Update in der Produktion.",
-   "answers": null,
+   "analogy": "Ein Worktree ist ein zweiter Arbeitstisch am selben Archiv. Auf jedem Tisch liegen eigene Unterlagen: eigene Dateien, ein eigener Branch. Aber beide Tische ziehen aus derselben Aktenablage, dem gemeinsamen `.git`, und stehen im selben Gebäude. Was am Tisch geschieht, trennt die Papiere voneinander, nicht das Gebäude vom Experiment.",
+   "answers": [
+    "Sie teilen das Repository mit seiner Historie und dem Remote. Jeder hat seine eigenen Dateien und seinen eigenen Branch.",
+    "Prozesse, Datenbanken, Ports und deine Rechte. Ein Worktree trennt Dateiänderungen und Branches, nicht dein System.",
+    "Claude Code fragt, ob du den Worktree behalten oder entfernen willst. Behalten bewahrt Ordner und Branch, Entfernen löscht beides samt der Arbeit."
+   ],
    "area": "git",
-   "checkpoint": "Du kannst für ein Experiment einen Worktree anlegen, von Hand oder mit `claude --worktree`, und begründen, wann er sich lohnt und welchen Wert von `worktree.baseRef` du wählst.",
+   "checkpoint": "Du kannst für ein Experiment einen Worktree anlegen, begründen, wann er sich lohnt, und sagen, was er nicht isoliert.",
    "demo": "../moderation/vorfuehren/s1-18-worktrees.md",
-   "example": "Create a git worktree at ../log-formatter-experiment on a new branch\ncalled experiment/json-log-format",
-   "example_lang": "",
+   "example": "   claude --worktree test-1 --permission-mode acceptEdits",
+   "example_lang": "bash",
    "file": "s1-18-worktrees.md",
    "glance": "Ein Git-Worktree ist ein zweites Arbeitsverzeichnis mit eigenem Branch, das dasselbe Repository teilt. Darin probierst du etwas aus oder machst einen Hotfix, ohne deinen laufenden Branch anzufassen: kein Stash, kein Branch-Wechsel mitten in der Arbeit. Klappt das Experiment, mergst du; klappt es nicht, entfernst du den Worktree.",
    "id": "S1.18",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1180,
-   "outcome": "Ich kann für ein Experiment einen Worktree anlegen, von Hand mit git worktree oder mit claude --worktree, und erklären, wann sich ein Worktree lohnt und was worktree.baseRef bestimmt.",
+   "outcome": "Ich kann mit claude --worktree einen Worktree anlegen, darin arbeiten und ihn beim Beenden entfernen oder behalten, sagen, wann sich ein Worktree lohnt und was er nicht isoliert, und worktree.baseRef als Einstellung für den Abzweigpunkt nennen.",
    "quiz": {
-    "correct": "Vom Standard-Branch auf dem Remote; deine ungepushten Commits sind in keinem der beiden Worktrees enthalten.",
-    "q": "Dein Feature-Branch hat ungepushte Commits. Du startest zwei Agenten mit `claude --worktree`, und `worktree.baseRef` steht auf `fresh`. Wovon gehen die beiden Worktrees aus?",
+    "correct": "Nur Dateien und Branch: Die Datenbank ist dieselbe wie im Hauptordner, das Skript kann sie also verändern.",
+    "q": "Du lässt Claude in einem Worktree ein Migrationsskript ausprobieren, das gegen deine lokale Entwicklungsdatenbank läuft. Was schützt der Worktree?",
     "wrong": [
-     "Von deinem lokalen HEAD; beide Worktrees starten also mit deinen ungepushten Commits als gemeinsamer Basis.",
-     "Vom letzten Commit des jeweils anderen Agenten, damit die beiden Worktrees nach jedem Commit synchron bleiben.",
-     "Von deinem Arbeitsverzeichnis samt allen nicht committeten Änderungen, damit kein Zwischenstand verloren geht."
+     "Alles, denn ein Worktree ist eine abgetrennte Testumgebung mit eigener Kopie der Datenbank und der Dienste.",
+     "Die Datenbank, denn Claude Code startet Befehle in einem Worktree automatisch in einer Sandbox ohne Zugriff.",
+     "Nichts, denn ein Worktree schützt nur lesende Zugriffe, schreibende Dateiänderungen landen im Hauptordner."
     ]
    },
    "recall": [
     "Was teilen sich Hauptordner und Worktree, und was hat jeder für sich?",
-    "Was ändert `-b` bei `git worktree add`?",
-    "Von wo zweigt ein neuer Worktree mit `fresh` ab, und was passiert, wenn es keinen Remote gibt?"
+    "Was trennt ein Worktree nicht, obwohl er wie ein „Testlabor“ aussieht?",
+    "Was passiert beim Beenden einer `claude --worktree`-Sitzung, wenn noch Arbeit im Worktree liegt?"
    ],
    "requires": [
     "S1.16"
@@ -1076,7 +1113,7 @@
    "shelf": "git",
    "skip_check": [
     "Hast du schon einmal mit `git worktree` oder `claude --worktree` parallel an zwei Branches gearbeitet?",
-    "Kannst du ohne Nachschlagen sagen, von wo ein neuer Worktree standardmäßig abzweigt und wie du das mit `worktree.baseRef` änderst?"
+    "Kannst du ohne Nachschlagen sagen, was ein Worktree von deinem Rechner trennt und was nicht?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/worktrees",
@@ -1091,34 +1128,38 @@
    "aliases": [
     "1.5"
    ],
-   "analogy": "Ein Wachdienst rechnet mit Stundenzetteln ab. Der Stundenzettel der laufenden Schicht ist `/cost`: Er zeigt, was diese Schicht bisher gekostet hat. Die Budgetgrenze ist das Tank- und Zeitbudget der Nachtstreife, die allein unterwegs ist: Ist es aufgebraucht, kehrt die Streife zurück, statt weiterzufahren. Dieses Budget gilt nur für Streifen ohne Aufsicht, also für `claude -p`-Läufe, nicht für einen Einsatz, bei dem du danebenstehst.",
-   "answers": null,
+   "analogy": "Ein Wachdienst rechnet mit Stundenzetteln ab. Der Stundenzettel der laufenden Schicht ist `/cost`. Die Budgetgrenze ist das Tank- und Zeitbudget der Nachtstreife, die allein unterwegs ist: Ist es aufgebraucht, kehrt sie zurück. Das gilt nur für Streifen ohne Aufsicht, also für `claude -p`-Läufe, nicht für einen Einsatz, bei dem du danebenstehst.",
+   "answers": [
+    "`/cost` (ein anderer Name für `/usage`). Für den Vergleich liest du die Zeile `Total cost` im Session-Block.",
+    "Im Print-Modus (`claude -p`), nicht interaktiv. `--max-budget-usd` begrenzt die Kosten in Dollar, `--max-turns` die Zahl der Agenten-Runden.",
+    "`/cost` zählt sonst alle Läufe zusammen, und ein neues Modell liest den bisherigen Verlauf ohne Cache-Treffer neu. Beides verfälscht den Vergleich."
+   ],
    "area": "cost",
-   "checkpoint": "Du kannst mit `/cost` bzw. `/usage` den Verbrauch deiner Sitzung ablesen, einen `claude -p`-Lauf mit `--max-budget-usd` und `--max-turns` deckeln und vor einem langen Lauf mindestens einen Sparhebel nennen: Cache, Effort oder Modell pro Phase.",
+   "checkpoint": "Du kannst mit `/cost` den Verbrauch deiner Sitzung ablesen, einen fairen Modellvergleich aufbauen und einen `claude -p`-Lauf mit `--max-budget-usd` und `--max-turns` deckeln.",
    "demo": "../moderation/vorfuehren/s1-19-kosten-im-blick.md",
-   "example": "# ~/.bashrc or ~/.zshrc\nalias claude-review='claude --model sonnet --effort medium --max-budget-usd 0.30'\nalias claude-deep='claude --model opus --effort xhigh --max-budget-usd 2.00'\nalias claude-quick='claude --model haiku'   # Haiku has no effort setting",
+   "example": "   claude --model opus --effort xhigh --permission-mode acceptEdits",
    "example_lang": "bash",
    "file": "s1-19-kosten-im-blick.md",
-   "glance": "Für den Anfang reichen drei Dinge: `/cost` (ein anderer Name für `/usage`) zeigt, was die laufende Sitzung bisher gekostet hat; das Standardmodell, das Opus-Tier, ist ein guter Start; und alles, was unbeaufsichtigt als `claude -p` läuft, deckelst du mit `--max-budget-usd` und `--max-turns`. Beide Grenzen wirken nur im Print-Modus (`-p`), nicht in einer interaktiven Sitzung.",
+   "glance": "Für den Anfang reichen drei Dinge: `/cost` (ein anderer Name für `/usage`) zeigt, was die laufende Sitzung bisher gekostet hat; Modell und Effort sind die großen Hebel, und du vergleichst sie am besten am selben Auftrag; und alles, was unbeaufsichtigt als `claude -p` läuft, deckelst du mit `--max-budget-usd` und `--max-turns`. Beide Grenzen wirken nur im Print-Modus (`-p`), nicht in einer interaktiven Sitzung.",
    "id": "S1.19",
    "level": "core",
    "minutes": 15,
    "offers": [],
    "order": 1190,
-   "outcome": "Ich kann mit /cost (einem anderen Namen für /usage) den Verbrauch meiner Sitzung ablesen, einen claude -p-Lauf mit --max-budget-usd und --max-turns deckeln und vor einem langen Lauf die drei Sparhebel Cache, Effort und Modell pro Phase prüfen.",
+   "outcome": "Ich kann mit /cost den Verbrauch meiner Sitzung ablesen, dieselbe Aufgabe mit drei Modellen vergleichen, ohne meinen Standard zu ändern, und einen claude -p-Lauf mit --max-budget-usd und --max-turns deckeln.",
    "quiz": {
-    "correct": "In `/usage`: Die Plan-Ansicht schlüsselt den Verbrauch auf Skills, Subagents, Plugins und MCP-Server auf, `w` zeigt 7 Tage.",
-    "q": "Du hast ein Max-Abo und willst wissen, ob ein bestimmter Skill einen großen Teil deines Verbrauchs der letzten Woche ausmacht. Wo schaust du nach?",
+    "correct": "Eine Schätzung aus den Tokens zum Listenpreis; für die Abrechnung im Abo ist sie nicht relevant, zum Vergleich von Läufen taugt sie.",
+    "q": "Du hast ein Max-Abo, und `/cost` zeigt am Ende einer Sitzung `Total cost` von 0,42 Dollar. Was bedeutet der Betrag?",
     "wrong": [
-     "In `/insights`: Der HTML-Bericht listet die Kosten je Skill und je Modell für die letzten sieben Tage übersichtlich als Tabelle auf.",
-     "In `/context`: Das farbige Raster zeigt, welcher Skill wie viel von deinem Wochenbudget verbraucht hat.",
-     "Nirgends in Claude Code: Den Verbrauch je Skill zeigt nur das Dashboard der Claude Console im Browser an."
+     "Den Betrag, den dir Anthropic zusätzlich zur Abo-Gebühr in Rechnung stellt, weil `/cost` die Abrechnung anzeigt.",
+     "Den verbindlichen Betrag, der immer genau mit der Usage-Seite der Claude Console übereinstimmt und dort auftaucht.",
+     "Einen festen Platzhalter ohne Bezug zu deinen Tokens, den Claude Code für Abos nur zur Anzeige einblendet."
     ]
    },
    "recall": [
-    "Was ist der günstigste Weg, damit eine Routineaufgabe nicht zur Kostenüberraschung wird?",
+    "Welchen Befehl nutzt du für den Verbrauch deiner laufenden Sitzung, und welche Zeile liest du für den Vergleich ab?",
     "In welchem Modus wirken `--max-budget-usd` und `--max-turns`, und was begrenzt jedes der beiden?",
-    "Warum startest du vor einem Modellvergleich mit `/clear` neu?"
+    "Warum startest du für jeden Lauf eines Modellvergleichs eine neue Sitzung?"
    ],
    "requires": [
     "S1.1"
@@ -1132,7 +1173,7 @@
    "shelf": "cost",
    "skip_check": [
     "Hast du schon einmal nach einer Sitzung `/cost` geöffnet und daraus eine Modell- oder Effort-Entscheidung abgeleitet?",
-    "Kannst du ohne Nachschlagen sagen, wann du `--max-budget-usd` setzt und in welchem Modus das Flag überhaupt wirkt?"
+    "Kannst du ohne Nachschlagen sagen, in welchem Modus `--max-budget-usd` überhaupt wirkt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/costs",
@@ -1146,17 +1187,21 @@
   {
    "aliases": [],
    "analogy": "",
-   "answers": null,
+   "answers": [
+    "Die Docstring-Regel stand in der CLAUDE.md, die Löschsperre als Deny-Regel in `.claude/settings.json`. Nur die Deny-Regel ist eine Sperre; die CLAUDE.md ist eine Hausordnung, an die sich Claude meist hält.",
+    "Damit genau das im Commit landet, was zur Änderung gehört. Das Diff vor der Freigabe ist die letzte Stelle, an der du siehst, was gleich in der Historie steht.",
+    "Du nennst das konkrete Problem und sagst, dass nur das behoben werden soll und sonst nichts geändert wird."
+   ],
    "area": null,
-   "checkpoint": "Du kannst für deine größte Lücke aus Session 1 die passende Übung wählen, sie allein bis zu ihrer Liste „Geschafft, wenn\" durcharbeiten und in einem Satz sagen, welche Fähigkeit sie trainiert hat.",
+   "checkpoint": "Du kannst die Bausteine aus Session 1 in einem Ablauf verbinden und für jeden sagen, wo er steht und was er leistet.",
    "demo": "../moderation/vorfuehren/s1-20-praxis-station-1.md",
-   "example": "That's not quite right. The issue is [specific problem]. Fix only that — don't change anything else.",
-   "example_lang": "",
+   "example": "Create hours.py with a function is_open(hour) that returns True for the hours 8 to 17 and False otherwise. Add unittest tests in test_hours.py for 7, 8, 17 and 18. Do not change README.md or CLAUDE.md. Success: python -m unittest prints OK. Run the tests.",
+   "example_lang": "text",
    "file": "s1-20-praxis-station-1.md",
-   "glance": "Diese Station hilft dir, aus den Übungen von Session 1 die eine zu wählen, die deine größte Lücke schließt: die Grundschleife, CLAUDE.md, präzise Aufträge oder Git. Im Workshop hast du dafür 15 Minuten, das reicht für eine Übung. Die Übungen selbst stehen in ihren Kapiteln; hier findest du die Auswahl, Fragen für die Nachbesprechung und kurze Extras zum Aufwärmen.",
+   "glance": "Diese Station schließt Session 1 ab. Du verbindest in einer einzigen kleinen Aufgabe, was du bisher einzeln geübt hast: eine Sitzung im passenden Rechte-Modus, eine Regel in der CLAUDE.md, eine Sperre in der `settings.json`, einen präzisen Auftrag und einen gezielten Commit auf einem eigenen Branch. Das dauert etwa 15 Minuten.",
    "id": "S1.20",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [
     "S1.1",
     "S1.10",
@@ -1165,12 +1210,12 @@
     "S1.18"
    ],
    "order": 1200,
-   "outcome": "Ich kann aus den Übungen von Session 1 die passende für meine Lücke auswählen, sie allein durchführen und an ihrer Liste Geschafft, wenn prüfen, ob sie gelungen ist.",
+   "outcome": "Ich kann die Bausteine aus Session 1 in einem Ablauf verbinden: Regeln in CLAUDE.md und settings.json, ein präziser Auftrag und ein geprüfter Commit auf einem eigenen Branch.",
    "quiz": null,
    "recall": [
-    "Welche Übung trainiert die Grundschleife, welche den Kontext über einen Neustart hinweg, welche präzise Aufträge und welche den Git-Ablauf?",
-    "Welche Übungen passen in die 15 Minuten der Station, und welche planst du für später ein?",
-    "Wie formulierst du eine Korrektur, wenn Claude in einer Übung danebenliegt?"
+    "Zwei Regeln galten in der Übung, ohne dass du sie im Auftrag wiederholt hast. Wo standen sie, und welche der beiden ist eine Sperre?",
+    "Warum hast du nur zwei Dateien gestagt und das Diff gelesen, bevor du den Commit freigegeben hast?",
+    "Wie formulierst du eine Korrektur, wenn Claude danebenliegt?"
    ],
    "requires": [],
    "requires_all": [],
@@ -1179,7 +1224,7 @@
    "shelf": "practice",
    "skip_check": [],
    "sources": [],
-   "title": "Praxis-Station Session 1: eine Übung wählen",
+   "title": "Praxis-Station Session 1: alles in einem Ablauf",
    "transferable": false,
    "type": "practice"
   },

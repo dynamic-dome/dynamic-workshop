@@ -385,5 +385,6 @@ def test_the_real_standard_list_names_existing_chapters_and_they_pass():
     lib = lm.load_library(ROOT / "resources" / "library")
     standard = bl.load_standard()
     assert standard, "the list is empty"
-    found = [p for p in bl.validate(lib, complete=False, meta=bl.load_meta(), standard=standard)]
+    # complete=True also checks anchors across chapters: a renamed heading must not leave a dead link elsewhere
+    found = [p for p in bl.validate(lib, complete=True, meta=bl.load_meta(), standard=standard)]
     assert found == []

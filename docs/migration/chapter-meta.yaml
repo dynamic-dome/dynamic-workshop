@@ -139,7 +139,7 @@
   title: Alle Gedächtnis-Ebenen im Überblick
   shelf: context
   level: deep-dive
-  minutes: 18
+  minutes: 20
   requires:
   - S1.10
   safety_floor: false
@@ -151,7 +151,7 @@
   title: Imports, --add-dir und AGENTS.md
   shelf: context
   level: deep-dive
-  minutes: 12
+  minutes: 20
   requires:
   - S1.10
   safety_floor: false
@@ -189,7 +189,7 @@
   title: Output Styles und Personas
   shelf: prompting
   level: deep-dive
-  minutes: 12
+  minutes: 15
   requires:
   - S1.13
   safety_floor: false
@@ -201,7 +201,7 @@
   title: 'Git in einem Fluss: Branch, Commit, PR'
   shelf: git
   level: core
-  minutes: 18
+  minutes: 15
   requires:
   - S1.5
   - S1.13
@@ -215,7 +215,7 @@
   title: Git-Befehle in der Sitzung
   shelf: git
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S1.16
   safety_floor: false
@@ -227,7 +227,7 @@
   title: Worktrees als Testlabor
   shelf: git
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S1.16
   safety_floor: false
@@ -249,10 +249,10 @@
   file: s1-19-kosten-im-blick.md
 - id: S1.20
   type: practice
-  title: 'Praxis-Station Session 1: eine Übung wählen'
+  title: 'Praxis-Station Session 1: alles in einem Ablauf'
   shelf: practice
   level: core
-  minutes: 15
+  minutes: 20
   requires: []
   safety_floor: false
   transferable: false

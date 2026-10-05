@@ -227,7 +227,7 @@ Unter **Windows** führt Git Hooks über das mitgelieferte Git Bash aus; ein `#!
 
 > **Sicherheitshinweis:** Nimm `/autofix-pr` für **Test- und Lint-Fehler**, nicht für fehlgeschlagene Produktions-Deploys. Ein scheiternder Deploy-Schritt ist ein Signal, das menschliches Urteil braucht, keine automatische Antwort.
 
-Wann `/autofix-pr` passt und wann nie, steht samt Voraussetzungen in [S1.17](s1-17-git-befehle.md#autofix-pr-ci-fehler-von-einer-cloud-sitzung-beheben-lassen). Kurz: Es passt zu Test-, Lint- und Formatierungsfehlern, Tippfehlern in der Doku und fehlenden Imports. Tabu ist es bei Produktions-Deploys, bei Security-, Auth- oder Crypto-Code (selbst ein „Lint-Fix" kann einen Fehler einbauen) und in Repos, deren main-Branch automatisch in Produktion deployt. Kombiniere es mit Branch-Protection-Regeln, damit der automatisch gepushte Commit vor dem Merge trotzdem eine menschliche Freigabe braucht.
+Wann `/autofix-pr` passt und wann nie, steht samt Voraussetzungen in [S1.17](s1-17-git-befehle.md#ausblick-autofix-pr-und---from-pr). Kurz: Es passt zu Test-, Lint- und Formatierungsfehlern, Tippfehlern in der Doku und fehlenden Imports. Tabu ist es bei Produktions-Deploys, bei Security-, Auth- oder Crypto-Code (selbst ein „Lint-Fix" kann einen Fehler einbauen) und in Repos, deren main-Branch automatisch in Produktion deployt. Kombiniere es mit Branch-Protection-Regeln, damit der automatisch gepushte Commit vor dem Merge trotzdem eine menschliche Freigabe braucht.
 
 ### Token-Rotation auf langlebigen Runnern
 

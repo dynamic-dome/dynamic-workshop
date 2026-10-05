@@ -2,7 +2,7 @@
 
 <!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
 
-71 Kapitel in 19 Regalen, zusammen etwa 19 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
+71 Kapitel in 19 Regalen, zusammen etwa 19,5 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
 
 ## So findest du deinen Weg
 
@@ -99,8 +99,8 @@ Das Kontextfenster ist der Arbeitsspeicher des Agenten, CLAUDE.md seine Hausordn
 | [S1.8 Das Kontextfenster verstehen](s1-08-kontextfenster.md) | Kern | 15 |  |
 | [S1.9 Kontext steuern mit /compact und /rewind](s1-09-kontext-steuern.md) | Kern | 15 |  |
 | [S1.10 CLAUDE.md: die Hausordnung des Projekts](s1-10-claude-md.md) | Kern | 15 |  |
-| [S1.11 Alle Gedächtnis-Ebenen im Überblick](s1-11-gedaechtnis-ebenen.md) | Vertiefung | 18 |  |
-| [S1.12 Imports, --add-dir und AGENTS.md](s1-12-imports-und-agents-md.md) | Vertiefung | 12 |  |
+| [S1.11 Alle Gedächtnis-Ebenen im Überblick](s1-11-gedaechtnis-ebenen.md) | Vertiefung | 20 |  |
+| [S1.12 Imports, --add-dir und AGENTS.md](s1-12-imports-und-agents-md.md) | Vertiefung | 20 |  |
 
 <a id="prompting"></a>
 
@@ -114,7 +114,7 @@ Ein guter Auftrag nennt Ort, Ursache, Grenze und Erfolgskriterium, wie ein Wartu
 |---|---|---:|---|
 | [S1.13 Vager und präziser Auftrag im Vergleich](s1-13-vager-und-praeziser-auftrag.md) | Kern | 15 |  |
 | [S1.14 Plan-Modus und schrittweises Vorgehen](s1-14-plan-modus.md) | Kern | 15 |  |
-| [S1.15 Output Styles und Personas](s1-15-output-styles.md) | Vertiefung | 12 |  |
+| [S1.15 Output Styles und Personas](s1-15-output-styles.md) | Vertiefung | 15 |  |
 
 <a id="git"></a>
 
@@ -126,9 +126,9 @@ Git ist die Sicherheitsleine: Jede Änderung landet auf einem Branch, du liest d
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S1.16 Git in einem Fluss: Branch, Commit, PR](s1-16-git-in-einem-fluss.md) | Kern | 18 |  |
-| [S1.17 Git-Befehle in der Sitzung](s1-17-git-befehle.md) | Vertiefung | 15 |  |
-| [S1.18 Worktrees als Testlabor](s1-18-worktrees.md) | Vertiefung | 15 |  |
+| [S1.16 Git in einem Fluss: Branch, Commit, PR](s1-16-git-in-einem-fluss.md) | Kern | 15 |  |
+| [S1.17 Git-Befehle in der Sitzung](s1-17-git-befehle.md) | Vertiefung | 20 |  |
+| [S1.18 Worktrees als Testlabor](s1-18-worktrees.md) | Vertiefung | 20 |  |
 
 <a id="cost"></a>
 
@@ -316,7 +316,7 @@ Jede Station sammelt die Übungen ihrer Session. Wähle eine, die zu deinem Pfad
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S1.20 Praxis-Station Session 1: eine Übung wählen](s1-20-praxis-station-1.md) | Kern | 15 |  |
+| [S1.20 Praxis-Station Session 1: alles in einem Ablauf](s1-20-praxis-station-1.md) | Kern | 20 |  |
 | [S2.20 Praxis-Station Session 2: eine Übung wählen](s2-20-praxis-station-2.md) | Kern | 18 |  |
 | [S3.15 Praxis-Station Session 3: eine Übung wählen](s3-15-praxis-station-3.md) | Kern | 15 |  |
 

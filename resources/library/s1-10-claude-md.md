@@ -8,7 +8,7 @@ minutes: 15
 requires: [S1.2]
 safety_floor: false
 transferable: true
-outcome: "Ich kann eine knappe CLAUDE.md mit Stack, Konventionen und Verboten schreiben, ohne Geheimnisse, und nach einem Neustart prüfen, dass Claude sie geladen hat."
+outcome: "Ich kann eine knappe CLAUDE.md mit Stack-Abweichungen, Konventionen und Verboten schreiben, nach einem Neustart mit /context prüfen, dass Claude sie geladen hat, und sagen, warum sie eine Leitplanke und keine Sperre ist."
 sources:
   - https://code.claude.com/docs/en/memory
   - https://code.claude.com/docs/en/best-practices
@@ -25,20 +25,18 @@ aliases: []
 
 ## Schnellcheck
 
-- Hast du schon eine CLAUDE.md für ein echtes Projekt geschrieben und nach einem Neustart geprüft, dass Claude die Regeln kennt?
-- Kannst du ohne Nachschlagen drei Dinge nennen, die in eine CLAUDE.md gehören, und drei, die nicht hineingehören?
+- Hast du schon eine CLAUDE.md geschrieben und nach einem Neustart geprüft, dass Claude sie kennt?
+- Kannst du ohne Nachschlagen sagen, warum eine Regel in der CLAUDE.md keine Sperre ist?
 
 ## Auf einen Blick
 
-CLAUDE.md ist eine Markdown-Datei, die Claude Code zu Beginn jeder Session automatisch liest: die Hausordnung deines Projekts mit Stack, Konventionen und Verboten. Du schreibst die Regeln einmal, und Claude hat sie in jeder Session vor Augen, ohne dass du sie wiederholst. Halte die Datei knapp und schreib nie Geheimnisse hinein.
+CLAUDE.md ist eine Markdown-Datei, die Claude Code zu Beginn jeder Session automatisch liest: die Hausordnung deines Projekts mit Konventionen, Verboten und allem, was vom Üblichen abweicht. Du schreibst die Regeln einmal und musst sie nicht wiederholen. Halte die Datei knapp.
 
-Eine Hausordnung ist aber kein Türschloss. Claude behandelt die CLAUDE.md als Kontext, nicht als erzwungene Regel: Meist hält es sich daran, garantiert ist es nicht. Was sicher verhindert werden muss, blockt ein Hook ([S2.8](s2-08-hook-einrichten.md)).
+Eine Hausordnung ist aber kein Türschloss. Claude behandelt die CLAUDE.md als Kontext, nicht als erzwungene Regel: Meist hält es sich daran, garantiert ist es nicht. Was sicher verhindert werden muss, sperrst du technisch: mit einer Deny-Regel ([S1.5](s1-05-rechte-im-alltag.md)) oder einem Hook ([S2.8](s2-08-hook-einrichten.md)).
 
 ## Bild im Kopf
 
-Ein neuer Auftragnehmer bekommt beim Betreten des Geländes die Hausordnung: welche Bereiche er betreten darf, welche gesperrt sind, was bei einem Alarm zu tun ist, wen er anruft. Er liest sie, bevor er mit der Arbeit anfängt, und zwar bei jedem Einsatz.
-
-Die CLAUDE.md ist genau diese Hausordnung. Claude liest sie zu Beginn jeder Session, bevor es irgendetwas tut. Steht darin „always run pytest before committing", lässt Claude vor dem Commit pytest laufen. Steht darin „never modify the legacy firmware parser", behandelt Claude den Parser als Sperrzone. Du schreibst die Hausordnung einmal, und Claude liest sie jede Session, ohne dass du erinnern musst. Aber wie beim Auftragnehmer gilt: Wer eine Regel übersieht, kommt trotzdem durch die Tür. Verriegeln kann nur ein Schloss.
+Ein neuer Auftragnehmer bekommt beim Betreten des Geländes die Hausordnung: welche Bereiche gesperrt sind, was bei einem Alarm zu tun ist. Er liest sie vor der Arbeit, bei jedem Einsatz. Die CLAUDE.md ist diese Hausordnung. Aber wer eine Regel übersieht, kommt trotzdem durch die Tür. Verriegeln kann nur ein Schloss.
 
 ```mermaid
 sequenceDiagram
@@ -56,167 +54,103 @@ sequenceDiagram
 
 ### Zwei Ebenen für den Anfang
 
-- `./CLAUDE.md`: Projektebene, im Repo eingecheckt, gilt für dieses Projekt. Sie darf auch unter `./.claude/CLAUDE.md` liegen.
-- `~/.claude/CLAUDE.md`: Nutzerebene, gilt für alle deine Claude-Code-Sessions.
+- `./CLAUDE.md`: Projektebene, wird mit dem Projekt eingecheckt. Sie darf auch unter `./.claude/CLAUDE.md` liegen.
+- `~/.claude/CLAUDE.md`: Nutzerebene, gilt für alle deine Sitzungen.
 
-Claude Code liest beide und fügt sie zusammen; die Nutzerebene steht dabei zuerst im Kontext, das Projekt danach. Es gibt noch weitere Ebenen: deine private `CLAUDE.local.md`, die Managed Policy deiner Organisation und Regeln unter `.claude/rules/`. Die stehen in [S1.11](s1-11-gedaechtnis-ebenen.md).
+Claude Code liest beide und fügt sie zusammen; die Nutzerebene steht dabei zuerst im Kontext, das Projekt danach. Weitere Ebenen (`CLAUDE.local.md`, Managed Policy, `.claude/rules/`) stehen in [S1.11](s1-11-gedaechtnis-ebenen.md).
 
 ### Mit /init anfangen
 
-`/init` erzeugt eine erste CLAUDE.md. Claude untersucht dafür die Codebasis und schreibt Build-Befehle, Testaufrufe und Konventionen hinein, die es findet. Gibt es schon eine CLAUDE.md, schlägt `/init` Verbesserungen vor, statt sie zu überschreiben. Danach ergänzt du, was Claude nicht selbst herausfinden kann.
+`/init` erzeugt eine erste CLAUDE.md: Claude untersucht die Codebasis und schreibt Build-Befehle, Testaufrufe und Konventionen hinein, die es findet. Gibt es schon eine CLAUDE.md, schlägt `/init` Verbesserungen vor, statt sie zu überschreiben. Danach ergänzt du, was Claude nicht selbst herausfinden kann.
 
 ### Was hineingehört
 
-- Technologie-Stack und Versionen
-- Code-Konventionen (Benennung, Formatierung, Test-Framework, Lint-Regeln)
-- Projektbegriffe und Fachwissen aus deiner Domäne
-- Was nicht getan werden darf (etwa „never use global state", „never modify the legacy parser")
-- Hinweise zum Deployment, wichtige Dateiorte
-- Kontakt- oder Eskalationshinweise, wenn sie relevant sind
+- Konventionen, die vom Werkzeug-Standard abweichen (Benennung, Formatierung, Test-Framework, Lint-Regeln)
+- Den Stack nur dort, wo er abweicht, etwa „nur die Standardbibliothek“ oder eine feste Version
+- Was nicht getan werden darf („never modify the legacy parser“)
+- Projektbegriffe und Fallstricke, die man dem Code nicht ansieht
 
 ### Was nicht hineingehört
 
-- **Geheimnisse** (API-Keys, Passwörter): Sie gehören nie in Klartextdateien. Die CLAUDE.md ist eingecheckt, und Versionskontrolle ist kein Tresor.
+- **Geheimnisse** (API-Keys, Passwörter). Das ist eine Vorgabe dieser Bibliothek, die Doku sagt dazu nichts: Die Datei ist eingecheckt und steht in jeder Session im Kontext. Versionskontrolle ist kein Tresor.
+- **Ableitbares:** Verzeichnislayout, Abhängigkeitslisten, Architekturübersichten. Das liest Claude selbst im Code. `/doctor` schlägt für eine eingecheckte CLAUDE.md genau solche Kürzungen vor.
 - **Vorübergehender Aufgabenkontext:** Dafür ist das Gespräch da.
-- **Lange Dokumentation:** Claude liest die Datei jede Session, also halte sie knapp. Die offizielle Doku empfiehlt unter 200 Zeilen je CLAUDE.md; längere Dateien belegen mehr Kontext und werden schlechter befolgt. Für eine eingecheckte CLAUDE.md schlägt `/doctor` Kürzungen vor.
+- **Lange Texte:** Die offizielle Doku empfiehlt unter 200 Zeilen je CLAUDE.md. Längere Dateien belegen mehr Kontext und werden schlechter befolgt.
 
 ### Leitplanke, keine Sperre
 
-Claude liest die CLAUDE.md als Kontext, nicht als erzwungene Konfiguration. Eine Regel wie „never modify …" respektiert das Modell meistens. Weil sein Verhalten aber nicht deterministisch ist, tut es das nicht garantiert jedes Mal. CLAUDE.md-Regeln sind **Leitplanken**, kein hartes Schloss. Die harte Sperre ist ein **Hook**: Er blockt die Aktion, egal wie das Modell gerade entscheidet ([S2.8](s2-08-hook-einrichten.md)).
+Claude liest die CLAUDE.md als Kontext, nicht als erzwungene Konfiguration. Eine Regel wie „never modify …“ respektiert das Modell meistens, aber nicht garantiert jedes Mal. Schreib Regeln so konkret, dass man sie prüfen kann. Die harte Sperre ist ein **Hook**: Er blockt die Aktion, egal wie das Modell gerade entscheidet.
 
 ## Selbst machen
 
-### Übung: deinen Kontext einrichten
+### Übung: drei Regeln, ein Neustart (etwa 10 Minuten)
 
-**Ziel:** Eine CLAUDE.md für deinen echten Arbeitsbereich anlegen und prüfen, dass sie einen Neustart der Session übersteht. Der persönliche Memory-Eintrag (Schritt 8) folgt in [S1.11](s1-11-gedaechtnis-ebenen.md).
+**Ziel:** Du schreibst eine CLAUDE.md mit drei Regeln, startest neu und siehst, dass Claude sie ohne dein Zutun kennt und befolgt. An einer Regel erlebst du, dass sie keine Sperre ist.
 
-**Schritt 1: einen Projektordner anlegen**
+**Startzustand:** ein neuer, leerer Ordner `~/cc-workshop/claudemd`. Leg ihn an und wechsle hinein (`mkdir -p ~/cc-workshop/claudemd && cd ~/cc-workshop/claudemd`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\claudemd"; Set-Location "$HOME\cc-workshop\claudemd"`). Starte mit `claude --permission-mode acceptEdits`, damit Dateiänderungen ohne Rückfrage laufen und du siehst, ob die Regel allein hält.
 
-Such dir einen Ordner, der für ein echtes oder realistisches Projekt aus deiner Arbeit steht. Er darf leer sein; er ist nur das Zuhause für die CLAUDE.md.
+1. Gib Claude den Auftrag: `Create legacy_panel_parser.py with a function parse_frame(raw) that splits a comma-separated string into a list, and app.py that prints parse_frame("door1,open,07:30").` Erwartet: zwei neue Dateien.
+2. Jetzt die CLAUDE.md. Gib genau diesen Auftrag ein:
 
-macOS, Linux oder Git Bash:
+   <!-- cockpit:example -->
+   ```text
+   Create a CLAUDE.md with exactly these three rules and nothing else:
+   - Every function docstring starts with "PANEL:".
+   - Never modify legacy_panel_parser.py.
+   - Use only the Python standard library.
+   ```
 
-```
-mkdir -p ~/cc-workshop/exercises/exercise-1.2 && cd ~/cc-workshop/exercises/exercise-1.2
-git init
-claude
-```
+   Erwartet: eine `CLAUDE.md` mit drei kurzen Zeilen. Lies sie: Die erste Regel ist eine Konvention, die Claude nicht raten kann, die zweite ein Verbot, die dritte eine Stack-Abweichung.
+3. Beende die Sitzung mit `/exit` und starte neu mit `claude --permission-mode acceptEdits`. Die Sitzung weiß nichts mehr von eben.
+4. Gib `/context all` ein. Erwartet: unter **Memory files** steht die `CLAUDE.md` deines Ordners. (`/context` ohne `all` zählt dort nur: „1 file“.)
+5. Frag: `Without using any tools, what must every docstring in this project start with?` Erwartet: `PANEL:`. Das kann Claude nur aus der CLAUDE.md wissen.
+6. Teste das Verbot: `Add a function parse_batch(frames) to legacy_panel_parser.py that parses a list of frames.` Erwartet: Claude verweist auf die Regel und ändert die Datei nicht. Prüf danach außerhalb von Claude, ob die Datei noch wie vorher aussieht (`cat legacy_panel_parser.py`, in PowerShell `Get-Content legacy_panel_parser.py`). Hat Claude sie doch geändert, ist das kein Fehler von dir, sondern die Antwort auf die Frage, ob eine Regel eine Sperre ist.
+7. Gib den Auftrag mit anderem Ziel: `Put parse_batch in a new file batch.py instead.` Erwartet: `batch.py` mit einem Docstring, der mit `PANEL:` beginnt.
 
-PowerShell:
-
-```powershell
-New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\exercises\exercise-1.2" | Out-Null
-Set-Location "$HOME\cc-workshop\exercises\exercise-1.2"
-git init
-claude
-```
-
-**Schritt 2: Claude von deinem Projekt erzählen und die CLAUDE.md schreiben lassen**
-
-Denk daran, woran du wirklich arbeitest. Gib Claude dann einen Auftrag wie diesen:
-
-<!-- cockpit:example -->
-```
-Create a CLAUDE.md for this project. It is a [describe your project — e.g.,
-Python-based alarm management system for commercial buildings].
-
-Include these conventions:
-- [Your language/framework, e.g., Python 3.11, asyncio]
-- [Your test framework, e.g., pytest with pytest-asyncio]
-- [Any formatting tools you use]
-- [A rule about something that must never be changed — e.g., the legacy panel interface]
-- [A domain-specific convention — e.g., all alarm codes must be in SCREAMING_SNAKE_CASE]
-- [Anything else that's specific to your domain or team]
-```
-
-**Schritt 3: prüfen und nachschärfen**
-
-Lies, was Claude angelegt hat. Fehlt etwas oder stimmt etwas nicht, sag:
-
-```
-Add: [missing rule]
-Change the section on [X] to say: [correction]
-```
-
-**Schritt 4: in dieser Session prüfen (30 Sekunden)**
-
-Frag Claude, bevor du neu startest, *jetzt gleich* in derselben laufenden Session:
-
-```
-What conventions apply to this project?
-```
-
-Claude antwortet aus der CLAUDE.md, die es gerade mitgeschrieben hat; sie steht schon im laufenden Kontext. Merk dir diese Antwort: Im nächsten Schritt startest du neu und fragst noch einmal. Es **zweimal** funktionieren zu sehen, einmal in der Session (Kontext im laufenden Prozess) und einmal nach dem Neustart (frisch von der Platte geladen), macht den Unterschied zwischen *Kontext im Gespräch* und *gespeichert* greifbar. Außerdem ist es ein kleiner Erfolg vor dem technisch heikleren Neustart.
-
-**Schritt 5: beenden und neu starten**
-
-```
-exit
-```
-
-Dann:
-
-```
-claude
-```
-
-**Schritt 6: die Dauerhaftigkeit testen (nach dem Neustart)**
-
-Frag Claude:
-
-```
-What are the coding conventions for this project?
-```
-
-Weiß es Bescheid? Nennt es die Regeln, die du in die CLAUDE.md geschrieben hast? Diesmal kommt die Antwort nur aus der CLAUDE.md, frisch von der Platte geladen; der Kontext von vorher ist weg.
-
-**Schritt 7: die „Nie ändern"-Grenze testen**
-
-Bitte Claude:
-
-```
-Modify the legacy panel interface module
-```
-
-Widerspricht Claude? Meistens sollte es darauf hinweisen, dass die CLAUDE.md das verbietet, **aber nicht garantiert jedes Mal** (siehe „Leitplanke, keine Sperre" oben). Widerspricht es nicht, ist das eine nützliche Lektion und nicht dein Fehler. Die harte Sperre ist ein Hook ([S2.8](s2-08-hook-einrichten.md)): Er blockt die Aktion, egal wie das Modell gerade entscheidet.
-
-Weiter geht es mit Schritt 8 in [S1.11](s1-11-gedaechtnis-ebenen.md): einem persönlichen Memory-Eintrag.
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/claudemd` selbst.
 
 **Geschafft, wenn:**
 
-- [ ] die CLAUDE.md mit deinen echten Konventionen im Projektordner liegt
-- [ ] Claude die Konventionen in der Session **und** nach dem Neustart aufzählen kann, ohne dass du sie nennst
-- [ ] Claude *meistens* widerspricht, wenn es das geschützte Modul ändern soll, und du weißt, warum das nicht garantiert ist (Schritt 7)
+- [ ] `/context all` die `CLAUDE.md` unter **Memory files** zeigt
+- [ ] Claude nach dem Neustart ohne Werkzeug `PANEL:` nennt
+- [ ] du nachgesehen hast, ob `legacy_panel_parser.py` unverändert blieb, und weißt, warum das nicht garantiert ist
+- [ ] `batch.py` einen Docstring mit `PANEL:` hat
+- [ ] deine `CLAUDE.md` keine Schlüssel oder Passwörter enthält und weit unter 200 Zeilen liegt
 
-**Tipps**
+### Extra: `/init` ausprobieren (etwa 5 Minuten)
 
-- Widerspricht Claude beim geschützten Modul nicht, prüf deine CLAUDE.md. Die Regel muss genau sein: „Never modify [exact filename]", nicht nur „be careful with the legacy module".
-- Du kannst Claude jederzeit bitten, dir die aktuelle CLAUDE.md zu zeigen: „Show me the contents of CLAUDE.md."
-- Eine Regel nachträglich ergänzen: „Add this rule to CLAUDE.md: [rule]"
-- Memory oder CLAUDE.md? Projektregeln gehören in die CLAUDE.md des Projekts. Soll eine Vorliebe für alle deine Projekte gelten, gehört sie in `~/.claude/CLAUDE.md`. Das Auto-Memory („Remember that …") gilt nur für das jeweilige Repository ([S1.11](s1-11-gedaechtnis-ebenen.md)).
+Starte im selben Ordner eine Sitzung und gib `/init` ein. Die `CLAUDE.md` existiert schon, deshalb schlägt Claude laut Doku Verbesserungen vor, statt sie zu überschreiben. Lies die Vorschläge und übernimm nur, was eine Regel prüfbarer macht.
 
 ## Typische Fallen
 
 - **Claude hält sich trotz Regel nicht daran.** Oft ist die Datei zu lang, und die Regel geht unter. Kürze die CLAUDE.md, formuliere die Regel prüfbar, und bau für Unverzichtbares einen Hook.
-- **Claude kennt die CLAUDE.md nicht.** Sie liegt in einem anderen Ordner als dem, in dem du Claude gestartet hast. `/context` zeigt unter **Memory files**, welche Dateien geladen sind.
-- **Ein Passwort steht „nur kurz" in der CLAUDE.md.** Die Datei ist eingecheckt und landet in jeder Session im Kontext. Geheimnisse gehören nie in Klartextdateien.
+- **Claude kennt die CLAUDE.md nicht.** Sie liegt in einem anderen Ordner als dem, in dem du Claude gestartet hast. `/context all` zeigt unter **Memory files**, welche Dateien geladen sind.
+- **Ein Passwort steht „nur kurz“ in der CLAUDE.md.** Die Datei ist eingecheckt und landet in jeder Session im Kontext. Geheimnisse gehören nie in Klartextdateien.
 
 ## Check
 
 Du kannst eine knappe CLAUDE.md schreiben, nach einem Neustart prüfen, dass Claude sie geladen hat, und erklären, warum sie eine Leitplanke und keine Sperre ist.
 
-1. Nenne eine Dauerregel, die für dein Team in die CLAUDE.md gehört. Gute Antworten sind dauerhafte Projektregeln, keine einmaligen Aufträge.
-2. Welche drei Dinge gehören nicht in eine CLAUDE.md, und warum?
-3. Wie prüfst du, ob Claude deine CLAUDE.md geladen hat?
+1. Welche Arten von Inhalt gehören in eine CLAUDE.md, und welche nicht?
+2. Wie prüfst du nach einem Neustart, dass Claude deine CLAUDE.md geladen hat?
+3. Warum schützt die Regel „Never modify legacy_panel_parser.py“ die Datei nicht sicher, und was baust du, wenn sie sicher geschützt sein muss?
+
+<details><summary>Auflösung</summary>
+
+1. Hinein gehören Konventionen, Verbote und Stack-Abweichungen, die man dem Code nicht ansieht. Nicht hinein gehören Geheimnisse, Ableitbares wie Verzeichnislayout und Abhängigkeitslisten, vorübergehender Aufgabenkontext und lange Texte über 200 Zeilen.
+2. Mit `/context all`: Die Datei steht dann unter **Memory files**. Zusätzlich fragst du ohne Werkzeuge nach einer Regel, die Claude nicht raten kann.
+3. Claude liest die CLAUDE.md als Kontext, nicht als erzwungene Konfiguration, und hält sich meist daran, aber nicht garantiert. Eine sichere Sperre baust du mit einem Hook.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** In deiner CLAUDE.md steht „Never modify legacy_panel_parser.py". Wie verlässlich schützt diese Zeile die Datei?
+**Frage:** Dein Team-Repo hat eine CLAUDE.md mit 600 Zeilen. Claude ignoriert regelmäßig die Regel in Zeile 480. Was hilft zuerst?
 
-- **Richtig:** Claude hält sich meist daran, aber garantiert ist es nicht; eine sichere Sperre baust du mit einem Hook.
-- Falsch: Vollständig: Claude Code liest die Zeile als Rechte-Regel und lehnt jeden Edit an der Datei technisch ab.
-- Falsch: Gar nicht: Die CLAUDE.md liest nur `/init`, in normalen Sessions wirkt die Zeile überhaupt nicht.
-- Falsch: Erst nach `/compact`: Vorher steht die CLAUDE.md nicht im Kontext, danach wirkt die Zeile als Sperre.
+- **Richtig:** Die Datei auf das Wesentliche kürzen und die Regel konkret und prüfbar formulieren, denn lange Dateien werden schlechter befolgt.
+- Falsch: `/clear` eingeben, weil die CLAUDE.md erst nach einem Leeren des Kontexts mit voller Gewichtung geladen wird.
+- Falsch: Die Datei nach `~/.claude/CLAUDE.md` verschieben, weil Regeln der Nutzerebene wie Rechte-Regeln durchgesetzt werden.
+- Falsch: `/init` erneut laufen lassen, weil es die vorhandene CLAUDE.md durch eine kürzere Fassung überschreibt.
 
 </details>
 

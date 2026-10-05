@@ -106,5 +106,5 @@ Du kannst eine Übung aus Session 2 passend zu deinem Ziel wählen, sie bis zu i
 - [S2.11 · Plugins: ein Bündel schnüren](s2-11-plugins-buendeln.md)
 - [S2.14 · MCP: der Integrationsstecker](s2-14-mcp-stecker.md)
 - [S2.18 · RAG und NotebookLM: dem Agenten Baupläne geben](s2-18-rag-und-notebooklm.md)
-- [S1.20 · Praxis-Station Session 1: eine Übung wählen](s1-20-praxis-station-1.md)
+- [S1.20 · Praxis-Station Session 1: alles in einem Ablauf](s1-20-praxis-station-1.md)
 - [S3.15 · Praxis-Station Session 3: eine Übung wählen](s3-15-praxis-station-3.md)

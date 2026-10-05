@@ -21,7 +21,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Community & Lernen](README.md#community) · **Stufe:** Kür · **~35 Min** · **Voraussetzungen:** keine
 >
-> ← [S1.20 Praxis-Station Session 1: eine Übung wählen](s1-20-praxis-station-1.md) · [Bibliothek](README.md) · [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](s2-01-skills-und-commands.md) →
+> ← [S1.20 Praxis-Station Session 1: alles in einem Ablauf](s1-20-praxis-station-1.md) · [Bibliothek](README.md) · [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](s2-01-skills-und-commands.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick

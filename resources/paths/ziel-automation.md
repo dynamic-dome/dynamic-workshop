@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 4 Etappen, zusammen etwa 9,5 Stunden (534 Min durcharbeiten, 33 Min überfliegen).
+**Umfang:** 4 Etappen, zusammen etwa 9,5 Stunden (536 Min durcharbeiten, 33 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -18,7 +18,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S1.7 Modellwahl und Effort](../library/s1-07-modellwahl-und-effort.md) — durcharbeiten
 - [S1.8 Das Kontextfenster verstehen](../library/s1-08-kontextfenster.md) — durcharbeiten
 
-## Etappe 2 (~142 Min)
+## Etappe 2 (~144 Min)
 
 - [S1.9 Kontext steuern mit /compact und /rewind](../library/s1-09-kontext-steuern.md) — durcharbeiten
 - [S1.10 CLAUDE.md: die Hausordnung des Projekts](../library/s1-10-claude-md.md) — durcharbeiten
@@ -26,7 +26,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S1.14 Plan-Modus und schrittweises Vorgehen](../library/s1-14-plan-modus.md) — durcharbeiten
 - [S1.16 Git in einem Fluss: Branch, Commit, PR](../library/s1-16-git-in-einem-fluss.md) — durcharbeiten
 - [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](../library/s1-19-kosten-im-blick.md) — durcharbeiten
-- [S1.20 Praxis-Station Session 1: eine Übung wählen](../library/s1-20-praxis-station-1.md) — durcharbeiten
+- [S1.20 Praxis-Station Session 1: alles in einem Ablauf](../library/s1-20-praxis-station-1.md) — durcharbeiten
 - [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) — überfliegen
 - [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) — überfliegen
 - [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — überfliegen

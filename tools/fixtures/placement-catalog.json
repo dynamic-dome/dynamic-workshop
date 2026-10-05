@@ -215,7 +215,7 @@
    "area": "context",
    "id": "S1.11",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 20,
    "offers": [],
    "order": 1110,
    "requires": [
@@ -236,7 +236,7 @@
    "area": "context",
    "id": "S1.12",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 1120,
    "requires": [
@@ -299,7 +299,7 @@
    "area": "prompting",
    "id": "S1.15",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1150,
    "requires": [
@@ -319,7 +319,7 @@
    "area": "git",
    "id": "S1.16",
    "level": "core",
-   "minutes": 18,
+   "minutes": 15,
    "offers": [],
    "order": 1160,
    "requires": [
@@ -342,7 +342,7 @@
    "area": "git",
    "id": "S1.17",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1170,
    "requires": [
@@ -365,7 +365,7 @@
    "area": "git",
    "id": "S1.18",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1180,
    "requires": [
@@ -407,7 +407,7 @@
    "area": null,
    "id": "S1.20",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [
     "S1.1",
     "S1.10",

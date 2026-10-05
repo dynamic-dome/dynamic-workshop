@@ -4,9 +4,9 @@
 
 Das Wichtigste in wenigen Stunden: der Mindestpfad für alle, die schnell produktiv werden wollen.
 
-**Umfang:** 1 Etappe, zusammen etwa 3,5 Stunden (208 Min durcharbeiten, 0 Min überfliegen).
+**Umfang:** 1 Etappe, zusammen etwa 3,5 Stunden (205 Min durcharbeiten, 0 Min überfliegen).
 
-## Etappe 1 (~208 Min)
+## Etappe 1 (~205 Min)
 
 - [S0.1 Werkstatt einrichten](../library/s0-01-werkstatt-einrichten.md) — durcharbeiten
 - [S1.1 Erster Kontakt: sofort eine Datei bauen](../library/s1-01-erster-kontakt.md) — durcharbeiten

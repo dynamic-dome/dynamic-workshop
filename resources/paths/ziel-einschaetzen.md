@@ -23,7 +23,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S1.14 Plan-Modus und schrittweises Vorgehen](../library/s1-14-plan-modus.md) — überfliegen
 - [S1.16 Git in einem Fluss: Branch, Commit, PR](../library/s1-16-git-in-einem-fluss.md) — überfliegen
 - [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](../library/s1-19-kosten-im-blick.md) — überfliegen
-- [S1.20 Praxis-Station Session 1: eine Übung wählen](../library/s1-20-praxis-station-1.md) — überfliegen
+- [S1.20 Praxis-Station Session 1: alles in einem Ablauf](../library/s1-20-praxis-station-1.md) — überfliegen
 - [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) — überfliegen
 - [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — überfliegen
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — überfliegen

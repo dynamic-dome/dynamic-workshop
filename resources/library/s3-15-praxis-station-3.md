@@ -83,5 +83,5 @@ Du kannst eine Übung aus Session 3 passend zu deinem Projekt wählen, sie bis z
 - [S3.1 · Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md)
 - [S3.12 · Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md)
 - [S4.8 · Abschlussprojekt mit Bewertung](s4-08-abschlussprojekt.md)
-- [S1.20 · Praxis-Station Session 1: eine Übung wählen](s1-20-praxis-station-1.md)
+- [S1.20 · Praxis-Station Session 1: alles in einem Ablauf](s1-20-praxis-station-1.md)
 - [S2.20 · Praxis-Station Session 2: eine Übung wählen](s2-20-praxis-station-2.md)

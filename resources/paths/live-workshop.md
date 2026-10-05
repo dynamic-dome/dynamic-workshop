@@ -14,7 +14,7 @@ Kern 25 Min
 
 ## Session 1 — Erste Schritte
 
-Kern 233 Min · Vertiefung 72 Min
+Kern 235 Min · Vertiefung 95 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
@@ -28,16 +28,16 @@ Kern 233 Min · Vertiefung 72 Min
 | [S1.8 Das Kontextfenster verstehen](../library/s1-08-kontextfenster.md) | Kern | 15 |  |  |
 | [S1.9 Kontext steuern mit /compact und /rewind](../library/s1-09-kontext-steuern.md) | Kern | 15 |  |  |
 | [S1.10 CLAUDE.md: die Hausordnung des Projekts](../library/s1-10-claude-md.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s1-10-claude-md.md) |
-| [S1.11 Alle Gedächtnis-Ebenen im Überblick](../library/s1-11-gedaechtnis-ebenen.md) | Vertiefung | 18 |  | [Demo](../moderation/vorfuehren/s1-11-gedaechtnis-ebenen.md) |
-| [S1.12 Imports, --add-dir und AGENTS.md](../library/s1-12-imports-und-agents-md.md) | Vertiefung | 12 |  |  |
+| [S1.11 Alle Gedächtnis-Ebenen im Überblick](../library/s1-11-gedaechtnis-ebenen.md) | Vertiefung | 20 |  | [Demo](../moderation/vorfuehren/s1-11-gedaechtnis-ebenen.md) |
+| [S1.12 Imports, --add-dir und AGENTS.md](../library/s1-12-imports-und-agents-md.md) | Vertiefung | 20 |  |  |
 | [S1.13 Vager und präziser Auftrag im Vergleich](../library/s1-13-vager-und-praeziser-auftrag.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s1-13-vager-und-praeziser-auftrag.md) |
 | [S1.14 Plan-Modus und schrittweises Vorgehen](../library/s1-14-plan-modus.md) | Kern | 15 |  |  |
-| [S1.15 Output Styles und Personas](../library/s1-15-output-styles.md) | Vertiefung | 12 |  |  |
-| [S1.16 Git in einem Fluss: Branch, Commit, PR](../library/s1-16-git-in-einem-fluss.md) | Kern | 18 |  | [Demo](../moderation/vorfuehren/s1-16-git-in-einem-fluss.md) |
-| [S1.17 Git-Befehle in der Sitzung](../library/s1-17-git-befehle.md) | Vertiefung | 15 |  |  |
-| [S1.18 Worktrees als Testlabor](../library/s1-18-worktrees.md) | Vertiefung | 15 |  | [Demo](../moderation/vorfuehren/s1-18-worktrees.md) |
+| [S1.15 Output Styles und Personas](../library/s1-15-output-styles.md) | Vertiefung | 15 |  |  |
+| [S1.16 Git in einem Fluss: Branch, Commit, PR](../library/s1-16-git-in-einem-fluss.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s1-16-git-in-einem-fluss.md) |
+| [S1.17 Git-Befehle in der Sitzung](../library/s1-17-git-befehle.md) | Vertiefung | 20 |  |  |
+| [S1.18 Worktrees als Testlabor](../library/s1-18-worktrees.md) | Vertiefung | 20 |  | [Demo](../moderation/vorfuehren/s1-18-worktrees.md) |
 | [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](../library/s1-19-kosten-im-blick.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s1-19-kosten-im-blick.md) |
-| [S1.20 Praxis-Station Session 1: eine Übung wählen](../library/s1-20-praxis-station-1.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s1-20-praxis-station-1.md) |
+| [S1.20 Praxis-Station Session 1: alles in einem Ablauf](../library/s1-20-praxis-station-1.md) | Kern | 20 |  | [Demo](../moderation/vorfuehren/s1-20-praxis-station-1.md) |
 
 ## Session 2 — Das Ökosystem
 
