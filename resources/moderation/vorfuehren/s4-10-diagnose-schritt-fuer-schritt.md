@@ -2,132 +2,44 @@
 
 > Demo und Hinweise für Moderierende zum Kapitel [S4.10 · Diagnose Schritt für Schritt](../../library/s4-10-diagnose-schritt-fuer-schritt.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
 
-### Demo: einen kaputten Skill diagnostizieren
+### Demo: ein Wächter, der still offen fällt
 
-**Ziel:** Das ganze Diagnose-Vorgehen an einem Skill zeigen, der auf drei Arten nacheinander scheitert. Jeder Fix legt das nächste Problem frei.
+**Ziel:** Das Diagnose-Vorgehen an einem Wächter-Hook zeigen, der keine Meldung erzeugt: Die Registrierung ist in Ordnung, das Log warnt nicht, und trotzdem blockt der Hook nichts. Erst der Handlauf mit einer Eingabe im echten Format und ein sichtbar gemachter Fehler führen zur Ursache.
 
-**Vorbereitung**
-
-Ein fertig kaputter Skill liegt im Repo unter [`resources/demos/assets/broken-greeter/SKILL.md`](../../demos/assets/broken-greeter/SKILL.md); du musst ihn nicht vor der Session nachbauen. Kopier ihn vorher an seinen Platz:
-
-```bash
-mkdir -p ~/.claude/skills/broken-greeter
-cp resources/demos/assets/broken-greeter/SKILL.md ~/.claude/skills/broken-greeter/SKILL.md
-```
-```powershell
-# Windows PowerShell
-New-Item -ItemType Directory -Force -Path "$HOME\.claude\skills\broken-greeter" | Out-Null
-Copy-Item resources\demos\assets\broken-greeter\SKILL.md "$HOME\.claude\skills\broken-greeter\SKILL.md"
-```
-
-Er hat **drei eingebaute Probleme**, in dieser Reihenfolge:
-
-1. **Die Beschreibung ist allgemein**, ohne konkrete Auslöser (nur „A skill for greeting.").
-2. **`disable-model-invocation: true`** im Frontmatter: Der Skill ist registriert, der automatische Aufruf aber aus.
-3. **`paths: ["never-match/**"]`**: ein Filter, den keine echte Datei erfüllt.
-
-Der Skill-Text selbst funktioniert („Reply with a friendly greeting that uses the user's name"). Falsch sind nur die Metadaten.
-
-**Schritte (etwa 7 Minuten)**
-
-> **Die Trace-Ausgaben sind sinngemäß, nicht wörtlich.** Die zitierten `/debug`-Zeilen zeigen, *welche Information*
-> erscheint; der **genaue Wortlaut hängt von der Claude-Code-Version ab**. Prüf vor der Session auf dem Vorführrechner,
-> was `/debug` und das Debug-Log wirklich zeigen, und lies die echten Zeilen vor. Versprich diese hier nicht als Ausgabe.
-
-**Schritt 1: den Skill normal benutzen**
-
-Prompt:
-
-> "Greet the user."
-
-Der Skill feuert nicht. Claude antwortet mit einem allgemeinen Gruß aus seinem Grundverhalten, ohne ein Zeichen, dass es den Skill überhaupt erwogen hat.
-
-**Schritt 2: prüfen, ob der Skill installiert ist**
-
-```
-/skills
-```
-
-Zeig: `broken-greeter` steht in der Liste. An der Installation liegt es also nicht.
-
-**Schritt 3: das Frontmatter ansehen**
-
-```bash
-cat ~/.claude/skills/broken-greeter/SKILL.md | head -20
-```
-
-Auf den ersten Blick wirkt das Frontmatter plausibel. **Lies es jetzt nicht gründlich durch.** Nimm stattdessen das Diagnose-Werkzeug; genau das ist die Lektion.
-
-**Schritt 4: `/debug` einschalten und neu auslösen**
-
-```
-/debug skill-not-triggering
-```
-
-Wiederhol dann den Prompt: *„Greet the user."*
-
-Lies die Auswertung laut vor. Such nach einer Zeile **sinngemäß** wie dieser (der Wortlaut variiert):
-
-> *"Skill `broken-greeter` matched paths-filter: NO (filter: `never-match/**`, current files: ...)"*
-
-Die erste Ursache ist sichtbar. Reaktion im Raum: „Ah, der paths-Filter ist falsch."
-
-**Schritt 5: Fix 1, den paths-Filter entfernen**
-
-Lösch die Zeile `paths:` im Frontmatter und lös den Prompt erneut aus. **Der Skill feuert immer noch nicht.** Lies die Auswertung noch einmal und such nach etwas **wie** (Wortlaut variiert):
-
-> *"Skill `broken-greeter` registered but auto-invocation disabled (`disable-model-invocation: true`). Available only via explicit `/broken-greeter`."*
-
-**Schritt 6: mit dem Aufruf von Hand gegenprüfen**
-
-```
-/broken-greeter
-```
-
-Der Skill feuert. Der Skill-Text funktioniert also; gesperrt haben nur die Metadaten.
-
-**Schritt 7: Fix 2, `disable-model-invocation` auf `false` setzen**
-
-Setz im Frontmatter `disable-model-invocation: false` und lös erneut aus:
-
-> "Greet the user."
-
-**Der Skill feuert immer noch nicht**, aber die Auswertung sagt jetzt etwas anderes (sinngemäß):
-
-> *"Skill `broken-greeter` description too generic for prompt — no candidate match."*
-
-**Schritt 8: Fix 3, die Beschreibung mit Auslösern neu schreiben**
-
-Ändere die Beschreibung von `"A skill for greeting"` in etwas wie:
-
-```
-description: >
-  Greets the user warmly by name. Use whenever the prompt is "greet the user",
-  "say hello", "welcome me", "hi", or any opening pleasantry.
-```
-
-**Schritt 9: den automatischen Aufruf prüfen**
-
-```
-"Greet me"
-```
-
-Jetzt feuert der Skill von selbst. Drei Probleme, drei Diagnoseschritte, drei Fixes.
+Zeig die Übung aus dem Kapitel live: die Übung „ein Wächter, der still offen fällt“ in [S4.10](../../library/s4-10-diagnose-schritt-fuer-schritt.md). Startzustand wie dort: der Ordner `~/cc-workshop/waechter-defekt` mit `.claude/settings.json` und `.claude/hooks/guard.py`, so wie im Kapitel angegeben. Leg beide Dateien vorher an; der Wächter hat einen eingebauten Fehler (er liest das Feld `cmd` statt `command` und fängt jede Ausnahme mit `exit 0` ab). Unter macOS und Linux steht überall `python3`, wo im Kapitel `python` steht, auch in der `settings.json`. Ablauf: die Schritte 1 bis 7 der Übung. Starte den ersten Lauf mit `claude --permission-mode default --debug-file debug.log`.
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** etwa 7 Minuten.
+**Dauer:** etwa 15 bis 20 Minuten.
 
 **Sagen:**
 
-„Wir haben nie **geraten**, was falsch ist. `/debug` und `/skills` haben uns den Zustand jeder Schicht gesagt. Wir hätten eine Stunde auf das Frontmatter starren können und den `paths`-Filter übersehen, weil er *vernünftig aussah*. Die Diagnose-Werkzeuge machen aus der Blackbox einen Glaskasten.
+- Schritt 1: „Der Befehl mit `release.lock` läuft. Im Transkript steht kein `hook error`. Nichts meldet einen Fehler." Nur Exit-Code 2 blockt. Ein Skript, das alle Fehler abfängt und mit `exit 0` endet, sieht für Claude Code aus wie ein Hook, der zugestimmt hat.
+- Schritt 2: „`/hooks` zeigt den Hook unter PreToolUse. Die Registrierung ist in Ordnung. Das war nicht das Problem."
+- Schritt 3: „Jetzt spiele ich die Eingabe im echten Format von Hand ein: Der Shell-Befehl steht in `tool_input.command`." Das Ergebnis ist `exit=0`, obwohl der Befehl `release.lock` nennt: Der Wächter sagt leise „kein Einwand".
+- Schritt 4: „Das Debug-Log hätte uns hier nicht gewarnt." In der interaktiven Sitzung steht zum Hook möglicherweise keine Zeile, in einem `-p`-Lauf schon; in beiden Fällen meldet das Log keinen Fehler. Verlässlich ist der Handlauf aus Schritt 3.
+- Schritt 5: „Ich mache den verschluckten Fehler laut, bevor ich etwas anderes ändere." Die Fehlermeldung endet auf `KeyError: 'cmd'`: Das Skript sucht das Feld `cmd`, im Ereignis heißt es `command`.
+- Schritt 6: „Zwei Änderungen: das richtige Feld, und der `except`-Block fällt geschlossen. Ein kaputter Wächter soll die Tür schließen, nicht öffnen." Die drei Handtests: `release.lock` ergibt `exit=2`, `echo hi` ergibt `exit=0`, `not json` ergibt `exit=2`.
+- Schritt 7: „Jetzt belegt der geblockte Befehl in der Sitzung die Reparatur."
+- Zum Abschluss: „Wir haben nie geraten. Wir haben jede Schicht gefragt, was sie sieht: `/hooks`, den Handlauf, das Log. Sobald du anfängst zu raten, lässt sich die Fehlersuche nicht mehr wiederholen." Die Diagnose-Checkliste des Kapitels beginnt mit `/doctor` und geht dann CLAUDE.md, Skills, Plugins, Hooks, MCP und Rechte durch, zuletzt das Debug-Log.
 
-Das ist die Schleife der **werkzeuggestützten Fehlersuche**: Frag die Werkzeuge, was sie sehen, behebe, was sie melden, und frag noch einmal. Sobald du anfängst zu raten, lässt sich die Fehlersuche nicht mehr wiederholen."
+**Wenn die Hooks nicht laufen:** Claude Code führt Hooks aus Settings-Dateien erst aus, wenn der Vertrauensdialog für den Ordner bestätigt ist.
 
-**Wenn `/debug` in deiner Claude-Code-Version fehlt** (ältere Builds): Starte die Sitzung mit `claude --debug` neu, lös die Prompts erneut aus und lies das Debug-Log in `~/.claude/debug/<session-id>.txt`. Das ist weniger bequem als Claudes Auswertung im Gespräch, zeigt dir aber das Log selbst.
+**Wenn Claude auf ein anderes Werkzeug ausweicht und nach einer Dateiänderung fragt (Schritt 7):** Lehn mit „No“ ab.
 
-**Wenn jemand fragt, warum drei Probleme statt einem:** Echte Skills haben meist ein Problem auf einmal, aber **die Diagnose-Schleife bleibt dieselbe, egal wie viele Probleme übereinanderliegen**. Es geht um die *Methode*, nicht um die Menge.
+**Zugabe: „Mein Skill greift nicht“**
 
-**Kürzere Fassung (etwa 4 statt 7 Minuten):** Bau nur die Probleme 1 und 3 ein und lass den Schritt zu `disable-model-invocation` weg.
+Dieselbe Methode an einem Skill, wenn Zeit bleibt. Ein fertig kaputter Skill liegt im Repo unter [`resources/demos/assets/broken-greeter/SKILL.md`](../../demos/assets/broken-greeter/SKILL.md). Er hat drei eingebaute Metadaten-Probleme: eine allgemeine Beschreibung, `disable-model-invocation: true` und einen `paths`-Filter, den keine echte Datei erfüllt. Der Skill-Text selbst funktioniert. Kopier ihn in einen Wegwerf-Ordner (`.claude/skills/broken-greeter/SKILL.md` im Ordner), nicht nach `~/.claude`, und starte dort eine Sitzung.
+
+Gehe die Diagnose-Reihenfolge des Kapitels durch:
+
+1. `/skills`: Steht der Skill in der Liste? Hier ja, an der Installation liegt es nicht.
+2. Das Frontmatter ansehen: `disable-model-invocation`, `paths`, Konkretheit der Beschreibung.
+3. Ausdrücklich auslösen: `/broken-greeter`. Der Skill-Text funktioniert; gesperrt haben nur die Metadaten.
+4. `/debug` mit einer Beschreibung des Problems, dann denselben Prompt („Greet the user.“) noch einmal.
+
+Behebe die Probleme eines nach dem anderen und prüf nach jedem, ob der Skill von selbst greift. Zum Schluss schreibst du die Beschreibung mit konkreten Auslösern neu, etwa „Greets the user warmly by name. Use whenever the prompt is "greet the user", "say hello" or "welcome me".“
+
+Die Ausgaben von `/debug` und des Debug-Logs hängen von der Claude-Code-Version ab. Prüf vor der Session auf dem Vorführrechner, was sie wirklich zeigen, und lies die echten Zeilen vor; versprich keinen Wortlaut. Fehlt `/debug`, starte mit `claude --debug` neu und lies das Log in `~/.claude/debug/<session-id>.txt`. Eine Kürzung auf zwei Probleme ist möglich: Bau nur die allgemeine Beschreibung und den `paths`-Filter ein.
 
 </details>
