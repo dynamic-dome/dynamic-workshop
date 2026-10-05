@@ -526,3 +526,120 @@ def test_review_asks_what_is_due_and_counts_honestly(browser, site):
     assert lead.startswith("Eine Frage") and "Fünf" not in lead
     assert errors == []
     page.close()
+
+
+# --- taking progress along, phone width (P9g) ----------------------------------------------------------------
+
+DONE_S27 = "localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {'S2.7': true}, doneAt: {'S2.7': '2026-10-01T08:00:00.000Z'}}));"
+
+
+def _export(page, tmp_path):
+    with page.expect_download() as download:
+        page.click("[data-action=export]")
+    target = tmp_path / "export.json"
+    download.value.save_as(str(target))
+    return target
+
+
+def test_export_and_import_carry_progress_and_placement_to_another_browser(browser, site, tmp_path):
+    source, errors = open_page(browser, site + "?screen=start", init_script=stored_profile() + DONE_S27)
+    exported = _export(source, tmp_path)
+    data = json.loads(exported.read_text(encoding="utf-8"))
+    assert data["app"] == "cc-workshop-cockpit" and data["v"] == 1
+    assert data["progress"]["done"] == {"S2.7": True} and data["profile"]["answers"]["goals"] == ["alltag"]
+    assert errors == []
+    source.close()
+
+    context = browser.new_context(viewport={"width": 1280, "height": 900})  # another browser: empty storage
+    target = context.new_page()
+    target.goto(site + "?screen=start")
+    assert target.locator(".start-grid [data-screen=einstufung]").count() == 1
+    target.set_input_files("input[data-action=import]", str(exported))
+    target.wait_for_selector(".start-grid [data-chapter='S2.8']")  # the page now leads on along the imported path
+    assert "1 erledigtes Kapitel" in target.locator("#carryFeedback").inner_text()
+    assert target.evaluate("JSON.parse(localStorage.getItem('ccWorkshopUiState')).done") == {"S2.7": True}
+    assert target.evaluate("JSON.parse(localStorage.getItem('ccWorkshopProfileV1')).answers.goals") == ["alltag"]
+    context.close()
+
+
+def test_import_adds_to_what_is_there_and_never_takes_progress_away(browser, site, tmp_path):
+    source, _ = open_page(browser, site + "?screen=start", init_script=DONE_S27)
+    exported = _export(source, tmp_path)
+    source.close()
+    context = browser.new_context(viewport={"width": 1280, "height": 900})
+    page = context.new_page()
+    page.goto(site + "?screen=start")
+    page.evaluate("localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {'S2.8': true}, doneAt: {'S2.8': '2026-10-02T08:00:00.000Z'}}))")
+    page.reload()
+    page.set_input_files("input[data-action=import]", str(exported))
+    page.wait_for_function("document.querySelector('#carryFeedback').textContent.includes('Importiert')")
+    assert page.evaluate("Object.keys(JSON.parse(localStorage.getItem('ccWorkshopUiState')).done).sort()") == ["S2.7", "S2.8"]
+    context.close()
+
+
+@pytest.mark.parametrize("content", [
+    "this is not json",
+    '{"foo": 1}',
+    '{"app": "cc-workshop-cockpit", "v": 1, "progress": {"done": {"S9.99": true, "S2.7": true}, "doneAt": {}}, "profile": {"answers": {"version": 1, "goals": ["gibt-es-nicht"]}}}',
+], ids=["garbage", "foreign", "unknown-ids"])
+def test_import_refuses_what_it_cannot_read_and_keeps_only_what_it_knows(browser, site, tmp_path, content):
+    path = tmp_path / "import.json"
+    path.write_text(content, encoding="utf-8")
+    context = browser.new_context(viewport={"width": 1280, "height": 900})
+    page = context.new_page()
+    errors = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.goto(site + "?screen=start")
+    page.set_input_files("input[data-action=import]", str(path))
+    page.wait_for_function("document.querySelector('#carryFeedback').textContent.trim() !== ''")
+    feedback = page.locator("#carryFeedback").inner_text()
+    stored = page.evaluate("JSON.parse(localStorage.getItem('ccWorkshopUiState') || '{}').done || {}")
+    profile = page.evaluate("localStorage.getItem('ccWorkshopProfileV1')")
+    if "S9.99" in content:
+        assert stored == {"S2.7": True}  # the unknown chapter is dropped, the known one kept
+        assert profile is None and "Einstufung" in feedback  # a placement the engine rejects is not taken over
+    else:
+        assert "keine Export-Datei" in feedback and stored == {} and profile is None
+    assert errors == []
+    context.close()
+
+
+def test_phone_width_every_screen_fits_and_the_navigation_is_reachable(browser, real_site):
+    page, errors = open_page(browser, real_site + "?screen=start", width=390, init_script=stored_profile())
+    for query in ("?screen=start", "?screen=einstufung", "?screen=pfad", "?screen=bibliothek", "?screen=wiederholen",
+                  "?run=S1.5", "?run=S2.8", "?run=S4.8"):
+        page.goto(real_site + query)
+        assert page.evaluate("document.documentElement.scrollWidth") <= 390, query
+    rights = page.locator(".nav button").evaluate_all("els => els.map(e => e.getBoundingClientRect().right)")
+    assert len(rights) == 5 and max(rights) <= 390  # no item hidden beyond the edge
+    assert errors == []
+    page.close()
+
+
+def test_phone_width_has_jump_marks_above_the_text_and_marking_works(browser, real_site):
+    page, errors = open_page(browser, real_site + "?run=S1.5", width=390)
+    assert not page.locator("aside .toc").is_visible()
+    inline = page.locator("details.toc-inline")
+    assert inline.is_visible()
+    in_front = page.evaluate("""() => {
+      const toc = document.querySelector('details.toc-inline'), text = document.querySelector('main [data-full=open]');
+      return !!(toc.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING);
+    }""")
+    assert in_front is True
+    inline.locator("summary").click()
+    inline.locator("[data-action=jump]", has_text="Selbst machen").click()
+    page.wait_for_function("""() => {
+      const h = [...document.querySelectorAll('.prose h2')].find(e => e.textContent.trim() === 'Selbst machen');
+      const top = h.getBoundingClientRect().top;
+      return top >= 0 && top < 260;
+    }""")
+    page.locator("[data-action=toggle-done]").click()
+    assert page.locator("[data-action=toggle-done]").inner_text() == "Als offen markieren"
+    assert errors == []
+    page.close()
+
+
+def test_wide_screens_show_the_jump_marks_only_in_the_side_column(browser, site):
+    page, _ = open_page(browser, site + "?run=S2.8")
+    assert page.locator("aside .toc").is_visible() and not page.locator("details.toc-inline").is_visible()
+    page.close()

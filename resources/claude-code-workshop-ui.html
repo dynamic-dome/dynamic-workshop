@@ -115,8 +115,11 @@
     .start-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
     .way { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 10px; text-align: left; text-decoration: none; }
     .way .btn { margin-top: auto; }
-    .for-moderators { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); }
-    .for-moderators h2 { font-size: 16px; margin: 0 0 6px; color: var(--ink-2); }
+    .for-moderators, .carry { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .for-moderators { margin-top: 28px; }
+    .for-moderators h2, .carry h2 { font-size: 16px; margin: 0 0 6px; color: var(--ink-2); }
+    .carry label.btn { cursor: pointer; position: relative; }
+    .carry label.btn:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
     .way:hover { border-color: var(--accent); }
     .way strong { font-size: 18px; }
     .way span { color: var(--ink-2); font-size: 15px; }
@@ -271,9 +274,12 @@
     .panel h2 { font-size: 14px; margin: 0 0 8px; color: var(--muted); font-weight: 600; }
     .panel ul { margin: 0; padding-left: 18px; }
     .prose h2 { scroll-margin-top: 70px; } /* a jump mark must not park the heading under the sticky header */
-    .toc ul { list-style: none; padding: 0; }
-    .toc button { border: 0; background: none; padding: 3px 0; color: var(--ink-2); text-align: left; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
-    .toc button:hover { color: var(--accent); text-decoration-color: var(--accent); }
+    .toc ul, .toc-inline ul { list-style: none; padding: 0; }
+    .toc-inline { display: none; margin: 12px 0 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 8px 14px; max-width: 74ch; }
+    .toc-inline summary { cursor: pointer; color: var(--ink-2); }
+    .toc-inline ul { margin: 8px 0 0; }
+    .toc button, .toc-inline button { border: 0; background: none; padding: 3px 0; color: var(--ink-2); text-align: left; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+    .toc button:hover, .toc-inline button:hover { color: var(--accent); text-decoration-color: var(--accent); }
     .pager { display: flex; justify-content: space-between; gap: 10px; margin-top: 36px; }
     .pager a { max-width: 48%; }
 
@@ -282,7 +288,9 @@
 
     @media (max-width: 700px) {
       .top-inner { padding: 8px 14px; gap: 6px 10px; }
-      .nav { order: 3; width: 100%; margin-left: 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+      .top { position: static; } /* two rows of navigation would cover a sixth of a phone screen */
+      .nav { order: 3; width: 100%; margin-left: 0; flex-wrap: wrap; } /* wrap: a row that scrolls hid its last item */
+      .prose h2 { scroll-margin-top: 12px; }
       .nav button { flex: none; padding: 5px 10px; }
       .theme { margin-left: auto; padding: 4px 8px; font-size: 14px; }
       main { padding: 20px 14px 60px; }
@@ -291,6 +299,8 @@
       .start-grid { grid-template-columns: 1fr; }
       .chapter { grid-template-columns: minmax(0, 1fr); }
       aside.side { position: static; }
+      aside .toc { display: none; } /* below the text it is of no use: the folded list above the text takes over */
+      .toc-inline { display: block; }
       .rows li { grid-template-columns: 1fr; gap: 4px; }
       .rows .min { text-align: left; }
       .floor { grid-template-columns: 1fr; }
@@ -658,6 +668,12 @@
           <div><b>${doneCount}</b>erledigt</div>
           <div><b>${profile ? "ja" : "nein"}</b>Einstufung gespeichert</div>
         </div>
+        <section class="carry" aria-labelledby="h-carry">
+          <h2 id="h-carry">Fortschritt mitnehmen</h2>
+          <p class="muted measure">Fortschritt und Einstufung liegen nur in diesem Browser, ohne Konto. Als Datei nimmst du sie auf ein anderes Gerät mit. Der Import ergänzt, was dort schon erledigt ist, und übernimmt die Einstufung aus der Datei.</p>
+          <div class="row"><button type="button" class="btn" data-action="export">Als Datei exportieren</button><label class="btn">Datei importieren<input type="file" class="sr-only" accept=".json,application/json" data-action="import"></label></div>
+          <p class="feedback small" id="carryFeedback" aria-live="polite"></p>
+        </section>
         <section class="for-moderators" aria-labelledby="h-moderators">
           <h2 id="h-moderators">Für Moderierende</h2>
           <p class="muted measure">Du hältst den Workshop vor einer Gruppe? Der Live-Workshop-Pfad enthält alle Kapitel in der Reihenfolge der vier moderierten Sessions.</p>
@@ -843,7 +859,10 @@
       const working = !!(c.html && !(mine && mine.status === "skim"));
       // jump marks: the sections of the text, in document order (render() gives the headings their ids)
       const sections = working ? (c.html.match(/<h2>[\s\S]*?<\/h2>/g) || []).map(h => h.replace(/<[^>]+>/g, "")) : [];
-      const toc = sections.length > 1 ? `<nav class="panel toc" aria-label="Abschnitte dieses Kapitels"><h2>In diesem Kapitel</h2><ul>${sections.map((s, i) => `<li><button type="button" data-action="jump" data-target="sec-${i}">${s}</button></li>`).join("")}</ul></nav>` : "";
+      const jumps = sections.map((s, i) => `<li><button type="button" data-action="jump" data-target="sec-${i}">${s}</button></li>`).join("");
+      const toc = sections.length > 1 ? `<nav class="panel toc" aria-label="Abschnitte dieses Kapitels"><h2>In diesem Kapitel</h2><ul>${jumps}</ul></nav>` : "";
+      // narrow screens stack the side column below the text, so they get the list folded above it (CSS shows one of the two)
+      const tocInline = sections.length > 1 ? `<details class="toc-inline"><summary>In diesem Kapitel</summary><ul>${jumps}</ul></details>` : "";
       const doneButton = `<button type="button" class="btn ${done ? "" : "primary"}" data-action="toggle-done" data-id="${esc(id)}" aria-pressed="${done}">${done ? "Als offen markieren" : "Als erledigt markieren"}</button>`;
       const hasQuick = c.skip_check && c.skip_check.length;
       // recall questions, each with its own answer to open: answer first from memory, then compare (P3)
@@ -857,6 +876,7 @@
           ${full}
           <p class="row done-row">${doneButton}</p>`;
       const whole = `${hasQuick ? `<p class="row skip-row"><span class="muted small">Beide Fragen im Schnellcheck sicher ja?</span><button type="button" class="btn" data-action="can-skip" data-id="${esc(id)}">Überspringen</button></p>` : ""}
+          ${tocInline}
           <div class="prose" data-full="open">${diagramHtml(c.html || "")}</div>
           ${c.quiz ? `<section class="block"><h2>Quiz</h2>${quizBlock(c, "ch")}</section>` : ""}
           <p class="row done-row">${doneButton}</p>`;
@@ -921,6 +941,49 @@
         if (natural) svg.style.setProperty("--w", natural + "px");  // the stylesheet scales from the natural width
         d.classList.toggle("is-wide", !!box && box.scrollWidth > box.clientWidth + 1);
       });
+    }
+    function carryFeedback(text) { const fb = document.getElementById("carryFeedback"); if (fb) fb.textContent = text; }
+    function exportState() {
+      const payload = { app: "cc-workshop-cockpit", v: 1, exportedAt: new Date().toISOString(), progress, profile };
+      const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 1)], { type: "application/json" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "claude-code-praxisbibliothek-fortschritt.json";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      carryFeedback("Exportiert. Die Datei liegt bei deinen Downloads.");
+    }
+    function importState(text) {
+      // Only what this cockpit knows gets in: chapter ids of this library, and a placement the engine accepts.
+      let data = null;
+      try { data = JSON.parse(text); } catch (err) { data = null; }
+      const isObject = v => !!v && typeof v === "object" && !Array.isArray(v);
+      if (!isObject(data) || data.app !== "cc-workshop-cockpit" || !isObject(data.progress)) return "Das ist keine Export-Datei dieses Cockpits. Es wurde nichts geändert.";
+      const done = isObject(data.progress.done) ? data.progress.done : {};
+      const doneAt = isObject(data.progress.doneAt) ? data.progress.doneAt : {};
+      let known = 0, added = 0;
+      Object.keys(done).forEach(id => {
+        if (!CH[id] || done[id] !== true) return;
+        known += 1;
+        if (!progress.done[id]) { progress.done[id] = true; added += 1; }
+        const at = typeof doneAt[id] === "string" && Number.isFinite(Date.parse(doneAt[id])) ? doneAt[id] : null;
+        const have = Date.parse(progress.doneAt[id] || "");
+        if (at && (!Number.isFinite(have) || Date.parse(at) < have)) progress.doneAt[id] = at;  // the earlier day counts
+        else if (!Number.isFinite(have)) progress.doneAt[id] = new Date().toISOString();
+      });
+      saveProgress();
+      let note = "";
+      if (isObject(data.profile) && isObject(data.profile.answers)) {
+        try {
+          place(DATA, data.profile.answers);
+          profile = { v: 1, at: typeof data.profile.at === "string" ? data.profile.at : new Date().toISOString(), why: typeof data.profile.why === "string" ? data.profile.why.slice(0, 1000) : "", answers: data.profile.answers };
+          saveProfile();
+          note = " Die Einstufung aus der Datei gilt jetzt.";
+        } catch (err) { note = " Die Einstufung aus der Datei passt nicht zu dieser Bibliothek und wurde nicht übernommen."; }
+      }
+      return `Importiert: ${known === 1 ? "1 erledigtes Kapitel" : known + " erledigte Kapitel"}${added !== known ? " (" + added + " davon neu)" : ""}.${note}`;
     }
     function showStep() {
       // A step starts at its top; the old scroll position would hide its heading under the sticky header (B1).
@@ -1002,6 +1065,8 @@
         // answers and the scroll position (B7).
         if (state.screen === "kapitel") showDoneState(id); else render();
         announce(progress.done[id] ? id + " erledigt." : id + " wieder offen.");
+      } else if (action === "export") {
+        exportState();
       } else if (action === "zoom" || action === "zoom-close") {
         const dialog = document.getElementById("zoomDialog");
         const svg = action === "zoom" ? target.closest(".diagram").querySelector("svg") : null;
@@ -1031,6 +1096,16 @@
     document.addEventListener("change", event => {
       const t = event.target;
       if (t.matches("select[data-action=override]")) setOverride(t.dataset.id, t.value);
+      if (t.matches("input[data-action=import]")) {
+        const file = t.files && t.files[0];
+        if (!file) return;
+        if (file.size > 1024 * 1024) { carryFeedback("Das ist keine Export-Datei dieses Cockpits. Es wurde nichts geändert."); t.value = ""; return; }
+        const reader = new FileReader();
+        reader.onerror = () => carryFeedback("Die Datei ließ sich nicht lesen. Es wurde nichts geändert.");
+        reader.onload = () => { const message = importState(String(reader.result)); render(); carryFeedback(message); announce(message); };
+        reader.readAsText(file);
+        return;
+      }
       if (t.matches("input[name=goal]")) {
         const boxes = Array.from(document.querySelectorAll("input[name=goal]"));
         if (boxes.filter(b => b.checked).length > 2) t.checked = false;
