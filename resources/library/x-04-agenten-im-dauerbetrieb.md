@@ -301,3 +301,4 @@ Du kannst für einen Dauer-Agenten zeigen, an welchen Stellen Text von außen zu
 - [S2.17 · MCP-Sicherheit und ein eigener Server](s2-17-mcp-sicherheit.md)
 - [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md)
 - [S3.9 · Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md)
+- Stand der OpenClaw-Doku: geprüft am 2026-10-06 (Heartbeat-Seite geändert; Takt-Standard, `0m`, `isolatedSession`, `lightContext`, Kosten-Hinweis und `system heartbeat disable` unverändert belegt).
