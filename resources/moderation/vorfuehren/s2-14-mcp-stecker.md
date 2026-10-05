@@ -2,88 +2,33 @@
 
 > Demo und Hinweise für Moderierende zum Kapitel [S2.14 · MCP: der Integrationsstecker](../../library/s2-14-mcp-stecker.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
 
-### Demo: MCP steuert einen echten Browser
+### Demo: einen MCP-Server anbinden und ein Tool aufrufen
 
-**Ziel:** Zeigen, dass Claude einen echten Browser bedient. Nichts wird simuliert, kein statisches HTML ausgelesen: Claude ruft Seiten auf, klickt und arbeitet mit Live-Webseiten.
+**Ziel:** Zeigen, dass MCP Claude Code mit einem externen System verbindet: ein Eintrag in der `.mcp.json`, eine Freigabe, und Claude ruft ein Tool auf, dessen Antwort es nur dort bekommen kann. Nichts wird simuliert.
 
-**Vorbereitung**
+Zeig die Übung aus dem Kapitel live: die Übung „einen Server anbinden und ein Tool aufrufen lassen“ in [S2.14](../../library/s2-14-mcp-stecker.md). Startzustand wie dort: der Ordner `~/cc-workshop/mcp` mit `server.py` (Schritt 1) und der `.mcp.json` aus Schritt 3. Leg beide vorher an; unter Windows steht in der `.mcp.json` `"command": "python"`. Du brauchst Python und sonst nichts, auch kein Internet.
 
-- Der Playwright-MCP-Server ist eingerichtet, in der `.mcp.json` des Projekts wie in „Selbst machen" oder per `claude mcp add` im Scope `user` ([S2.15](../../library/s2-15-mcp-einrichten.md)).
-- Internetzugang
-- Konfiguration:
+**Ablauf:** Schritte 4 bis 7 der Übung: `claude mcp list` (Status `Pending approval`), die Sitzung mit `claude --permission-mode default`, die Freigabe des Servers und `/mcp`, der Auftrag mit dem Türcode des Labors, die Frage nach dem vollen Werkzeugnamen. Den Handtest des Servers (Schritt 2) kannst du vorab zeigen: Er schickt dem Server eine Zeile und liest die Antwort.
 
-```json
-{
-  "mcpServers": {
-    "playwright": {
-      "command": "npx",
-      "args": ["@playwright/mcp@latest"]
-    }
-  }
-}
-```
-
-**Schritt 1: die Bühne bereiten**
-
-Kündige an, dass Claude gleich einen echten Browser steuert.
-
-**Schritt 2: GitHub aufrufen**
-
-In Claude Code:
-
-```
-Navigate to github.com/anthropics/claude-code using the browser
-```
-
-Claude ruft das Playwright-Tool auf. Ein Browserfenster öffnet sich (oder der Browser läuft headless, je nach Konfiguration) und lädt die URL.
-
-Mach einen Screenshot:
-
-```
-Take a screenshot of the current page
-```
-
-Zeig den Screenshot in der Ausgabe im Terminal.
-
-**Schritt 3: mit der Seite arbeiten**
-
-```
-Click on the Issues tab
-```
-
-Claude klickt auf den Tab „Issues". Zeig das Ergebnis.
-
-```
-List the titles of the first 5 open issues
-```
-
-Claude liest die Seite und zieht die Titel der Issues heraus. Zeig die Liste.
-
-**Schritt 4: den Bezug zur eigenen Arbeit herstellen**
-
-Nenn Beispiele aus der Arbeit der Teilnehmenden (Software für Physical Security) und frag, welche Weboberflächen sie heute von Hand bedienen.
+**Zugabe, wenn Zeit bleibt:** der echte Browser aus der Extra-Übung des Kapitels („Playwright, ein echter Browser“). Der Server braucht Node.js mit `npx` und seinen eigenen Ordner `~/cc-workshop/mcp-browser`; die Konfiguration steht im Kapitel. Frag `What browser tools do you have available?`, dann `Navigate to example.com using the browser and take a screenshot`. Nimm keine Seite, die eine Anmeldung verlangt.
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** etwa 8 Minuten (Schritt 1: 1 Min., Schritt 2: 1 Min., Schritt 3: 3 Min., Schritt 4: 3 Min.).
+**Dauer:** etwa 8 Minuten für den Server aus der Übung, mit der Zugabe etwa 15.
 
 **Sagen:**
 
-- Schritt 1: „MCP verbindet Claude Code mit externen Systemen. Das anschaulichste Beispiel ist die Browser-Steuerung über Playwright. Passt auf: Claude steuert gleich einen echten Browser."
-- Schritt 3: „Das ist ein echter Browser. JavaScript lief, dynamische Inhalte wurden geladen, echte DOM-Elemente geklickt. Keine HTTP-Anfragen, kein Scraping, echte Browser-Automatisierung."
-- Schritt 4: „Überlegt, was das für eure Arbeit heißt." Beispiele:
-  - „Euer Admin-Panel der Zutrittskontrolle: Claude könnte sich anmelden, Berichte über Türereignisse ziehen, exportieren und an euer Monitoring schicken."
-  - „Das Firmware-Portal eures Herstellers: Claude könnte nach neuen Versionen sehen, sie herunterladen und die Update-Historie protokollieren."
-  - „Die Weboberfläche eurer Alarmzentrale: Claude könnte Alarme quittieren, Tagesberichte erzeugen und den Zustand der Meldebereiche prüfen."
-- Abschluss: „Jede Weboberfläche, die euer Team von Hand bedient, lässt sich mit Playwright-MCP automatisieren. Und das ist nur ein Server: Es gibt Server für Slack, Mail und Datenbanken, und ihr könnt eigene für eure Systeme bauen."
+- Vor Schritt 4: „MCP verbindet Claude Code mit externen Systemen. Das ist ein winziger Server, nur Standardbibliothek. Er kennt zwei Tools."
+- Schritt 4: „Der Server steht in der Liste, aber noch nicht freigegeben: `Pending approval`. Claude Code nutzt Server aus einer `.mcp.json` erst nach deiner Freigabe, damit ein geklontes Repo sich keine Server unterschieben kann."
+- Schritt 5: Lies die Antwortoptionen vor und wähl „Use this MCP server“. Vorausgewählt ist „Continue without using this MCP server“: Wer nur Enter drückt, wählt das Falsche. Danach `/mcp`, mit `Esc` schließen.
+- Schritt 6: „Ohne den Zusatz ‚Without reading any files‘ könnte Claude den Code aus `server.py` lesen. So bekommt es ihn nur vom Server." Antwort: `3088`.
+- Schritt 7: „In Claude Code heißt das Tool `mcp__rooms__door_code`."
+- Zugabe: „Das ist ein echter Browser: JavaScript läuft, Elemente werden wirklich angeklickt." Was du tippst, steht im Gespräch, und Claude Code legt Sitzungen im Klartext ab. Ob das Fenster sichtbar ist, regelt ein Flag des Servers (`--headless`), nicht Claude Code. Beim ersten Aufruf kann Playwright einen Browser nachladen oder melden, dass er fehlt.
+- Abschluss: Frag die Teilnehmenden, welche Weboberflächen und Systeme ihres Alltags sie heute von Hand bedienen: das Admin-Panel der Zutrittskontrolle, das Firmware-Portal eines Herstellers, die Oberfläche einer Alarmzentrale. Sag, dass es Server für viele Systeme gibt und dass man eigene bauen kann.
+- Sicherheitshinweis: „MCP-Server laufen mit euren Zugangsdaten. Deshalb sind Hooks und Leitplanken hier noch wichtiger." Vertiefung in [S2.17](../../library/s2-17-mcp-sicherheit.md).
 
-**Kernsätze:**
+**Wenn die Freigabe nicht erscheint oder `/mcp` den Server nicht zeigt:** Prüf, ob die `.mcp.json` im Ordner liegt, in dem Claude gestartet wurde, und ob `python` bzw. `python3` zur Plattform passt. Der Handtest des Servers (Schritt 2) zeigt, ob er selbst läuft.
 
-- „MCP ist die Zutrittskontrolle, die sich mit den anderen Gebäudeanlagen verbindet: Brandmeldeanlage, Videoüberwachung, Besuchermanagement. Claude ist die zentrale Leitstelle."
-- „Ein Protokoll, viele Integrationen. Einmal lernen, alles anschließen."
-- „Playwright-MCP macht aus jeder Weboberfläche eine API, die Claude bedienen kann."
-- „Sicherheitshinweis: MCP-Server laufen mit euren Zugangsdaten. Deshalb sind Hooks und Leitplanken hier noch wichtiger." Vertiefung in [S2.17](../../library/s2-17-mcp-sicherheit.md).
-
-**Wenn Playwright-MCP nicht eingerichtet ist:** Zeig die Konfigurationsdatei und erklär, was sie bewirken würde. Sag: „Das richten wir gleich in der Übung ein. Für jetzt: Glaubt mir, es funktioniert, und ihr probiert es selbst." Oder zeig einen Screenshot, den du bei der Vorbereitung gemacht hast, und beschreib, was passiert ist.
+**Wenn Playwright nicht eingerichtet ist:** Lass die Zugabe weg oder zeig nur die Konfiguration aus dem Kapitel und sag: „Das probiert ihr gleich in der Übung selbst."
 
 </details>

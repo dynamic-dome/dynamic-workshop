@@ -6,97 +6,39 @@
 
 **Ziel:** Zeigen, dass Modellwahl und Effort Kostenhebel sind, nicht nur Qualitätshebel.
 
-**Was die Gruppe sieht:** Dieselbe realistische Coding-Aufgabe läuft dreimal mit verschiedenen Kombinationen aus Modell und Effort, nach jedem Lauf `/cost`, damit ihr die Beträge nebeneinander vergleichen könnt. Die Aufgabe ist der IPv4-Validator, den ihr aus [S1.13](../../library/s1-13-vager-und-praeziser-auftrag.md) kennt.
+Zeig die Übung aus dem Kapitel live: die Übung „dieselbe Aufgabe, drei Modelle“ in [S1.19](../../library/s1-19-kosten-im-blick.md).
 
-**Vorbereitung**
+**Startzustand:** der leere Ordner `~/cc-workshop/kosten`, Claude Code angemeldet, `/cost` vor dem Workshop einmal ausprobiert. Du stellst Modell und Effort nur mit Start-Flags ein und tippst in diesen Sitzungen weder `/model` noch `/effort`: Beide würden deine Wahl als Standard speichern.
 
-- Terminal in einem Wegwerf-Ordner (`~/cost-demo/`)
-- Claude Code angemeldet, eine frische Sitzung
-- `/cost` vor dem Workshop einmal ausprobieren
+**Ablauf:** Schritte 1 bis 4 der Übung. Jeder Lauf ist eine neue Sitzung (`claude --model opus --effort xhigh …`, dann `sonnet` mit `medium`, dann `haiku` ohne `--effort`), derselbe Auftrag mit je eigenem Dateinamen, danach `/cost`, den Betrag notieren, `Esc`, `/exit`. Schritt 5 (Standard unverändert) zeigst du zum Schluss.
 
-**Schritt 1: Ausgangswert mit dem Opus-Tier und xhigh**
+Danach frag die Runde:
 
-In Claude Code:
-
-```
-/model opus
-/effort xhigh
-Write a Python function that validates IPv4 addresses with proper edge case handling. Include a few tests at the bottom of the file demonstrating valid and invalid inputs.
-```
-
-Erwartet: Claude liefert eine gründliche Umsetzung mit mehreren Randfällen (führende Nullen, Oktette außerhalb des Bereichs, leere Strings, eingebettete Leerzeichen) und einem kleinen Testblock.
-
-Danach:
-
-```
-/cost
-```
-
-Erwartet: die Kosten dieses einen Durchgangs. Notier den Betrag; es kommt auf die Größenordnung an, nicht auf den genauen Wert.
-
-**Schritt 2: dieselbe Aufgabe mit dem Sonnet-Tier und medium**
-
-Starte vorher mit `/clear` neu. Sonst zählt `/cost` alle Läufe zusammen, und das neue Modell liest den ganzen bisherigen Verlauf ohne Cache-Treffer neu; der Vergleich wäre schief.
-
-```
-/model sonnet
-/effort medium
-Write a Python function that validates IPv4 addresses with proper edge case handling. Include a few tests at the bottom of the file demonstrating valid and invalid inputs.
-```
-
-Danach:
-
-```
-/cost
-```
-
-Erwartet: deutlich weniger als im ersten Lauf. Schon der Preis pro Token ist beim Sonnet-Tier etwa halb so hoch wie beim Opus-Tier ([Kanon](../../_canonical.md)), dazu kommt die niedrigere Effort-Stufe.
-
-**Schritt 3: dieselbe Aufgabe mit dem Haiku-Tier (ohne Effort)**
-
-Haiku kennt keine Effort-Stufen, deshalb fehlt hier die `/effort`-Zeile: Die Modellwahl allein ist der Hebel. (Aliase, Generationen und Effort je Tier: [Kanon](../../_canonical.md).) Wieder vorher `/clear`.
-
-```
-/model haiku
-Write a Python function that validates IPv4 addresses with proper edge case handling. Include a few tests at the bottom of the file demonstrating valid and invalid inputs.
-```
-
-```
-/cost
-```
-
-Erwartet: der günstigste der drei Läufe. Pro Token kostet das Haiku-Tier etwa ein Viertel des Opus-Tiers.
-
-**Schritt 4: nebeneinander vergleichen**
-
-Öffne die drei erzeugten Dateien im Editor oder zeig sie nebeneinander im Terminal. Frag die Runde:
-
-- Sind alle drei Ergebnisse fachlich korrekt? (Meist ja.)
-- Wo liegt der Qualitätsunterschied? (Opus zählt meist mehr Randfälle auf, Haiku erklärt knapper.)
+- Sind alle drei Dateien fachlich korrekt?
 - Wie groß ist der Abstand zwischen dem günstigsten und dem teuersten Lauf? Lest ihn an euren eigenen Zahlen ab.
-- Ist das Opus-Tier bei genau dieser Aufgabe, einer klar umrissenen IPv4-Prüfung ohne Architekturentscheidung, den Aufpreis wert? Fast nie.
+- Zeigt sich der Aufpreis bei dieser Aufgabe in der Qualität? Sieh in die drei Dateien.
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** etwa 6 Minuten.
+**Dauer:** etwa 6 bis 10 Minuten.
 
 **Einstieg:** „Das ist das Kapitel, das euer Manager kennen muss. Kosten sind nicht ‚schauen wir mal‘, Kosten sind eine bewusste Variable wie Latenz oder Speicher.“
 
 **Sagen:**
 
-- Schritt 1: „Das ist eine teure Kombination, Opus auf einer tiefen Effort-Stufe. Schaut auf die Kosten. Jetzt sehen wir, was wir für weniger bekommen.“
-- Schritt 2: „Sonnet auf seiner Start-Stufe. Dieselbe Aufgabe, vermutlich ähnliche Codequalität. Seht ihr, was das im Vergleich zum ersten Lauf kostet?“
-- Schritt 3: „Haiku, das günstigste Tier. Die Ausgabe ist etwas knapper, vielleicht fehlen ein, zwei Randfälle. Aber für eine IPv4-Prüfung, eine Aufgabe mit bekannter richtiger Antwort, reicht Haiku.“
-- Schritt 4: „Die eigentliche Frage stellt ihr *vor* der Sitzung: Wie wichtig ist hier die Qualität? Für ein einmaliges Hilfsskript reicht Haiku. Entwerft ihr einen Protokoll-Parser, der zehn Jahre in einer Firmware lebt, zahlt ihr für Opus mit xhigh. Kostenregler und Effort-Regler gehören zu eurem Job.“
-- Abschluss: „Kosten sind kein Aufkleber am Monatsende, sondern ein Regler, den ihr in jeder Sitzung dreht. `/cost` zeigt, wo ihr in dieser Sitzung steht; im Abo zeigt `/usage` die letzten 24 Stunden oder 7 Tage und was sie getrieben hat. Schaut nach, bevor ihr einen Ablauf hochskaliert.“
-- Merksätze: „Effort ist ein Regler, kein Schalter: xhigh ist nicht einfach besser.“ und „Die Budgetgrenze ist für autonome `-p`-Läufe Pflicht, nicht Kür.“
+- Lauf 1: „Das ist eine teure Kombination, das Opus-Tier auf einer tiefen Effort-Stufe. Schaut in die Ansicht Usage auf `Total cost`. Jetzt sehen wir, was wir für weniger bekommen."
+- Lauf 2: „Sonnet auf mittlerer Stufe. Gleiche Aufgabe. Seht ihr, was das im Vergleich zum ersten Lauf kostet?" Pro Token kostet das Sonnet-Tier etwa die Hälfte des Opus-Tiers ([Kanon](../../_canonical.md)).
+- Lauf 3: „Haiku, das günstigste Tier, ohne Effort-Stufen: Die Modellwahl allein ist der Hebel." Pro Token kostet es etwa ein Viertel des Opus-Tiers ([Kanon](../../_canonical.md)). Einzelne Läufe können trotzdem abweichen, etwa wegen unterschiedlich langer Antworten; sag das, wenn die Zahlen nicht sauber sinken.
+- Vergleich: „Die eigentliche Frage stellt ihr *vor* der Sitzung: Wie wichtig ist hier die Qualität? Für ein einmaliges Hilfsskript reicht vermutlich das günstige Tier. Kostenregler und Effort-Regler gehören zu eurem Job."
+- Abschluss: „Kosten sind kein Aufkleber am Monatsende, sondern ein Regler, den ihr in jeder Sitzung dreht. `/usage` zeigt, wo ihr in dieser Sitzung steht; `/cost` ist ein anderer Name dafür. Im Abo zeigt er darunter, was den Verbrauch getrieben hat. Schaut nach, bevor ihr einen Ablauf hochskaliert."
+- Merksatz: „Die Budgetgrenze ist für unbeaufsichtigte `-p`-Läufe Pflicht, nicht Kür." Die Extra-Übung des Kapitels zeigt `--max-budget-usd` und `--max-turns`; beide wirken nur mit `-p`.
 
-**Wenn `/cost` in einer älteren Version fehlt:** Wechsle auf die Usage-Seite der Claude Console (https://platform.claude.com/usage). Die zeigt die Summe; der Punkt kommt trotzdem an.
+**Wenn die Ansicht offen bleibt:** `/cost` bleibt offen, bis du `Esc` drückst; der nächste Auftrag landet sonst in der Ansicht.
 
-**Wenn zwei Läufe verdächtig gleich viel kosten:** Wahrscheinlich hat der Cache gegriffen. Starte zwischen den Läufen mit `/clear` neu oder ändere den Prompt leicht.
+**Wenn du in einer Sitzung das Modell wechselst:** Starte lieber eine neue Sitzung. Wechselst du das Modell in derselben Sitzung, liest das neue Modell den Verlauf ohne Cache-Treffer neu, und `/cost` zählt alle Läufe zusammen. Der Vergleich wäre schief.
 
-**Wenn jemand bezweifelt, dass Haiku korrekten Code liefert:** Führ das Gegenbeispiel live aus. Der Punkt der Demo bleibt, und nebenbei hast du adversariales Debugging gezeigt.
+**Wenn ein Modell nicht zur Verfügung steht:** Lass es aus (wie in der Übung).
 
-**Nach der Demo:** `/model` und `/effort` haben deine Wahl als Standard gespeichert, zuletzt `haiku`. `/model default` holt das Standardmodell deines Kontos zurück, `/effort auto` löscht die gespeicherte Stufe des aktiven Modells.
+**Wenn doch `/model` oder `/effort` getippt wurde:** Beide haben deine Wahl als Standard gespeichert. `/model default` holt das Standardmodell deines Kontos zurück, `/effort auto` löscht die gespeicherte Stufe des aktiven Modells.
 
 </details>

@@ -666,7 +666,7 @@ Haiku-Datum, X.1), R11 (bis auf „Stop feuert nach jeder Antwort“), R23 für 
 |---|---|---|
 | P8a | Faktenreste: R3 (Handtest der Token Firewall zeigt eine Eingabe, die es nicht gibt), R5 (`karte-erweitern.md` ohne die 50.000-Zeichen-Schwelle), R9 (Kanon: Sonnet-Retirement, Startmodus von `claude -p` bei Drittanbietern, `/hooks`), R11 („Stop feuert nach jeder Antwort“ an vier Stellen), R12 (EN 50131 in S4.8), R29 (Diagnose-Kasten in S2.8, Verweise aus S2.2 und S2.15) | [x] `f55d9a9` |
 | P8b | Vorlagen: Python-Fassungen von `redact-output` und `token-firewall` mit Tests (laufen unter Windows ohne Git Bash und `jq`; die Bash-Fassungen bleiben), Bash-Scanner blockt die Eingabe `null`; Windows-Weg der beiden Extras in S2.10 | [x] `cf44429` |
-| P8c | Moderationsschicht nachziehen: Die Dateien zu S1.10, S1.13, S1.16, S1.18, S1.19, S2.8 (R7), S2.11, S2.14, S2.18, S3.8, S3.13, S3.14, S4.2 beschreiben Demos an Übungsständen, die es im Kapitel nicht mehr gibt; die Dateien zu den P7f-Kapiteln gegenlesen | [ ] |
+| P8c | Moderationsschicht nachziehen: Die Dateien zu S1.10, S1.13, S1.16, S1.18, S1.19, S2.8 (R7), S2.11, S2.14, S2.18, S3.8, S3.13, S3.14, S4.2 beschreiben Demos an Übungsständen, die es im Kapitel nicht mehr gibt; die Dateien zu den P7f-Kapiteln gegenlesen | [x] siehe „Stand P8c“ |
 | P8d | Kleine Hinweise aus den Läufen: S3.13 (Hooks aus den Benutzer-Einstellungen hinterlassen Dateien im Worktree), S4.3 (`--output-format json` als Array bei `verbose`), X.3 (Wegwerf-Ordner als Grenze), `claude plugin list` (eigener Abschnitt für claude.ai-Plugins), `/model`-Vorgabe | [x] `2345d5b` |
 | P8e | Aufbau (R24, R29, R30 und die Voraussetzungen): Voraussetzungen umgesetzt (siehe „Stand P8e“); der Rest braucht eine Entscheidung des Owners | [ ] teilweise |
 
@@ -713,6 +713,34 @@ und Golden neu.
   `--output-format json` (Array statt Objekt, durch einen Lauf belegt); S3.13 sagt, was zu tun ist, wenn git einen
   Worktree mit fremden Dateien nicht entfernt. Ohne Änderung geprüft: `claude plugin list` (steht in S2.12),
   `/model`-Vorgabe (von `model-config.md` gedeckt).
+
+### Stand P8c und Codex-Gegenprüfung (2026-10-05)
+
+- **P8c, Moderationsschicht** (Sonnet-Schreiber im eigenen Worktree, 29 Commits, übernommen als Merge „Merge branch
+  'p8c-moderation'“): Alle 30 Demo-Dateien gegen ihr Kapitel gelesen. Eine war stimmig (S1.2), 23 nannten Ordner,
+  Dateien oder Plugins, die es im Kapitel nicht mehr gibt, sechs widersprachen dem Kapitel in der Sache:
+  S2.6 („gilt für jede Sitzung, jedes Projekt“), S2.8 (R7: PreToolUse gezeigt, PostToolUse behauptet;
+  `security-check.sh` gibt es nicht), S3.6 („die Überlappung ist die Bestätigung“), S3.13 (Entfernen ohne `unlock`),
+  S4.4 (Exit-Code und Kosten beim Budgetdeckel), S4.10 (Reihenfolge der Diagnose, erfundene Log-Zeilen).
+- **Form jetzt:** Die Datei sagt „Zeig die Übung aus dem Kapitel live“, nennt Startzustand und Schritte der Übung
+  und behält die Hinweise für Moderierende (was sagen, wo anhalten, was tun, wenn es anders läuft). So gibt es je
+  Kapitel einen durchgespielten Ablauf statt zweier, von denen einer veraltet. Eigene Demos, die weiter tragen,
+  sind geblieben: der Passwortgenerator (S1.1), der garantierte Einstieg in Session 3 (S3.1), das Plugin
+  `devil-advocate-swarms` (S3.6), der Codex-Schwarm als Teil 2 (S4.2), Playwright und NotebookLM als Zugabe.
+- **Entfallen** sind damit 85 Codeblöcke des alten Kurses (74 Ledger-Zeilen, je mit dem Kapitel), darunter die
+  Demo-Kette `demo-1.2` mit dem IPv4-Validator (S1.10, S1.13, S1.16), die Tour durch den Plugin-Cache von
+  agentic-os (S2.11), `/tdd` aus dem Superpowers-Cache (S2.2), `/agentic-os:run-loop` (S3.14) und der Schritt mit
+  der Telegram-Brücke (S4.6). Sie liegen im Tag `kurs-v1` und in der Historie vor dem Merge. **Für den Owner:** Wer
+  eine dieser Demos für das Live-Format zurückhaben will, nennt sie; der Merge lässt sich auch als Ganzes
+  zurücknehmen (`git revert -m 1 <Merge-Hash>`).
+- **Abnahme:** alle 29 geänderten Dateien gelesen, Werte stichprobenweise gegen die Kapitel geprüft (Türcode,
+  Werkzeugname, Karten-ID, Statuszeilen); ein Rest korrigiert (S3.1 nannte die Telegram-Brücke). Nicht vorgeführt:
+  Die Abläufe sind die durchgespielten Übungen; die Zugaben mit eigenen Plugins und Fremddiensten sind ungeprüft
+  und in den Dateien als „nur wenn vorbereitet“ markiert.
+- **Codex-Gegenprüfung von P8a, P8b, P8d und den Voraussetzungen (lesend):** FAIL, fünf Befunde; vier bestätigt und
+  eingearbeitet (`b1a5243`: `claude doctor` schlägt laut Doku nichts vor, das tut `/doctor`; zwei Karten ohne die
+  Ausnahme der Organisationsrichtlinie; Testlücke an der Mindestlänge des Schlüsselmusters), einer ohne Wirkung
+  (NUL-Zeichen im Schlüssel: Claude sieht in beiden Fassungen denselben Text).
 
 ### Stand P8e (2026-10-05)
 

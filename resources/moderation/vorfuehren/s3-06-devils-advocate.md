@@ -4,7 +4,7 @@
 
 ### Demo: Devil's Advocate, adversariales Sicherheitstesten
 
-**Ziel:** Eine automatisierte Pentest-Pipeline in Aktion zeigen.
+**Ziel:** Eine automatisierte Pentest-Pipeline in Aktion zeigen. Wer das Plugin nicht hat, zeigt stattdessen die Übung aus dem Kapitel live: die Übung „Ankläger und Verteidiger selbst bauen“ in [S3.6](../../library/s3-06-devils-advocate.md) (Ordner `~/cc-workshop/gegenpruefung`, `door.py`, die Subagenten `accuser` und `defender`, Schritte 1 bis 8). Dort fällst du das Urteil je Befund selbst und belegst es am Programm.
 
 **Vorbereitung**
 
@@ -25,7 +25,7 @@ cd workshop-playground/
 
 **Schritt 3: Stufe 1, die Scanner**
 
-Die Scanner laufen parallel. Sag, wonach jeder sucht, und zeig: Mehrere finden dieselben eingebauten Probleme, die Überlappung ist die Bestätigung. Erwartet sind die fünf Schwachstellen aus „Im Detail".
+Die Scanner laufen parallel. Sag, wonach jeder sucht, und zeig: Mehrere finden dieselben eingebauten Probleme. Das hilft gegen Zufallsrauschen, ist aber kein Beleg: Alle Scanner sind dasselbe Modell, ihre Irrtümer hängen zusammen. Erwartet sind die fünf eingebauten Schwachstellen von `access_control.py`; Orte und Erklärung stehen in [Lösungen zum Playground](../../reference/playground-loesungen.md), erst nach den Übungen lesen.
 
 Übersieht der Schwarm den fail-open-Fehler, halte an und untersuche `check_access_resilient()` von Hand. Dieser Befund ist am nächsten am Fach der Teilnehmenden: Eine Zutrittsanlage muss sicher schließen, statt Zutritt zu gewähren, weil die Datenbank des Controllers nicht erreichbar ist.
 
@@ -43,7 +43,7 @@ Das ist der wichtigste Teil. Werde langsamer und erkläre, was passiert:
 
 **Schritt 5: Stufe 3, der Konsens**
 
-Zeig die Aufteilung in CONFIRMED und FALSE POSITIVE. Jeder bestätigte Befund hat einen vollständigen Audit-Trail; das Protokoll der Debatte ist der Beleg.
+Zeig die Aufteilung in CONFIRMED und FALSE POSITIVE. Das Urteil fällst du, nicht die Pipeline. Ein Beleg ist ein Test, der den Befund reproduziert, oder ein Programmlauf; zwei überzeugende Texte ersetzen ihn nicht.
 
 **Schritt 6: Stufe 4, die Fixer**
 
@@ -61,7 +61,7 @@ Für Gruppen aus Embedded und physischer Sicherheit:
 /devil-advocate-swarms:swarm scan osdp_frame_decoder.c
 ```
 
-Erwartet sind die vier Speicherfehler aus „Im Detail".
+Erwartet sind die vier Speicherfehler der Datei; Orte und Erklärung stehen in [Lösungen zum Playground](../../reference/playground-loesungen.md).
 
 <details><summary>Für Moderierende</summary>
 
@@ -69,18 +69,17 @@ Erwartet sind die vier Speicherfehler aus „Im Detail".
 
 **Rahmung:** Stell die Demo als automatisierten Penetrationstest mit Gerichtsverfahren vor, denn genau das ist sie. Wer aus der Cybersecurity kommt, fühlt sich hier zu Hause; für diese Gruppe ist die Demo der Höhepunkt.
 
-**Sagen (nach Schritt 7):** „Das ist ein automatisierter Penetrationstest mit eingebauter rechtlicher Prüfung. Der Ankläger ist euer Pentester, der den Exploit-Bericht schreibt. Der Verteidiger ist euer Entwickler, der erklärt, was wirklich ausnutzbar ist und was nicht. Der Konsens-Agent ist euer Sicherheitsverantwortlicher, der entscheidet, was eine CVE bekommt. Die Fixer sind euer Patch-Team. Das Ganze ist gerade von allein durchgelaufen. Für die Security-Leute im Raum: Das ist eure Welt, angewendet auf Code."
+**Sagen (nach Schritt 7):** „Das ist ein automatisierter Penetrationstest mit eingebauter rechtlicher Prüfung. Der Ankläger ist euer Pentester, der den Exploit-Bericht schreibt. Der Verteidiger ist euer Entwickler, der erklärt, was wirklich ausnutzbar ist und was nicht. Den Konsens zieht am Ende ihr als Sicherheitsverantwortliche: Das Urteil über jeden Befund bleibt bei euch. Die Fixer sind euer Patch-Team. Das Ganze ist gerade von allein durchgelaufen. Für die Security-Leute im Raum: Das ist eure Welt, angewendet auf Code."
 
 **Welcher Playground?** `access_control.py` (Python, Benutzerverwaltung) zeigt Schwachstellen, wie sie in Backend-Diensten vorkommen. `osdp_frame_decoder.c` (C, eingebetteter OSDP-Frame-Parser) zeigt Speicherfehler, wie sie in Firmware vorkommen: eingebettete Protokolle, Parsen von Wire-Formaten. Zeig beide, wenn die Zeit reicht, sonst den, der näher am Arbeitsalltag der Gruppe ist.
-
-**Windows:** siehe „Typische Fallen". Sprich die Einschränkung kurz an und mach weiter; der statische Befund ist der Punkt der Demo.
 
 **Nach der Demo:** Die Fixer haben `access_control.py` geändert. Setz die Datei im Playground mit `git checkout -- access_control.py` zurück, damit die Schwachstellen für die nächste Runde erhalten bleiben.
 
 **Wenn etwas schiefgeht:**
 
-- **Plugin nicht installiert:** Zeig die Aufzeichnung aus der Vorbereitung und besprich die vier Stufen (Scan → Debatte → Konsens → Fix). Oder zeig live den Weg ohne Plugin aus der Übung unten; Debatte und Konsens siehst du dann nicht.
-- **Falsche Befunde oder eine übersehene Schwachstelle:** siehe „Typische Fallen", beides ist ein Lehrmoment.
+- **Plugin nicht installiert:** Zeig die Aufzeichnung aus der Vorbereitung und besprich die vier Stufen (Scan → Debatte → Konsens → Fix). Oder zeig live die Übung aus dem Kapitel: Dort laufen Ankläger und Verteidiger als eigene Subagenten nacheinander, und das Urteil fällst du selbst.
+- **Der Verteidiger stimmt dem Ankläger einfach zu:** Beide sind dasselbe Modell. Stuft der Verteidiger einen Fund als erreichbar ein, such live selbst nach den Aufrufen, statt dich auf sein Zitat zu verlassen.
+- **Beide übersehen dasselbe, etwa den Fail-open:** Hat keiner den Fachfehler genannt, ist die Gegenprobe blind dafür. Das ist ein Lehrmoment.
 - **Die Debatte sieht in dieser Plugin-Version anders aus:** Erzähl die Absicht („Der Ankläger argumentiert für die Ausnutzbarkeit, der Verteidiger hält dagegen"), auch wenn die Stufen anders heißen. Die Architektur zählt mehr als die Bezeichnungen.
 
 </details>

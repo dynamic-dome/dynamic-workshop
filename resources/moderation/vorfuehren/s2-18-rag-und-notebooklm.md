@@ -2,95 +2,32 @@
 
 > Demo und Hinweise für Moderierende zum Kapitel [S2.18 · RAG und NotebookLM: dem Agenten Baupläne geben](../../library/s2-18-rag-und-notebooklm.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
 
-### Demo: NotebookLM als Wissensbasis
+### Demo: eine Wissensbasis mit Quellenangabe
 
-**Ziel:** Zeigen, dass Claude Fragen aus einer bestimmten, nachprüfbaren Wissensquelle beantworten kann statt aus Trainingswissen, und dass das bei Fachfragen das Risiko von Halluzinationen senkt.
+**Ziel:** Zeigen, dass Claude Fragen aus einer bestimmten, nachprüfbaren Wissensquelle beantworten kann statt aus Trainingswissen, und dass es bei einer Frage ohne Quelle trotzdem raten kann.
 
-**Vorbereitung**
+Zeig die Übung aus dem Kapitel live: die Übung „eine Wissensbasis aus Dateien, mit Quellenangabe“ in [S2.18](../../library/s2-18-rag-und-notebooklm.md). Startzustand wie dort: der Ordner `~/cc-workshop/wissen` mit den drei Dateien in `kb/` (Schritt 1). Leg sie vorher an. Du brauchst kein Konto und kein Zusatzprogramm; das Gerät „OL-9“ in den Quellen ist erfunden, Claude kann nichts davon aus dem Training wissen. Starte mit `claude --permission-mode default`.
 
-- Die Kommandozeile `notebooklm` ist installiert und angemeldet; für `/notebooklm …` zusätzlich der Skill der Moderation (`~/.claude/skills/notebooklm/`).
-- Ein Notebook mit ein paar Quellen ist schon angelegt. Mach das vor der Session: Anlegen und Indexieren dauern ein paar Minuten.
-- Vorschlag: ein Notebook mit der Claude-Code-Doku oder mit eurer eigenen Projektdoku.
-
-**Schritt 1: das Problem erklären**
-
-Erklär, dass Claudes Trainingsdaten einen Stichtag haben und Claude bei neuen APIs, internen Werkzeugen oder Nischenthemen falsch raten kann.
-
-**Schritt 2: den Notebook-Ablauf zeigen**
-
-Zeig das vorbereitete Notebook:
-
-```
-notebooklm list --json
-```
-
-Oder mit dem Skill:
-
-```
-/notebooklm navigate
-```
-
-Zeig den Namen des Notebooks und wie viele Quellen es hat.
-
-**Schritt 3: das Notebook abfragen**
-
-In Claude Code:
-
-```
-notebooklm use <notebook-id>
-notebooklm ask "What is the correct JSON structure for a PreToolUse hook in settings.json?"
-```
-
-Sieh dir die Antwort an und zeig darauf:
-
-- Die Antwort enthält **Zitate**: Du siehst, aus welcher Quellseite sie stammt.
-- Die Antwort ist konkret, nicht allgemein.
-- Du kannst jede Aussage an der zitierten Stelle nachprüfen. Das senkt das Risiko von Halluzinationen, schließt sie aber nicht aus ([S2.19](../../library/s2-19-rag-grenzen.md)).
-
-Frag dann etwas, womit Claude sich sonst schwertut:
-
-```
-notebooklm ask "What are the valid matcher patterns for hooks, and what tool names can I match against?"
-```
-
-**Schritt 4: der Gegenversuch**
-
-Stell dieselbe Frage OHNE Notebook, in einem frischen Kontext:
-
-```
-(new context) What are the valid matcher patterns for hooks in Claude Code settings.json?
-```
-
-Claude gibt eine plausibel klingende Antwort, die aber veraltet, unvollständig oder leicht falsch sein kann. Die geprüfte Regel, wann ein Matcher als exakter Name und wann als Regex gilt, steht in [S2.8](../../library/s2-08-hook-einrichten.md); daran kannst du beide Antworten live messen.
+**Ablauf:** Schritte 2 bis 6 der Übung: dieselbe Frage zuerst ohne und dann mit den Quellen, die Frage am Rand der Quellen, die Frage, die sie sicher nicht abdecken, und der Gegencheck der Fundstelle im Editor. Der NotebookLM-Weg ist die Extra-Übung des Kapitels („dasselbe mit NotebookLM“); zeig sie nur, wenn du Notebook und Anmeldung vor der Session vorbereitet hast (Anlegen und Indexieren dauern ein paar Minuten).
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** etwa 7 Minuten (Schritt 1: 1 Min., Schritt 2: 2 Min., Schritt 3: 3 Min., Schritt 4: 1 Min.).
+**Dauer:** etwa 8 bis 10 Minuten.
 
-**Einstieg:** „RAG heißt: Claude liest deine Doku, bevor es antwortet. Wichtig: Die Daten gehen zu Google. Für sensibles Material gibt es lokale RAG-Alternativen."
+**Einstieg:** „RAG heißt: Claude liest deine Quellen, bevor es antwortet. Die Quellen kommen hier aus Dateien; wichtig, wenn Daten zu einem gehosteten Dienst gehen: Das steht in [S2.19](../../library/s2-19-rag-grenzen.md)."
 
 **Sagen:**
 
-- Schritt 1: „Claudes Trainingsdaten haben einen Stichtag. Bei neuen APIs, internen Werkzeugen oder Nischenthemen rät Claude vielleicht falsch. Ich zeige euch, wie ihr Claude eine geprüfte Wissensquelle gebt."
-- Schritt 2: „Ich habe schon ein Notebook angelegt und Quellen hinzugefügt. So sieht das aus."
-- Schritt 3: „Das ist eine genaue, spezifische Frage. Ohne Notebook würde Claude aus allgemeinem Trainingswissen antworten, das falsch sein kann, oder Unsicherheit einräumen. Mit Notebook wird die echte Dokumentation durchsucht, und du bekommst die Antwort mit Zitat."
-- Schritt 4: „Gleiche Frage, andere Qualität. Das ist der Unterschied zwischen allgemeinem Sicherheitswissen und euren echten Bauplänen."
-
-**Sprechpunkte:**
-
-- „RAG heißt: Claude bekommt eure echten Baupläne statt allgemeinen Wissens."
-- „NotebookLM ist ein gehostetes RAG-System: keine ML-Infrastruktur nötig, es läuft sofort."
-- „Die Antworten kommen mit Zitaten: nachprüfbar statt geraten."
+- Schritt 2: „Claudes Trainingsdaten haben einen Stichtag. Das Gerät kennt Claude nicht. Seht, was es ohne Quellen macht: einräumen oder allgemein raten."
+- Schritt 3: „Gleiche Frage, andere Qualität. Claude liest in `kb`, antwortet konkret und nennt die Datei und die Zeile." Du kannst jede Aussage an der Stelle nachprüfen. Das senkt das Risiko von Halluzinationen, schließt sie aber nicht aus.
+- Schritt 4: „Zur `0` steht nichts in den Quellen. Eine gute Antwort sagt das."
+- Schritt 5: „Eine Frage, die sicher nicht drinsteht. Nennt Claude trotzdem eine Zahl, haben wir einen Fall mit Zuversicht ohne Beleg." Schreib auf, was passiert; beide Ausgänge sind brauchbar.
+- Schritt 6: Öffne `kb/ol9-errors.md` und vergleich die zitierte Zeile mit der Antwort. „Auch eine Wissensbasis weiß nicht alles: Die Antwort ist nur so gut wie die Quellen und eure Prüfung."
+- Abschluss: „Das Muster, das trägt: herausfinden, was Claude wissen muss und nicht aus dem Training kennt, die Quellen dafür bereitstellen und Claude anweisen, dort zuerst nachzusehen." Das geht mit der Extra-Übung auch per `CLAUDE.md`.
 - „Einsatzfälle: interne Doku, aktuelle API-Doku, Compliance-Texte, das gesammelte Wissen eures Teams."
-- „Das Muster, das trägt: herausfinden, was Claude wissen muss und nicht aus dem Training kennt, ein Notebook dafür bauen und Claude anweisen, dort zuerst nachzusehen."
 
-**Wenn der Skill nicht eingerichtet ist:** Zeig das Prinzip in der Web-Oberfläche.
+**Wenn du NotebookLM zeigst:** Es braucht die inoffizielle Kommandozeile `notebooklm`, installiert und angemeldet wie in der Extra-Übung, und ein Google-Konto. Die Daten gehen zu Google; für sensibles Material gibt es lokale Alternativen ([S2.19](../../library/s2-19-rag-grenzen.md)). Unter Windows hängst du an Befehle mit Ausgabe `--json`, weil die normale Ausgabe dort zerschossen sein kann. Die Antwort kommt mit Zitaten auf Stellen der Quelle; stell dieselbe Frage in einer Sitzung ohne Notebook und vergleich beide.
 
-- Öffne `notebooklm.google.com` (leitet inzwischen auf `notebook.google.com` weiter).
-- Zeig ein vorhandenes Notebook mit Quellen.
-- Stell eine Frage im Chat der Web-Oberfläche.
-- Sag: „Der Skill verpackt dieselbe Schnittstelle, damit ihr aus dem Terminal fragen könnt. In der Übung baut ihr eure eigene Wissensbasis."
-
-**Wenn die Ausgabe unter Windows kaputtgeht:** siehe „Typische Fallen".
+**Wenn NotebookLM nicht eingerichtet ist:** Bleib bei den Dateien aus der Übung. Sie zeigen dasselbe Prinzip ohne Konto.
 
 </details>

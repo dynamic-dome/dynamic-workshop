@@ -2,11 +2,15 @@
 
 > Demo und Hinweise für Moderierende zum Kapitel [S3.1 · Was ist ein Agent? Spezialisierung statt Allrounder](../../library/s3-01-was-ist-ein-agent.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
 
-### Einstieg in Session 3: ein garantierter Live-Moment
+### Demo: was ein Subagent weiß und was nicht
 
-Die meisten Vorführungen dieser Session hängen von etwas Externem ab: eigenen Plugins, der Codex CLI, dem Internet, der Telegram-Brücke. Scheitert eine davon gleich zu Beginn vor Publikum, wirkt der ganze Block wackelig. Beginne Session 3 deshalb mit einer Vorführung, die nur das lokal installierte `claude` braucht und nicht an einem fehlenden Plugin scheitern kann.
+**Ziel:** Zeigen, dass ein Subagent ein Codewort aus deinem Gespräch nur kennt, wenn der Auftrag es enthält. Zeig die Übung aus dem Kapitel live: die Übung „was ein Subagent weiß und was nicht“ in [S3.1](../../library/s3-01-was-ist-ein-agent.md).
 
-Tipp am Prompt, sodass alle zusehen:
+**Startzustand:** der leere Ordner `~/cc-workshop/agent-kontext`, darin eine Sitzung mit `claude --permission-mode default` und bestätigtem Vertrauensdialog, wie im Startzustand der Übung. Im Ordner liegt keine `CLAUDE.md`. Ablauf: Schritte 1 bis 4 der Übung (Codewort nennen, Lauf 1 ohne Codewort im Auftrag, den übergebenen Auftragstext prüfen, Lauf 2 mit Codewort im Auftrag). Den Fork aus der Extra-Übung zeigst du, wenn Zeit bleibt.
+
+#### Einstieg in Session 3: ein garantierter Live-Moment
+
+Die meisten Vorführungen dieser Session hängen von etwas Externem ab: eigenen Plugins, der Codex CLI, dem Internet. Scheitert eine davon gleich zu Beginn vor Publikum, wirkt der ganze Block wackelig. Beginne Session 3 deshalb mit einer Vorführung, die nur das lokal installierte `claude` braucht: Wechsle in einen beliebigen Projektordner mit ein paar Dateien (der Übungsordner `agent-kontext` ist dafür noch zu leer) und tipp am Prompt, sodass alle zusehen:
 
 ```bash
 claude -p "Summarize what this repo does in one sentence."
@@ -22,12 +26,16 @@ Danach geht es mit der Vorführung zu den Orchestrierungsmustern weiter ([S3.4](
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** etwa 60 Sekunden, garantiert lauffähig.
+**Dauer:** der Einstieg etwa 60 Sekunden; die Übung etwa 10 Minuten.
 
 **Warum zuerst:** Fällt später eine Plugin-Vorführung aus, hast du schon einen sauberen Live-Erfolg im Raum.
 
 **Sagen:**
 
-- „Das ist derselbe Claude, mit dem ihr bisher gearbeitet habt. Dasselbe Modell, dieselben Skills. Es fehlt nur die Gesprächsschleife."
+- Einstieg: „Das ist derselbe Claude, mit dem ihr bisher gearbeitet habt. Dasselbe Modell, dieselben Skills. Es fehlt nur die Gesprächsschleife."
+- Schritt 2 der Übung: „Der Subagent kennt das Codewort nicht. Das Gespräch gelangt nicht von allein zu ihm." Mit `Ctrl+O` zeigst du den Aufruf des Subagenten im Transkript und schließt die Ansicht mit `Ctrl+O` wieder.
+- Schritt 3: Lies den übergebenen Auftragstext vor. Steht das Codewort doch darin, hat Claude den Auftrag ergänzt; dann zählt der Lauf nicht, und du wiederholst Schritt 2 mit demselben Wortlaut.
+- Schritt 4: „Typ, Anweisung und Gespräch waren gleich. Geändert hat sich allein der Auftragstext. Alles, was ein Subagent wissen soll, muss im Auftrag stehen."
+- Fork (Extra): Laut Doku erbt ein Fork das ganze Gespräch, der Preis ist, dass die Isolation wegfällt. `/subtask` braucht laut Doku Claude Code ab Version 2.1.212; fehlt der Befehl, überspring das Extra.
 
 </details>

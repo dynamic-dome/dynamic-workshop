@@ -2,104 +2,28 @@
 
 > Demo und Hinweise für Moderierende zum Kapitel [S2.2 · Eine SKILL.md schreiben](../../library/s2-02-skill-schreiben.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
 
-### Demo: Skills in Aktion
+### Demo: einen Skill bauen und nachschärfen
 
-**Ziel:** Zeigen, wie Skills aussehen, wie man sie aufruft und warum sie mehr bringen, als jedes Mal Anweisungen zu tippen.
+**Ziel:** Zeigen, wie ein Skill aussieht, wie man ihn aufruft, wie er sich ohne Neustart nachschärfen lässt und warum er mehr bringt, als jedes Mal Anweisungen zu tippen.
 
-**Vorbereitung**
+Zeig die Übung aus dem Kapitel live: die Übung „einen Skill bauen und nachschärfen“ in [S2.2](../../library/s2-02-skill-schreiben.md). Startzustand wie dort: der Ordner `~/cc-workshop/skill-schreiben` mit Git, der gestagten `app.py` (Schritt 2) und der `SKILL.md` unter `.claude/skills/commit-check/` (Schritt 3). Leg sie vorher an und zeig sie der Gruppe im Editor: das Frontmatter und den Body mit den Schritten. Starte mit `claude --permission-mode default`.
 
-- ein Terminal in einem beliebigen Projektordner
-- `~/.claude/skills/` vorhanden, auch wenn der Ordner leer ist
-- optional: ein einfacher Stub `email-validator.js`, noch ohne Tests
-
-**Schritt 1: die verfügbaren Befehle zeigen**
-
-In Claude Code:
-
-```
-/help
-```
-
-Die Ausgabe durchgehen und zeigen:
-
-- eingebaute Befehle wie `/compact` und `/clear`
-- eigene Befehle aus installierten Plugins
-
-**Schritt 2: die persönlichen Skills auflisten**
-
-Im Terminal:
-
-```bash
-ls ~/.claude/skills/
-```
-
-Oder in Claude Code:
-
-```
-list my skills
-```
-
-Zeig, was da ist. Hat jemand im Raum `agent-orchestrator` oder `tdd` installiert, heb einen davon hervor.
-
-**Schritt 3: mit dem TDD-Skill einen E-Mail-Validator bauen**
-
-In Claude Code:
-
-```
-/tdd
-```
-
-Ist `/tdd` nicht als Befehl installiert, tippst du:
-
-```
-Use TDD to implement an email validator function. Start with the failing test.
-```
-
-Was passiert:
-
-1. Claude fragt, was gebaut werden soll, oder legt direkt los.
-2. Claude schreibt ZUERST den Test. Zeig ihn.
-3. Claude führt den Test aus, er schlägt fehl (rot). Zeig die rote Ausgabe.
-4. Claude schreibt die minimale Implementierung.
-5. Claude führt den Test aus, er läuft durch (grün). Zeig die grüne Ausgabe.
-
-**Schritt 4: die SKILL.md zeigen**
-
-```bash
-cat ~/.claude/skills/tdd/SKILL.md
-# Or if it's a plugin skill:
-cat ~/.claude/plugins/cache/superpowers-marketplace/skills/test-driven-development/SKILL.md
-```
-
-Darauf hinweisen:
-
-- das YAML-Frontmatter mit den Trigger-Phrasen
-- die eigentlichen Arbeitsschritte im Body
+**Ablauf:** Schritte 4 bis 7 der Übung: `/skills`, `/commit-check`, die Zeile mit `VERDICT` ergänzen und denselben Befehl in derselben Sitzung noch einmal, dann der Auftrag ohne Befehl.
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** etwa 8 Minuten (Schritt 1: 1 Min., Schritt 2: 1 Min., Schritt 3: 5 Min., Schritt 4: 1 Min.).
+**Dauer:** etwa 10 Minuten.
 
 **Sagen:**
 
-- Schritt 1: „Das sind die Alarmknöpfe. Jeder löst eine bestimmte Dienstanweisung aus."
-- Schritt 2: „Das sind meine persönlichen Dienstanweisungen, verfügbar in jedem Projekt auf diesem Rechner."
-- Schritt 3: „Ich habe Claude nicht gesagt, TDD zu machen. Ich habe den Skill aufgerufen, oder die Trigger-Phrase benutzt, und Claude ist der ganzen Dienstanweisung von selbst gefolgt. Keine Erinnerung, keine Wiederholung."
-- Schritt 4: „Das ist die Dienstanweisung. Eine Textdatei. Du kannst sie bearbeiten, versionieren und mit deinem Team teilen."
+- Schritt 4: „Das sind meine Skills. Jeder löst eine bestimmte Dienstanweisung aus." Die Ansicht mit `Esc` schließen, nicht mit Leertaste oder Enter: Beide ändern dort die Sichtbarkeit eines Skills.
+- Schritt 5: „Ich habe Claude nicht erklärt, wie die Prüfung geht. Ich habe den Skill aufgerufen, und Claude ist der ganzen Dienstanweisung gefolgt." Zeig, dass die Antwort mit `PRE-COMMIT CHECK:` beginnt und beide Funde nennt.
+- Schritt 6: „Ich ändere die Datei bei laufender Sitzung. Kein Neustart." Nach dem Speichern ein paar Sekunden warten, bis Claude Code die Änderung bemerkt; nutze die Wartezeit für die Erklärung. Dann endet die Antwort mit `VERDICT: BLOCK`: Das konnte der erste Entwurf nicht.
+- Schritt 7: „Jetzt ohne Befehl." Nach `Ctrl+O` den Aufruf des Werkzeugs `Skill` im Transkript zeigen. Lädt Claude den Skill nicht, schreib den getippten Satz in `when_to_use`: Die automatische Wahl hängt an Claudes Urteil über die Beschreibung, nicht an einer festen Regel.
+- Zum Schluss: „Das ist eine Textdatei. Du kannst sie bearbeiten, versionieren und mit deinem Team teilen." Persönliche Skills in `~/.claude/skills/` sind in jedem Projekt auf diesem Rechner verfügbar.
 
-**Kernbotschaften** (zu [S2.1](../../library/s2-01-skills-und-commands.md)):
+**Wenn `/commit-check` nicht in `/skills` steht:** Prüf, ob die Datei `.claude/skills/commit-check/SKILL.md` heißt und die erste Zeile die öffnende `---` ist. Ein unbekanntes Feld im Frontmatter ignoriert Claude Code still. Wurde `.claude/skills/` erst während der Sitzung angelegt, hilft `/reload-skills`.
 
-- „Skills sind Dienstanweisungen, gespeichert als Textdateien."
-- „Commands sind die Alarmknöpfe, die sie auslösen."
-- „Persönliche Skills in `~/.claude/skills/` begleiten dich in jedes Projekt."
-- „Du kannst für jeden wiederkehrenden Ablauf einen eigenen Skill schreiben: die Review-Checkliste deines Teams, dein Vorgehen beim Deployment, deine Schritte bei einem Sicherheitsvorfall."
-
-**Wenn der TDD-Skill nicht installiert ist:**
-
-```
-Let's implement an email validator with tests. Write the failing test first, then implement, then verify the test passes. Follow strict red-green-refactor — no implementation before a failing test exists.
-```
-
-Das stößt den TDD-Ablauf von Hand an. Sag dann: „Das habe ich gerade von Hand gemacht. Mit einem Skill tippe ich `/tdd`, und Claude weiß das alles schon."
+**Wenn der Befehl in Schritt 5 nichts findet:** Prüf mit `git status`, ob `app.py` gestagt ist.
 
 </details>
