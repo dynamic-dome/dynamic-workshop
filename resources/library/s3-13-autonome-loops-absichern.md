@@ -5,7 +5,7 @@ title: "Autonome Loops absichern: Budget und Worktree"
 shelf: automation
 level: core
 minutes: 25
-requires: [S3.12, S1.19]
+requires: [S3.12, S1.19, S3.8]
 safety_floor: true
 transferable: true
 outcome: "Ich kann einen unbeaufsichtigten Lauf mit --max-budget-usd und --max-turns deckeln, ihn in einem eigenen Worktree laufen lassen, den Stopp am Ergebnis ablesen und sagen, was eine interaktive Sitzung stattdessen begrenzt."
@@ -21,7 +21,7 @@ aliases: []
 # S3.13 · Autonome Loops absichern: Budget und Worktree
 
 <!-- meta:start -->
-> **Regal:** [Automation & Loops](README.md#automation) · **Stufe:** Kern · **~25 Min** · **Voraussetzungen:** [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md) · [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](s1-19-kosten-im-blick.md) · 🛡 **Sicherheitsboden**
+> **Regal:** [Automation & Loops](README.md#automation) · **Stufe:** Kern · **~25 Min** · **Voraussetzungen:** [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md) · [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](s1-19-kosten-im-blick.md) · [S3.8 Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md) · 🛡 **Sicherheitsboden**
 >
 > ← [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md) · [Bibliothek](README.md) · [S3.14 Self-Improve-Loop: was geht und wo es endet](s3-14-self-improve-loop.md) →
 <!-- meta:end -->

@@ -2913,16 +2913,16 @@
    {
     "id": "S3.2",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 5,
+    "status": "skim"
    },
    {
     "id": "S3.3",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 5,
+    "status": "skim"
    },
    {
     "id": "S3.4",
@@ -3118,7 +3118,7 @@
     "n": 4
    },
    {
-    "minutes": 128,
+    "minutes": 141,
     "n": 5
    },
    {
@@ -3135,7 +3135,7 @@
    }
   ],
   "totals": {
-   "skim_min": 94,
+   "skim_min": 107,
    "work_min": 925
   },
   "version": 1,
@@ -3152,6 +3152,13 @@
     "ids": [
      "S2.8",
      "S2.10"
+    ]
+   },
+   {
+    "code": "override-prereq",
+    "ids": [
+     "S2.8",
+     "S3.11"
     ]
    },
    {
@@ -6722,16 +6729,16 @@
    {
     "id": "S3.2",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 4,
+    "status": "skim"
    },
    {
     "id": "S3.3",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 4,
+    "status": "skim"
    },
    {
     "id": "S3.4",
@@ -6923,7 +6930,7 @@
     "n": 3
    },
    {
-    "minutes": 118,
+    "minutes": 131,
     "n": 4
    },
    {
@@ -6936,7 +6943,7 @@
    }
   ],
   "totals": {
-   "skim_min": 69,
+   "skim_min": 82,
    "work_min": 745
   },
   "version": 1,
@@ -9924,16 +9931,16 @@
    {
     "id": "S3.2",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 4,
+    "status": "skim"
    },
    {
     "id": "S3.3",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 5,
+    "status": "skim"
    },
    {
     "id": "S3.4",
@@ -9981,7 +9988,7 @@
     "id": "S3.10",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -10107,7 +10114,7 @@
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    }
   ],
@@ -10125,20 +10132,24 @@
     "n": 3
    },
    {
-    "minutes": 145,
+    "minutes": 150,
     "n": 4
    },
    {
-    "minutes": 148,
+    "minutes": 136,
     "n": 5
    },
    {
-    "minutes": 140,
+    "minutes": 130,
     "n": 6
+   },
+   {
+    "minutes": 30,
+    "n": 7
    }
   ],
   "totals": {
-   "skim_min": 50,
+   "skim_min": 63,
    "work_min": 805
   },
   "version": 1,
@@ -10457,16 +10468,16 @@
    {
     "id": "S3.2",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 4,
+    "status": "skim"
    },
    {
     "id": "S3.3",
     "override": false,
-    "reason": "not-goal",
-    "stage": null,
-    "status": "later"
+    "reason": "prerequisite",
+    "stage": 5,
+    "status": "skim"
    },
    {
     "id": "S3.4",
@@ -10514,7 +10525,7 @@
     "id": "S3.10",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -10619,7 +10630,7 @@
     "id": "S4.8",
     "override": false,
     "reason": "capstone",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    },
    {
@@ -10658,24 +10669,24 @@
     "n": 3
    },
    {
-    "minutes": 145,
+    "minutes": 150,
     "n": 4
    },
    {
-    "minutes": 148,
+    "minutes": 136,
     "n": 5
    },
    {
-    "minutes": 141,
+    "minutes": 106,
     "n": 6
    },
    {
-    "minutes": 90,
+    "minutes": 145,
     "n": 7
    }
   ],
   "totals": {
-   "skim_min": 94,
+   "skim_min": 107,
    "work_min": 860
   },
   "version": 1,

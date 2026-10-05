@@ -5,7 +5,7 @@ title: Codex-Schwarm und die Datenfluss-Grenze
 shelf: agents
 level: bonus
 minutes: 25
-requires: [S4.1]
+requires: [S4.1, S3.11]
 safety_floor: false
 transferable: true
 outcome: "Ich kann erklären, welcher Anbieter in einer Claude-Codex-Pipeline welchen Code sieht, die Dateien eines kleinen Projekts in „darf raus“, „darf nicht raus“ und „nur Signatur“ einteilen und für sensiblen Code eine der drei Optionen (Codex weglassen, lokales Modell, nur Signaturen senden) begründet wählen."
@@ -18,7 +18,7 @@ aliases: []
 # S4.2 · Codex-Schwarm und die Datenfluss-Grenze
 
 <!-- meta:start -->
-> **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kür · **~25 Min** · **Voraussetzungen:** [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md)
+> **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kür · **~25 Min** · **Voraussetzungen:** [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) · [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](s3-11-datenschutz-und-compliance.md)
 >
 > ← [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) · [Bibliothek](README.md) · [S4.3 Headless: claude -p als Pipeline-Stufe](s4-03-headless.md) →
 <!-- meta:end -->

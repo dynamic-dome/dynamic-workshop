@@ -5,7 +5,7 @@ title: Datenschutz, Aufbewahrung und regulierte Branchen
 shelf: security
 level: deep-dive
 minutes: 25
-requires: [S3.9]
+requires: [S3.9, S2.8]
 safety_floor: false
 transferable: true
 outcome: "Ich kann die Aufbewahrungsstufen der Claude-Pläne benennen, Anliegen wie „nichts speichern“, „kein Gedächtnis“ oder „keine Schlüssel in Dateien“ einer Kontrolle zuordnen und einen PreToolUse-Hook einrichten, der sensible Muster in Datei-Schreibzugriffen blockt."
@@ -20,7 +20,7 @@ aliases: []
 # S3.11 · Datenschutz, Aufbewahrung und regulierte Branchen
 
 <!-- meta:start -->
-> **Regal:** [Gegenprüfung & Compliance](README.md#security) · **Stufe:** Vertiefung · **~25 Min** · **Voraussetzungen:** [S3.9 Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md)
+> **Regal:** [Gegenprüfung & Compliance](README.md#security) · **Stufe:** Vertiefung · **~25 Min** · **Voraussetzungen:** [S3.9 Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md) · [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md)
 >
 > ← [S3.10 Netzwerk und Skills härten](s3-10-netzwerk-und-skills-haerten.md) · [Bibliothek](README.md) · [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md) →
 <!-- meta:end -->

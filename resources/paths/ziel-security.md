@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 8 Etappen, zusammen etwa 17,5 Stunden (960 Min durcharbeiten, 94 Min überfliegen).
+**Umfang:** 8 Etappen, zusammen etwa 18 Stunden (960 Min durcharbeiten, 107 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -49,7 +49,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.15 MCP einrichten: Transporte, Scopes, CLI](../library/s2-15-mcp-einrichten.md) — durcharbeiten
 - [S2.16 MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](../library/s2-16-mcp-im-detail.md) — durcharbeiten
 
-## Etappe 5 (~118 Min)
+## Etappe 5 (~131 Min)
 
 - [S2.17 MCP-Sicherheit und ein eigener Server](../library/s2-17-mcp-sicherheit.md) 🛡 — durcharbeiten
 - [S2.18 RAG und NotebookLM: dem Agenten Baupläne geben](../library/s2-18-rag-und-notebooklm.md) — durcharbeiten
@@ -57,6 +57,8 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.20 Praxis-Station Session 2: alles in einem Ablauf](../library/s2-20-praxis-station-2.md) — durcharbeiten
 - [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
 - [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) — überfliegen
+- [S3.2 Eingebaute Subagenten nutzen](../library/s3-02-eingebaute-subagenten.md) — überfliegen
+- [S3.3 Einen eigenen Subagenten definieren](../library/s3-03-eigener-subagent.md) — überfliegen
 - [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) — überfliegen
 
 ## Etappe 6 (~140 Min)

@@ -2873,13 +2873,16 @@
     "Was unterscheidet fail-open von fail-secure, und warum findet eine reine Mustersuche einen fail-open-Fehler schlecht?"
    ],
    "requires": [
-    "S3.4"
+    "S3.4",
+    "S3.3"
    ],
    "requires_all": [
     "S0.1",
     "S1.1",
     "S1.2",
     "S3.1",
+    "S3.2",
+    "S3.3",
     "S3.4"
    ],
    "safety_floor": false,
@@ -3183,7 +3186,8 @@
     "Wie lange werden Daten bei einem Pro-Plan aufbewahrt, wenn du Training erlaubst, und wie lange, wenn nicht?"
    ],
    "requires": [
-    "S3.9"
+    "S3.9",
+    "S2.8"
    ],
    "requires_all": [
     "S0.1",
@@ -3191,6 +3195,9 @@
     "S1.2",
     "S1.5",
     "S1.6",
+    "S2.6",
+    "S2.7",
+    "S2.8",
     "S3.8",
     "S3.9"
    ],
@@ -3313,16 +3320,20 @@
    ],
    "requires": [
     "S3.12",
-    "S1.19"
+    "S1.19",
+    "S3.8"
    ],
    "requires_all": [
     "S0.1",
     "S1.1",
     "S1.2",
+    "S1.5",
+    "S1.6",
     "S1.10",
     "S1.19",
     "S2.1",
     "S2.4",
+    "S3.8",
     "S3.12"
    ],
    "safety_floor": true,
@@ -3385,10 +3396,13 @@
     "S0.1",
     "S1.1",
     "S1.2",
+    "S1.5",
+    "S1.6",
     "S1.10",
     "S1.19",
     "S2.1",
     "S2.4",
+    "S3.8",
     "S3.12",
     "S3.13"
    ],
@@ -3606,15 +3620,24 @@
     "Der zweite Anbieter soll eine Änderung innerhalb einer vertraulichen Datei umsetzen. Warum hilft „nur Signaturen“ nicht, und was wählst du stattdessen?"
    ],
    "requires": [
-    "S4.1"
+    "S4.1",
+    "S3.11"
    ],
    "requires_all": [
     "S0.1",
     "S1.1",
     "S1.2",
+    "S1.5",
+    "S1.6",
     "S1.7",
+    "S2.6",
+    "S2.7",
+    "S2.8",
     "S3.1",
     "S3.4",
+    "S3.8",
+    "S3.9",
+    "S3.11",
     "S4.1"
    ],
    "safety_floor": false,

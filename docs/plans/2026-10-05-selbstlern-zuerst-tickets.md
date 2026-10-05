@@ -664,11 +664,11 @@ Haiku-Datum, X.1), R11 (bis auf „Stop feuert nach jeder Antwort“), R23 für 
 
 | Teil | Inhalt | Stand |
 |---|---|---|
-| P8a | Faktenreste: R3 (Handtest der Token Firewall zeigt eine Eingabe, die es nicht gibt), R5 (`karte-erweitern.md` ohne die 50.000-Zeichen-Schwelle), R9 (Kanon: Sonnet-Retirement, Startmodus von `claude -p` bei Drittanbietern, `/hooks`), R11 („Stop feuert nach jeder Antwort“ an vier Stellen), R12 (EN 50131 in S4.8), R29 (Diagnose-Kasten in S2.8, Verweise aus S2.2 und S2.15) | [ ] |
-| P8b | Vorlagen: Python-Fassungen von `redact-output` und `token-firewall` mit Tests (laufen unter Windows ohne Git Bash und `jq`; die Bash-Fassungen bleiben), Bash-Scanner blockt die Eingabe `null`; Windows-Weg der beiden Extras in S2.10 | [ ] |
+| P8a | Faktenreste: R3 (Handtest der Token Firewall zeigt eine Eingabe, die es nicht gibt), R5 (`karte-erweitern.md` ohne die 50.000-Zeichen-Schwelle), R9 (Kanon: Sonnet-Retirement, Startmodus von `claude -p` bei Drittanbietern, `/hooks`), R11 („Stop feuert nach jeder Antwort“ an vier Stellen), R12 (EN 50131 in S4.8), R29 (Diagnose-Kasten in S2.8, Verweise aus S2.2 und S2.15) | [x] `f55d9a9` |
+| P8b | Vorlagen: Python-Fassungen von `redact-output` und `token-firewall` mit Tests (laufen unter Windows ohne Git Bash und `jq`; die Bash-Fassungen bleiben), Bash-Scanner blockt die Eingabe `null`; Windows-Weg der beiden Extras in S2.10 | [x] `cf44429` |
 | P8c | Moderationsschicht nachziehen: Die Dateien zu S1.10, S1.13, S1.16, S1.18, S1.19, S2.8 (R7), S2.11, S2.14, S2.18, S3.8, S3.13, S3.14, S4.2 beschreiben Demos an Übungsständen, die es im Kapitel nicht mehr gibt; die Dateien zu den P7f-Kapiteln gegenlesen | [ ] |
-| P8d | Kleine Hinweise aus den Läufen: S3.13 (Hooks aus den Benutzer-Einstellungen hinterlassen Dateien im Worktree), S4.3 (`--output-format json` als Array bei `verbose`), X.3 (Wegwerf-Ordner als Grenze), `claude plugin list` (eigener Abschnitt für claude.ai-Plugins), `/model`-Vorgabe | [ ] |
-| P8e | Aufbau (R24, R29, R30 und die Voraussetzungen): siehe unten, braucht eine Entscheidung des Owners | [ ] |
+| P8d | Kleine Hinweise aus den Läufen: S3.13 (Hooks aus den Benutzer-Einstellungen hinterlassen Dateien im Worktree), S4.3 (`--output-format json` als Array bei `verbose`), X.3 (Wegwerf-Ordner als Grenze), `claude plugin list` (eigener Abschnitt für claude.ai-Plugins), `/model`-Vorgabe | [x] `2345d5b` |
+| P8e | Aufbau (R24, R29, R30 und die Voraussetzungen): Voraussetzungen umgesetzt (siehe „Stand P8e“); der Rest braucht eine Entscheidung des Owners | [ ] teilweise |
 
 **Abweichung von der Paketbeschreibung, mit Begründung.** Die Beschreibung nennt `.ps1`-Fassungen für Schwärzung und
 Token Firewall. Gebaut werden Python-Fassungen: eine Datei für alle Systeme, ohne `jq`, wie beim Gate
@@ -695,6 +695,48 @@ S3.13 → S3.8, S4.2 → S3.11, X.4 → S3.13/S4.4 (jede zusätzliche Voraussetz
 Sicherheitskapitel (R30: S2.13, S2.17, S3.11 Vertiefung; X.4, S4.2 Kür); S4.9 und S4.10 stehen als Kern hinter S4.8;
 Vorschläge der Schreiber (S1.11 teilen, `/voice` aus S1.15 lösen). Jede dieser Änderungen schreibt Vertrag, Personas
 und Golden neu.
+
+### Stand P8a, P8b, P8d (2026-10-05)
+
+- **P8a** (`f55d9a9`): Karte „Erweitern“ nennt die 50.000-Zeichen-Schwelle; Kanon: Sonnet 4.5 ist seit 30.09.2026
+  abgekündigt (Abschaltung auf der Claude API am 30.11.2026), und die Doku-Tabelle nennt jetzt den Startmodus von
+  `claude -p` ohne Feature-Flags (`auto` ab 2.1.285 bei Drittanbietern oder abgeschalteter Telemetrie); S1.6 und zwei
+  Karten folgen. „Stop feuert nach jeder abgeschlossenen Antwort“; S4.8 ohne EN 50131 als Quelle; S2.8 und S2.15
+  verweisen früh auf `/hooks`, `claude doctor` und das Debug-Log (S4.9). Das Prüfdatum des Kanons ist unverändert:
+  Das war kein voller Aktualitätslauf.
+- **P8b** (`cf44429`): `redact-output.py`, `token-firewall.py` (Tests zuerst, 14 rot), Bash-Scanner blockt `null`.
+  Unter Windows Ende zu Ende belegt: Über das PowerShell-Tool kam `Get-Content config.txt` als `key=[REDACTED]` bei
+  Claude an, und eine Testausgabe von 41 Zeilen gekürzt mit Markierungszeile. Die Ausgabe des PowerShell-Tools hat
+  dieselben vier Felder wie die des Bash-Tools (Bash zusätzlich `noOutputExpected`). Ein fehlgeschlagener Testlauf
+  hinter einer Pipe (`… | tail -n 5`) endet mit 0 und erreicht PostToolUse; S2.10 erklärt das.
+- **P8d** (`2345d5b`): X.3 nennt den Wegwerf-Ordner nicht mehr als Grenze; S4.3 warnt vor `--verbose` mit
+  `--output-format json` (Array statt Objekt, durch einen Lauf belegt); S3.13 sagt, was zu tun ist, wenn git einen
+  Worktree mit fremden Dateien nicht entfernt. Ohne Änderung geprüft: `claude plugin list` (steht in S2.12),
+  `/model`-Vorgabe (von `model-config.md` gedeckt).
+
+### Stand P8e (2026-10-05)
+
+**Umgesetzt: vier Voraussetzungen,** die eine Übung wirklich braucht. Vorher gerechnet, was jede an den zwanzig
+Persona-Pfaden ändert (`requires` zieht ein Kapitel, das sonst „später“ wäre, als „überfliegen“ in den Pfad):
+
+| Voraussetzung | Grund | Wirkung auf die Personas |
+|---|---|---|
+| S3.6 → S3.3 | Die Übung baut zwei eigene Subagenten | P06, P13, P19, P20: S3.2 und S3.3 werden „überfliegen“ (+13 Minuten); P19 hat eine Etappe mehr |
+| S3.11 → S2.8 | Die Übung richtet einen Hook ein, der mit `exit 2` blockt | P06 (überspringt S2.8) bekommt eine Warnung mehr |
+| S3.13 → S3.8 | Die Übung arbeitet mit `dontAsk` und Allow-Regeln | keine |
+| S4.2 → S3.11 | Die Datenfluss-Grenze baut auf den Datenregeln auf | keine |
+
+Vertrag (`chapter-meta.yaml`), Katalog, Persona P06 (Erwartung zuerst geändert, rot gesehen) und Golden bewusst neu;
+Python-Engine und JS-Port bleiben gleich (Suite grün).
+
+**Nicht umgesetzt, mit Grund:** S3.7 → S1.17 (nur ein Verweis unter „Weiterlesen“); S3.10 → S2.5 (das Kapitel erklärt
+die eine Sache, die es aus S2.5 braucht, selbst; S3.8 ist über S3.9 schon Voraussetzung); X.4 → S3.13, S4.4 (würde
+S4.3 und S4.4 in fünf Pfade ziehen, darunter die beiden Schnellstart-Personas, obwohl X.4 dort nur überflogen wird).
+
+**Offen, Entscheidung des Owners:** S2.10 teilen (Gate als eigenes Kapitel) und der Grenzfall S2.8; Reihenfolge S3.7
+vor S3.6 und S4.9/S4.10 vor S4.8 (die Reihenfolge folgt den IDs, ein Tausch heißt umnummerieren mit Aliasen);
+Stufen nach R30 (S2.13, S2.17, S3.8, S3.9, S3.13, S4.4 stehen schon im Sicherheitsboden, offen sind S3.11, S4.2, X.4);
+die Vorschläge zu S1.11 und S1.15.
 
 ## P9 — UI-Überarbeitung
 

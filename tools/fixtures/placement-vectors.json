@@ -437,6 +437,13 @@
       "code": "override-prereq",
       "ids": [
        "S2.8",
+       "S3.11"
+      ]
+     },
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S2.8",
        "S4.10"
       ]
      },

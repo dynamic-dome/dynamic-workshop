@@ -5,7 +5,7 @@ title: "Devil's Advocate: eine adversariale Prüf-Pipeline"
 shelf: security
 level: core
 minutes: 35
-requires: [S3.4]
+requires: [S3.4, S3.3]
 safety_floor: false
 transferable: true
 outcome: "Ich kann ein Ankläger-Verteidiger-Paar aus zwei Subagenten selbst bauen und nacheinander einsetzen, erklären, warum die Übereinstimmung zweier Scanner kein Beweis ist und eine Reproduktion mehr trägt, und an einem Beispiel zeigen, warum Erreichbarkeit und Fachlogik die Schwere eines Befunds ändern."
@@ -18,7 +18,7 @@ aliases: ["3.3", "3.3a"]
 # S3.6 · Devil's Advocate: eine adversariale Prüf-Pipeline
 
 <!-- meta:start -->
-> **Regal:** [Gegenprüfung & Compliance](README.md#security) · **Stufe:** Kern · **~35 Min** · **Voraussetzungen:** [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md)
+> **Regal:** [Gegenprüfung & Compliance](README.md#security) · **Stufe:** Kern · **~35 Min** · **Voraussetzungen:** [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) · [S3.3 Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md)
 >
 > ← [S3.5 Hintergrund-Sitzungen und Agent Teams](s3-05-hintergrund-und-teams.md) · [Bibliothek](README.md) · [S3.7 Die eingebauten Reviews](s3-07-eingebaute-reviews.md) →
 <!-- meta:end -->

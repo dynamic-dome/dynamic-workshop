@@ -585,6 +585,7 @@
   minutes: 35
   requires:
   - S3.4
+  - S3.3
   safety_floor: false
   transferable: true
   aliases:
@@ -648,6 +649,7 @@
   minutes: 25
   requires:
   - S3.9
+  - S2.8
   safety_floor: false
   transferable: true
   aliases: []
@@ -674,6 +676,7 @@
   requires:
   - S3.12
   - S1.19
+  - S3.8
   safety_floor: true
   transferable: true
   aliases: []
@@ -726,6 +729,7 @@
   minutes: 25
   requires:
   - S4.1
+  - S3.11
   safety_floor: false
   transferable: true
   aliases: []
