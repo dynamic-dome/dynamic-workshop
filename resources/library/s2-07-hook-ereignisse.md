@@ -66,7 +66,7 @@ Die offizielle Doku führt deutlich mehr Ereignisse, als du im Alltag brauchst; 
 | **PreToolUse** | Bevor Claude ein Tool nutzt (Bash, Edit, MCP-Aufruf). **Kann blocken**: über den Exit-Code allein nur mit **2**, daneben per JSON-Entscheidung ([S2.10](s2-10-hook-ausgaben.md)) | Gefährliche Befehle verhindern, ein Review vor dem Deploy erzwingen, unumkehrbare Aktionen bestätigen lassen |
 | **PostToolUse** | Nachdem ein Tool-Aufruf erfolgreich war. Bei einem Fehlschlag feuert stattdessen PostToolUseFailure | Audit-Log erfolgreicher Änderungen, Slack-Nachricht bei grünen Tests, Dashboard aktualisieren |
 | **Stop** | Claude hat eine Antwort beendet und wartet auf deinen nächsten Prompt; nicht nach einem Abbruch durch dich | Zusammenfassungen, Aufräumarbeiten, Statusmeldungen |
-| **SessionStart** | Bei jedem Start einer Sitzung, auch beim Fortsetzen und nach `/clear` | Briefing-Hook: Projektstatus ausgeben, `git status` prüfen, kontrollieren, ob die Abhängigkeiten installiert sind |
+| **SessionStart** | Bei jedem Start einer Sitzung, auch beim Fortsetzen, nach `/clear` und nach dem Komprimieren | Briefing-Hook: Projektstatus ausgeben, `git status` prüfen, kontrollieren, ob die Abhängigkeiten installiert sind |
 | **SessionEnd** | Die Sitzung endet (du beendest sie, `/clear`, Wechsel per `/resume`) | Abschluss-Hook: Sitzungszusammenfassung sichern, Logs archivieren |
 | **UserPromptSubmit** | Du schickst einen Prompt ab (bevor Claude ihn sieht) | Prompt prüfen, Kontext ergänzen (aktueller Branch, Ticket-ID), Prompts mit Secrets abweisen |
 | **PreCompact** | Kurz bevor der Kontext komprimiert wird, um Platz zu schaffen | Wichtigen Zustand auf die Platte schreiben, bevor er weggefasst wird |
@@ -120,9 +120,9 @@ SessionEnd-Hooks können die Beendigung nicht verhindern, und sie haben standard
 
 2. Starte `claude --permission-mode default` und bestätige den Vertrauensdialog mit „Yes, I trust this folder". Gib ein: `Without using any tools: when does the deploy freeze start?` Erwartet: Claude antwortet „Friday". Den Satz hat das Briefing bei SessionStart in den Kontext gelegt.
 3. Gib ein: `Without using any tools: which ticket is current?` Erwartet: Claude nennt `T-77`. Diesen Satz legt UserPromptSubmit bei jedem abgeschickten Prompt neben die Anfrage.
-4. Lies in einem zweiten Terminal die Logdatei (`cat hook-log.txt`, in PowerShell `Get-Content hook-log.txt`). Erwartet: eine Zeile `start`, danach zwei Zeilen `prompt`, eine je Prompt, den du abgeschickt hast. SessionStart feuert einmal je Sitzung, UserPromptSubmit je Prompt.
+4. Lies in einem zweiten Terminal die Logdatei (`cat hook-log.txt`, in PowerShell `Get-Content hook-log.txt`). Erwartet: eine Zeile `start`, danach zwei Zeilen `prompt`, eine je Prompt, den du abgeschickt hast. SessionStart hat hier einmal gefeuert, beim Start; UserPromptSubmit feuert je Prompt.
 
-**Aufräumen:** Beende die Sitzung mit `/exit` und lösch den Ordner `~/cc-workshop/ereignisse` selbst.
+**Aufräumen:** Beende die Sitzung mit `/exit` und lösch den Ordner `~/cc-workshop/ereignisse` selbst. Willst du das Extra unten machen, lösch ihn erst danach.
 
 **Geschafft, wenn:**
 

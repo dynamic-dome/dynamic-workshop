@@ -126,7 +126,7 @@ Diese Kurzfassung zeigt nur das Prinzip. Fehlt `jq`, bleibt `COMMAND` leer, und 
 3. Gib `/hooks` ein. Erwartet: eine schreibgeschützte Ansicht, in der deine Hooks unter PreToolUse, PostToolUse und Stop auftauchen, mit der Projekt-Einstellung als Herkunft. Schließ sie mit `Esc`.
 4. Gib ein: `Run the shell command echo hello and tell me what it prints.` Lies danach die Logdatei in einem zweiten Terminal im selben Ordner (`cat hook-log.txt`, in PowerShell `Get-Content hook-log.txt`). Erwartet: drei Zeilen in dieser Reihenfolge: `pre`, `post`, `stop`. (Führt Claude zusätzliche Befehle aus, stehen mehr `pre`- und `post`-Paare dazwischen; `stop` kommt erst am Ende der Antwort.)
 5. Gib ein: `What is 2 plus 2? Do not use any tools.` Lies die Datei erneut. Erwartet: Es ist genau eine Zeile `stop` dazugekommen, ohne `pre` und `post`. Stop feuert nach jeder Antwort, die Tool-Hooks nur bei Tool-Aufrufen.
-6. Gib ein: `Run the shell command git status and show me the output.` Der Ordner ist kein Git-Repository, der Befehl endet also mit einem Fehlercode. Lies die Datei erneut. Erwartet: Für diesen Aufruf steht `pre` in der Datei, aber kein `post`, danach `stop`. Der Aufruf ist fehlgeschlagen, und PostToolUse feuert nur nach Erfolg.
+6. Gib ein: `Run the shell command git show no-such-commit and show me the output.` Einen Commit dieses Namens gibt es nicht (und in diesem Ordner nicht einmal ein Repository), der Befehl endet also mit einem Fehlercode. Lies die Datei erneut. Erwartet: Für diesen Aufruf steht `pre` in der Datei, aber kein `post`, danach `stop`. Der Aufruf ist fehlgeschlagen, und PostToolUse feuert nur nach Erfolg.
 
 **Aufräumen:** Beende die Sitzung mit `/exit` und lösch den Ordner `~/cc-workshop/hooks-sensoren` selbst. Die Hooks hingen nur an diesem Ordner.
 
@@ -135,7 +135,7 @@ Diese Kurzfassung zeigt nur das Prinzip. Fehlt `jq`, bleibt `COMMAND` leer, und 
 - [ ] `/hooks` deine drei Hooks zeigte
 - [ ] nach dem `echo`-Auftrag `pre`, `post`, `stop` in dieser Reihenfolge in der Datei standen
 - [ ] die Frage ohne Werkzeug nur ein zusätzliches `stop` erzeugte
-- [ ] der fehlgeschlagene `git status` ein `pre`, aber kein `post` hinterließ
+- [ ] der fehlgeschlagene `git show` ein `pre`, aber kein `post` hinterließ
 
 ## Typische Fallen
 

@@ -152,7 +152,7 @@ Das hat eine Sicherheitsseite. Ein Skill kann sich selbst weitreichende Rechte g
 
 2. Starte `claude --permission-mode default` und bestätige den Vertrauensdialog. Gib ein: `Deploy the current branch to staging.` Du tippst `/deploy` nicht. Erwartet: Claude ruft den Skill auf; je nach Rückfrage gibst du ihn mit „Yes" frei, und auch das Anlegen von `deployed.txt` bestätigst du. Drück danach `Ctrl+O`: Im Transkript steht ein Aufruf des Werkzeugs `Skill`, und `deployed.txt` liegt im Ordner. (Fragt Claude nur zurück, was es deployen soll, hat es den Skill nicht gewählt. Das zeigt, dass die Wahl an seinem Urteil hängt; probier den Satz „ship it".)
 3. Beende die Sitzung mit `/exit`, lösch `deployed.txt` und ergänz in der SKILL.md im Frontmatter die Zeile `disable-model-invocation: true` direkt unter `name: deploy`.
-4. Starte `claude --permission-mode default` neu und gib denselben Satz ein: `Deploy the current branch to staging.` Erwartet: Claude startet den Skill nicht von selbst. Entweder kennt es ihn gar nicht, oder ein Versuch wird geblockt und es schlägt vor, dass du `/deploy` tippst. Will Claude sich stattdessen mit einem Shell-Befehl im Ordner umsehen, lehn die Rückfrage ab. Im Transkript (`Ctrl+O`) steht kein erfolgreicher Skill-Aufruf, und `deployed.txt` gibt es nicht.
+4. Starte `claude --permission-mode default` neu und gib denselben Satz ein: `Deploy the current branch to staging.` Erwartet: Claude startet den Skill nicht von selbst. Entweder kennt es ihn gar nicht, oder ein Versuch wird geblockt und es schlägt vor, dass du `/deploy` tippst. Will Claude sich stattdessen mit einem Shell-Befehl im Ordner umsehen oder `deployed.txt` von Hand anlegen (es kann die SKILL.md als gewöhnliche Datei finden und lesen), lehn die Rückfrage ab: Beides wäre kein Aufruf des Skills. Im Transkript (`Ctrl+O`) steht kein erfolgreicher Skill-Aufruf, und `deployed.txt` gibt es nicht.
 5. Gib jetzt `/deploy` ein. Erwartet: Der Skill läuft, `deployed.txt` entsteht (nach deiner Bestätigung des Anlegens).
 
 **Aufräumen:** Beende die Sitzung mit `/exit` und lösch den Ordner `~/cc-workshop/deploy` selbst.
@@ -182,7 +182,7 @@ Das hat eine Sicherheitsseite. Ein Skill kann sich selbst weitreichende Rechte g
    Create the file note.txt containing the line `OK`. Then create a folder named backup with the shell command `mkdir backup`.
    ```
 
-2. Starte `claude --permission-mode default` (Vertrauensdialog bestätigen) und gib `/note` ein. Erwartet: `note.txt` entsteht ohne Rückfrage, denn `Write` ist für diesen Turn freigegeben. Das `mkdir` dagegen fragt nach: Die Shell war nicht freigegeben und auch nicht gesperrt. Lehn die Rückfrage mit „No" ab.
+2. Starte `claude --permission-mode default` (Vertrauensdialog bestätigen) und gib `/note` ein. Erwartet: `note.txt` entsteht ohne Rückfrage, denn `Write` ist für diesen Turn freigegeben. (Auf einem Firmenrechner, dessen Organisation `allowManagedPermissionRulesOnly` setzt, gilt die Freigabe laut Doku nicht; dann fragt Claude Code auch hier.) Das `mkdir` dagegen fragt nach: Die Shell war nicht freigegeben und auch nicht gesperrt. Lehn die Rückfrage mit „No" ab.
 3. Gib in der nächsten Nachricht ein: `Create other.txt containing the word two.` Erwartet: Jetzt fragt Claude Code auch beim Schreiben nach. Die Freigabe galt nur für den Turn von `/note`. Lehn ab.
 
 **Aufräumen:** Beende die Sitzung mit `/exit` und lösch den Ordner `~/cc-workshop/freigabe` selbst.
