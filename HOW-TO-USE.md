@@ -87,6 +87,7 @@ python tools/build_library.py validate --complete   # Format, Verweise, Quiz, Vo
 python tools/build_library.py build                 # Katalog, Übersichten, Pfade, Meta-Blöcke, Cockpit
 python -m pytest tools -q                           # alle Wächter, Engine Python und JS, Browser-Tests
 python tools/lint_currency.py                       # Modellgenerationen nur im Kanon
+python tools/cockpit_shots.py <url> <ordner>        # Bilder aller Cockpit-Ansichten (Server vorher: python -m http.server 8765 --bind 127.0.0.1)
 ```
 
 `python tools/build_library.py check` prüft ohne zu schreiben, ob alle generierten Dateien aktuell sind.
