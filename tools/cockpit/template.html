@@ -253,6 +253,10 @@
     .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; min-width: 0; overflow-wrap: anywhere; }
     .panel h2 { font-size: 14px; margin: 0 0 8px; color: var(--muted); font-weight: 600; }
     .panel ul { margin: 0; padding-left: 18px; }
+    .prose h2 { scroll-margin-top: 70px; } /* a jump mark must not park the heading under the sticky header */
+    .toc ul { list-style: none; padding: 0; }
+    .toc button { border: 0; background: none; padding: 3px 0; color: var(--ink-2); text-align: left; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+    .toc button:hover { color: var(--accent); text-decoration-color: var(--accent); }
     .pager { display: flex; justify-content: space-between; gap: 10px; margin-top: 36px; }
     .pager a { max-width: 48%; }
 
@@ -788,8 +792,12 @@
       const reqs = c.requires.map(r => CH[r]).filter(Boolean);
       const diagramHtml = html => html.replace(/<div class="diagram" data-diagram="([0-9a-f]{8})"><\/div>/g, (m, key) => DATA.diagrams && DATA.diagrams[key] ? `<div class="diagram">${DATA.diagrams[key]}</div>` : m);
       const full = c.html ? `<details class="full"><summary>Ganzes Kapitel lesen</summary><div class="prose">${diagramHtml(c.html)}</div></details>` : (c.full_url ? `<p class="full"><a href="${esc(c.full_url)}" target="_blank" rel="noopener noreferrer">Ganzes Kapitel auf GitHub lesen</a></p>` : "");
-      // "durcharbeiten": the teaching text and the exercise are the page, not a folded extra (design 2026-10-05, P2)
-      const working = !!(mine && mine.status === "work" && c.html);
+      // The teaching text and the exercise are the page (P2); since P9 for every chapter, with or without a
+      // placement. Only a chapter the path sets to "überfliegen" keeps the short view.
+      const working = !!(c.html && !(mine && mine.status === "skim"));
+      // jump marks: the sections of the text, in document order (render() gives the headings their ids)
+      const sections = working ? (c.html.match(/<h2>[\s\S]*?<\/h2>/g) || []).map(h => h.replace(/<[^>]+>/g, "")) : [];
+      const toc = sections.length > 1 ? `<nav class="panel toc" aria-label="Abschnitte dieses Kapitels"><h2>In diesem Kapitel</h2><ul>${sections.map((s, i) => `<li><button type="button" data-action="jump" data-target="sec-${i}">${s}</button></li>`).join("")}</ul></nav>` : "";
       const doneButton = `<button type="button" class="btn ${done ? "" : "primary"}" data-action="toggle-done" data-id="${esc(id)}" aria-pressed="${done}">${done ? "Als offen markieren" : "Als erledigt markieren"}</button>`;
       const hasQuick = c.skip_check && c.skip_check.length;
       // recall questions, each with its own answer to open: answer first from memory, then compare (P3)
@@ -800,7 +808,8 @@
           ${c.analogy ? `<section class="block"><h2>Bild im Kopf</h2><div class="analogy">${rich(c, "analogy")}</div></section>` : ""}
           ${c.example ? `<section class="block"><h2>Ausprobieren</h2><div class="code"><button type="button" class="copy" data-action="copy" data-id="${esc(id)}">Kopieren</button><pre><code>${esc(c.example)}</code></pre></div></section>` : ""}
           ${c.checkpoint || c.quiz || recallList ? `<section class="block"><h2>Check</h2>${c.checkpoint ? `<p>${rich(c, "checkpoint")}</p>` : ""}${recallList}${quizBlock(c, "ch")}</section>` : ""}
-          ${full}`;
+          ${full}
+          <p class="row done-row">${doneButton}</p>`;
       const whole = `${hasQuick ? `<p class="row skip-row"><span class="muted small">Beide Fragen im Schnellcheck sicher ja?</span><button type="button" class="btn" data-action="can-skip" data-id="${esc(id)}">Überspringen</button></p>` : ""}
           <div class="prose" data-full="open">${diagramHtml(c.html || "")}</div>
           ${c.quiz ? `<section class="block"><h2>Quiz</h2>${quizBlock(c, "ch")}</section>` : ""}
@@ -814,8 +823,8 @@
           <nav class="pager" aria-label="Kapitel blättern">${prev ? `<a href="?run=${esc(prev.id)}" data-chapter="${esc(prev.id)}">← ${esc(prev.id)} ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="?run=${esc(next.id)}" data-chapter="${esc(next.id)}">${esc(next.id)} ${esc(next.title)} →</a>` : ""}</nav>
         </div>
         <aside class="side">
-          ${working ? (mine ? `<div class="panel"><p class="small muted">${esc(reasonText(mine.reason))}</p></div>` : "") : `<div class="panel">${doneButton}
-          ${mine ? `<p class="small muted gap-top">${esc(reasonText(mine.reason))}</p>` : ""}</div>`}
+          ${toc}
+          ${mine && reasonText(mine.reason) ? `<div class="panel"><p class="small muted">${esc(reasonText(mine.reason))}</p></div>` : ""}
           ${reqs.length ? `<div class="panel"><h2>Baut auf</h2><ul>${reqs.map(r => `<li>${chapterLink(r)}</li>`).join("")}</ul></div>` : ""}
           ${c.sources && c.sources.length ? `<div class="panel"><h2>Offizielle Quellen</h2><ul>${c.sources.map(s => `<li><a href="${esc(s)}" target="_blank" rel="noopener noreferrer">${esc(s.replace(/^https:\/\//, ""))}</a></li>`).join("")}</ul></div>` : ""}
           <div class="panel"><h2>Regal</h2><p class="small">${esc(shelf.title)} — ${esc(shelf.purpose || "")}</p></div>
@@ -844,11 +853,25 @@
       else if (state.screen === "kapitel") html = renderChapter(state.chapter);
       else html = renderStart();
       main.innerHTML = html;
-      document.title = (state.screen === "kapitel" && CH[state.chapter] ? CH[state.chapter].id + " · " + CH[state.chapter].title + " — " : "") + "Claude Code Workshop Lern-Cockpit";
+      main.querySelectorAll("[data-full=open] h2").forEach((h, i) => { h.id = "sec-" + i; h.tabIndex = -1; });
+      document.title =(state.screen === "kapitel" && CH[state.chapter] ? CH[state.chapter].id + " · " + CH[state.chapter].title + " — " : "") + "Claude Code Workshop Lern-Cockpit";
       showStorageNotice();
     }
 
     // ---------- events ----------
+    function showDoneState(id) {
+      const done = !!progress.done[id];
+      document.querySelectorAll('[data-action="toggle-done"]').forEach(b => {
+        if (b.dataset.id !== id) return;
+        b.textContent = done ? "Als offen markieren" : "Als erledigt markieren";
+        b.setAttribute("aria-pressed", String(done));
+        b.classList.toggle("primary", !done);
+      });
+      const meta = $(".chapter .meta");
+      const mark = meta ? meta.querySelector(".st-done") : null;
+      if (meta && done && !mark) meta.insertAdjacentHTML("beforeend", chip("done"));
+      if (mark && !done) mark.remove();
+    }
     function setOverride(id, value) {
       if (!profile) return;
       const result = currentResult();
@@ -899,7 +922,14 @@
       } else if (action === "toggle-done") {
         if (progress.done[id]) { delete progress.done[id]; delete progress.doneAt[id]; }
         else { progress.done[id] = true; progress.doneAt[id] = new Date().toISOString(); }
-        saveProgress(); render(); announce(progress.done[id] ? id + " erledigt." : id + " wieder offen.");
+        saveProgress();
+        // In a chapter only the button and the chip change: a rebuilt page would lose the quiz result, opened
+        // answers and the scroll position (B7).
+        if (state.screen === "kapitel") showDoneState(id); else render();
+        announce(progress.done[id] ? id + " erledigt." : id + " wieder offen.");
+      } else if (action === "jump") {
+        const heading = document.getElementById(target.dataset.target);
+        if (heading) { heading.scrollIntoView({ block: "start" }); heading.focus({ preventScroll: true }); }
       } else if (action === "can-skip") {
         if (profile) setOverride(id, "skip");
         const order = pathOrder(currentResult());

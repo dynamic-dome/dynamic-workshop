@@ -68,6 +68,14 @@ def open_page(browser, url, width=1280, init_script=None):
     return page, errors
 
 
+def stored_profile(overrides=None, goals=("alltag",)):
+    """Init script: a saved placement for a newcomer (S2.7 and S2.8 'work', X.1 'skim'), plus own overrides."""
+    answers = {"version": 1, "goals": list(goals), "time": "abende", "areas": {}, "scenarios": {},
+               "overrides": overrides or {}}
+    profile = {"v": 1, "at": "2026-10-01T08:00:00.000Z", "why": "", "answers": answers}
+    return f"localStorage.setItem('ccWorkshopProfileV1', JSON.stringify({json.dumps(profile)}));"
+
+
 def test_every_screen_renders_without_errors(browser, site):
     page, errors = open_page(browser, site)
     for q in ("?screen=start", "?screen=einstufung", "?screen=pfad", "?screen=bibliothek", "?screen=wiederholen",
@@ -162,7 +170,6 @@ def test_arrow_keys_page_through_chapters_without_modifiers_only(browser, site):
 
 def test_chapter_html_links_stay_inside_the_cockpit(browser, site):
     page, _ = open_page(browser, site + "?run=S2.8")
-    page.click("details.full summary")
     link = page.locator(".prose a[data-chapter='S2.7']").first
     link.click()
     assert page.locator("main h1").inner_text().startswith("S2.7")
@@ -203,27 +210,106 @@ def test_a_chapter_to_work_through_opens_with_its_full_text_and_exercise(browser
     page.close()
 
 
-def test_skimmed_and_unplaced_chapters_keep_the_short_view(browser, site):
-    page, errors = open_page(browser, site + "?screen=einstufung")
-    _newcomer_path_for_alltag(page)
-    page.goto(site + "?run=X.1")
+def test_without_a_placement_a_chapter_opens_with_its_full_text_and_exercise(browser, site):
+    """Answer 3 of round 1 (P9): the library is fully usable without a placement."""
+    page, errors = open_page(browser, site + "?run=S2.8")  # nothing stored
+    assert page.locator("main [data-full=open]").count() == 1
+    assert page.locator("main details.full").count() == 0
+    assert page.get_by_role("heading", name="Selbst machen").is_visible()
+    assert page.locator(".meta .st-later").count() == 0  # no status without a placement
+    assert errors == []
+    page.close()
+
+
+@pytest.mark.parametrize("status", ["skip", "later"])
+def test_a_chapter_the_path_does_not_recommend_still_opens_in_full(browser, site, status):
+    page, errors = open_page(browser, site + "?run=S2.8", init_script=stored_profile({"S2.8": status}))
+    assert page.locator("main [data-full=open]").count() == 1
+    assert page.locator("main details.full").count() == 0
+    assert errors == []
+    page.close()
+
+
+def _done_button_position(page):
+    return page.evaluate("""() => {
+      const done = document.querySelectorAll('[data-action=toggle-done]');
+      const text = document.querySelector('main [data-full=open], main details.full');
+      return { count: done.length, inSide: !!done[0].closest('aside'),
+               afterText: !!(text.compareDocumentPosition(done[0]) & Node.DOCUMENT_POSITION_FOLLOWING) };
+    }""")
+
+
+def test_only_a_skimmed_chapter_keeps_the_short_view_and_done_sits_at_its_end(browser, site):
+    page, errors = open_page(browser, site + "?run=X.1", init_script=stored_profile())
     assert page.locator("main details.full").count() == 1
     assert page.locator("main details.full").get_attribute("open") is None
     assert page.locator("main [data-full=open]").count() == 0
+    assert _done_button_position(page) == {"count": 1, "inSide": False, "afterText": True}
     assert errors == []
     page.close()
-    fresh, fresh_errors = open_page(browser, site + "?run=S2.8")  # nothing stored: no placement
-    assert fresh.locator("main details.full").count() == 1
-    assert fresh.locator("main details.full").get_attribute("open") is None
-    assert fresh.locator("main [data-full=open]").count() == 0
-    assert fresh_errors == []
-    fresh.close()
+
+
+def test_done_sits_once_at_the_end_of_the_full_view(browser, site):
+    page, _ = open_page(browser, site + "?run=S2.8")
+    assert _done_button_position(page) == {"count": 1, "inSide": False, "afterText": True}
+    page.close()
+
+
+def test_marking_done_keeps_quiz_result_open_answer_and_scroll_position(browser, site):
+    """B7: marking used to rebuild the page; the quiz result vanished and the page jumped."""
+    page, errors = open_page(browser, site + "?run=S2.8")
+    page.set_viewport_size({"width": 1280, "height": 420})
+    page.click(".quiz [data-action=quiz][data-correct='1']")
+    page.locator(".prose details summary").first.click()
+    button = page.locator("[data-action=toggle-done]")
+    button.scroll_into_view_if_needed()
+    before = page.evaluate("window.scrollY")
+    assert before > 0
+    button.click()
+    assert page.locator(".quiz .feedback").inner_text().startswith("Richtig")
+    assert page.locator(".prose details").first.get_attribute("open") is not None
+    assert abs(page.evaluate("window.scrollY") - before) <= 2
+    assert button.inner_text() == "Als offen markieren" and button.get_attribute("aria-pressed") == "true"
+    assert page.locator(".meta .st-done").count() == 1
+    assert page.evaluate("JSON.parse(localStorage.getItem('ccWorkshopUiState')).done['S2.8']") is True
+    button.click()
+    assert button.inner_text() == "Als erledigt markieren" and button.get_attribute("aria-pressed") == "false"
+    assert page.locator(".meta .st-done").count() == 0
+    assert errors == []
+    page.close()
+
+
+def test_jump_marks_lead_to_a_section_without_changing_the_address(browser, site):
+    page, errors = open_page(browser, site + "?run=S2.8")
+    page.set_viewport_size({"width": 1280, "height": 480})
+    labels = page.locator("aside .toc [data-action=jump]").all_inner_texts()
+    assert labels[:3] == ["Schnellcheck", "Auf einen Blick", "Bild im Kopf"] and "Selbst machen" in labels
+    assert "Das ist kein Abschnitt" not in labels  # a heading inside a code block is no section
+    page.click(".quiz [data-action=quiz][data-correct='1']")  # state a rebuilt page would lose
+    url = page.url
+    page.locator("aside .toc [data-action=jump]", has_text="Selbst machen").click()
+    page.wait_for_function("""() => {
+      const h = [...document.querySelectorAll('.prose h2')].find(e => e.textContent.trim() === 'Selbst machen');
+      const top = h.getBoundingClientRect().top;
+      const bar = document.querySelector('header.top').getBoundingClientRect().bottom;
+      return top >= bar && top < bar + 120;
+    }""")
+    assert page.url == url
+    assert page.locator(".quiz .feedback").inner_text().startswith("Richtig")
+    assert errors == []
+    page.close()
+
+
+def test_a_skimmed_chapter_has_no_jump_marks(browser, site):
+    page, _ = open_page(browser, site + "?run=X.1", init_script=stored_profile())
+    assert page.locator(".toc").count() == 0
+    page.close()
 
 
 # --- recall questions with their answers (design 2026-10-05, package P3) ------------------------------------
 
 def test_short_view_shows_the_recall_questions_and_reveals_an_answer_on_demand(browser, site):
-    page, errors = open_page(browser, site + "?run=S2.8")  # no placement: short view
+    page, errors = open_page(browser, site + "?run=S2.8", init_script=stored_profile({"S2.8": "skim"}))
     questions = page.locator("main .recall > li")
     assert questions.count() == 2
     answer = questions.nth(0).locator("details.answer")
@@ -237,7 +323,8 @@ def test_short_view_shows_the_recall_questions_and_reveals_an_answer_on_demand(b
 
 
 def test_chapter_without_recall_questions_shows_no_empty_list(browser, site):
-    page, errors = open_page(browser, site + "?run=S2.7")
+    page, errors = open_page(browser, site + "?run=S2.7", init_script=stored_profile({"S2.7": "skim"}))
+    assert page.locator("main details.full").count() == 1  # short view
     assert page.locator("main .recall").count() == 0
     assert errors == []
     page.close()
