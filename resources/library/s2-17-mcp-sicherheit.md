@@ -102,9 +102,35 @@ if __name__ == "__main__":
     mcp.run()
 ```
 
-In der `.mcp.json` trägst du den Python-Befehl der virtuellen Umgebung ein, damit der Server die installierte Bibliothek findet (`.venv/bin/python`, unter Windows `.venv\Scripts\python.exe`). Das Muster gilt in jeder Sprache mit MCP-SDK. Dein eigener Server ist so sicher wie dein Code: Er läuft mit deinen Rechten, also gelten für ihn dieselben Regeln wie für jedes Programm, das du selbst schreibst.
+In die `.mcp.json` trägst du ihn so ein:
 
-Für gemeinsame Team-Dienste ist HTTP der empfohlene Transport ([S2.15](s2-15-mcp-einrichten.md)). Braucht der Dienst eine Anmeldung, nimmst du OAuth über `/mcp` oder ein Token im Header (`"Authorization": "Bearer ${TEAM_MCP_TOKEN}"`). Das Token steht als Umgebungsvariable in der Datei, nie im Klartext in der eingecheckten `.mcp.json`.
+```json
+{
+  "mcpServers": {
+    "my-tools": {
+      "command": "python",
+      "args": ["my_mcp_server.py"]
+    }
+  }
+}
+```
+
+Damit `python` die installierte Bibliothek findet, aktivierst du die virtuelle Umgebung in dem Terminal, aus dem du Claude Code startest; alternativ trägst du den vollen Pfad ein (`.venv/bin/python`, unter Windows `.venv\Scripts\python.exe`). Unter macOS und Linux heißt der Befehl ohne Umgebung meist `python3`. Das Muster gilt in jeder Sprache mit MCP-SDK. Dein eigener Server ist so sicher wie dein Code: Er läuft mit deinen Rechten, also gelten für ihn dieselben Regeln wie für jedes Programm, das du selbst schreibst.
+
+Für gemeinsame Team-Dienste ist HTTP der empfohlene Transport ([S2.15](s2-15-mcp-einrichten.md)). In der `.mcp.json` steht dann:
+
+```json
+{
+  "mcpServers": {
+    "my-team-tools": {
+      "type": "http",
+      "url": "https://mcp.corp.example/tools"
+    }
+  }
+}
+```
+
+Braucht der Dienst eine Anmeldung, nimmst du OAuth über `/mcp` oder ein Token im Header (`"Authorization": "Bearer ${TEAM_MCP_TOKEN}"`). Das Token steht als Umgebungsvariable in der Datei, nie im Klartext in der eingecheckten `.mcp.json`.
 
 ## Selbst machen
 
