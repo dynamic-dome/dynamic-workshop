@@ -214,17 +214,49 @@ Beide erweitern Claude Code, aber sie lösen verschieden aus. Ein MCP-Tool ruft 
 
 ### Extra: Playwright, ein echter Browser (etwa 15 Minuten)
 
-Der bekannteste Server gibt Claude einen echten Browser. Er braucht Node.js mit `npx` ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#nodejs)). Ergänz in derselben `.mcp.json` einen zweiten Eintrag neben `rooms`:
+Der bekannteste Server gibt Claude einen echten Browser. Er braucht Node.js mit `npx` ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#nodejs)). Leg dafür einen zweiten Ordner `~/cc-workshop/mcp-browser` an und wechsle hinein. Prüf zuerst, dass `npx` da ist und der Server startet:
+
+```bash
+# Verify npx is available
+npx --version
+
+# Test that Playwright MCP can start
+npx @playwright/mcp@latest --help
+```
+
+Trag den Server in die `.mcp.json` dieses Ordners ein:
 
 ```json
-"playwright": {
-  "command": "npx",
-  "args": ["@playwright/mcp@latest"],
-  "env": {}
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "env": {}
+    }
+  }
 }
 ```
 
-Starte `claude --permission-mode default` neu und gib den neuen Server frei. Frag `What browser tools do you have available?` Erwartet: Tools wie `browser_navigate`, `browser_click` und `browser_take_screenshot` (die Namen stammen aus der Doku von `@playwright/mcp`, nicht von Claude Code). Dann: `Navigate to example.com using the browser and take a screenshot.` Beim ersten Aufruf kann Playwright einen Browser nachladen oder melden, dass er fehlt; die [Doku von `@playwright/mcp`](https://github.com/microsoft/playwright-mcp) sagt, wie du ihn installierst. Nimm für Versuche keine Seite, die eine Anmeldung verlangt: Was du tippst, steht im Gespräch, und Claude Code legt Sitzungen im Klartext unter `~/.claude/projects/` ab. Der Browser läuft mit dem Netzwerkzugang deines Rechners, auch in einem Firmennetz mit Proxy oder SSO. Ob das Fenster sichtbar ist oder nicht, regelt ein Flag des Servers (`--headless`), nicht Claude Code.
+Starte `claude --permission-mode default` in diesem Ordner, gib den Server frei und frag:
+
+```text
+What browser tools do you have available?
+```
+
+Erwartet: Tools wie `browser_navigate`, `browser_click` und `browser_take_screenshot` (die Namen stammen aus der Doku von `@playwright/mcp`, nicht von Claude Code). Dann:
+
+```text
+Navigate to example.com using the browser and take a screenshot
+```
+
+Erwartet: Claude ruft das Navigations-Tool mit `https://example.com` auf und danach das Screenshot-Tool. Beim ersten Aufruf kann Playwright einen Browser nachladen oder melden, dass er fehlt; die [Doku von `@playwright/mcp`](https://github.com/microsoft/playwright-mcp) sagt, wie du ihn installierst. Zum Schluss lässt du Claude mit einer echten Seite arbeiten:
+
+```text
+Navigate to github.com/anthropics and list the first 5 repositories shown on the page
+```
+
+Nimm für Versuche keine Seite, die eine Anmeldung verlangt: Was du tippst, steht im Gespräch, und Claude Code legt Sitzungen im Klartext unter `~/.claude/projects/` ab. Der Browser läuft mit dem Netzwerkzugang deines Rechners, auch in einem Firmennetz mit Proxy oder SSO. Ob das Fenster sichtbar ist oder nicht, regelt ein Flag des Servers (`--headless`), nicht Claude Code. Lösch den Ordner `~/cc-workshop/mcp-browser` danach.
 
 ## Typische Fallen
 
