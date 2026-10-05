@@ -307,7 +307,7 @@
       h1 { font-size: 28px; }
     }
     @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
-    @media print { .top, .nav, aside.side, .copy, .zoom, .pager { display: none; } body { background: #fff; color: #000; } }
+    @media print { .top, .nav, aside.side, .toc-inline, .btn, .copy, .zoom, .pager { display: none; } body { background: #fff; color: #000; } .chapter { grid-template-columns: minmax(0, 1fr); } }
   </style>
 </head>
 <body>
@@ -1136,6 +1136,17 @@
     // ---------- start ----------
     const theme = readJson(THEME_KEY);
     if (theme && theme.theme === "light") document.documentElement.dataset.theme = "light";
+    // Printing is light whatever the stored theme; the stored one comes back after the print dialog.
+    let themeBeforePrint = null;
+    window.addEventListener("beforeprint", () => {
+      if (themeBeforePrint === null) themeBeforePrint = document.documentElement.dataset.theme || "";
+      document.documentElement.dataset.theme = "light";
+    });
+    window.addEventListener("afterprint", () => {
+      if (themeBeforePrint === "") delete document.documentElement.dataset.theme;
+      else if (themeBeforePrint) document.documentElement.dataset.theme = themeBeforePrint;
+      themeBeforePrint = null;
+    });
     readLocation();
     render();
   </script>

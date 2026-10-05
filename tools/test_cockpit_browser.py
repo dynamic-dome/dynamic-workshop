@@ -678,3 +678,24 @@ def test_an_imported_placement_is_stored_the_way_the_wizard_would_store_it(brows
     page.goto(real_site + "?screen=einstufung")
     assert page.locator("input[name=goal]:checked").count() == 2
     context.close()
+
+
+@pytest.mark.parametrize("stored", [None, "light"])
+def test_printing_is_light_and_the_stored_theme_comes_back(browser, site, stored):
+    init = f"localStorage.setItem('ccWorkshopTheme', JSON.stringify({{theme: '{stored}'}}));" if stored else None
+    page, errors = open_page(browser, site + "?run=S2.8", init_script=init)
+    theme = "document.documentElement.dataset.theme ?? null"
+    assert page.evaluate(theme) == stored
+    page.evaluate("window.dispatchEvent(new Event('beforeprint'))")
+    page.emulate_media(media="print")
+    assert page.evaluate(theme) == "light"
+    # light code boxes: with the dark theme kept, code would print as black boxes
+    rgb = page.locator("main code").first.evaluate("el => getComputedStyle(el).backgroundColor")
+    assert min(int(v) for v in rgb[4:-1].split(",")) >= 230, rgb
+    assert page.locator("main h1").is_visible()
+    assert not page.locator(".nav").is_visible() and not page.locator("[data-action=toggle-done]").is_visible()
+    page.emulate_media(media="screen")
+    page.evaluate("window.dispatchEvent(new Event('afterprint'))")
+    assert page.evaluate(theme) == stored
+    assert errors == []
+    page.close()
