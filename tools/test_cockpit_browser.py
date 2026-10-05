@@ -465,3 +465,41 @@ def test_a_new_placement_step_starts_at_its_top(browser, real_site):
     assert page.evaluate("window.scrollY") == 0
     assert errors == []
     page.close()
+
+
+def test_a_wide_diagram_uses_the_column_and_can_be_enlarged(browser, real_site):
+    """B6: diagrams were boxed into the reading width (S2.8: 1404 px wide, less than half visible)."""
+    page, errors = open_page(browser, real_site + "?run=S2.8")
+    box = page.locator(".prose .diagram").first
+    text_width = page.locator(".prose > p").first.evaluate("e => e.getBoundingClientRect().width")
+    column = page.locator(".chapter-main").evaluate("e => e.getBoundingClientRect().width")
+    width = box.evaluate("e => e.getBoundingClientRect().width")
+    assert width > text_width + 50 and width <= column + 1
+    zoom = box.locator("[data-action=zoom]")
+    assert zoom.is_visible()
+    zoom.click()
+    dialog = page.locator("dialog.zoom-dialog")
+    assert dialog.evaluate("d => d.open") is True and dialog.locator("svg").count() == 1
+    page.keyboard.press("Escape")
+    assert dialog.evaluate("d => d.open") is False and dialog.locator("svg").count() == 0
+    assert page.locator("main h1").inner_text().startswith("S2.8")  # still the same page
+    assert errors == []
+    page.close()
+
+
+def test_copy_button_does_not_cover_the_code(browser, real_site):
+    """B11: the button sat on the end of the first line of code."""
+    page, _ = open_page(browser, real_site + "?run=S1.5", init_script=stored_profile({"S1.5": "skim"}))
+    button = page.locator(".code [data-action=copy]").bounding_box()
+    pre = page.locator(".code pre").bounding_box()
+    assert button["y"] + button["height"] <= pre["y"] + 1
+    page.close()
+
+
+def test_a_wrong_quiz_answer_says_where_to_look(browser, site):
+    """B8, as far as the chapter format allows: there is no reason per option, so the feedback points to the text."""
+    page, _ = open_page(browser, site + "?run=S2.8")
+    page.locator(".quiz [data-action=quiz][data-correct='0']").first.click()
+    feedback = page.locator(".quiz .feedback").inner_text()
+    assert feedback.startswith("Nicht ganz") and "Auflösung" in feedback and "Im Detail" in feedback
+    page.close()
