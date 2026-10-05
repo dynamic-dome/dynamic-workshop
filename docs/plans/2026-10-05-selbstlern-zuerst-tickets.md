@@ -830,6 +830,28 @@ Fragen zu P9, je mit Empfehlung:
 9. **Abnahme.** Je Befund ein Browser-Test, am Ende ein Durchgang mit dir im Browser wie am 2026-10-02 (ab
    „Fortsetzung“). Empfehlung: ja.
 
+### Bauplan P9 (2026-10-05, nach Fragerunde 1)
+
+Größe M: eine Vorlage (`tools/cockpit/template.html`, 945 Zeilen), dazu die Etappenregel in beiden Engines. Jeder
+Punkt bekommt zuerst einen Browser-Test in `tools/test_cockpit_browser.py` (Fixture-Bibliothek, echter Chromium), der
+rot gesehen wird. Die Optik bleibt (Antwort 6). Ein Commit je Teilpaket.
+
+| Teil | Verhalten, das gebaut wird | Herkunft | Stand |
+|---|---|---|---|
+| P9a | **Kapitel, eine Ansicht.** Jedes Kapitel öffnet mit Kopf (Titel, Stufe, Minuten, Outcome), „Überspringen“ am Schnellcheck, dann dem ganzen Text samt Übung, dem Quiz und am Ende „Als erledigt markieren“. Die Kurzansicht bleibt nur, wenn der Pfad das Kapitel auf „überfliegen“ setzt; auch dort steht der Knopf am Ende. Sprungmarken zu den Abschnitten in der Seitenleiste, ohne die Adresse zu ändern. Markieren baut die Seite nicht neu auf (Quiz-Ergebnis, offene Auflösungen und Scrollposition bleiben). | Antworten 2, 3; B7; P2 offen | [ ] |
+| P9b | **Bibliothek.** Jede Tür zeigt ID und Titel, eine Zeile je Kapitel. Ohne Einstufung gibt es keinen Status „später“ und keine Empfehlungs-Legende; „erledigt“ und Sicherheitsboden bleiben sichtbar. | Antworten 3, 5 | [ ] |
+| P9c | **Start.** Zwei Einstiege für Lernende (Einstufung, Bibliothek); der Live-Workshop-Pfad steht darunter in einem Bereich „Für Moderierende“. Mit gespeicherter Einstufung ist der Hauptknopf „Weiter mit <nächstes offenes Kapitel des Pfads>“, die Einstufung wird zum Nebenknopf. | Antwort 4; B10 | [ ] |
+| P9d | **Einstufung.** Schrittwechsel beginnt oben (B1). Ein drittes Ziel wird sichtbar abgewiesen: Hinweis im Schritt, übrige Kästchen gesperrt, solange zwei gewählt sind (B2). Begründung der Community-Kapitel neutral: „Blick über den Tellerrand: überfliegen reicht.“ (B4). | B1, B2, B4 | [ ] |
+| P9e | **Kleinigkeiten in der Kapitelansicht.** Diagramme, die breiter sind als die Lesespalte, dürfen bis zur vollen Inhaltsbreite ausbrechen und scrollen erst danach (B6). Der Knopf „Kopieren“ steht über dem Codeblock statt auf der Zeile (B11). Eine falsche Quiz-Antwort verweist auf Auflösungen und Abschnitt; eine Begründung je Antwort gibt das Kapitelformat nicht her (B8 damit nur zum Teil). | B6, B8, B11 | [ ] |
+| P9f | **Wiederholen und Etappen.** „Wiederholen“ fragt nur Kapitel ab, die mindestens einen Tag erledigt sind, und sagt sonst „noch nichts fällig“; der Text nennt die echte Zahl der Fragen (B9). Ein Rest unter 30 Minuten wird an die letzte Etappe angehängt statt eine eigene zu bilden (B12): Python-Engine und JS-Port, Golden bewusst neu (heute betrifft das die Persona P17). | B9, B12 | [ ] |
+| P9g | **Fortschritt mitnehmen.** Export als JSON-Datei (Fortschritt und Einstufung) und Import mit Prüfung der Form; kein Konto (Antwort 8). Handy-Breite: Start, Bibliothek, Kapitel und Pfad ohne waagerechtes Scrollen, Navigation und Markieren bedienbar (Antwort 7). | Antworten 7, 8 | [ ] |
+| P9h | **Abnahme.** Volle Suite, Bilder der sechs Ansichten in zwei Breiten, lesende Codex-Gegenprüfung des Diffs, dann der Durchgang mit dem Owner im Browser (Antwort 9; dazu die offene Liste „Fortsetzung“ vom 2026-10-02). | Antwort 9 | [ ] |
+
+**Entschieden beim Planen (Ableitungen aus den Antworten, keine neuen Fragen):** „Schnellcheck reicht“ und „später“
+öffnen wie „durcharbeiten“ im Volltext; wer so ein Kapitel aufschlägt, will es lesen. Sprungmarken ändern die Adresse
+nicht, weil der Router auf Adresswechsel neu zeichnet. B3 und B5 sind erledigt (Branch `einstufung-security-ausnahme`,
+P0). B8 ganz zu erfüllen hieße 61 Begründungen schreiben: eigenes Inhaltspaket, nicht Teil von P9.
+
 ---
 
 ## Plan-Prüfung 2026-10-05 (Modus: Scope halten)
