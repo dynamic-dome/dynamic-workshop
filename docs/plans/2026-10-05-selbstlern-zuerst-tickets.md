@@ -656,6 +656,46 @@ S3.6, S4.4 teilen: ändert den Kapitelbestand, also wie P6 mit Vertrag), R25 (Bi
 Diagnose-Kasten in S2.8, Verweis von S2.2 und S2.15), R30 (Stufen der Sicherheitskapitel). Vor Beginn in
 Teilpakete schneiden; was P7 schon erledigt hat, hier abhaken.
 
+### Zuschnitt P8 (2026-10-05, nach dem Abschluss von P7)
+
+Bestandsaufnahme: Ein Sonnet-Leser hat jeden Restbefund gegen den Text auf dem Branch geprüft (Fundstellen mit
+Zitat). **Durch P5 bis P7 schon erledigt:** R4, R6, R10, R12 (bis auf einen Rest in S4.8), R25, R9 (`claude purge`,
+Haiku-Datum, X.1), R11 (bis auf „Stop feuert nach jeder Antwort“), R23 für S2.6 und S2.8, R3 im Kapiteltext.
+
+| Teil | Inhalt | Stand |
+|---|---|---|
+| P8a | Faktenreste: R3 (Handtest der Token Firewall zeigt eine Eingabe, die es nicht gibt), R5 (`karte-erweitern.md` ohne die 50.000-Zeichen-Schwelle), R9 (Kanon: Sonnet-Retirement, Startmodus von `claude -p` bei Drittanbietern, `/hooks`), R11 („Stop feuert nach jeder Antwort“ an vier Stellen), R12 (EN 50131 in S4.8), R29 (Diagnose-Kasten in S2.8, Verweise aus S2.2 und S2.15) | [ ] |
+| P8b | Vorlagen: Python-Fassungen von `redact-output` und `token-firewall` mit Tests (laufen unter Windows ohne Git Bash und `jq`; die Bash-Fassungen bleiben), Bash-Scanner blockt die Eingabe `null`; Windows-Weg der beiden Extras in S2.10 | [ ] |
+| P8c | Moderationsschicht nachziehen: Die Dateien zu S1.10, S1.13, S1.16, S1.18, S1.19, S2.8 (R7), S2.11, S2.14, S2.18, S3.8, S3.13, S3.14, S4.2 beschreiben Demos an Übungsständen, die es im Kapitel nicht mehr gibt; die Dateien zu den P7f-Kapiteln gegenlesen | [ ] |
+| P8d | Kleine Hinweise aus den Läufen: S3.13 (Hooks aus den Benutzer-Einstellungen hinterlassen Dateien im Worktree), S4.3 (`--output-format json` als Array bei `verbose`), X.3 (Wegwerf-Ordner als Grenze), `claude plugin list` (eigener Abschnitt für claude.ai-Plugins), `/model`-Vorgabe | [ ] |
+| P8e | Aufbau (R24, R29, R30 und die Voraussetzungen): siehe unten, braucht eine Entscheidung des Owners | [ ] |
+
+**Abweichung von der Paketbeschreibung, mit Begründung.** Die Beschreibung nennt `.ps1`-Fassungen für Schwärzung und
+Token Firewall. Gebaut werden Python-Fassungen: eine Datei für alle Systeme, ohne `jq`, wie beim Gate
+(`secure-diff-gate.py`) und beim Scanner (`sensitive-data-scanner.py`); PowerShell 5.1 bräuchte für UTF-8 und JSON
+eigene Umwege.
+
+**Belegt durch einen Lauf (Claude Code 2.1.289, Linux):** Ein Shell-Befehl mit Exit-Code 3 löst
+`PostToolUseFailure` aus (Felder `error: "Exit code 3\n…"`, `is_interrupt`, kein `tool_response`), der Befehl mit
+Exit-Code 0 `PostToolUse` (`tool_response` mit `stdout`, `stderr`, `interrupted`, `isImage`, `noOutputExpected`).
+Schwärzung und Token Firewall sehen fehlgeschlagene Befehle also nie.
+
+**P8e, Vorschlag zum Aufbau (noch nicht umgesetzt).** R24 stammt vom Stand vor P7. Die Zahlen heute:
+
+| Kapitel | Minuten | Wörter | Einschätzung |
+|---|---|---|---|
+| S2.10 | 35 | 2.924 | teilen: das Gate (Schutz von Dateien, Sicherheitswissen, R30) und die Ausgabe-Kanäle (Vertiefung) sind zwei Lernziele auf zwei Stufen |
+| S2.8 | 35 | 3.730 | Grenzfall: eine Hauptübung (15 Min.) und der `if`-Filter (5 Min.); der Filter könnte nach S2.9 wandern |
+| S3.6 | 35 | 2.421 | nicht teilen: seit P7d ein Lernziel mit einer Übung von 25 Minuten |
+| S3.9 | 30 | 2.461 | nicht teilen: 30 Minuten haben sechs weitere Kapitel |
+| S4.4 | 30 | 2.695 | nicht teilen: seit P7f trägt der Sicherheitskern, der Kosten-Feinschliff ist auf Verweise geschrumpft |
+
+Offen dazu: Reihenfolge S3.7 vor S3.6; Voraussetzungen S3.6 → S3.3, S3.7 → S1.17, S3.10 → S3.8/S2.5, S3.11 → S2.8,
+S3.13 → S3.8, S4.2 → S3.11, X.4 → S3.13/S4.4 (jede zusätzliche Voraussetzung kann Pfade verlängern, R31); Stufen der
+Sicherheitskapitel (R30: S2.13, S2.17, S3.11 Vertiefung; X.4, S4.2 Kür); S4.9 und S4.10 stehen als Kern hinter S4.8;
+Vorschläge der Schreiber (S1.11 teilen, `/voice` aus S1.15 lösen). Jede dieser Änderungen schreibt Vertrag, Personas
+und Golden neu.
+
 ## P9 — UI-Überarbeitung
 
 Erst nach P8. Eingang: B1 bis B12 aus `docs/reviews/2026-10-02-cockpit-durchgang.md`, die Beobachtungen vom
