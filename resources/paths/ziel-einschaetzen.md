@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 2 Etappen, zusammen etwa 4,5 Stunden (90 Min durcharbeiten, 177 Min überfliegen).
+**Umfang:** 3 Etappen, zusammen etwa 5 Stunden (120 Min durcharbeiten, 185 Min überfliegen).
 
 ## Etappe 1 (~147 Min)
 
@@ -28,7 +28,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — überfliegen
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — überfliegen
 
-## Etappe 2 (~120 Min)
+## Etappe 2 (~149 Min)
 
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — überfliegen
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — überfliegen
@@ -43,4 +43,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S4.8 Abschlussprojekt mit Bewertung](../library/s4-08-abschlussprojekt.md) — überfliegen
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — überfliegen
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — überfliegen
+
+## Etappe 3 (~9 Min)
+
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — überfliegen

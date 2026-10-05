@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7d: 729) und `python tools/build_library.py validate --complete`.
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7e: 739) und `python tools/build_library.py validate --complete`.
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -31,8 +31,8 @@
 | P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [x] `d03ea85` |
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] `664d5ca` |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [x] `359c9db` und Folge-Commit, siehe Abschluss P5 |
-| P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a, S2.20 mit P7c erledigt; S3.15 folgt mit P7e |
-| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e, P7f [ ] (Schreiber fertig oder laufend, siehe „Stand P7e und P7f“) |
+| P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a, S2.20 mit P7c, S3.15 mit P7e erledigt |
+| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] siehe Abschluss P7e · P7f [ ] (Schreiber gestartet, siehe „Stand P7f“) |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [ ] |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [ ] |
 
@@ -581,18 +581,40 @@ Danach übernimmt, wer abnimmt: alle Kapitel lesen, jede Hauptübung durchspiele
   Voraussetzungen S3.6 → S3.3 und S3.7 → S1.17; ein Quizblock in Community-Kapiteln (der Validator lässt keinen zu);
   X.3 nennt den Wegwerf-Ordner an zwei Stellen noch als äußere Grenze (mit F7 prüfen).
 
-### Stand P7e und P7f (2026-10-05, 16:20)
+### Abschluss P7e (2026-10-05)
 
-- **P7e:** Schreiber fertig, Worktree `~/AI/worktrees/workshop-p7e`, Branch `p7e-schreiber` (neun Commits
-  `a107ff0..f1a92ab`, Basis `b72b648`). Noch nicht gelesen, nicht durchgespielt, nicht gemergt. Vom Schreiber als
-  unsicher gemeldet, in dieser Reihenfolge: S3.13 (Stopp am Turn-Limit, Exit-Wert, Worktree aufräumen), S3.8
-  (Ask-Regel beim Commit in `dontAsk`), S3.12 (`/loop`, `/goal`), S3.10 (`echo` im Skill ohne Rückfrage), S3.14
-  (hält Claude die Konvention im ersten Lauf wirklich nicht ein?), S4.1 (zweite Modellzeile in `/cost` nach
-  `opusplan`). S3.11 bringt eine Python-Fassung des Scanner-Hooks mit, die keine getestete Vorlage ist: bei der
-  Abnahme entscheiden (als Vorlage mit Test aufnehmen oder streichen). Neun alte Codeblöcke brauchen eine Begründung.
-  Danach S3.15 als Abschluss von Session 3 neu schreiben (Muster S1.20, S2.20).
-- **P7f:** Schreiber gestartet, Worktree `~/AI/worktrees/workshop-p7f`, Branch `p7f-schreiber` (Basis `8e75575`):
-  S4.3 bis S4.7, S4.9, S4.10, X.4.
+- **Schreiber** (Sonnet, neun Commits `a107ff0..f1a92ab`): S3.8 bis S3.14, S4.1, S4.2. Die Sicherheitskapitel haben
+  Übungen, deren Ergebnis an `git` abzulesen ist; S3.14 hängt nicht mehr an einem Plugin-Befehl, den es nicht gibt;
+  S4.2 hat eine Übung ohne zweiten Anbieter. Übernommen als Merge (Hash im Log: „Merge branch 'p7e-schreiber'“).
+- **S3.15** ist der Abschluss von Session 3 (neuer Titel „alles in einem Ablauf“): Regeln, gedeckelter Lauf im
+  Worktree, eigener Subagent als Gegenprüfung, Übernahme erst durch den eigenen Merge.
+- **Neue getestete Vorlage:** `sensitive-data-scanner.py` (Tests zuerst; beide Scanner teilen die Tests). Damit
+  braucht die Übung in S3.11 kein `jq` mehr. Offen für P8/R23: Die Bash-Fassung lässt die Eingabe `null` durch.
+- **Durchgespielt und korrigiert:**
+  - S3.8: Ein Sammelauftrag landete als eine Shell-Zeile und wurde in `dontAsk` als Ganzes abgelehnt; die Runden
+    haben jetzt zwei Aufträge. Endfassung nachgespielt (Runde 1: Commit mit beiden Dateien; Runde 2: Änderung an
+    `config.txt` und Commit abgelehnt), dazu das Extra (drei Umgehungsversuche, alle gestoppt).
+  - S3.9: lief in allen drei Runden wie geschrieben (Rückfrage trotz Allow-Regel, Ablehnung in `dontAsk`).
+  - S3.10, S3.11 (Python-Fassung), S3.13 (Linux und Windows): liefen wie geschrieben; in S3.13 ist der Worktree
+    nach einem `-p`-Lauf immer gesperrt, das Aufräumen entsperrt jetzt zuerst.
+  - **Allow-Regeln eines Projekts gelten in einem `-p`-Lauf erst nach dem Vertrauensdialog** (Probelauf der Station
+    und permissions.md). Die Station hat dafür einen eigenen Schritt, S3.8 und S3.13 sagen es.
+- **Codex-Gegenprüfung (lesend, zwei Läufe):** beide FAIL, acht Befunde, alle bestätigt und eingearbeitet (Ask-Regel
+  fragt auch in `auto`; `/sandbox` trägt die lokale Settings-Datei in die globale Ignore-Liste ein; „mindestens fünf
+  Runden“ war nicht belegt; Ausweich-Präfix in S3.14; Datenfluss in S4.2; zweites Terminal in S3.12; `python3`).
+- **Vertrag:** Minuten S3.8 30, S3.9 30, S3.10 20, S3.11 25, S3.12 30, S3.13 25, S3.14 20, S3.15 25, S4.1 25,
+  S4.2 25; Titel S3.15; Katalog, Golden. Neun alte Codeblöcke mit Begründung.
+- **Nicht durchgespielt:** die Extras zu Sandbox (S3.9), eigenem Muster (S3.11), Routine (S3.12) und falscher Regel (S3.14); in S3.12 `/goal` ohne Argument und `/goal clear` (die Eingaben landeten im Probelauf in einer Rückfrage zum Testbefehl); S4.1 nach der Planfreigabe (läuft beim Commit, Nachtrag folgt); S4.2 ist eine Papierübung; unter Windows alles außer den PowerShell-Startblöcken (S3.8, S3.9, S3.13, S3.14, S3.15) und dem gedeckelten Lauf aus S3.13.
+- **Offen (→ P8):** Voraussetzungen S3.10 → S3.8/S2.5, S3.11 → S2.8, S3.13 → S3.8, S4.2 → S3.11; S3.9 teilen
+  (geschützte Pfade, Sandbox-Stufen); die Moderationsdateien zu S3.8, S3.13, S3.14 und S4.2 beschreiben die alten
+  Demos; unter Windows hinterlassen Hooks aus den eigenen Benutzer-Einstellungen Dateien im Worktree, dann scheitert
+  `git worktree remove` (Hinweis für S3.13 prüfen).
+
+### Stand P7f (2026-10-05)
+
+- Schreiber gestartet, Worktree `~/AI/worktrees/workshop-p7f`, Branch `p7f-schreiber` (Basis `8e75575`): S4.3 bis
+  S4.7, S4.9, S4.10, X.4. Danach Abnahme wie bei den anderen Teilpaketen; dann entfällt die Pflichtliste
+  (`tools/fixtures/standard-chapters.txt`), und die Regeln gelten für alle Lektionen.
 
 ---
 

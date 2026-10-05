@@ -1065,7 +1065,7 @@
    "area": "permissions",
    "id": "S3.8",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3080,
    "requires": [
@@ -1087,7 +1087,7 @@
    "area": "permissions",
    "id": "S3.9",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3090,
    "requires": [
@@ -1110,7 +1110,7 @@
    "area": "permissions",
    "id": "S3.10",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 3100,
    "requires": [
@@ -1134,7 +1134,7 @@
    "area": "review",
    "id": "S3.11",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 3110,
    "requires": [
@@ -1158,7 +1158,7 @@
    "area": "automation",
    "id": "S3.12",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3120,
    "requires": [
@@ -1181,7 +1181,7 @@
    "area": "automation",
    "id": "S3.13",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 3130,
    "requires": [
@@ -1207,7 +1207,7 @@
    "area": "automation",
    "id": "S3.14",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 3140,
    "requires": [
@@ -1233,7 +1233,7 @@
    "area": null,
    "id": "S3.15",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [
     "S3.4",
     "S3.6"
@@ -1264,7 +1264,7 @@
    "area": "cost",
    "id": "S4.1",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4010,
    "requires": [
@@ -1288,7 +1288,7 @@
    "area": "agents",
    "id": "S4.2",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4020,
    "requires": [

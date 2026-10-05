@@ -2,7 +2,7 @@
 
 <!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
 
-71 Kapitel in 19 Regalen, zusammen etwa 24,5 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
+71 Kapitel in 19 Regalen, zusammen etwa 26 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
 
 ## So findest du deinen Weg
 
@@ -83,8 +83,8 @@ Rechte-Modi sind die Freigabestufen deines Agenten, wie Zutrittsebenen in einem 
 |---|---|---:|---|
 | [S1.5 Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md) | Kern | 20 | 🛡 |
 | [S1.6 Alle Rechte-Modi im Überblick](s1-06-rechte-modi.md) | Kern | 15 | 🛡 |
-| [S3.8 Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md) | Kern | 15 | 🛡 |
-| [S3.9 Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md) | Kern | 15 | 🛡 |
+| [S3.8 Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md) | Kern | 30 | 🛡 |
+| [S3.9 Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md) | Kern | 30 | 🛡 |
 
 <a id="context"></a>
 
@@ -142,7 +142,7 @@ Nicht jede Aufgabe braucht das stärkste Modell. Du lernst, Modell und Effort na
 |---|---|---:|---|
 | [S1.7 Modellwahl und Effort](s1-07-modellwahl-und-effort.md) | Kern | 15 |  |
 | [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](s1-19-kosten-im-blick.md) | Kern | 15 |  |
-| [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) | Vertiefung | 15 |  |
+| [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) | Vertiefung | 25 |  |
 
 <a id="skills"></a>
 
@@ -222,7 +222,7 @@ Statt eines Allrounders arbeiten spezialisierte Rollen mit klaren Grenzen, wie T
 | [S3.3 Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md) | Kern | 25 |  |
 | [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) | Kern | 25 |  |
 | [S3.5 Hintergrund-Sitzungen und Agent Teams](s3-05-hintergrund-und-teams.md) | Vertiefung | 20 |  |
-| [S4.2 Codex-Schwarm und die Datenfluss-Grenze](s4-02-codex-schwarm.md) | Kür | 15 |  |
+| [S4.2 Codex-Schwarm und die Datenfluss-Grenze](s4-02-codex-schwarm.md) | Kür | 25 |  |
 
 <a id="security"></a>
 
@@ -236,8 +236,8 @@ Ein grüner Bericht ist kein Beweis. Hier lässt du Code von einer adversarialen
 |---|---|---:|---|
 | [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](s3-06-devils-advocate.md) | Kern | 35 |  |
 | [S3.7 Die eingebauten Reviews](s3-07-eingebaute-reviews.md) | Kern | 25 |  |
-| [S3.10 Netzwerk und Skills härten](s3-10-netzwerk-und-skills-haerten.md) | Vertiefung | 12 |  |
-| [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](s3-11-datenschutz-und-compliance.md) | Vertiefung | 15 |  |
+| [S3.10 Netzwerk und Skills härten](s3-10-netzwerk-und-skills-haerten.md) | Vertiefung | 20 |  |
+| [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](s3-11-datenschutz-und-compliance.md) | Vertiefung | 25 |  |
 
 <a id="automation"></a>
 
@@ -249,9 +249,9 @@ Automatisierte Patrouillen brauchen Stopp-Regeln. Du wählst zwischen `/loop` (T
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md) | Kern | 15 |  |
-| [S3.13 Autonome Loops absichern: Budget und Worktree](s3-13-autonome-loops-absichern.md) | Kern | 12 | 🛡 |
-| [S3.14 Self-Improve-Loop: was geht und wo es endet](s3-14-self-improve-loop.md) | Kür | 15 |  |
+| [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md) | Kern | 30 |  |
+| [S3.13 Autonome Loops absichern: Budget und Worktree](s3-13-autonome-loops-absichern.md) | Kern | 25 | 🛡 |
+| [S3.14 Self-Improve-Loop: was geht und wo es endet](s3-14-self-improve-loop.md) | Kür | 20 |  |
 
 <a id="headless-ci"></a>
 
@@ -318,7 +318,7 @@ Jede Station sammelt die Übungen ihrer Session. Wähle eine, die zu deinem Pfad
 |---|---|---:|---|
 | [S1.20 Praxis-Station Session 1: alles in einem Ablauf](s1-20-praxis-station-1.md) | Kern | 20 |  |
 | [S2.20 Praxis-Station Session 2: alles in einem Ablauf](s2-20-praxis-station-2.md) | Kern | 25 |  |
-| [S3.15 Praxis-Station Session 3: eine Übung wählen](s3-15-praxis-station-3.md) | Kern | 15 |  |
+| [S3.15 Praxis-Station Session 3: alles in einem Ablauf](s3-15-praxis-station-3.md) | Kern | 25 |  |
 
 <a id="community"></a>
 

@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 7 Etappen, zusammen etwa 15,5 Stunden (850 Min durcharbeiten, 81 Min überfliegen).
+**Umfang:** 8 Etappen, zusammen etwa 17 Stunden (921 Min durcharbeiten, 85 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -59,24 +59,27 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) — überfliegen
 - [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) — überfliegen
 
-## Etappe 6 (~149 Min)
+## Etappe 6 (~140 Min)
 
 - [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](../library/s3-06-devils-advocate.md) — durcharbeiten
 - [S3.7 Die eingebauten Reviews](../library/s3-07-eingebaute-reviews.md) — durcharbeiten
 - [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) 🛡 — durcharbeiten
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
 - [S3.10 Netzwerk und Skills härten](../library/s3-10-netzwerk-und-skills-haerten.md) — durcharbeiten
+
+## Etappe 7 (~135 Min)
+
 - [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](../library/s3-11-datenschutz-und-compliance.md) — durcharbeiten
 - [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) — überfliegen
 - [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) 🛡 — durcharbeiten
-- [S3.15 Praxis-Station Session 3: eine Übung wählen](../library/s3-15-praxis-station-3.md) — durcharbeiten
-
-## Etappe 7 (~99 Min)
-
+- [S3.15 Praxis-Station Session 3: alles in einem Ablauf](../library/s3-15-praxis-station-3.md) — durcharbeiten
 - [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) — überfliegen
 - [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) — überfliegen
 - [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) 🛡 — durcharbeiten
 - [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) — überfliegen
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
+
+## Etappe 8 (~48 Min)
+
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

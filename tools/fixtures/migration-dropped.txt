@@ -159,3 +159,12 @@ e518710c79e0071d resources/modules/block-3-advanced.md:371 P7d/S3.5: ersetzt dur
 296c4757a52eba48 resources/exercises/block-3-exercises.md:184 P7d/S3.6: entfernt, Playground-Audit; siehe 3a9b58ea5a9b84b5.
 de19b41e7841dcfc resources/exercises/block-3-exercises.md:190 P7d/S3.6: entfernt, Playground-Audit; siehe 3a9b58ea5a9b84b5.
 f8266595fdb105c0 resources/exercises/block-3-exercises.md:685 P7d/S3.6: entfernt. Der testgetriebene Parser-Bau war eine zweite Lerneinheit im selben Kapitel (Befund D5, R24); er kommt mit der Teilung von S3.6 in P8 zurück oder entfällt.
+41a0ad338b0d0004 resources/modules/block-3-advanced.md:858 P7e/S3.11: ersetzt. Die Kommentare nannten Dienstleister (Statsig, Sentry), die die Doku nicht nennt; der Block steht mit neutralen Kommentaren im Kapitel.
+826af82a04a34581 resources/modules/block-3-advanced.md:862 P7e/S3.11: ersetzt, PowerShell-Fassung desselben Blocks; siehe 41a0ad338b0d0004.
+ed60d5009d964f80 resources/modules/block-3-advanced.md:962 P7e/S3.12: entfernt. `/loop 5m /quality-gate` rief einen Skill auf, den es nicht gibt; die Übung lässt `/loop` eine Datei lesen und berichten.
+1510f7a012ef3705 resources/modules/block-3-advanced.md:978 P7e/S3.12: ersetzt durch eine Bedingung, die Claudes eigene Ausgabe belegen kann (`python -m unittest exits 0 …, or stop after 6 turns`).
+603d4506ce9ebf53 resources/modules/block-3-advanced.md:1017 P7e/S3.13: entfernt. Das Beispiel war im Kapitel selbst als nicht tragfähig vorgeführt (`/loop` in einem `-p`-Lauf); die Übung zeigt einen gedeckelten Lauf, der wirklich stoppt.
+8e186b2e56f5710a resources/modules/block-3-advanced.md:1030 P7e/S3.13: entfernt, zweites Beispiel des alten Kurses, das nicht trägt (nächtliches Audit als `-p`-Lauf mit Routine verwechselt); siehe 603d4506ce9ebf53.
+b8269c2977ef8482 resources/exercises/block-3-exercises.md:241 P7e/S3.12: ersetzt. Das nackte `/schedule` der alten Optionen A und B ist jetzt ein Extra mit Auftrag, Lauf und Löschen der Routine; die Hauptübung bleibt in der Sitzung.
+b8269c2977ef8482 resources/exercises/block-3-exercises.md:248 P7e/S3.12: ersetzt. Das nackte `/schedule` der alten Optionen A und B ist jetzt ein Extra mit Auftrag, Lauf und Löschen der Routine; die Hauptübung bleibt in der Sitzung.
+2699ba04e0d66b5e resources/exercises/block-3-exercises.md:255 P7e/S3.12: ersetzt durch `/loop 1m` mit einem Auftrag, dessen Durchgänge sich zählen lassen.

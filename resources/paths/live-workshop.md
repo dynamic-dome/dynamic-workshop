@@ -68,7 +68,7 @@ Kern 300 Min · Vertiefung 190 Min
 
 ## Session 3 — Fortgeschritten: Kern
 
-Kern 217 Min · Vertiefung 47 Min · Kür 15 Min
+Kern 285 Min · Vertiefung 65 Min · Kür 20 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
@@ -79,23 +79,23 @@ Kern 217 Min · Vertiefung 47 Min · Kür 15 Min
 | [S3.5 Hintergrund-Sitzungen und Agent Teams](../library/s3-05-hintergrund-und-teams.md) | Vertiefung | 20 |  |  |
 | [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](../library/s3-06-devils-advocate.md) | Kern | 35 |  | [Demo](../moderation/vorfuehren/s3-06-devils-advocate.md) |
 | [S3.7 Die eingebauten Reviews](../library/s3-07-eingebaute-reviews.md) | Kern | 25 |  |  |
-| [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) | Kern | 15 | 🛡 | [Demo](../moderation/vorfuehren/s3-08-rechte-fuer-autonomie.md) |
-| [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) | Kern | 15 | 🛡 |  |
-| [S3.10 Netzwerk und Skills härten](../library/s3-10-netzwerk-und-skills-haerten.md) | Vertiefung | 12 |  |  |
-| [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](../library/s3-11-datenschutz-und-compliance.md) | Vertiefung | 15 |  |  |
-| [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) | Kern | 15 |  |  |
-| [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) | Kern | 12 | 🛡 | [Demo](../moderation/vorfuehren/s3-13-autonome-loops-absichern.md) |
-| [S3.14 Self-Improve-Loop: was geht und wo es endet](../library/s3-14-self-improve-loop.md) | Kür | 15 |  | [Demo](../moderation/vorfuehren/s3-14-self-improve-loop.md) |
-| [S3.15 Praxis-Station Session 3: eine Übung wählen](../library/s3-15-praxis-station-3.md) | Kern | 15 |  |  |
+| [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) | Kern | 30 | 🛡 | [Demo](../moderation/vorfuehren/s3-08-rechte-fuer-autonomie.md) |
+| [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) | Kern | 30 | 🛡 |  |
+| [S3.10 Netzwerk und Skills härten](../library/s3-10-netzwerk-und-skills-haerten.md) | Vertiefung | 20 |  |  |
+| [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](../library/s3-11-datenschutz-und-compliance.md) | Vertiefung | 25 |  |  |
+| [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) | Kern | 30 |  |  |
+| [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) | Kern | 25 | 🛡 | [Demo](../moderation/vorfuehren/s3-13-autonome-loops-absichern.md) |
+| [S3.14 Self-Improve-Loop: was geht und wo es endet](../library/s3-14-self-improve-loop.md) | Kür | 20 |  | [Demo](../moderation/vorfuehren/s3-14-self-improve-loop.md) |
+| [S3.15 Praxis-Station Session 3: alles in einem Ablauf](../library/s3-15-praxis-station-3.md) | Kern | 25 |  |  |
 
 ## Session 4 — Fortgeschritten: Kür
 
-Kern 63 Min · Vertiefung 66 Min · Kür 97 Min
+Kern 63 Min · Vertiefung 76 Min · Kür 107 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
-| [S4.1 Das richtige Modell pro Phase](../library/s4-01-modell-pro-phase.md) | Vertiefung | 15 |  |  |
-| [S4.2 Codex-Schwarm und die Datenfluss-Grenze](../library/s4-02-codex-schwarm.md) | Kür | 15 |  | [Demo](../moderation/vorfuehren/s4-02-codex-schwarm.md) |
+| [S4.1 Das richtige Modell pro Phase](../library/s4-01-modell-pro-phase.md) | Vertiefung | 25 |  |  |
+| [S4.2 Codex-Schwarm und die Datenfluss-Grenze](../library/s4-02-codex-schwarm.md) | Kür | 25 |  | [Demo](../moderation/vorfuehren/s4-02-codex-schwarm.md) |
 | [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) | Vertiefung | 15 |  | [Demo](../moderation/vorfuehren/s4-03-headless.md) |
 | [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) | Vertiefung | 18 | 🛡 | [Demo](../moderation/vorfuehren/s4-04-ci-zugang-und-kosten.md) |
 | [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](../library/s4-05-ci-pipelines.md) | Vertiefung | 18 |  |  |

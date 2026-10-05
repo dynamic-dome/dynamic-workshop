@@ -256,3 +256,25 @@ Zehn Übungen eines Schreibers wurden durchgespielt; neun liefen wie geschrieben
 - **Aufräumen heißt nachsehen.** Nach Deinstallieren und Entfernen des Marketplace lag die Plugin-Kopie noch im
   Cache. Wer eine Übung schreibt, die außerhalb des Ordners etwas anlegt, vergleicht vorher und nachher.
 
+## Aus P7d und P7e mitzunehmen (S3.1 bis S3.15, S4.1, S4.2)
+
+- **Allow-Regeln eines Projekts gelten erst nach dem Vertrauensdialog, und ein `-p`-Lauf zeigt ihn nie.** Ein
+  Headless-Lauf in einem frisch angelegten Übungsordner lehnte in `dontAsk` jede Änderung ab, obwohl die
+  eingecheckte `.claude/settings.json` sie erlaubte. Die Doku sagt es (permissions.md, „Project allow rules and
+  workspace trust“); Deny- und Ask-Regeln gelten auch ohne Vertrauen. Eine Übung mit `-p` und Projekt-Regeln beginnt
+  deshalb mit einer interaktiven Sitzung im Ordner. In einem Worktree zählt der Hauptordner des Repositorys.
+- **Ein Auftrag, eine Regel.** Soll eine Übung mehrere Regeln zeigen, bekommt jede ihren eigenen Auftrag. In einem
+  Sammelauftrag packte Claude Änderungen und Commit in eine Shell-Zeile, `dontAsk` lehnte sie als Ganzes ab, und
+  keine der Regeln war einzeln zu sehen.
+- **Wer fragt, steht nicht in der Rückfrage.** Ob das Hauptgespräch oder ein Subagent eine Datei anlegen will, ist
+  am Dialog nicht abzulesen. Eine Übung, die das unterscheiden soll, braucht eine zweite Beobachtung (hier: beide
+  Agenten nach ihren Werkzeugen fragen).
+- **Nach einem `-p`-Lauf mit `--worktree` ist der Worktree gesperrt.** Aufräumen heißt immer `git worktree unlock`,
+  dann `remove`, dann den Branch löschen.
+- **Wer eine Ansicht verlässt, landet nicht immer in der Shell.** Nach `/exit` in einer angehängten
+  Hintergrund-Sitzung steht man auf der Tafel von `claude agents`; der nächste getippte Befehl wäre ein neuer Auftrag.
+- **Eine getestete Vorlage steht uneingerückt im Kapitel.** Der Vergleichstest findet Codeblöcke in Listenpunkten
+  nicht; eine Vorlage gehört unter „Im Detail“, die Übung verweist darauf.
+- **Beim Durchspielen per Skript:** `claude -p` liest die Standardeingabe. In einem Skript, das selbst über die
+  Standardeingabe kommt, verschluckt der Lauf den Rest; jeder Aufruf bekommt `< /dev/null`.
+

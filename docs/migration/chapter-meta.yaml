@@ -608,7 +608,7 @@
   title: Rechte für autonome Läufe
   shelf: permissions
   level: core
-  minutes: 15
+  minutes: 30
   requires:
   - S1.6
   safety_floor: true
@@ -621,7 +621,7 @@
   title: Geschützte Pfade und Sandbox-Stufen
   shelf: permissions
   level: core
-  minutes: 15
+  minutes: 30
   requires:
   - S3.8
   safety_floor: true
@@ -633,7 +633,7 @@
   title: Netzwerk und Skills härten
   shelf: security
   level: deep-dive
-  minutes: 12
+  minutes: 20
   requires:
   - S3.9
   safety_floor: false
@@ -645,7 +645,7 @@
   title: Datenschutz, Aufbewahrung und regulierte Branchen
   shelf: security
   level: deep-dive
-  minutes: 15
+  minutes: 25
   requires:
   - S3.9
   safety_floor: false
@@ -657,7 +657,7 @@
   title: 'Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen'
   shelf: automation
   level: core
-  minutes: 15
+  minutes: 30
   requires:
   - S2.4
   safety_floor: false
@@ -670,7 +670,7 @@
   title: 'Autonome Loops absichern: Budget und Worktree'
   shelf: automation
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S3.12
   - S1.19
@@ -683,7 +683,7 @@
   title: 'Self-Improve-Loop: was geht und wo es endet'
   shelf: automation
   level: bonus
-  minutes: 15
+  minutes: 20
   requires:
   - S3.13
   safety_floor: false
@@ -692,10 +692,10 @@
   file: s3-14-self-improve-loop.md
 - id: S3.15
   type: practice
-  title: 'Praxis-Station Session 3: eine Übung wählen'
+  title: 'Praxis-Station Session 3: alles in einem Ablauf'
   shelf: practice
   level: core
-  minutes: 15
+  minutes: 25
   requires: []
   safety_floor: false
   transferable: false
@@ -709,7 +709,7 @@
   title: Das richtige Modell pro Phase
   shelf: cost
   level: deep-dive
-  minutes: 15
+  minutes: 25
   requires:
   - S1.7
   - S3.4
@@ -723,7 +723,7 @@
   title: Codex-Schwarm und die Datenfluss-Grenze
   shelf: agents
   level: bonus
-  minutes: 15
+  minutes: 25
   requires:
   - S4.1
   safety_floor: false

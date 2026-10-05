@@ -362,7 +362,7 @@
     "id": "S3.9",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -517,13 +517,13 @@
     "n": 4
    },
    {
-    "minutes": 63,
+    "minutes": 93,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 598
+   "work_min": 628
   },
   "version": 1,
   "warnings": []
@@ -1543,12 +1543,12 @@
   ],
   "stages": [
    {
-    "minutes": 121,
+    "minutes": 133,
     "n": 1
    }
   ],
   "totals": {
-   "skim_min": 91,
+   "skim_min": 103,
    "work_min": 30
   },
   "version": 1,
@@ -2060,13 +2060,13 @@
     "n": 1
    },
    {
-    "minutes": 89,
+    "minutes": 127,
     "n": 2
    }
   ],
   "totals": {
-   "skim_min": 177,
-   "work_min": 90
+   "skim_min": 185,
+   "work_min": 120
   },
   "version": 1,
   "warnings": []
@@ -2434,7 +2434,7 @@
     "id": "S3.9",
     "override": false,
     "reason": "new",
-    "stage": 3,
+    "stage": 4,
     "status": "work"
    },
    {
@@ -2455,7 +2455,7 @@
     "id": "S3.12",
     "override": false,
     "reason": "new",
-    "stage": 3,
+    "stage": 4,
     "status": "work"
    },
    {
@@ -2518,7 +2518,7 @@
     "id": "S4.5",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -2553,21 +2553,21 @@
     "id": "S4.9",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
     "id": "S4.10",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    }
   ],
@@ -2581,17 +2581,21 @@
     "n": 2
    },
    {
-    "minutes": 148,
+    "minutes": 133,
     "n": 3
    },
    {
-    "minutes": 141,
+    "minutes": 143,
     "n": 4
+   },
+   {
+    "minutes": 81,
+    "n": 5
    }
   ],
   "totals": {
    "skim_min": 50,
-   "work_min": 516
+   "work_min": 584
   },
   "version": 1,
   "warnings": []
@@ -2952,7 +2956,7 @@
     "id": "S3.8",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -3001,14 +3005,14 @@
     "id": "S3.15",
     "override": false,
     "reason": "practice",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    },
    {
     "id": "X.3",
     "override": false,
     "reason": "community",
-    "stage": 6,
+    "stage": 7,
     "status": "skim"
    },
    {
@@ -3029,14 +3033,14 @@
     "id": "S4.3",
     "override": false,
     "reason": "prerequisite",
-    "stage": 6,
+    "stage": 7,
     "status": "skim"
    },
    {
     "id": "S4.4",
     "override": false,
     "reason": "new",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    },
    {
@@ -3064,7 +3068,7 @@
     "id": "X.4",
     "override": false,
     "reason": "community",
-    "stage": 6,
+    "stage": 7,
     "status": "skim"
    },
    {
@@ -3078,14 +3082,14 @@
     "id": "S4.9",
     "override": false,
     "reason": "new",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    },
    {
     "id": "S4.10",
     "override": false,
     "reason": "new",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    },
    {
@@ -3114,21 +3118,21 @@
     "n": 4
    },
    {
-    "minutes": 143,
+    "minutes": 128,
     "n": 5
    },
    {
-    "minutes": 143,
+    "minutes": 139,
     "n": 6
    },
    {
-    "minutes": 30,
+    "minutes": 124,
     "n": 7
    }
   ],
   "totals": {
-   "skim_min": 81,
-   "work_min": 815
+   "skim_min": 85,
+   "work_min": 886
   },
   "version": 1,
   "warnings": [
@@ -3524,7 +3528,7 @@
     "id": "S3.9",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -3679,13 +3683,13 @@
     "n": 4
    },
    {
-    "minutes": 63,
+    "minutes": 93,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 583
+   "work_min": 613
   },
   "version": 1,
   "warnings": [
@@ -4096,14 +4100,14 @@
     "id": "S3.12",
     "override": false,
     "reason": "new",
-    "stage": 7,
+    "stage": 8,
     "status": "work"
    },
    {
     "id": "S3.13",
     "override": false,
     "reason": "new",
-    "stage": 7,
+    "stage": 8,
     "status": "work"
    },
    {
@@ -4117,14 +4121,14 @@
     "id": "S3.15",
     "override": false,
     "reason": "practice",
-    "stage": 7,
+    "stage": 8,
     "status": "work"
    },
    {
     "id": "X.3",
     "override": false,
     "reason": "community",
-    "stage": 7,
+    "stage": 8,
     "status": "skim"
    },
    {
@@ -4180,7 +4184,7 @@
     "id": "X.4",
     "override": false,
     "reason": "community",
-    "stage": 7,
+    "stage": 8,
     "status": "skim"
    },
    {
@@ -4194,21 +4198,21 @@
     "id": "S4.9",
     "override": false,
     "reason": "new",
-    "stage": 8,
+    "stage": 9,
     "status": "work"
    },
    {
     "id": "S4.10",
     "override": false,
     "reason": "new",
-    "stage": 8,
+    "stage": 9,
     "status": "work"
    },
    {
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 8,
+    "stage": 9,
     "status": "work"
    }
   ],
@@ -4238,17 +4242,21 @@
     "n": 6
    },
    {
-    "minutes": 137,
+    "minutes": 130,
     "n": 7
    },
    {
-    "minutes": 118,
+    "minutes": 148,
     "n": 8
+   },
+   {
+    "minutes": 63,
+    "n": 9
    }
   ],
   "totals": {
    "skim_min": 57,
-   "work_min": 1047
+   "work_min": 1133
   },
   "version": 1,
   "warnings": []
@@ -4637,28 +4645,28 @@
     "id": "S3.12",
     "override": false,
     "reason": "new",
-    "stage": 8,
+    "stage": 9,
     "status": "work"
    },
    {
     "id": "S3.13",
     "override": false,
     "reason": "new",
-    "stage": 8,
+    "stage": 9,
     "status": "work"
    },
    {
     "id": "S3.14",
     "override": false,
     "reason": "new",
-    "stage": 8,
+    "stage": 9,
     "status": "work"
    },
    {
     "id": "S3.15",
     "override": false,
     "reason": "practice",
-    "stage": 8,
+    "stage": 9,
     "status": "work"
    },
    {
@@ -4686,35 +4694,35 @@
     "id": "S4.3",
     "override": false,
     "reason": "new",
-    "stage": 9,
+    "stage": 10,
     "status": "work"
    },
    {
     "id": "S4.4",
     "override": false,
     "reason": "new",
-    "stage": 9,
+    "stage": 10,
     "status": "work"
    },
    {
     "id": "S4.5",
     "override": false,
     "reason": "new",
-    "stage": 9,
+    "stage": 10,
     "status": "work"
    },
    {
     "id": "S4.6",
     "override": false,
     "reason": "new",
-    "stage": 9,
+    "stage": 10,
     "status": "work"
    },
    {
     "id": "S4.7",
     "override": false,
     "reason": "new",
-    "stage": 9,
+    "stage": 10,
     "status": "work"
    },
    {
@@ -4742,14 +4750,14 @@
     "id": "S4.10",
     "override": false,
     "reason": "new",
-    "stage": 10,
+    "stage": 11,
     "status": "work"
    },
    {
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 10,
+    "stage": 11,
     "status": "work"
    }
   ],
@@ -4783,21 +4791,25 @@
     "n": 7
    },
    {
-    "minutes": 139,
+    "minutes": 130,
     "n": 8
    },
    {
-    "minutes": 108,
+    "minutes": 150,
     "n": 9
    },
    {
-    "minutes": 118,
+    "minutes": 148,
     "n": 10
+   },
+   {
+    "minutes": 48,
+    "n": 11
    }
   ],
   "totals": {
    "skim_min": 0,
-   "work_min": 1350
+   "work_min": 1461
   },
   "version": 1,
   "warnings": []
@@ -5165,7 +5177,7 @@
     "id": "S3.9",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -5320,13 +5332,13 @@
     "n": 4
    },
    {
-    "minutes": 63,
+    "minutes": 93,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 598
+   "work_min": 628
   },
   "version": 1,
   "warnings": []
@@ -5694,7 +5706,7 @@
     "id": "S3.9",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -5849,13 +5861,13 @@
     "n": 4
    },
    {
-    "minutes": 63,
+    "minutes": 93,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 51,
-   "work_min": 598
+   "work_min": 628
   },
   "version": 1,
   "warnings": []
@@ -6251,7 +6263,7 @@
     "id": "S3.13",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -6279,7 +6291,7 @@
     "id": "S4.1",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -6293,7 +6305,7 @@
     "id": "S4.3",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -6356,7 +6368,7 @@
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    }
   ],
@@ -6374,17 +6386,21 @@
     "n": 3
    },
    {
-    "minutes": 135,
+    "minutes": 138,
     "n": 4
    },
    {
-    "minutes": 99,
+    "minutes": 134,
     "n": 5
+   },
+   {
+    "minutes": 30,
+    "n": 6
    }
   ],
   "totals": {
    "skim_min": 50,
-   "work_min": 601
+   "work_min": 669
   },
   "version": 1,
   "warnings": []
@@ -6766,7 +6782,7 @@
     "id": "S3.11",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -6794,7 +6810,7 @@
     "id": "S3.15",
     "override": false,
     "reason": "practice",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -6871,7 +6887,7 @@
     "id": "S4.9",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -6907,17 +6923,17 @@
     "n": 4
    },
    {
-    "minutes": 147,
+    "minutes": 140,
     "n": 5
    },
    {
-    "minutes": 48,
+    "minutes": 113,
     "n": 6
    }
   ],
   "totals": {
    "skim_min": 69,
-   "work_min": 660
+   "work_min": 718
   },
   "version": 1,
   "warnings": []
@@ -7404,7 +7420,7 @@
     "id": "S4.9",
     "override": false,
     "reason": "new",
-    "stage": 11,
+    "stage": 12,
     "status": "work"
    },
    {
@@ -7418,7 +7434,7 @@
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 12,
+    "stage": 13,
     "status": "work"
    }
   ],
@@ -7464,17 +7480,21 @@
     "n": 10
    },
    {
-    "minutes": 45,
+    "minutes": 60,
     "n": 11
    },
    {
-    "minutes": 48,
+    "minutes": 33,
     "n": 12
+   },
+   {
+    "minutes": 30,
+    "n": 13
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 598
+   "work_min": 628
   },
   "version": 1,
   "warnings": []
@@ -7981,12 +8001,12 @@
   ],
   "stages": [
    {
-    "minutes": 51,
+    "minutes": 59,
     "n": 1
    }
   ],
   "totals": {
-   "skim_min": 21,
+   "skim_min": 29,
    "work_min": 30
   },
   "version": 1,
@@ -8397,14 +8417,14 @@
     "id": "S3.15",
     "override": false,
     "reason": "practice",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
     "id": "X.3",
     "override": false,
     "reason": "community",
-    "stage": 5,
+    "stage": 6,
     "status": "skim"
    },
    {
@@ -8460,7 +8480,7 @@
     "id": "X.4",
     "override": false,
     "reason": "community",
-    "stage": 5,
+    "stage": 6,
     "status": "skim"
    },
    {
@@ -8488,7 +8508,7 @@
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    }
   ],
@@ -8510,17 +8530,21 @@
     "n": 4
    },
    {
-    "minutes": 105,
+    "minutes": 135,
     "n": 5
    },
    {
-    "minutes": 118,
+    "minutes": 126,
     "n": 6
+   },
+   {
+    "minutes": 30,
+    "n": 7
    }
   ],
   "totals": {
    "skim_min": 72,
-   "work_min": 720
+   "work_min": 788
   },
   "version": 1,
   "warnings": []
@@ -9021,7 +9045,7 @@
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 2,
+    "stage": 3,
     "status": "skim"
    }
   ],
@@ -9031,13 +9055,17 @@
     "n": 1
    },
    {
-    "minutes": 120,
+    "minutes": 149,
     "n": 2
+   },
+   {
+    "minutes": 9,
+    "n": 3
    }
   ],
   "totals": {
-   "skim_min": 177,
-   "work_min": 90
+   "skim_min": 185,
+   "work_min": 120
   },
   "version": 1,
   "warnings": []
@@ -9398,7 +9426,7 @@
     "id": "S3.8",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -9556,17 +9584,17 @@
     "n": 3
    },
    {
-    "minutes": 147,
+    "minutes": 132,
     "n": 4
    },
    {
-    "minutes": 78,
+    "minutes": 123,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 623
+   "work_min": 653
   },
   "version": 1,
   "warnings": [
@@ -9956,7 +9984,7 @@
     "id": "S3.11",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -9984,7 +10012,7 @@
     "id": "S3.15",
     "override": false,
     "reason": "practice",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -10097,17 +10125,17 @@
     "n": 4
    },
    {
-    "minutes": 140,
+    "minutes": 148,
     "n": 5
    },
    {
-    "minutes": 63,
+    "minutes": 113,
     "n": 6
    }
   ],
   "totals": {
    "skim_min": 50,
-   "work_min": 720
+   "work_min": 778
   },
   "version": 1,
   "warnings": []
@@ -10489,21 +10517,21 @@
     "id": "S3.11",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
     "id": "S3.12",
     "override": false,
     "reason": "prerequisite",
-    "stage": 5,
+    "stage": 6,
     "status": "skim"
    },
    {
     "id": "S3.13",
     "override": false,
     "reason": "prerequisite",
-    "stage": 5,
+    "stage": 6,
     "status": "skim"
    },
    {
@@ -10517,7 +10545,7 @@
     "id": "S3.15",
     "override": false,
     "reason": "practice",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -10601,14 +10629,14 @@
     "id": "S4.10",
     "override": false,
     "reason": "new",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    },
    {
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    }
   ],
@@ -10630,17 +10658,21 @@
     "n": 4
    },
    {
-    "minutes": 149,
+    "minutes": 148,
     "n": 5
    },
    {
-    "minutes": 131,
+    "minutes": 150,
     "n": 6
+   },
+   {
+    "minutes": 48,
+    "n": 7
    }
   ],
   "totals": {
-   "skim_min": 80,
-   "work_min": 775
+   "skim_min": 88,
+   "work_min": 833
   },
   "version": 1,
   "warnings": []

@@ -38,7 +38,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Community & Lernen](README.md#community) · **Stufe:** Kür · **~25 Min** · **Voraussetzungen:** keine
 >
-> ← [S3.15 Praxis-Station Session 3: eine Übung wählen](s3-15-praxis-station-3.md) · [Bibliothek](README.md) · [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) →
+> ← [S3.15 Praxis-Station Session 3: alles in einem Ablauf](s3-15-praxis-station-3.md) · [Bibliothek](README.md) · [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick

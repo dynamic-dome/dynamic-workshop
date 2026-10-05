@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 6 Etappen, zusammen etwa 13 Stunden (720 Min durcharbeiten, 50 Min überfliegen).
+**Umfang:** 6 Etappen, zusammen etwa 14 Stunden (778 Min durcharbeiten, 50 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -50,7 +50,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
 - [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) — überfliegen
 
-## Etappe 5 (~140 Min)
+## Etappe 5 (~148 Min)
 
 - [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) — überfliegen
 - [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](../library/s3-06-devils-advocate.md) — durcharbeiten
@@ -58,11 +58,11 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) 🛡 — durcharbeiten
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
 - [S3.10 Netzwerk und Skills härten](../library/s3-10-netzwerk-und-skills-haerten.md) — durcharbeiten
+
+## Etappe 6 (~113 Min)
+
 - [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](../library/s3-11-datenschutz-und-compliance.md) — durcharbeiten
-- [S3.15 Praxis-Station Session 3: eine Übung wählen](../library/s3-15-praxis-station-3.md) — durcharbeiten
-
-## Etappe 6 (~63 Min)
-
+- [S3.15 Praxis-Station Session 3: alles in einem Ablauf](../library/s3-15-praxis-station-3.md) — durcharbeiten
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

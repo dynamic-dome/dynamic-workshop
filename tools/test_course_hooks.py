@@ -261,9 +261,12 @@ def test_safety_check_fails_closed_when_input_is_unreadable(script, stdin):
 # --- sensitive-data-scanner (Bonus Exercise 3.8, PreToolUse Write|Edit) ----------------------------
 
 SCANNER = pytest.param(HOOKS / "sensitive-data-scanner.sh", marks=needs_bash_jq)
+# The Python variant needs neither bash nor jq: it is the one every learner can run (S3.11).
+SCANNER_PY = pytest.param(HOOKS / "sensitive-data-scanner.py")
+SCANNERS = [SCANNER, SCANNER_PY]
 
 
-@pytest.mark.parametrize("script", [SCANNER])
+@pytest.mark.parametrize("script", SCANNERS)
 def test_scanner_blocks_api_key_in_write_content(script):
     result = run(script, pre_write("C:\\project\\config.py", 'API_KEY = "sk-' + "a" * 24 + '"'))
 
@@ -271,18 +274,35 @@ def test_scanner_blocks_api_key_in_write_content(script):
     assert "BLOCKED" in result.stderr
 
 
-@pytest.mark.parametrize("script", [SCANNER])
+@pytest.mark.parametrize("script", SCANNERS)
 def test_scanner_blocks_card_number_in_edit_new_string(script):
     result = run(script, pre_edit("C:\\project\\notes.md", "card: TBD", "card: 4111 1111 1111 1111"))
 
     assert result.returncode == BLOCK
 
 
-@pytest.mark.parametrize("script", [SCANNER])
+@pytest.mark.parametrize("script", SCANNERS)
 def test_scanner_allows_clean_write(script):
     result = run(script, pre_write("C:\\project\\README.md", "# Access panel notes\nNothing secret here."))
 
     assert result.returncode == 0
+
+
+@pytest.mark.parametrize("script", SCANNERS)
+@pytest.mark.parametrize("stdin", ["not json", "", "[]"], ids=["garbage", "empty", "array"])
+def test_scanner_blocks_when_it_cannot_read_its_input(script, stdin):
+    result = run_raw(script, stdin)
+
+    assert result.returncode == BLOCK
+    assert "SCANNER" in result.stderr
+
+
+def test_python_scanner_does_not_echo_the_match():
+    secret = "pk_" + "c" * 22
+    result = run(HOOKS / "sensitive-data-scanner.py", pre_write("C:\\project\\t.txt", "api_key = " + secret))
+
+    assert result.returncode == BLOCK
+    assert secret not in result.stderr and secret not in result.stdout
 
 
 # --- redact-output (Module 2.2 advanced output, PostToolUse Bash) ----------------------------------
@@ -444,6 +464,7 @@ SNIPPET_HOME = {
     "redact-output.sh": "s2-10-hook-ausgaben.md",
     "token-firewall.sh": "s2-10-hook-ausgaben.md",
     "sensitive-data-scanner.sh": "s3-11-datenschutz-und-compliance.md",
+    "sensitive-data-scanner.py": "s3-11-datenschutz-und-compliance.md",
 }
 
 
