@@ -643,3 +643,38 @@ def test_wide_screens_show_the_jump_marks_only_in_the_side_column(browser, site)
     page, _ = open_page(browser, site + "?run=S2.8")
     assert page.locator("aside .toc").is_visible() and not page.locator("details.toc-inline").is_visible()
     page.close()
+
+
+def test_a_chapter_id_that_names_an_object_property_is_no_chapter(browser, site, tmp_path):
+    """Lookups by id must not find 'constructor' or '__proto__' on the lookup table itself."""
+    page, errors = open_page(browser, site + "?run=constructor")
+    assert page.locator("main h1").inner_text().startswith("Lerne Claude Code")  # unknown id: the start page
+    assert errors == []
+    path = tmp_path / "import.json"
+    path.write_text('{"app": "cc-workshop-cockpit", "v": 1, "progress": {"done": {"constructor": true, "__proto__": true, "S2.7": true}, "doneAt": {}}}', encoding="utf-8")
+    page.goto(site + "?screen=start")
+    page.set_input_files("input[data-action=import]", str(path))
+    page.wait_for_function("document.querySelector('#carryFeedback').textContent.includes('Importiert')")
+    assert "1 erledigtes Kapitel" in page.locator("#carryFeedback").inner_text()
+    assert page.evaluate("Object.keys(JSON.parse(localStorage.getItem('ccWorkshopUiState')).done)") == ["S2.7"]
+    assert errors == []
+    page.close()
+
+
+def test_an_imported_placement_is_stored_the_way_the_wizard_would_store_it(browser, real_site, tmp_path):
+    """Codex finding on P9: the engine cuts to two goals for its computation, but the import stored all three."""
+    path = tmp_path / "import.json"
+    path.write_text(json.dumps({"app": "cc-workshop-cockpit", "v": 1, "progress": {"done": {}, "doneAt": {}},
+                                "profile": {"why": "x", "answers": {"goals": ["alltag", "security", "agents"],
+                                                                    "junk": {"a": 1}}}}), encoding="utf-8")
+    context = browser.new_context(viewport={"width": 1280, "height": 900})
+    page = context.new_page()
+    page.goto(real_site + "?screen=start")
+    page.set_input_files("input[data-action=import]", str(path))
+    page.wait_for_function("document.querySelector('#carryFeedback').textContent.includes('Importiert')")
+    answers = page.evaluate("JSON.parse(localStorage.getItem('ccWorkshopProfileV1')).answers")
+    assert answers["goals"] == ["alltag", "security"] and "junk" not in answers
+    assert sorted(answers) == ["areas", "goals", "overrides", "scenarios", "time", "version"]
+    page.goto(real_site + "?screen=einstufung")
+    assert page.locator("input[name=goal]:checked").count() == 2
+    context.close()

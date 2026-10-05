@@ -567,11 +567,11 @@
       sheet.textContent = Object.values(DATA.diagram_css).join("\n");
       document.head.appendChild(sheet);
     }
-    const CH = {};
+    const CH = Object.create(null);  // no inherited keys: "constructor" is no chapter id
     DATA.chapters.forEach(c => { CH[c.id] = c; });
     const ORDERED = DATA.chapters.slice().sort((a, b) => a.order - b.order);
     const RULES = DATA.placement;
-    const SHELF = {};
+    const SHELF = Object.create(null);
     DATA.shelves.forEach(s => { SHELF[s.id] = s; });
     const LEVEL = { core: "Kern", "deep-dive": "Vertiefung", bonus: "Kür" };
     const SHIELD = '<svg class="ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 1.5 2.5 3.6v4.1c0 3.2 2.3 5.6 5.5 6.8 3.2-1.2 5.5-3.6 5.5-6.8V3.6Z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
@@ -977,8 +977,14 @@
       let note = "";
       if (isObject(data.profile) && isObject(data.profile.answers)) {
         try {
-          place(DATA, data.profile.answers);
-          profile = { v: 1, at: typeof data.profile.at === "string" ? data.profile.at : new Date().toISOString(), why: typeof data.profile.why === "string" ? data.profile.why.slice(0, 1000) : "", answers: data.profile.answers };
+          // Store what the wizard would store: the known fields only, two goals at most. place() throws on
+          // every id it does not know (goal, time, area, scenario, chapter).
+          const a = data.profile.answers;
+          const goals = Array.from(new Set(Array.isArray(a.goals) ? a.goals : [])).slice(0, 2);
+          const answers = { version: 1, goals: goals.length ? goals : [RULES.default_goal], time: typeof a.time === "string" ? a.time : RULES.default_time,
+            areas: isObject(a.areas) ? a.areas : {}, scenarios: isObject(a.scenarios) ? a.scenarios : {}, overrides: isObject(a.overrides) ? a.overrides : {} };
+          place(DATA, answers);
+          profile = { v: 1, at: typeof data.profile.at === "string" ? data.profile.at : new Date().toISOString(), why: typeof data.profile.why === "string" ? data.profile.why.slice(0, 1000) : "", answers };
           saveProfile();
           note = " Die Einstufung aus der Datei gilt jetzt.";
         } catch (err) { note = " Die Einstufung aus der Datei passt nicht zu dieser Bibliothek und wurde nicht übernommen."; }
