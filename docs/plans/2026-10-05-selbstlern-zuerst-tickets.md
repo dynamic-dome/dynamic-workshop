@@ -745,6 +745,21 @@ Erst nach P8. Eingang: B1 bis B12 aus `docs/reviews/2026-10-02-cockpit-durchgang
 markieren“ steht vor dem Inhalt; Kurzansicht und Volltext doppeln sich) und was P2 bewusst offen lässt. Eigene
 Fragerunde mit dem Owner, bevor etwas gebaut wird.
 
+### Bestandsaufnahme für die Fragerunde (2026-10-05, Cockpit vom Branch, 1280 × 800, dunkles Thema)
+
+Bilder: `~/AI/analysis-artifacts/workshop-review-2026-10-05/cockpit-2026-10-05/` (Start, Bibliothek, Kapitel S1.5).
+
+- **Start:** drei gleich gewichtete Einstiege (Einstufung, Live-Workshop-Pfad, Bibliothek). Der Live-Pfad steht
+  damit auf der ersten Seite neben dem Weg für Selbstlernende.
+- **Bibliothek:** Die Türen zeigen nur IDs (S0.1, S1.1 …). Wer stöbert, erfährt den Titel erst nach dem Klick.
+- **Kapitel ohne Einstufung:** Es öffnet sich die Kurzansicht (Schnellcheck, Auf einen Blick, Bild, „Ausprobieren“,
+  Check mit Auflösungen und Quiz). Der Lehrtext und die Übung („Im Detail“, „Selbst machen“) liegen eingeklappt
+  unter „Ganzes Kapitel lesen“ und wiederholen dort die Kurzblöcke. Seit P7 hat jede Lektion eine Übung; wer ohne
+  Einstufung liest, sieht sie in dieser Ansicht nicht, und der Check fragt Stoff ab, der eingeklappt ist.
+- **„Als erledigt markieren“** steht oben rechts in der Seitenleiste, vor dem Lesen erreichbar.
+- Sechs Ansichten (`renderStart`, `renderPlacement`, `renderPath`, `renderLibrary`, `renderChapter`,
+  `renderReview`), eine erzeugte Datei von 2,9 MB, 14 Browser-Tests.
+
 ---
 
 ## Plan-Prüfung 2026-10-05 (Modus: Scope halten)
