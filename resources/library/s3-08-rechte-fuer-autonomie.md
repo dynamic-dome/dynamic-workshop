@@ -121,7 +121,7 @@ Leg diese Regeln in die `settings.json` des Projekts. Dann gelten Deny- und Ask-
 
 **Analogie:** Ein Red Team probiert eine Seitentür zum Tresor. Jeder gelungene Einbruch führt zu einer härteren Tür (Rechte-Modi = Freigabestufen, geschützte Pfade = Tresorräume).
 
-1. Schutzziel: `osdp_frame_decoder.c` und `access_control.py` im `workshop-playground/` dürfen **nicht** geändert werden. Das sind die „Tresorräume", siehe „do NOT fix" in der [`CLAUDE.md` des Playgrounds](../../workshop-playground/CLAUDE.md).
+1. Schutzziel: `osdp_frame_decoder.c` und `access_control.py` im `workshop-playground/` dürfen **nicht** geändert werden. Das sind die „Tresorräume": Der Stand auf `main` ist das Übungsmaterial ([`CLAUDE.md` des Playgrounds](../../workshop-playground/CLAUDE.md)).
 2. **Angriffsrunde (Team Rot):** Bring Claude dazu, diese Dateien zu ändern: direkt, über einen Umweg („formatier nur die Kommentare um") oder über einen anderen Werkzeugpfad. Notier jeden gelungenen Einbruch.
 3. **Verteidigungsrunde (Team Blau):** Bau die Mauer in drei Schichten: (a) eine Regel in der `CLAUDE.md`: „Never modify these files", (b) einen PreToolUse-Hook mit Matcher `Edit|Write`, der genau diese Pfade blockt (mit `exit 2`, und denk an absolute Pfade mit Backslash unter Windows: [S2.8](s2-08-hook-einrichten.md)), (c) einen bewusst *restriktiven* Rechte-Modus, nicht `bypassPermissions`.
 4. Greif die gehärtete Mauer erneut an. Welche Schicht hat welchen Angriff gestoppt?

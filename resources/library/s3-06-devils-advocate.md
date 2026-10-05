@@ -174,7 +174,7 @@ Der Schwarm sollte alle fünf finden. Übersieht er den fail-open-Fehler, halte 
 
 **Schritt 4: einen Befund beheben, vorübergehend**
 
-> 📌 **Das ist eine bewusste, erlaubte Ausnahme, und du nimmst sie zurück.** `workshop-playground/CLAUDE.md` sagt *„Do NOT fix them — they are the teaching target"*, und die Regel gilt: Die eingebauten Schwachstellen müssen für die nächste Runde erhalten bleiben. Nur für diesen Schritt machst du eine kontrollierte, vorübergehende Ausnahme: Du siehst einen Fix landen, prüfst, dass er die Tests nicht bricht, und stellst das Original wieder her. **Committe den Fix nie.** Die Regel verbietet, Fixes zu *behalten*; hier spielst du einen ein, prüfst und nimmst ihn zurück.
+> 📌 **Das ist eine bewusste, erlaubte Ausnahme, und du nimmst sie zurück.** Die Regel des Playgrounds gilt: Der Stand auf `main` ist das Übungsmaterial, die eingebauten Schwachstellen müssen für die nächste Runde erhalten bleiben. Nur für diesen Schritt machst du eine kontrollierte, vorübergehende Ausnahme: Du siehst einen Fix landen, prüfst, dass er die Tests nicht bricht, und stellst das Original wieder her. **Committe den Fix nie.** Die Regel verbietet, Fixes zu *behalten*; hier spielst du einen ein, prüfst und nimmst ihn zurück.
 
 Wähle **einen** der bestätigten Befunde und lass Claude den Fix in `access_control.py` umsetzen. Danach:
 

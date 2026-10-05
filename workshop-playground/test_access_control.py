@@ -1,6 +1,6 @@
 """
 pytest test suite for access_control.py
-Tests cover legitimate functionality only — vulnerabilities are demoed separately.
+Tests cover the intended behaviour of the tool.
 """
 
 import json

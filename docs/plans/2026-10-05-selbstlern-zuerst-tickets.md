@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P3: 696).
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P4: 701).
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -28,8 +28,8 @@
 | P0 | Gate fällt geschlossen; „nur exit 2“ präzisiert (R1, R2) | — | [x] `fcab910` |
 | P1 | Moderationsschicht: „Vorführen“ aus den Kapiteln in eigene Dateien | — | [x] `d6c40d5`, `597f9ce` |
 | P2 | Cockpit und Tutor zeigen bei „durcharbeiten“ Lehrtext und Übung (R19) | P1 | [x] `4c98ba0` |
-| P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [x] siehe Abschluss P3 |
-| P4 | Playground ohne Lösungshinweise (R18, R13) | — | [ ] |
+| P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [x] `d03ea85` |
+| P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] siehe Abschluss P4 |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [ ] |
 | P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [ ] |
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | [ ] |
@@ -243,6 +243,21 @@ veraltet: `backup_database()` steht in Zeile 161, `read_log()` in 148, `log_even
 5. Tests unter `tools/`, die die Zahl oder den Ort der Schwachstellen festhalten, auf die neue Datei umstellen.
 
 **Fertig, wenn:** `grep -ri "vulnerab" workshop-playground/` leer; Playground-Tests unverändert; Suite grün.
+
+### Abschluss P4 (2026-10-05)
+
+- Lösungen: `resources/reference/playground-loesungen.md`, neun Schwachstellen (fünf in Python, vier in C), Orte als
+  Funktionsnamen statt Zeilennummern. Damit ist auch R13 erledigt (die alte Liste nannte veraltete Zeilen).
+- `workshop-playground/CLAUDE.md` ist nur noch Projekt-Gedächtnis; statt „Do NOT fix“ gilt: auf eigenem Branch
+  arbeiten, `main` bleibt das Übungsmaterial. S3.6, S3.8 und S4.8 zitieren die neue Regel, S1.8 verweist auf die
+  Lösungen.
+- Kommentare und Docstrings in `access_control.py`, `osdp_frame_decoder.c` und der Testdatei nennen keine Schwachstelle
+  mehr. Beleg: gleicher AST ohne Docstrings (Python) und gleiche Token-Folge ohne Kommentare (C, 511 Token) gegenüber
+  dem Stand davor; Playground-Tests 18 grün, vorher wie nachher; der Ordner blieb beim Testlauf unverändert.
+- `tools/test_playground.py` hält das fest: kein verräterisches Wort im Playground, die Lösungen nennen jede
+  betroffene Funktion und nur Funktionen, die es gibt.
+- **Offen für P5 und P7:** S1.8 braucht eine Übung, die auch dann trägt, wenn Claude die Datei von sich aus liest;
+  S3.6 zählt die fünf Schwachstellen im Kapiteltext vor der Übung auf.
 
 ---
 

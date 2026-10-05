@@ -24,6 +24,9 @@ Pakete: `docs/plans/2026-10-05-selbstlern-zuerst-design.md`, `…-tickets.md`.
 - **Auflösungen (P3):** Abruffragen können eine Auflösung tragen (eingeklappter Block im Abschnitt „Check“). Der
   Validator prüft, dass je Frage genau eine Antwort dasteht; das Cockpit zeigt die Fragen jetzt auch in der Kurzansicht,
   je Frage mit eigener Auflösung. Erstes Kapitel: S1.1. `validate` meldet den Fortschritt (Übungen, Auflösungen).
+- **Playground (P4):** Die Lösungen liegen jetzt in `resources/reference/playground-loesungen.md`. Die `CLAUDE.md` des
+  Playgrounds und die Kommentare im Code nennen keine Schwachstelle mehr; vorher las Claude Code die Liste in jeder
+  Sitzung mit. Das Verhalten des Codes ist unverändert.
 
 ## 2026-10-02 — Einstufung: Sicherheitsboden bei Ziel Sicherheit
 

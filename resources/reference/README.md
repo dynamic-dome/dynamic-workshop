@@ -27,6 +27,7 @@ Fallen und Entscheidungshilfen, verlinkt die offizielle Doku und trägt ein Prü
 | [faq.md](faq.md) | Die wenigen Fragen, die mehrere Kapitel berühren und keines als Heimat haben. |
 | [adoptionsplan-vorlage.md](adoptionsplan-vorlage.md) | Einseitige Vorlage für den ersten echten Schritt mit Claude Code im eigenen Team. |
 | [kosten-nachbau.md](kosten-nachbau.md) | Geschätzte Kosten, wenn du alle Vorführungen und Pflichtübungen des Kurses selbst nachmachst. |
+| [playground-loesungen.md](playground-loesungen.md) | Die eingebauten Schwachstellen des Playgrounds mit Ort und Erkennungsmerkmal. Erst nach den Übungen lesen. |
 
 `analogien.md` erzeugt der Generator (`python tools/build_library.py build`); ändere sie nicht von Hand, sondern den
 Abschnitt „Bild im Kopf" im jeweiligen Kapitel.

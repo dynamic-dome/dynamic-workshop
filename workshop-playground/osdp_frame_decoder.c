@@ -7,17 +7,10 @@
  *   [SOM=0x53][ADDR][LEN_LSB][LEN_MSB][CTRL][DATA...][CRC-16/CCITT]
  *   -- i.e. ADDR comes BEFORE a 16-bit little-endian LEN, and the trailer is a
  *   CRC-16/CCITT. The struct below uses a SIMPLIFIED single-byte layout for
- *   teaching only; it is intentionally NOT wire-accurate. Do not use as a
+ *   teaching only; it is NOT wire-accurate, on purpose. Do not use as a
  *   reference implementation.
  *
- * INTENTIONAL VULNERABILITIES (do NOT fix in this playground - they are teaching targets;
- * referenced by function name so the targets survive future edits):
- *   1. Buffer Overflow   in decode_data_payload()
- *   2. Integer Overflow  in compute_crc()      (uint8_t arithmetic wraps around)
- *   3. Format String     in log_frame()
- *   4. (Bonus) Off-by-one in read_frame_crc()  (reads the CRC one byte past frame end)
- *
- * For Block 3.3 (Devil's Advocate Swarm) and Block 3.7 (Troubleshooting).
+ * Practice material of the Claude Code Praxisbibliothek.
  */
 
 #include <stdio.h>
@@ -39,27 +32,14 @@ typedef struct {
     uint16_t crc;
 } osdp_frame_t;
 
-/* VULNERABILITY 1: Buffer Overflow
- * data_len comes from the wire and is not validated against OSDP_MAX_FRAME_LEN.
- * A malicious peer can send length=255 with actual_data of 512 bytes and
- * overflow frame->data[]. Detected by static analysis if the swarm uses
- * one (e.g., clang static analyzer, cppcheck).
- */
+/* Copy the payload of a frame into the frame struct. */
 int decode_data_payload(osdp_frame_t *frame, const uint8_t *raw, size_t data_len) {
-    /* INTENTIONAL: no bounds check */
     memcpy(frame->data, raw, data_len);
     return 0;
 }
 
-/* VULNERABILITY 2: Integer Overflow
- * `byte_count` is computed in uint8_t. For length values above ~251 the
- * addition wraps around (e.g. 255 + 4 == 259, which is 3 in a uint8_t), so the
- * CRC loop runs over a far smaller range than the real frame. The CRC is then
- * computed over the wrong bounds -- a genuine integrity bug driven purely by the
- * wrap-around (real OSDP integrity uses CRC-16/CCITT over the full frame).
- */
+/* Checksum over the frame (simplified; real OSDP uses CRC-16/CCITT). */
 uint16_t compute_crc(const osdp_frame_t *frame) {
-    /* INTENTIONAL: uint8_t arithmetic wraps for large length (no widening) */
     uint8_t byte_count = (uint8_t)(frame->length + 4);  /* +4 for header+CRC bytes */
     uint16_t crc = 0;
     for (uint8_t i = 0; i < byte_count; i++) {
@@ -68,29 +48,19 @@ uint16_t compute_crc(const osdp_frame_t *frame) {
     return crc;
 }
 
-/* VULNERABILITY 3: Format String
- * `cmd_name` is attacker-controlled (e.g., from a malicious peer).
- * Passing it as first argument of printf() allows %s/%n exploitation.
- */
+/* Print one line per frame; cmd_name is the command name sent by the peer. */
 void log_frame(const osdp_frame_t *frame, const char *cmd_name) {
-    /* INTENTIONAL: cmd_name as format string */
     printf("OSDP Frame: addr=%d cmd=", frame->address);
-    printf(cmd_name);  /* MUST be printf("%s", cmd_name) */
+    printf(cmd_name);
     printf(" length=%d\n", frame->length);
 }
 
-/* VULNERABILITY 4 (BONUS): Off-by-one at the frame tail
- * The CRC trailer sits at the END of an OSDP frame. For a frame of `frame_len`
- * bytes the valid indices are raw[0 .. frame_len-1], so the last (CRC) byte is
- * raw[frame_len - 1]. This reads raw[frame_len] -- one byte past the end, a
- * classic off-by-one when locating the CRC. The guard still lets frame_len equal
- * the buffer length through, so a minimum-size frame triggers the OOB read.
- */
+/* Return the CRC byte from the tail of a frame of frame_len bytes. */
 int read_frame_crc(const uint8_t *raw, size_t frame_len) {
     if (frame_len < OSDP_HEADER_LEN) {
         return -1;
     }
-    return raw[frame_len];  /* off-by-one: last valid byte is raw[frame_len - 1] */
+    return raw[frame_len];
 }
 
 int main(int argc, char *argv[]) {
@@ -109,10 +79,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    /* Validate hex input: must be non-empty and even-length.
-     * Hardened against a size_t underflow on empty input (hex_len - 1 wrapping to
-     * SIZE_MAX) and a silently dropped final nibble on odd input. This is an
-     * unplanned robustness fix in main(), NOT one of the four teaching vulns. */
+    /* Validate hex input: must be non-empty and even-length (an empty string would make
+     * hex_len - 1 wrap to SIZE_MAX, an odd one would silently drop its last nibble). */
     if (hex_len == 0 || hex_len % 2 != 0) {
         fprintf(stderr, "Invalid hex length (must be non-empty and even)\n");
         return 1;
@@ -135,16 +103,16 @@ int main(int argc, char *argv[]) {
     frame.address = buf[2];
     frame.command = buf[3];
 
-    /* Trigger V1 */
+    /* payload */
     decode_data_payload(&frame, &buf[OSDP_HEADER_LEN], frame.length);
 
-    /* Trigger V2 */
+    /* checksum */
     frame.crc = compute_crc(&frame);
 
-    /* Trigger V3 (if hex includes a format-string-like command name) */
+    /* log line */
     log_frame(&frame, (const char *)&buf[3]);
 
-    /* Trigger V4 */
+    /* CRC byte at the tail */
     int crc_tail = read_frame_crc(buf, buf_len);
     printf("CRC tail byte: %d\n", crc_tail);
 

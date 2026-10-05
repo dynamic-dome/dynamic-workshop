@@ -253,7 +253,7 @@ Erwartet ist kein produktionsreifer Code, sondern etwas, an dem du lernst. Wicht
 - **Alles auf einmal.** Der Plan darf alle sieben Bereiche streifen, gebaut wird genau ein Ausschnitt. Frag dich zuerst, was der kleinste brauchbare Workflow ist.
 - **Breite Prüfung statt enger.** Eine breite oder unpassende Prüfung gibt in der Rubrik nur 1 Punkt. Lass die Prüfung laufen, die deine Änderung trifft, und sag, was sie beweist und was nicht.
 - **Der Hook-Guardrail blockt nicht.** Von den Exit-Codes blockt nur `exit 2`; jeder andere und ein Timeout lassen die Aktion laufen. Den Bash-Befehl liest der Hook aus `tool_input.command`. Test den Hook von Hand, bevor du ihn in die Übergabe schreibst ([S2.8](s2-08-hook-einrichten.md)).
-- **Eine eingebaute Schwachstelle dauerhaft fixen.** `workshop-playground/CLAUDE.md` sagt: „Do NOT fix them in this playground — they are the teaching target." Wählst du eine davon als Mission, bleibt der Fix auf deinem Branch oder in einem Worktree ([S1.18](s1-18-worktrees.md)); der Hauptstand behält die Schwachstelle für die nächste Übung.
+- **Eine eingebaute Schwachstelle dauerhaft fixen.** Der Stand auf `main` ist das Übungsmaterial; so steht es in der `CLAUDE.md` des Playgrounds. Wählst du eine davon als Mission, bleibt der Fix auf deinem Branch oder in einem Worktree ([S1.18](s1-18-worktrees.md)); der Hauptstand behält die Schwachstelle für die nächste Übung.
 - **Übergabe ohne Rollback.** Für 3 Punkte müssen Risiken, Rollback und die genau ausgeführten Checks ausdrücklich in der PR-Beschreibung stehen, nicht nur eine Zusammenfassung.
 
 ## Check

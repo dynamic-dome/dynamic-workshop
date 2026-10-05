@@ -109,7 +109,7 @@ Sieh zu, wie die Antwort konkret wird.
 
 **Schritt 3:** Tipp `/clear` und stell die Frage aus Schritt 1 noch einmal, ohne `@`. Der Kontext ist *weg*. **Du** füllst und leerst das Fenster, nicht der Zufall.
 
-**Auflösung:** Die Frage aus Schritt 1 nennt drei Schwachstellen. In `access_control.py` stecken fünf absichtlich eingebaute; die Liste steht in `workshop-playground/CLAUDE.md`. Schau nach, ob Claude die Zahl aus der Frage einfach übernommen hat.
+**Auflösung:** Die Frage aus Schritt 1 nennt drei Schwachstellen. In `access_control.py` stecken fünf absichtlich eingebaute; die Liste steht in den [Lösungen zum Playground](../reference/playground-loesungen.md). Schau nach, ob Claude die Zahl aus der Frage einfach übernommen hat.
 
 ## Typische Fallen
 
