@@ -328,3 +328,37 @@ def test_chapter_without_recall_questions_shows_no_empty_list(browser, site):
     assert page.locator("main .recall").count() == 0
     assert errors == []
     page.close()
+
+
+# --- library and start for people who learn alone (P9b, P9c) ------------------------------------------------
+
+def test_library_doors_show_id_and_title(browser, site):
+    page, errors = open_page(browser, site + "?screen=bibliothek")
+    door = page.locator(".door[data-chapter='S2.8']")
+    assert door.locator(".door-id").inner_text() == "S2.8"
+    assert door.locator(".door-title").is_visible()
+    assert door.locator(".door-title").inner_text() == page.evaluate("CH['S2.8'].title")
+    assert errors == []
+    page.close()
+
+
+def test_library_without_a_placement_shows_no_recommendation(browser, site):
+    page, _ = open_page(browser, site + "?screen=bibliothek")
+    assert page.locator(".door").count() == 4
+    assert page.locator(".door.st-later, .door.st-work, .door.st-skim, .door.st-skip").count() == 0
+    assert page.locator(".legend .st-work, .legend .st-later").count() == 0
+    assert page.locator(".legend .st-done").count() == 1 and page.locator(".legend .safe").count() == 1
+    page.close()
+    placed, _ = open_page(browser, site + "?screen=bibliothek", init_script=stored_profile())
+    assert placed.locator(".door.st-work[data-chapter='S2.8']").count() == 1
+    assert placed.locator(".door.st-skim[data-chapter='X.1']").count() == 1
+    assert placed.locator(".legend .st-work").count() == 1 and placed.locator(".legend .st-later").count() == 1
+    placed.close()
+
+
+def test_library_marks_done_chapters_with_or_without_a_placement(browser, site):
+    done = "localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {'S2.7': true}, doneAt: {'S2.7': '2026-10-01T08:00:00.000Z'}}));"
+    page, _ = open_page(browser, site + "?screen=bibliothek", init_script=done)
+    assert page.locator(".door.is-done[data-chapter='S2.7']").count() == 1
+    assert "erledigt" in page.locator(".door[data-chapter='S2.7']").inner_text()
+    page.close()
