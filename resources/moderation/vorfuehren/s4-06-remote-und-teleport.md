@@ -2,55 +2,34 @@
 
 > Demo und Hinweise für Moderierende zum Kapitel [S4.6 · Unterwegs: Remote Control und /teleport](../../library/s4-06-remote-und-teleport.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
 
-### Demo 3.5, Schritte 3 und 4: Remote Control und Telegram-Bridge
+### Demo: Remote Control, eine lokale Sitzung im Browser
 
-Ziel, Dauer und Vorbereitung der ganzen Demo stehen in [S4.7](s4-07-isolation-docker-worktrees.md). Schritt 1 (Worktree-Isolation) steht in [S3.13](s3-13-autonome-loops-absichern.md), Schritt 2 (Architektur am Whiteboard) in [S4.8](s4-08-abschlussprojekt.md).
+**Ziel:** Zeigen, dass eine Sitzung, die auf deinem Rechner läuft, von einem zweiten Gerät aus steuerbar ist: Der Auftrag kommt aus dem Browser, Claude führt ihn lokal aus, die Ausgabe steht an beiden Stellen.
 
-**Schritt 3: Remote Control, eingebaut (3 Min., Pflicht)**
+Zeig die Übung aus dem Kapitel live: die Übung „eine lokale Sitzung im Browser öffnen und wieder trennen“ in [S4.6](../../library/s4-06-remote-und-teleport.md). Startzustand wie dort: der Ordner `~/cc-workshop/unterwegs` mit `todo.txt` (drei Zeilen), die Anmeldung über claude.ai mit einem Abo (API-Keys werden nicht unterstützt; bei Team und Enterprise muss ein Owner Remote Control freigeschaltet haben) und ein zweiter Bildschirm: ein Browser-Tab auf claude.ai/code oder das Handy mit der Claude-App. Ablauf: die Schritte 1 bis 6 der Übung (`claude auth status`, `/remote-control Workshop-Test`, das Statusfenster mit URL und QR-Code, ein lesender Auftrag aus dem Browser, Verbindung trennen, Sitzung beenden und archivieren).
 
-Zeig den offiziellen Weg, eine Sitzung von einem zweiten Gerät aus zu steuern:
-
-```
-/remote-control
-```
-
-Claude Code verbindet die Sitzung und nennt eine Sitzungs-URL. Ruf `/remote-control` noch einmal auf, dann zeigt das Statusfenster URL und QR-Code. Öffne die URL auf Handy oder Laptop, dann liest und antwortest du von dort.
-
-**Oder `/teleport`**, um eine Cloud-Sitzung ins lokale Terminal zu holen:
-
-```
-/teleport
-```
-
-Du wählst eine Cloud-Sitzung aus, Claude Code holt ihren Branch und Verlauf, und du machst im Terminal weiter. Das ist praktisch, wenn du am Handy etwas begonnen hast und am Schreibtisch weitermachen willst.
-
-**Schritt 4 (Bonus, nur wenn vorbereitet): Telegram-Bridge (3 Min., optional)**
-
-> **Voraussetzung:** das Token eines Telegram-Bots, ein laufender Bridge-Dienst und das Workshop-Plugin `telegram-bridge` (🔧). **Ist das nicht vorbereitet, lass den Schritt weg.**
-
-Zeig, wie die Workshop-eigene Telegram-Bridge Abläufe im Gruppenchat möglich macht:
-
-- einen Befehl aus Telegram an deine lokale Claude-Sitzung schicken
-- die Antworten als Telegram-Nachrichten zurückbekommen
-- nützlich für Szenarien mit mehreren Nutzern oder für Gruppenkoordination
-
-Das ist **eine Vorführung des Musters**, kein empfohlener Aufbau für den Betrieb: `/remote-control` (eingebaut) deckt die meisten Fälle einfacher und sicherer ab.
+`/teleport` (der umgekehrte Weg: eine Cloud-Sitzung samt Branch ins lokale Terminal holen) zeigst du nur, wenn eine Cloud-Sitzung auf einem gepushten Repository bereitsteht; das Kapitel hat dafür keine Übung.
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** Schritt 3 etwa 3 Minuten, Schritt 4 als Bonus weitere 3 Minuten.
+**Dauer:** etwa 10 Minuten.
 
-**Vorher prüfen:** Beim ersten `/remote-control` fragt Claude Code einmalig nach deiner Zustimmung (**Enable Remote Control**). Bestätige das vor dem Workshop, damit der Dialog nicht live erscheint.
+**Vorher prüfen:** Beim ersten `/remote-control` erscheint ein Dialog; laut Doku wählst du **Enable Remote Control**, die Bestätigung gilt einmalig. Mach das vor dem Workshop, damit der Dialog nicht live erscheint.
 
 **Sagen:**
 
-- Schritt 3: „Das ist der offizielle Weg, Claude Code von einem zweiten Gerät aus zu steuern. Keine eigene Infrastruktur nötig: derselbe Kanal, den Anthropic ausliefert, dieselbe Anmeldung, dasselbe Audit."
+- Schritt 2: „Das ist der offizielle Weg, Claude Code von einem zweiten Gerät aus zu steuern. Keine eigene Infrastruktur nötig: dieselbe Anmeldung, dasselbe Konto." Der Rechner muss an sein und der `claude`-Prozess weiterlaufen.
+- Schritt 3: Zeig URL und QR-Code im Statusfenster.
+- Schritt 4: „Ausführung und Dateizugriff bleiben auf meinem Rechner. Die Oberfläche schickt nur Prompts." Auch ein Auftrag vom Browser läuft unter den Rechten der Sitzung: Das Lesen im Ordner braucht keine Freigabe, ein Schreibauftrag würde die Rückfrage auslösen, die der Modus vorsieht.
+- Was dabei wohin geht: Solange Remote Control verbunden ist, liegt das Transkript der Sitzung (Nachrichten, Antworten, Werkzeugaktivität) auf Anthropics Servern. Die lokale Sitzung baut nur ausgehende HTTPS-Verbindungen auf und öffnet keine Ports.
+- Dein Konto ist der Zugang: Wer dein claude.ai-Konto übernimmt, erreicht damit auch deine verbundene Sitzung.
+- Für Nachrichten, die von außen in eine Sitzung kommen sollen (etwa aus einem Chat wie Telegram oder Discord), ist Remote Control nicht der Weg: Dafür nennt die Doku Channels (Research Preview). Für „ich will vom Handy aus meinen Laptop steuern" reicht Remote Control.
 
 **Wenn etwas schiefgeht:**
 
-- **Schritt 3: `/remote-control` geht nicht.** Meldet der Befehl, dass Remote Control ein claude.ai-Abo braucht, bist du nicht mit einem Abo angemeldet, etwa weil ein API-Key greift: Melde dich mit `/login` über claude.ai an. `Unknown command: /remote-control` zeigen ältere Versionen, die den Befehl noch nicht kennen oder eine fehlende Abo-Anmeldung so melden; aktualisiere dann Claude Code. Hilft beides nicht, beschränke dich auf Schritt 1 und 2 und erwähne, dass aktuelle Versionen die Funktion haben.
-- **Schritt 3: `/teleport` findet keine Cloud-Sitzung.** Starte zuerst eine Sitzung auf claude.ai/code und ruf `/teleport` dann erneut auf. Oder lass es weg und zeig nur `/remote-control`.
-- **Schritt 4: Die Bridge läuft nicht, oder das Plugin fehlt.** Lass den Schritt kommentarlos weg und sag: „Im Betrieb bräuchtet ihr einen laufenden Bridge-Dienst; das Muster steht in diesem Kapitel unter Telegram-Bridge."
-- **Schritt 1 und der optionale Inception-Schritt:** siehe [S4.7](s4-07-isolation-docker-worktrees.md).
+- **`/remote-control` geht nicht:** Steht in `claude auth status` als `authMethod` `api_key`, `api_key_helper` oder `third_party`, ist die Übung nicht möglich: Remote Control braucht ein Abo, die Anmeldung über claude.ai mit `/login` und den Endpunkt `api.anthropic.com`. Mit Amazon Bedrock, Vertex, Foundry oder einem anderen `ANTHROPIC_BASE_URL` geht es nicht. Dann bleib beim Konzept und zeig die Schritte als Aufzeichnung.
+- **Die Sitzung erscheint im Browser nicht:** Such sie unter **Code** nach ihrem Namen (`Workshop-Test`) oder öffne die URL aus dem Statusfenster.
+- **Nach der Demo:** Trenn die Verbindung, beende die Sitzung und archiviere den Eintrag auf claude.ai/code. Schalte Remote Control nicht für alle Sitzungen ein: Es würde jede künftige Sitzung verbinden.
+- **`/teleport` findet keine Cloud-Sitzung:** Laut Doku braucht Teleport einen sauberen Git-Stand, dasselbe Repository (keinen Fork), einen auf den Remote gepushten Branch und dasselbe claude.ai-Konto. Mit einer Anmeldung per API-Key ist es nicht verfügbar.
 
 </details>
