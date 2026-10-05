@@ -535,7 +535,7 @@ Fragerunde mit dem Owner, bevor etwas gebaut wird.
 ## Plan-Prüfung 2026-10-05 (Modus: Scope halten)
 
 Der Owner hat Umfang und Reihenfolge bestätigt; geprüft wurde auf Fehlermodi, nicht auf mehr oder weniger Umfang.
-Die Befunde sind technische Schärfungen und oben eingearbeitet. Eine Entscheidung bleibt beim Owner: der Merge-Takt.
+Die Befunde sind technische Schärfungen und oben eingearbeitet. Der Merge-Takt ist entschieden (Owner, 2026-10-05): Pakete auf dem Branch sammeln; ein Merge oder Push zwischendurch ist möglich, aber nicht nötig.
 
 ### Geprüfte Alternativen
 
@@ -597,5 +597,5 @@ Volltext fehlt im Artefakt ──▶ Kurzansicht mit Link
 Modus Scope halten · Ansatz „Schicht und Inhalte“ · Schärfungen: Skriptort und Parser-Naht (P1), vier Kapitel mit
 Beispiel in „Vorführen“ (P1), Volltext ersetzt Kurzblöcke bei `work` (P2), Fortschrittszahlen und Größengrenze (P3),
 Zeilennummern im Playground (P4), ehrliche Zeit, Wegwerf-Ordner und Durchspiel-Probe (P5, P7), Schreiber bauen
-nicht (P7). Offen beim Owner: nach jedem Paket nach `main` mergen (Empfehlung) oder gesammelt am Ende.
+nicht (P7). Merge-Takt: gesammelt, siehe oben.
 P8 und P9 sind bewusst grob gehalten und werden vor ihrem Beginn geschnitten.

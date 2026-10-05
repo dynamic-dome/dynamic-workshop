@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 2 Etappen, zusammen etwa 4 Stunden (90 Min durcharbeiten, 152 Min überfliegen).
+**Umfang:** 2 Etappen, zusammen etwa 4,5 Stunden (90 Min durcharbeiten, 169 Min überfliegen).
 
 ## Etappe 1 (~147 Min)
 
@@ -27,11 +27,11 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) — überfliegen
 - [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — überfliegen
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — überfliegen
+
+## Etappe 2 (~112 Min)
+
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — überfliegen
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — überfliegen
-
-## Etappe 2 (~95 Min)
-
 - [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) — überfliegen
 - [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) — überfliegen
 - [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) 🛡 — durcharbeiten

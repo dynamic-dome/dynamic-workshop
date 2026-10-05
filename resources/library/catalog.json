@@ -1273,33 +1273,37 @@
    "aliases": [
     "2.1"
    ],
-   "analogy": "In einer Sicherheitszentrale liegen Dienstanweisungen aus, auf Englisch SOPs (Standard Operating Procedures): laminierte Blätter, die genau festlegen, was die Wache bei einem bestimmten Alarm tut. Die Anweisung für „Bewegung im Serverraum A\" lautet etwa: Kamerabild prüfen, Schichtleitung anrufen, Streife schicken, Vorfall protokollieren. Der Alarmknopf selbst weiß davon nichts. Er löst nur aus; das Wissen steckt in der Dienstanweisung.",
-   "answers": null,
+   "analogy": "In der Leitstelle liegt ein Ordner mit Dienstanweisungen. Jedes Blatt trägt oben eine Überschrift („Bewegung im Serverraum A\") und darunter den Ablauf: Kamerabild prüfen, Schichtleitung anrufen, Streife schicken, Vorfall protokollieren. Die Überschriften kennt jede Wache auswendig, den Ablauf liest sie erst, wenn sie das Blatt aufschlägt. Aufschlagen kann es auf zwei Wegen: Du drückst den Alarmknopf, der das Blatt vorlegt, oder die Wache schlägt es selbst auf, weil die Lage zur Überschrift passt.",
+   "answers": [
+    "Die SKILL.md enthält die Anweisung, der Claude folgt: oben eine Beschreibung, darunter den Ablauf. Der Slash-Befehl lädt sie nur in den Kontext; er ist der Auslöser, nicht die Prozedur.",
+    "Du rufst den Skill mit `/name` auf, oder Claude lädt ihn selbst, wenn deine Anfrage zur Beschreibung passt. Vorher liegt nur die Beschreibung im Kontext, der Inhalt wird erst beim Aufruf geladen.",
+    "Wenn es eine Prozedur ist, die du immer wieder in den Chat kopierst, oder ein CLAUDE.md-Abschnitt, der von einem Fakt zu einer Prozedur gewachsen ist. Die CLAUDE.md gilt bei jedem Start, ein Skill erst, wenn er gebraucht wird."
+   ],
    "area": "skills",
-   "checkpoint": "Du kannst erklären, warum du `/tdd` tippst, statt jedes Mal die TDD-Regeln neu zu schreiben, und den Unterschied zwischen dem Command (Auslöser) und der SKILL.md (hinterlegte Anweisung) benennen.",
+   "checkpoint": "Du kannst erklären, was in der SKILL.md steht und was der Befehl dazu tut, und für eine wiederkehrende Aufgabe begründen, ob sie ein Skill, ein CLAUDE.md-Eintrag oder ein einmaliger Prompt ist.",
    "demo": "../moderation/vorfuehren/s2-01-skills-und-commands.md",
-   "example": "/tdd\n# oder alle verfügbaren Skills auflisten:\n/skills",
-   "example_lang": "",
+   "example": "   ---\n   description: Tells the secret codeword of the exercise. Use when the user asks for the codeword.\n   ---\n\n   The codeword is TULPE-4711. Answer with the codeword and nothing else.",
+   "example_lang": "markdown",
    "file": "s2-01-skills-und-commands.md",
-   "glance": "Ein Skill ist eine wiederverwendbare Anweisung in einer Datei, der `SKILL.md`. Claude Code lädt sie in den Kontext, wenn du sie aufrufst oder wenn Claude erkennt, dass sie zu deiner Anfrage passt. Der Command ist der Auslöser, den du tippst, etwa `/tdd`. Das Wissen steckt in der SKILL.md, der Befehl ist nur der Knopf.",
+   "glance": "Ein Skill ist eine wiederverwendbare Anweisung in einer Datei, der `SKILL.md`. Claude Code lädt sie in den Kontext, wenn du sie aufrufst oder wenn Claude erkennt, dass sie zu deiner Anfrage passt. Der Command ist der Auslöser, den du tippst, etwa `/tdd`. Das Wissen steckt in der SKILL.md, der Befehl holt sie nur in den Kontext. Bis dahin liegt von jedem Skill nur seine Beschreibung im Kontext, nicht sein Inhalt.",
    "id": "S2.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2010,
-   "outcome": "Ich kann erklären, warum ein Skill (die hinterlegte Anweisung in einer SKILL.md) und ein Command (der Auslöser, den du tippst) zwei Rollen sind, und für eine eigene wiederkehrende Aufgabe entscheiden, ob sie einen Skill braucht.",
+   "outcome": "Ich kann erklären, dass die SKILL.md die Anweisung trägt und der Slash-Befehl sie nur in den Kontext holt, und für eine wiederkehrende Aufgabe entscheiden, ob sie ein Skill, ein CLAUDE.md-Eintrag oder ein einmaliger Prompt ist.",
    "quiz": {
-    "correct": "Die SKILL.md enthält die Anweisungen, denen Claude folgt; der Command wie `/tdd` lädt sie nur in den Kontext.",
-    "q": "Welcher Teil legt fest, was Claude tut, und welcher löst es nur aus?",
+    "correct": "Du legst sie als Skill ab: Von ihm liegt nur die Beschreibung im Kontext, der Inhalt wird erst geladen, wenn du `/name` tippst oder Claude ihn für passend hält.",
+    "q": "Du kopierst für jedes Release dieselbe Checkliste mit 30 Zeilen in den Chat. Du überlegst, sie fest zu hinterlegen, und willst, dass sie nur dann Platz im Kontext braucht, wenn du ein Release vorbereitest. Was tust du?",
     "wrong": [
-     "Der Command-Name trägt die Anweisungen; die SKILL.md ist nur ein Eintrag, damit `/skills` den Befehl findet.",
-     "Beide steuern gleich viel: Der Command legt fest, was Claude tut, die SKILL.md nur, wann er gestartet wird.",
-     "Ein PreToolUse-Hook lädt bei jedem Prompt die passende SKILL.md; der Command ist nur eine Abkürzung daran vorbei."
+     "Du schreibst sie in die CLAUDE.md, denn dort liest Claude sie nur beim ersten Prompt der Sitzung und lädt sie danach nicht mehr.",
+     "Du trägst sie in `.claude/settings.json` ein, denn diese Datei nimmt Checklisten als Regel auf und zeigt sie Claude bei jedem Prompt.",
+     "Du legst sie als `release.md` ins Projekt, denn Claude liest jede Markdown-Datei im Ordner von selbst, sobald sie zur Aufgabe passt."
     ]
    },
    "recall": [
     "Was steht in der SKILL.md, und was macht der Slash-Befehl?",
-    "Auf welchen zwei Wegen kommt ein Skill in den Kontext?",
+    "Auf welchen zwei Wegen kommt ein Skill in den Kontext, und was liegt vorher schon dort?",
     "Wann gehört eine Anweisung in einen Skill statt in die CLAUDE.md?"
    ],
    "requires": [
@@ -1315,8 +1319,8 @@
    "session": 2,
    "shelf": "skills",
    "skip_check": [
-    "Kannst du ohne Nachschlagen erklären, was in einer SKILL.md steht und welche Rolle der Slash-Befehl dazu spielt?",
-    "Hast du schon einmal eine wiederkehrende Anweisung, etwa dein Commit-Format oder einen TDD-Ablauf, als Datei gepflegt, statt sie jedes Mal neu einzutippen?"
+    "Kannst du ohne Nachschlagen sagen, was in einer SKILL.md steht und was der Slash-Befehl dazu beiträgt?",
+    "Kannst du für eine Anweisung, die du oft tippst, begründen, ob sie in die CLAUDE.md oder in einen Skill gehört?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/skills"
@@ -1328,27 +1332,31 @@
   {
    "aliases": [],
    "analogy": "Eine Dienstanweisung hat einen Kopf und einen Ablauf. Der Kopf sagt, wofür sie gilt und wann sie gezogen wird: „Alarm Zone A, Bewegungsmelder, nur außerhalb der Geschäftszeiten\". Der Ablauf sagt, was die Wache Schritt für Schritt tut. Das Frontmatter ist der Kopf, der Body ist der Ablauf. Ist der Kopf unklar, greift niemand zur richtigen Anweisung, egal wie gut der Ablauf geschrieben ist.",
-   "answers": null,
+   "answers": [
+    "Das Frontmatter zwischen den `---`-Zeilen steuert, wann der Skill lädt; der Markdown-Body enthält die Anweisungen, denen Claude folgt.",
+    "Ein persönlicher Skill liegt in `~/.claude/skills/<name>/SKILL.md` und gilt in allen Projekten, ein Projekt-Skill in `.claude/skills/<name>/SKILL.md` und kommt über Git zum Team.",
+    "`description` und `when_to_use` werden in der Skill-Liste zusammen nach 1.536 Zeichen abgeschnitten, und Claude entscheidet anhand dieses Texts, ob der Skill passt. Was hinten steht, kann wegfallen."
+   ],
    "area": "skills",
-   "checkpoint": "Du kannst eine SKILL.md mit gültigem Frontmatter und klarem Body anlegen, die Claude bei passenden Anfragen lädt, und erklären, wofür `description` und `when_to_use` jeweils da sind.",
+   "checkpoint": "Du kannst eine SKILL.md mit gültigem Frontmatter und klarem Body in einem Projekt anlegen, sie nachschärfen und erklären, wofür `description` und `when_to_use` jeweils da sind.",
    "demo": "../moderation/vorfuehren/s2-02-skill-schreiben.md",
-   "example": "---\nname: my-first-skill\ndescription: >\n  [One sentence explaining what this skill does].\nwhen_to_use: >\n  [List 3-5 trigger situations or phrases that should activate this skill].\nargument-hint: \"[target]\"\narguments: [target]\n---\n\n# [Skill Name]\n\n[Detailed instructions for Claude to follow]\n\n## Step 1: [First thing Claude should do]\n[Details]\n\n## Step 2: [Second thing]\n[Details]\n\n## Rules\n- [Non-negotiable rules Claude must follow]\n- [Add as many as needed]",
+   "example": "   ---\n   name: commit-check\n   description: Checks the staged changes before a commit. Use before committing or when the user asks for a pre-commit check.\n   when_to_use: pre-commit check, check my staged changes, am I ready to commit\n   ---\n\n   # Commit check\n\n   1. Run `git diff --staged` and read the changes.\n   2. Report findings under these headings:\n      - Debug output: any leftover `print(` or `console.log(`\n      - Open TODOs: any `TODO` comment without a ticket number like `TODO-123`\n   3. Start your answer with the line `PRE-COMMIT CHECK:`.\n\n   ## Rules\n   - Do not change any file.\n   - Name file and line for every finding.",
    "example_lang": "markdown",
    "file": "s2-02-skill-schreiben.md",
-   "glance": "Eine SKILL.md hat zwei Teile: oben das YAML-Frontmatter zwischen zwei `---`-Zeilen, das steuert, wann und wie der Skill lädt, darunter den Markdown-Body mit den Anweisungen, denen Claude folgt. Das wichtigste Feld ist `description`: Claude entscheidet damit, wann der Skill passt. Ein persönlicher Skill liegt in `~/.claude/skills/<name>/SKILL.md` und gilt in all deinen Projekten, ein Projekt-Skill in `.claude/skills/<name>/SKILL.md` und kommt über Git zu deinem Team.",
+   "glance": "Eine SKILL.md hat zwei Teile: oben das YAML-Frontmatter zwischen zwei `---`-Zeilen, das steuert, wann der Skill lädt, darunter den Markdown-Body mit den Anweisungen, denen Claude folgt. Das wichtigste Feld ist `description`: Claude entscheidet damit, wann der Skill passt. Ein Projekt-Skill liegt in `.claude/skills/<name>/SKILL.md` und kommt über Git zu deinem Team, ein persönlicher in `~/.claude/skills/<name>/SKILL.md` und gilt in all deinen Projekten.",
    "id": "S2.2",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2020,
-   "outcome": "Ich kann eine SKILL.md mit Frontmatter (name, description, when_to_use, arguments) und Markdown-Body unter ~/.claude/skills/ anlegen, sie mit /name aufrufen und so nachschärfen, dass Claude sie bei passenden Anfragen lädt.",
+   "outcome": "Ich kann eine SKILL.md mit Frontmatter (name, description, when_to_use) und Markdown-Body in einem Projektordner anlegen, sie mit /name aufrufen, in der laufenden Sitzung nachschärfen und prüfen, ob Claude sie auch ohne Befehl lädt.",
    "quiz": {
-    "correct": "Claude entscheidet damit, wann der Skill passt; `when_to_use` wird in der Skill-Liste nur angehängt.",
-    "q": "Welche Rolle spielt das Feld `description` in einer SKILL.md?",
+    "correct": "In `description` und `when_to_use`: Claude vergleicht deine Anfrage mit diesem Text, `/name` funktioniert davon unabhängig.",
+    "q": "`/commit-check` funktioniert, aber Claude lädt den Skill bei „Check my staged changes\" nie von selbst. Wo suchst du zuerst?",
     "wrong": [
-     "Es ist nur für Menschen gedacht; ob der Skill lädt, entscheidet Claude allein anhand von `when_to_use`.",
-     "Es ist Pflicht; fehlt es, lädt Claude Code den Skill gar nicht und meldet beim Start einen Fehler.",
-     "Es legt den Befehl fest; `/name` entsteht aus dem ersten Wort der `description`, nicht aus dem Ordner."
+     "Im Body: Claude liest ihn schon vor dem Aufruf in jeder Sitzung und entscheidet anhand der ersten Zeile, ob der Skill zur Anfrage passt.",
+     "Im Feld `name`: Claude lädt nur Skills, deren Name wörtlich in deiner Anfrage vorkommt, und `commit-check` fehlt in ihr.",
+     "In `.claude/settings.json`: Dort muss jeder Skill zuerst freigeschaltet werden, bevor Claude ihn selbst laden darf."
     ]
    },
    "recall": [
@@ -1370,8 +1378,8 @@
    "session": 2,
    "shelf": "skills",
    "skip_check": [
-    "Kannst du ohne Nachschlagen eine SKILL.md schreiben, die Claude allein anhand ihrer `description` zum richtigen Zeitpunkt lädt?",
-    "Hast du schon einmal einen Skill angelegt, der in all deinen Projekten verfügbar ist, und einen, den dein Team über Git bekommt?"
+    "Kannst du ohne Nachschlagen sagen, welches Feld einer SKILL.md Claude zur Entscheidung nutzt, ob er den Skill von selbst lädt?",
+    "Kannst du sagen, wo ein Skill liegt, der nur in einem Projekt gilt, und wo einer, der in all deinen Projekten gilt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/skills"
@@ -1382,32 +1390,36 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein Alarmknopf löst nur aus, wenn ein Mensch ihn drückt. Eine Dienstanweisung im Ordner der Leitstelle dagegen darf jede Wache selbst aufschlagen, sobald die Lage zu ihrer Überschrift passt. Beide beschreiben dieselbe Prozedur, der Unterschied liegt nur darin, wer sie in Gang setzen darf. Für die Räumung eines Gebäudes willst du einen Knopf, den jemand bewusst drückt, keine Anweisung, die jemand auf Verdacht aufschlägt.",
-   "answers": null,
+   "analogy": "Aus [S2.1](s2-01-skills-und-commands.md) kennst du den Ordner mit den Dienstanweisungen: Jedes Blatt kann auf zwei Wegen aufgeschlagen werden, mit dem Alarmknopf durch dich oder von der Wache selbst, wenn die Lage zur Überschrift passt. `disable-model-invocation: true` nimmt die Überschrift aus dem Ordner der Wache: Das Blatt liegt weiter bereit, aber nur der Knopf schlägt es auf. Für die Räumung eines Gebäudes willst du genau das: eine Anweisung, die jemand bewusst auslöst, und keine, die jemand auf Verdacht aufschlägt.",
+   "answers": [
+    "Beide erzeugen `/deploy` und funktionieren gleich, weil Commands und Skills zusammengelegt sind. Bei gleichem Namen gewinnt der Skill.",
+    "Bei `disable-model-invocation: true` nur du mit `/name`; Claude lädt den Skill nie selbst. Bei `user-invocable: false` nur Claude; du kannst ihn nicht tippen.",
+    "Es gibt die genannten Tools in dem Turn, der den Skill aufruft, ohne Rückfrage frei; die Freigabe endet mit deiner nächsten Nachricht. Es schränkt nichts ein: Alle anderen Tools bleiben verfügbar und laufen über deine Rechte-Regeln."
+   ],
    "area": "skills",
-   "checkpoint": "Du kannst erklären, warum Skill und Command technisch dasselbe sind, und begründen, warum ein Deploy-Skill `disable-model-invocation: true` braucht.",
+   "checkpoint": "Du kannst erklären, warum Skill und Command technisch dasselbe sind, begründen, warum ein Deploy-Skill `disable-model-invocation: true` braucht, und sagen, was `allowed-tools` tut und was nicht.",
    "demo": null,
    "example": "---\nname: deploy\ndisable-model-invocation: true   # Manual /deploy only — never auto-triggered\n---",
    "example_lang": "yaml",
    "file": "s2-03-wer-skills-ausloest.md",
-   "glance": "Commands und Skills sind in Claude Code zusammengelegt: `.claude/commands/deploy.md` und `.claude/skills/deploy/SKILL.md` erzeugen beide `/deploy` und funktionieren gleich. Die echte Grenze ist ein Schalter im Frontmatter: Mit `disable-model-invocation: true` startet der Skill nur, wenn du `/name` tippst; ohne ihn darf Claude ihn auch selbst laden. Zerstörerische oder kritische Aktionen wie `/deploy`, `/commit` oder `/delete` gehören deshalb auf `true`.",
+   "glance": "Commands und Skills sind in Claude Code zusammengelegt: `.claude/commands/deploy.md` und `.claude/skills/deploy/SKILL.md` erzeugen beide `/deploy` und funktionieren gleich. Die echte Grenze ist ein Schalter im Frontmatter: Mit `disable-model-invocation: true` startet der Skill nur, wenn du `/name` tippst; ohne ihn darf Claude ihn auch selbst laden. Zerstörerische oder kritische Aktionen wie `/deploy` oder `/commit` gehören deshalb auf `true`.",
    "id": "S2.3",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2030,
-   "outcome": "Ich kann erklären, dass Skill und Command technisch dasselbe sind, und setze disable-model-invocation: true gezielt für zerstörerische oder kritische Aktionen wie /deploy.",
+   "outcome": "Ich kann erklären, dass Skill und Command technisch dasselbe sind, mit disable-model-invocation: true verhindern, dass Claude einen kritischen Skill selbst startet, und sagen, was allowed-tools freigibt und was nicht.",
    "quiz": {
     "correct": "Claude darf den Skill selbst laden, wenn eine Anfrage zur Beschreibung passt, etwa „Was bräuchte es, um das live zu bringen?\".",
     "q": "Ein Skill für das Produktions-Deployment lässt `disable-model-invocation` auf dem Standardwert. Was ist das Risiko?",
     "wrong": [
-     "Keines: Das Feld regelt nur, ob der Skill in der `/skills`-Liste auftaucht; selbst auslösen kann Claude einen Skill ohnehin nie.",
-     "Der Skill lädt gar nicht, weil Deploy-Skills zusätzlich ein Feld `scope: production` im Frontmatter brauchen.",
-     "Jeder verbundene MCP-Server kann den Skill dann über eine Folge von Tool-Aufrufen von außen starten."
+     "Keines: Das Feld bestimmt nur, ob der Skill in der `/skills`-Liste erscheint; selbst laden kann Claude einen Skill ohnehin nie.",
+     "Der Standardwert schaltet den Handbefehl ab, sodass nur noch Claude den Skill starten darf und du nicht mehr.",
+     "Keines: Mit einem `allowed-tools`-Feld darf der Skill nur die dort genannten Tools nutzen, also kann ein Deploy nie mehr tun als vorgesehen."
     ]
    },
    "recall": [
-    "Was unterscheidet `.claude/commands/deploy.md` im Betrieb von `.claude/skills/deploy/SKILL.md`?",
+    "Was haben `.claude/commands/deploy.md` und `.claude/skills/deploy/SKILL.md` gemeinsam, und welcher gewinnt bei gleichem Namen?",
     "Wer darf einen Skill mit `disable-model-invocation: true` auslösen, wer einen mit `user-invocable: false`?",
     "Was bewirkt `allowed-tools`, und was bewirkt es nicht?"
    ],
@@ -1426,8 +1438,8 @@
    "session": 2,
    "shelf": "skills",
    "skip_check": [
-    "Kannst du ohne Nachschlagen sagen, welches Frontmatter-Feld aus einem Skill, den Claude selbst laden darf, einen reinen Handbefehl macht?",
-    "Hast du schon einmal einen Deploy- oder Commit-Skill so abgesichert, dass Claude ihn nicht von selbst starten kann?"
+    "Kannst du ohne Nachschlagen sagen, welches Frontmatter-Feld verhindert, dass Claude einen Skill von selbst startet?",
+    "Kannst du sagen, ob `allowed-tools` die Werkzeuge eines Skills einschränkt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/skills"
@@ -1439,33 +1451,37 @@
   {
    "aliases": [],
    "analogy": "Mitgelieferte Skills sind wie die Dienstanweisungen, die ab Werk mit einer Sicherheitsanlage kommen. `/batch` ist wie ein Firmware-Update, das auf alle Türcontroller gleichzeitig ausgerollt wird, jeder in seinem eigenen abgeschotteten Worktree, damit ein Fehler an einem Controller die anderen nicht lahmlegt. `/verify` entspricht dem Moment, in dem du nach dem Schlosstausch die Tür wirklich öffnest: Repariert ist sie erst, wenn du sie benutzt hast.",
-   "answers": null,
+   "answers": [
+    "Mit `/skills` für Projekt-, persönliche und Plugin-Skills und mit `/context` für alle, auch die mitgelieferten. `/skills` zeigt die mitgelieferten Skills nicht.",
+    "`/batch`: Er zerlegt die Arbeit in unabhängige Teile und bearbeitet jeden in einem eigenen Git-Worktree.",
+    "Er bringt die App aus einer sauberen Umgebung zum Laufen, hält fest, was funktioniert hat, und legt es als Projekt-Skill unter `.claude/skills/run-<name>/` ab, damit `/run` und `/verify` diesem Rezept folgen. Du führst ihn einmal pro Projekt aus und wieder, wenn sich Build oder Start ändern."
+   ],
    "area": "skills",
-   "checkpoint": "Du kannst vier mitgelieferte Skills mit ihrem Einsatz benennen und erklären, warum `/verify` nicht durch einen Testlauf ersetzt wird.",
+   "checkpoint": "Du kannst nachsehen, welche Skills in deiner Sitzung verfügbar sind, für eine Aufgabe den passenden mitgelieferten Skill wählen und erklären, warum `/verify` nicht durch einen Testlauf ersetzt wird.",
    "demo": null,
    "example": "/run-skill-generator",
    "example_lang": "",
    "file": "s2-04-mitgelieferte-skills.md",
-   "glance": "Claude Code bringt mitgelieferte Skills (bundled skills) mit: Anleitungen auf Prompt-Basis, die ohne Installation bereitstehen, etwa `/batch`, `/debug`, `/loop`, `/simplify` und `/verify`. Anders als die meisten eingebauten Befehle führen sie keine feste Logik aus, sondern geben Claude genaue Anweisungen, und Claude erledigt die Arbeit mit seinen Tools. Welche es gibt, ändert sich mit den Versionen; `/skills` zeigt dir den Stand auf deinem Rechner.",
+   "glance": "Claude Code bringt mitgelieferte Skills (bundled skills) mit: Anleitungen auf Prompt-Basis, die ohne Installation bereitstehen, etwa `/batch`, `/debug`, `/loop`, `/simplify` und `/verify`. Anders als die meisten eingebauten Befehle führen sie keine feste Logik aus, sondern geben Claude genaue Anweisungen, und Claude erledigt die Arbeit mit seinen Tools. Welche es gibt, ändert sich mit den Versionen. Eine Liste lohnt sich nicht auswendig zu lernen; wichtig ist, dass du weißt, wo du nachsiehst und wonach du wählst.",
    "id": "S2.4",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2040,
-   "outcome": "Ich kann mit /skills nachsehen, welche Skills verfügbar sind, und für typische Aufgaben (Änderungen parallel ausrollen, Fehler suchen, einen Prompt wiederholen, die App wirklich prüfen) den passenden mitgelieferten Skill wählen.",
+   "outcome": "Ich kann nachsehen, welche Skills in meiner Sitzung verfügbar sind, für typische Aufgaben (Änderungen parallel ausrollen, Fehler suchen, einen Prompt wiederholen, die App wirklich prüfen, Code aufräumen) den passenden mitgelieferten Skill wählen und einen davon an einer eigenen Änderung ausprobieren.",
    "quiz": {
     "correct": "Er baut und startet die App und beobachtet ihr Verhalten, statt sich auf Tests oder Typprüfungen zu verlassen.",
     "q": "Was unterscheidet `/verify` von einem normalen Testlauf wie `pytest` oder `npm test`?",
     "wrong": [
      "Er ist ein Kürzel für den erkannten Test-Runner und wählt nur selbst zwischen `pytest`, `npm test` und `cargo test`.",
      "Er führt statische Analyse aus, also ESLint, mypy oder tsc, und ergänzt so den Testlauf um Lint- und Typfehler.",
-     "Er verbindet sich immer mit dem Playwright-MCP und bricht ohne aktive Browser-Verbindung mit einem Fehler ab."
+     "Er startet die App nur, wenn du vorher `/run-skill-generator` ausgeführt hast; ohne Startrezept bricht er sofort ab."
     ]
    },
    "recall": [
-    "Wie findest du heraus, welche mitgelieferten Skills auf deinem Rechner verfügbar sind?",
-    "Was macht `/run-skill-generator`, und wann führst du ihn erneut aus?",
-    "Wofür nimmst du `/batch`, wofür `/loop`?"
+    "Womit siehst du nach, welche Skills verfügbar sind, und was zeigt `/skills` nicht?",
+    "Du sollst in 80 Dateien dieselbe API-Änderung machen. Welchen Skill nimmst du, und wie arbeitet er?",
+    "Was macht `/run-skill-generator`, und wann führst du ihn erneut aus?"
    ],
    "requires": [
     "S2.1"
@@ -1481,8 +1497,8 @@
    "session": 2,
    "shelf": "skills",
    "skip_check": [
-    "Kannst du ohne Nachschlagen vier mitgelieferte Skills nennen und sagen, wofür `/verify` statt eines Testlaufs gedacht ist?",
-    "Hast du schon einmal mit `/skills` nachgesehen, welche Skills in deiner Sitzung tatsächlich verfügbar sind?"
+    "Kannst du ohne Nachschlagen sagen, womit du in einer Sitzung nachsiehst, welche Skills es gibt?",
+    "Kannst du für „in 80 Dateien dieselbe Änderung machen\" sagen, welchen mitgelieferten Skill du nimmst?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/skills",
@@ -1494,28 +1510,32 @@
   },
   {
    "aliases": [],
-   "analogy": "Das ist wie eine Zugangskontrolle, die bei jedem Kartenscan frische Ausweisdaten aus dem Verzeichnis abruft, statt sich auf einen Ausdruck von heute Morgen zu verlassen. Die Karte, die jemand vorhält, sind die Argumente; die Live-Abfrage ist der eingebettete Befehl. Mächtig, aber auch eine neue Angriffsfläche: Wer die Abfrage manipulieren kann, bestimmt, was am Leser ankommt.",
-   "answers": null,
+   "analogy": "Das ist wie eine Zugangskontrolle, die bei jedem Kartenscan frische Ausweisdaten aus dem Verzeichnis abruft, statt sich auf einen Ausdruck von heute Morgen zu verlassen. Die Karte, die jemand vorhält, sind die Argumente; die Live-Abfrage ist der eingebettete Befehl. Die Abfrage läuft, bevor die Wache das Blatt zu sehen bekommt, und sie kann sie nicht mehr ablehnen. Wer die Abfrage manipulieren kann, bestimmt, was am Leser ankommt.",
+   "answers": [
+    "`$0` ist `strict`, `$1` ist `auth-service` (die Zählung beginnt bei 0), und `$module` ist ebenfalls `auth-service`, weil `arguments: [mode, module]` die Namen der Reihe nach vergibt.",
+    "Der ganze Aufruf bricht ab, und Claude sieht den Skill gar nicht. Die Meldung beginnt mit `Shell command failed for pattern`, die Ausgabe des Befehls steht darin unter `[stderr]`.",
+    "Mitgelieferte und verwaltete Skills; für Skills aus Nutzer-, Projekt- und Plugin-Quellen und zusätzlichen Verzeichnissen ersetzt Claude Code jeden eingebetteten Befehl durch `[shell command execution disabled by policy]`."
+   ],
    "area": "skills",
-   "checkpoint": "Du kannst erklären, wann genau `` !`git diff HEAD` `` in einer SKILL.md ausgeführt wird, nämlich beim Aufruf und bevor Claude den Text sieht, und warum `disableSkillShellExecution` in regulierten Umgebungen sinnvoll ist.",
+   "checkpoint": "Du kannst erklären, wann genau `` !`git diff HEAD` `` in einer SKILL.md ausgeführt wird, nämlich beim Aufruf und bevor Claude den Text sieht, was passiert, wenn der Befehl scheitert, und warum `disableSkillShellExecution` in regulierten Umgebungen sinnvoll ist.",
    "demo": null,
-   "example": "# Pre-Commit Skill\n\nCurrent git diff:\n!`git diff HEAD`\n\nCurrent branch:\n!`git branch --show-current`\n\nFailing tests:\n!`pytest --tb=no -q 2>&1 | tail -20`\n\nNow review the diff and propose a commit message.",
+   "example": "# Pre-Commit Skill\n\nCurrent git diff:\n!`git diff HEAD`\n\nCurrent branch:\n!`git branch --show-current`\n\nNow review the diff and propose a commit message.",
    "example_lang": "markdown",
    "file": "s2-05-lebendige-prompts.md",
    "glance": "Skills müssen kein starres Markdown sein. Beim Aufruf ersetzt Claude Code Platzhalter wie `$ARGUMENTS`, `$0` oder `$mode` durch deine Argumente, und eine Zeile `` !`befehl` `` führt einen Shell-Befehl auf deinem Rechner aus und setzt seine Ausgabe in den Text, bevor Claude ihn liest. Das macht Skills zu lebendigen Prompts und ist zugleich eine neue Angriffsfläche: Prüf fremde Skills, bevor du sie aufrufst; mit `disableSkillShellExecution` lässt sich die Ausführung abschalten.",
    "id": "S2.5",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2050,
-   "outcome": "Ich kann in einem Skill Argumente ($ARGUMENTS, $0, $name) und Live-Kontext per !`befehl` einsetzen und erklären, warum ein Admin die Shell-Ausführung in Skills abschalten kann.",
+   "outcome": "Ich kann in einem Skill Argumente ($ARGUMENTS, $0, $name) und Live-Kontext per !`befehl` einsetzen, sagen, was mit dem Skill passiert, wenn ein eingebetteter Befehl scheitert, und erklären, warum ein Admin die Shell-Ausführung in Skills abschalten kann.",
    "quiz": {
     "correct": "Beim Aufruf, bevor der Text das Modell erreicht; Claude sieht nur die Ausgabe und kann den Befehl nicht ablehnen.",
     "q": "Wann läuft ein `` !`git diff HEAD` ``-Block in einer SKILL.md, und was folgt daraus für die Angriffsfläche?",
     "wrong": [
      "Erst wenn Claude den Text liest; Claude entscheidet dann selbst, ob der Befehl wirklich läuft, und lehnt gefährliche ab.",
      "Nur bei einem Aufruf von Hand mit `/name`; lädt Claude den Skill selbst, überspringt Claude Code alle Befehle.",
-     "Beim Start der Sitzung, als PreToolUse-Hook registriert; deshalb ist `disableSkillShellExecution` überflüssig."
+     "Beim Start der Sitzung, für alle Skills auf einmal; deshalb ist `disableSkillShellExecution` überflüssig."
     ]
    },
    "recall": [
@@ -1538,8 +1558,8 @@
    "session": 2,
    "shelf": "skills",
    "skip_check": [
-    "Kannst du ohne Nachschlagen einen Skill schreiben, der den aktuellen `git diff` automatisch in den Prompt setzt?",
-    "Hast du schon einmal bei einem fremden Skill nachgesehen, ob er beim Aufruf Shell-Befehle ausführt?"
+    "Kannst du ohne Nachschlagen sagen, wann genau ein eingebetteter Befehl in einer SKILL.md läuft?",
+    "Kannst du sagen, welches Argument `$0` meint, wenn du `/review strict auth-service` tippst?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/skills"
@@ -1552,34 +1572,38 @@
    "aliases": [
     "2.2"
    ],
-   "analogy": "In einer Zutrittskontrolle feuert der Kartenleser, sobald jemand eine Karte vorhält. Bevor die Tür aufgeht, prüft das System: Ist die Karte berechtigt, gilt sie zu dieser Uhrzeit, ist der Bereich gerade zugänglich? Das ist PreToolUse, eine Prüfung, die die Aktion verhindern kann. Der Türkontakt meldet nach dem Öffnen, wer wann durch welche Tür gegangen ist. Das ist PostToolUse, ein Protokoll nach dem Ereignis. Die Checkliste zum Schichtende läuft, wenn der Wachmann den Schichtbericht abschließt, nicht weil die Uhr 18:00 zeigt. Das ist Stop: ausgelöst durch ein Ereignis, nicht durch die Uhr.",
-   "answers": null,
+   "analogy": "In einer Zutrittskontrolle feuert der Kartenleser, sobald jemand eine Karte vorhält. Bevor die Tür aufgeht, prüft das System: Ist die Karte berechtigt, gilt sie zu dieser Uhrzeit, ist der Bereich gerade zugänglich? Das ist PreToolUse, eine Prüfung, die die Aktion verhindern kann. Der Türkontakt meldet nach dem Öffnen, wer wann durch welche Tür gegangen ist. Das ist PostToolUse, ein Protokoll nach dem Ereignis; ging die Tür gar nicht auf, gibt es nichts zu melden. Die Checkliste zum Schichtende läuft, wenn der Wachmann den Schichtbericht abschließt, nicht weil die Uhr 18:00 zeigt. Das ist Stop: ausgelöst durch ein Ereignis, nicht durch die Uhr.",
+   "answers": [
+    "Ein Hook läuft von selbst an einem festen Ereignis, etwa vor jedem Tool-Aufruf. Einen Skill lädt Claude nur, wenn du ihn aufrufst oder die Anfrage zur Beschreibung passt, und er gibt Anweisungen, denen Claude folgen kann.",
+    "Über den Exit-Code mit `exit 2` (daneben mit einer JSON-Entscheidung, [S2.10](s2-10-hook-ausgaben.md)). Mit `exit 1` meldet Claude Code nur einen Hook-Fehler, und die Aktion läuft weiter.",
+    "Wenn der Tool-Aufruf fehlgeschlagen ist, etwa weil ein Befehl mit einem Fehlercode endet. Dann feuert PostToolUseFailure."
+   ],
    "area": "hooks",
-   "checkpoint": "Du kannst die drei Eckpfeiler-Hooks benennen, erklären, welcher blockieren kann und welcher nicht, und für jeden ein konkretes Beispiel nennen.",
+   "checkpoint": "Du kannst die drei Eckpfeiler-Hooks benennen, erklären, welcher blockieren kann und wann PostToolUse nicht feuert, und den Unterschied zu einem Skill nennen.",
    "demo": "../moderation/vorfuehren/s2-06-hooks-als-sensoren.md",
-   "example": "#!/bin/bash\n# Der Bash-Befehl steht in tool_input.command; nur exit 2 blockt.\nINPUT=$(cat)\nCOMMAND=$(printf '%s' \"$INPUT\" | jq -r '.tool_input.command // \"\"')\nif printf '%s' \"$COMMAND\" | grep -qiE 'rm[[:space:]]+-rf|git push.*--force'; then\n  echo \"Destructive command blocked\" >&2\n  exit 2   # exit 1 wuerde NICHT blocken\nfi\nexit 0",
-   "example_lang": "bash",
+   "example": "   {\n     \"hooks\": {\n       \"PreToolUse\": [\n         {\n           \"matcher\": \"Bash|PowerShell\",\n           \"hooks\": [{\"type\": \"command\", \"command\": \"echo pre >> \\\"${CLAUDE_PROJECT_DIR}/hook-log.txt\\\"\"}]\n         }\n       ],\n       \"PostToolUse\": [\n         {\n           \"matcher\": \"Bash|PowerShell\",\n           \"hooks\": [{\"type\": \"command\", \"command\": \"echo post >> \\\"${CLAUDE_PROJECT_DIR}/hook-log.txt\\\"\"}]\n         }\n       ],\n       \"Stop\": [\n         {\n           \"hooks\": [{\"type\": \"command\", \"command\": \"echo stop >> \\\"${CLAUDE_PROJECT_DIR}/hook-log.txt\\\"\"}]\n         }\n       ]\n     }\n   }",
+   "example_lang": "json",
    "file": "s2-06-hooks-als-sensoren.md",
-   "glance": "Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken, über den Exit-Code aber nur mit `exit 2`; PostToolUse feuert danach und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Jeder andere Exit-Code als 2 blockt nicht: Die Aktion läuft weiter. Den zweiten Weg zu blocken, eine JSON-Entscheidung, zeigt [S2.10](s2-10-hook-ausgaben.md).",
+   "glance": "Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken; PostToolUse feuert danach, aber nur nach einem erfolgreichen Aufruf, und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Geblockt wird über den Exit-Code allein nur mit `exit 2`; jeder andere Code, ein Absturz oder ein Timeout lässt die Aktion laufen. Der zweite Weg, eine JSON-Entscheidung, steht in [S2.10](s2-10-hook-ausgaben.md).",
    "id": "S2.6",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2060,
-   "outcome": "Ich kann Hooks als Event-Listener beschreiben und PreToolUse (kann blocken), PostToolUse (reagiert) und Stop (Claude ist mit der Antwort fertig) mit je einem Beispiel unterscheiden.",
+   "outcome": "Ich kann Hooks als Event-Listener beschreiben, PreToolUse (kann blocken), PostToolUse (reagiert nach einem erfolgreichen Tool-Aufruf) und Stop (Claude ist mit der Antwort fertig) unterscheiden und in einem Wegwerf-Projekt drei Hooks eintragen, deren Reihenfolge ich in einer Logdatei sehe.",
    "quiz": {
-    "correct": "PreToolUse mit `exit 2`: Er läuft vor dem Aufruf; PostToolUse und Stop kommen erst, wenn der Aufruf gelaufen ist.",
-    "q": "Welcher der drei Eckpfeiler-Hooks kann einen Tool-Aufruf verhindern, bevor er läuft, und wie signalisiert er das?",
+    "correct": "Er läuft: `exit 1` meldet nur einen Hook-Fehler, über den Exit-Code allein blockt nur `exit 2`.",
+    "q": "Dein PreToolUse-Wächter erkennt einen gefährlichen Befehl und endet mit `exit 1`. Was passiert mit dem Befehl?",
     "wrong": [
-     "Alle drei, jeweils mit `exit 1`: PostToolUse macht den Aufruf wieder rückgängig, und Stop verwirft die gerade fertige Antwort.",
-     "Keiner der drei: Hooks können nur Warnungen loggen, Blocken geht ausschließlich über `permissions.deny`.",
-     "PreToolUse, aber nur bei Bash; für Edit, Write und MCP-Tools bleibt dir dann nur `permissions.deny`."
+     "Er wird geblockt, denn Claude Code behandelt jeden Exit-Code ungleich 0 als Ablehnung des Tool-Aufrufs.",
+     "Er wird geblockt, sobald der Hook zusätzlich eine Begründung auf stderr schreibt, wie im Skript davor.",
+     "Er läuft nicht, weil ein Hook-Fehler den ganzen Tool-Aufruf abbricht, genau wie ein Timeout des Hooks."
     ]
    },
    "recall": [
-    "Warum musst du an einen Hook nicht denken, damit er läuft — und was unterscheidet ihn darin von einem Skill, den du aufrufst?",
-    "Was passiert, wenn ein PreToolUse-Hook mit `exit 1` endet?",
-    "Warum ist Stop kein Uhrzeit-Ereignis?"
+    "Warum musst du an einen Hook nicht denken, damit er läuft, und was unterscheidet ihn darin von einem Skill?",
+    "Wie kann ein PreToolUse-Hook einen Aufruf verhindern, und was passiert, wenn er mit `exit 1` endet?",
+    "Wann feuert PostToolUse nicht, obwohl Claude ein Tool benutzt hat?"
    ],
    "requires": [
     "S1.5"
@@ -1595,7 +1619,7 @@
    "shelf": "hooks",
    "skip_check": [
     "Kannst du ohne Nachschlagen sagen, welcher der drei Eckpfeiler-Hooks eine Aktion verhindern kann und welcher nur reagiert?",
-    "Hast du schon einmal eine Aktion von Claude automatisch geprüft oder protokolliert, ohne dafür den Prompt zu ändern?"
+    "Kannst du sagen, nach welchen Tool-Aufrufen PostToolUse feuert und nach welchen nicht?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/hooks",
@@ -1607,33 +1631,37 @@
   },
   {
    "aliases": [],
-   "analogy": "PreToolUse ist der Kartenleser, der die Berechtigung prüft, *bevor* die Tür aufschließt. PostToolUse ist der Türkontakt, der das Ereignis *danach* protokolliert. SessionStart ist das Briefing zu Schichtbeginn. PreCompact ist der Moment, bevor ein Wachmann seine Notizen übergibt: Was wichtig ist, muss aufgeschrieben sein, bevor es verblasst.",
-   "answers": null,
+   "analogy": "PreToolUse ist der Kartenleser, der die Berechtigung prüft, *bevor* die Tür aufschließt, PostToolUse der Türkontakt, der das Ereignis *danach* protokolliert. Dazu kommen die Ereignisse rund um die Schicht: SessionStart ist das Briefing zu Schichtbeginn, UserPromptSubmit der Pförtner, der jeden Besucher am Eingang anspricht, bevor er im Gebäude ist, PreCompact der Moment, bevor ein Wachmann seine Notizen übergibt (was wichtig ist, muss aufgeschrieben sein, bevor es verblasst), und SessionEnd das Schließen des Übergabeprotokolls.",
+   "answers": [
+    "SessionStart für das Briefing, SessionEnd für die Sicherung beim Beenden.",
+    "Dann hat Claude den Prompt schon gelesen, und PreToolUse feuert erst bei einem Tool-Aufruf. UserPromptSubmit feuert, bevor Claude den Prompt sieht; er kann ihn abweisen oder Kontext ergänzen, aber nicht umschreiben.",
+    "Stop feuert nach jeder abgeschlossenen Antwort, SessionEnd erst, wenn die Sitzung endet."
+   ],
    "area": "hooks",
-   "checkpoint": "Du kannst für jedes der zwölf Hook-Ereignisse einen konkreten Einsatz nennen und erklären, warum PreCompact bei langen Sitzungen besonders wichtig ist.",
+   "checkpoint": "Du kannst zu einer Aufgabe das passende Hook-Ereignis nennen und erklären, warum PreCompact bei langen Sitzungen wichtig ist.",
    "demo": null,
-   "example": "{\n  \"hooks\": {\n    \"SessionStart\": [{\"hooks\": [{\"type\": \"command\", \"command\": \"echo 'Session started' >> ~/.claude/session.log\"}]}],\n    \"UserPromptSubmit\": [{\"hooks\": [{\"type\": \"command\", \"command\": \"bash ~/.claude/hooks/check-prompt-secrets.sh\"}]}],\n    \"PreCompact\": [{\"hooks\": [{\"type\": \"command\", \"command\": \"bash ~/.claude/hooks/save-state.sh\"}]}]\n  }\n}",
+   "example": "   {\n     \"hooks\": {\n       \"SessionStart\": [\n         {\n           \"hooks\": [{\"type\": \"command\", \"command\": \"echo \\\"Briefing: the deploy freeze starts on Friday.\\\"; echo start >> \\\"${CLAUDE_PROJECT_DIR}/hook-log.txt\\\"\"}]\n         }\n       ],\n       \"UserPromptSubmit\": [\n         {\n           \"hooks\": [{\"type\": \"command\", \"command\": \"echo \\\"Ticket note: the current ticket is T-77.\\\"; echo prompt >> \\\"${CLAUDE_PROJECT_DIR}/hook-log.txt\\\"\"}]\n         }\n       ]\n     }\n   }",
    "example_lang": "json",
    "file": "s2-07-hook-ereignisse.md",
-   "glance": "Hook-Ereignisse decken den ganzen Lebenslauf einer Sitzung ab: SessionStart und SessionEnd klammern die Sitzung, UserPromptSubmit feuert, bevor Claude deinen Prompt sieht, PreCompact kommt vor dem Komprimieren des Kontexts, SubagentStart und SubagentStop begleiten Subagenten, FileChanged reagiert auf Änderungen von außen. Das richtige Ereignis zu wählen entscheidet: Eine Prüfung auf Secrets im Prompt gehört an UserPromptSubmit, nicht an PreToolUse, denn das Secret steht schon im Prompt, bevor überhaupt ein Tool-Aufruf entsteht.",
+   "glance": "Hook-Ereignisse decken den ganzen Lebenslauf einer Sitzung ab: SessionStart und SessionEnd klammern die Sitzung, UserPromptSubmit feuert, bevor Claude deinen Prompt sieht, PreCompact kommt vor dem Komprimieren des Kontexts, SubagentStart und SubagentStop begleiten Subagenten, FileChanged reagiert auf Änderungen von außen. Das richtige Ereignis zu wählen entscheidet: Eine Prüfung auf Secrets im Prompt gehört an UserPromptSubmit, nicht an PreToolUse, denn das Secret steht schon im Prompt, bevor überhaupt ein Tool-Aufruf entsteht. Für den Anfang reichen vier neue Ereignisse: SessionStart, UserPromptSubmit, PreCompact und SessionEnd. Der Rest ist eine Tabelle zum Nachschlagen.",
    "id": "S2.7",
    "level": "core",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 2070,
-   "outcome": "Ich kann zu einer Aufgabe (Briefing beim Start, Secrets im Prompt abfangen, Sicherung vor dem Komprimieren, Benachrichtigung) das passende der zwölf wichtigsten Hook-Ereignisse nennen.",
+   "outcome": "Ich kann zu einer Aufgabe (Briefing beim Start, Secrets im Prompt abfangen, Sicherung vor dem Komprimieren, Benachrichtigung) das passende Hook-Ereignis nennen und in einem Wegwerf-Projekt einen SessionStart- und einen UserPromptSubmit-Hook eintragen.",
    "quiz": {
     "correct": "`UserPromptSubmit`: Es feuert, bevor Claude den Prompt sieht, und kann ihn abweisen. `PreToolUse` käme zu spät, Claude hätte ihn schon gelesen.",
     "q": "Ein Team will verhindern, dass API-Keys aus dem Prompt beim Modell ankommen. Welches Hook-Ereignis passt, und warum ist ein naheliegendes anderes falsch?",
     "wrong": [
      "`PreToolUse` mit Bash-Matcher, weil Keys fast immer in Shell-Befehlen stehen; `UserPromptSubmit` wäre zu früh und zu ungenau.",
-     "`SessionStart`, weil es einmal Kontext-Variablen setzt, mit denen Claude dann die ganze Sitzung bereinigt, statt jeden Prompt einzeln zu prüfen.",
-     "`InstructionsLoaded`, weil es nach dem Laden der CLAUDE.md feuert und Secret-Muster in eine Deny-Liste einträgt."
+     "`SessionStart`, weil es einmal pro Sitzung feuert und dort alle späteren Prompts nach Keys durchsuchen kann.",
+     "`Stop`, weil es nach der Antwort feuert und den Prompt nachträglich aus der Unterhaltung löschen kann."
     ]
    },
    "recall": [
-    "Welches Ereignis nimmst du für ein Briefing beim Start, welches für eine Zusammenfassung beim sauberen Beenden?",
-    "Warum ist PreToolUse zu spät, wenn du Secrets im Prompt abfangen willst?",
+    "Welches Ereignis nimmst du für ein Briefing beim Start, welches für eine Sicherung beim Beenden der Sitzung?",
+    "Warum ist PreToolUse zu spät, wenn du Secrets im Prompt abfangen willst, und was kann UserPromptSubmit mit einem Prompt tun?",
     "Worin unterscheidet sich Stop von SessionEnd?"
    ],
    "requires": [
@@ -1650,8 +1678,8 @@
    "session": 2,
    "shelf": "hooks",
    "skip_check": [
-    "Kannst du ohne Nachschlagen sagen, welches Ereignis vor dem Komprimieren des Kontexts feuert und wofür du es nutzt?",
-    "Hast du schon einmal einen SessionStart- oder Notification-Hook eingesetzt?"
+    "Kannst du ohne Nachschlagen sagen, welches Ereignis feuert, bevor Claude deinen Prompt sieht?",
+    "Kannst du sagen, welches Ereignis vor dem Komprimieren des Kontexts feuert und wofür du es nutzt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/hooks"
@@ -1663,33 +1691,37 @@
   {
    "aliases": [],
    "analogy": "Stell dir eine Alarmmatrix mit zwei Filterebenen vor. Die erste Ebene ist der Sensortyp: Wiegand-Leser (Bash) oder Kamera-Bewegung (Edit). Das ist der `matcher`. Die zweite Ebene ist der Bereichsfilter: „nur wenn Berechtigungsstufe unter 3 und Zone = Serverraum\". Das ist das `if`-Feld mit Rechte-Regel-Syntax. Ohne zweite Ebene löst jeder Kartenscan Alarm aus, mit ihr nur die Ereignisse, die zählen.",
-   "answers": null,
+   "answers": [
+    "`exit 2`. Jeder andere Code (1, 127, ein Absturz) und ein Timeout melden nur einen Hook-Fehler; die Aktion läuft weiter.",
+    "In `tool_input.command`. Unter Windows brauchst du `\"Bash|PowerShell\"`, weil Shell-Befehle dort meist über das PowerShell-Tool laufen; beide Tools liefern den Befehl in diesem Feld.",
+    "Er endet mit `exit 2` und blockt. Das ist die sichere Richtung: Ein kaputter Wächter soll die Tür schließen, denn bei jedem anderen Code, den Claude Code ohnehin als Hook-Fehler wertet, liefe der Befehl."
+   ],
    "area": "hooks",
-   "checkpoint": "Du kannst einen PreToolUse-Hook mit passendem `matcher` und `if`-Filter eintragen, der mit `exit 2` wirklich blockt, und erklären, warum ein kaputter Schutz-Hook ein offener Schutz-Hook ist.",
+   "checkpoint": "Du kannst einen PreToolUse-Hook mit passendem `matcher` eintragen, der mit `exit 2` wirklich blockt, und erklären, warum ein kaputter Schutz-Hook ein offener Schutz-Hook ist und wie du ihn geschlossen machst.",
    "demo": "../moderation/vorfuehren/s2-08-hook-einrichten.md",
-   "example": "echo '{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"rm -rf /tmp/test\"}}' | bash ~/.claude/hooks/safety-check.sh; echo \"exit=$?\"\n# expected: SAFETY HOOK ... blocked, exit=2",
-   "example_lang": "bash",
+   "example": "   {\n     \"hooks\": {\n       \"PreToolUse\": [\n         {\n           \"matcher\": \"Bash|PowerShell\",\n           \"hooks\": [\n             {\n               \"type\": \"command\",\n               \"command\": \"bash \\\"${CLAUDE_PROJECT_DIR}\\\"/.claude/hooks/safety-check.sh\"\n             }\n           ]\n         }\n       ]\n     }\n   }",
+   "example_lang": "json",
    "file": "s2-08-hook-einrichten.md",
-   "glance": "Von den Exit-Codes blockt bei einem Schutz-Hook nur `exit 2`; jeder andere Exit-Code (1, 127, ein Absturz) und ein Timeout blocken nicht, die Aktion läuft weiter. Daneben kann ein PreToolUse-Hook per JSON blocken (`permissionDecision: \"deny\"`, [S2.10](s2-10-hook-ausgaben.md)). Ein kaputter Schutz-Hook ist deshalb ein offener Schutz-Hook: Ein guter Wächter liest den Befehl aus `tool_input.command` und blockt lieber, wenn er seine Eingabe nicht lesen kann.",
+   "glance": "Über den Exit-Code allein blockt bei einem Schutz-Hook nur `exit 2`; jeder andere Exit-Code (1, 127, ein Absturz) und ein Timeout blocken nicht, die Aktion läuft weiter. Daneben kann ein PreToolUse-Hook per JSON blocken (`permissionDecision: \"deny\"`, [S2.10](s2-10-hook-ausgaben.md)). Ein kaputter Schutz-Hook ist deshalb ein offener Schutz-Hook: Ein guter Wächter liest den Befehl aus `tool_input.command` und blockt lieber, wenn er seine Eingabe nicht lesen kann.",
    "id": "S2.8",
    "level": "core",
-   "minutes": 15,
+   "minutes": 35,
    "offers": [],
    "order": 2080,
-   "outcome": "Ich kann einen PreToolUse-Hook in settings.json mit matcher und if-Filter eintragen, ihn mit exit 2 wirklich blocken lassen und erkennen, ob er bei einem Fehler offen oder geschlossen fällt.",
+   "outcome": "Ich kann einen PreToolUse-Hook in der settings.json eines Projekts mit matcher eintragen, ihn mit exit 2 wirklich blocken lassen, erkennen, ob er bei einem Fehler offen oder geschlossen fällt, und mit if feiner filtern.",
    "quiz": {
-    "correct": "Als Liste exakter Namen: Er enthält nur Buchstaben und `|`. Erst ein Zeichen wie `.`, `^` oder `$` macht daraus einen Regex.",
-    "q": "Ein Hook soll auf Bash, Edit und Write reagieren. Jemand setzt `\"matcher\": \"Bash|Edit|Write\"`. Wird das als Regex oder als Liste exakter Namen ausgewertet, und warum?",
+    "correct": "Er läuft, denn 127 blockt nicht. Das Skript muss seine Eingabe selbst prüfen und bei einem Lesefehler mit `exit 2` enden.",
+    "q": "Dein Wächter-Skript stürzt ab, weil `jq` fehlt, und endet mit Exit-Code 127. Was passiert mit dem gefährlichen Befehl, und wie änderst du das?",
     "wrong": [
-     "Als Regex: `|` ist in Claude Code immer ein Regex-Operator, also wird jeder Matcher mit `|` als Regex gelesen.",
-     "Das ist egal: Beide Lesarten liefern hier dasselbe, deshalb unterscheidet Claude Code gar nicht zwischen den beiden.",
-     "Als Rechte-Regel: Mehrere Namen mit `|` liest Claude Code wie `permissions.allow`-Einträge, und `if` filtert dann die Namen."
+     "Er wird geblockt, denn ein Hook, der nicht sauber läuft, gilt für Claude Code als Ablehnung und stoppt den Aufruf.",
+     "Er läuft nur beim ersten Mal; danach blockt Claude Code ihn von selbst, bis der Hook wieder funktioniert.",
+     "Er wird geblockt, sobald das Skript einen Fehlertext auf stderr schreibt, auch ohne den Exit-Code 2."
     ]
    },
    "recall": [
-    "Welcher Exit-Code lässt einen PreToolUse-Hook blocken, und was passiert, wenn der Hook mit einem anderen Code abstürzt?",
-    "Wo im Eingabe-JSON steht der Bash-Befehl?",
-    "Warum ist `\"Bash|^Edit$\"` ein Regex, `\"Bash|Edit\"` aber nicht?"
+    "Welcher Exit-Code lässt einen PreToolUse-Hook über den Code allein blocken, und was passiert bei jedem anderen Code oder einem Timeout?",
+    "Wo im Eingabe-JSON steht der Bash-Befehl, und welchen `matcher` brauchst du unter Windows?",
+    "Was tut der Wächter in diesem Kapitel, wenn er seine Eingabe nicht lesen kann, und warum ist das die sichere Richtung?"
    ],
    "requires": [
     "S2.7"
@@ -1706,8 +1738,8 @@
    "session": 2,
    "shelf": "hooks",
    "skip_check": [
-    "Kannst du ohne Nachschlagen einen Hook skizzieren, der nur `git push` in Bash blockt, und sagen, welcher Exit-Code blockt?",
-    "Hast du schon einmal einen Schutz-Hook absichtlich kaputtgemacht, um zu sehen, ob er offen oder geschlossen fällt?"
+    "Kannst du ohne Nachschlagen sagen, welchen Exit-Code ein Schutz-Hook braucht, um einen Aufruf zu blocken, und was ein Absturz mit einem anderen Code bewirkt?",
+    "Kannst du sagen, welchen `matcher` ein Hook unter Windows braucht, damit er Shell-Befehle überhaupt sieht?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/hooks",
@@ -1719,34 +1751,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein Subagent-Hook ist ein Sensor, den ein Wachmann auf einer Streife mitträgt: Er kommt mit ihm zurück. Ein Skill-Hook ist ein Sensor, den der Wachmann auf der Streife an die Wand schraubt: Er bleibt bis Schichtende scharf, es sei denn, er ist so gebaut, dass er sich nach dem ersten Alarm selbst abschaltet (`once: true`).",
-   "answers": null,
+   "analogy": "Ein Skill-Hook ist ein Sensor, den der Wachmann an die Wand schraubt, sobald er die Dienstanweisung aufschlägt: Er bleibt bis Schichtende scharf, auch bei Vorfällen, die mit der Anweisung nichts zu tun haben. Ist er so gebaut (`once: true`), baut er sich nach seinem ersten erfolgreichen Lauf selbst ab. Ein Subagent-Hook ist dagegen ein Sensor, den ein Wachmann auf der Streife am Gürtel trägt: Er kommt mit ihm zurück und ist dann weg.",
+   "answers": [
+    "Für eine feste Musterprüfung `command`, für ein Urteil, das Kontext braucht, `prompt`. Der `prompt`-Hook fragt ein Modell, das kostet Tokens und Zeit, und das Urteil kann von Lauf zu Lauf abweichen.",
+    "Ein Skill-Hook wird beim Aufruf des Skills registriert und bleibt bis zum Ende der Sitzung. Ein Subagent-Hook läuft nur, solange der Subagent läuft, und wird danach entfernt.",
+    "Es entfernt den Handler nach seinem ersten erfolgreichen Lauf. Es wirkt nur bei Hooks im Frontmatter eines Skills; in Settings-Dateien wird es ignoriert."
+   ],
    "area": "hooks",
-   "checkpoint": "Du kannst erklären, wann ein `prompt`-Hook besser passt als ein `command`-Hook, und zeigen, wie ein Hook im Frontmatter einen Deploy-Skill mit eigener Vor- und Nachprüfung ausstattet, ohne die globale settings.json zu belasten.",
+   "checkpoint": "Du kannst erklären, wann ein `prompt`-Hook besser passt als ein `command`-Hook, und zeigen, wie ein Hook im Frontmatter einen Skill mit eigener Vor- und Nachprüfung ausstattet, ohne die globale settings.json zu belasten.",
    "demo": null,
-   "example": "---\nname: deploy\ndescription: Deploy the current branch to staging\ndisable-model-invocation: true\nhooks:\n  PreToolUse:\n    - matcher: \"Bash\"\n      hooks:\n        - type: command\n          command: \"./pre-deploy-check.sh\"\n  PostToolUse:\n    - matcher: \"Bash\"\n      hooks:\n        - type: command\n          command: \"./post-deploy-notify.sh\"\n          once: true\n---",
+   "example": "---\nname: deploy\ndescription: Deploy the current branch to staging\ndisable-model-invocation: true\nhooks:\n  PreToolUse:\n    - matcher: \"Bash|PowerShell\"\n      hooks:\n        - type: command\n          command: \"./pre-deploy-check.sh\"\n  PostToolUse:\n    - matcher: \"Bash\"\n      hooks:\n        - type: command\n          if: \"Bash(./deploy.sh *)\"\n          command: \"./post-deploy-notify.sh\"\n          once: true\n---",
    "example_lang": "yaml",
    "file": "s2-09-hook-typen.md",
-   "glance": "Hooks führen nicht nur Shell-Befehle aus: Es gibt fünf Typen, nämlich `command`, `http`, `prompt`, `agent` und `mcp_tool`. Außerdem müssen Hooks nicht in `settings.json` stehen. Im Frontmatter eines Skills oder Subagenten leben sie mit ihrer Komponente: Subagent-Hooks nur, solange der Subagent läuft, Skill-Hooks ab dem Aufruf des Skills bis zum Ende der Sitzung (`once: true` entfernt einen Handler nach seinem ersten erfolgreichen Lauf).",
+   "glance": "Hooks führen nicht nur Shell-Befehle aus: Es gibt fünf Typen, nämlich `command`, `http`, `prompt`, `agent` und `mcp_tool`. Für feste Regeln bleibt `command` die beste Wahl. Außerdem müssen Hooks nicht in `settings.json` stehen. Im Frontmatter eines Skills oder Subagenten leben sie mit ihrer Komponente: Subagent-Hooks nur, solange der Subagent läuft, Skill-Hooks ab dem Aufruf des Skills bis zum Ende der Sitzung (`once: true` entfernt einen Handler nach seinem ersten erfolgreichen Lauf).",
    "id": "S2.9",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2090,
-   "outcome": "Ich kann die fünf Hook-Typen (command, http, prompt, agent, mcp_tool) nach ihrem Einsatz wählen und einen Hook mit der richtigen Lebensdauer in das Frontmatter eines Skills oder Subagenten einbetten.",
+   "outcome": "Ich kann für eine Aufgabe den passenden der fünf Hook-Typen (command, http, prompt, agent, mcp_tool) wählen und einen Hook im Frontmatter eines Skills einbetten, dessen Lebensdauer ich kenne.",
    "quiz": {
-    "correct": "Er gehört zum Skill: Er wird erst beim Aufruf registriert, und kein globaler Hook muss selbst herausfinden, ob gerade dieser Skill läuft.",
-    "q": "Warum ist ein Hook im Frontmatter eines Skills oft besser als ein globaler Hook, der nach dem Skill-Namen filtert?",
+    "correct": "In das Frontmatter des Deploy-Skills: Dort wird er erst beim Aufruf registriert und bleibt dann bis zum Sitzungsende.",
+    "q": "Eine Vorab-Prüfung soll nur dann scharf werden, wenn jemand `/deploy` aufruft, und nicht in jeder Sitzung. Wohin gehört der Hook?",
     "wrong": [
-     "Er ist schneller, weil er fest in die Skill-Datei kompiliert wird, während ein globaler Hook bei jedem Aufruf einen neuen Prozess startet.",
-     "Es gibt keinen Unterschied in der Wirkung; beide werden gleich ausgewertet, das Frontmatter liest sich nur besser.",
-     "Nur im Frontmatter gehen die Typen `prompt` und `agent`; in settings.json sind nur `command` und `http` erlaubt."
+     "In `~/.claude/settings.json` mit dem Matcher `/deploy`, denn der Matcher vergleicht den Namen des Skills, der gerade läuft.",
+     "In das Frontmatter eines Subagenten, denn nur dort leben Hooks genau so lange, wie der Skill aktiv ist.",
+     "In `.claude/settings.local.json`, denn diese Datei liest Claude Code erst, wenn du einen Slash-Befehl aufrufst."
     ]
    },
    "recall": [
     "Welcher Hook-Typ passt für eine feste Musterprüfung, welcher für ein Urteil, das Kontext braucht?",
     "Wie lange lebt ein Hook im Skill-Frontmatter, wie lange einer im Subagent-Frontmatter?",
-    "Was bewirkt `once: true` an einem Handler?"
+    "Was bewirkt `once: true` an einem Handler, und wo wirkt es?"
    ],
    "requires": [
     "S2.8"
@@ -1764,8 +1800,8 @@
    "session": 2,
    "shelf": "hooks",
    "skip_check": [
-    "Kannst du ohne Nachschlagen erklären, wann ein `prompt`-Hook statt eines `command`-Hooks sinnvoll ist?",
-    "Hast du schon einmal einen Hook ins Frontmatter eines Skills geschrieben statt in `settings.json`?"
+    "Kannst du ohne Nachschlagen sagen, wann ein `prompt`-Hook statt eines `command`-Hooks sinnvoll ist?",
+    "Kannst du sagen, wie lange ein Hook lebt, den du ins Frontmatter eines Skills schreibst?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/hooks",
@@ -1778,34 +1814,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein Leitstand hat mehrere Ausgabewege. Der Schwärzungsbeauftragte (`updatedToolOutput`) sitzt zwischen Außendienst und Lagebesprechung: Der Bericht kommt beim Analysten an, aber die sensiblen Kennungen sind vorher geschwärzt. Die gelbe Warnlampe (`systemMessage`, `additionalContext`) leuchtet, ohne die Tür zu sperren; der Betrieb läuft, der Leitstand weiß Bescheid. Der Pager (`terminalSequence`) erreicht den Menschen direkt, ohne Umweg über das Modell.",
-   "answers": null,
+   "analogy": "In deiner Zutrittskontrolle gibt es Zonen: Manche Türen sind immer offen (Lobby), manche brauchen eine Karte (Büros), manche bleiben ohne ausdrückliche Freigabe zu (Tresor). Das Secure Diff Gate ist die Tresor-Regel für die Türen, an denen es hängt: Write und Edit. Die Shell ist eine andere Tür. Weiter hinten im Leitstand sitzt der Schwärzungsbeauftragte (`updatedToolOutput`): Der Bericht kommt beim Analysten an, aber die sensiblen Kennungen sind vorher geschwärzt. Was der Außendienst getan hat, macht er nicht ungeschehen.",
+   "answers": [
+    "Shell-Befehle über das Bash- oder PowerShell-Tool, denn der Matcher des Gates ist `Write|Edit`. Eine Deny-Regel wie `Edit(./.env)` deckt auch Datei-Befehle und Umleitungsziele ab; gegen Unterprozesse, die Dateien selbst schreiben, hilft die Sandbox.",
+    "PostToolUse feuert erst, nachdem der Befehl gelaufen ist; der Hook ändert nur, was Claude sieht. Der Ersatz muss die Form der Tool-Ausgabe haben, bei Bash ein Objekt mit `stdout`, `stderr`, `interrupted` und `isImage`; einen String ignoriert Claude Code.",
+    "Mit `exit 0` und JSON `permissionDecision: \"deny\"` plus Begründung. Unter Windows kommen Pfade mit Backslash, ein Vergleich auf `secrets/` greift dann nicht; das Gate vereinheitlicht die Pfade vorher."
+   ],
    "area": "hooks",
-   "checkpoint": "Du kannst erklären, wie `updatedToolOutput` in der Form der Tool-Ausgabe verhindert, dass ein API-Key in Claudes Kontext landet, warum `exit 2` oder `permissionDecision: \"deny\"` blocken und wann ein weiches Signal (`systemMessage`, `additionalContext`) besser passt als eine Sperre.",
+   "checkpoint": "Du kannst das Secure Diff Gate mit seiner Grenze beschreiben, erklären, wie `updatedToolOutput` einen API-Key in einer Tool-Ausgabe schwärzt und warum das den Befehl nicht verhindert, und sagen, wie ein PreToolUse-Hook außer mit `exit 2` blockt.",
    "demo": "../moderation/vorfuehren/s2-10-hook-ausgaben.md",
-   "example": "#!/bin/bash\n# token-firewall.sh - PostToolUse hook (matcher \"Bash\"): shrink noisy test output before Claude reads it.\n# tested asset: resources/demos/assets/hooks/token-firewall.sh\n#\n# Replaces tool_response.stdout via hookSpecificOutput.updatedToolOutput (same Bash shape).\n# stderr passes through unchanged: stripping error details can mislead Claude.\n# Note: suppressOutput has no effect, and systemMessage only reaches the user, not Claude.\n\nINPUT=$(cat)\nCOMMAND=$(printf '%s' \"$INPUT\" | jq -r '.tool_input.command // \"\"')\n\n# Only touch test runs; everything else passes through untouched.\nif ! printf '%s' \"$COMMAND\" | grep -qE '(npm test|pytest|jest|mocha)'; then\n  exit 0\nfi\n\nprintf '%s' \"$INPUT\" | jq '{\n  hookSpecificOutput: {\n    hookEventName: \"PostToolUse\",\n    updatedToolOutput: (.tool_response | .stdout |= (\n      [split(\"\\n\")[] | select(test(\"FAIL|ERROR|Error|passed|failed|Summary\"))]\n      | .[-50:] | join(\"\\n\")\n      | . + \"\\n--- [Token Firewall: passing-test lines removed; failures and summary kept] ---\"\n    ))\n  }\n}'\nexit 0",
-   "example_lang": "bash",
+   "example": "   {\n     \"hooks\": {\n       \"PreToolUse\": [\n         {\n           \"matcher\": \"Write|Edit\",\n           \"hooks\": [\n             {\n               \"type\": \"command\",\n               \"command\": \"python\",\n               \"args\": [\"${CLAUDE_PROJECT_DIR}/.claude/hooks/secure-diff-gate.py\"]\n             }\n           ]\n         }\n       ]\n     }\n   }",
+   "example_lang": "json",
    "file": "s2-10-hook-ausgaben.md",
-   "glance": "Über `exit 0` (erlauben) und `exit 2` (blocken) hinaus kann ein Hook strukturiertes JSON zurückgeben: `hookSpecificOutput.updatedToolOutput` ersetzt in einem PostToolUse-Hook die Tool-Ausgabe, bevor Claude sie liest, aber nur in der Form der Tool-Ausgabe (Bash: `stdout`, `stderr`, `interrupted`, `isImage`), sonst wird sie ignoriert. Weiche Signale wie `systemMessage` (für dich) und `additionalContext` (für Claude) melden etwas, ohne zu sperren, und `terminalSequence` holt dich per Desktop-Benachrichtigung. Schreibzugriffe der Tools Write und Edit auf `.env`, `*.pem` oder `secrets/` blockt ein PreToolUse-Hook mit `exit 2`: das Secure Diff Gate. Eine harte Grenze ist es nicht: Shell-Befehle laufen an seinem Matcher vorbei, dafür brauchst du zusätzlich eine Deny-Regel.",
+   "glance": "Über `exit 0` (erlauben) und `exit 2` (blocken) hinaus kann ein Hook strukturiertes JSON zurückgeben. Zwei Einsätze zählen hier. Erstens das Secure Diff Gate: Ein PreToolUse-Hook auf Write und Edit blockt mit `exit 2` Schreibzugriffe auf `.env`, `*.pem` und `secrets/`. Eine harte Grenze ist er nicht: Shell-Befehle laufen an seinem Matcher vorbei, dafür brauchst du zusätzlich eine Deny-Regel. Zweitens `hookSpecificOutput.updatedToolOutput`: Es ersetzt in einem PostToolUse-Hook die Tool-Ausgabe, bevor Claude sie liest, aber nur in der Form der Tool-Ausgabe (Bash: `stdout`, `stderr`, `interrupted`, `isImage`), und der Befehl ist dann schon gelaufen.",
    "id": "S2.10",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 35,
    "offers": [],
    "order": 2100,
-   "outcome": "Ich kann einen Hook bauen, der Secrets aus Tool-Ausgaben schwärzt (updatedToolOutput), Schreibzugriffe auf sensible Dateien blockt (Secure Diff Gate), und einen Circuit Breaker als Kostenbremse beschreiben.",
+   "outcome": "Ich kann ein Secure Diff Gate in einem Projekt einrichten, das Schreibzugriffe auf .env, *.pem und secrets/ blockt, seine Grenze nennen (Shell-Befehle laufen an ihm vorbei) und erklären, wie ein PostToolUse-Hook mit updatedToolOutput Tool-Ausgaben schwärzt und was er nicht verhindert.",
    "quiz": {
-    "correct": "Ein PostToolUse-Hook mit `updatedToolOutput`: Der Befehl läuft normal, der Hook ersetzt die Ausgabe durch eine geschwärzte Fassung in Bash-Form.",
-    "q": "Ein Team will, dass Claude rohe API-Keys aus einer Bash-Ausgabe nie zu sehen bekommt, den Bash-Befehl selbst aber nicht blocken. Welche Hook-Mechanik passt?",
+    "correct": "Das Gate hängt nur an Write und Edit; der Shell-Befehl läuft an seinem Matcher vorbei. Eine Deny-Regel `Edit(./.env)` schließt die Lücke.",
+    "q": "Du hast das Secure Diff Gate eingerichtet. Claude legt `.env` trotzdem an, mit `echo X > .env`. Was ist die richtige Erklärung?",
     "wrong": [
-     "Ein PreToolUse-Hook mit `continueOnBlock: true`: Er prüft den Befehl vorher, lässt ihn trotzdem laufen und markiert den Fund dabei im Transcript.",
-     "Ein UserPromptSubmit-Hook, der alle Bash-Argumente scannt, weil Keys schon auf Prompt-Ebene abgefangen werden müssen.",
-     "Nur `permissions.deny` für Credential-Dateien, denn `updatedToolOutput` wirkt ausschließlich bei MCP-Tools, nicht bei Bash."
+     "Das Gate ist defekt, denn `exit 2` blockt nach der Doku nur Aufrufe des Bash-Tools, nicht die von Write.",
+     "Das Gate kennt `.env` nicht, es ist für `.pem` und `secrets/` gebaut und braucht eine eigene Zeile für jede weitere Datei.",
+     "Ein PreToolUse-Hook feuert erst, wenn der Aufruf erfolgreich war, deshalb kommt er bei einem Schreibzugriff zu spät."
     ]
    },
    "recall": [
-    "Wie verkleinert ein PostToolUse-Hook eine laute Ausgabe, bevor Claude sie liest?",
-    "Warum schützt `updatedToolOutput` nicht davor, dass ein Befehl etwas anrichtet?",
-    "Woran scheitert ein Pfadvergleich auf `secrets/` unter Windows?"
+    "Welche Zugriffe gehen am Secure Diff Gate vorbei, und womit schließt du die Lücke?",
+    "Warum schützt `updatedToolOutput` nicht davor, dass ein Befehl etwas anrichtet, und welche Form muss der Ersatz bei Bash haben?",
+    "Wie blockt ein PreToolUse-Hook neben `exit 2`, und woran scheitert ein Pfadvergleich auf `secrets/` unter Windows?"
    ],
    "requires": [
     "S2.8"
@@ -1823,8 +1863,8 @@
    "session": 2,
    "shelf": "hooks",
    "skip_check": [
-    "Kannst du ohne Nachschlagen erklären, wie ein PostToolUse-Hook verhindert, dass ein API-Key aus einer Befehlsausgabe in Claudes Kontext landet?",
-    "Hast du schon einmal einen Hook eingesetzt, der Schreibzugriffe auf `.env` oder `secrets/` blockt, und weißt du, welche Zugriffe an ihm vorbeigehen?"
+    "Kannst du ohne Nachschlagen sagen, welche Zugriffe an einem Hook auf `Write|Edit` vorbeigehen?",
+    "Kannst du sagen, ob ein PostToolUse-Hook mit `updatedToolOutput` verhindert, dass ein Befehl etwas anrichtet?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/hooks"

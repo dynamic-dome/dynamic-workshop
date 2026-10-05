@@ -41,20 +41,20 @@ Kern 235 Min · Vertiefung 95 Min
 
 ## Session 2 — Das Ökosystem
 
-Kern 177 Min · Vertiefung 113 Min
+Kern 256 Min · Vertiefung 148 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
-| [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) | Kern | 12 |  | [Demo](../moderation/vorfuehren/s2-01-skills-und-commands.md) |
-| [S2.2 Eine SKILL.md schreiben](../library/s2-02-skill-schreiben.md) | Kern | 18 |  | [Demo](../moderation/vorfuehren/s2-02-skill-schreiben.md) |
-| [S2.3 Skills oder Commands, und wer sie auslösen darf](../library/s2-03-wer-skills-ausloest.md) | Kern | 12 |  |  |
-| [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) | Kern | 12 |  |  |
-| [S2.5 Lebendige Prompts: Argumente und dynamischer Inhalt](../library/s2-05-lebendige-prompts.md) | Vertiefung | 15 |  |  |
-| [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s2-06-hooks-als-sensoren.md) |
-| [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) | Kern | 12 |  |  |
-| [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) | Kern | 15 | 🛡 | [Demo](../moderation/vorfuehren/s2-08-hook-einrichten.md) |
-| [S2.9 Hook-Typen und Hooks in Komponenten](../library/s2-09-hook-typen.md) | Vertiefung | 15 |  |  |
-| [S2.10 Hook-Ausgaben und das Secure Diff Gate](../library/s2-10-hook-ausgaben.md) | Vertiefung | 15 |  | [Demo](../moderation/vorfuehren/s2-10-hook-ausgaben.md) |
+| [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) | Kern | 25 |  | [Demo](../moderation/vorfuehren/s2-01-skills-und-commands.md) |
+| [S2.2 Eine SKILL.md schreiben](../library/s2-02-skill-schreiben.md) | Kern | 25 |  | [Demo](../moderation/vorfuehren/s2-02-skill-schreiben.md) |
+| [S2.3 Skills oder Commands, und wer sie auslösen darf](../library/s2-03-wer-skills-ausloest.md) | Kern | 25 |  |  |
+| [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) | Kern | 25 |  |  |
+| [S2.5 Lebendige Prompts: Argumente und dynamischer Inhalt](../library/s2-05-lebendige-prompts.md) | Vertiefung | 25 |  |  |
+| [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) | Kern | 20 |  | [Demo](../moderation/vorfuehren/s2-06-hooks-als-sensoren.md) |
+| [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) | Kern | 20 |  |  |
+| [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) | Kern | 35 | 🛡 | [Demo](../moderation/vorfuehren/s2-08-hook-einrichten.md) |
+| [S2.9 Hook-Typen und Hooks in Komponenten](../library/s2-09-hook-typen.md) | Vertiefung | 20 |  |  |
+| [S2.10 Hook-Ausgaben und das Secure Diff Gate](../library/s2-10-hook-ausgaben.md) | Vertiefung | 35 |  | [Demo](../moderation/vorfuehren/s2-10-hook-ausgaben.md) |
 | [S2.11 Plugins: ein Bündel schnüren](../library/s2-11-plugins-buendeln.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s2-11-plugins-buendeln.md) |
 | [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](../library/s2-12-plugin-lebenszyklus.md) | Vertiefung | 15 |  |  |
 | [S2.13 Lieferkettenrisiken bei Plugins](../library/s2-13-plugin-lieferkette.md) | Vertiefung | 10 | 🛡 |  |

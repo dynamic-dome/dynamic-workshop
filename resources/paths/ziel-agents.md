@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 5 Etappen, zusammen etwa 11,5 Stunden (629 Min durcharbeiten, 48 Min überfliegen).
+**Umfang:** 5 Etappen, zusammen etwa 11,5 Stunden (629 Min durcharbeiten, 65 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -18,7 +18,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S1.7 Modellwahl und Effort](../library/s1-07-modellwahl-und-effort.md) — durcharbeiten
 - [S1.8 Das Kontextfenster verstehen](../library/s1-08-kontextfenster.md) — durcharbeiten
 
-## Etappe 2 (~143 Min)
+## Etappe 2 (~149 Min)
 
 - [S1.9 Kontext steuern mit /compact und /rewind](../library/s1-09-kontext-steuern.md) — durcharbeiten
 - [S1.10 CLAUDE.md: die Hausordnung des Projekts](../library/s1-10-claude-md.md) — durcharbeiten
@@ -32,10 +32,10 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — überfliegen
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — überfliegen
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — überfliegen
+
+## Etappe 3 (~147 Min)
+
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — überfliegen
-
-## Etappe 3 (~136 Min)
-
 - [S2.14 MCP: der Integrationsstecker](../library/s2-14-mcp-stecker.md) — durcharbeiten
 - [S2.15 MCP einrichten: Transporte, Scopes, CLI](../library/s2-15-mcp-einrichten.md) — durcharbeiten
 - [S2.16 MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](../library/s2-16-mcp-im-detail.md) — durcharbeiten

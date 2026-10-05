@@ -441,7 +441,7 @@
    "area": "skills",
    "id": "S2.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2010,
    "requires": [
@@ -462,7 +462,7 @@
    "area": "skills",
    "id": "S2.2",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2020,
    "requires": [
@@ -484,7 +484,7 @@
    "area": "skills",
    "id": "S2.3",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2030,
    "requires": [
@@ -507,7 +507,7 @@
    "area": "skills",
    "id": "S2.4",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2040,
    "requires": [
@@ -529,7 +529,7 @@
    "area": "skills",
    "id": "S2.5",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2050,
    "requires": [
@@ -552,7 +552,7 @@
    "area": "hooks",
    "id": "S2.6",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2060,
    "requires": [
@@ -573,7 +573,7 @@
    "area": "hooks",
    "id": "S2.7",
    "level": "core",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 2070,
    "requires": [
@@ -595,7 +595,7 @@
    "area": "hooks",
    "id": "S2.8",
    "level": "core",
-   "minutes": 15,
+   "minutes": 35,
    "offers": [],
    "order": 2080,
    "requires": [
@@ -618,7 +618,7 @@
    "area": "hooks",
    "id": "S2.9",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2090,
    "requires": [
@@ -642,7 +642,7 @@
    "area": "hooks",
    "id": "S2.10",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 35,
    "offers": [],
    "order": 2100,
    "requires": [

@@ -2,7 +2,7 @@
 
 <!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
 
-71 Kapitel in 19 Regalen, zusammen etwa 19,5 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
+71 Kapitel in 19 Regalen, zusammen etwa 21,5 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
 
 ## So findest du deinen Weg
 
@@ -154,11 +154,11 @@ Skills sind die Dienstanweisungen deines Agenten, Commands die Knöpfe dazu. Du 
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](s2-01-skills-und-commands.md) | Kern | 12 |  |
-| [S2.2 Eine SKILL.md schreiben](s2-02-skill-schreiben.md) | Kern | 18 |  |
-| [S2.3 Skills oder Commands, und wer sie auslösen darf](s2-03-wer-skills-ausloest.md) | Kern | 12 |  |
-| [S2.4 Mitgelieferte Skills](s2-04-mitgelieferte-skills.md) | Kern | 12 |  |
-| [S2.5 Lebendige Prompts: Argumente und dynamischer Inhalt](s2-05-lebendige-prompts.md) | Vertiefung | 15 |  |
+| [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](s2-01-skills-und-commands.md) | Kern | 25 |  |
+| [S2.2 Eine SKILL.md schreiben](s2-02-skill-schreiben.md) | Kern | 25 |  |
+| [S2.3 Skills oder Commands, und wer sie auslösen darf](s2-03-wer-skills-ausloest.md) | Kern | 25 |  |
+| [S2.4 Mitgelieferte Skills](s2-04-mitgelieferte-skills.md) | Kern | 25 |  |
+| [S2.5 Lebendige Prompts: Argumente und dynamischer Inhalt](s2-05-lebendige-prompts.md) | Vertiefung | 25 |  |
 
 <a id="hooks"></a>
 
@@ -170,11 +170,11 @@ Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S2.6 Hooks als Sensoren: die drei Eckpfeiler](s2-06-hooks-als-sensoren.md) | Kern | 15 |  |
-| [S2.7 Die wichtigsten Hook-Ereignisse](s2-07-hook-ereignisse.md) | Kern | 12 |  |
-| [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md) | Kern | 15 | 🛡 |
-| [S2.9 Hook-Typen und Hooks in Komponenten](s2-09-hook-typen.md) | Vertiefung | 15 |  |
-| [S2.10 Hook-Ausgaben und das Secure Diff Gate](s2-10-hook-ausgaben.md) | Vertiefung | 15 |  |
+| [S2.6 Hooks als Sensoren: die drei Eckpfeiler](s2-06-hooks-als-sensoren.md) | Kern | 20 |  |
+| [S2.7 Die wichtigsten Hook-Ereignisse](s2-07-hook-ereignisse.md) | Kern | 20 |  |
+| [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md) | Kern | 35 | 🛡 |
+| [S2.9 Hook-Typen und Hooks in Komponenten](s2-09-hook-typen.md) | Vertiefung | 20 |  |
+| [S2.10 Hook-Ausgaben und das Secure Diff Gate](s2-10-hook-ausgaben.md) | Vertiefung | 35 |  |
 
 <a id="plugins"></a>
 

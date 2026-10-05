@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 4 Etappen, zusammen etwa 9,5 Stunden (536 Min durcharbeiten, 33 Min überfliegen).
+**Umfang:** 5 Etappen, zusammen etwa 10,5 Stunden (594 Min durcharbeiten, 41 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -18,7 +18,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S1.7 Modellwahl und Effort](../library/s1-07-modellwahl-und-effort.md) — durcharbeiten
 - [S1.8 Das Kontextfenster verstehen](../library/s1-08-kontextfenster.md) — durcharbeiten
 
-## Etappe 2 (~144 Min)
+## Etappe 2 (~137 Min)
 
 - [S1.9 Kontext steuern mit /compact und /rewind](../library/s1-09-kontext-steuern.md) — durcharbeiten
 - [S1.10 CLAUDE.md: die Hausordnung des Projekts](../library/s1-10-claude-md.md) — durcharbeiten
@@ -30,15 +30,18 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) — überfliegen
 - [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](../library/s2-01-skills-und-commands.md) — überfliegen
 - [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — überfliegen
+
+## Etappe 3 (~148 Min)
+
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — durcharbeiten
-
-## Etappe 3 (~146 Min)
-
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — durcharbeiten
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — durcharbeiten
 - [S2.9 Hook-Typen und Hooks in Komponenten](../library/s2-09-hook-typen.md) — durcharbeiten
 - [S2.10 Hook-Ausgaben und das Secure Diff Gate](../library/s2-10-hook-ausgaben.md) — durcharbeiten
 - [S2.20 Praxis-Station Session 2: eine Übung wählen](../library/s2-20-praxis-station-2.md) — durcharbeiten
+
+## Etappe 4 (~137 Min)
+
 - [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
 - [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) — überfliegen
 - [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) — überfliegen
@@ -46,13 +49,13 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
 - [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) — durcharbeiten
 - [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) 🛡 — durcharbeiten
-
-## Etappe 4 (~129 Min)
-
 - [S4.1 Das richtige Modell pro Phase](../library/s4-01-modell-pro-phase.md) — durcharbeiten
 - [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) — durcharbeiten
 - [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) 🛡 — durcharbeiten
 - [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](../library/s4-05-ci-pipelines.md) — durcharbeiten
+
+## Etappe 5 (~63 Min)
+
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

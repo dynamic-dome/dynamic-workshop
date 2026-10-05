@@ -4,11 +4,11 @@ type: lesson
 title: Eine SKILL.md schreiben
 shelf: skills
 level: core
-minutes: 18
+minutes: 25
 requires: [S2.1]
 safety_floor: false
 transferable: false
-outcome: "Ich kann eine SKILL.md mit Frontmatter (name, description, when_to_use, arguments) und Markdown-Body unter ~/.claude/skills/ anlegen, sie mit /name aufrufen und so nachschärfen, dass Claude sie bei passenden Anfragen lädt."
+outcome: "Ich kann eine SKILL.md mit Frontmatter (name, description, when_to_use) und Markdown-Body in einem Projektordner anlegen, sie mit /name aufrufen, in der laufenden Sitzung nachschärfen und prüfen, ob Claude sie auch ohne Befehl lädt."
 sources:
   - https://code.claude.com/docs/en/skills
 aliases: []
@@ -17,19 +17,19 @@ aliases: []
 # S2.2 · Eine SKILL.md schreiben
 
 <!-- meta:start -->
-> **Regal:** [Skills & Commands](README.md#skills) · **Stufe:** Kern · **~18 Min** · **Voraussetzungen:** [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](s2-01-skills-und-commands.md)
+> **Regal:** [Skills & Commands](README.md#skills) · **Stufe:** Kern · **~25 Min** · **Voraussetzungen:** [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](s2-01-skills-und-commands.md)
 >
 > ← [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](s2-01-skills-und-commands.md) · [Bibliothek](README.md) · [S2.3 Skills oder Commands, und wer sie auslösen darf](s2-03-wer-skills-ausloest.md) →
 <!-- meta:end -->
 
 ## Schnellcheck
 
-- Kannst du ohne Nachschlagen eine SKILL.md schreiben, die Claude allein anhand ihrer `description` zum richtigen Zeitpunkt lädt?
-- Hast du schon einmal einen Skill angelegt, der in all deinen Projekten verfügbar ist, und einen, den dein Team über Git bekommt?
+- Kannst du ohne Nachschlagen sagen, welches Feld einer SKILL.md Claude zur Entscheidung nutzt, ob er den Skill von selbst lädt?
+- Kannst du sagen, wo ein Skill liegt, der nur in einem Projekt gilt, und wo einer, der in all deinen Projekten gilt?
 
 ## Auf einen Blick
 
-Eine SKILL.md hat zwei Teile: oben das YAML-Frontmatter zwischen zwei `---`-Zeilen, das steuert, wann und wie der Skill lädt, darunter den Markdown-Body mit den Anweisungen, denen Claude folgt. Das wichtigste Feld ist `description`: Claude entscheidet damit, wann der Skill passt. Ein persönlicher Skill liegt in `~/.claude/skills/<name>/SKILL.md` und gilt in all deinen Projekten, ein Projekt-Skill in `.claude/skills/<name>/SKILL.md` und kommt über Git zu deinem Team.
+Eine SKILL.md hat zwei Teile: oben das YAML-Frontmatter zwischen zwei `---`-Zeilen, das steuert, wann der Skill lädt, darunter den Markdown-Body mit den Anweisungen, denen Claude folgt. Das wichtigste Feld ist `description`: Claude entscheidet damit, wann der Skill passt. Ein Projekt-Skill liegt in `.claude/skills/<name>/SKILL.md` und kommt über Git zu deinem Team, ein persönlicher in `~/.claude/skills/<name>/SKILL.md` und gilt in all deinen Projekten.
 
 ## Bild im Kopf
 
@@ -37,7 +37,7 @@ Eine Dienstanweisung hat einen Kopf und einen Ablauf. Der Kopf sagt, wofür sie 
 
 ```mermaid
 flowchart LR
-  S["SKILL.md"] --> F["Frontmatter zwischen ---<br/>wann und wie der Skill lädt"]
+  S["SKILL.md"] --> F["Frontmatter zwischen ---<br/>wann der Skill lädt"]
   S --> B["Markdown-Body<br/>was Claude tut"]
   F --> D["description und when_to_use:<br/>Claude wählt den Skill aus"]
   B --> R["Phasen, Schritte, Regeln:<br/>Claude folgt ihnen"]
@@ -49,11 +49,11 @@ flowchart LR
 
 Ein Skill ist ein Ordner mit einer Datei `SKILL.md`. Drei Orte sind für dich wichtig:
 
-- `~/.claude/skills/<name>/SKILL.md`: persönlich, in **jedem Projekt** auf deinem Rechner verfügbar, nicht nur in einem Repo. Das ist dein eigener Werkzeugkasten.
-- `.claude/skills/<name>/SKILL.md`: im Projekt. Checkst du den Ordner ein, bekommt dein Team den Skill mit.
+- `.claude/skills/<name>/SKILL.md`: im Projekt. Checkst du den Ordner ein, bekommt dein Team den Skill mit. Die Übung unten arbeitet hier, in einem Wegwerf-Projekt.
+- `~/.claude/skills/<name>/SKILL.md`: persönlich, in **jedem Projekt** auf deinem Rechner verfügbar. Das ist dein eigener Werkzeugkasten für tägliche Abläufe.
 - `skills/<name>/SKILL.md` in einem Plugin: teilbar und versionierbar über einen Marketplace. Plugin-Skills rufst du als `/plugin-name:skill-name` auf ([S2.11](s2-11-plugins-buendeln.md)).
 
-Faustregel: Team-Konventionen als Projekt-Skill, eigene tägliche Abläufe als persönlicher Skill, „das könnten andere auch brauchen" als Plugin.
+Faustregel: Team-Konventionen als Projekt-Skill, eigene tägliche Abläufe als persönlicher Skill, „das könnten andere auch brauchen" als Plugin. Heißt derselbe Skill persönlich und im Projekt, gewinnt laut Doku der persönliche; eine Organisation kann außerdem Skills ausliefern, und die haben noch Vorrang.
 
 Ein persönlicher Werkzeugkasten sieht etwa so aus:
 
@@ -78,72 +78,27 @@ Danach kannst du ihn in jeder Claude-Code-Sitzung mit `/my-workflow` aufrufen. O
 
 ### Teil 1: das Frontmatter
 
-Das Frontmatter ist der YAML-Kopf ganz oben in der Datei, zwischen zwei `---`-Zeilen:
+Das Frontmatter ist der YAML-Kopf ganz oben in der Datei, zwischen zwei `---`-Zeilen, und die erste Zeile der Datei muss die öffnende `---` sein. Drei Felder reichen für den Anfang:
 
 ```yaml
 ---
 name: tdd
 description: >
-  Test-Driven Development workflow. Use when user wants to write tests first,
-  implement after, or says "write tests before code", "TDD", "red-green-refactor".
+  Test-Driven Development workflow. Use when the user wants to write tests first,
+  implement after, or says "write tests before code".
 when_to_use: >
   TDD, test first, write tests, red-green-refactor, failing test,
   or any request where implementation should wait for a failing test.
-argument-hint: "[target]"
-arguments: [target]
-model: sonnet
-effort: high
-paths: ["src/**", "tests/**"]
 ---
 ```
 
-Die Grundfelder:
-
 - `name`: der Name des Skills und damit der Befehl, den du tippst. Ohne `name` gilt der Ordnername.
-- `description`: was der Skill tut und wann er passt. **Claude entscheidet anhand dieses Felds, wann der Skill geladen wird.** Stell den wichtigsten Einsatzfall an den Anfang.
-- `when_to_use`: zusätzliche Hinweise, wann der Skill passt, etwa Trigger-Phrasen oder Beispielanfragen. Lange Trigger-Listen gehören besser hierher als in eine überladene `description`. In der Skill-Liste hängt Claude Code `when_to_use` an die `description` an.
-- `argument-hint` und `arguments`: der Hinweis, den du beim Tippen siehst, und die benannten Argumente ([S2.5](s2-05-lebendige-prompts.md)).
-- `model`, `effort`, `paths`: Steuerung von Ausführung und Geltungsbereich (Tabelle unten).
+- `description`: was der Skill tut und wann er passt. **Claude entscheidet anhand dieses Felds, wann der Skill geladen wird.** Stell den wichtigsten Einsatzfall an den Anfang: `description` und `when_to_use` zusammen werden in der Skill-Liste nach 1.536 Zeichen abgeschnitten.
+- `when_to_use`: zusätzliche Hinweise, wann der Skill passt, etwa Trigger-Phrasen oder Beispielanfragen. Claude Code hängt sie in der Skill-Liste an die `description` an. Eine lange Trigger-Liste gehört hierher und nicht in eine überladene `description`.
 
 Alle Felder sind optional, empfohlen ist nur `description`. Schreib die Feldnamen genau so wie in der Referenz, mit Bindestrichen; einzige Ausnahme ist `when_to_use`. Ein Feld, das Claude Code nicht kennt, ignoriert es still, ohne Fehlermeldung.
 
-Über `name` und `description` hinaus gibt es weitere Felder, die tatsächlich beeinflussen, wie Claude Code den Skill lädt, eingrenzt und ausführt:
-
-```yaml
----
-name: tdd
-description: Test-Driven Development workflow. Use when writing tests before code.
-when_to_use: >
-  Triggers on TDD, test-first, red-green-refactor, "write tests before code"
-argument-hint: "[guide|learn] [module]"
-arguments: [mode, module]
-model: sonnet
-effort: high
-paths: ["src/**/*.ts", "tests/**/*.ts"]
-shell: powershell
-hooks:
-  PreToolUse:
-    - matcher: "Bash"
-      hooks:
-        - type: command
-          command: "./pre-test-check.sh"
----
-```
-
-| Feld | Was es tut |
-|------|------------|
-| `argument-hint` | Hinweis, der beim Tippen des Befehls erscheint, z. B. `/tdd [target]` |
-| `arguments` | Liste benannter Argumente nach Position; im Body als `$mode`, `$module` … ([S2.5](s2-05-lebendige-prompts.md)) |
-| `when_to_use` | zusätzliche Aktivierungshinweise, die Claude zusammen mit der `description` liest |
-| `model` | welches Modell den Skill ausführt, z. B. `haiku`, `sonnet`, `opus`. Ohne `context: fork` gilt es für den Rest des aktuellen Turns, mit `context: fork` für den abgezweigten Subagenten. Für einfache Skills spart `haiku` Kosten ([S1.7](s1-07-modellwahl-und-effort.md)) |
-| `effort` | `low` / `medium` / `high` / `xhigh` / `max`: Effort, solange der Skill aktiv ist; überschreibt den Wert der Sitzung. Welche Stufen es gibt, hängt vom Modell ab |
-| `paths` | Glob-Muster. Der Skill lädt nur dann automatisch, wenn Claude mit passenden Dateien arbeitet |
-| `shell` | `bash` (Standard) oder `powershell`: welche Shell die eingebetteten Befehle eines Skills ausführt ([S2.5](s2-05-lebendige-prompts.md)). Unter Windows wichtig |
-| `hooks` | Hooks, die mit dem Skill kommen. Sie werden beim Aufruf registriert und bleiben bis zum Ende der Sitzung aktiv ([S2.9](s2-09-hook-typen.md)) |
-| `context` | `fork` lässt den Skill in einem eigenen Subagenten-Kontext laufen, mit eigenem System-Prompt und eigenen Tools. Dieser Subagent sieht deinen bisherigen Gesprächsverlauf nicht |
-| `agent` | mit `context: fork`: welcher Subagent-**Typ** den Skill ausführt (`Explore`, `Plan`, `general-purpose` oder ein eigener Agent). Ein Typ, kein Modell ([S3.2](s3-02-eingebaute-subagenten.md)) |
-
-Die Felder, die regeln, wer einen Skill auslösen darf (`disable-model-invocation`, `user-invocable`, `allowed-tools`), erklärt [S2.3](s2-03-wer-skills-ausloest.md).
+Weitere Felder lernst du dort, wo sie gebraucht werden: `disable-model-invocation`, `user-invocable` und `allowed-tools` in [S2.3](s2-03-wer-skills-ausloest.md), `argument-hint`, `arguments` und `shell` in [S2.5](s2-05-lebendige-prompts.md), `hooks` in [S2.9](s2-09-hook-typen.md), `context` und `agent` in [S3.2](s3-02-eingebaute-subagenten.md). Dazu kommen `model` und `effort` ([S1.7](s1-07-modellwahl-und-effort.md)) und `paths`: ein Glob-Muster, bei dem der Skill nur automatisch lädt, wenn Claude mit passenden Dateien arbeitet.
 
 ### Teil 2: der Body
 
@@ -178,158 +133,151 @@ You are following strict Test-Driven Development. Follow these steps exactly:
 
 Phasen mit nummerierten Schritten und eine Liste harter Regeln: So sieht eine brauchbare Dienstanweisung aus. Halte den Body knapp. Einmal geladen, bleibt sein Inhalt über die folgenden Runden im Kontext, jede Zeile kostet also immer wieder Tokens.
 
+### Änderungen wirken sofort
+
+Eine bestehende SKILL.md bearbeitest du bei laufender Sitzung: Claude Code beobachtet die Skill-Ordner und übernimmt die Änderung, ohne Neustart. Das gilt für Ordner, die schon beim Start existierten. Legst du `.claude/skills/` erst während der Sitzung an, führ `/reload-skills` aus. Mehr dazu in [S2.5](s2-05-lebendige-prompts.md#änderungen-wirken-sofort).
+
 ## Selbst machen
 
-### Übung: deinen ersten Skill bauen
+### Übung: einen Skill bauen und nachschärfen (etwa 15 Minuten)
 
-**Ziel:** Einen Ablauf, den du ohnehin immer wieder von Hand anstößt, in einen wiederverwendbaren Skill verwandeln. Danach musst du dieselben Anweisungen nicht mehr zweimal tippen.
+**Ziel:** Du schreibst einen Skill mit Frontmatter und Body, rufst ihn mit `/commit-check` auf, schärfst ihn nach, bis seine Ausgabe etwas enthält, das der erste Entwurf nicht hatte, und prüfst, ob Claude ihn auch ohne Befehl lädt.
 
-**Hintergrund:** Denk an eine Aufgabe, die du in deinen Projekten immer wieder erledigst:
+**Startzustand:** Git und Python ([S0.1](s0-01-werkstatt-einrichten.md)). Alles passiert im Wegwerf-Ordner `~/cc-workshop/skill-schreiben`; deine globale Konfiguration bleibt unberührt.
 
-- Code-Review mit einer bestimmten Checkliste
-- einen neuen Feature-Branch mit festen Schritten anlegen
-- Fehlersuche in immer derselben Reihenfolge
-- Commit-Nachrichten im Format deines Teams
-- Dokumentation aus Code erzeugen
+1. Leg den Ordner an, wechsle hinein und initialisiere Git:
 
-Du schreibst jetzt die Dienstanweisung für diese Aufgabe, als SKILL.md.
+   ```bash
+   mkdir -p ~/cc-workshop/skill-schreiben/.claude/skills/commit-check
+   cd ~/cc-workshop/skill-schreiben
+   git init
+   ```
 
-**Schritt 1: die wiederkehrende Aufgabe festlegen**
+   In PowerShell:
 
-Nimm etwas Bestimmtes; je konkreter, desto besser. Beispiel: „Vor jedem Commit prüfe ich, dass die Tests grün sind, keine Debug-Logs übrig sind und die Commit-Nachricht unserem Format folgt."
+   ```powershell
+   New-Item -ItemType Directory -Force "$HOME\cc-workshop\skill-schreiben\.claude\skills\commit-check"
+   Set-Location "$HOME\cc-workshop\skill-schreiben"
+   git init
+   ```
 
-Schreib es zuerst in Alltagssprache auf. Welche Schritte machst du immer? Welche Regeln wendest du immer an?
+2. Leg mit einem Editor `app.py` an und nimm sie mit `git add app.py` in den Index auf (ohne Commit):
 
-**Schritt 2: den Skill-Ordner anlegen**
+   ```python
+   def total(prices):
+       print("debug", prices)
+       # TODO fix rounding later
+       return round(sum(prices), 2)
+   ```
 
-```bash
-# Create a directory for your skill under user skills
-mkdir -p ~/.claude/skills/my-first-skill
+3. Leg `.claude/skills/commit-check/SKILL.md` an. Den Ordner `.claude` schreibst du selbst; Claude würde dort nachfragen, weil er ein geschützter Pfad ist.
 
-# Verify it exists
-ls ~/.claude/skills/
-```
+   <!-- cockpit:example -->
+   ```markdown
+   ---
+   name: commit-check
+   description: Checks the staged changes before a commit. Use before committing or when the user asks for a pre-commit check.
+   when_to_use: pre-commit check, check my staged changes, am I ready to commit
+   ---
 
-Gib ihm einen sprechenden Namen, klein geschrieben, mit Bindestrichen: `pre-commit-check`, `feature-setup`, `debug-workflow` und so weiter.
+   # Commit check
 
-> **Windows:** In Git Bash laufen die Befehle wie gezeigt. In PowerShell nimmst du `New-Item -ItemType Directory -Force` statt `mkdir -p`.
+   1. Run `git diff --staged` and read the changes.
+   2. Report findings under these headings:
+      - Debug output: any leftover `print(` or `console.log(`
+      - Open TODOs: any `TODO` comment without a ticket number like `TODO-123`
+   3. Start your answer with the line `PRE-COMMIT CHECK:`.
 
-**Schritt 3: die SKILL.md schreiben**
+   ## Rules
+   - Do not change any file.
+   - Name file and line for every finding.
+   ```
 
-Leg `~/.claude/skills/my-first-skill/SKILL.md` an:
+4. Starte `claude --permission-mode default` im Ordner und bestätige den Vertrauensdialog mit „Yes, I trust this folder" ([S1.1](s1-01-erster-kontakt.md)). Gib `/skills` ein. Erwartet: `commit-check` steht in der Liste. Schließ die Ansicht mit `Esc` und drück weder Leertaste noch Enter: Beide Tasten ändern dort die Sichtbarkeit eines Skills.
+5. Gib `/commit-check` ein. Erwartet: Die Antwort beginnt mit `PRE-COMMIT CHECK:` und nennt zwei Funde in `app.py`, die Zeile mit `print("debug", prices)` und das `TODO` ohne Ticketnummer. Claude liest den Diff mit einem Lesebefehl; eine Rückfrage kommt nicht.
+6. Schärf nach: Der erste Entwurf verlangt kein Urteil. Öffne die SKILL.md im Editor, ergänz diese Zeile als vierten Schritt und speichere:
 
-```bash
-# Open in your editor, or create via Claude Code:
-# "Create a SKILL.md file in ~/.claude/skills/my-first-skill/ for a pre-commit checklist skill"
-```
+   ```markdown
+   4. End with a last line `VERDICT: BLOCK` if you found anything, otherwise `VERDICT: OK`.
+   ```
 
-Deine SKILL.md braucht:
+   Bleib in derselben Sitzung, warte nach dem Speichern ein paar Sekunden (Claude Code braucht einen Moment, bis es die geänderte Datei bemerkt) und gib `/commit-check` noch einmal ein. Erwartet: Die Antwort endet jetzt mit `VERDICT: BLOCK`, ohne Neustart. Diese Zeile konnte der erste Entwurf nicht liefern.
+7. Gib ohne Befehl ein: `Check my staged changes before I commit.` Drück danach `Ctrl+O`. Erwartet: Claude lädt den Skill selbst, im Transkript steht ein Aufruf des Werkzeugs `Skill`, und die Antwort beginnt mit `PRE-COMMIT CHECK:`. Lädt Claude ihn nicht, schreib den Satz, den du getippt hast, in `when_to_use` und versuch es erneut. Die automatische Wahl hängt an Claudes Urteil über die Beschreibung, nicht an einer festen Regel.
 
-<!-- cockpit:example -->
-```markdown
----
-name: my-first-skill
-description: >
-  [One sentence explaining what this skill does].
-when_to_use: >
-  [List 3-5 trigger situations or phrases that should activate this skill].
-argument-hint: "[target]"
-arguments: [target]
----
-
-# [Skill Name]
-
-[Detailed instructions for Claude to follow]
-
-## Step 1: [First thing Claude should do]
-[Details]
-
-## Step 2: [Second thing]
-[Details]
-
-## Rules
-- [Non-negotiable rules Claude must follow]
-- [Add as many as needed]
-```
-
-**Schritt 4: den Skill aufrufen und testen**
-
-Öffne Claude Code oder starte es neu. Dann löst du deinen Skill aus.
-
-Variante A, direkt aufrufen:
-
-```
-/my-first-skill
-```
-
-Variante B, über eine Trigger-Phrase (Claude vergleicht deine Anfrage mit `description` und `when_to_use`):
-
-```
-[use one of the trigger phrases you wrote in the description]
-```
-
-Variante C, ausdrücklich nennen:
-
-```
-Use the my-first-skill skill to [describe your task]
-```
-
-**Schritt 5: nachschärfen**
-
-Beobachte, wie Claude arbeitet. Folgt Claude allen Schritten? Lässt Claude etwas aus? Ist ein Schritt zu vage?
-
-Bearbeite die SKILL.md, um das zu beheben, und teste wieder. Wiederhole das, bis Claude der Dienstanweisung genau so folgt, wie du es willst. Änderungen an einer bestehenden SKILL.md übernimmt Claude Code in der laufenden Sitzung ([S2.5](s2-05-lebendige-prompts.md#änderungen-wirken-sofort)).
+**Aufräumen:** Beende die Sitzung mit `/exit` und lösch den Ordner `~/cc-workshop/skill-schreiben` selbst.
 
 **Geschafft, wenn:**
 
-- [ ] `ls ~/.claude/skills/` deinen neuen Skill-Ordner zeigt
-- [ ] die SKILL.md gültiges YAML-Frontmatter mit `name`, `description` und `when_to_use` hat
-- [ ] Claude den Anweisungen deines Skills folgt, ohne dass du sie wiederholst
-- [ ] du den Skill mindestens einmal verbessert hast
-- [ ] der Skill in einer neuen Claude-Code-Sitzung genauso funktioniert (neu starten und ausprobieren)
+- [ ] `/skills` den Skill `commit-check` zeigte
+- [ ] die Antwort auf `/commit-check` mit `PRE-COMMIT CHECK:` begann und beide Funde nannte
+- [ ] die Antwort nach deiner Änderung ohne Neustart mit `VERDICT: BLOCK` endete
+- [ ] Claude den Skill ohne Befehl geladen hat, oder du `when_to_use` so geschärft hast, dass er es tat
 
-**Tipps**
+### Extra: der Panel-Migrations-Diff (etwa 25 Minuten)
 
-- **Claude greift den Skill nicht von selbst auf:** Prüf, ob deine Trigger-Phrasen in `description` und `when_to_use` zu dem passen, was du tippst. `description: >` ist ein YAML-Block-Skalar; achte darauf, dass die Folgezeilen richtig eingerückt sind.
-- **Der Skill ist zu vage:** Schreib konkrete Prüfpunkte. Statt „prüfe den Code" etwa: „prüfe auf (1) fehlende Fehlerbehandlung, (2) übrig gebliebene `console.log`-Aufrufe, (3) Variablennamen mit weniger als 3 Zeichen".
-- **Dir fällt keine Aufgabe ein:** Nimm diese: „Prüfe vor jedem git commit, dass (1) alle Tests grün sind, (2) keine TODO-Kommentare ohne Ticketnummer dazugekommen sind, (3) die gestagten Dateien zu dem passen, was ich ändern wollte, (4) die Commit-Nachricht dem Format Conventional Commits folgt."
-- **Ideen finden:** Schau in deinen bisherigen Verlauf mit Claude Code. Welche Anweisungen wiederholst du? Das sind Kandidaten für Skills.
+**Ziel:** Einen Skill schreiben, der eine wiederkehrende, fehleranfällige Umwandlung von Konfigurationen festhält: eine echte Dienstanweisung, keine bloße Checkliste. Das Beispiel stammt aus der Zutrittstechnik. Nimm es, wie es ist, oder ersetz Format und Regeln durch etwas aus deiner eigenen Arbeit.
 
-### Extra: der Panel-Migrations-Diff (etwa 25 Minuten, mittel)
+**Startzustand:** ein Ordner `~/cc-workshop/panel` mit drei Dateien (Git brauchst du hier nicht). `panel_new.json` zeigt das Zielformat, `panel_old.json` ist die erste Eingabe, `panel_old_2.json` eine zweite, leicht andere:
 
-**Ziel:** Einen Skill schreiben, der eine wiederkehrende, fehleranfällige Umwandlung von Konfigurationen festhält (Format Panel-A → Panel-B): eine echte Dienstanweisung, keine bloße Checkliste.
+```json
+{"doors": [{"id": "DOOR-01", "profile_seconds": 900}, {"id": "DOOR-02", "profile_seconds": 5400}]}
+```
 
-**Analogie:** eine Dienstanweisung für den Controller-Tausch, die jede Technikerin und jeder Techniker gleich anwendet.
+```json
+{"doors": [{"id": "D7", "profile_minutes": 0.5}, {"id": "D12"}]}
+```
 
-1. Leg zwei Mini-Konfigurationen an: `panel_old.json` (Tür-IDs `D01`, Zeitprofile in **Minuten**) und als Ziel `panel_new.json` (Tür-IDs `DOOR-01`, Zeitprofile in **Sekunden**).
-2. Frag zuerst von Hand: `Convert panel_old.json to the new format.` Achte darauf, welche Regel Claude falsch umsetzt: Minuten in Sekunden? Das Auffüllen der ID?
-3. Mach die Regeln ausdrücklich und speichere sie als `~/.claude/skills/panel-migrate/SKILL.md`, die Umwandlungsregeln als Schritte, von denen nicht abgewichen wird.
-4. Teste den Skill an einer **zweiten**, leicht anderen `panel_old_2.json`. Hält er die Regeln ein?
-5. Bonus: Nimm einen Sonderfall dazu (fehlendes Zeitprofil) und prüfe, ob der Skill ihn *meldet*, statt still falsch umzuwandeln. Erkenntnis: Was dich bei 200 Türen teuer zu stehen kommt, ist jetzt eine feste Dienstanweisung.
+```json
+{"doors": [{"id": "D3", "profile_minutes": 2}, {"id": "D40"}]}
+```
+
+1. Starte Claude Code im Ordner und frag zuerst von Hand: `Convert panel_old.json to the format of panel_new.json.` Notier, welche Regel Claude falsch oder gar nicht umsetzt: das Auffüllen von `D7` zu `DOOR-07`, Minuten in Sekunden, die Tür ohne Profil.
+2. Mach die Regeln ausdrücklich und speichere sie als `.claude/skills/panel-migrate/SKILL.md`: ID `D<Zahl>` wird `DOOR-<zweistellig>`, `profile_minutes` mal 60 wird `profile_seconds`, eine Tür ohne Profil wird gemeldet statt still umgewandelt. Leg den Ordner an, bevor du die nächste Sitzung startest.
+3. Starte neu und ruf `/panel-migrate panel_old_2.json` auf. Der Text hinter dem Befehl ist das Argument; Claude sieht ihn am Ende des Skills ([S2.5](s2-05-lebendige-prompts.md)). Erwartet: `DOOR-03` mit `120` Sekunden und eine Meldung zu `D40`.
+
+<details><summary>Vergleich</summary>
+
+Ohne ausdrückliche Regeln rät Claude: Typische Fehler sind `DOOR-7` statt `DOOR-07` und eine stillschweigend ausgelassene oder mit `0` gefüllte Tür ohne Profil. Mit dem Skill sind die Regeln festgehalten; ob Claude sie bei einer neuen Eingabe einhält, siehst du an `DOOR-03` und an der Meldung zu `D40`.
+
+</details>
+
+**Geschafft, wenn:**
+
+- [ ] der Skill `panel_old_2.json` mit `DOOR-03` und `120` Sekunden umgewandelt hat
+- [ ] `D40` gemeldet statt still umgewandelt wurde
 
 ## Typische Fallen
 
-- **Der Skill wird nicht geladen.** Prüf der Reihe nach: Steht er in `/skills`? Hat er `disable-model-invocation: true` (dann nur per `/name`, [S2.3](s2-03-wer-skills-ausloest.md))? Beschränkt ein `paths`-Filter ihn auf bestimmte Dateien? Ist die `description` zu allgemein? Dann ergänz Trigger-Phrasen. Systematische Fehlersuche: [S4.9](s4-09-fehlersuche-werkzeuge.md).
+- **Der Skill wird nicht geladen.** Prüf der Reihe nach: Steht er in `/skills`? Hat er `disable-model-invocation: true` (dann nur per `/name`, [S2.3](s2-03-wer-skills-ausloest.md))? Ist die `description` zu allgemein? Dann ergänz Trigger-Phrasen in `when_to_use`. Systematische Fehlersuche: [S4.9](s4-09-fehlersuche-werkzeuge.md).
 - **Ein Feld wirkt nicht.** Claude Code ignoriert unbekannte Feldnamen ohne Meldung. `user_invocable` mit Unterstrich ist nicht `user-invocable`.
-- **Neuer Skill-Ordner, aber kein Skill.** Hast du `~/.claude/skills/` erst während der laufenden Sitzung angelegt, beobachtet Claude Code diesen Ordner noch nicht. Führ `/reload-skills` aus oder starte neu.
+- **Neuer Skill-Ordner, aber kein Skill.** Hast du `.claude/skills/` erst während der laufenden Sitzung angelegt, beobachtet Claude Code diesen Ordner noch nicht. Führ `/reload-skills` aus oder starte neu.
 - **Die Beschreibung ist zu lang.** In der Skill-Liste werden `description` und `when_to_use` zusammen nach 1.536 Zeichen abgeschnitten. Das Wichtigste gehört an den Anfang.
+- **Die erste Zeile ist nicht `---`.** Dann liest Claude Code die ganze Datei als Skill-Inhalt, und das Frontmatter greift nicht.
 
 ## Check
 
-Du kannst eine SKILL.md mit gültigem Frontmatter und klarem Body anlegen, die Claude bei passenden Anfragen lädt, und erklären, wofür `description` und `when_to_use` jeweils da sind.
+Du kannst eine SKILL.md mit gültigem Frontmatter und klarem Body in einem Projekt anlegen, sie nachschärfen und erklären, wofür `description` und `when_to_use` jeweils da sind.
 
 1. Welche zwei Teile hat eine SKILL.md, und was steuert jeder davon?
 2. Wo liegt ein persönlicher Skill, wo ein Projekt-Skill?
 3. Warum gehört der wichtigste Einsatzfall an den Anfang der `description`?
 
+<details><summary>Auflösung</summary>
+
+1. Das Frontmatter zwischen den `---`-Zeilen steuert, wann der Skill lädt; der Markdown-Body enthält die Anweisungen, denen Claude folgt.
+2. Ein persönlicher Skill liegt in `~/.claude/skills/<name>/SKILL.md` und gilt in allen Projekten, ein Projekt-Skill in `.claude/skills/<name>/SKILL.md` und kommt über Git zum Team.
+3. `description` und `when_to_use` werden in der Skill-Liste zusammen nach 1.536 Zeichen abgeschnitten, und Claude entscheidet anhand dieses Texts, ob der Skill passt. Was hinten steht, kann wegfallen.
+
+</details>
+
 <details><summary>Quizfrage</summary>
 
-**Frage:** Welche Rolle spielt das Feld `description` in einer SKILL.md?
+**Frage:** `/commit-check` funktioniert, aber Claude lädt den Skill bei „Check my staged changes" nie von selbst. Wo suchst du zuerst?
 
-- **Richtig:** Claude entscheidet damit, wann der Skill passt; `when_to_use` wird in der Skill-Liste nur angehängt.
-- Falsch: Es ist nur für Menschen gedacht; ob der Skill lädt, entscheidet Claude allein anhand von `when_to_use`.
-- Falsch: Es ist Pflicht; fehlt es, lädt Claude Code den Skill gar nicht und meldet beim Start einen Fehler.
-- Falsch: Es legt den Befehl fest; `/name` entsteht aus dem ersten Wort der `description`, nicht aus dem Ordner.
+- **Richtig:** In `description` und `when_to_use`: Claude vergleicht deine Anfrage mit diesem Text, `/name` funktioniert davon unabhängig.
+- Falsch: Im Body: Claude liest ihn schon vor dem Aufruf in jeder Sitzung und entscheidet anhand der ersten Zeile, ob der Skill zur Anfrage passt.
+- Falsch: Im Feld `name`: Claude lädt nur Skills, deren Name wörtlich in deiner Anfrage vorkommt, und `commit-check` fehlt in ihr.
+- Falsch: In `.claude/settings.json`: Dort muss jeder Skill zuerst freigeschaltet werden, bevor Claude ihn selbst laden darf.
 
 </details>
 

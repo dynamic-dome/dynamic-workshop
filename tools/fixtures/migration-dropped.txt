@@ -112,3 +112,29 @@ d70c4c129edb8794 resources/exercises/block-1-exercises.md:476 P7a/S1.16: ersetzt
 83ad53ab6dda3440 resources/exercises/block-1-exercises.md:501 P7a/S1.18: ersetzt. Der Worktree von Hand ist jetzt das Extra des Kapitels (`git worktree add -b experiment ../worktree-experiment`).
 c04218da56aa0650 resources/exercises/block-1-exercises.md:509 P7a/S1.18: ersetzt, wie block-1-exercises.md:501.
 41cc3286810a8aef resources/exercises/block-1-exercises.md:597 P7a/S1.19: entfernt. Die Shell-Aliase mit festem Modell und Budget änderten die Shell-Konfiguration der Lernenden; die Übung nutzt Start-Flags, die nur für eine Sitzung gelten.
+65119dbfca19ac81 resources/modules/block-2-ecosystem.md:76 P7b/S2.2: ersetzt. Das tdd-Frontmatter ist auf die drei Felder gekürzt, die das Kapitel erklärt (name, description, when_to_use).
+c0378963190bdd8d resources/modules/block-2-ecosystem.md:104 P7b/S2.2: ersetzt. Das Frontmatter mit zehn Feldern entfällt; jedes Feld steht in dem Kapitel, das es erklärt (S2.3, S2.5, S2.9, S3.2, S1.7).
+fe3213430aa5c186 resources/modules/block-2-ecosystem.md:156 P7b/S2.5: ersetzt. Das Beispiel beschriftete `$1` als erstes Argument; die Zählung beginnt bei `$0` (skills.md).
+fa90894b81602292 resources/modules/block-2-ecosystem.md:181 P7b/S2.5: ersetzt. Die Zeile `pytest ... | tail` lief nur in Bash und bricht im Modus default den ganzen Skill ab (skills.md: "aborts the invocation").
+7a345644e59d6675 resources/modules/block-2-ecosystem.md:242 P7b/S2.3: ersetzt. Das Command-Frontmatter nutzte Feldnamen, die es nicht gibt (`user_invocable`); neue, korrekte Fassung im Kapitel.
+bd62b7918ec62bc6 resources/modules/block-2-ecosystem.md:382 P7b/S2.4: entfernt. Der Platzhalter `/<your-new-skill-name>` gehörte zu einem Abschnitt ohne Beleg ("dreimal pro Woche"); S2.2 zeigt, wie ein eigener Skill entsteht.
+ad9cd60dc5ebaed6 resources/modules/block-2-ecosystem.md:668 P7b/S2.9: ersetzt. Der Skill-Hook mit `once: true` ist jetzt mit `if` auf den Deploy-Befehl eingegrenzt (hooks.md: once "Only honored for hooks declared in skill frontmatter").
+68e56d9a6187797c resources/modules/block-2-ecosystem.md:775 P7b/S2.10: entfernt. Das Snippet mit `$CLAUDE_EFFORT` rief Skripte auf, die es nicht gibt.
+8bcbeed74d51ba52 resources/exercises/block-2-exercises.md:40 P7b/S2.2: ersetzt. Der Schritt schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts.
+618743364c160463 resources/exercises/block-2-exercises.md:54 P7b/S2.2: ersetzt. Der Schritt schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts.
+11dfb788d18b63e8 resources/exercises/block-2-exercises.md:61 P7b/S2.2: ersetzt. Die Vorlage mit Platzhaltern ließ sich nicht prüfen; die neue Übung gibt einen festen Skill (commit-check) mit prüfbarer Ausgabe vor.
+47fc95192f5fe98a resources/exercises/block-2-exercises.md:92 P7b/S2.2: ersetzt, Test-Prompt mit Platzhalter; siehe 11dfb788d18b63e8.
+04d2a1a22b98aed0 resources/exercises/block-2-exercises.md:97 P7b/S2.2: ersetzt, Test-Prompt mit Platzhalter; siehe 11dfb788d18b63e8.
+bc48bf2406673866 resources/exercises/block-2-exercises.md:102 P7b/S2.2: ersetzt, Test-Prompt mit Platzhalter; siehe 11dfb788d18b63e8.
+609c9331e57bd822 resources/exercises/block-2-exercises.md:155 P7b/S2.8: entfernt. Die Sicherung der globalen settings.json ist nicht mehr nötig: Die Übung trägt den Hook in die settings.json eines Wegwerf-Ordners ein.
+0ee510aa8d4badd5 resources/exercises/block-2-exercises.md:172 P7b/S2.8: ersetzt. Der Schritt schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts.
+3331324e1af92bd0 resources/exercises/block-2-exercises.md:226 P7b/S2.8: entfernt. `chmod +x` ist nicht nötig, weil der Hook das Skript mit `bash <pfad>` aufruft.
+f2b7b8763ab2327f resources/exercises/block-2-exercises.md:333 P7b/S2.8: ersetzt. Der Auftrag löscht jetzt einen Ordner `build` im Übungsordner statt `/tmp/test-directory`.
+ccb599572a84b62c resources/exercises/block-2-exercises.md:340 P7b/S2.8: ersetzt. Der Handtest zeigt jetzt drei Fälle im Projektordner (blocken, durchlassen, unlesbare Eingabe).
+51cb210e61e85233 resources/exercises/block-2-exercises.md:346 P7b/S2.8: ersetzt durch `Run the shell command echo hello.` als Zeile im Schritt.
+49f668cc37034633 resources/exercises/block-2-exercises.md:358 P7b/S2.8: entfernt (Bonus Audit-Log). Er versprach, jeden Befehl mitzuschreiben; PostToolUse feuert aber nur nach Erfolg (hooks.md). S2.6 schreibt stattdessen ein Log im Projekt und zeigt genau diese Lücke.
+4e218f98f95430f4 resources/exercises/block-2-exercises.md:369 P7b/S2.8: entfernt, Bonus Audit-Log; siehe 49f668cc37034633.
+3887d822b7998562 resources/exercises/block-2-exercises.md:375 P7b/S2.8: entfernt, Bonus Audit-Log; siehe 49f668cc37034633.
+3d87789e3b880dd4 resources/exercises/block-2-exercises.md:421 P7b/S2.8: entfernt, Bonus Audit-Log; siehe 49f668cc37034633.
+6549ef9919b30f86 resources/exercises/block-2-exercises.md:444 P7b/S2.8: entfernt. Die Prüfung mit json.tool galt der globalen settings.json.
+3d65ff9a0781b790 resources/exercises/block-2-exercises.md:998 P7b/S2.10: ersetzt. Die Registrierung der Token Firewall schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts; das Extra testet das Skript jetzt von Hand.

@@ -269,7 +269,7 @@
   title: Skills sind Dienstanweisungen, Commands sind Knöpfe
   shelf: skills
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S1.10
   safety_floor: false
@@ -282,7 +282,7 @@
   title: Eine SKILL.md schreiben
   shelf: skills
   level: core
-  minutes: 18
+  minutes: 25
   requires:
   - S2.1
   safety_floor: false
@@ -294,7 +294,7 @@
   title: Skills oder Commands, und wer sie auslösen darf
   shelf: skills
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S2.2
   safety_floor: false
@@ -306,7 +306,7 @@
   title: Mitgelieferte Skills
   shelf: skills
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S2.1
   safety_floor: false
@@ -318,7 +318,7 @@
   title: 'Lebendige Prompts: Argumente und dynamischer Inhalt'
   shelf: skills
   level: deep-dive
-  minutes: 15
+  minutes: 25
   requires:
   - S2.2
   safety_floor: false
@@ -330,7 +330,7 @@
   title: 'Hooks als Sensoren: die drei Eckpfeiler'
   shelf: hooks
   level: core
-  minutes: 15
+  minutes: 20
   requires:
   - S1.5
   safety_floor: false
@@ -343,7 +343,7 @@
   title: Die wichtigsten Hook-Ereignisse
   shelf: hooks
   level: core
-  minutes: 12
+  minutes: 20
   requires:
   - S2.6
   safety_floor: false
@@ -355,7 +355,7 @@
   title: Einen Hook einrichten, der wirklich blockt
   shelf: hooks
   level: core
-  minutes: 15
+  minutes: 35
   requires:
   - S2.7
   safety_floor: true
@@ -367,7 +367,7 @@
   title: Hook-Typen und Hooks in Komponenten
   shelf: hooks
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S2.8
   safety_floor: false
@@ -379,7 +379,7 @@
   title: Hook-Ausgaben und das Secure Diff Gate
   shelf: hooks
   level: deep-dive
-  minutes: 15
+  minutes: 35
   requires:
   - S2.8
   safety_floor: false
