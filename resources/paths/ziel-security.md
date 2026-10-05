@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 5 Etappen, zusammen etwa 11,5 Stunden (644 Min durcharbeiten, 59 Min überfliegen).
+**Umfang:** 5 Etappen, zusammen etwa 12 Stunden (674 Min durcharbeiten, 59 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -61,7 +61,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
 - [S3.10 Netzwerk und Skills härten](../library/s3-10-netzwerk-und-skills-haerten.md) — durcharbeiten
 
-## Etappe 5 (~113 Min)
+## Etappe 5 (~143 Min)
 
 - [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](../library/s3-11-datenschutz-und-compliance.md) — durcharbeiten
 - [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) — überfliegen
@@ -73,3 +73,4 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) — überfliegen
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
+- [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

@@ -2,7 +2,7 @@
 
 <!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
 
-70 Kapitel in 19 Regalen, zusammen etwa 18 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
+71 Kapitel in 19 Regalen, zusammen etwa 19 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
 
 ## So findest du deinen Weg
 
@@ -43,7 +43,7 @@ flowchart LR
   subgraph Z3["Betrieb & Abschluss"]
     direction TB
     troubleshooting["Fehlersuche<br/>2 Kapitel"]
-    capstone["Abschlussprojekt<br/>1 Kapitel"]
+    capstone["Abschlussprojekt<br/>2 Kapitel"]
   end
   subgraph Z4["Begleitend"]
     direction TB
@@ -297,13 +297,14 @@ Die Diagnose-Werkzeuge machen aus der Blackbox einen Glaskasten. Du gehst Schich
 
 ## Abschlussprojekt
 
-**Die Bausteine zu einem eigenen, begrenzten Agenten-Workflow zusammensetzen und bewerten.**
+**Am Ende des Pfads das Gelernte zu einem kleinen, echten Build zusammensetzen und selbst bewerten.**
 
-Im Abschlussprojekt setzt du die Bausteine zu einem kleinen, echten Build zusammen: Im Playground lieferst du in 35 bis 45 Minuten ein Feature oder einen Fix, einen Guardrail, eine enge Verifikation und eine PR-fertige Übergabe. Eine Rubrik zeigt dir, wo du stehst.
+Jeder Pfad endet mit einem kleinen Build: Im Playground lieferst du in etwa 20 Minuten eine Änderung, einen Guardrail, eine enge Prüfung und eine Übergabe und bewertest dich an fünf Kriterien (S4.11). Die große Fassung mit Plan über die fortgeschrittenen Bausteine und einer Rubrik mit Punkten ist das Abschlussprojekt (S4.8).
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S4.8 Abschlussprojekt mit Bewertung](s4-08-abschlussprojekt.md) | Kür | 25 |  |
+| [S4.8 Abschlussprojekt mit Bewertung](s4-08-abschlussprojekt.md) | Kür | 55 |  |
+| [S4.11 Abschluss: ein kleiner Build](s4-11-abschluss-kleiner-build.md) | Kern | 30 |  |
 
 <a id="practice"></a>
 

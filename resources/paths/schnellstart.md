@@ -4,9 +4,9 @@
 
 Das Wichtigste in wenigen Stunden: der Mindestpfad für alle, die schnell produktiv werden wollen.
 
-**Umfang:** 1 Etappe, zusammen etwa 3 Stunden (178 Min durcharbeiten, 0 Min überfliegen).
+**Umfang:** 1 Etappe, zusammen etwa 3,5 Stunden (208 Min durcharbeiten, 0 Min überfliegen).
 
-## Etappe 1 (~178 Min)
+## Etappe 1 (~208 Min)
 
 - [S0.1 Werkstatt einrichten](../library/s0-01-werkstatt-einrichten.md) — durcharbeiten
 - [S1.1 Erster Kontakt: sofort eine Datei bauen](../library/s1-01-erster-kontakt.md) — durcharbeiten
@@ -18,3 +18,4 @@ Das Wichtigste in wenigen Stunden: der Mindestpfad für alle, die schnell produk
 - [S1.14 Plan-Modus und schrittweises Vorgehen](../library/s1-14-plan-modus.md) — durcharbeiten
 - [S1.16 Git in einem Fluss: Branch, Commit, PR](../library/s1-16-git-in-einem-fluss.md) — durcharbeiten
 - [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](../library/s1-19-kosten-im-blick.md) — durcharbeiten
+- [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

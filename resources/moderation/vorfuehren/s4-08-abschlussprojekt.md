@@ -25,6 +25,8 @@ Die übrigen Schritte dieser Vorführung stehen bei ihren Kapiteln: Worktree-Iso
 
 Die Fehlersuche ([S4.9](../../library/s4-09-fehlersuche-werkzeuge.md), [S4.10](../../library/s4-10-diagnose-schritt-fuer-schritt.md)) folgt nach dem Abschlussprojekt.
 
+**Gruppenformat:** Im Kapitel steht das Abschlussprojekt als Übung für eine Person. In der Gruppe fährt eine Person, die anderen beobachten mit der Rubrik. Am Ende stellt jede Person am Steuer ihre Übergabe in 5 Minuten vor, am Whiteboard oder anhand von Diff und Guardrail. Im Mittelpunkt stehen die drei Fragen vom Schluss der Übung: Welches Problem löst das? Welche Automatisierung bringt am meisten? Was würdest du diese Woche als Erstes wirklich einbauen?
+
 **Das Abschlussprojekt moderieren:**
 
 - Die Person am Steuer treibt Claude Code, die anderen beobachten mit der Rubrik. Wechsle die Person am Steuer, wenn Zeit bleibt.

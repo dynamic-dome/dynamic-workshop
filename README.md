@@ -1,6 +1,6 @@
 # Claude Code Praxisbibliothek
 
-> Claude Code lernen nach deinem Stand: 70 Kapitel in 19 Regalen — von der ersten Datei bis zur abgesicherten
+> Claude Code lernen nach deinem Stand: 71 Kapitel in 19 Regalen — von der ersten Datei bis zur abgesicherten
 > Agenten-Pipeline. Eine kurze Einstufung zeigt dir, welche Kapitel zu deinem Ziel passen; du musst nicht alles lesen.
 
 Dieses Repository ist die Materialbasis hinter der Workshop-Seite von DoMe Dynamics

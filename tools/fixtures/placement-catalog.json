@@ -1434,7 +1434,7 @@
    "area": null,
    "id": "S4.8",
    "level": "bonus",
-   "minutes": 25,
+   "minutes": 55,
    "offers": [],
    "order": 4080,
    "requires": [
@@ -1509,6 +1509,31 @@
    "session": 4,
    "shelf": "troubleshooting",
    "type": "lesson"
+  },
+  {
+   "area": null,
+   "id": "S4.11",
+   "level": "core",
+   "minutes": 30,
+   "offers": [],
+   "order": 4110,
+   "requires": [
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "capstone",
+   "type": "capstone"
   }
  ],
  "placement": {
@@ -1777,9 +1802,10 @@
    "S1.13",
    "S1.14",
    "S1.16",
-   "S1.19"
+   "S1.19",
+   "S4.11"
   ],
-  "quickstart_warn_minutes": 180,
+  "quickstart_warn_minutes": 240,
   "reasons": {
    "after-quickstart": "Nach dem Schnellstart, wenn du weitermachen willst.",
    "assess": "Zum Einschätzen reicht der Überblick.",

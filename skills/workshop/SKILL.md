@@ -135,6 +135,9 @@ Lies das Kapitel ganz, dann gehe nach **Typ** vor (Abschnitte, die das Kapitel n
    Du gibst den Auftrag Schritt für Schritt, Hinweise nur auf Wunsch („Tipp?"), steigernd. Prüfen darfst du, was die
    Person dir zeigt oder freigibt (Datei lesen, Ausgabe ansehen) — keine zerstörerischen Befehle, keine Änderungen an
    ihren Dateien ohne ausdrückliches Ja. Bei 🔧-Kapiteln ohne installierte Bausteine: auf den Beobachtungsweg wechseln.
+   Beim Typ `capstone` (S4.11, S4.8) treibt die Person den Build allein: Du gibst keine Lösungsschritte vor und
+   wählst keine Befehle aus. Am Ende gehst du die Selbstbewertung bzw. die Rubrik des Kapitels Zeile für Zeile mit
+   ihr durch und fragst zu jeder Zeile nach dem Beleg.
 5. **Check**: die Abruffragen aus dem Kapitel (Katalogfeld `recall`) **ohne** Spickzettel stellen, eine nach der
    anderen, dann das Quiz (Optionen gemischt). Rückmeldung anhand der Auflösung des Kapitels (Katalogfeld `answers`,
    im Kapitel der Block „Auflösung"); zeig sie erst, nachdem die Person geantwortet hat. Fehlt die Auflösung,

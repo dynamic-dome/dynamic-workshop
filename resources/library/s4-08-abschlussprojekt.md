@@ -4,7 +4,7 @@ type: capstone
 title: Abschlussprojekt mit Bewertung
 shelf: capstone
 level: bonus
-minutes: 25
+minutes: 55
 requires: [S3.4, S3.8, S3.13]
 safety_floor: false
 transferable: true
@@ -20,7 +20,7 @@ aliases: []
 # S4.8 · Abschlussprojekt mit Bewertung
 
 <!-- meta:start -->
-> **Regal:** [Abschlussprojekt](README.md#capstone) · **Stufe:** Kür · **~25 Min** · **Voraussetzungen:** [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) · [S3.8 Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md) · [S3.13 Autonome Loops absichern: Budget und Worktree](s3-13-autonome-loops-absichern.md)
+> **Regal:** [Abschlussprojekt](README.md#capstone) · **Stufe:** Kür · **~55 Min** · **Voraussetzungen:** [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) · [S3.8 Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md) · [S3.13 Autonome Loops absichern: Budget und Worktree](s3-13-autonome-loops-absichern.md)
 >
 > ← [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) · [Bibliothek](README.md) · [S4.9 Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md) →
 <!-- meta:end -->
@@ -34,7 +34,7 @@ aliases: []
 
 Im Abschlussprojekt zeigst du, dass du Claude Code allein und produktiv einsetzen kannst. In 35 bis 45 Minuten lieferst du im `workshop-playground/` eine kleine Änderung mit vier Ergebnissen: ein Feature oder einen Fix, einen Guardrail, eine enge Verifikation und eine PR-fertige Übergabe. Eine Rubrik bewertet, was du beobachtbar tust, nicht welche Begriffe du dir gemerkt hast.
 
-Davor gehst du die Gesamtarchitektur als Rückblick durch. Deine Skizze wird zum Plan, der Build zum Beweis. Den Ablauf sollst du morgen im eigenen Repo wiederholen können.
+Das ist die große Fassung des kleinen Builds aus [S4.11](s4-11-abschluss-kleiner-build.md): derselbe Ablauf, dazu ein Plan über die fortgeschrittenen Bausteine und eine Rubrik mit Punkten. Davor gehst du die Gesamtarchitektur als Rückblick durch. Deine Skizze wird zum Plan, der Build zum Beweis.
 
 ## Bild im Kopf
 
@@ -147,17 +147,23 @@ Die Skizze der Architektur wird dabei zum Plan, der beobachtete Build zum Beweis
 
 ## Selbst machen
 
-### Aufgabe: der Capstone-Build (35–45 Minuten)
+### Übung: der große Build (etwa 40 Minuten)
 
-**Ziel:** Du treibst Claude Code selbstständig durch eine kleine Änderung im Playground, mit Guardrail, Verifikation und PR-fertiger Übergabe. Das ist die Abschlussprüfung, auf die der ganze Workshop hinarbeitet.
+**Ziel:** Du treibst Claude Code selbstständig durch eine kleine Änderung im Playground, mit Guardrail, Verifikation und PR-fertiger Übergabe, und bewertest das Ergebnis mit der Rubrik.
 
-**Format:** In der Gruppe fährt eine Person, die anderen beobachten mit der Rubrik unten. Lernst du allein, bewertest du dich hinterher selbst mit der Rubrik.
+**Startzustand:** das Workshop-Repo mit grünen Playground-Tests ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#workshop-repo-und-playground)) und ein eigener Branch im Playground, etwa `git switch -c capstone`. Hast du [S4.11](s4-11-abschluss-kleiner-build.md) gemacht, kennst du den Ablauf und die Vorlage für die Übergabe schon.
 
-**Regeln:** Erlaubt sind die Doku, die Dateien im lokalen Repo und Claude Code. Nicht erlaubt ist, dass dich jemand Schritt für Schritt steuert.
+**Regeln:** Erlaubt sind die Doku, die Dateien im lokalen Repo und Claude Code. Die Entscheidungen triffst du: Claude schlägt vor, du wählst aus und gibst frei.
 
 **Schritt 1: Mission wählen und den Workflow skizzieren**
 
-Such dir eine kleine Mission in `workshop-playground/` und nenne vorher deine Fertig-Kriterien. Skizziere dann den Claude-Code-Workflow, den du dafür nehmen würdest. Dein Plan beantwortet diese Fragen:
+Such dir eine kleine Mission in `workshop-playground/` und nenne vorher deine Fertig-Kriterien. Drei Vorschläge:
+
+- eine der eingebauten Schwachstellen, die du in [S3.6](s3-06-devils-advocate.md) gefunden hast, auf deinem Branch beheben, mit einem Hook als Guardrail ([S2.8](s2-08-hook-einrichten.md))
+- eine Mission aus [S4.11](s4-11-abschluss-kleiner-build.md), die du noch nicht gemacht hast, und den Diff von einem Prüf-Subagenten gegenlesen lassen ([S3.3](s3-03-eigener-subagent.md))
+- eine eigene kleine Änderung, die sich mit einem Test zeigen lässt
+
+Skizziere dann den Claude-Code-Workflow, den du dafür nehmen würdest. Dein Plan beantwortet diese Fragen:
 
 1. **Hooks:** Welche Automatik läuft, ohne dass du fragst? Vor Commits, nach dem Speichern, wenn Tests scheitern? ([S2.8](s2-08-hook-einrichten.md))
 2. **Skills:** Welche Abläufe sind komplex genug für einen Skill? Code-Review, Deployment, bestimmte Analysen? ([S2.2](s2-02-skill-schreiben.md))
@@ -183,7 +189,7 @@ Bau genau einen konkreten Ausschnitt deines Plans. Am Ende liegen alle vier Erge
 1. **Feature oder Fix:** Du setzt im Playground eine kleine Verhaltensänderung oder einen Bugfix um.
 2. **Hook oder Guardrail:** Du ergänzt ein projektspezifisches Sicherheitsnetz, etwa einen Pre-Commit-Check, einen Hook, eine Rechte-Regel (auch eine Deny-Regel) oder eine dokumentierte Allow-/Deny-Policy ([S2.8](s2-08-hook-einrichten.md), [S3.8](s3-08-rechte-fuer-autonomie.md)).
 3. **Verifikation:** Du lässt die enge, passende Prüfung laufen, einen Test oder einen Check von Hand, und erklärst, warum sie die Änderung belegt.
-4. **PR-fertige Übergabe:** Du lieferst Branch, Commit und PR-Beschreibung mit Risiken, Rollback-Notiz und den genau ausgeführten Checks ([S1.16](s1-16-git-in-einem-fluss.md)).
+4. **PR-fertige Übergabe:** Du lieferst Branch, Commit und PR-Beschreibung mit Risiken, Rollback-Notiz und den genau ausgeführten Checks ([S1.16](s1-16-git-in-einem-fluss.md)). Eine Vorlage steht in [S4.11](s4-11-abschluss-kleiner-build.md#die-übergabe).
 
 **Ablauf**
 
@@ -191,11 +197,9 @@ Bau genau einen konkreten Ausschnitt deines Plans. Am Ende liegen alle vier Erge
 2. **25–30 Min.:** Claude Code am Playground treiben.
 3. **5 Min.:** Verifikation laufen lassen und den Beleg erklären.
 4. **5 Min.:** die PR-fertige Übergabe entwerfen.
-5. **5 Min.:** mit der Rubrik bewerten und eine konkrete Empfehlung für den nächsten Schritt festhalten (in der Gruppe übernimmt das die Moderation).
+5. **5 Min.:** mit der Rubrik bewerten und eine konkrete Empfehlung für den nächsten Schritt festhalten.
 
-**Vorstellen (in der Gruppe)**
-
-Jede Person am Steuer stellt ihre Übergabe in 5 Minuten vor, am Whiteboard oder anhand von Diff und Guardrail. Im Mittelpunkt stehen drei Fragen:
+**Zum Schluss** notierst du drei Sätze, einen je Frage:
 
 - Welches Problem löst das?
 - Welche Automatisierung bringt am meisten?
@@ -220,6 +224,21 @@ Bewerte jede Zeile mit 0 bis 3. Bestanden ist das Abschlussprojekt ab 12 von 18 
 | Verifikation | keine Prüfung | führt eine breite oder unpassende Prüfung aus | führt die passende enge Prüfung aus | erklärt, was die Prüfung beweist und was nicht |
 | PR-Übergabe | keine Übergabe | nur eine Zusammenfassung | Commit plus PR-Notizen | Commit, PR-Notizen, Risiken, Rollback und Checks stehen ausdrücklich da |
 
+### Ein bewertetes Beispiel
+
+So sieht die Rubrik an einem echten Ergebnis aus: Mission A aus [S4.11](s4-11-abschluss-kleiner-build.md) (leere Namen abweisen), geliefert mit Push-Sperre, einem neuen Test und einem Commit nach der Vorlage.
+
+| Bereich | Punkte | Warum |
+|---|---|---|
+| Auftrag fassen | 2 | kleine, prüfbare Aufgabe mit Grenze und Prüfschritt; das Risiko stand erst in der Übergabe, nicht vor dem Coden |
+| Claude Code bedienen | 2 | normaler Ablauf mit Rückfragen; keine Checkpoints, kein gezielter Umgang mit dem Kontext nötig |
+| Umsetzung | 3 | nur `add_user` geändert, ein Test dazu, sauberer Commit |
+| Hook / Guardrail | 2 | die Push-Sperre läuft und ist dokumentiert, schützt aber nicht vor dem Risiko dieser Änderung |
+| Verifikation | 3 | der neue Test trifft die Änderung, und die Übergabe sagt, was er nicht beweist |
+| PR-Übergabe | 3 | Commit mit Prüfung, Risiko, Rollback und Guardrail |
+
+Das sind 15 von 18 Punkten, ohne 0 bei Guardrail oder Verifikation: bestanden. Eine 3 beim Guardrail hätte eine Regel oder ein Hook gebracht, der zum Risiko der Änderung passt, etwa eine Sperre für direkte Änderungen an der Benutzerdatei.
+
 ### Anregungen: zehn Blaupausen
 
 Die Blaupausen sind Bausteine für deinen Workflow-Plan. Jede Zeile nennt das Kapitel, in dem du den Baustein lernst.
@@ -237,16 +256,16 @@ Die Blaupausen sind Bausteine für deinen Workflow-Plan. Jede Zeile nennt das Ka
 | 9 | **Two-Device Debugging:** Remote Control vom Handy oder Browser | `/remote-control` + lokale Ausführung | Vorfallbearbeitung unterwegs | [S4.6](s4-06-remote-und-teleport.md) |
 | 10 | **Agent Team als virtuelle Entwicklungsabteilung:** Lead + Reviewer + QA + Doku | Agent Teams (experimentell) + `SendMessage` + Sonnet-Teammitglieder | parallele Spezialarbeit | [S3.5](s3-05-hintergrund-und-teams.md) |
 
-### Optional: Capstone-Track im eigenen Projekt
+### Extra: ein Baustein im eigenen Projekt (etwa 60 Minuten)
 
-Bleibt nach der Übung Zeit, oder als Hausaufgabe: Nimm ein eigenes Projekt (eigener Code, ein Nebenprojekt, ein Repo, das du regelmäßig nutzt) und baue **ein** konkretes Setup-Element aus dem Kurs:
+Nimm ein eigenes Projekt (eigener Code, ein Nebenprojekt, ein Repo, das du regelmäßig nutzt) und baue **ein** konkretes Setup-Element aus der Bibliothek:
 
 - **Variante A, Skill für deinen Ablauf:** ein Skill für ein typisches Anliegen deines Projekts, etwa „Code review for firmware PRs", „Generate OSDP frame tests" oder „Audit access-control configs" ([S2.2](s2-02-skill-schreiben.md)). Einen geführten OSDP- oder Wiegand-Parser-Build findest du in [S3.6](s3-06-devils-advocate.md) (Übung „einen Domänen-Parser richtig bauen").
 - **Variante B, Hook für dein Repo:** ein Hook, der eine Projektregel durchsetzt, etwa „Nie direkt auf main committen" oder „Keine Änderungen an firmware/secure-boot.c ohne Bestätigung" ([S2.8](s2-08-hook-einrichten.md)).
 - **Variante C, Plugin:** 2–3 Skills oder Hooks zu einem Plugin bündeln und mit `claude --plugin-dir ./my-plugin` für eine Sitzung lokal laden ([S2.11](s2-11-plugins-buendeln.md)).
 - **Variante D, CI-Workflow:** eine GitHub-Action (YAML), die Claude Code als Reviewer nutzt ([S4.5](s4-05-ci-pipelines.md)).
 
-Erwartet ist kein produktionsreifer Code, sondern etwas, an dem du lernst. Wichtig: Nutz es in deinem echten Arbeitsalltag, nicht in der Workshop-Sandbox. Wenn du magst, teil dein Ergebnis mit der Workshop-Community (Slack, Discord oder E-Mail).
+Erwartet ist kein produktionsreifer Code, sondern etwas, an dem du lernst. Wichtig: Nutz es in deinem echten Arbeitsalltag, nicht nur im Playground.
 
 ## Typische Fallen
 
@@ -263,6 +282,14 @@ Du kannst eine kleine Playground-Mission eigenständig mit Claude Code treiben: 
 1. Welche vier Ergebnisse muss dein Build liefern, und was gehört in die PR-Übergabe?
 2. Ab wie vielen Punkten ist das Abschlussprojekt bestanden, und welche zwei Rubrik-Zeilen dürfen keine 0 haben?
 3. Was unterscheidet in der Rubrik eine Verifikation mit 2 Punkten von einer mit 3?
+
+<details><summary>Auflösung</summary>
+
+1. Ein Feature oder einen Fix, einen Hook oder Guardrail, eine enge Verifikation und eine PR-fertige Übergabe. In die Übergabe gehören Branch, Commit und eine PR-Beschreibung mit Risiken, Rollback-Notiz und den genau ausgeführten Checks.
+2. Ab 12 von 18 Punkten. „Hook / Guardrail“ und „Verifikation“ dürfen keine 0 haben.
+3. Für 2 Punkte führst du die passende enge Prüfung aus. Für 3 erklärst du zusätzlich, was die Prüfung beweist und was nicht.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
@@ -281,6 +308,7 @@ Du kannst eine kleine Playground-Mission eigenständig mit Claude Code treiben: 
 - [Subagents, isolation: worktree](https://code.claude.com/docs/en/sub-agents)
 - [Worktrees](https://code.claude.com/docs/en/worktrees)
 - [Hooks-Referenz](https://code.claude.com/docs/en/hooks)
+- [S4.11 · Abschluss: ein kleiner Build](s4-11-abschluss-kleiner-build.md), die kleine Fassung für jeden Pfad
 - [S3.4 · Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md)
 - [S3.6 · Devil's Advocate: eine adversariale Prüf-Pipeline](s3-06-devils-advocate.md)
 - [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md)

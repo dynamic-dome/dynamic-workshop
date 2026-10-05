@@ -3,8 +3,12 @@
 version: 1
 skim_percent: 30
 base_shelves: [start, permissions, context, prompting, git, cost, troubleshooting]
-minimum_path: [S0.1, S1.1, S1.2, S1.5, S1.6, S1.10, S1.13, S1.14, S1.16, S1.19]
-quickstart_warn_minutes: 180
+# Jeder Pfad endet mit einem kleinen Build: Kern-Kapitel vom Typ capstone (S4.11) gehören für jedes Ziel zur
+# Relevanzmenge und in den Mindestpfad. Kür-Kapitel dieses Typs (S4.8) bleiben den Zielen agents und einschaetzen
+# vorbehalten.
+minimum_path: [S0.1, S1.1, S1.2, S1.5, S1.6, S1.10, S1.13, S1.14, S1.16, S1.19, S4.11]
+# Der Mindestpfad braucht mit dem Abschluss gut 200 Minuten; die Warnung meldet, wenn er über vier Stunden wächst.
+quickstart_warn_minutes: 240
 default_goal: alltag
 # Kapitel-Ziele, je nach Kapiteltyp mit anderer Wirkung:
 # - Community-Kapitel: nur für diese Ziele relevant (ersetzt den Standard: alle Ziele außer Nur-Einschätzen).

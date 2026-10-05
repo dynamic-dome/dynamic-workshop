@@ -21,14 +21,20 @@ mkdir -p ~/cc-workshop
 git clone https://github.com/dynamic-dome/dynamic-workshop.git ~/cc-workshop/dynamic-workshop
 cd ~/cc-workshop/dynamic-workshop/workshop-playground
 
-# Install Python dependencies   (Windows: use pip instead of pip3)
-pip3 install -r requirements.txt
+# macOS / Linux: a virtual environment for the test dependencies
+python3 -m venv .venv
+source .venv/bin/activate
 
-# Verify tests run   (Windows: use python instead of python3)
-python3 -m pytest -v
+# Install the dependencies and verify that the tests run
+pip install -r requirements.txt
+python -m pytest -v
 ```
 
-Fertig, wenn die Tests grün sind. Danach sieht dein Ordner so aus:
+Fertig, wenn die Tests grün sind (18 passed).
+
+Die virtuelle Umgebung brauchst du unter Linux und mit Homebrew-Python: Dort verweigert `pip install` das Installieren ins System-Python (`error: externally-managed-environment`). Unter Windows lässt du die beiden Zeilen mit `venv` und `activate` weg; `pip install` und `python -m pytest` laufen dort direkt. Die Umgebung gilt nur für das Terminal, in dem du sie aktiviert hast. In einem neuen Terminal führst du im Playground zuerst wieder `source .venv/bin/activate` aus, bevor du Tests oder Claude Code startest.
+
+Danach sieht dein Ordner so aus:
 
 ```
 ~/cc-workshop/
@@ -40,7 +46,8 @@ Fertig, wenn die Tests grün sind. Danach sieht dein Ordner so aus:
 
 Übungen, die den Playground nennen, meinen den Pfad im Repo. Arbeite dort auf einem eigenen Branch; der Stand auf `main` ist das Übungsmaterial. Am Ende räumst du mit `rm -rf ~/cc-workshop` alles auf einmal weg, samt Klon und allem, was du darin geändert hast.
 
-- **Die Tests scheitern.** Prüf die Python-Version (`python3 --version`, 3.9 oder neuer) und führ `pip3 install -r requirements.txt` noch einmal aus (Windows: `pip`).
+- **`No module named pytest` oder `externally-managed-environment`.** Die virtuelle Umgebung ist in diesem Terminal nicht aktiv. Führ im Playground `source .venv/bin/activate` aus und dann `pip install -r requirements.txt`.
+- **Die Tests scheitern.** Prüf die Python-Version (`python --version`, 3.9 oder neuer).
 - **Die Lösungen** zu den eingebauten Schwachstellen stehen in [playground-loesungen.md](playground-loesungen.md), absichtlich außerhalb des Playgrounds.
 
 ## GitHub CLI

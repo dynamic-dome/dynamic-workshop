@@ -380,7 +380,7 @@
         });
         chapters.forEach(c => {
           if (c.type === "practice" && c.offers.some(o => relevant.has(o) && (r(byId[o]) || 0) < 2)) relevant.add(c.id);
-          else if (c.type === "capstone" && (goals.includes("agents") || goals.includes("einschaetzen"))) relevant.add(c.id);
+          else if (c.type === "capstone" && (c.level === "core" || goals.includes("agents") || goals.includes("einschaetzen"))) relevant.add(c.id);
           else if (c.type === "community") {
             const limited = (rules.chapter_goals || {})[c.id];
             if (limited ? limited.some(g => goals.includes(g)) : goals.some(g => g !== "einschaetzen")) relevant.add(c.id);

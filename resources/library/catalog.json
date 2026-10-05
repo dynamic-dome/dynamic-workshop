@@ -3793,7 +3793,11 @@
   {
    "aliases": [],
    "analogy": "Stell dir vor, du hast für deine Software einen Sicherheitsleitstand (SOC) gebaut. Er überwacht laufend, ermittelt selbst, schickt Spezialisten los und isoliert riskante Arbeit. Er greift sich selbst mit Angriffstests an, behebt bestätigte Befunde und führt ein lückenloses Protokoll. Seine Meldungen kommen auf dem Kanal an, den du angeschlossen hast: Terminal, Web, Push-Nachricht oder eine eigene Brücke.",
-   "answers": null,
+   "answers": [
+    "Ein Feature oder einen Fix, einen Hook oder Guardrail, eine enge Verifikation und eine PR-fertige Übergabe. In die Übergabe gehören Branch, Commit und eine PR-Beschreibung mit Risiken, Rollback-Notiz und den genau ausgeführten Checks.",
+    "Ab 12 von 18 Punkten. „Hook / Guardrail“ und „Verifikation“ dürfen keine 0 haben.",
+    "Für 2 Punkte führst du die passende enge Prüfung aus. Für 3 erklärst du zusätzlich, was die Prüfung beweist und was nicht."
+   ],
    "area": null,
    "checkpoint": "Du kannst eine kleine Playground-Mission eigenständig mit Claude Code treiben: den Umfang festlegen, ein Feature oder einen Fix umsetzen, einen Hook oder Guardrail ergänzen, eng verifizieren und eine PR-fertige Übergabe formulieren.",
    "demo": "../moderation/vorfuehren/s4-08-abschlussprojekt.md",
@@ -3803,7 +3807,7 @@
    "glance": "Im Abschlussprojekt zeigst du, dass du Claude Code allein und produktiv einsetzen kannst. In 35 bis 45 Minuten lieferst du im `workshop-playground/` eine kleine Änderung mit vier Ergebnissen: ein Feature oder einen Fix, einen Guardrail, eine enge Verifikation und eine PR-fertige Übergabe. Eine Rubrik bewertet, was du beobachtbar tust, nicht welche Begriffe du dir gemerkt hast.",
    "id": "S4.8",
    "level": "bonus",
-   "minutes": 25,
+   "minutes": 55,
    "offers": [],
    "order": 4080,
    "outcome": "Ich kann in 35 bis 45 Minuten eigenständig einen kleinen Claude-Code-Build liefern: ein Feature oder einen Fix, einen Guardrail, eine enge Verifikation und eine PR-fertige Übergabe mit Risiko- und Rollback-Notiz.",
@@ -3978,6 +3982,69 @@
    "title": "Diagnose Schritt für Schritt",
    "transferable": true,
    "type": "lesson"
+  },
+  {
+   "aliases": [],
+   "analogy": "Bevor eine neue Tür in Betrieb geht, gibt es eine Abnahme mit vier Unterschriften. Die Tür tut, was bestellt wurde. Die Sperre ist nicht nur eingebaut, jemand hat an der Klinke gerüttelt. Im Prüfprotokoll steht, was getestet wurde und was nicht. Und im Übergabeprotokoll steht, was schiefgehen kann und wie man zurückbaut.",
+   "answers": [
+    "Eine Änderung, die genau ein Verhalten ändert, ein Guardrail, eine enge Prüfung und eine Übergabe: ein Commit auf einem eigenen Branch, dessen Nachricht Prüfung, Risiko und Rückweg nennt.",
+    "Wenn die Regel im Projekt liegt und du gesehen hast, dass sie ablehnt. Eine Regel, die nur aufgeschrieben ist, kann wegen eines Tippfehlers nie greifen.",
+    "Grüne alte Tests zeigen nur, dass nichts anderes kaputtging. Das neue Verhalten belegt erst ein Test, der genau diese Änderung trifft."
+   ],
+   "area": null,
+   "checkpoint": "Du kannst eine kleine Änderung mit Claude Code allein liefern und an fünf Kriterien selbst beurteilen, ob sie fertig ist.",
+   "demo": null,
+   "example": "In access_control.py, make add_user reject empty or whitespace-only usernames: return False and leave the database unchanged.\nChange only add_user. Do not touch other functions or existing tests.\nAdd one test to test_access_control.py that proves the new behaviour, then run only that test.",
+   "example_lang": "text",
+   "file": "s4-11-abschluss-kleiner-build.md",
+   "glance": "Am Ende deines Pfads setzt du zusammen, was du gelernt hast: einen präzisen Auftrag, eine Rechte-Regel und einen Commit auf einem eigenen Branch. In etwa 20 Minuten lieferst du im Playground eine kleine Änderung mit vier Ergebnissen: der Änderung selbst, einem Guardrail, einer engen Prüfung und einer Übergabe. Danach bewertest du dich selbst an fünf Kriterien.",
+   "id": "S4.11",
+   "level": "core",
+   "minutes": 30,
+   "offers": [],
+   "order": 4110,
+   "outcome": "Ich kann mit Claude Code allein eine kleine Änderung liefern: mit einem präzisen Auftrag, einem Guardrail, der nachweislich hält, einer engen Prüfung und einer Übergabe mit Risiko und Rückweg.",
+   "quiz": {
+    "correct": "Nur, dass nichts anderes kaputtging; ob leere Namen jetzt abgelehnt werden, hat kein Test geprüft.",
+    "q": "Du hast Mission A umgesetzt. Alle 18 alten Tests sind grün, einen neuen Test hast du nicht geschrieben. Was kannst du über deine Änderung sagen?",
+    "wrong": [
+     "Dass sie stimmt; die Suite deckt `add_user` ab, also prüft sie auch das neue Verhalten mit.",
+     "Nichts; grüne Tests sagen bei einer von Claude geschriebenen Änderung grundsätzlich nichts aus.",
+     "Dass sie stimmt, sobald Claude im Gespräch bestätigt, den Fall mit leeren Namen bedacht zu haben."
+    ]
+   },
+   "recall": [
+    "Welche vier Ergebnisse gehören zu deinem Build?",
+    "Wann zählt ein Guardrail als erfüllt?",
+    "Warum reicht es nicht, dass die ganze Testsuite grün ist?"
+   ],
+   "requires": [
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "capstone",
+   "skip_check": [
+    "Hast du schon einmal mit Claude Code eine Änderung geliefert, zu der ein Test gehörte, der genau diese Änderung prüft?",
+    "Hast du dabei eine Deny-Regel gesetzt und ausprobiert, ob sie hält?"
+   ],
+   "sources": [
+    "https://code.claude.com/docs/en/best-practices",
+    "https://code.claude.com/docs/en/permissions"
+   ],
+   "title": "Abschluss: ein kleiner Build",
+   "transferable": true,
+   "type": "capstone"
   }
  ],
  "placement": {
@@ -4246,9 +4313,10 @@
    "S1.13",
    "S1.14",
    "S1.16",
-   "S1.19"
+   "S1.19",
+   "S4.11"
   ],
-  "quickstart_warn_minutes": 180,
+  "quickstart_warn_minutes": 240,
   "reasons": {
    "after-quickstart": "Nach dem Schnellstart, wenn du weitermachen willst.",
    "assess": "Zum Einschätzen reicht der Überblick.",
@@ -4568,8 +4636,8 @@
   },
   {
    "id": "capstone",
-   "intro": "Im Abschlussprojekt setzt du die Bausteine zu einem kleinen, echten Build zusammen: Im Playground lieferst du in 35 bis 45 Minuten ein Feature oder einen Fix, einen Guardrail, eine enge Verifikation und eine PR-fertige Übergabe. Eine Rubrik zeigt dir, wo du stehst.",
-   "purpose": "Die Bausteine zu einem eigenen, begrenzten Agenten-Workflow zusammensetzen und bewerten.",
+   "intro": "Jeder Pfad endet mit einem kleinen Build: Im Playground lieferst du in etwa 20 Minuten eine Änderung, einen Guardrail, eine enge Prüfung und eine Übergabe und bewertest dich an fünf Kriterien (S4.11). Die große Fassung mit Plan über die fortgeschrittenen Bausteine und einer Rubrik mit Punkten ist das Abschlussprojekt (S4.8).",
+   "purpose": "Am Ende des Pfads das Gelernte zu einem kleinen, echten Build zusammensetzen und selbst bewerten.",
    "title": "Abschlussprojekt",
    "zone": "Betrieb & Abschluss"
   },

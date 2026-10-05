@@ -204,6 +204,20 @@ def test_duplicate_goals_count_once():
     assert run({"goals": ["einschaetzen", "einschaetzen"]}) == run({"goals": ["einschaetzen"]})
 
 
+def test_every_path_ends_with_the_small_build():
+    """Design 2026-10-05: a core capstone belongs to every goal and to the quick start; the bonus one does not."""
+    rules = CATALOG["placement"]
+    for goal in [g["id"] for g in rules["goals"]]:
+        for time in [t["id"] for t in rules["times"]]:
+            result = run({"goals": [goal], "time": time})
+            recommended = [c["id"] for c in result["chapters"] if c["status"] in ("work", "skim")]
+            assert recommended[-1] == "S4.11", (goal, time)
+            assert by_chapter(result)["S4.11"]["reason"] == "capstone"
+    assert by_chapter(run({"goals": ["alltag"]}))["S4.8"]["status"] == "later"
+    assert by_chapter(run({"goals": ["agents"]}))["S4.8"]["status"] == "work"
+    assert run({"time": "schnellstart"})["warnings"] == []
+
+
 def test_cli_markdown_links_use_link_base(tmp_path):
     cat = json.loads((FIX / "placement-catalog.json").read_text(encoding="utf-8"))
     for c in cat["chapters"]:

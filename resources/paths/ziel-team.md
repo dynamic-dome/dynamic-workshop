@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 4 Etappen, zusammen etwa 10 Stunden (553 Min durcharbeiten, 35 Min überfliegen).
+**Umfang:** 5 Etappen, zusammen etwa 10,5 Stunden (583 Min durcharbeiten, 35 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -59,3 +59,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.15 Praxis-Station Session 3: eine Übung wählen](../library/s3-15-praxis-station-3.md) — durcharbeiten
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
+
+## Etappe 5 (~30 Min)
+
+- [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

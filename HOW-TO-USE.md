@@ -49,8 +49,9 @@ beantwortet auf Wunsch der Mentor-Agent („frag den Mentor").
 
 ```bash
 cd workshop-playground
-pip3 install -r requirements.txt   # Windows: pip install -r requirements.txt
-python3 -m pytest -v               # Windows: python -m pytest -v
+python3 -m venv .venv && source .venv/bin/activate   # macOS/Linux; unter Windows weglassen
+pip install -r requirements.txt
+python -m pytest -v
 ```
 
 ## 2 · Moderieren

@@ -22,7 +22,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Fehlersuche](README.md#troubleshooting) · **Stufe:** Kern · **~18 Min** · **Voraussetzungen:** [S4.9 Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md) · [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md)
 >
-> ← [S4.9 Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md) · [Bibliothek](README.md)
+> ← [S4.9 Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md) · [Bibliothek](README.md) · [S4.11 Abschluss: ein kleiner Build](s4-11-abschluss-kleiner-build.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

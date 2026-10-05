@@ -90,7 +90,7 @@ Kern 157 Min · Vertiefung 42 Min · Kür 15 Min
 
 ## Session 4 — Fortgeschritten: Kür
 
-Kern 33 Min · Vertiefung 66 Min · Kür 67 Min
+Kern 63 Min · Vertiefung 66 Min · Kür 97 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
@@ -101,9 +101,10 @@ Kern 33 Min · Vertiefung 66 Min · Kür 67 Min
 | [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](../library/s4-05-ci-pipelines.md) | Vertiefung | 18 |  |  |
 | [S4.6 Unterwegs: Remote Control und /teleport](../library/s4-06-remote-und-teleport.md) | Kür | 12 |  | [Demo](../moderation/vorfuehren/s4-06-remote-und-teleport.md) |
 | [S4.7 Isolation mit Docker und Worktrees](../library/s4-07-isolation-docker-worktrees.md) | Kür | 15 |  | [Demo](../moderation/vorfuehren/s4-07-isolation-docker-worktrees.md) |
-| [S4.8 Abschlussprojekt mit Bewertung](../library/s4-08-abschlussprojekt.md) | Kür | 25 |  | [Demo](../moderation/vorfuehren/s4-08-abschlussprojekt.md) |
+| [S4.8 Abschlussprojekt mit Bewertung](../library/s4-08-abschlussprojekt.md) | Kür | 55 |  | [Demo](../moderation/vorfuehren/s4-08-abschlussprojekt.md) |
 | [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) | Kern | 15 |  |  |
 | [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) | Kern | 18 |  | [Demo](../moderation/vorfuehren/s4-10-diagnose-schritt-fuer-schritt.md) |
+| [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) | Kern | 30 |  |  |
 
 ## Außerhalb der Sessions
 

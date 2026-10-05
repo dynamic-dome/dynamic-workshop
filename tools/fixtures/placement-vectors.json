@@ -79,6 +79,10 @@
      "X.4": [
       "later",
       "not-goal"
+     ],
+     "S4.11": [
+      "work",
+      "capstone"
      ]
     },
     "first_stage": [
@@ -113,7 +117,8 @@
      "S1.13",
      "S1.14",
      "S1.16",
-     "S1.19"
+     "S1.19",
+     "S4.11"
     ],
     "status": {
      "S1.3": [
@@ -130,7 +135,7 @@
      ]
     },
     "stages": 1,
-    "first_stage_minutes": 178,
+    "first_stage_minutes": 208,
     "warnings": []
    }
   },
@@ -234,7 +239,8 @@
      "S3.13",
      "X.3",
      "S4.4",
-     "X.4"
+     "X.4",
+     "S4.11"
     ],
     "warnings": []
    }
@@ -301,6 +307,10 @@
      "S4.10": [
       "skim",
       "assess"
+     ],
+     "S4.11": [
+      "skim",
+      "capstone"
      ]
     },
     "warnings": []
@@ -366,6 +376,10 @@
      "S3.12": [
       "work",
       "new"
+     ],
+     "S4.11": [
+      "work",
+      "capstone"
      ]
     },
     "warnings": []
@@ -475,6 +489,13 @@
        "S1.16",
        "S1.18"
       ]
+     },
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S1.16",
+       "S4.11"
+      ]
      }
     ]
    }
@@ -571,6 +592,10 @@
      "X.2": [
       "later",
       "not-goal"
+     ],
+     "S4.11": [
+      "work",
+      "capstone"
      ]
     },
     "all_session_chapters_recommended": true,
@@ -726,7 +751,8 @@
      "S1.5",
      "S1.6",
      "S3.8",
-     "S3.9"
+     "S3.9",
+     "S4.11"
     ],
     "status": {
      "S1.5": [

@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 2 Etappen, zusammen etwa 3,5 Stunden (90 Min durcharbeiten, 134 Min überfliegen).
+**Umfang:** 2 Etappen, zusammen etwa 4 Stunden (90 Min durcharbeiten, 152 Min überfliegen).
 
 ## Etappe 1 (~147 Min)
 
@@ -30,7 +30,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — überfliegen
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — überfliegen
 
-## Etappe 2 (~77 Min)
+## Etappe 2 (~95 Min)
 
 - [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) — überfliegen
 - [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) — überfliegen
@@ -43,3 +43,4 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S4.8 Abschlussprojekt mit Bewertung](../library/s4-08-abschlussprojekt.md) — überfliegen
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — überfliegen
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — überfliegen
+- [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — überfliegen

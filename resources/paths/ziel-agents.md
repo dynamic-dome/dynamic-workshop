@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 5 Etappen, zusammen etwa 10,5 Stunden (567 Min durcharbeiten, 48 Min überfliegen).
+**Umfang:** 5 Etappen, zusammen etwa 11,5 Stunden (627 Min durcharbeiten, 48 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -60,8 +60,9 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) — überfliegen
 - [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) — überfliegen
 
-## Etappe 5 (~58 Min)
+## Etappe 5 (~118 Min)
 
 - [S4.8 Abschlussprojekt mit Bewertung](../library/s4-08-abschlussprojekt.md) — durcharbeiten
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
+- [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

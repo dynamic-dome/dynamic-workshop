@@ -131,8 +131,8 @@ def place(catalog, answers):
             if c["type"] == "practice" and any(
                     o in relevant and (r(by_id[o]) or 0) < 2 for o in c["offers"]):
                 relevant.add(c["id"])
-            elif c["type"] == "capstone" and ({"agents", "einschaetzen"} & set(goals)):
-                relevant.add(c["id"])
+            elif c["type"] == "capstone" and (c["level"] == "core" or {"agents", "einschaetzen"} & set(goals)):
+                relevant.add(c["id"])  # the small build closes every path; the big one stays with two goals
             elif c["type"] == "community":
                 limited = (rules.get("chapter_goals") or {}).get(c["id"])
                 if (set(limited) & set(goals)) if limited else any(g != "einschaetzen" for g in goals):

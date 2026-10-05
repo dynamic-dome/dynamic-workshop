@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 4 Etappen, zusammen etwa 9 Stunden (504 Min durcharbeiten, 33 Min überfliegen).
+**Umfang:** 4 Etappen, zusammen etwa 9,5 Stunden (534 Min durcharbeiten, 33 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -47,7 +47,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) — durcharbeiten
 - [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) 🛡 — durcharbeiten
 
-## Etappe 4 (~99 Min)
+## Etappe 4 (~129 Min)
 
 - [S4.1 Das richtige Modell pro Phase](../library/s4-01-modell-pro-phase.md) — durcharbeiten
 - [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) — durcharbeiten
@@ -55,3 +55,4 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](../library/s4-05-ci-pipelines.md) — durcharbeiten
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
+- [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

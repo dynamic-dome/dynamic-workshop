@@ -39,7 +39,7 @@ CONTRACT_FIELDS = ("id", "type", "title", "shelf", "level", "minutes", "requires
                    "aliases", "offers", "after")
 
 REQUIRED_IDS = (["S0.1"] + [f"S1.{n}" for n in range(1, 21)] + [f"S2.{n}" for n in range(1, 21)]
-                + [f"S3.{n}" for n in range(1, 16)] + [f"S4.{n}" for n in range(1, 11)] + ["X.1", "X.2", "X.3", "X.4"])
+                + [f"S3.{n}" for n in range(1, 16)] + [f"S4.{n}" for n in range(1, 12)] + ["X.1", "X.2", "X.3", "X.4"])
 
 ALL = set(lm.SECTION_ORDER)
 # Allowed and required H2 sections per chapter type (spec 4.3).
