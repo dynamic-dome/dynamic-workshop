@@ -34,7 +34,7 @@
 | P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a, S2.20 mit P7c, S3.15 mit P7e erledigt |
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [x] cc1052a |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [x] siehe „Abschluss P8“ |
-| P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [ ] |
+| P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | gebaut, siehe „Stand P9“; Durchgang mit dem Owner offen |
 
 DCO-Todos unter #9632: P1 #9636 · P2 #9637 · P3 #9638 · P4 #9639 · P5 #9640 · P6 #9641 · P7 #9642 · P8 #9643 · P9 #9644.
 
@@ -838,19 +838,47 @@ rot gesehen wird. Die Optik bleibt (Antwort 6). Ein Commit je Teilpaket.
 
 | Teil | Verhalten, das gebaut wird | Herkunft | Stand |
 |---|---|---|---|
-| P9a | **Kapitel, eine Ansicht.** Jedes Kapitel öffnet mit Kopf (Titel, Stufe, Minuten, Outcome), „Überspringen“ am Schnellcheck, dann dem ganzen Text samt Übung, dem Quiz und am Ende „Als erledigt markieren“. Die Kurzansicht bleibt nur, wenn der Pfad das Kapitel auf „überfliegen“ setzt; auch dort steht der Knopf am Ende. Sprungmarken zu den Abschnitten in der Seitenleiste, ohne die Adresse zu ändern. Markieren baut die Seite nicht neu auf (Quiz-Ergebnis, offene Auflösungen und Scrollposition bleiben). | Antworten 2, 3; B7; P2 offen | [ ] |
-| P9b | **Bibliothek.** Jede Tür zeigt ID und Titel, eine Zeile je Kapitel. Ohne Einstufung gibt es keinen Status „später“ und keine Empfehlungs-Legende; „erledigt“ und Sicherheitsboden bleiben sichtbar. | Antworten 3, 5 | [ ] |
-| P9c | **Start.** Zwei Einstiege für Lernende (Einstufung, Bibliothek); der Live-Workshop-Pfad steht darunter in einem Bereich „Für Moderierende“. Mit gespeicherter Einstufung ist der Hauptknopf „Weiter mit <nächstes offenes Kapitel des Pfads>“, die Einstufung wird zum Nebenknopf. | Antwort 4; B10 | [ ] |
-| P9d | **Einstufung.** Schrittwechsel beginnt oben (B1). Ein drittes Ziel wird sichtbar abgewiesen: Hinweis im Schritt, übrige Kästchen gesperrt, solange zwei gewählt sind (B2). Begründung der Community-Kapitel neutral: „Blick über den Tellerrand: überfliegen reicht.“ (B4). | B1, B2, B4 | [ ] |
-| P9e | **Kleinigkeiten in der Kapitelansicht.** Diagramme, die breiter sind als die Lesespalte, dürfen bis zur vollen Inhaltsbreite ausbrechen und scrollen erst danach (B6). Der Knopf „Kopieren“ steht über dem Codeblock statt auf der Zeile (B11). Eine falsche Quiz-Antwort verweist auf Auflösungen und Abschnitt; eine Begründung je Antwort gibt das Kapitelformat nicht her (B8 damit nur zum Teil). | B6, B8, B11 | [ ] |
-| P9f | **Wiederholen und Etappen.** „Wiederholen“ fragt nur Kapitel ab, die mindestens einen Tag erledigt sind, und sagt sonst „noch nichts fällig“; der Text nennt die echte Zahl der Fragen (B9). Ein Rest unter 30 Minuten wird an die letzte Etappe angehängt statt eine eigene zu bilden (B12): Python-Engine und JS-Port, Golden bewusst neu (heute betrifft das die Persona P17). | B9, B12 | [ ] |
-| P9g | **Fortschritt mitnehmen.** Export als JSON-Datei (Fortschritt und Einstufung) und Import mit Prüfung der Form; kein Konto (Antwort 8). Handy-Breite: Start, Bibliothek, Kapitel und Pfad ohne waagerechtes Scrollen, Navigation und Markieren bedienbar (Antwort 7). | Antworten 7, 8 | [ ] |
-| P9h | **Abnahme.** Volle Suite, Bilder der sechs Ansichten in zwei Breiten, lesende Codex-Gegenprüfung des Diffs, dann der Durchgang mit dem Owner im Browser (Antwort 9; dazu die offene Liste „Fortsetzung“ vom 2026-10-02). | Antwort 9 | [ ] |
+| P9a | **Kapitel, eine Ansicht.** Jedes Kapitel öffnet mit Kopf (Titel, Stufe, Minuten, Outcome), „Überspringen“ am Schnellcheck, dann dem ganzen Text samt Übung, dem Quiz und am Ende „Als erledigt markieren“. Die Kurzansicht bleibt nur, wenn der Pfad das Kapitel auf „überfliegen“ setzt; auch dort steht der Knopf am Ende. Sprungmarken zu den Abschnitten in der Seitenleiste, ohne die Adresse zu ändern. Markieren baut die Seite nicht neu auf (Quiz-Ergebnis, offene Auflösungen und Scrollposition bleiben). | Antworten 2, 3; B7; P2 offen | [x] `eb67fd3` |
+| P9b | **Bibliothek.** Jede Tür zeigt ID und Titel, eine Zeile je Kapitel. Ohne Einstufung gibt es keinen Status „später“ und keine Empfehlungs-Legende; „erledigt“ und Sicherheitsboden bleiben sichtbar. | Antworten 3, 5 | [x] `441dfc3` |
+| P9c | **Start.** Zwei Einstiege für Lernende (Einstufung, Bibliothek); der Live-Workshop-Pfad steht darunter in einem Bereich „Für Moderierende“. Mit gespeicherter Einstufung ist der Hauptknopf „Weiter mit <nächstes offenes Kapitel des Pfads>“, die Einstufung wird zum Nebenknopf. | Antwort 4; B10 | [x] `5046c84` |
+| P9d | **Einstufung.** Schrittwechsel beginnt oben (B1). Ein drittes Ziel wird sichtbar abgewiesen: Hinweis im Schritt, übrige Kästchen gesperrt, solange zwei gewählt sind (B2). Begründung der Community-Kapitel neutral: „Blick über den Tellerrand: überfliegen reicht.“ (B4). | B1, B2, B4 | [x] `b2c0a2d` |
+| P9e | **Kleinigkeiten in der Kapitelansicht.** Diagramme, die breiter sind als die Lesespalte, dürfen bis zur vollen Inhaltsbreite ausbrechen und scrollen erst danach (B6). Der Knopf „Kopieren“ steht über dem Codeblock statt auf der Zeile (B11). Eine falsche Quiz-Antwort verweist auf Auflösungen und Abschnitt; eine Begründung je Antwort gibt das Kapitelformat nicht her (B8 damit nur zum Teil). | B6, B8, B11 | [x] `cdeca66` |
+| P9f | **Wiederholen und Etappen.** „Wiederholen“ fragt nur Kapitel ab, die mindestens einen Tag erledigt sind, und sagt sonst „noch nichts fällig“; der Text nennt die echte Zahl der Fragen (B9). Ein Rest unter 30 Minuten wird an die letzte Etappe angehängt statt eine eigene zu bilden (B12): Python-Engine und JS-Port, Golden bewusst neu (heute betrifft das die Persona P17). | B9, B12 | [x] `0c827ae` |
+| P9g | **Fortschritt mitnehmen.** Export als JSON-Datei (Fortschritt und Einstufung) und Import mit Prüfung der Form; kein Konto (Antwort 8). Handy-Breite: Start, Bibliothek, Kapitel und Pfad ohne waagerechtes Scrollen, Navigation und Markieren bedienbar (Antwort 7). | Antworten 7, 8 | [x] `1f5c55e` |
+| P9h | **Abnahme.** Volle Suite, Bilder der sechs Ansichten in zwei Breiten, lesende Codex-Gegenprüfung des Diffs, dann der Durchgang mit dem Owner im Browser (Antwort 9; dazu die offene Liste „Fortsetzung“ vom 2026-10-02). | Antwort 9 | [ ] Durchgang mit dem Owner offen; Rest `cbab54d` |
 
 **Entschieden beim Planen (Ableitungen aus den Antworten, keine neuen Fragen):** „Schnellcheck reicht“ und „später“
 öffnen wie „durcharbeiten“ im Volltext; wer so ein Kapitel aufschlägt, will es lesen. Sprungmarken ändern die Adresse
 nicht, weil der Router auf Adresswechsel neu zeichnet. B3 und B5 sind erledigt (Branch `einstufung-security-ausnahme`,
 P0). B8 ganz zu erfüllen hieße 61 Begründungen schreiben: eigenes Inhaltspaket, nicht Teil von P9.
+
+### Stand P9 (2026-10-05, gebaut; der Durchgang mit dem Owner steht aus)
+
+- **Gebaut in sieben Teilen,** je Test zuerst und rot gesehen: 45 Browser-Tests (vorher 14), 821 Tests insgesamt,
+  `validate --complete` ohne Befund. Die Browser-Tests laufen teils gegen das erzeugte Cockpit der echten Bibliothek
+  (neue Fixture `real_site`), weil die Fixture-Bibliothek nur ein Ziel und keine Diagramme hat.
+- **Was sich für Lernende ändert:** Jedes Kapitel öffnet mit Text und Übung; „erledigt“ steht am Ende; Sprungmarken
+  zu den Abschnitten; Markieren baut die Seite nicht neu auf. Die Bibliothek zeigt Titel und ist ohne Einstufung
+  neutral. Der Start führt mit gespeicherter Einstufung zum nächsten offenen Kapitel; der Live-Pfad steht unter „Für
+  Moderierende“. Die Einstufung beginnt jeden Schritt oben und sperrt das dritte Ziel sichtbar. Breite Diagramme
+  nutzen die Spalte, schrumpfen bis 72 Prozent und lassen sich vergrößern. „Wiederholen“ wartet einen Tag. Ein Rest
+  unter 30 Minuten bildet keine eigene Etappe mehr (P17: zwei statt drei Etappen). Fortschritt und Einstufung lassen
+  sich als Datei mitnehmen. In Handy-Breite passt jede Ansicht, die Navigation bricht um.
+- **Angesehen:** 19 Bilder (sechs Ansichten, mit und ohne Einstufung, 1280 und 390 Pixel), keines mit Skriptfehler
+  oder waagerechtem Überlauf: `~/AI/analysis-artifacts/workshop-review-2026-10-05/cockpit-2026-10-05/nach-p9/`.
+- **Dabei gefunden und behoben:** Der Bau-Wächter weist Inline-Style-Attribute ab, die natürliche Diagrammbreite
+  geht deshalb über das CSSOM an das Stylesheet. `?run=constructor` endete in einem Skriptfehler (älter als P9):
+  Die Nachschlagetabellen haben keinen Prototyp mehr.
+- **Codex-Gegenprüfung (lesend):** FAIL, drei Befunde zum Import. Zwei behoben (`cbab54d`: geerbte Schlüssel als
+  Kapitel-ID; drei Ziele über eine Importdatei), einer ist Absicht und durch einen Test festgehalten (eine Datei mit
+  abgewiesener Einstufung bringt ihre erledigten Kapitel trotzdem mit, die Seite sagt das).
+- **Nicht umgesetzt:** B8 ganz (eine Begründung je Quiz-Antwort wären 61 neue Texte in den Kapiteln). B6 „breite
+  LR-Flüsse als TD rendern“ (würde 24 Diagramme neu setzen; die Vergrößerung löst das Lesen). Hell-Thema und
+  Druckansicht wurden nicht eigens angesehen.
+- **Offen:** der Durchgang mit dem Owner im Browser (Antwort 9) samt der Liste „Fortsetzung“ vom 2026-10-02
+  (falsche Quiz-Antwort, Live-Pfad, Einstufung ändern, Sicherheitsboden herunterstufen, Schnellstart-Warnung,
+  Tutor-Plugin aus einem frischen Klon). Start: `python -m http.server 8765 --bind 127.0.0.1` im Repo, dann
+  `http://127.0.0.1:8765/resources/claude-code-workshop-ui.html`.
 
 ---
 
