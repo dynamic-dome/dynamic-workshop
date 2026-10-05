@@ -73,7 +73,7 @@ When asked to explore a project:
 Never modify files.  Never execute code.  Explore only.
 ```
 
-Der Text unter dem Frontmatter ist der System-Prompt des Subagenten. Er bekommt nur diesen Prompt plus Angaben zur Umgebung wie das Arbeitsverzeichnis, nicht den System-Prompt von Claude Code.
+Der Text unter dem Frontmatter ist der System-Prompt des Subagenten. Er bekommt nur diesen Prompt plus Angaben zur Umgebung wie das Arbeitsverzeichnis, nicht den System-Prompt von Claude Code. Deine CLAUDE.md-Dateien kommen trotzdem bei ihm an, als Teil der Nachrichten ([S3.1](s3-01-was-ist-ein-agent.md)).
 
 Wo die Datei liegt, bestimmt, für wen der Agent gilt: `.claude/agents/` nur für dieses Projekt (checkst du den Ordner ein, nutzt das Team den Agenten mit), `~/.claude/agents/` für alle deine Projekte auf diesem Rechner. Gibt es denselben `name` mehrfach, gewinnt der Ort mit der höheren Priorität: Projekt schlägt Benutzer, Agenten aus Plugins haben die niedrigste.
 

@@ -65,7 +65,7 @@ Willst du einen bestimmten Typ, nenn ihn im Auftrag, etwa „Use the Explore sub
 
 ### Was sie mitbekommen
 
-Explore und Plan überspringen deine CLAUDE.md-Dateien und den Schnappschuss des Git-Status, damit die Recherche schnell und günstig bleibt. Alle anderen eingebauten und alle eigenen Subagenten laden beides.
+Explore und Plan überspringen deine CLAUDE.md-Dateien und den Schnappschuss des Git-Status, damit die Recherche schnell und günstig bleibt. Alle anderen eingebauten und alle eigenen Subagenten laden beides, es sei denn, die Definition eines eigenen setzt das Feld `omitClaudeMd`.
 
 Explore und Plan sind Einmal-Aufträge: Sie geben keine Agent-ID zurück, Claude kann sie also nicht fortsetzen. Brauchst du Arbeit in mehreren Etappen, nimm general-purpose oder einen eigenen Subagenten. Auch ein Skill kann in einem dieser Subagenten laufen ([S2.2](s2-02-skill-schreiben.md), Feld `context: fork`).
 

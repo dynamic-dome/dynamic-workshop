@@ -68,7 +68,7 @@ Ein Beispiel aus der Zutrittstechnik: Auch dort gibt es spezialisierte Rollen st
 
 ### Was ein Subagent mitbekommt
 
-Jeder Subagent startet mit einem frischen, isolierten Kontextfenster. Laut Doku sieht er weder deinen Gesprächsverlauf noch die Dateien, die Claude schon gelesen hat. Claude schreibt eine Auftragsnachricht, und der Subagent arbeitet damit. Dazu kommen sein eigener System-Prompt und deine CLAUDE.md-Dateien; nur Explore und Plan überspringen sie ([S3.2](s3-02-eingebaute-subagenten.md)).
+Jeder Subagent startet mit einem frischen, isolierten Kontextfenster. Laut Doku sieht er weder deinen Gesprächsverlauf noch die Dateien, die Claude schon gelesen hat. Claude schreibt eine Auftragsnachricht, und der Subagent arbeitet damit. Dazu kommen sein eigener System-Prompt und deine CLAUDE.md-Dateien; Explore und Plan überspringen sie ([S3.2](s3-02-eingebaute-subagenten.md)).
 
 Was du nur im Gespräch gesagt hast, kommt also nicht an. Muss eine Regel bei ihm ankommen, etwa „ignoriere den Ordner `vendor/`“, nenn sie in dem Auftrag, den du Claude zum Delegieren gibst. Die Übung unten zeigt genau das.
 
