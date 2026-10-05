@@ -4,11 +4,11 @@ type: lesson
 title: CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff
 shelf: headless-ci
 level: deep-dive
-minutes: 18
+minutes: 30
 requires: [S4.3]
 safety_floor: true
 transferable: true
-outcome: "Ich kann für einen CI-Lauf den passenden Zugang wählen (API-Key mit --bare, Abo-Token nur ohne --bare, oder gar kein langlebiges Secret), jeden Lauf mit --max-budget-usd und --max-turns deckeln und die Kosten mit /usage, Prompt-Caching und einem Modell pro Phase gezielt senken."
+outcome: "Ich kann für einen CI-Lauf den passenden Zugang wählen (API-Key mit --bare, Abo-Token nur ohne --bare, oder gar kein langlebiges Secret), sagen und an einem Lauf zeigen, was --bare nicht lädt und was es braucht, und jeden Lauf mit --max-budget-usd und --max-turns deckeln."
 sources:
   - https://code.claude.com/docs/en/authentication
   - https://code.claude.com/docs/en/headless
@@ -29,13 +29,11 @@ aliases: []
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen sagen, welche Zugangsdaten ein `--bare`-Lauf liest und welche nicht, und was passiert, wenn API-Key und Abo-Token beide gesetzt sind?
-- Hast du schon einmal einen unbeaufsichtigten Claude-Lauf mit harter Dollar- und Rundengrenze abgesichert und danach nachgesehen, was er wirklich gekostet hat?
+- Weißt du, was ein `claude -p`-Lauf ohne `--bare` aus einem ausgecheckten fremden Repository mitlädt?
 
 ## Auf einen Blick
 
-`claude -p` ohne `--bare` führt die Hooks und MCP-Server eines fremden Repos aus, ohne Vertrauensdialog. Für Code, den du nicht selbst geschrieben hast, nimmst du deshalb einen API-Key und `--bare`. Ein Abo-Token aus `claude setup-token` liest `--bare` nie; es gehört nur in Jobs ohne `--bare` auf Code, dem du vertraust. Jeden unbeaufsichtigten Lauf deckelst du mit `--max-budget-usd` und `--max-turns`.
-
-Danach kommt der Feinschliff der Kosten: ein Modell pro Phase (Planen, Umsetzen, Prüfen), Prompt-Caching, knappe Prompts und ein wöchentlicher Blick in `/usage`.
+`claude -p` ohne `--bare` führt die Hooks und MCP-Server eines fremden Repos aus, ohne Vertrauensdialog. Für Code, den du nicht selbst geschrieben hast, nimmst du deshalb einen API-Key und `--bare`. Ein Abo-Token aus `claude setup-token` liest `--bare` nie; es gehört nur in Jobs ohne `--bare` auf Code, dem du vertraust. Jeden unbeaufsichtigten Lauf deckelst du mit `--max-budget-usd` und `--max-turns`. Die Kosten-Feinarbeit über Wochen steht in anderen Kapiteln; hier gibt es dazu nur Verweise.
 
 ## Bild im Kopf
 
@@ -62,8 +60,8 @@ claude setup-token   # once, on a workstation: browser login, then prints a 1-ye
 
 Aus der Tabelle folgen drei Regeln:
 
-1. **Ein direkter `claude --bare`-Aufruf braucht einen API-Key oder Zugangsdaten eines Cloud-Anbieters.** Er liest `ANTHROPIC_API_KEY`, einen `apiKeyHelper` oder die Zugangsdaten von Bedrock, Vertex oder Foundry, nie `CLAUDE_CODE_OAUTH_TOKEN` und nie Federation-Profile. Ein `--bare`-Job, der nur das Abo-Token hat, ist nicht angemeldet. `--bare` ist der empfohlene Modus für geskriptete Aufrufe und soll künftig Standard für `-p` werden; Weg A ist damit der zukunftssichere Standard.
-2. **Code, den du nicht geschrieben hast → Weg A mit `--bare`.** Weg B läuft ohne `--bare`, und dann laufen die Hooks aus der `.claude/settings.json` und die Server aus der `.mcp.json` des ausgecheckten Repos auf deinem Runner (siehe „`--bare`" unten). Weg B bleibt Repos vorbehalten, denen du vertraust.
+1. **Ein direkter `claude --bare`-Aufruf braucht für die Anthropic-API einen API-Key.** Er liest `ANTHROPIC_API_KEY` oder einen `apiKeyHelper`; für Bedrock, Vertex und Foundry liest er deren eigene Zugangsdaten wie üblich. Nie liest er `CLAUDE_CODE_OAUTH_TOKEN`, OAuth-Anmeldungen, den Schlüsselbund des Systems oder Federation-Profile. Ein `--bare`-Job, der nur das Abo-Token hat, ist nicht angemeldet. Laut Doku ist `--bare` der empfohlene Modus für geskriptete Aufrufe und soll künftig Standard für `-p` werden.
+2. **Code, den du nicht geschrieben hast → Weg A mit `--bare`.** Weg B läuft ohne `--bare`, und dann laufen die Hooks aus der `.claude/settings.json` und die Server aus der `.mcp.json` des ausgecheckten Repos auf deinem Runner. Weg B bleibt Repos vorbehalten, denen du vertraust.
 3. **Geteiltes Secret → API-Key.** Ein Abo-Token gehört der Person, die `claude setup-token` ausgeführt hat. Für ein Secret, das mehrere Repos oder ein Team teilen, nimmst du einen API-Key.
 
 ```mermaid
@@ -77,233 +75,158 @@ flowchart TD
   Q2 -- "nein" --> B["Weg B möglich:<br/>CLAUDE_CODE_OAUTH_TOKEN<br/>nur ohne --bare"]
 ```
 
-> **Vorrang-Falle:** Sind beide gesetzt, gewinnt `ANTHROPIC_API_KEY` gegen `CLAUDE_CODE_OAUTH_TOKEN`; im `-p`-Modus wird ein vorhandener Key immer genutzt. Ein vergessener Key in der Runner-Umgebung schiebt eine „Abo"-Pipeline still in die API-Abrechnung. `claude auth status` zeigt, welche Zugangsdaten Claude Code nehmen würde (`"authMethod": "api_key"` oder `"oauth_token"`); ob sie gültig sind, prüft es nicht.
+> **Vorrang-Falle:** Sind mehrere Zugangsdaten gesetzt, nimmt Claude Code laut Doku in dieser Reihenfolge: Cloud-Anbieter, `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_API_KEY`, `apiKeyHelper`, `CLAUDE_CODE_OAUTH_TOKEN`, Federation-Profile, zuletzt die Abo-Anmeldung aus `/login`. Im `-p`-Modus wird ein vorhandener `ANTHROPIC_API_KEY` immer genutzt. Ein vergessener Key in der Runner-Umgebung schiebt eine „Abo"-Pipeline also still in die API-Abrechnung. `claude auth status` zeigt als JSON, welche Methode gilt (`authMethod`: `none`, `claude.ai`, `oauth_token`, `api_key`, `api_key_helper` oder `third_party`) und endet mit Exit-Code 0, wenn du angemeldet bist, sonst mit 1.
 
-> **Sicherheitshinweis:** Beides sind dauerhafte Zugangsdaten. Das Abo-Token kann nur Modell-Anfragen stellen (keine Remote Control, keine claude.ai-Connectors), verbraucht aber ein Jahr lang dein Abo. Behandle beide wie einen SSH-Deploy-Key: nie committen, nie loggen, nach Plan rotieren und sofort ersetzen, wenn ein CI-Anbieter kompromittiert ist.
+> **Sicherheitshinweis:** Beides sind dauerhafte Zugangsdaten. Das Abo-Token kann nur Modell-Anfragen stellen (keine Remote Control, keine claude.ai-Connectors), verbraucht aber ein Jahr lang dein Abo. Behandle beide wie einen SSH-Deploy-Key: nie committen, nie loggen, nie in einen Prompt tippen, nach Plan rotieren und sofort ersetzen, wenn ein CI-Anbieter kompromittiert ist.
 
-### Kostengrenzen: `--max-budget-usd` und `--max-turns`
+### Läufe deckeln: `--max-budget-usd` und `--max-turns`
 
-Das größte CI-Risiko bei autonomen Sprachmodellen ist eine Endlosschleife: Ein Werkzeug scheitert immer wieder, Claude versucht es immer wieder, die Rechnung steigt und steigt. Zwei Flags entschärfen das:
+Das größte CI-Risiko bei autonomen Sprachmodellen ist eine Endlosschleife: Ein Werkzeug scheitert immer wieder, Claude versucht es immer wieder, die Rechnung steigt. Zwei Flags entschärfen das, beide nur im Print-Modus (`-p`):
 
-- **`--max-budget-usd 0.50`**: harte Dollargrenze. Ist sie erreicht, endet der Lauf mit einem Exit-Code ungleich 0. CI scheitert sauber, statt Geld zu verbrennen. Ausgaben von Subagenten zählen mit. Die Antwort, mit der ein Lauf die Grenze überschreitet, wird noch bezahlt; die Endsumme kann also etwas über der Grenze liegen.
-- **`--max-turns 10`**: harte Grenze für Agenten-Runden. Erreicht Claude sie, endet der Lauf mit einem Fehler. Ohne das Flag gibt es keine Rundengrenze. Es steht in der CLI-Referenz, aber nicht in `claude --help`: Die Hilfe ist nicht die vollständige Referenz.
+- **`--max-budget-usd 0.50`**: Dollargrenze. Laut Doku zählen Ausgaben von Subagenten mit. Die Antwort, mit der ein Lauf die Grenze überschreitet, wird noch bezahlt; die Endsumme kann also etwas über der Grenze liegen. Die Doku nennt für diesen Fall keinen Exit-Code, wohl aber einen Ergebnis-Subtyp `error_max_budget_usd`. Eine Pipeline, die auf die Grenze reagieren soll, liest ihn aus dem JSON (`--output-format json`) und prüft den Exit-Code einmal selbst, statt ihn anzunehmen.
+- **`--max-turns 10`**: Grenze für die Zahl der Arbeitsschritte. Laut Doku endet der Lauf mit einem Fehler, wenn sie erreicht ist. Ohne das Flag gibt es keine Grenze.
 
-Beide Flags wirken nur im Print-Modus (`-p`). Die Rundengrenze bremst Wiederholungsschleifen, das Budget bremst die Kosten, auch innerhalb einer einzigen langen Runde. Einen Aufruf mit beiden Grenzen probierst du in „Selbst machen" aus.
+Die Rundengrenze bremst Wiederholungsschleifen, das Budget die Kosten. Setz in CI immer beide. [S3.13](s3-13-autonome-loops-absichern.md) nutzt dieselben Grenzen für autonome Loops, die Grundlagen stehen in [S1.19](s1-19-kosten-im-blick.md). Was ein Lauf gekostet hat, steht im JSON-Feld `total_cost_usd`; die Doku nennt es eine Schätzung auf dem Client, maßgeblich ist die Usage-Seite der [Claude Console](https://platform.claude.com/usage).
 
-Setz in CI immer beide Grenzen.
+### `--bare`: was es weglässt und was es braucht
 
-**Querverweis:** [S3.13](s3-13-autonome-loops-absichern.md) nutzt dieselben Grenzen als Sicherheitsnetz für autonome Loops, die Grundlagen stehen in [S1.19](s1-19-kosten-im-blick.md). CI ist die strengste Anwendung dieses Musters.
-
-### `--bare`: schlank und sicher
-
-Standardmäßig lädt `claude -p` Hooks, Skills, Plugins, MCP-Server und das Auto-Memory. Für einen einfachen Aufruf in CI, etwa „ordne dieses JSON ein", ist das reiner Ballast. **`--bare` schaltet das alles ab:**
+Standardmäßig lädt `claude -p` Hooks, Skills, Plugins, MCP-Server, Auto-Memory und `CLAUDE.md`. **`--bare` schaltet die automatische Erkennung von all dem ab:**
 
 ```bash
-# Heavy: loads everything
+# Loads everything it finds in the folder and in ~/.claude
 claude -p "Categorize" --output-format json
 
-# Lightweight: just the model
+# Skips the discovery: just the model and the built-in tools
 claude --bare -p "Categorize" --output-format json
 ```
 
-`--bare` bringt dir:
-
-- **schnelleren Kaltstart:** keine automatische Erkennung von Hooks, Skills, eigenen Commands, Subagenten, Plugins, MCP-Servern, Auto-Memory oder CLAUDE.md
-- **gleiches Verhalten überall:** Hooks, Skills, eigene Commands, Subagenten, Plugins und `.mcp.json`-Server aus dem Host oder dem ausgecheckten Repo laufen nicht, außer du übergibst sie selbst. Der `env`-Block und Helper wie `awsAuthRefresh` aus den Settings-Dateien des Projekts gelten aber weiter
-- **nur ausdrücklich übergebenen Kontext:** Was der Schritt braucht, gibst du mit `--append-system-prompt-file`, `--add-dir`, `--mcp-config`, `--settings`, `--agents` oder `--plugin-dir` mit. Einen Skill kannst du weiterhin ausdrücklich mit `/skill-name` aufrufen.
-
-„Nur das Modell" heißt dabei nicht „ohne Werkzeuge": Auch mit `--bare` hat Claude Bash sowie Werkzeuge zum Lesen und Bearbeiten von Dateien.
+- **Schneller Kaltstart:** keine automatische Erkennung von Hooks, Skills, eigenen Commands, Subagenten, Plugins, MCP-Servern, Auto-Memory oder `CLAUDE.md`.
+- **Gleiches Verhalten überall:** Hooks, Plugins und `.mcp.json`-Server aus dem Host oder dem ausgecheckten Repo laufen nicht, außer du übergibst sie selbst. Der `env`-Block und Helper wie `awsAuthRefresh` aus den Settings-Dateien des Projekts gelten aber weiter.
+- **Nur ausdrücklich übergebener Kontext:** Was der Schritt braucht, gibst du mit `--append-system-prompt-file`, `--add-dir`, `--mcp-config`, `--settings`, `--agents` oder `--plugin-dir` mit.
+- **Nicht ohne Werkzeuge:** Auch mit `--bare` hat Claude Bash sowie Werkzeuge zum Lesen und Bearbeiten von Dateien. `--bare` ist keine Rechte-Grenze; die setzen Modus und Regeln ([S3.8](s3-08-rechte-fuer-autonomie.md)).
 
 **Warum das für die Sicherheit zählt:** Ohne `--bare` führt eine `-p`-Sitzung die Hooks aus der `.claude/settings.json` des Projekts aus und verbindet die Server aus seiner `.mcp.json`, auch in einem Ordner, dem du nie vertraut hast, und ohne Vertrauensdialog. In einer CI, die Code von Beitragenden auscheckt, hält `--bare` deren Hooks von deinem Runner fern. Ganz fremdem Code gibst du zusätzlich `--setting-sources user` mit: Dann liest Claude Code weder die Settings-Dateien noch die `.mcp.json` des Projekts, also auch nicht dessen `env`-Block und Helper.
 
-**Haken bei der Anmeldung:** `--bare` meldet sich **nur** über `ANTHROPIC_API_KEY` oder einen `apiKeyHelper` an. Es liest weder OAuth noch den Schlüsselbund des Systems noch `CLAUDE_CODE_OAUTH_TOKEN` (das Token aus `claude setup-token`). Eine `--bare`-Pipeline braucht also einen API-Key (Weg A) oder Zugangsdaten eines Cloud-Anbieters. Federation-Profile liest `--bare` ebenfalls nicht.
+**Was `--bare` braucht:** den API-Key (Weg A) oder Zugangsdaten eines Cloud-Anbieters. Die Übung unten zeigt beides: dass die Hooks eines fremden Repos ohne `--bare` laufen und dass ein `--bare`-Lauf ohne Key nicht angemeldet ist.
 
-Nimm `--bare` für jeden CI-Schritt, der deine eigenen Skills oder Hooks nicht wirklich braucht. Zum vollen Modus greifst du nur, wenn die Pipeline tatsächlich von einem Plugin oder MCP-Server abhängt.
+### Kosten-Feinschliff: wohin der Rest gehört
 
-### Eine Persona für CI: die Systemprompt-Flags
+Wie du Kosten über Wochen senkst, ist nicht der Sicherheitskern dieses Kapitels und steht dort, wo es zu Hause ist:
 
-Eine Persona für CI sieht anders aus als eine interaktive: knapper, strukturierter, mit Blick auf Zeilennummern. Drei Flags formen sie:
-
-- **`--append-system-prompt "Always respond in JSON."`** hängt einen Hinweis an den Standard-Systemprompt an. Gut für kleine Anpassungen.
-- **`--system-prompt "<full text>"`** ersetzt den Systemprompt ganz. Volle Kontrolle, aber die Voreinstellungen von Claude Code fallen weg.
-- **`--system-prompt-file <path>`** tut dasselbe, liest den Text aber aus einer Datei. Die Persona in git zu versionieren, ist das empfohlene Muster.
-
-```bash
-claude -p "Review the diff" \
-  --system-prompt-file ci/personas/strict-reviewer.md \
-  --output-format json
-```
-
-`--system-prompt` und `--system-prompt-file` schließen sich gegenseitig aus. Output Styles und Personas im Alltag: [S1.15](s1-15-output-styles.md).
-
-### Preise im Verhältnis
-
-Absolute Preise pro Million Tokens ändern sich mit jeder Generation; sie stehen nur im [Kanon](../_canonical.md). Relativ zum Opus-Tier ergeben die Preise dort ungefähr dieses Bild (neu rechnen, wenn sich die Tabelle im Kanon ändert):
-
-| Tier | Relative Kosten |
-|---|---|
-| Fable | ~2.5x |
-| Opus | 1x |
-| Sonnet | ~0.5x |
-| Haiku | ~0.25x |
-
-**Faustregel:** Output kostet ungefähr das Fünffache von Input. Schreib knappe Prompts mit wenigen vorgeladenen Dateien, denn auch Input kostet. Eine CLAUDE.md mit 50 KB, die in jeder Sitzung lädt, ist eine wiederkehrende Abgabe auf jedes Gespräch mit Claude.
-
-Den Überblick, wofür sich welches Modell eignet, gibt [S1.7](s1-07-modellwahl-und-effort.md).
-
-### `/usage` und `/insights`: wohin Tokens und Zeit gehen
-
-`/usage` (Aliase `/cost` und `/stats`) zeigt die Kosten der laufenden Sitzung, die Grenzen deines Plans und Aktivitätsstatistiken. Auf einem Pro-, Max-, Team- oder Enterprise-Plan kommt eine Aufschlüsselung dazu:
-
-- **Anteile:** wie viel der jüngsten Nutzung auf Skills, Subagenten, Plugins und einzelne MCP-Server entfällt
-- **Verhaltensmerker:** etwa langer Kontext oder Cache-Fehlschläge, sobald eines davon 10 % oder mehr der Nutzung ausmacht
-- **Loops:** die schwersten `/loop`- und anderen geplanten Aufgaben, mit Tokens insgesamt und pro Lauf
-
-Mit `d` und `w` wechselst du zwischen den letzten 24 Stunden und den letzten 7 Tagen. Die Zahlen sind Näherungen aus der lokalen Sitzungshistorie dieses Rechners.
-
-`/insights` misst nicht Tokens, sondern deine Arbeitsweise. Es analysiert deine letzten Sitzungen auf diesem Rechner und schreibt einen HTML-Bericht: woran du arbeitest, wo es hakt (etwa missverstandene Aufträge oder fehlerhafter Code) und was du an Claude Code ausprobieren solltest. Die Analyse verbraucht selbst Tokens aus deinem Plan oder deiner API-Nutzung.
-
-**Wochenroutine:** Öffne `/usage`, schalte mit `w` auf 7 Tage und prüf:
-
-1. Welche Skills, Subagenten oder MCP-Server tragen den größten Anteil, und ist das gerechtfertigt?
-2. Welche Loops sind die schwersten, und waren sie gewollt?
-3. Sollte eine Routinearbeit auf ein günstigeres Modell wechseln, etwa das Haiku-Tier?
-
-Danach zeigt dir `/insights`, wo in deiner Arbeitsweise Zeit und Tokens verloren gehen. So misst du deine Kosten laufend, statt am Monatsende überrascht zu werden.
-
-**Für Teams und CI:** `/usage` und `/insights` sehen nur die lokalen Sitzungen eines Rechners, keine anderen Geräte. Die verbindliche Abrechnung zeigt die Usage-Seite der [Claude Console](https://platform.claude.com/usage). Einen einzelnen Headless-Lauf misst `--output-format json`: Die Antwort enthält das Feld `total_cost_usd`, eine Schätzung auf dem Client. Kostenüberwachung in der Pipeline: [S4.5](s4-05-ci-pipelines.md).
-
-### Ein Modell pro Phase: Planen, Umsetzen, Prüfen
-
-Bei anspruchsvollen Aufgaben schlägt eine Pipeline aus drei Modellen einen Ein-Modell-Ansatz oft bei Qualität und Kosten zugleich:
-
-| Phase | Modell | Effort | Warum |
-|---|---|---|---|
-| **Planen** | Opus-Tier | `xhigh` | Fehler in der Architektur kosten am meisten; Tiefe an dieser Stelle erspart dir später das Neuschreiben |
-| **Umsetzen** | Sonnet-Tier | `medium` | Code schreiben ist Routine; Sonnet erledigt das schnell und solide |
-| **Prüfen** | Haiku-Tier | keine Effort-Einstellung | Schlusskontrolle, schneller Mustervergleich; dafür reicht Haiku |
-
-Die Kostenform ist grob `1x (plan) + 0.5x (implement) + 0.25x (review) ≈ 1.75x` statt `3x` (Opus in allen drei Phasen), also rund 40 % günstiger, gerechnet mit gleicher Tokenmenge je Phase, und oft mit besseren Ergebnissen als nur mit Opus.
-
-Wann nicht: bei kleinen Aufgaben, bei denen die Planung der triviale Teil ist. Ein Hilfsprogramm in einer einzigen Datei braucht keinen Opus-Architekten. Wie du Modelle in einer Pipeline mit Codex staffelst: [S4.1](s4-01-modell-pro-phase.md).
-
-### Acht Gewohnheiten, die sich über Monate summieren
-
-1. **Skills statt einer langen CLAUDE.md:** Skills laden bei Bedarf, die CLAUDE.md lädt in jeder Sitzung.
-2. **Subagenten zur Isolation:** Sie halten deinen Hauptkontext frei von den Tokens der Nebenaufgaben.
-3. **`/compact` rechtzeitig:** Verdichte, *bevor* der Kontext voll ist, mit einem Fokus-Hinweis, damit das richtige Detail übrig bleibt.
-4. **Sonnet für Routinearbeit:** Zum Opus-Tier greifst du nur, wenn die Aufgabe Tiefe wirklich belohnt.
-5. **Haiku für Massen-Lesen:** Dateiinventar, einfaches Filtern, „finde alle Dateien, die zu X passen".
-6. **Den Cache nutzen:** Wiederholte Aufgaben landen oft im Cache (Lebensdauer siehe „Prompt-Caching" unten).
-7. **`--bare` für einfache geskriptete Aufrufe:** Es überspringt die Erkennung von Hooks, Skills, Plugins, MCP-Servern, Auto-Memory und CLAUDE.md, wenn du sie nicht brauchst (Anmeldung nur per API-Key, `apiKeyHelper` oder Cloud-Anbieter).
-8. **Knappe Prompts:** Lass „erklär deine Begründung" weg, wenn die Antwort offensichtlich ist.
-
-Die drei Gewohnheiten für den ersten Tag stehen in [S1.19](s1-19-kosten-im-blick.md).
-
-### Faustregeln fürs Team
-
-- **Eigene Basislinie:** Was eine Person pro Tag ausgibt, schwankt stark mit Kontextlänge, Modellmix und der Frage, wie oft Claude unbeaufsichtigt läuft. Die Kostenseite der Doku rät, mit einer kleinen Pilotgruppe eine eigene Basislinie zu messen, bevor ihr breit ausrollt.
-- **Im Abo:** Kenn deine Grenze; `/usage` zeigt die Plan-Limits.
-- **Im Team:** Macht `--max-budget-usd` zur Voreinstellung in geteilten Skripten und schaut jede Woche in `/usage`.
-
-Es geht nicht um eine bestimmte Zahl, sondern darum, dass es eine gibt und du sie kennst.
-
-### Prompt-Caching: der größte Kostenhebel
-
-Claude Code schickt bei jeder Nachricht den ganzen Kontext neu. Die API cacht den unveränderten Anfang der Anfrage (den Präfix) und berechnet ihn beim nächsten Mal zum Cache-Preis. Ein Cache-Treffer kostet einen Bruchteil des normalen Input-Preises, beim Sonnet-Tier ein Zehntel. Das erste Schreiben in den Cache kostet dagegen etwas mehr als normaler Input.
-
-**Wie lange der Cache hält:** Jeder Treffer setzt die Uhr zurück. Mit API-Key oder Cloud-Anbieter, also im typischen CI-Lauf, hält er standardmäßig fünf Minuten. Im Abo bekommt die Hauptsitzung innerhalb der Plan-Nutzung eine Stunde; Subagenten bekommen fünf Minuten.
-
-Was das bedeutet:
-
-- Eine lange CLAUDE.md lädt einmal beim Sitzungsstart und liegt dann im Cache; weitere Runden innerhalb der Lebensdauer treffen ihn.
-- Ein Subagent liest den Cache der Hauptsitzung nicht mit, er baut einen eigenen auf. Ein Fork dagegen erbt den Präfix und liest ihn.
-
-So triffst du den Cache öfter:
-
-1. **Wechsle das Modell nicht mitten in der Sitzung.** Jedes Modell hat seinen eigenen Cache.
-2. **Bündle zusammengehörige Aufgaben in einer Sitzung,** solange der Cache warm ist.
-3. **Ändere die CLAUDE.md ruhig, aber wisse, wann es wirkt:** Eine Änderung mitten in der Sitzung bricht den Cache nicht, gilt aber erst nach `/clear`, `/compact` oder einem Neustart.
-4. **Für Batch-Läufe in CI:** `--exclude-dynamic-system-prompt-sections` verschiebt benutzerbezogenen Kontext aus dem Systemprompt und verbessert so die Wiederverwendung über Nutzer und Rechner hinweg. Das Flag ist für geskriptete Mehrbenutzer-Lasten mit `-p` gedacht und wirkt nur mit dem Standard-Systemprompt, nicht zusammen mit `--system-prompt` oder `--system-prompt-file`.
-
-**Was den Cache bricht:**
-
-- ein Modellwechsel (`/model opus` ↔ `/model sonnet`)
-- je nach Modell ein Wechsel der Effort-Stufe
-- ein MCP-Server, den du mitten in der Sitzung verbindest oder entfernst, aber nur, wenn sich dadurch die Werkzeugdefinitionen der Anfrage ändern. Stellt Tool Search die MCP-Werkzeuge zurück (auf unterstützten Modellen der Standard), bleibt der Cache stehen. Für ein Plugin mit MCP-Servern gilt dasselbe; seine Skills, Commands, Agents und Hooks brechen den Cache nie.
-- `/compact`, weil es die Unterhaltung durch eine Zusammenfassung ersetzt, und ein Upgrade von Claude Code
-- eine Pause, die länger ist als die Lebensdauer
-- ein anderer `--system-prompt` zwischen zwei Läufen
-
-**Größenordnung:** Eine CLAUDE.md mit 100K Tokens kostet beim ersten Laden den vollen Input-Preis und den Aufschlag fürs Schreiben in den Cache. Bei einem Treffer zahlst du nur den Cache-Lesepreis. Bei zehn Sitzungen am Tag summiert sich der Unterschied. Wie gut der Cache gerade trifft, zeigt `/usage` in der Zeile `Prompt cache (main)`.
-
-### Anti-Patterns
-
-- **Mach das Opus-Tier mit `xhigh` nicht zur Voreinstellung.** Das ist eine der teuersten Kombinationen und selten gerechtfertigt.
-- **Lass `/loop` oder `/goal` nicht ohne Kostengrenze laufen** ([S3.13](s3-13-autonome-loops-absichern.md)). Die Kosten können sich still vervielfachen.
-- **Lass die CLAUDE.md nicht unbegrenzt wachsen.** Jedes Token darin zahlst du in jeder Sitzung, für immer.
-- **Rechtfertige laufende Ausgaben nicht mit „Heute ist schon so viel weg, dann kann ich auch weitermachen".** Nimm das frühe Stoppsignal als Hilfe, nicht als Störung.
+- **Modell und Effort je Phase:** [S4.1](s4-01-modell-pro-phase.md) und [S1.7](s1-07-modellwahl-und-effort.md). Preisverhältnisse zwischen den Modellen führt der [Kanon](../_canonical.md), nicht dieses Kapitel.
+- **`/usage`, `/insights`, die ersten Gewohnheiten:** [S1.19](s1-19-kosten-im-blick.md). `/usage` und `/insights` sehen nur die lokalen Sitzungen eines Rechners, nicht die Läufe deiner Pipeline.
+- **Systemprompt für CI (`--append-system-prompt`, `--system-prompt-file`):** [CLI-Referenz](https://code.claude.com/docs/en/cli-reference#system-prompt-flags) und [S1.15](s1-15-output-styles.md).
+- **Prompt-Caching und Basislinie:** Laut [Doku](https://code.claude.com/docs/en/prompt-caching) hält der Cache mit API-Key oder Cloud-Anbieter, also im typischen CI-Lauf, standardmäßig fünf Minuten; ein Modellwechsel bricht ihn. Bündle zusammengehörige Läufe zeitlich eng. Die Kostenseite der Doku rät außerdem, vor einem breiten Rollout mit einer kleinen Gruppe eine eigene Basislinie zu messen.
 
 ## Selbst machen
 
-### Übung: einen Headless-Lauf deckeln und nachmessen (etwa 10 Minuten)
+### Übung: ein fremdes Repo, ein Hook, ein Deckel (etwa 15 Minuten)
 
-**Ziel:** Einen unbeaufsichtigten Lauf mit beiden Grenzen absichern und danach wissen, welcher Zugang gegriffen hat und was der Lauf gekostet hat.
+**Ziel:** Du siehst, dass `claude -p` ohne `--bare` den Hook eines Ordners ausführt, ohne zu fragen, dass `--bare` ihn nicht lädt (und dafür eine Anmeldung braucht, die du vielleicht nicht hast), und wie ein Budgetdeckel einen Lauf abbricht.
 
-**Schritt 1: den Zugang prüfen**
+**Startzustand:** ein neuer Ordner `~/cc-workshop/ci-zugang`, der ein „fremdes Repo" spielt. Sein Hook ist harmlos: Er schreibt nur eine Zeile in `hook-ran.txt` im Ordner. Was ein böser Hook an derselben Stelle tun könnte, bleibt Text. Du brauchst nur Claude Code und Python. Die Hauptübung braucht keinen API-Key; wer einen hat, findet unten ein Extra. Es läuft nichts weiter, an deiner globalen Konfiguration ändert sich nichts. **Kein Secret in einen Prompt oder eine Datei:** Auch nicht für das Extra.
 
-`claude auth status` zeigt, welche Zugangsdaten Claude Code gerade nehmen würde (`"authMethod": "api_key"` oder `"oauth_token"`). Ob sie gültig sind, prüft der Befehl nicht. Willst du `--bare` nutzen, brauchst du einen API-Key (Weg A).
-
-**Schritt 2: beide Grenzen setzen**
-
-Führe in einem Repo mit ein paar Commits aus:
-
-<!-- cockpit:example -->
-```bash
-claude -p "Generate release notes" --max-budget-usd 0.20 --max-turns 10
-```
-
-Prüf danach mit `echo $?` den Exit-Code. Erreicht der Lauf eine der beiden Grenzen, endet er mit einem Fehler.
-
-**Schritt 3 (Bonus, etwa 5 Minuten): eine Kostenspur für den Pre-Commit-Hook**
-
-Baust du in [S4.5](s4-05-ci-pipelines.md) den Pre-Commit-Hook mit `claude -p`, dann schreib jeden Aufruf in eine lokale Spur-Datei, damit du später nachprüfen kannst, wie oft der Hook lief und mit welchem Ergebnis:
+Bash:
 
 ```bash
-echo "$(date) | $(basename "$0") | budget=0.10 | result=$(echo "$RESULT" | head -1)" >> ~/.claude/precommit-trace.log
+mkdir -p ~/cc-workshop/ci-zugang/.claude && cd ~/cc-workshop/ci-zugang
 ```
 
-Setz die Zeile direkt vor `exit 0` (und eine ähnliche vor `exit 1`). Nach ein paar Commits zeigt `tail ~/.claude/precommit-trace.log`, wie oft der Hook lief und was herauskam. Die Zeile notiert nur die Grenze (`budget=0.10`), nicht den echten Betrag. Den echten Betrag liefert ein Lauf mit `--output-format json` im Feld `total_cost_usd`.
+PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\cc-workshop\ci-zugang\.claude"; Set-Location "$HOME\cc-workshop\ci-zugang"
+```
+
+1. Sieh nach, womit du angemeldet bist: `claude auth status`. Erwartet: JSON mit dem Feld `authMethod`, bei einer Anmeldung per Browser vermutlich `claude.ai`. Danach `echo "exit=$?"` (PowerShell: `"exit=$LASTEXITCODE"`): `exit=0`, wenn du angemeldet bist. Merk dir `authMethod`: Steht dort `claude.ai` oder `oauth_token`, wird `--bare` in Schritt 4 nicht angemeldet sein.
+2. Leg mit einem Editor die Datei `.claude/settings.json` an (`.claude` ist ein geschützter Pfad, schreib die Datei selbst, nicht über Claude):
+
+   <!-- cockpit:example -->
+   ```json
+   {
+     "hooks": {
+       "SessionStart": [
+         {
+           "hooks": [
+             {"type": "command", "command": "echo ran >> \"${CLAUDE_PROJECT_DIR}/hook-ran.txt\""}
+           ]
+         }
+       ]
+     }
+   }
+   ```
+
+   Du hast kein `claude` gestartet und keinen Vertrauensdialog bestätigt. Prüf mit `ls` (PowerShell: `dir`), dass `hook-ran.txt` noch nicht existiert.
+3. Lauf ohne `--bare`, mit beiden Deckeln und JSON-Ausgabe. Bash:
+
+   ```bash
+   claude -p "Reply with the single word ok." --model haiku --max-turns 2 --max-budget-usd 0.50 --permission-mode dontAsk --output-format json
+   echo "exit=$?"
+   cat hook-ran.txt
+   ```
+
+   PowerShell: dieselbe erste Zeile, dann `"exit=$LASTEXITCODE"` und `Get-Content hook-ran.txt`. Erwartet: Es kam kein Vertrauensdialog, keine Rückfrage, `exit=0`. In der JSON-Ausgabe steht `total_cost_usd` (laut Doku eine Schätzung), und `hook-ran.txt` enthält die Zeile `ran`. Der Hook eines Ordners, den du nie bestätigt hast, ist gelaufen.
+4. Lösch den Beweis und wiederhol den Lauf mit `--bare`. Bash:
+
+   ```bash
+   rm hook-ran.txt
+   claude --bare -p "Reply with the single word ok." --model haiku --max-turns 2 --output-format json
+   echo "exit=$?"
+   ls hook-ran.txt
+   ```
+
+   PowerShell: `Remove-Item hook-ran.txt`, dieselbe `claude`-Zeile, `"exit=$LASTEXITCODE"`, `Test-Path hook-ran.txt`. Erwartet: `hook-ran.txt` existiert nicht (`ls` meldet, dass es fehlt, `Test-Path` gibt `False`): Der Hook wurde nie geladen. Bist du nur per Browser angemeldet, endet der Lauf mit einem Fehler, nicht angemeldet, und einem Exit-Code ungleich 0; die Doku sagt dazu, dass `--bare` OAuth-Anmeldungen und den Schlüsselbund nie liest und ein Fehler im Lauf als Ergebnis auf stdout steht. Hast du `ANTHROPIC_API_KEY` in der Umgebung, läuft er mit Antwort durch. In beiden Fällen fehlt `hook-ran.txt`.
+5. Lass einen Lauf an seiner Budgetgrenze scheitern. Der Deckel ist absichtlich winzig:
+
+   ```bash
+   claude -p "Reply with the single word ok." --model haiku --max-turns 2 --max-budget-usd 0.0001 --permission-mode dontAsk --output-format json
+   echo "exit=$?"
+   ```
+
+   In PowerShell: dieselbe erste Zeile, dann `"exit=$LASTEXITCODE"`. Erwartet: Der Lauf endet vorzeitig; im JSON steht laut Doku `error_max_budget_usd` als `subtype` des Ergebnisses, und `total_cost_usd` ist größer als 0, denn die Antwort, die den Deckel überschritten hat, wird bezahlt. Notier dir den Exit-Code, den du siehst: Die Doku nennt keinen, also verlass dich in deiner Pipeline nicht auf eine Annahme, sondern auf das, was du gemessen hast.
+
+**Extra: `--bare` mit eigenem Key (etwa 5 Minuten).** Nur, wenn du einen API-Key aus der Console hast. Setz ihn nur für dieses Terminal, ohne dass er in einer Datei oder im Verlauf landet. Bash: `read -rs ANTHROPIC_API_KEY && export ANTHROPIC_API_KEY`. PowerShell: `$env:ANTHROPIC_API_KEY = Read-Host "key"`. Wiederhol Schritt 4. Erwartet: ein normales Ergebnis, `exit=0`, kein `hook-ran.txt`. Räum danach auf: `unset ANTHROPIC_API_KEY` beziehungsweise `Remove-Item Env:ANTHROPIC_API_KEY`, und schließ das Terminal. Mit gesetztem Key rechnet jeder `-p`-Lauf über die API ab, auch ohne `--bare`.
+
+**Aufräumen:** Es läuft nichts weiter. Lösch den Ordner `~/cc-workshop/ci-zugang` selbst.
 
 **Geschafft, wenn:**
 
-- [ ] du weißt, welcher Zugang auf deinem Rechner greift
-- [ ] ein Lauf mit `--max-budget-usd` und `--max-turns` durchgelaufen ist und du seinen Exit-Code kennst
-- [ ] (Bonus) `~/.claude/precommit-trace.log` mit jedem Commit wächst
+- [ ] du `authMethod` deiner Anmeldung kennst
+- [ ] `hook-ran.txt` nach dem Lauf ohne `--bare` existierte und nach dem Lauf mit `--bare` nicht
+- [ ] du in Schritt 3 `total_cost_usd` gelesen hast
+- [ ] der Lauf mit dem winzigen Budget vorzeitig endete und du seinen Exit-Code notiert hast
 
 ## Typische Fallen
 
 - **Der `--bare`-Job ist nicht angemeldet.** Er hat nur `CLAUDE_CODE_OAUTH_TOKEN`, und das liest `--bare` nie. Nimm Weg A (`ANTHROPIC_API_KEY`) oder lass `--bare` weg, aber nur auf Code, dem du vertraust.
-- **Die „Abo"-Pipeline rechnet über die API ab.** In der Runner-Umgebung steht noch ein `ANTHROPIC_API_KEY`, und der gewinnt gegen das Abo-Token. `claude auth status` zeigt, welche Zugangsdaten gewählt werden.
-- **Das Token landet im Log oder auf dem Beamer.** `claude setup-token` gibt ein Token mit einem Jahr Laufzeit aus. Zeig den Befehl nie live, schreib das Token nie in eine Datei im Repo und ersetze es sofort, wenn es sichtbar war.
-- **Der Lauf hat keine Rundengrenze, weil `claude --help` das Flag nicht zeigt.** `--max-turns` gibt es trotzdem; die CLI-Referenz ist maßgeblich, nicht die Hilfe.
+- **Die „Abo"-Pipeline rechnet über die API ab.** In der Runner-Umgebung steht noch ein `ANTHROPIC_API_KEY`, und der gewinnt gegen das Abo-Token. `claude auth status` zeigt, welche Methode gewählt wird.
+- **Das Token landet im Log.** `claude setup-token` gibt ein Token mit einem Jahr Laufzeit aus. Schreib es nie in eine Datei im Repo, nie in einen Prompt, und ersetze es sofort, wenn es sichtbar war.
+- **Die Grenze „sichert" nur das Geld.** `--max-budget-usd` und `--max-turns` begrenzen Kosten und Schritte, nicht, was Claude in diesen Schritten tut. Das bestimmen Rechte-Modus und Regeln.
 
 ## Check
 
-Du kannst für eine CI-Stufe den passenden Zugang wählen und begründen (API-Key mit `--bare` für fremden Code, Abo-Token nur ohne `--bare` auf vertrauenswürdigem Code), jeden Lauf mit `--max-budget-usd` und `--max-turns` deckeln und die Kosten mit einem Modell pro Phase und Prompt-Caching senken.
+Du kannst für eine CI-Stufe den passenden Zugang wählen und begründen, sagen, was `--bare` weglässt und braucht, und jeden Lauf mit `--max-budget-usd` und `--max-turns` deckeln.
 
-1. Welche Zugangsdaten liest ein `claude --bare`-Aufruf, und welche nie?
-2. Was passiert in einem `-p`-Lauf, wenn `ANTHROPIC_API_KEY` und `CLAUDE_CODE_OAUTH_TOKEN` beide gesetzt sind?
-3. Was läuft auf deinem Runner mit, wenn ein `-p`-Job ohne `--bare` fremden Code auscheckt?
+1. Welche Zugangsdaten liest ein `claude --bare`-Aufruf für die Anthropic-API, und welche nie?
+2. Was passiert in einem `-p`-Lauf, wenn `ANTHROPIC_API_KEY` und `CLAUDE_CODE_OAUTH_TOKEN` beide gesetzt sind, und was läuft auf deinem Runner mit, wenn ein `-p`-Job ohne `--bare` fremden Code auscheckt?
+3. Was begrenzt `--max-budget-usd`, was `--max-turns`, und warum können die Kosten trotzdem etwas über der Dollargrenze liegen?
+
+<details><summary>Auflösung</summary>
+
+1. `ANTHROPIC_API_KEY` oder einen `apiKeyHelper`. Nie liest `--bare` OAuth-Anmeldungen, den Schlüsselbund, `CLAUDE_CODE_OAUTH_TOKEN` oder Federation-Profile.
+2. Der API-Key gewinnt; im `-p`-Modus wird ein vorhandener Key immer genutzt. Ohne `--bare` laufen die Hooks aus der `.claude/settings.json` und die Server aus der `.mcp.json` des ausgecheckten Repos, ohne Vertrauensdialog.
+3. `--max-budget-usd` begrenzt die Ausgaben (Subagenten zählen mit), `--max-turns` die Zahl der Arbeitsschritte. Die Antwort, die die Dollargrenze überschreitet, wird noch bezahlt.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Welcher Ansatz senkt laut diesem Kapitel die Kosten einer anspruchsvollen Aufgabe, ohne auf Qualität zu verzichten?
+**Frage:** Eine Pipeline prüft Pull Requests von Beitragenden. Sie nutzt bisher das Abo-Token deines Projekts (`CLAUDE_CODE_OAUTH_TOKEN`), ohne `--bare`. Du willst fremde Hooks aussperren. Was ist richtig?
 
-- **Richtig:** Planen mit dem Opus-Tier, Umsetzen mit Sonnet, Prüfen mit Haiku: grob 1,75x statt 3x.
-- Falsch: `--bare` für alle Subagenten, weil geladene Hooks und Plugins die Kosten treiben, nicht die Modellwahl.
-- Falsch: Prompt-Caching allein, weil ein warmer Cache die Input-Tokens aller Subagenten auf null senkt.
-- Falsch: `effort: low` für alle Phasen, weil die Effort-Stufe mehr bewirkt als die Wahl des Modells.
+- **Richtig:** Auf einen API-Key aus der Console wechseln und `--bare` hinzufügen. Das Abo-Token liest `--bare` nie, ein Job mit `--bare` und nur dem Token wäre nicht angemeldet.
+- Falsch: `--bare` zum bestehenden Aufruf hinzufügen und das Abo-Token behalten, denn `--bare` übernimmt die Anmeldung aus der Umgebung.
+- Falsch: Nichts ändern, denn Hooks eines Repos laufen in `-p` erst, nachdem jemand den Vertrauensdialog für den Ordner bestätigt hat.
+- Falsch: Zusätzlich einen API-Key setzen und das Token behalten, denn bei zwei Zugängen gilt das Abo und der Key bleibt ungenutzt.
 
 </details>
 
@@ -311,7 +234,7 @@ Du kannst für eine CI-Stufe den passenden Zugang wählen und begründen (API-Ke
 
 - [Authentifizierung, u. a. Vorrang und langlebige Tokens](https://code.claude.com/docs/en/authentication)
 - [Headless und `--bare`](https://code.claude.com/docs/en/headless)
-- [CLI-Referenz (`--max-budget-usd`, `--max-turns`, Systemprompt-Flags)](https://code.claude.com/docs/en/cli-reference)
+- [CLI-Referenz (`--max-budget-usd`, `--max-turns`, `claude auth status`)](https://code.claude.com/docs/en/cli-reference)
 - [Kosten verwalten](https://code.claude.com/docs/en/costs)
 - [Wie Claude Code Prompt-Caching nutzt](https://code.claude.com/docs/en/prompt-caching)
 - [GitHub Actions](https://code.claude.com/docs/en/github-actions)
