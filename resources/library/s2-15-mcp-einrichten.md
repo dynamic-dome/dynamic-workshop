@@ -195,7 +195,7 @@ Du kannst für eine Integration Transport und Scope begründen, den Server mit `
 ## Weiterlesen
 
 - [MCP in Claude Code](https://code.claude.com/docs/en/mcp)
-- [S2.14 · MCP: der Integrationsstecker](s2-14-mcp-stecker.md) (Demo und Übung)
+- [S2.14 · MCP: der Integrationsstecker](s2-14-mcp-stecker.md) (Übung)
 - [S2.16 · MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](s2-16-mcp-im-detail.md)
 - [S2.17 · MCP-Sicherheit und ein eigener Server](s2-17-mcp-sicherheit.md)
 - [S2.12 · Plugin-Lebenszyklus, Scopes und Marketplaces](s2-12-plugin-lebenszyklus.md)

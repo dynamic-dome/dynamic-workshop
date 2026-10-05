@@ -58,7 +58,9 @@ python3 -m pytest -v               # Windows: python -m pytest -v
 - Reihenfolge und Minuten der vier Sessions: [`resources/paths/live-workshop.md`](resources/paths/live-workshop.md) (generiert).
 - Foliensatz für den Einstieg jeder Session: [`resources/media/claude-code-praxisbibliothek.pptx`](resources/media/claude-code-praxisbibliothek.pptx)
   — Diagramme als bearbeitbare Formen, Sprechernotizen auf Deutsch.
-- Im Kapitel steht unter „Vorführen" die Demo; Talking Points und Recovery-Hinweise liegen dort in „Für Moderierende".
+- Die Kapitel sind für Selbstlernende geschrieben. Demo, Talking Points und Recovery-Hinweise je Kapitel liegen in
+  [`resources/moderation/vorfuehren/`](resources/moderation/vorfuehren/), eine Datei je Kapitel; der Live-Pfad verlinkt
+  sie in der Spalte „Vorführen".
 - Co-Pilot während der Session: `/dynamic-workshop:workshop guide S1` bis `guide S4` oder `guide <Kapitel>`.
 
 ## 3 · Pflegen (Maintainer und Agenten)
@@ -67,7 +69,8 @@ python3 -m pytest -v               # Windows: python -m pytest -v
 
 | Information | Quelle | Daraus erzeugt |
 |---|---|---|
-| Lehrinhalt, Demo, Übung, Quiz, Schnellcheck | `resources/library/<kapitel>.md` | Cockpit, Katalog, Referenz `analogien.md` |
+| Lehrinhalt, Übung, Quiz, Schnellcheck | `resources/library/<kapitel>.md` | Cockpit, Katalog, Referenz `analogien.md` |
+| Demo und Hinweise für Moderierende je Kapitel | `resources/moderation/vorfuehren/<kapitel>.md` | Spalte „Vorführen" im Live-Pfad, Katalogfeld `demo` |
 | Reihenfolge, Stufe, Minuten, Voraussetzungen | Frontmatter der Kapitel (Vertrag: `docs/migration/chapter-meta.yaml`) | Pfade, Katalog, Deck |
 | Regale | `resources/library/_shelves.yaml` | Bibliotheks-Übersicht, Cockpit, Deck |
 | Einstufung (Fragen, Regeln, Texte) | `resources/library/_placement.yaml` | Katalog, `einstufung.md`, Pfade |

@@ -33,6 +33,8 @@ Schritt ist überspringbar.
 - Engine: `${CLAUDE_PLUGIN_ROOT}/tools/placement.py` (nur Python-Standardbibliothek).
 - Live-Pfad und Moderation: `${CLAUDE_PLUGIN_ROOT}/resources/paths/live-workshop.md`,
   `${CLAUDE_PLUGIN_ROOT}/resources/moderation/handbuch.md`.
+- Demo und Hinweise für Moderierende je Kapitel: Katalogfeld `demo` (Pfad relativ zu `resources/library/`, oder
+  `null`). Nur der Modus `guide` liest diese Dateien; beim Lernen (`next`, `learn`, `review`) kommen sie nicht vor.
 
 **Fehlt der Katalog oder ein Kapitel, sag das klar** („Das Kapitel S2.8 fehlt in dieser Installation — bitte das
 Plugin aktualisieren") und unterrichte **nicht** aus dem Gedächtnis weiter. Wird der Skill ohne Plugin genutzt
@@ -124,7 +126,7 @@ Lies das Kapitel ganz, dann gehe nach **Typ** vor (Abschnitte, die das Kapitel n
    überspringen — mit Lernprotokoll („per Schnellcheck belegt") und Eintrag in `fortschritt.json`.
 2. **Auf einen Blick + Bild im Kopf**: in eigenen Worten, höchstens ~150 Wörter, mit der Analogie. Bei
    Sicherheitsboden-Kapiteln (`safety_floor`) die Sicherheitsaussage wörtlich nennen.
-3. **Selbst machen / Vorführen**: Die Person arbeitet **in ihrem eigenen Terminal** (Playground oder eigenes Repo).
+3. **Selbst machen**: Die Person arbeitet **in ihrem eigenen Terminal** (Playground oder eigenes Repo).
    Du gibst den Auftrag Schritt für Schritt, Hinweise nur auf Wunsch („Tipp?"), steigernd. Prüfen darfst du, was die
    Person dir zeigt oder freigibt (Datei lesen, Ausgabe ansehen) — keine zerstörerischen Befehle, keine Änderungen an
    ihren Dateien ohne ausdrückliches Ja. Bei 🔧-Kapiteln ohne installierte Bausteine: auf den Beobachtungsweg wechseln.
@@ -147,7 +149,8 @@ gewollt: Abrufen baut Speicherstärke auf, flüssiges Wiedererkennen täuscht.
 ## Moderationsmodus (`guide`)
 
 Du unterstützt die moderierende Person, nicht die Gruppe. Für ein Kapitel: Dauer (`minutes`), 3–5 Kernaussagen aus
-„Auf einen Blick", die Analogie, die Demo-Schritte aus „Vorführen" samt „Für Moderierende" (Talking Points,
-Recovery), eine Überleitung zum nächsten Kapitel im Live-Pfad, zwei Rückfragen, auf die man gefasst sein sollte.
-Für `S1`–`S4`: die Kapitel der Session aus `paths/live-workshop.md` mit Minuten, dazu Ablauf, Pausen und
-Live-Anker aus `moderation/handbuch.md`. Auf „weiter" gehst du zum nächsten Kapitel der Session.
+„Auf einen Blick", die Analogie, die Demo-Schritte und die Hinweise für Moderierende (Talking Points, Recovery)
+aus der Demo-Datei des Kapitels (Katalogfeld `demo`), eine Überleitung zum nächsten Kapitel im Live-Pfad, zwei Rückfragen, auf die man gefasst sein sollte.
+Hat ein Kapitel keine Demo-Datei, sag das und schlag vor, die Übung aus „Selbst machen" gemeinsam zu machen;
+erfinde keine Demo. Für `S1`–`S4`: die Kapitel der Session aus `paths/live-workshop.md` mit Minuten, dazu Ablauf,
+Pausen und Live-Anker aus `moderation/handbuch.md`. Auf „weiter" gehst du zum nächsten Kapitel der Session.

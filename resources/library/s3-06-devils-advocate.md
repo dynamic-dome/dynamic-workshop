@@ -104,7 +104,7 @@ Für jeden bestätigten Befund arbeitet ein Fixer-Agent so:
 
 ### Das Übungsziel: fünf eingebaute Schwachstellen
 
-Demo und Übung prüfen `workshop-playground/access_control.py`. Die Datei enthält absichtlich fünf Schwachstellen:
+Die Übung prüft `workshop-playground/access_control.py`. Die Datei enthält absichtlich fünf Schwachstellen:
 
 | Schwachstelle | Ort | Was passiert |
 |---|---|---|
@@ -128,171 +128,6 @@ Der zweite Playground `osdp_frame_decoder.c` ist ein vereinfachter Decoder für 
 - Integer Overflow in `compute_crc()` (die `uint8_t`-Arithmetik läuft über)
 - Format String in `log_frame()`
 - Off-by-one in `read_frame_crc()` (liest die CRC ein Byte hinter dem Frame-Ende)
-
-## Vorführen
-
-### Demo: Devil's Advocate, adversariales Sicherheitstesten
-
-**Ziel:** Eine automatisierte Pentest-Pipeline in Aktion zeigen.
-
-**Vorbereitung**
-
-- Den `workshop-playground/` hast du beim Einrichten geklont ([S0.1](s0-01-werkstatt-einrichten.md)). Er wird so verwendet, wie er ist; du legst keine Dateien an.
-- 🔧 Das Workshop-Plugin `devil-advocate-swarms` ist installiert (`claude plugin list`).
-
-**Schritt 1: in den Playground wechseln**
-
-```bash
-cd workshop-playground/
-```
-
-**Schritt 2: den Schwarm starten**
-
-```
-/devil-advocate-swarms:swarm scan access_control.py
-```
-
-**Schritt 3: Stufe 1, die Scanner**
-
-Die Scanner laufen parallel. Sag, wonach jeder sucht, und zeig: Mehrere finden dieselben eingebauten Probleme, die Überlappung ist die Bestätigung. Erwartet sind die fünf Schwachstellen aus „Im Detail".
-
-Übersieht der Schwarm den fail-open-Fehler, halte an und untersuche `check_access_resilient()` von Hand. Dieser Befund ist am nächsten am Fach der Teilnehmenden: Eine Zutrittsanlage muss sicher schließen, statt Zutritt zu gewähren, weil die Datenbank des Controllers nicht erreichbar ist.
-
-**Schritt 4: Stufe 2, die Debatte**
-
-Das ist der wichtigste Teil. Werde langsamer und erkläre, was passiert:
-
-- Der Ankläger argumentiert jeden Befund wie in einem Exploit-Bericht.
-- Der Verteidiger sucht Gründe, warum er nicht ausnutzbar ist.
-- Command Injection: Der Verteidiger hat kein gutes Argument. Bestätigt.
-- Path Traversal: Der Verteidiger sagt vielleicht „`logs/` ist ein kontrollierter Ordner", der Ankläger kontert mit dem Beispiel `../../etc/passwd`. Bestätigt.
-- Fail-open: Der Verteidiger sagt vielleicht „bei Türen zählt die Verfügbarkeit", der Ankläger kontert, dass Notausgang und Prüfung der Berechtigung getrennte Sicherheitskanäle sind. Bestätigt.
-- Fest eingetragenes Passwort: Hier hat der Verteidiger ein gutes Argument, denn `ADMIN_PASSWORD` ist toter Code. Das Ergebnis kann zu Recht CONFIRMED mit niedriger Schwere oder NEEDS INVESTIGATION lauten.
-- Wird ein Befund wegdiskutiert, zeig es: So spart die Pipeline Menschen Zeit.
-
-**Schritt 5: Stufe 3, der Konsens**
-
-Zeig die Aufteilung in CONFIRMED und FALSE POSITIVE. Jeder bestätigte Befund hat einen vollständigen Audit-Trail; das Protokoll der Debatte ist der Beleg.
-
-**Schritt 6: Stufe 4, die Fixer**
-
-Zeig, wie die Fixes eingespielt werden. Jeder Fix ist klein und gezielt, jeder hat einen Regressionstest.
-
-**Schritt 7: Bilanz ziehen**
-
-Geh die Befunde durch. Ziel ist, dass alle fünf eingebauten Schwachstellen gefunden werden. Findet der Schwarm nur vier, nutze die fehlende als Lehrmoment: Auch adversariale Automatisierung braucht ein fachkundiges menschliches Review.
-
-**Optionaler Schritt: den Schwarm auf den C-Playground ansetzen**
-
-Für Gruppen aus Embedded und physischer Sicherheit:
-
-```
-/devil-advocate-swarms:swarm scan osdp_frame_decoder.c
-```
-
-Erwartet sind die vier Speicherfehler aus „Im Detail".
-
-<details><summary>Für Moderierende</summary>
-
-**Dauer:** etwa 12 Minuten geplant; reserviere live etwa 18 Minuten, falls Debatte und Konsens viel ausgeben.
-
-**Rahmung:** Stell die Demo als automatisierten Penetrationstest mit Gerichtsverfahren vor, denn genau das ist sie. Wer aus der Cybersecurity kommt, fühlt sich hier zu Hause; für diese Gruppe ist die Demo der Höhepunkt.
-
-**Sagen (nach Schritt 7):** „Das ist ein automatisierter Penetrationstest mit eingebauter rechtlicher Prüfung. Der Ankläger ist euer Pentester, der den Exploit-Bericht schreibt. Der Verteidiger ist euer Entwickler, der erklärt, was wirklich ausnutzbar ist und was nicht. Der Konsens-Agent ist euer Sicherheitsverantwortlicher, der entscheidet, was eine CVE bekommt. Die Fixer sind euer Patch-Team. Das Ganze ist gerade von allein durchgelaufen. Für die Security-Leute im Raum: Das ist eure Welt, angewendet auf Code."
-
-**Welcher Playground?** `access_control.py` (Python, Benutzerverwaltung) zeigt Schwachstellen, wie sie in Backend-Diensten vorkommen. `osdp_frame_decoder.c` (C, eingebetteter OSDP-Frame-Parser) zeigt Speicherfehler, wie sie in Firmware vorkommen: eingebettete Protokolle, Parsen von Wire-Formaten. Zeig beide, wenn die Zeit reicht, sonst den, der näher am Arbeitsalltag der Gruppe ist.
-
-**Windows:** siehe „Typische Fallen". Sprich die Einschränkung kurz an und mach weiter; der statische Befund ist der Punkt der Demo.
-
-**Nach der Demo:** Die Fixer haben `access_control.py` geändert. Setz die Datei im Playground mit `git checkout -- access_control.py` zurück, damit die Schwachstellen für die nächste Runde erhalten bleiben.
-
-**Wenn etwas schiefgeht:**
-
-- **Plugin nicht installiert:** Zeig die Aufzeichnung aus der Vorbereitung und besprich die vier Stufen (Scan → Debatte → Konsens → Fix). Oder zeig live den Weg ohne Plugin aus der Übung unten; Debatte und Konsens siehst du dann nicht.
-- **Falsche Befunde oder eine übersehene Schwachstelle:** siehe „Typische Fallen", beides ist ein Lehrmoment.
-- **Die Debatte sieht in dieser Plugin-Version anders aus:** Erzähl die Absicht („Der Ankläger argumentiert für die Ausnutzbarkeit, der Verteidiger hält dagegen"), auch wenn die Stufen anders heißen. Die Architektur zählt mehr als die Bezeichnungen.
-
-</details>
-
-### Demo: Vom Advisory zum PR (CVE-Fix-Pipeline)
-
-Diese Demo überträgt die Idee: Sie zeigt keinen Schwarm, sondern den Weg „Research-to-Patch" mit Websuche, Plan-Modus ([S1.14](s1-14-plan-modus.md)) und automatischem PR. Das Automatisieren von PRs vertieft [S4.5](s4-05-ci-pipelines.md).
-
-**Ziel:** Zeigen, wie Claude eine echte Schwachstelle in einer Abhängigkeit behebt.
-
-**Schritt 0: eine verwundbare Abhängigkeit einbauen (vor der Demo)**
-
-Die `workshop-playground/requirements.txt` enthält nur ein ungepinntes `pytest`. Pinne vor der Demo vorübergehend eine bekannt verwundbare ältere Bibliothek, damit der CVE-Fix echten Input hat:
-
-```bash
-# Inside workshop-playground/
-# Option A (Python, recommended):
-echo "requests==2.5.0" >> requirements.txt    # CVE-2018-18074
-
-# Option B (alternative Python CVE):
-# echo "urllib3==1.24.0" >> requirements.txt
-```
-
-Wichtig: Die Version wird **absichtlich nicht installiert**. Die Demo zeigt nur Scan, Fix und PR, keine Ausnutzung. Claude braucht nur den Versionsstring im Manifest, um ein Advisory dazu zu finden.
-
-**Schritt 1: Claude um den Fix bitten**
-
-```
-/plan Find and fix any known CVEs in our dependencies.
-Search the web for current advisories, identify the fix version,
-update the lockfile, run tests, and create a PR.
-```
-
-Geh durch, was Claude tut:
-
-1. **WebSearch:** findet das Advisory bei NVD oder GitHub zur gepinnten alten Version
-2. **Plan:** bestimmt das betroffene Paket, die Version mit dem Fix und den Migrationsweg
-3. **Edit:** ändert die Version in `requirements.txt`
-4. **Bash:** führt nach der Änderung `pip install` und die Tests aus (ohne Internet lässt du die Installation weg, den PR kann Claude trotzdem erstellen)
-5. **Git:** committet und erstellt einen PR mit Verweis auf die CVE
-
-**Schritt 2: die PR-Beschreibung zeigen**
-
-Zeig, dass Claude aufgenommen hat:
-
-- CVE-ID und Link zum Advisory
-- was verwundbar war und warum
-- was geändert wurde
-- die Testergebnisse
-
-**Schritt 3: nach der Demo aufräumen, mit einem Befehl**
-
-Bearbeite die Datei nicht von Hand, das vergisst man leicht. Ein Revert setzt `requirements.txt` auf den committeten Stand zurück und verwirft damit die eingebaute Zeile aus Schritt 0 **und** jede Änderung, die Claude in der Demo gemacht hat:
-
-```bash
-# from the repo root:
-git checkout -- workshop-playground/requirements.txt
-
-# verify the planted line is gone (expect 0):
-grep -c "requests==2.5.0" workshop-playground/requirements.txt
-```
-
-> **⚠️ Führe `pip install` nie auf der eingebauten Zeile aus.** Die ganze Demo ist Scan, Fix und PR; die verwundbare Version darf auf keinem Rechner installiert werden. Hast du Claudes Fix in der Demo auf einen Branch committet, verwirf auch diesen Branch, damit der Playground sauber bleibt.
-
-Der Revert hält den Playground für spätere Sessions im gewünschten Zustand und verhindert, dass jemand versehentlich eine bekannt verwundbare Bibliothek installiert.
-
-<details><summary>Für Moderierende</summary>
-
-**Dauer:** etwa 5 Minuten (Schritt 1: 3 Min., Schritt 2: 1 Min.).
-
-**Sagen:**
-
-- Schritt 2: „Von ‚da ist eine CVE' bis ‚hier ist ein PR mit Tests' in wenigen Minuten. Das ist Schwachstellen-Management in Maschinengeschwindigkeit."
-- Zum Schluss: „In eurer Welt heißt eine Schwachstelle in der Firmware eines Türcontrollers: Advisory finden, betroffene Geräte bestimmen, den Update-Weg planen, auf dem Prüfstand testen, ausrollen, prüfen. Hier ist es derselbe Ablauf, nur macht Claude die Schritte 1 bis 5 automatisch. Ihr prüft und gebt frei."
-
-**Wenn etwas schiefgeht:**
-
-- **WebSearch ist blockiert (Firmen-Proxy, kein Internet):** Überspring die Live-Suche und füg eine vorbereitete CVE-Beschreibung ein, etwa den NVD-Eintrag zu CVE-2018-18074 aus der Zwischenablage.
-- **Du vergisst das Aufräumen:** Das ist das größte Risiko dieser Demo. Setz dir eine Kalender-Erinnerung für das Aufräumen nach dem Workshop.
-- **`gh pr create` scheitert:** Zeig es über `git push` und einen PR von Hand im Browser. Oder lass den PR ganz weg und zeig nur Diff und Commit.
-- **`pip install` läuft doch auf der verwundbaren Version:** Sofort anhalten, `pip uninstall requests` ausführen und eine sichere Version installieren. Die Demo soll nur Scan und Fix zeigen, nie die CVE installieren.
-
-</details>
 
 ## Selbst machen
 
@@ -379,7 +214,7 @@ git checkout -- access_control.py
 
 **Ziel:** Mit TDD und dem Multi-Agent-Vorgehen einen *korrekten, grenzgeprüften* Parser für die physische Sicherheit bauen, das Gegenstück zum verwundbaren `workshop-playground/osdp_frame_decoder.c`.
 
-**Hintergrund:** In der Demo (optionaler Schritt) und im CTF unten sucht der Schwarm die eingebauten Speicherfehler in `osdp_frame_decoder.c`: Buffer Overflow, Integer Overflow, Format String, Off-by-one. Diese Übung dreht es um. Statt Fehler im Parser von jemand anderem zu finden, **baust du selbst einen sicheren, testgetrieben**. Hier trifft das abstrakte Material zu TDD und Multi-Agent-Arbeit auf dein Fachgebiet.
+**Hintergrund:** Im CTF unten sucht der Schwarm die eingebauten Speicherfehler in `osdp_frame_decoder.c`: Buffer Overflow, Integer Overflow, Format String, Off-by-one. Diese Übung dreht es um. Statt Fehler im Parser von jemand anderem zu finden, **baust du selbst einen sicheren, testgetrieben**. Hier trifft das abstrakte Material zu TDD und Multi-Agent-Arbeit auf dein Fachgebiet.
 
 Nimm **eine** Variante; beide nutzen dieselbe Schleife Red → Green → Refactor.
 

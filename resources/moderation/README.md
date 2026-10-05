@@ -12,7 +12,8 @@ dafür ist die [Bibliothek](../library/README.md) mit der [Einstufung](../librar
 | [vorbereitung.md](vorbereitung.md) | Zeitplan und Checklisten vor den Sessions; Workshop-Plugins, Hook-Datei, NotebookLM, Playwright, Codex |
 | [videos.md](videos.md) | Transkript der drei Intro-Videos, Stand der Aufnahme (drei Sessions) |
 | [Live-Pfad](../paths/live-workshop.md) | Die Kapitel je Session mit Stufe und Minuten, aus den Kapiteln generiert |
-| [Kapitel](../library/README.md) | Inhalt, Demo und Übung je Lerneinheit; Sprechpunkte, Dauer und Recovery-Notes stehen unter „Vorführen → Für Moderierende" |
+| [Kapitel](../library/README.md) | Inhalt und Übung je Lerneinheit, geschrieben für Selbstlernende |
+| [Vorführen](vorfuehren/) | Je Kapitel eine Datei mit Demo, Sprechpunkten, Dauer und Recovery-Notes; der Live-Pfad verlinkt sie |
 
 Das Deck liegt unter `resources/media/claude-code-praxisbibliothek.pptx`, die Intro-Videos und der Podcast ebenfalls
 in `resources/media/`.
@@ -25,8 +26,8 @@ in `resources/media/`.
    Setup-Termine mit den Teilnehmenden vereinbaren.
 3. **Eigene Maschine vorbereiten** nach [vorbereitung.md](vorbereitung.md): Plugins, Hook-Datei, NotebookLM-Notebook,
    Playwright-Cache, gegebenenfalls Codex. Danach alle Demos einmal komplett durchspielen.
-4. **Vor jeder Session** den Abschnitt der Session im [Live-Pfad](../paths/live-workshop.md) öffnen, in jedem Kapitel
-   den Block „Für Moderierende" lesen und die Checkliste „Vor Session N" in [vorbereitung.md](vorbereitung.md#zeitplan)
+4. **Vor jeder Session** den Abschnitt der Session im [Live-Pfad](../paths/live-workshop.md) öffnen, zu jedem Kapitel
+   die Datei unter [Vorführen](vorfuehren/) lesen und die Checkliste „Vor Session N" in [vorbereitung.md](vorbereitung.md#zeitplan)
    abarbeiten.
 5. **Am Workshop-Tag** den [Pre-Flight](handbuch.md#pre-flight-am-workshop-tag) laufen lassen, in Session 3 und 4
    zusätzlich die [Go/No-Go-Matrix](handbuch.md#gono-go-je-demo).

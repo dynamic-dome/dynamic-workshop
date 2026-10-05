@@ -82,10 +82,6 @@ Tipp in Claude Code:
 
 `/tdd` gibt es nur, wenn ein TDD-Skill installiert ist. `/skills` zeigt dir, welche Skills in deiner Sitzung verfügbar sind.
 
-## Vorführen
-
-Die Demo „Skills in Aktion" mit den Sprechpunkten zu diesem Kapitel steht in [S2.2](s2-02-skill-schreiben.md#vorführen).
-
 ## Typische Fallen
 
 - **Einen Skill als Garantie behandeln.** Ein Skill ist eine Anweisung, der Claude folgt, wenn er geladen ist. Muss etwas bei einem Ereignis garantiert passieren, etwa ein Block vor einem gefährlichen Befehl, ist ein Hook das richtige Werkzeug ([S2.6](s2-06-hooks-als-sensoren.md)). Faustregel: Skill für „ich gebe Anweisungen immer wieder", Hook für „passiert automatisch im Hintergrund".

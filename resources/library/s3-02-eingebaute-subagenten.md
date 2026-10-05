@@ -70,7 +70,7 @@ Use the Explore subagent to map all OSDP-related files in firmware/ and report m
 
 Beim bloßen Nennen entscheidet Claude weiterhin selbst, ob es delegiert. Wie du einen Subagenten verbindlich anforderst, zeigt [S3.3](s3-03-eigener-subagent.md).
 
-Die meisten Vorführungen dieses Regals drehen sich um eigene Subagenten ([S3.3](s3-03-eigener-subagent.md)). Wer die eingebauten kennt, baut aber keine eigenen Späher und Planer nach.
+Der Rest dieses Regals dreht sich vor allem um eigene Subagenten ([S3.3](s3-03-eigener-subagent.md)). Wer die eingebauten kennt, baut aber keine eigenen Späher und Planer nach.
 
 ### Was sie mitbekommen
 

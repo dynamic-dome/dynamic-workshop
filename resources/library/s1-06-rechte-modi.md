@@ -155,6 +155,6 @@ Du kannst die sechs Rechte-Modi danach ordnen, wer statt dir prüft, den Startmo
 - [Rechte-Regeln (offizielle Doku)](https://code.claude.com/docs/en/permissions)
 - [S1.5 · Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md)
 - [S1.14 · Plan-Modus und schrittweises Vorgehen](s1-14-plan-modus.md)
-- [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md), mit Live-Vorführung vom Besucherausweis zum Generalschlüssel
+- [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md)
 - [S3.9 · Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md)
 - [S1.3 · Die Oberflächen: CLI, Desktop, IDE, Web, iOS](s1-03-oberflaechen.md)

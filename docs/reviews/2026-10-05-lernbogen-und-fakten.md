@@ -105,6 +105,8 @@ Branch `selbstlern-zuerst` (ab `e693038`), Owner-Entscheid 2026-10-05: Selbstler
   Code-Kommentar in S2.6:75. Offen: der Beispieltitel „Blockt nur mit exit 2“ in X.2:145 und
   `skills/workshop/LEARNING-RECORD-FORMAT.md`:11.
 
+- **Ab hier führt die Paketliste den Stand:** `docs/plans/2026-10-05-selbstlern-zuerst-tickets.md` (P0 bis P9). P1, die Moderationsschicht, ist umgesetzt: kein „Vorführen“ mehr in den Kapiteln, 30 Dateien unter `resources/moderation/vorfuehren/`. Das beantwortet den ersten Teil von R21.
+
 ## Noten der Didaktik-Leser (70 Kapitel, Skala 1 bis 5)
 
 | Kriterium | Mittel | Verteilung 1 · 2 · 3 · 4 · 5 |

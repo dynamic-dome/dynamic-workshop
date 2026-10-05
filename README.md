@@ -26,8 +26,9 @@ Wie du damit lernst, moderierst oder das Material pflegst: [HOW-TO-USE.md](HOW-T
 
 ## Was drin steckt
 
-- **Kapitel mit festem Aufbau:** Schnellcheck → Auf einen Blick → Bild im Kopf → Im Detail → Vorführen →
-  Selbst machen → Typische Fallen → Check → Weiterlesen, mit der offiziellen Doku als Primärquelle.
+- **Kapitel mit festem Aufbau:** Schnellcheck → Auf einen Blick → Bild im Kopf → Im Detail → Selbst machen →
+  Typische Fallen → Check → Weiterlesen, mit der offiziellen Doku als Primärquelle. Geschrieben für eine Person, die
+  allein lernt; Demos und Hinweise für Moderierende liegen getrennt unter `resources/moderation/`.
 - **Bilder aus der Sicherheitstechnik:** Rechte-Modi als Zutrittsebenen, Hooks als Türsensoren, Worktrees als Testlabor.
 - **Sicherheitsboden:** Neun Kapitel empfehlen wir auch Fortgeschrittenen — etwa, dass von den Exit-Codes nur `exit 2`
   einen Hook blocken lässt und `claude -p` ohne `--bare` die Hooks eines fremden Repos ausführt.

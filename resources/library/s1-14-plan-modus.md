@@ -129,7 +129,7 @@ After making changes, run pytest tests/test_auth.py -v and show me
 the output before we move on.
 ```
 
-Die Prüfung steckt im Auftrag. Du siehst die Testergebnisse, bevor du committest. In Demo und Übung von [S1.13](s1-13-vager-und-praeziser-auftrag.md) ist das der Schritt „Run the tests“.
+Die Prüfung steckt im Auftrag. Du siehst die Testergebnisse, bevor du committest. In der Übung von [S1.13](s1-13-vager-und-praeziser-auftrag.md) ist das der Schritt „Run the tests“.
 
 **„Erklär, was du gemacht hast“**
 

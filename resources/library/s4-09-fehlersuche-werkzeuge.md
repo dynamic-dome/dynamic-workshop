@@ -77,7 +77,7 @@ Hinter `/debug` darfst du das Problem beschreiben; das lenkt die Auswertung:
 
 Das Argument ist eine freie Beschreibung. Ältere Fassungen dieses Kurses nannten feste Schwerpunkte wie `hook-firing`, `mcp-handshake` oder `instructions-loaded`; eine solche Liste kennt die Doku nicht. Solche Stichworte sind einfach eine kurze Beschreibung, ein ganzer Satz geht genauso.
 
-Der typische Fall: „Mein Skill ist installiert, aber Claude nimmt ihn nicht. Warum?" Claude sucht dann im Log und in deiner Konfiguration nach der Ursache: eine zu allgemeine Beschreibung, ein `paths`-Filter, der nicht passt, ein abgeschalteter automatischer Aufruf oder ein Frontmatter, das sich nicht lesen lässt. Die Felder dazu erklärt [S2.3](s2-03-wer-skills-ausloest.md). In der Demo in [S4.10](s4-10-diagnose-schritt-fuer-schritt.md) siehst du `/debug` in Schritt 4 live.
+Der typische Fall: „Mein Skill ist installiert, aber Claude nimmt ihn nicht. Warum?" Claude sucht dann im Log und in deiner Konfiguration nach der Ursache: eine zu allgemeine Beschreibung, ein `paths`-Filter, der nicht passt, ein abgeschalteter automatischer Aufruf oder ein Frontmatter, das sich nicht lesen lässt. Die Felder dazu erklärt [S2.3](s2-03-wer-skills-ausloest.md). Wie `/debug` in einer ganzen Diagnose sitzt, zeigt Schritt 4 der Abläufe in [S4.10](s4-10-diagnose-schritt-fuer-schritt.md).
 
 ### `claude --debug`: das Log von Anfang an
 

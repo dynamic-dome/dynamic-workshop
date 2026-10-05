@@ -30,6 +30,8 @@ Zielgruppe: vor allem Selbstlernende (öffentlich); der Live-Workshop ist ein Pf
 - Kopierbare Hooks sind getestete Vorlagen (`tested asset:`); Snippet und Datei bleiben identisch.
 - Einstufung oder Kapitel-Metadaten ändern → Vertragskatalog, Personas und Golden bewusst neu (HOW-TO-USE §3).
 - Tutor und Mentor halten keine Inhaltskopie; sie lesen Katalog und Kapitel.
-- Demos vor Folien; Übungen sind freiwillig. Keine Tests gegen Produktionsdaten.
+- Kapitel sind für Selbstlernende geschrieben; Demo und Moderationshinweise liegen je Kapitel in
+  `resources/moderation/vorfuehren/` (der Validator weist „Vorführen“ im Kapitel ab).
+- Im Live-Format gilt: Demos vor Folien. Übungen sind freiwillig. Keine Tests gegen Produktionsdaten.
 
 Anleitung: [HOW-TO-USE.md](HOW-TO-USE.md) · Spec: `docs/plans/2026-09-30-praxisbibliothek-design.md`

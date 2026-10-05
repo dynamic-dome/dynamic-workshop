@@ -87,13 +87,9 @@ Das setzt die richtige Erwartung: Du lernst hier nicht „die richtige Art, Clau
 
 Wie bei einer Kreissäge: Das Handbuch erklärt dir das Sägeblatt, die Schutzfunktionen und den Vorschub. Wie du damit dein Projekt baust, entscheidest du. Das Werkzeug schränkt deine Kreativität nicht ein.
 
-## Vorführen
+### Ausprobieren
 
-### Demo-Schritt: Claude beschreibt sich selbst
-
-Das ist Schritt 2 der Demo „Erster Kontakt"; die übrigen Schritte stehen in [S1.1](s1-01-erster-kontakt.md).
-
-Tipp in Claude Code:
+Frag Claude Code selbst, worin es sich von einem Chat unterscheidet:
 
 <!-- cockpit:example -->
 ```
@@ -101,14 +97,6 @@ Describe yourself in exactly 3 bullet points. Focus on what makes you different 
 ```
 
 Erwartet: Claude antwortet mit drei knappen Punkten, etwa zu (1) Zugriff aufs Dateisystem, (2) Ausführen von Befehlen, (3) Git- und Werkzeug-Integration. Der Wortlaut schwankt, die Substanz ist da.
-
-<details><summary>Für Moderierende</summary>
-
-**Sagen, während Claude antwortet:** „Es sagt nicht ‚Ich bin ein hilfreicher KI-Assistent'. Es beschreibt seine Fähigkeiten zutreffend. Es weiß, dass es ein Agent ist und kein Chatwerkzeug. Diese Einordnung ist wichtig."
-
-**Wenn Claude genau drei Punkte liefert:** Sag: „Gut, und ihr seht, dass es sich an Vorgaben im Prompt hält. Ich habe drei Punkte verlangt, und es hat mir drei gegeben."
-
-</details>
 
 ## Check
 

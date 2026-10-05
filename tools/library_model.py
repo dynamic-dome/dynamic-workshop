@@ -4,6 +4,10 @@
 A chapter is a Markdown file with a narrow YAML front matter and fixed H2 sections
 (spec docs/plans/2026-09-30-praxisbibliothek-design.md, section 4). This module only
 parses; tools/build_library.py validates and generates.
+
+Chapters are written for one person learning alone. The demo and the notes for moderators of a
+chapter live in the moderation layer, resources/moderation/vorfuehren/<chapter file>
+(design docs/plans/2026-10-05-selbstlern-zuerst-design.md).
 """
 from __future__ import annotations
 
@@ -20,9 +24,11 @@ if _TOOLS not in sys.path:
 import catalog_core as _core  # noqa: E402
 
 SECTION_ORDER = [
-    "Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail", "Vorführen",
+    "Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail",
     "Selbst machen", "Typische Fallen", "Check", "Weiterlesen",
 ]
+DEMO_FOLDER = ("moderation", "vorfuehren")  # next to the library folder
+MODERATOR_BLOCK = "<summary>Für Moderierende</summary>"
 CHAPTER_TYPES = ("lesson", "setup", "practice", "capstone", "community")
 LEVELS = ("core", "deep-dive", "bonus")
 
@@ -87,6 +93,7 @@ class Chapter:
     checkpoint: str
     mermaid: list
     links: list
+    demo: Path | None = None  # file in the moderation layer, if this chapter has a demo
 
     @property
     def order(self) -> int:
@@ -107,8 +114,17 @@ class Library:
     problems: list = field(default_factory=list)
 
     @property
+    def demo_dir(self) -> Path:
+        return demo_dir(self.root)
+
+    @property
     def by_id(self) -> dict:
         return {c.id: c for c in self.chapters}
+
+
+def demo_dir(library_root) -> Path:
+    """Folder of the moderation layer that belongs to a library folder."""
+    return Path(library_root).parent.joinpath(*DEMO_FOLDER)
 
 
 def order_of(chapter_id: str, after: str | None) -> int:
@@ -282,13 +298,14 @@ def parse_chapter(path) -> Chapter:
     body = _strip_meta(body)
     h1, preamble, sections, order = _split_sections(body)
     example, lang = None, ""
-    for title in ("Selbst machen", "Vorführen", "Im Detail", "Check"):
+    for title in ("Selbst machen", "Im Detail", "Check"):
         if title in sections:
             example, lang = _example(sections[title])
             if example is not None:
                 break
     mermaid = [content for text in sections.values() for fl, content, _ in _fences(text) if fl == "mermaid"]
     minutes = front.get("minutes")
+    demo = demo_dir(path.parent) / path.name
     return Chapter(
         path=path,
         id=str(front.get("id", "")),
@@ -319,6 +336,7 @@ def parse_chapter(path) -> Chapter:
         checkpoint=_first_paragraph(sections.get("Check", "")),
         mermaid=mermaid,
         links=_links(body),
+        demo=demo if demo.is_file() else None,
     )
 
 

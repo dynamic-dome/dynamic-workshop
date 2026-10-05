@@ -230,3 +230,37 @@ def test_quiz_longest_share_is_checked_library_wide(lib_dir):
     edit(lib_dir, EVENTS, "- **Richtig:** Bevor ein Werkzeug ausgeführt wird", "- **Richtig:** Bevor ein Werkzeug ausgeführt wird!!")
     found = {p.rule for p in bl.validate(lm.load_library(lib_dir), complete=True)}
     assert "quiz-longest-share" in found
+
+
+# --- moderation layer: demos live outside the chapters (design 2026-10-05) ------------------------------
+
+def demo_dir(lib_dir):
+    path = lib_dir.parent / "moderation" / "vorfuehren"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def test_vorfuehren_section_is_not_allowed_in_a_chapter(lib_dir):
+    edit(lib_dir, HOOK, "## Selbst machen", "## Vorführen" + chr(10) * 2 + "Zeig den Hook." + chr(10) * 2 + "## Selbst machen")
+    assert "sections-allowed" in rules(lib_dir)
+
+
+def test_moderation_block_is_not_allowed_in_a_chapter(lib_dir):
+    block = "<details><summary>Für Moderierende</summary>" + chr(10) * 2 + "Sagen: …" + chr(10) * 2 + "</details>"
+    edit(lib_dir, HOOK, "## Check", block + chr(10) * 2 + "## Check")
+    assert "no-moderation-block" in rules(lib_dir)
+
+
+def test_demo_file_without_a_chapter_is_reported(lib_dir):
+    (demo_dir(lib_dir) / "s9-99-ohne-kapitel.md").write_text("# Vorführen: S9.9 · Nichts" + chr(10), encoding="utf-8")
+    assert "demo-orphan" in rules(lib_dir)
+
+
+def test_demo_file_must_name_its_chapter_and_its_links_must_resolve(lib_dir):
+    demo = demo_dir(lib_dir) / HOOK
+    demo.write_text("# Vorführen: S2.8 · Einen Hook konfigurieren" + chr(10) * 2
+                    + "[Kapitel](../../library/s2-08-demo-hook.md)" + chr(10), encoding="utf-8")
+    assert rules(lib_dir) == []
+    demo.write_text("# Vorführen: S2.8 · Falscher Titel" + chr(10) * 2
+                    + "[weg](../../library/gibt-es-nicht.md)" + chr(10), encoding="utf-8")
+    assert {"demo-h1", "links-resolve"} <= set(rules(lib_dir))

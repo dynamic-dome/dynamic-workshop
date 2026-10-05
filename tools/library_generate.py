@@ -54,6 +54,8 @@ def catalog(lib):
             "checkpoint": ch.checkpoint, "transferable": ch.transferable,
             "quiz": ({"q": ch.quiz.question, "correct": ch.quiz.correct, "wrong": list(ch.quiz.wrong)}
                      if ch.quiz else None),
+            # moderation layer: demo and moderator notes, relative to the library folder (or None)
+            "demo": _demo_link(ch),
         })
     cat["shelves"] = [{k: s.get(k, "") for k in ("id", "title", "zone", "purpose", "intro")} for s in lib.shelves]
     return cat
@@ -67,6 +69,13 @@ def dump_json(data):
 
 def _link(ch, prefix=""):
     return f"[{ch.id} {ch.title}]({prefix}{ch.path.name})"
+
+
+def _demo_link(ch):
+    """Demo file of a chapter, relative to the library folder (the paths folder is a sibling, so it fits there too)."""
+    if not ch.demo:
+        return None
+    return "/".join(["..", ch.demo.parent.parent.name, ch.demo.parent.name, ch.demo.name])
 
 
 def _shelf_titles(lib):
@@ -199,14 +208,16 @@ def paths(lib, cat):
         index.append((f"ziel-{goal['id']}.md", goal["label"], res))
     live = ["# Live-Workshop: vier Sessions", "", GENERATED, "",
             "Die Reihenfolge des moderierten Workshops. Ablauf, Zeiten, Pausen und Live-Anker stehen im "
-            "[Moderations-Handbuch](../moderation/handbuch.md).", ""]
+            "[Moderations-Handbuch](../moderation/handbuch.md). Die Spalte „Vorführen“ führt zur Demo und zu den "
+            "Hinweisen für Moderierende; die Kapitel selbst sind für Selbstlernende geschrieben.", ""]
     for session in sorted({c.session for c in lib.chapters if c.session is not None}):
         chapters = [c for c in lib.chapters if c.session == session]
         live += [f"## {SESSION_LABEL.get(session, f'Session {session}')}", "", _minutes_line(chapters), "",
-                 "| Kapitel | Stufe | Min | |", "|---|---|---:|---|"]
+                 "| Kapitel | Stufe | Min | | Vorführen |", "|---|---|---:|---|---|"]
         for c in chapters:
+            demo = f"[Demo]({_demo_link(c)})" if c.demo else ""
             live.append(f"| {_link(c, '../library/')} | {LEVEL_LABEL.get(c.level, c.level)} | {c.minutes} | "
-                        f"{SHIELD if c.safety_floor else ''} |")
+                        f"{SHIELD if c.safety_floor else ''} | {demo} |")
         live.append("")
     extra = [c for c in lib.chapters if c.session is None]
     if extra:

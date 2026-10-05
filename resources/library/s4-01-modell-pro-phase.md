@@ -99,7 +99,7 @@ Wie viele Befunde Haiku allein findet, hängt von der Aufgabe ab; eine feste Quo
 - Codex übernimmt die mechanische Erzeugung: günstig, schnell, parallel.
 - Zwei KI-Systeme haben verschiedene blinde Flecken. Was das eine übersieht, fängt das andere.
 
-Die kleine Strategie oben und diese Pipeline passen zusammen: Haiku macht den ersten, günstigen Prüfdurchgang, die Abnahme und alle strittigen Punkte liegen beim Opus-Tier. Wie Claude die Codex-Agenten verteilt, zeigt die Demo in [S4.2](s4-02-codex-schwarm.md); das allgemeine Muster „Pipeline“ kennst du aus [S3.4](s3-04-orchestrierungsmuster.md).
+Die kleine Strategie oben und diese Pipeline passen zusammen: Haiku macht den ersten, günstigen Prüfdurchgang, die Abnahme und alle strittigen Punkte liegen beim Opus-Tier. Wie Claude die Codex-Agenten verteilt, beschreibt [S4.2](s4-02-codex-schwarm.md); das allgemeine Muster „Pipeline“ kennst du aus [S3.4](s3-04-orchestrierungsmuster.md).
 
 ### Eingebaut: opusplan
 

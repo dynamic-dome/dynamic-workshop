@@ -109,7 +109,7 @@ Nimm Opus für Planung und Architektur, Sonnet für die Umsetzung und Haiku für
 
 > **Schlanker System-Prompt.** Auf aktuellen Fable- und Opus-Builds bringt Claude Code standardmäßig einen schlankeren System-Prompt mit (welche Modelle ihn bekommen, kann sich von Release zu Release ändern). Das heißt weniger fester Overhead im Kontextfenster und mehr Platz für deinen Code. Anfassen musst du ihn selten. Ergänzen kannst du ihn mit `--append-system-prompt`, ersetzen mit `--system-prompt` oder `--system-prompt-file`.
 
-Den direkten Vergleich, dieselbe Aufgabe mit drei Modellen und `/cost` nach jedem Lauf, zeigt die Demo in [S1.19](s1-19-kosten-im-blick.md). Dort steht auch die Übung, in der du Modell und Effort für deine eigenen Abläufe festlegst.
+Wie du den Verbrauch abliest und Modell und Effort für deine eigenen Abläufe festlegst, übst du in [S1.19](s1-19-kosten-im-blick.md).
 
 ## Typische Fallen
 

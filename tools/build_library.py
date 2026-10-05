@@ -39,12 +39,13 @@ REQUIRED_IDS = (["S0.1"] + [f"S1.{n}" for n in range(1, 21)] + [f"S2.{n}" for n 
 
 ALL = set(lm.SECTION_ORDER)
 # Allowed and required H2 sections per chapter type (spec 4.3).
+# "Vorführen" is no chapter section any more: demos live in the moderation layer (_check_demos).
 ALLOWED = {
     "lesson": ALL,
-    "setup": ALL - {"Vorführen"},
+    "setup": ALL,
     "practice": {"Auf einen Blick", "Selbst machen", "Check", "Weiterlesen"},
     "capstone": ALL,
-    "community": ALL - {"Schnellcheck", "Vorführen"},
+    "community": ALL - {"Schnellcheck"},
 }
 REQUIRED = {
     "lesson": {"Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail", "Check", "Weiterlesen"},
@@ -194,22 +195,56 @@ def _check_body(ch, add, planned=frozenset()):
     raw = ch.path.read_text(encoding="utf-8")
     if "TODO(migration)" in raw:
         add("no-migration-todo", "offene TODO(migration)-Markierung")
+    if lm.MODERATOR_BLOCK in raw:
+        add("no-moderation-block", "Block 'Für Moderierende' gehört in die Moderationsschicht "
+            "(resources/moderation/vorfuehren/), nicht ins Kapitel")
     for src in ch.sources:
         if not src.startswith("https://"):
             add("sources-https", f"Quelle ohne https: {src}")
     if t in SOURCES_REQUIRED and not ch.sources:
         add("sources-required", "mindestens eine offizielle Quelle unter sources")
-    for target in ch.links:
+    _check_links(ch.path, ch.links, add, planned)
+
+
+def _check_links(path, links, add, planned=frozenset(), generated=GENERATED_TARGETS):
+    """Relative links of one Markdown file lead to an existing file and, for .md targets, an existing anchor."""
+    for target in links:
         if re.match(r"^[a-z]+:", target) or target.startswith("#"):
             continue
         file_part, _, fragment = target.partition("#")
-        if file_part in planned or file_part in GENERATED_TARGETS or file_part.startswith("../paths/ziel-"):
+        if file_part in planned or file_part in generated or "/paths/ziel-" in "/" + file_part:
             continue
-        dest = (ch.path.parent / file_part).resolve() if file_part else ch.path.resolve()
+        dest = (path.parent / file_part).resolve() if file_part else path.resolve()
         if file_part and not dest.exists():
             add("links-resolve", f"Link-Ziel existiert nicht: {target}")
         elif fragment and dest.suffix == ".md" and fragment not in anchors_of(dest):
             add("links-resolve", f"Anker #{fragment} gibt es in {dest.name} nicht")
+
+
+# Generated files as seen from a demo file (two folders below resources/).
+DEMO_GENERATED_TARGETS = tuple("../" + t if t.startswith("../") else "../../library/" + t for t in GENERATED_TARGETS)
+
+
+def _check_demos(lib, report):
+    """Moderation layer: every demo file belongs to one chapter, names it, and its links resolve."""
+    folder = lib.demo_dir
+    if not folder.is_dir():
+        return
+    by_file = {ch.path.name: ch for ch in lib.chapters}
+    for path in sorted(folder.glob("*.md")):
+        add = report(path)
+        ch = by_file.get(path.name)
+        if ch is None:
+            add("demo-orphan", "zu dieser Demo-Datei gibt es kein Kapitel mit demselben Dateinamen")
+            continue
+        text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        expected = f"# Vorführen: {ch.id} · {ch.title}"
+        first = text.split("\n", 1)[0].rstrip()
+        if first != expected:
+            add("demo-h1", f"erste Zeile muss '{expected}' lauten, ist '{first}'")
+        if lm.EXAMPLE_MARKER in text:
+            add("demo-no-example-marker", "cockpit:example gehört ins Kapitel, nicht in die Demo-Datei")
+        _check_links(path, lm._links(text), add, generated=DEMO_GENERATED_TARGETS)
 
 
 def _check_graph(lib, by_id, report, planned_orders=None):
@@ -386,6 +421,7 @@ def validate(lib, *, complete: bool, meta=None) -> list:
     _check_graph(lib, by_id, report, planned_orders)
     planned_ids = frozenset() if complete or not meta else frozenset(e["id"] for e in meta)
     _check_placement(lib, by_id, report, planned_ids)
+    _check_demos(lib, report)
     if complete:
         quizzes = [c.quiz for c in lib.chapters if c.quiz and c.quiz.closed and len(c.quiz.wrong) == 3]
         longest = sum(1 for q in quizzes if len(q.correct) > max(len(w) for w in q.wrong))

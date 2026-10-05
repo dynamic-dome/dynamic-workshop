@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P0: 609).
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P1: 677).
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -26,7 +26,7 @@
 | Paket | Inhalt | Vorbedingung | Stand |
 |---|---|---|---|
 | P0 | Gate fällt geschlossen; „nur exit 2“ präzisiert (R1, R2) | — | [x] `fcab910` |
-| P1 | Moderationsschicht: „Vorführen“ aus den Kapiteln in eigene Dateien | — | [ ] |
+| P1 | Moderationsschicht: „Vorführen“ aus den Kapiteln in eigene Dateien | — | [x] siehe Abschluss P1 |
 | P2 | Cockpit und Tutor zeigen bei „durcharbeiten“ Lehrtext und Übung (R19) | P1 | [ ] |
 | P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [ ] |
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [ ] |
@@ -96,6 +96,30 @@ S2.6, S3.13, S3.14, S4.3, S4.6, S4.7) sind in P5 und P7 als „braucht Übung“
 **Für spätere Pakete notieren (nicht in P1 lösen):** Lehr- und Hilfetext, der in Moderationsblöcken steht und in
 den Kapiteltext gehört: S2.6 (Hooks sind Best-Effort-Wächter), S2.10 (Windows-Weg des Gates, Fehlerhilfe), S3.8
 („Wenn es hakt“), S2.2 (Kernbotschaft der Demo), S1.19 (Rücksetzen mit `/model default`).
+
+### Abschluss P1 (2026-10-05)
+
+- Verschoben per `docs/migration/2026-10-05-vorfuehren/migrate.py`: 29 Abschnitte, Beleg in `check-output.txt`
+  daneben (12.884 Wörter alt wie neu, jedes Kapitel exakt „alt minus Abschnitt“). Danach `fixups.py`: der
+  Moderationsblock aus S1.20 (30. Datei), „Ausprobieren“ in S1.2, S3.13, S3.14, S4.6, 16 Verweise in Kapiteln,
+  27 Querverweise zwischen Demo-Dateien.
+- Werkzeug: `tools/library_model.py` (kein „Vorführen“ in `SECTION_ORDER`, `Chapter.demo`, `demo_dir`),
+  `tools/build_library.py` (Regeln `no-moderation-block`, `demo-orphan`, `demo-h1`, `demo-no-example-marker`,
+  Link-Prüfung für Demo-Dateien), `tools/library_generate.py` (Katalogfeld `demo`, Spalte „Vorführen“ im Live-Pfad).
+  Tests: acht neue, alle vorher rot gesehen; Suite 677 grün (die Zahl steigt vor allem, weil die Wächter die 30
+  neuen Dateien mitlesen).
+- Tutor, HOW-TO-USE, README, Moderations-README, CLAUDE.md und AGENTS.md nachgezogen; Hinweis in der Spec vom
+  2026-09-30.
+- **Dabei entschieden:** S1.1 verweist nicht mehr auf den Passwortgenerator der Demo (die Variante entfällt im
+  Kapitel, der Prompt steht in der Demo-Datei). S3.14 hat als Beispiel `/goal` aus der offiziellen Doku.
+- **Was Selbstlernende durch das Verschieben verlieren und in P5 oder P7 als Übung zurückbekommen sollen:**
+  der Vergleich einer Aufgabe über drei Modelle (Demo S1.19 → P7a), die CVE-Behebung bis zum PR (Demo S3.6 → P7d),
+  das Secure Diff Gate zum Selbereinrichten (Demo S2.10 → P7b), der Headless-Ablauf mit Schema und Exit-Code
+  (Demos S3.1, S4.3, S4.4 → P7d, P7f), Remote Control mit zweitem Gerät (S4.6 → P7f). S4.2 verweist in der Übung
+  vorerst auf die Demo-Datei, weil die Übung ohne sie nicht geht (→ P7e).
+- **Kapitel ohne Übung und jetzt auch ohne Demo:** S1.2, S2.1, S2.6, S3.13, S3.14, S4.3, S4.6, S4.7 (→ P5, P7).
+- **Nicht angefasst:** `minutes` der Kapitel (enthielten die Demo-Zeit; werden mit der Regel „ehrliche Zeit“ in P5
+  und P7 neu gesetzt, zusammen mit dem Einstufungsvertrag).
 
 ---
 

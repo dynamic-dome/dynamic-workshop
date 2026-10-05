@@ -173,5 +173,5 @@ Du kannst sagen, was `default` und `acceptEdits` ohne Rückfrage erlauben, eine 
 - [S1.4 · Eingebaute Werkzeuge und ihre Namen](s1-04-werkzeuge.md)
 - [S1.6 · Alle Rechte-Modi im Überblick](s1-06-rechte-modi.md)
 - [S1.14 · Plan-Modus und schrittweises Vorgehen](s1-14-plan-modus.md)
-- [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md), mit Live-Vorführung der Modi
+- [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md)
 - [S2.8 · Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md), `if`-Filter mit derselben Regel-Syntax

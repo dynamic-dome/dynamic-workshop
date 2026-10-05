@@ -102,7 +102,7 @@ In den Workshop-Unterlagen taucht auch ein `/security-audit`-Skill auf. Er ist *
 | Lieferkettenrisiken | Abhängigkeiten mit bekannten CVEs, ungepinnte Versionen |
 | Fehlende Eingabeprüfung | externe Parameter, die ohne Bereinigung benutzt werden |
 
-Wie du einen eigenen Skill schreibst, zeigt [S2.2](s2-02-skill-schreiben.md); headless in einer Pipeline läuft er wie in [S4.3](s4-03-headless.md). Wie Claude eine CVE in einer Abhängigkeit bis zum PR behebt, zeigt die CVE-Demo in [S3.6](s3-06-devils-advocate.md).
+Wie du einen eigenen Skill schreibst, zeigt [S2.2](s2-02-skill-schreiben.md); headless in einer Pipeline läuft er wie in [S4.3](s4-03-headless.md).
 
 ### ultracode ist kein Review
 
