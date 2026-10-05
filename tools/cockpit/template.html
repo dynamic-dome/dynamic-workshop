@@ -137,6 +137,8 @@
     .choice:hover { border-color: var(--ink-2); }
     .choice input { margin-top: 5px; accent-color: var(--accent); }
     .choice:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
+    .choice:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+    .goal-hint { margin: 10px 0 0; color: var(--ink-2); }
     textarea { width: 100%; min-height: 84px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; }
     .areas { display: grid; gap: 10px; }
     .area { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 12px 14px; }
@@ -659,9 +661,11 @@
       const steps = STEP_TITLES.map((t, i) => `<li${i === state.step ? ' aria-current="step"' : ""}${i < state.step ? ' class="done"' : ""}>${i + 1}. ${esc(t)}</li>`).join("");
       let body = "";
       if (state.step === 0) {
+        // Two goals at most: with two chosen, the others are locked and a hint says how to change (B2).
+        const full = a.goals.length >= 2;
         body = `<fieldset><legend>Wofür willst du Claude Code lernen? (höchstens zwei)</legend><div class="choices">` +
-          RULES.goals.map(g => `<label class="choice"><input type="checkbox" name="goal" value="${esc(g.id)}"${a.goals.includes(g.id) ? " checked" : ""}><span>${esc(g.label)}</span></label>`).join("") +
-          `</div></fieldset><p class="muted small">Nichts gewählt? Dann nehmen wir „${esc(RULES.goals.find(g => g.id === RULES.default_goal).label)}".</p>`;
+          RULES.goals.map(g => `<label class="choice"><input type="checkbox" name="goal" value="${esc(g.id)}"${a.goals.includes(g.id) ? " checked" : (full ? " disabled" : "")}><span>${esc(g.label)}</span></label>`).join("") +
+          `</div><p class="goal-hint small" role="status"${full ? "" : " hidden"}>Zwei Ziele gewählt. Wähl eines ab, wenn du ein anderes nehmen willst.</p></fieldset><p class="muted small">Nichts gewählt? Dann nehmen wir „${esc(RULES.goals.find(g => g.id === RULES.default_goal).label)}".</p>`;
       } else if (state.step === 1) {
         body = `<fieldset><legend>Warum willst du das lernen? (freiwillig)</legend><label class="muted small" for="why">Bleibt nur in deinem Browser und erinnert dich später an dein Ziel.</label><textarea id="why" name="why" placeholder="Zum Beispiel: Ich will Code-Reviews in unserem Team mit Claude beschleunigen, ohne Sicherheitslücken zu riskieren.">${esc(d.why)}</textarea></fieldset>` +
           `<fieldset><legend>Wie viel Zeit hast du?</legend><div class="choices">` +
@@ -882,6 +886,12 @@
     }
 
     // ---------- events ----------
+    function showStep() {
+      // A step starts at its top; the old scroll position would hide its heading under the sticky header (B1).
+      render();
+      window.scrollTo(0, 0);
+      $("#main").focus({ preventScroll: true });
+    }
     function showDoneState(id) {
       const done = !!progress.done[id];
       document.querySelectorAll('[data-action="toggle-done"]').forEach(b => {
@@ -927,9 +937,9 @@
         profile ={ v: 1, at: new Date().toISOString(), why: profile ? profile.why || "" : "", answers: { version: 1, goals: ["moderieren"], time: RULES.default_time, areas: {}, scenarios: {}, overrides: {} } };
         saveProfile(); go("pfad");
       } else if (action === "step-next") {
-        if (collectStep()) { state.step = Math.min(state.step + 1, STEP_TITLES.length - 1); render(); $("#main").focus(); }
+        if (collectStep()) { state.step = Math.min(state.step + 1, STEP_TITLES.length - 1); showStep(); }
       } else if (action === "step-back") {
-        collectStep(); state.step = Math.max(0, state.step - 1); render(); $("#main").focus();
+        collectStep(); state.step = Math.max(0, state.step - 1); showStep();
       } else if (action === "finish") {
         finishPlacement();
       } else if (action === "scenario") {
@@ -977,8 +987,12 @@
       const t = event.target;
       if (t.matches("select[data-action=override]")) setOverride(t.dataset.id, t.value);
       if (t.matches("input[name=goal]")) {
-        const checked = document.querySelectorAll("input[name=goal]:checked");
-        if (checked.length > 2) { t.checked = false; announce("Höchstens zwei Ziele."); }
+        const boxes = Array.from(document.querySelectorAll("input[name=goal]"));
+        if (boxes.filter(b => b.checked).length > 2) t.checked = false;
+        const full = boxes.filter(b => b.checked).length >= 2;
+        boxes.forEach(b => { b.disabled = full && !b.checked; });
+        const hint = $(".goal-hint");
+        if (hint) hint.hidden = !full;
       }
     });
     document.addEventListener("keydown", event => {

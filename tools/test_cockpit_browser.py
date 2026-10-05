@@ -414,3 +414,54 @@ def test_start_does_not_say_the_same_chapter_twice(browser, site):
     page, _ = open_page(browser, site + "?screen=start", init_script=stored_profile() + other)
     assert "X.1" in page.locator(".resume").inner_text()
     page.close()
+
+
+# --- the real cockpit (generated file in the repo): behaviour that needs the real library ----------------------
+
+@pytest.fixture(scope="module")
+def real_site():
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        port = s.getsockname()[1]
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(ROOT / "resources"))
+    handler.log_message = lambda *a, **k: None
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", port), handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    yield f"http://127.0.0.1:{port}/claude-code-workshop-ui.html"
+    server.shutdown()
+
+
+def test_a_third_goal_is_refused_visibly(browser, real_site):
+    """B2: the third goal could not be ticked, without any hint why."""
+    page, errors = open_page(browser, real_site + "?screen=einstufung")
+    boxes = page.locator("input[name=goal]")
+    assert boxes.count() >= 3
+    assert not page.locator(".goal-hint").is_visible()
+    boxes.nth(0).check()
+    boxes.nth(1).check()
+    assert page.locator(".goal-hint").is_visible()
+    assert boxes.nth(2).is_disabled() and boxes.nth(0).is_enabled()
+    page.click("[data-action=step-next]")
+    page.click("[data-action=step-back]")  # the step is drawn again from the draft
+    assert boxes.nth(2).is_disabled() and page.locator(".goal-hint").is_visible()
+    boxes.nth(0).uncheck()
+    assert boxes.nth(2).is_enabled() and not page.locator(".goal-hint").is_visible()
+    assert errors == []
+    page.close()
+
+
+def test_a_new_placement_step_starts_at_its_top(browser, real_site):
+    """B1: the next step opened at the scroll position of the previous one, its heading under the sticky header."""
+    page, errors = open_page(browser, real_site + "?screen=einstufung")
+    page.set_viewport_size({"width": 1280, "height": 500})
+    page.click("[data-action=step-next]")
+    page.click("[data-action=step-next]")  # step 3 of 4: the long list of areas
+    page.locator("[data-action=step-next]").scroll_into_view_if_needed()
+    assert page.evaluate("window.scrollY") > 200
+    page.click("[data-action=step-next]")
+    assert page.evaluate("window.scrollY") == 0
+    page.locator("[data-action=step-back]").scroll_into_view_if_needed()
+    page.click("[data-action=step-back]")
+    assert page.evaluate("window.scrollY") == 0
+    assert errors == []
+    page.close()
