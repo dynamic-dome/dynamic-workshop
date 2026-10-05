@@ -29,8 +29,8 @@ Wie du damit lernst, moderierst oder das Material pflegst: [HOW-TO-USE.md](HOW-T
 - **Kapitel mit festem Aufbau:** Schnellcheck → Auf einen Blick → Bild im Kopf → Im Detail → Vorführen →
   Selbst machen → Typische Fallen → Check → Weiterlesen, mit der offiziellen Doku als Primärquelle.
 - **Bilder aus der Sicherheitstechnik:** Rechte-Modi als Zutrittsebenen, Hooks als Türsensoren, Worktrees als Testlabor.
-- **Sicherheitsboden:** Neun Kapitel empfehlen wir auch Fortgeschrittenen — etwa, dass nur `exit 2` einen Hook blocken
-  lässt und `claude -p` ohne `--bare` die Hooks eines fremden Repos ausführt.
+- **Sicherheitsboden:** Neun Kapitel empfehlen wir auch Fortgeschrittenen — etwa, dass von den Exit-Codes nur `exit 2`
+  einen Hook blocken lässt und `claude -p` ohne `--bare` die Hooks eines fremden Repos ausführt.
 - **Getestet statt behauptet:** Kopierbare Hooks sind [getestete Vorlagen](resources/demos/assets/hooks/), Wächter-Tests
   verhindern bekannte Falschaussagen, ein [Übungs-Playground](workshop-playground/) mit fünf eingebauten Schwachstellen.
 - **Einstufung ohne Druck:** Verhaltensfragen statt Wissensabfrage, freiwillige Mini-Szenarien, Empfehlung mit Begründung.

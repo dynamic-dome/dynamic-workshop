@@ -30,7 +30,7 @@ aliases: ["2.2"]
 
 ## Auf einen Blick
 
-Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken, aber nur mit `exit 2`; PostToolUse feuert danach und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Jeder andere Exit-Code als 2 blockt nicht: Die Aktion läuft weiter.
+Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken, über den Exit-Code aber nur mit `exit 2`; PostToolUse feuert danach und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Jeder andere Exit-Code als 2 blockt nicht: Die Aktion läuft weiter. Den zweiten Weg zu blocken, eine JSON-Entscheidung, zeigt [S2.10](s2-10-hook-ausgaben.md).
 
 ## Bild im Kopf
 
@@ -59,7 +59,7 @@ Stell dir Hooks als **Event-Listener** für Claudes Verhalten vor. Wenn etwas pa
 
 ### Die drei Eckpfeiler
 
-**PreToolUse: vorher, kann blocken.** Feuert, bevor Claude ein Tool nutzt, also einen Bash-Befehl ausführt, eine Datei bearbeitet oder einen MCP-Server aufruft. Der Hook bekommt mit, was Claude gleich tun will. Er kann die Aktion loggen, dich warnen oder sie **ganz blocken**, indem er mit Code 2 endet. Nur 2 blockt: `exit 1`, ein Absturz oder ein Timeout melden nur einen Hook-Fehler, und die Aktion läuft weiter. Für einen Wächter ist das die gefährliche Fehlerrichtung.
+**PreToolUse: vorher, kann blocken.** Feuert, bevor Claude ein Tool nutzt, also einen Bash-Befehl ausführt, eine Datei bearbeitet oder einen MCP-Server aufruft. Der Hook bekommt mit, was Claude gleich tun will. Er kann die Aktion loggen, dich warnen oder sie **ganz blocken**, indem er mit Code 2 endet. Von den Exit-Codes blockt nur 2: `exit 1`, ein Absturz oder ein Timeout melden nur einen Hook-Fehler, und die Aktion läuft weiter. Für einen Wächter ist das die gefährliche Fehlerrichtung.
 
 **PostToolUse: nachher, kann reagieren.** Feuert, nachdem Claude ein Tool genutzt und das Ergebnis bekommen hat. Er kann festhalten, was passiert ist, Folgeaktionen anstoßen, Benachrichtigungen schicken, in ein Audit-Log schreiben.
 
@@ -95,7 +95,7 @@ Einstieg: „Hooks sind Sensoren in deinem Workflow. Sie feuern bei Ereignissen.
 Sprechpunkte:
 
 - „Hooks sind die Sensoren deiner Alarmanlage: Sie feuern bei Ereignissen, nicht auf Zuruf."
-- „PreToolUse ist der Sensor, der prüft, bevor die Tür aufgeht. Er kann sie verriegeln, aber nur mit `exit 2`."
+- „PreToolUse ist der Sensor, der prüft, bevor die Tür aufgeht. Er kann sie verriegeln, über den Exit-Code aber nur mit `exit 2`."
 - „PostToolUse ist der Sensor, der protokolliert, nachdem jemand durch ist."
 - „Stop ist die Meldung zum Schichtende: Sie feuert, wenn Claude mit der Antwort fertig ist."
 - „Eine Hook-Konfiguration gilt für jede Sitzung, jedes Projekt und jedes Teammitglied, das dieselbe Konfiguration nutzt."
@@ -105,7 +105,7 @@ Sprechpunkte:
 
 ## Typische Fallen
 
-- **Blocken mit `exit 1`.** Das blockt nicht. Nur `exit 2` stoppt einen PreToolUse-Aufruf; jeder andere Code meldet einen Hook-Fehler, und die Aktion läuft.
+- **Blocken mit `exit 1`.** Das blockt nicht. Von den Exit-Codes stoppt nur `exit 2` einen PreToolUse-Aufruf; jeder andere Code meldet einen Hook-Fehler, und die Aktion läuft.
 - **Stop mit dem Sitzungsende verwechseln.** Stop feuert nach jeder Antwort. Für das saubere Ende der Sitzung gibt es SessionEnd ([S2.7](s2-07-hook-ereignisse.md)).
 - **Hooks für eine harte Grenze halten.** Hooks sind Best-Effort-Wächter. Warum, und womit du sie kombinierst, steht in [S2.8](s2-08-hook-einrichten.md).
 

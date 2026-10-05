@@ -9,6 +9,7 @@ Payloads follow the official hooks reference (code.claude.com/docs/en/hooks, che
 """
 
 import json
+import os
 from pathlib import Path
 import re
 import shutil
@@ -118,6 +119,65 @@ def test_secure_diff_gate_allows_normal_absolute_windows_path(script):
     result = run(script, pre_write("C:\\project\\src\\access_control.py", "print('ok')"))
 
     assert result.returncode == 0
+
+
+def run_raw(script: Path, stdin: str, env: dict | None = None) -> subprocess.CompletedProcess:
+    """Run a hook with arbitrary stdin (not necessarily JSON), optionally in a changed environment."""
+    cmd = [sys.executable, str(script)] if script.suffix == ".py" else [BASH, str(script)]
+    return subprocess.run(
+        cmd, input=stdin, capture_output=True, text=True, encoding="utf-8", check=False, timeout=60, env=env
+    )
+
+
+@pytest.mark.parametrize("script", SECURE_DIFF_GATE)
+@pytest.mark.parametrize("stdin", ["this is not json", "", "[]"], ids=["garbage", "empty", "not-an-object"])
+def test_secure_diff_gate_fails_closed_when_input_is_unreadable(script, stdin):
+    """Same rule as safety-check: a gate that cannot read its input blocks, and says that it is the gate."""
+    result = run_raw(script, stdin)
+
+    assert result.returncode == BLOCK
+    assert "BLOCKED" in result.stderr
+
+
+@pytest.mark.skipif(BASH is None, reason="bash is required")
+def test_secure_diff_gate_sh_fails_closed_when_jq_is_unusable(tmp_path):
+    """Without a working jq the script used to end with 127, which does not block: the write to .env went through."""
+    shim = tmp_path / "jq"
+    shim.write_text("#!/bin/sh\nexit 127\n", encoding="utf-8", newline="\n")
+    shim.chmod(0o755)
+    env = {**os.environ, "PATH": str(tmp_path) + os.pathsep + os.environ["PATH"]}
+    probe = subprocess.run(
+        [BASH, "-c", "jq --version"], capture_output=True, text=True, check=False, timeout=60, env=env
+    )
+    if probe.returncode != 127:
+        pytest.skip("could not put a failing jq in front of the real one on this machine")
+
+    result = run_raw(HOOKS / "secure-diff-gate.sh", json.dumps(pre_write("C:\\project\\.env", "TOKEN=x")), env=env)
+
+    assert result.returncode == BLOCK
+    assert "BLOCKED" in result.stderr
+
+
+@pytest.mark.parametrize("script", SECURE_DIFF_GATE)
+def test_secure_diff_gate_blocks_env_file_in_any_letter_case(script):
+    """Windows and the default macOS file system ignore case: .ENV is the same file as .env."""
+    result = run(script, pre_write("C:\\project\\.ENV", "TOKEN=x"))
+
+    assert result.returncode == BLOCK
+
+
+@pytest.mark.parametrize("script", SECURE_DIFF_GATE)
+def test_secure_diff_gate_handles_non_ascii_paths_and_names_them_readably(script):
+    """Claude Code sends and reads UTF-8; on Windows Python's stdin and stderr default to cp1252.
+
+    The exit codes were right before this test existed; what was broken is the reason Claude gets to read.
+    """
+    blocked = run(script, pre_write("C:\\Users\\Ángel\\project\\secrets\\panel-db.json", "{}"))
+    allowed = run(script, pre_write("C:\\Users\\Ángel\\project\\src\\app.py", "print('ok')"))
+
+    assert blocked.returncode == BLOCK
+    assert "C:/Users/Ángel/project/secrets/panel-db.json" in blocked.stderr
+    assert allowed.returncode == 0
 
 
 # --- safety-check (Exercise 2.2 + Demo 2.2, PreToolUse Bash) ---------------------------------------

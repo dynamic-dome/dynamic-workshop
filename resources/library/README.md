@@ -166,7 +166,7 @@ Skills sind die Dienstanweisungen deines Agenten, Commands die Knöpfe dazu. Du 
 
 **Aktionen des Agenten automatisch prüfen, blocken oder protokollieren.**
 
-Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können eine Aktion stoppen — aber nur mit `exit 2`. Ein abstürzender Hook ist ein offener Hook. Dieses Regal zeigt, wie du Hooks baust, denen du trauen kannst.
+Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können eine Aktion stoppen — über den Exit-Code aber nur mit `exit 2`. Ein abstürzender Hook ist ein offener Hook. Dieses Regal zeigt, wie du Hooks baust, denen du trauen kannst.
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|

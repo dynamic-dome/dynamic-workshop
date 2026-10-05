@@ -1278,7 +1278,7 @@
    "example": "#!/bin/bash\n# Der Bash-Befehl steht in tool_input.command; nur exit 2 blockt.\nINPUT=$(cat)\nCOMMAND=$(printf '%s' \"$INPUT\" | jq -r '.tool_input.command // \"\"')\nif printf '%s' \"$COMMAND\" | grep -qiE 'rm[[:space:]]+-rf|git push.*--force'; then\n  echo \"Destructive command blocked\" >&2\n  exit 2   # exit 1 wuerde NICHT blocken\nfi\nexit 0",
    "example_lang": "bash",
    "file": "s2-06-hooks-als-sensoren.md",
-   "glance": "Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken, aber nur mit `exit 2`; PostToolUse feuert danach und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Jeder andere Exit-Code als 2 blockt nicht: Die Aktion läuft weiter.",
+   "glance": "Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken, über den Exit-Code aber nur mit `exit 2`; PostToolUse feuert danach und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Jeder andere Exit-Code als 2 blockt nicht: Die Aktion läuft weiter. Den zweiten Weg zu blocken, eine JSON-Entscheidung, zeigt [S2.10](s2-10-hook-ausgaben.md).",
    "id": "S2.6",
    "level": "core",
    "minutes": 15,
@@ -1374,7 +1374,7 @@
    "example": "echo '{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"rm -rf /tmp/test\"}}' | bash ~/.claude/hooks/safety-check.sh; echo \"exit=$?\"\n# expected: SAFETY HOOK ... blocked, exit=2",
    "example_lang": "bash",
    "file": "s2-08-hook-einrichten.md",
-   "glance": "Ein Schutz-Hook blockt nur mit `exit 2`; jeder andere Exit-Code (1, 127, ein Absturz) und ein Timeout blocken nicht, die Aktion läuft weiter. Ein kaputter Schutz-Hook ist deshalb ein offener Schutz-Hook: Ein guter Wächter liest den Befehl aus `tool_input.command` und blockt lieber, wenn er seine Eingabe nicht lesen kann.",
+   "glance": "Von den Exit-Codes blockt bei einem Schutz-Hook nur `exit 2`; jeder andere Exit-Code (1, 127, ein Absturz) und ein Timeout blocken nicht, die Aktion läuft weiter. Daneben kann ein PreToolUse-Hook per JSON blocken (`permissionDecision: \"deny\"`, [S2.10](s2-10-hook-ausgaben.md)). Ein kaputter Schutz-Hook ist deshalb ein offener Schutz-Hook: Ein guter Wächter liest den Befehl aus `tool_input.command` und blockt lieber, wenn er seine Eingabe nicht lesen kann.",
    "id": "S2.8",
    "level": "core",
    "minutes": 15,
@@ -1476,7 +1476,7 @@
    "example": "#!/bin/bash\n# token-firewall.sh - PostToolUse hook (matcher \"Bash\"): shrink noisy test output before Claude reads it.\n# tested asset: resources/demos/assets/hooks/token-firewall.sh\n#\n# Replaces tool_response.stdout via hookSpecificOutput.updatedToolOutput (same Bash shape).\n# stderr passes through unchanged: stripping error details can mislead Claude.\n# Note: suppressOutput has no effect, and systemMessage only reaches the user, not Claude.\n\nINPUT=$(cat)\nCOMMAND=$(printf '%s' \"$INPUT\" | jq -r '.tool_input.command // \"\"')\n\n# Only touch test runs; everything else passes through untouched.\nif ! printf '%s' \"$COMMAND\" | grep -qE '(npm test|pytest|jest|mocha)'; then\n  exit 0\nfi\n\nprintf '%s' \"$INPUT\" | jq '{\n  hookSpecificOutput: {\n    hookEventName: \"PostToolUse\",\n    updatedToolOutput: (.tool_response | .stdout |= (\n      [split(\"\\n\")[] | select(test(\"FAIL|ERROR|Error|passed|failed|Summary\"))]\n      | .[-50:] | join(\"\\n\")\n      | . + \"\\n--- [Token Firewall: passing-test lines removed; failures and summary kept] ---\"\n    ))\n  }\n}'\nexit 0",
    "example_lang": "bash",
    "file": "s2-10-hook-ausgaben.md",
-   "glance": "Über `exit 0` (erlauben) und `exit 2` (blocken) hinaus kann ein Hook strukturiertes JSON zurückgeben: `hookSpecificOutput.updatedToolOutput` ersetzt in einem PostToolUse-Hook die Tool-Ausgabe, bevor Claude sie liest, aber nur in der Form der Tool-Ausgabe (Bash: `stdout`, `stderr`, `interrupted`, `isImage`), sonst wird sie ignoriert. Weiche Signale wie `systemMessage` (für dich) und `additionalContext` (für Claude) melden etwas, ohne zu sperren, und `terminalSequence` holt dich per Desktop-Benachrichtigung. Für eine harte Sperre auf `.env`, `*.pem` oder `secrets/` bleibt ein PreToolUse-Hook mit `exit 2`: das Secure Diff Gate.",
+   "glance": "Über `exit 0` (erlauben) und `exit 2` (blocken) hinaus kann ein Hook strukturiertes JSON zurückgeben: `hookSpecificOutput.updatedToolOutput` ersetzt in einem PostToolUse-Hook die Tool-Ausgabe, bevor Claude sie liest, aber nur in der Form der Tool-Ausgabe (Bash: `stdout`, `stderr`, `interrupted`, `isImage`), sonst wird sie ignoriert. Weiche Signale wie `systemMessage` (für dich) und `additionalContext` (für Claude) melden etwas, ohne zu sperren, und `terminalSequence` holt dich per Desktop-Benachrichtigung. Schreibzugriffe der Tools Write und Edit auf `.env`, `*.pem` oder `secrets/` blockt ein PreToolUse-Hook mit `exit 2`: das Secure Diff Gate. Eine harte Grenze ist es nicht: Shell-Befehle laufen an seinem Matcher vorbei, dafür brauchst du zusätzlich eine Deny-Regel.",
    "id": "S2.10",
    "level": "deep-dive",
    "minutes": 15,
@@ -1509,7 +1509,7 @@
    "shelf": "hooks",
    "skip_check": [
     "Kannst du ohne Nachschlagen erklären, wie ein PostToolUse-Hook verhindert, dass ein API-Key aus einer Befehlsausgabe in Claudes Kontext landet?",
-    "Hast du schon einmal einen Hook eingesetzt, der Schreibzugriffe auf `.env` oder `secrets/` hart blockt?"
+    "Hast du schon einmal einen Hook eingesetzt, der Schreibzugriffe auf `.env` oder `secrets/` blockt, und weißt du, welche Zugriffe an ihm vorbeigehen?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/hooks"
@@ -3973,7 +3973,7 @@
   },
   {
    "id": "hooks",
-   "intro": "Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können eine Aktion stoppen — aber nur mit `exit 2`. Ein abstürzender Hook ist ein offener Hook. Dieses Regal zeigt, wie du Hooks baust, denen du trauen kannst.",
+   "intro": "Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können eine Aktion stoppen — über den Exit-Code aber nur mit `exit 2`. Ein abstürzender Hook ist ein offener Hook. Dieses Regal zeigt, wie du Hooks baust, denen du trauen kannst.",
    "purpose": "Aktionen des Agenten automatisch prüfen, blocken oder protokollieren.",
    "title": "Hooks",
    "zone": "Erweitern"

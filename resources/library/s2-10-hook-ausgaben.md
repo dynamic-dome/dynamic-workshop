@@ -25,17 +25,17 @@ aliases: []
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen erklären, wie ein PostToolUse-Hook verhindert, dass ein API-Key aus einer Befehlsausgabe in Claudes Kontext landet?
-- Hast du schon einmal einen Hook eingesetzt, der Schreibzugriffe auf `.env` oder `secrets/` hart blockt?
+- Hast du schon einmal einen Hook eingesetzt, der Schreibzugriffe auf `.env` oder `secrets/` blockt, und weißt du, welche Zugriffe an ihm vorbeigehen?
 
 ## Auf einen Blick
 
-Über `exit 0` (erlauben) und `exit 2` (blocken) hinaus kann ein Hook strukturiertes JSON zurückgeben: `hookSpecificOutput.updatedToolOutput` ersetzt in einem PostToolUse-Hook die Tool-Ausgabe, bevor Claude sie liest, aber nur in der Form der Tool-Ausgabe (Bash: `stdout`, `stderr`, `interrupted`, `isImage`), sonst wird sie ignoriert. Weiche Signale wie `systemMessage` (für dich) und `additionalContext` (für Claude) melden etwas, ohne zu sperren, und `terminalSequence` holt dich per Desktop-Benachrichtigung. Für eine harte Sperre auf `.env`, `*.pem` oder `secrets/` bleibt ein PreToolUse-Hook mit `exit 2`: das Secure Diff Gate.
+Über `exit 0` (erlauben) und `exit 2` (blocken) hinaus kann ein Hook strukturiertes JSON zurückgeben: `hookSpecificOutput.updatedToolOutput` ersetzt in einem PostToolUse-Hook die Tool-Ausgabe, bevor Claude sie liest, aber nur in der Form der Tool-Ausgabe (Bash: `stdout`, `stderr`, `interrupted`, `isImage`), sonst wird sie ignoriert. Weiche Signale wie `systemMessage` (für dich) und `additionalContext` (für Claude) melden etwas, ohne zu sperren, und `terminalSequence` holt dich per Desktop-Benachrichtigung. Schreibzugriffe der Tools Write und Edit auf `.env`, `*.pem` oder `secrets/` blockt ein PreToolUse-Hook mit `exit 2`: das Secure Diff Gate. Eine harte Grenze ist es nicht: Shell-Befehle laufen an seinem Matcher vorbei, dafür brauchst du zusätzlich eine Deny-Regel.
 
 ## Bild im Kopf
 
 Ein Leitstand hat mehrere Ausgabewege. Der Schwärzungsbeauftragte (`updatedToolOutput`) sitzt zwischen Außendienst und Lagebesprechung: Der Bericht kommt beim Analysten an, aber die sensiblen Kennungen sind vorher geschwärzt. Die gelbe Warnlampe (`systemMessage`, `additionalContext`) leuchtet, ohne die Tür zu sperren; der Betrieb läuft, der Leitstand weiß Bescheid. Der Pager (`terminalSequence`) erreicht den Menschen direkt, ohne Umweg über das Modell.
 
-In deiner Zutrittskontrolle hast du Zonen: Manche Türen sind immer offen (Lobby), manche brauchen eine Karte (Büros), manche bleiben ohne ausdrückliche Freigabe zu (Tresor). Das Secure Diff Gate ist die Tresor-Regel für deinen Code. Und der Circuit Breaker ist der Totmann-Schalter: Meldet sich die Streife nicht mehr, eskaliert das System von selbst.
+In deiner Zutrittskontrolle hast du Zonen: Manche Türen sind immer offen (Lobby), manche brauchen eine Karte (Büros), manche bleiben ohne ausdrückliche Freigabe zu (Tresor). Das Secure Diff Gate ist die Tresor-Regel für die Türen, an denen es hängt: Write und Edit. Die Shell ist eine andere Tür. Und der Circuit Breaker ist der Totmann-Schalter: Meldet sich die Streife nicht mehr, eskaliert das System von selbst.
 
 ```mermaid
 sequenceDiagram
@@ -184,11 +184,13 @@ cp resources/demos/assets/hooks/secure-diff-gate.sh ~/.claude/hooks/   # Windows
 }
 ```
 
-Das Gate liest das Ziel aus `tool_input.file_path` (absolut; unter Windows mit Backslashes, die es vereinheitlicht) und blockt mit exit 2. Frühere Fassungen dieser Demo nutzten einen Inline-Einzeiler, der ein Feld `file_path` auf oberster Ebene las; er hat nie etwas erkannt.
+Das Gate liest das Ziel aus `tool_input.file_path` (absolut; unter Windows mit Backslashes, die es vereinheitlicht) und blockt mit exit 2, in jeder Schreibweise (`.ENV` ist unter Windows und macOS dieselbe Datei wie `.env`). Kann es seine Eingabe nicht lesen, etwa weil `jq` fehlt, blockt es ebenfalls, wie der Wächter aus [S2.8](s2-08-hook-einrichten.md).
+
+**Die Grenze des Gates:** Der Matcher `Write|Edit` sieht keine Shell-Befehle. `echo X > .env` über das Bash- oder PowerShell-Tool geht am Gate vorbei. Für eine harte Grenze trägst du zusätzlich eine Deny-Regel ein, etwa `Edit(./.env)`: Sie gilt für die Datei-Tools, für Datei-Befehle, die Claude Code in Bash erkennt, und für Umleitungsziele wie `> .env`. Gegen beliebige Unterprozesse, die Dateien indirekt schreiben, hilft erst die Sandbox ([S3.9](s3-09-geschuetzte-pfade-und-sandbox.md)).
 
 **Schritt 1: die Hook-Konfiguration zeigen.** Öffne die Settings-Datei und erkläre:
 
-- Der Matcher `Write|Edit` feuert bei jeder Dateiänderung.
+- Der Matcher `Write|Edit` feuert bei jeder Dateiänderung über diese beiden Tools, nicht bei Shell-Befehlen.
 - Das Skript prüft den Zielpfad gegen ein Muster.
 - Passt er zu `.env`, `.pem`, `secrets/` oder `credentials`, heißt das exit 2 = BLOCK.
 
@@ -215,15 +217,15 @@ Das geht durch: Der Hook prüft den Pfad, findet kein sensibles Muster und endet
 **Sagen:**
 
 - Schritt 1: „Das ist ein Türcontroller mit Sperrliste. Diese Pfade sind wie der Serverraum: kein Zutritt ohne ausdrückliche Freigabe."
-- Schritt 2: „Claude hat nicht beschlossen, die .env-Datei auszulassen. Der Hook hat das Schreiben physisch geblockt. Das ist kein Vorschlag, das ist eine verschlossene Tür."
+- Schritt 2: „Claude hat nicht beschlossen, die .env-Datei auszulassen. Der Hook hat diesen Schreibzugriff geblockt. Das ist kein Vorschlag an das Modell, sondern eine Sperre an dieser Tür. Die Shell ist eine andere Tür; dafür gibt es Deny-Regeln und die Sandbox."
 - Schritt 3: „Normale Türen gehen normal auf. Nur die geschützten Zonen sind zu. Least Privilege in Aktion."
 - Zum Schluss: „In eurer Zutrittskontrolle habt ihr Zonen. Manche Türen sind immer offen (Lobby), manche brauchen eine Karte (Büros), manche bleiben ohne ausdrückliche Freigabe zu (Tresor). Dieser Hook ist die Tresor-Regel für euren Code."
 
 **Wenn etwas schiefgeht:**
 
 - **Das Bash-Quoting bricht live:** Nimm das vorbereitete, getestete Skript aus dem Repo: [`resources/demos/assets/hooks/secure-diff-gate.sh`](../demos/assets/hooks/secure-diff-gate.sh). Kopiere es nach `~/.claude/hooks/` und trag es mit `command: bash ~/.claude/hooks/secure-diff-gate.sh` ein. Gleiches Verhalten, kein Inline-Quoting, das schiefgehen kann.
-- **`jq` fehlt (Windows ohne Git Bash):** Nimm die Python-Variante ohne `jq`, [`resources/demos/assets/hooks/secure-diff-gate.py`](../demos/assets/hooks/secure-diff-gate.py) (liest stdin per `json.load`, keine externen Abhängigkeiten). Trag sie als `command: python %USERPROFILE%\.claude\hooks\secure-diff-gate.py` ein (unter Windows `python`, nicht `python3`). Beide Skripte sind geprüft: Sie blocken Schreibzugriffe auf `.env`, `*.pem`, `secrets/` und `credentials` (exit 2) und lassen normale Schreibzugriffe durch (exit 0).
-- **Der Hook feuert, blockt aber nicht (exit 0 statt 2):** Prüf die Bedingung im Bash-Skript, `grep -qE` muss treffen. Teste den Regex außerhalb von Claude mit `echo ".env" | grep -qE "(\.env|\.pem)"; echo $?`.
+- **`jq` fehlt (Windows ohne Git Bash):** Das Gate blockt dann jeden Schreibzugriff und meldet, dass es seine Eingabe nicht lesen kann. Nimm die Python-Variante ohne `jq`, [`resources/demos/assets/hooks/secure-diff-gate.py`](../demos/assets/hooks/secure-diff-gate.py) (keine externen Abhängigkeiten). Trag sie als `"command": "python \"$HOME/.claude/hooks/secure-diff-gate.py\""` ein (unter Windows `python`, sonst `python3`). `$HOME` lösen Git Bash und PowerShell auf, `%USERPROFILE%` keine von beiden. Beide Skripte sind geprüft: Sie blocken Schreibzugriffe auf `.env`, `*.pem`, `secrets/` und `credentials` (exit 2), lassen normale Schreibzugriffe durch (exit 0) und blocken, wenn sie ihre Eingabe nicht lesen können.
+- **Der Hook feuert, blockt aber nicht (exit 0 statt 2):** Teste das Skript außerhalb von Claude von Hand: `echo '{"tool_input":{"file_path":".env"}}' | bash ~/.claude/hooks/secure-diff-gate.sh; echo "exit=$?"` muss `exit=2` zeigen.
 - **`settings.json` lässt sich nicht parsen:** Häufige Ursache sind nicht maskierte Anführungszeichen im Inline-Befehl. Leg das Skript in eine eigene Datei und verweise per Pfad darauf.
 
 </details>

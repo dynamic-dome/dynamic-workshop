@@ -30,7 +30,7 @@ aliases: []
 
 ## Auf einen Blick
 
-Ein Schutz-Hook blockt nur mit `exit 2`; jeder andere Exit-Code (1, 127, ein Absturz) und ein Timeout blocken nicht, die Aktion läuft weiter. Ein kaputter Schutz-Hook ist deshalb ein offener Schutz-Hook: Ein guter Wächter liest den Befehl aus `tool_input.command` und blockt lieber, wenn er seine Eingabe nicht lesen kann.
+Von den Exit-Codes blockt bei einem Schutz-Hook nur `exit 2`; jeder andere Exit-Code (1, 127, ein Absturz) und ein Timeout blocken nicht, die Aktion läuft weiter. Daneben kann ein PreToolUse-Hook per JSON blocken (`permissionDecision: "deny"`, [S2.10](s2-10-hook-ausgaben.md)). Ein kaputter Schutz-Hook ist deshalb ein offener Schutz-Hook: Ein guter Wächter liest den Befehl aus `tool_input.command` und blockt lieber, wenn er seine Eingabe nicht lesen kann.
 
 Eingetragen wird der Hook in `settings.json`, global oder pro Projekt; `matcher` wählt die Tools, `if` filtert feiner mit der Syntax der Rechte-Regeln. Hooks sind Best-Effort-Wächter, keine harte Grenze: Kombiniere sie mit Rechte-Regeln und Sandbox.
 
@@ -294,7 +294,7 @@ Zeig, dass es nur ein Bash-Skript ist. Es liest JSON von stdin (die Daten des To
 
 **Schritt 4: das Blocken ansprechen**
 
-Ein PreToolUse-Hook kann eine Aktion ganz stoppen, aber nur mit exit 2. PostToolUse-Hooks reagieren nur: Sie loggen oder melden hinterher, machen die Aktion aber nicht rückgängig.
+Ein PreToolUse-Hook kann eine Aktion ganz stoppen, über den Exit-Code aber nur mit exit 2. PostToolUse-Hooks reagieren nur: Sie loggen oder melden hinterher, machen die Aktion aber nicht rückgängig.
 
 <details><summary>Für Moderierende</summary>
 

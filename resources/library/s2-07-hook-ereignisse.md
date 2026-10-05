@@ -65,7 +65,7 @@ Die offizielle Doku führt deutlich mehr Ereignisse, als du im Alltag brauchst; 
 
 | Ereignis | Wann es feuert | Typischer Einsatz |
 |-------|---------------|------------------|
-| **PreToolUse** | Bevor Claude ein Tool nutzt (Bash, Edit, MCP-Aufruf). **Kann blocken**, und zwar nur mit Exit-Code **2** (jeder andere Code ungleich null blockt nicht) | Gefährliche Befehle verhindern, ein Review vor dem Deploy erzwingen, unumkehrbare Aktionen bestätigen lassen |
+| **PreToolUse** | Bevor Claude ein Tool nutzt (Bash, Edit, MCP-Aufruf). **Kann blocken**: über den Exit-Code nur mit **2** (jeder andere Code ungleich null blockt nicht), daneben per JSON-Entscheidung ([S2.10](s2-10-hook-ausgaben.md)) | Gefährliche Befehle verhindern, ein Review vor dem Deploy erzwingen, unumkehrbare Aktionen bestätigen lassen |
 | **PostToolUse** | Nachdem ein Tool gelaufen ist und das Ergebnis vorliegt. Kann reagieren, loggen, Folgeschritte anstoßen | Audit-Log jeder Änderung, Slack-Nachricht bei grünen Tests, Dashboard aktualisieren |
 | **Stop** | Claude hat eine Antwort beendet und wartet auf deinen nächsten Prompt | Zusammenfassungen, Aufräumarbeiten, Statusmeldungen |
 | **SessionStart** | Bei jedem Start einer Claude-Code-Sitzung | Briefing-Hook: Projektstatus ausgeben, `git status` prüfen, kontrollieren, ob die Abhängigkeiten installiert sind |

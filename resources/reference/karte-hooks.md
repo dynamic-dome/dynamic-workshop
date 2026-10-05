@@ -9,7 +9,7 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quell
 | Frage | Antwort |
 |---|---|
 | Was kommt an? | JSON auf stdin mit `tool_name` und `tool_input`. Der Shell-Befehl steht in `tool_input.command`, bei Write in `file_path` und `content`, bei Edit in `file_path`, `old_string`, `new_string`. PostToolUse bringt zusätzlich `tool_response` |
-| Was blockt? | Nur `exit 2`, bei Ereignissen, die blocken können; bei PreToolUse geht stderr als Grund an Claude. Der Block gilt auch, wenn eine allow-Regel passen würde |
+| Was blockt? | Von den Exit-Codes nur `exit 2`, bei Ereignissen, die blocken können; bei PreToolUse geht stderr als Grund an Claude. Daneben blockt bei PreToolUse die JSON-Entscheidung `permissionDecision: "deny"`. Der Block gilt auch, wenn eine allow-Regel passen würde |
 | Und `exit 0`? | Kein Einwand; danach entscheidet der normale Rechte-Ablauf. stderr eines Hooks mit `exit 0` sieht Claude nie |
 | Jeder andere Code (1, 127 …) | Ohne gültiges JSON auf stdout nur ein Hook-Fehler: Die Aktion läuft weiter |
 | Timeout | Bei `PreToolUse` Standard 600 s (`command`, `http`, `mcp_tool`); ein Timeout blockt dort nicht, der Aufruf läuft weiter. Andere Ereignisse haben eigene Werte, etwa 30 s bei `UserPromptSubmit` |

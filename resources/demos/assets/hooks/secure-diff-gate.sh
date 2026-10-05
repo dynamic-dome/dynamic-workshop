@@ -1,32 +1,38 @@
 #!/bin/bash
-# secure-diff-gate.sh — PreToolUse hook: block writes to protected paths.
+# secure-diff-gate.sh - PreToolUse hook (matcher "Write|Edit"): block writes to protected paths.
 #
-# Workshop Demo 2.2b ("Secure Diff Gate"). This is the pre-prepared fallback
-# referenced in resources/demos/block-2-demos.md, in case the inline-JSON hook
-# quoting breaks live.
+# Contract (official hooks reference):
+#   - Claude Code sends the event as JSON on stdin; the target is in tool_input.file_path
+#     (absolute, with backslashes on Windows).
+#   - exit 2 = BLOCK: the file is not written, and stderr is shown to Claude as the reason.
+#   - exit 0 = no objection: the normal permission flow decides.
+#   - Any OTHER exit code (1, 127, ...) does NOT block: the write happens anyway. That is why this
+#     script decides every branch itself and never lets a failing tool end it.
+#   - Protected: .env / *.pem / secrets/ / credentials, in any letter case (Windows and the default
+#     macOS file system treat .ENV and .env as the same file).
 #
-# Contract:
-#   - Reads the PreToolUse hook payload as JSON on stdin.
-#   - Exits 2 (BLOCK) if the target path matches a protected pattern
-#     (.env / *.pem / secrets/ / credentials).
-#   - Exits 0 (ALLOW) for any other path.
+# Limits: the matcher "Write|Edit" does not see shell commands. `echo X > .env` through the Bash or
+# PowerShell tool goes past this gate. Add deny rules (permissions.deny) or a sandbox for a hard limit.
 #
 # Register in .claude/settings.json (matcher "Write|Edit"):
 #   "command": "bash ~/.claude/hooks/secure-diff-gate.sh"
 #
 # Windows: run via Git Bash (jq required). No jq? Use secure-diff-gate.py instead.
 
-set -euo pipefail
-
 INPUT=$(cat)
 
-# Newer Claude Code nests the path under tool_input.file_path; older/demo
-# payloads use a top-level file_path or path. Check all three, first non-empty wins.
-FILE=$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // .file_path // .path // ""')
+# Fail closed: if the input cannot be read (no jq, no JSON, empty), block instead of allowing the write.
+if ! FILE=$(printf '%s' "$INPUT" | jq -er '.tool_input.file_path // .file_path // .path // ""' 2>/dev/null); then
+  echo "BLOCKED: secure-diff-gate could not read the hook input (is jq installed?) - blocking to stay safe." >&2
+  exit 2
+fi
+
 # Windows delivers absolute backslash paths (C:\project\secrets\x): normalise before matching "secrets/".
 FILE="${FILE//\\//}"
 
-if printf '%s' "$FILE" | grep -qE '(\.env|\.pem|secrets/|credentials)'; then
+# Matched by bash itself, so a missing grep cannot turn the gate off either.
+shopt -s nocasematch
+if [[ "$FILE" =~ (\.env|\.pem|secrets/|credentials) ]]; then
   echo "BLOCKED: write to protected path: $FILE" >&2
   exit 2
 fi
