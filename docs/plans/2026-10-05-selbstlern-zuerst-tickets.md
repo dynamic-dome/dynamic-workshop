@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P1: 677).
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P2: 688).
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -26,8 +26,8 @@
 | Paket | Inhalt | Vorbedingung | Stand |
 |---|---|---|---|
 | P0 | Gate fällt geschlossen; „nur exit 2“ präzisiert (R1, R2) | — | [x] `fcab910` |
-| P1 | Moderationsschicht: „Vorführen“ aus den Kapiteln in eigene Dateien | — | [x] siehe Abschluss P1 |
-| P2 | Cockpit und Tutor zeigen bei „durcharbeiten“ Lehrtext und Übung (R19) | P1 | [ ] |
+| P1 | Moderationsschicht: „Vorführen“ aus den Kapiteln in eigene Dateien | — | [x] `d6c40d5`, `597f9ce` |
+| P2 | Cockpit und Tutor zeigen bei „durcharbeiten“ Lehrtext und Übung (R19) | P1 | [x] siehe Abschluss P2 |
 | P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [ ] |
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [ ] |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [ ] |
@@ -155,6 +155,19 @@ den Kapiteltext gehört: S2.6 (Hooks sind Best-Effort-Wächter), S2.10 (Windows-
 
 **Fertig, wenn:** Browser-Tests grün (vorher rot gesehen), Suite grün, im Browser an 127.0.0.1 mit einer Persona
 nachgesehen (Screenshot nach `%TEMP%`).
+
+### Abschluss P2 (2026-10-05)
+
+- Cockpit: Bei Status `work` ist der volle Kapiteltext die Seite; darunter das Quiz und „Als erledigt markieren“ (einmal,
+  nicht mehr in der Seitenleiste). Oben bleibt eine Zeile zum Überspringen per Schnellcheck. Alle anderen Zustände
+  behalten die Kurzansicht. Zwei Browser-Tests: der für `work` war vorher rot, der für die Kurzansicht schützt
+  bestehendes Verhalten (war von Anfang an grün).
+- Am echten Cockpit nachgesehen (Neuling, Ziel Alltag): S1.1 „durcharbeiten“ zeigt Schnellcheck bis Weiterlesen,
+  Quiz, Knopf am Ende; X.2 und S2.8 („überfliegen“) zeigen die Kurzansicht; keine Konsolenfehler.
+- Tutor: neuer Schritt „Im Detail“ bei `work` (abschnittsweise, mit Rückfrage; ohne Übung endet er in einer
+  Anwendungsfrage); `skim` bleibt Zusammenfassung und Check. Test in `tools/test_workshop_tutor.py`.
+- **Offen für P9:** Die Seite zeichnet sich beim Markieren neu (B7); der Volltext wiederholt in der Kurzansicht
+  die Kurzblöcke; lange Kapitel haben keine Sprungmarken.
 
 ---
 

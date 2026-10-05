@@ -126,17 +126,22 @@ Lies das Kapitel ganz, dann gehe nach **Typ** vor (Abschnitte, die das Kapitel n
    überspringen — mit Lernprotokoll („per Schnellcheck belegt") und Eintrag in `fortschritt.json`.
 2. **Auf einen Blick + Bild im Kopf**: in eigenen Worten, höchstens ~150 Wörter, mit der Analogie. Bei
    Sicherheitsboden-Kapiteln (`safety_floor`) die Sicherheitsaussage wörtlich nennen.
-3. **Selbst machen**: Die Person arbeitet **in ihrem eigenen Terminal** (Playground oder eigenes Repo).
+3. **Im Detail** (nur beim Status `work`): Geh den Abschnitt Unterabschnitt für Unterabschnitt durch. Je
+   Unterabschnitt die Kernaussagen in höchstens ~120 Wörtern; Befehle, Code und Dateinamen wörtlich aus dem Kapitel.
+   Danach eine kurze Rückfrage („klar, oder ein Beispiel?"), dann weiter. Lass nichts aus, was das Outcome oder eine
+   Abruffrage des Kapitels braucht. Hat das Kapitel kein „Selbst machen", stell am Ende eine Anwendungsfrage, die
+   das Outcome auf ein eigenes Beispiel der Person bezieht.
+4. **Selbst machen**: Die Person arbeitet **in ihrem eigenen Terminal** (Playground oder eigenes Repo).
    Du gibst den Auftrag Schritt für Schritt, Hinweise nur auf Wunsch („Tipp?"), steigernd. Prüfen darfst du, was die
    Person dir zeigt oder freigibt (Datei lesen, Ausgabe ansehen) — keine zerstörerischen Befehle, keine Änderungen an
    ihren Dateien ohne ausdrückliches Ja. Bei 🔧-Kapiteln ohne installierte Bausteine: auf den Beobachtungsweg wechseln.
-4. **Check**: die Abruffragen aus dem Kapitel **ohne** Spickzettel stellen, dann das Quiz (Optionen gemischt).
+5. **Check**: die Abruffragen aus dem Kapitel **ohne** Spickzettel stellen, dann das Quiz (Optionen gemischt).
    Rückmeldung mit Begründung aus dem Kapitel.
-5. **Abschluss**: Hauptquelle nennen (`sources[0]`), Pfad zur Kapiteldatei für die Vertiefung, nächstes Kapitel.
+6. **Abschluss**: Hauptquelle nennen (`sources[0]`), Pfad zur Kapiteldatei für die Vertiefung, nächstes Kapitel.
    Erledigt wird ein Kapitel erst, wenn die Person es sagt oder die Übung gelaufen ist. War es das erste erledigte
    Kapitel, folgt die Mission-Frage (Einstufung, Schritt 7).
 
-`skim` heißt: nur Schritt 2 und 4. Nach jedem Kapitel `fortschritt.json` aktualisieren; ein Lernprotokoll nur bei
+`skim` heißt: nur Schritt 2 und 5. Nach jedem Kapitel `fortschritt.json` aktualisieren; ein Lernprotokoll nur bei
 echter Evidenz (siehe Format).
 
 ## Abruf mit Abstand (`review`)

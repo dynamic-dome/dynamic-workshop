@@ -167,3 +167,54 @@ def test_chapter_html_links_stay_inside_the_cockpit(browser, site):
     link.click()
     assert page.locator("main h1").inner_text().startswith("S2.7")
     page.close()
+
+
+# --- "durcharbeiten" shows the teaching text and the exercise (design 2026-10-05, package P2) ----------------
+
+def _newcomer_path_for_alltag(page):
+    """The wizard for a newcomer with goal 'alltag': S2.7 and S2.8 become 'work', the community chapter X.1 'skim'."""
+    page.check("input[name=goal][value=alltag]")
+    page.click("[data-action=step-next]")
+    page.check("input[name=time][value=abende]")
+    page.click("[data-action=step-next]")
+    page.click("[data-action=step-next]")
+    page.click("[data-action=finish] >> nth=0")
+    page.wait_for_selector("text=Mein Pfad")
+
+
+def test_a_chapter_to_work_through_opens_with_its_full_text_and_exercise(browser, site):
+    page, errors = open_page(browser, site + "?screen=einstufung")
+    _newcomer_path_for_alltag(page)
+    page.goto(site + "?run=S2.8")
+    assert page.locator("main [data-full=open]").count() == 1
+    assert page.locator("main details.full").count() == 0
+    assert page.get_by_role("heading", name="Selbst machen").is_visible()
+    # the quiz stays usable, and "done" sits once, below the text
+    page.click(".quiz [data-action=quiz][data-correct='1']")
+    assert page.locator(".quiz .feedback").inner_text().startswith("Richtig")
+    assert page.locator("[data-action=toggle-done]").count() == 1
+    done_follows_text = page.evaluate("""() => {
+      const text = document.querySelector('main [data-full=open]');
+      const done = document.querySelector('[data-action=toggle-done]');
+      return !!(text.compareDocumentPosition(done) & Node.DOCUMENT_POSITION_FOLLOWING);
+    }""")
+    assert done_follows_text is True
+    assert errors == []
+    page.close()
+
+
+def test_skimmed_and_unplaced_chapters_keep_the_short_view(browser, site):
+    page, errors = open_page(browser, site + "?screen=einstufung")
+    _newcomer_path_for_alltag(page)
+    page.goto(site + "?run=X.1")
+    assert page.locator("main details.full").count() == 1
+    assert page.locator("main details.full").get_attribute("open") is None
+    assert page.locator("main [data-full=open]").count() == 0
+    assert errors == []
+    page.close()
+    fresh, fresh_errors = open_page(browser, site + "?run=S2.8")  # nothing stored: no placement
+    assert fresh.locator("main details.full").count() == 1
+    assert fresh.locator("main details.full").get_attribute("open") is None
+    assert fresh.locator("main [data-full=open]").count() == 0
+    assert fresh_errors == []
+    fresh.close()

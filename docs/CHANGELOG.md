@@ -18,6 +18,9 @@ Pakete: `docs/plans/2026-10-05-selbstlern-zuerst-design.md`, `…-tickets.md`.
   der Katalog führt je Kapitel `demo`, der Live-Pfad verlinkt die Demos, der Tutor liest sie nur im Modus `guide`.
   Vier Lektionen, deren Cockpit-Beispiel in der Demo stand (S1.2, S3.13, S3.14, S4.6), haben einen Unterabschnitt
   „Ausprobieren“; S3.14 nutzt dafür `/goal` statt des entfallenen Plugin-Befehls.
+- **Cockpit und Tutor (P2):** Sagt die Einstufung „durcharbeiten“, öffnet das Cockpit das Kapitel mit vollem Text und
+  Übung statt der Kurzfassung; das Quiz und „Als erledigt markieren“ stehen am Ende. Der Tutor geht bei solchen
+  Kapiteln durch „Im Detail“, bevor die Übung kommt.
 
 ## 2026-10-02 — Einstufung: Sicherheitsboden bei Ziel Sicherheit
 
