@@ -311,8 +311,9 @@ def test_validate_reports_how_many_lessons_have_an_exercise_and_answers(lib_dir,
 
 
 # --- the standard for self-learners (design 2026-10-05, package P5) ---------------------------------------
-# Chapters listed in tools/fixtures/standard-chapters.txt carry answers, an exercise with a time and a list
-# "Geschafft, wenn", and minutes that match reading time plus exercises.
+# Every chapter of the library carries answers, an exercise with a time and a list "Geschafft, wenn", and
+# minutes that match reading time plus exercises. validate() takes the set of chapter IDs the rules apply to; the
+# CLI passes all chapters of the default library (until P7 was finished, a list file named them).
 
 EXERCISE = "### Übung: den Hook eintragen (etwa 15 Minuten)"
 
@@ -368,12 +369,11 @@ def test_a_commented_out_heading_is_no_exercise(lib_dir):
     assert rules_with_standard(lib_dir, ["S2.8"]) == ["exercise-shape", "minutes-honest"]
 
 
-def test_the_cli_applies_the_standard_list_to_the_default_library_only(lib_dir, monkeypatch, capsys):
+def test_the_cli_applies_the_standard_to_the_default_library_only(lib_dir, monkeypatch, capsys):
     edit(lib_dir, HOOK, "**Geschafft, wenn:**", "Am Ende:")
-    monkeypatch.setattr(bl, "load_standard", lambda: frozenset({"S2.8"}))
     monkeypatch.setattr(bl, "load_meta", lambda: None)
     chapter = str(lib_dir / HOOK)
-    assert bl.main(["validate", "--root", str(lib_dir)]) == 0  # any other folder: the list does not apply
+    assert bl.main(["validate", "--root", str(lib_dir)]) == 0  # any other folder: the standard does not apply
     assert bl.main(["validate", "--chapter", chapter]) == 0
     monkeypatch.setattr(bl, "DEFAULT_LIBRARY", lib_dir)
     assert bl.main(["validate", "--root", str(lib_dir)]) == 1
@@ -381,10 +381,11 @@ def test_the_cli_applies_the_standard_list_to_the_default_library_only(lib_dir, 
     assert "exercise-shape" in capsys.readouterr().out
 
 
-def test_the_real_standard_list_names_existing_chapters_and_they_pass():
+def test_every_chapter_of_the_real_library_meets_the_standard():
     lib = lm.load_library(ROOT / "resources" / "library")
-    standard = bl.load_standard()
-    assert standard, "the list is empty"
+    standard = bl.load_standard(lib)
+    assert standard == {c.id for c in lib.chapters} and len(standard) > 60
+    assert not (ROOT / "tools" / "fixtures" / "standard-chapters.txt").exists(), "the list file is obsolete"
     # complete=True also checks anchors across chapters: a renamed heading must not leave a dead link elsewhere
     found = [p for p in bl.validate(lib, complete=True, meta=bl.load_meta(), standard=standard)]
     assert found == []

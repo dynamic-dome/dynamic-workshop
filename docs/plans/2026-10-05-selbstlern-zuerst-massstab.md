@@ -7,7 +7,7 @@
 
 ## Was der Validator durchsetzt
 
-Kapitel, die in `tools/fixtures/standard-chapters.txt` stehen, prüft `python tools/build_library.py validate` zusätzlich:
+Für jedes Kapitel der Bibliothek prüft `python tools/build_library.py validate` zusätzlich (bis zum Abschluss von P7 galt das nur für die Kapitel einer Liste):
 
 | Regel | Befund, wenn … |
 |---|---|
@@ -278,3 +278,22 @@ Zehn Übungen eines Schreibers wurden durchgespielt; neun liefen wie geschrieben
 - **Beim Durchspielen per Skript:** `claude -p` liest die Standardeingabe. In einem Skript, das selbst über die
   Standardeingabe kommt, verschluckt der Lauf den Rest; jeder Aufruf bekommt `< /dev/null`.
 
+## Aus P7f mitzunehmen (S4.3 bis S4.7, S4.9, S4.10, X.4, Commit `cc1052a`)
+
+- **Ein eingebauter Fehler kann den nächsten verdecken.** In S4.9 liegen drei Fehler im Übungsordner. Solange die
+  Einstellungsdatei ungültig war, übersprang Claude Code die Freigabe des Projekt-MCP-Servers; der dritte Fehler
+  war in `/mcp` gar nicht zu sehen. Eine Übung mit mehreren Fehlern wird in genau der Reihenfolge durchgespielt, in
+  der Lernende sie erleben, und die Schritte nennen, wann welcher Fehler sichtbar wird.
+- **Dialoge, die die Doku nicht nennt, stehen wörtlich und als Probelauf markiert im Schritt.** Der Dialog zu
+  fehlerhaften Einstellungen hat eine vorausgewählte Antwort („Fix with Claude“), die der Übung die Arbeit abnimmt.
+  Der Schritt nennt die Antwort, die gewählt werden soll, und sagt, warum.
+- **Eine Liste zeigt nicht, was läuft.** Im Safe Mode listet `/hooks` den Projekt-Hook weiter auf; er läuft nicht.
+  Wo eine Übung „ist nicht geladen“ behauptet, prüft sie es mit einer Wirkung (hier: Die Datei, in die der Hook
+  schreibt, wächst nicht).
+- **Das Debug-Log ist für Hooks keine sichere Quelle.** In der interaktiven Sitzung stand zum Hook keine Zeile, in
+  einem `-p`-Lauf schon. Verlässlich ist der Test von Hand mit einer Eingabe im echten Format (S4.10).
+- **Hooks eines nie bestätigten Ordners laufen in einem `-p`-Lauf.** Nur `--bare` lässt sie weg (S4.4). Wer eine
+  Übung mit `-p` in einem fremden Ordner schreibt, sagt das dazu.
+- **Benutzer-Einstellungen färben den Lauf.** Auf dem Windows-Rechner lieferte `--output-format json` ein Array statt
+  eines Objekts (vermutlich `verbose` in den Benutzer-Einstellungen). Durchgespielt wird deshalb mit
+  `--setting-sources project,local`; was davon abweichen kann, gehört als Hinweis in den Schritt (offen für P8).

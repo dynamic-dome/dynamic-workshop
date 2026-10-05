@@ -33,7 +33,6 @@ DEFAULT_LIBRARY = ROOT / "resources" / "library"
 CHAPTER_META = ROOT / "docs" / "migration" / "chapter-meta.yaml"
 # Chapters whose recall questions must carry answers. The list grows shelf by shelf (design 2026-10-05, packages
 # P5 and P7) and is replaced by the rule "every lesson" once all shelves are done.
-STANDARD_LIST = TOOLS / "fixtures" / "standard-chapters.txt"
 MINUTES_TOLERANCE = 5  # declared minutes may differ this much from reading time plus exercises
 CONTRACT_FIELDS = ("id", "type", "title", "shelf", "level", "minutes", "requires", "safety_floor", "transferable",
                    "aliases", "offers", "after")
@@ -381,12 +380,9 @@ def _check_standard(ch, add):
             f"von 5 mit höchstens {MINUTES_TOLERANCE} Abstand")
 
 
-def load_standard(path=STANDARD_LIST) -> frozenset:
-    """IDs of the chapters that meet the standard for self-learners, one per line; '#' starts a comment."""
-    if not Path(path).exists():
-        return frozenset()
-    lines = (line.split("#", 1)[0].strip() for line in Path(path).read_text(encoding="utf-8").splitlines())
-    return frozenset(line for line in lines if line)
+def load_standard(lib) -> frozenset:
+    """IDs of the chapters that must meet the standard for self-learners: since package P7 every chapter."""
+    return frozenset(ch.id for ch in lib.chapters)
 
 
 def coverage(lib) -> str:
@@ -460,7 +456,7 @@ def validate(lib, *, complete: bool, meta=None, standard=frozenset()) -> list:
         if meta_by_id is not None:
             _check_contract(ch, meta_by_id.get(ch.id), add)
     for cid in sorted(standard - {ch.id for ch in lib.chapters}):
-        problems.append(Problem(_rel(STANDARD_LIST), "standard-list", f"{cid} steht auf der Liste, das Kapitel gibt es nicht"))
+        problems.append(Problem(_rel(lib.root), "standard-list", f"{cid} soll den Maßstab erfüllen, das Kapitel gibt es nicht"))
     orders = {}
     for ch in lib.chapters:
         try:
@@ -507,7 +503,7 @@ def build(root, *, write: bool, complete: bool = False) -> int:
     is_default = root == DEFAULT_LIBRARY.resolve()
     meta = load_meta() if is_default else None
     problems = validate(lib, complete=complete, meta=meta,
-                        standard=load_standard() if is_default else frozenset())
+                        standard=load_standard(lib) if is_default else frozenset())
     if problems:
         print("Build abgebrochen, der Validator meldet Befunde:")
         return _print(problems)
@@ -558,7 +554,7 @@ def main(argv=None) -> int:
             rel = _rel(chapter)
             is_default = chapter.parent == DEFAULT_LIBRARY.resolve()
             meta = load_meta() if is_default else None
-            standard = load_standard() if is_default else frozenset()
+            standard = load_standard(lib) if is_default else frozenset()
             found = [p for p in validate(lib, complete=False, meta=meta, standard=standard) if p.path == rel]
             if not found and chapter not in {c.path.resolve() for c in lib.chapters}:
                 found = [Problem(rel, "parse", "Datei wurde nicht als Kapitel geladen (Dateiname oder Pfad prüfen)")]
@@ -567,7 +563,7 @@ def main(argv=None) -> int:
         meta = load_meta() if is_default else None
         lib = lm.load_library(args.root)
         code = _print(validate(lib, complete=args.complete, meta=meta,
-                               standard=load_standard() if is_default else frozenset()))
+                               standard=load_standard(lib) if is_default else frozenset()))
         print(coverage(lib))
         return code
     return 2

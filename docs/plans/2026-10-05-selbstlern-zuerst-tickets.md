@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7e: 739) und `python tools/build_library.py validate --complete`.
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7f: 739) und `python tools/build_library.py validate --complete`.
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -32,7 +32,7 @@
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] `664d5ca` |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [x] `359c9db` und Folge-Commit, siehe Abschluss P5 |
 | P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a, S2.20 mit P7c, S3.15 mit P7e erledigt |
-| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [ ] (Schreiber gestartet, siehe „Stand P7f“) |
+| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [x] cc1052a |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [ ] |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [ ] |
 
@@ -445,7 +445,7 @@ Schreiber ändern nur Kapitel und Moderationsdateien ihres Teilpakets; sie bauen
 generierten Dateien (sonst kollidieren Katalog und Cockpit). Gebaut wird nach dem Übernehmen, ein Teilpaket nach
 dem anderen. Die Hauptübung je Kapitel wird durchgespielt (siehe P5), nicht vom Schreiber selbst.
 
-**Fertig, wenn:** die Auflösungs- und die Übungsregel im Validator für alle Lektionen gelten (die Pflichtliste aus
+**Fertig, wenn (erfüllt, siehe Abschluss P7):** die Auflösungs- und die Übungsregel im Validator für alle Lektionen gelten (die Pflichtliste aus
 P3 entfällt); Suite grün.
 
 ### Auftrag für Schreiber (Vorlage, bewährt in P7a)
@@ -610,11 +610,39 @@ Danach übernimmt, wer abnimmt: alle Kapitel lesen, jede Hauptübung durchspiele
   Demos; unter Windows hinterlassen Hooks aus den eigenen Benutzer-Einstellungen Dateien im Worktree, dann scheitert
   `git worktree remove` (Hinweis für S3.13 prüfen).
 
-### Stand P7f (2026-10-05)
+### Abschluss P7f (2026-10-05)
 
-- Schreiber gestartet, Worktree `~/AI/worktrees/workshop-p7f`, Branch `p7f-schreiber` (Basis `8e75575`): S4.3 bis
-  S4.7, S4.9, S4.10, X.4. Danach Abnahme wie bei den anderen Teilpaketen; dann entfällt die Pflichtliste
-  (`tools/fixtures/standard-chapters.txt`), und die Regeln gelten für alle Lektionen.
+- **Schreiber** (Sonnet, neun Commits `b8c539c..ac73790`): S4.3 bis S4.7, S4.9, S4.10, X.4. Damit hat jede der 61
+  Lektionen eine Übung und eine Auflösung. S4.4 trägt jetzt der Sicherheitskern (Zugang, Deckel, `--bare`); S4.7
+  braucht kein Workshop-Plugin mehr; S4.9 und S4.10 haben Übungen für eine Person; der Notaus in X.4 gilt einer
+  eigenen Hintergrund-Sitzung. Übernommen als Merge `cc1052a`.
+- **Durchgespielt (Linux):** S4.3, S4.4, S4.5 vollständig per Skript; S4.7, S4.9 (mit Extra), S4.10 und X.4 in
+  tmux. Unter Windows (PowerShell 5.1) die PowerShell-Blöcke von S4.3 samt Quoting des Schemas. Bestätigt: Der
+  Hook eines nie bestätigten Ordners läuft in einem `-p`-Lauf ohne `--bare` (S4.4); `--bare` ohne API-Key endet
+  mit „Not logged in“; der Budgetdeckel liefert `error_max_budget_usd` und Exit 1.
+- **Korrigiert nach den Läufen:** Meldung zum ungültigen Schema (S4.3); das Debug-Log der interaktiven Sitzung
+  enthielt zum Hook keine Zeile (S4.10, Schritt 4 nennt jetzt beide Ausgänge); in S4.7 fragt Claude Code erst um
+  Erlaubnis, die Datei im Hauptordner zu lesen; zwei Quiz-Antworten gekürzt (Regel `quiz-longest-share`).
+  S4.9: Mit dem ungültigen `matcher` öffnet die Sitzung einen eigenen Dialog („Files with errors are skipped
+  entirely“; Fix with Claude / Exit and fix manually / Continue without these settings) und überspringt die
+  Freigabe des Projekt-MCP-Servers („skipping .mcp.json server approval (settings errors in …)“). Der Server
+  steht deshalb erst nach der Reparatur von Fehler 1 und einem Neustart in `/mcp` (Schritte 2 und 6 umgestellt).
+  Im Safe Mode listet `/hooks` den Projekt-Hook weiter auf, er läuft aber nicht (Extra prüft das jetzt nach).
+- **Nachtrag P7e:** S4.1 nach der Planfreigabe (Rückfrage zu Prüfbefehlen, Haiku ohne Befund).
+- **Codex-Gegenprüfung (lesend, zwei Läufe):** beide FAIL, sechs Befunde, alle an der Quelle bestätigt und behoben: S4.3 (`dontAsk` allein heißt nicht nur lesen; die Abschlussliste lässt den längeren Auftrag zu), S4.4 zweimal („immer genutzt“ meint die fehlende Rückfrage im `-p`-Modus, die Rangfolge ist eine eigene Aussage), S4.5 (die Kurzschreibweise im Extra war kein JSON Schema), S4.7 zweimal (ein Container trennt nicht vollständig; für ein Repository, dem man nicht traut, nennt die Doku eine eigene VM oder eine Cloud-Sitzung).
+- **Vertrag:** Minuten S4.3 25, S4.4 30, S4.5 30, S4.6 20, S4.7 25, S4.9 30, S4.10 30, X.4 35; Katalog, Golden.
+  17 alte Codeblöcke mit Begründung.
+- **Nicht durchgespielt:** S4.6 (Remote Control braucht einen Browser oder ein zweites Gerät), das GitHub- und GitLab-Material von S4.5, die Extras außer dem von S4.9; aus P7e weiterhin `/cost` in S4.1.
+- **Offen (→ P8):** S4.4 teilen (R24); X.4 mit 35 Minuten und `requires` (D7 schlägt S3.13, S4.4 vor); S4.9 und
+  S4.10 stehen als Kern hinter S4.8; `--output-format json` liefert mit `verbose` in den Benutzer-Einstellungen
+  ein Array statt eines Objekts (auf dem Windows-Rechner beobachtet, Hinweis für S4.3 prüfen).
+
+### Abschluss P7 (2026-10-05)
+
+Alle sechs Teilpakete sind übernommen. Die Regeln des Maßstabs gelten im Validator für jedes Kapitel; die
+Pflichtliste `tools/fixtures/standard-chapters.txt` ist entfallen (`load_standard` nimmt alle Kapitel der
+Bibliothek). 61 von 61 Lektionen haben eine Übung und eine Auflösung, die drei Stationen sind Session-Abschlüsse,
+S4.11 schließt jeden Pfad. Was die Läufe gelehrt haben, steht im Maßstab unter „mitzunehmen“. Als Nächstes: P8.
 
 ---
 
