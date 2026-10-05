@@ -218,3 +218,26 @@ def test_skimmed_and_unplaced_chapters_keep_the_short_view(browser, site):
     assert fresh.locator("main [data-full=open]").count() == 0
     assert fresh_errors == []
     fresh.close()
+
+
+# --- recall questions with their answers (design 2026-10-05, package P3) ------------------------------------
+
+def test_short_view_shows_the_recall_questions_and_reveals_an_answer_on_demand(browser, site):
+    page, errors = open_page(browser, site + "?run=S2.8")  # no placement: short view
+    questions = page.locator("main .recall > li")
+    assert questions.count() == 2
+    answer = questions.nth(0).locator("details.answer")
+    assert answer.get_attribute("open") is None
+    assert not answer.locator("p").is_visible()
+    answer.locator("summary").click()
+    assert "blockt nur" in answer.locator("p").inner_text()
+    assert questions.nth(1).locator("details.answer").get_attribute("open") is None  # one at a time
+    assert errors == []
+    page.close()
+
+
+def test_chapter_without_recall_questions_shows_no_empty_list(browser, site):
+    page, errors = open_page(browser, site + "?run=S2.7")
+    assert page.locator("main .recall").count() == 0
+    assert errors == []
+    page.close()

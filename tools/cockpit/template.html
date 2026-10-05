@@ -234,6 +234,10 @@
     .full { margin-top: 30px; border-top: 1px solid var(--line); padding-top: 12px; }
     .full summary { cursor: pointer; font-weight: 600; }
     .skip-row { margin: 14px 0 6px; }
+    .recall { margin: 10px 0 16px; padding-left: 22px; }
+    .recall li { margin: 8px 0; }
+    .answer { margin-top: 4px; }
+    .answer summary { cursor: pointer; color: var(--muted); font-size: 0.92em; }
     .done-row { margin-top: 28px; }
     .prose { max-width: 74ch; }
     .prose table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 10px 0 18px; display: block; overflow-x: auto; }
@@ -788,11 +792,14 @@
       const working = !!(mine && mine.status === "work" && c.html);
       const doneButton = `<button type="button" class="btn ${done ? "" : "primary"}" data-action="toggle-done" data-id="${esc(id)}" aria-pressed="${done}">${done ? "Als offen markieren" : "Als erledigt markieren"}</button>`;
       const hasQuick = c.skip_check && c.skip_check.length;
+      // recall questions, each with its own answer to open: answer first from memory, then compare (P3)
+      const answers = c.answers_html || [];
+      const recallList = c.recall && c.recall.length ? `<ol class="recall">${(c.recall_html || c.recall.map(esc)).map((q, i) => `<li>${q}${answers[i] ? `<details class="answer"><summary>Auflösung</summary><p>${answers[i]}</p></details>` : ""}</li>`).join("")}</ol>` : "";
       const short = `${hasQuick ? `<section class="block quick" aria-labelledby="h-quick"><h2 id="h-quick">Schnellcheck</h2><ul>${(c.skip_check_html || c.skip_check.map(esc)).map(q => `<li>${q}</li>`).join("")}</ul><div class="row"><button type="button" class="btn" data-action="can-skip" data-id="${esc(id)}">Beides sicher ja — überspringen</button><span class="muted small">Sonst lies weiter.</span></div></section>` : ""}
           ${c.glance ? `<section class="block"><h2>Auf einen Blick</h2><p>${rich(c, "glance")}</p></section>` : ""}
           ${c.analogy ? `<section class="block"><h2>Bild im Kopf</h2><div class="analogy">${rich(c, "analogy")}</div></section>` : ""}
           ${c.example ? `<section class="block"><h2>Ausprobieren</h2><div class="code"><button type="button" class="copy" data-action="copy" data-id="${esc(id)}">Kopieren</button><pre><code>${esc(c.example)}</code></pre></div></section>` : ""}
-          ${c.checkpoint || c.quiz ? `<section class="block"><h2>Check</h2>${c.checkpoint ? `<p>${rich(c, "checkpoint")}</p>` : ""}${quizBlock(c, "ch")}</section>` : ""}
+          ${c.checkpoint || c.quiz || recallList ? `<section class="block"><h2>Check</h2>${c.checkpoint ? `<p>${rich(c, "checkpoint")}</p>` : ""}${recallList}${quizBlock(c, "ch")}</section>` : ""}
           ${full}`;
       const whole = `${hasQuick ? `<p class="row skip-row"><span class="muted small">Beide Fragen im Schnellcheck sicher ja?</span><button type="button" class="btn" data-action="can-skip" data-id="${esc(id)}">Überspringen</button></p>` : ""}
           <div class="prose" data-full="open">${diagramHtml(c.html || "")}</div>

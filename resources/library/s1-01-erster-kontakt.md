@@ -225,6 +225,14 @@ Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine 
 2. Warum siehst du in einer neuen Sitzung womöglich keine Freigabe-Abfrage, und wie startest du so, dass Claude fragt?
 3. Nenne drei Dinge, die Claude Code laut „Was Claude Code kann" für dich erledigt.
 
+<details><summary>Auflösung</summary>
+
+1. Claude schlägt die Datei vor, fragt je nach Rechte-Modus um Freigabe, schreibt sie, führt sie aus und zeigt dir die Ausgabe im Terminal.
+2. Seit v2.1.283 startet eine interaktive Sitzung im Terminal standardmäßig im Modus `auto`: Ein Klassifikator prüft die Aktionen an deiner Stelle, und die Abfrage kann ausbleiben. Mit `claude --permission-mode default` fragt Claude vor den meisten Dateiänderungen und Shell-Befehlen.
+3. Zum Beispiel: Codebasen lesen, Dateien schreiben und ändern, Befehle ausführen. Die Liste nennt außerdem Git bedienen, im Web suchen, Agenten koordinieren, über MCP andocken und sich über Sitzungen hinweg erinnern.
+
+</details>
+
 <details><summary>Quizfrage</summary>
 
 **Frage:** Du tippst in einer frischen Sitzung `Create a file hello.py that prints "Hello from Claude Code" and run it.` Was passiert, und was unterscheidet das von einem Chat-Assistenten?

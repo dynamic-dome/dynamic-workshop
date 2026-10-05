@@ -146,3 +146,11 @@ def test_catalog_and_live_path_point_to_the_demos_that_exist(lib_dir):
     live = gen.paths(lib, cat)["live-workshop.md"]
     assert "(../moderation/vorfuehren/s2-08-demo-hook.md)" in live
     assert live.count("moderation/vorfuehren/") == 1
+
+
+def test_catalog_carries_recall_questions_and_answers(lib_dir):
+    cat = gen.catalog(lm.load_library(lib_dir))
+    by_id = {c["id"]: c for c in cat["chapters"]}
+    assert by_id["S2.8"]["recall"] == ["Welcher Exit-Code blockt einen Aufruf?", "Was passiert bei `exit 1`?"]
+    assert len(by_id["S2.8"]["answers"]) == 2
+    assert by_id["S2.7"]["recall"] == [] and by_id["S2.7"]["answers"] is None

@@ -135,8 +135,10 @@ Lies das Kapitel ganz, dann gehe nach **Typ** vor (Abschnitte, die das Kapitel n
    Du gibst den Auftrag Schritt für Schritt, Hinweise nur auf Wunsch („Tipp?"), steigernd. Prüfen darfst du, was die
    Person dir zeigt oder freigibt (Datei lesen, Ausgabe ansehen) — keine zerstörerischen Befehle, keine Änderungen an
    ihren Dateien ohne ausdrückliches Ja. Bei 🔧-Kapiteln ohne installierte Bausteine: auf den Beobachtungsweg wechseln.
-5. **Check**: die Abruffragen aus dem Kapitel **ohne** Spickzettel stellen, dann das Quiz (Optionen gemischt).
-   Rückmeldung mit Begründung aus dem Kapitel.
+5. **Check**: die Abruffragen aus dem Kapitel (Katalogfeld `recall`) **ohne** Spickzettel stellen, eine nach der
+   anderen, dann das Quiz (Optionen gemischt). Rückmeldung anhand der Auflösung des Kapitels (Katalogfeld `answers`,
+   im Kapitel der Block „Auflösung"); zeig sie erst, nachdem die Person geantwortet hat. Fehlt die Auflösung,
+   begründe aus dem Kapiteltext.
 6. **Abschluss**: Hauptquelle nennen (`sources[0]`), Pfad zur Kapiteldatei für die Vertiefung, nächstes Kapitel.
    Erledigt wird ein Kapitel erst, wenn die Person es sagt oder die Übung gelaufen ist. War es das erste erledigte
    Kapitel, folgt die Mission-Frage (Einstufung, Schritt 7).

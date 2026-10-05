@@ -264,6 +264,8 @@ def cockpit_data(lib, catalog, diagrams=None):
         for key in ("glance", "analogy", "checkpoint", "outcome"):
             entry[key + "_html"] = inline_html(entry.get(key) or "", ids_by_file)
         entry["skip_check_html"] = [inline_html(q, ids_by_file) for q in entry.get("skip_check") or []]
+        entry["recall_html"] = [inline_html(q, ids_by_file) for q in entry.get("recall") or []]
+        entry["answers_html"] = [inline_html(a, ids_by_file) for a in entry.get("answers") or []]
         if entry.get("quiz"):
             q = entry["quiz"]
             entry["quiz_html"] = {"q": inline_html(q["q"], ids_by_file), "correct": inline_html(q["correct"], ids_by_file),

@@ -278,3 +278,33 @@ def test_demo_link_to_a_goal_path_that_is_not_generated_is_reported(lib_dir):
     demo.write_text("# Vorführen: S2.8 · Einen Hook konfigurieren" + chr(10) * 2
                     + "[weg](../../paths/ziel-gibt-es-nicht.md)" + chr(10), encoding="utf-8")
     assert "links-resolve" in rules(lib_dir)
+
+
+# --- answers to the recall questions (design 2026-10-05, package P3) --------------------------------------
+
+def rules_with_required(lib_dir, required):
+    lib = lm.load_library(lib_dir)
+    return sorted({p.rule for p in bl.validate(lib, complete=False, answers_required=frozenset(required))})
+
+
+def test_every_recall_question_needs_exactly_one_answer(lib_dir):
+    edit(lib_dir, HOOK, "2. Der Aufruf läuft weiter, Claude Code meldet nur einen Hook-Fehler." + chr(10), "")
+    assert "answers-count" in rules(lib_dir)
+
+
+def test_an_unclosed_answer_block_is_reported(lib_dir):
+    edit(lib_dir, HOOK, "meldet nur einen Hook-Fehler." + chr(10) * 2 + "</details>", "meldet nur einen Hook-Fehler.")
+    assert "answers-count" in rules(lib_dir)
+
+
+def test_answers_are_required_only_for_chapters_on_the_list(lib_dir):
+    edit(lib_dir, EVENTS, "Du ordnest Events zu.", "Du ordnest Events zu." + chr(10) * 2 + "1. Wann feuert Stop?")
+    assert rules_with_required(lib_dir, []) == []
+    assert rules_with_required(lib_dir, ["S2.7"]) == ["answers-required"]
+    assert rules_with_required(lib_dir, ["S2.8"]) == []  # S2.8 has its answers
+
+
+def test_validate_reports_how_many_lessons_have_an_exercise_and_answers(lib_dir, capsys):
+    assert bl.main(["validate", "--root", str(lib_dir)]) == 0
+    out = capsys.readouterr().out
+    assert "Lektionen mit Übung: 2 von 2" in out and "mit Auflösung: 1 von 2" in out

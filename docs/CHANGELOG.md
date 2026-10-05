@@ -21,6 +21,9 @@ Pakete: `docs/plans/2026-10-05-selbstlern-zuerst-design.md`, `…-tickets.md`.
 - **Cockpit und Tutor (P2):** Sagt die Einstufung „durcharbeiten“, öffnet das Cockpit das Kapitel mit vollem Text und
   Übung statt der Kurzfassung; das Quiz und „Als erledigt markieren“ stehen am Ende. Der Tutor geht bei solchen
   Kapiteln durch „Im Detail“, bevor die Übung kommt.
+- **Auflösungen (P3):** Abruffragen können eine Auflösung tragen (eingeklappter Block im Abschnitt „Check“). Der
+  Validator prüft, dass je Frage genau eine Antwort dasteht; das Cockpit zeigt die Fragen jetzt auch in der Kurzansicht,
+  je Frage mit eigener Auflösung. Erstes Kapitel: S1.1. `validate` meldet den Fortschritt (Übungen, Auflösungen).
 
 ## 2026-10-02 — Einstufung: Sicherheitsboden bei Ziel Sicherheit
 

@@ -62,6 +62,16 @@ echo "hallo"
 
 Du kannst einen Hook eintragen und seinen Exit-Code begründen.
 
+1. Welcher Exit-Code blockt einen Aufruf?
+2. Was passiert bei `exit 1`?
+
+<details><summary>Auflösung</summary>
+
+1. Von den Exit-Codes blockt nur `2`.
+2. Der Aufruf läuft weiter, Claude Code meldet nur einen Hook-Fehler.
+
+</details>
+
 <details><summary>Quizfrage</summary>
 
 **Frage:** Welcher Exit-Code blockt einen PreToolUse-Aufruf?

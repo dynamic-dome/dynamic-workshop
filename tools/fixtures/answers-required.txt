@@ -1,0 +1,4 @@
+# Kapitel, deren Abruffragen eine Auflösung tragen müssen (tools/build_library.py, Regel answers-required).
+# Die Liste wächst Regal für Regal (docs/plans/2026-10-05-selbstlern-zuerst-tickets.md, P5 und P7) und entfällt,
+# sobald die Regel für alle Lektionen gilt. Eine ID je Zeile.
+S1.1

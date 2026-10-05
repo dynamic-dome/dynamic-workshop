@@ -31,6 +31,9 @@ import library_model as lm  # noqa: E402
 ROOT = TOOLS.parent
 DEFAULT_LIBRARY = ROOT / "resources" / "library"
 CHAPTER_META = ROOT / "docs" / "migration" / "chapter-meta.yaml"
+# Chapters whose recall questions must carry answers. The list grows shelf by shelf (design 2026-10-05, packages
+# P5 and P7) and is replaced by the rule "every lesson" once all shelves are done.
+ANSWERS_REQUIRED = TOOLS / "fixtures" / "answers-required.txt"
 CONTRACT_FIELDS = ("id", "type", "title", "shelf", "level", "minutes", "requires", "safety_floor", "transferable",
                    "aliases", "offers", "after")
 
@@ -148,7 +151,7 @@ def anchors_of(path: Path) -> set:
     return found
 
 
-def _check_body(ch, add, planned=frozenset(), goal_targets=()):
+def _check_body(ch, add, planned=frozenset(), goal_targets=(), answers_required=frozenset()):
     t = ch.type if ch.type in ALLOWED else "lesson"
     for title in ch.section_order:
         if title not in ALLOWED[t]:
@@ -188,6 +191,13 @@ def _check_body(ch, add, planned=frozenset(), goal_targets=()):
             if len(q.correct) > QUIZ_TELL_MAX * mean or min(len(w) for w in q.wrong) < QUIZ_TELL_MIN * len(q.correct):
                 add("quiz-length-tell", f"Antwortlängen verraten die Lösung (richtig {len(q.correct)} Zeichen, "
                     f"falsch Ø {mean:.0f}); angleichen auf ≤ {QUIZ_TELL_MAX} × Mittel")
+    if ch.answers is not None:
+        if not ch.recall or len(ch.answers) != len(ch.recall) or not all(a.strip() for a in ch.answers):
+            add("answers-count", f"{len(ch.answers)} Auflösungen zu {len(ch.recall)} Abruffragen "
+                "(je Frage genau eine, gleiche Nummer, Block mit </details> geschlossen)")
+    elif ch.recall and ch.id in answers_required:
+        add("answers-required", f"{len(ch.recall)} Abruffragen ohne Block 'Auflösung' "
+            "(<details><summary>Auflösung</summary> nach den Fragen)")
     if t == "lesson" and len(ch.skip_check) != 2:
         add("skip-check-count", f"Schnellcheck braucht genau 2 Fragen, hat {len(ch.skip_check)}")
     elif "Schnellcheck" in ch.sections and len(ch.skip_check) != 2:
@@ -350,6 +360,23 @@ def _check_placement(lib, by_id, report, planned_ids=frozenset()):
             add("placement-refs", f"Szenario {sc.get('id')}: Kapitel {sc.get('chapter')} gibt es nicht")
 
 
+def load_answers_required(path=ANSWERS_REQUIRED) -> frozenset:
+    """Chapter IDs, one per line; '#' starts a comment."""
+    if not Path(path).exists():
+        return frozenset()
+    lines = (line.split("#", 1)[0].strip() for line in Path(path).read_text(encoding="utf-8").splitlines())
+    return frozenset(line for line in lines if line)
+
+
+def coverage(lib) -> str:
+    """How far the library is on its way to 'every lesson ends in something to do and can be checked alone'."""
+    lessons = [c for c in lib.chapters if c.type == "lesson"]
+    with_exercise = sum(1 for c in lessons if "Selbst machen" in c.sections)
+    with_answers = sum(1 for c in lessons if c.answers and len(c.answers) == len(c.recall))
+    return (f"Lektionen mit Übung: {with_exercise} von {len(lessons)} · "
+            f"mit Auflösung: {with_answers} von {len(lessons)}")
+
+
 def load_meta(path=CHAPTER_META):
     import yaml
     return yaml.safe_load(Path(path).read_text(encoding="utf-8")) if Path(path).exists() else None
@@ -368,8 +395,9 @@ def _check_contract(ch, entry, add):
             add("meta-contract", f"{key}: Metadaten {want!r}, Kapitel {have!r}")
 
 
-def validate(lib, *, complete: bool, meta=None) -> list:
-    """meta: binding chapter metadata (list of dicts) or None to skip the contract rule."""
+def validate(lib, *, complete: bool, meta=None, answers_required=frozenset()) -> list:
+    """meta: binding chapter metadata (list of dicts) or None to skip the contract rule.
+    answers_required: IDs of chapters whose recall questions must have answers."""
     problems = []
     meta_by_id = {e["id"]: e for e in meta} if meta else None
     planned = frozenset() if complete or not meta else frozenset(e["file"] for e in meta)
@@ -407,7 +435,7 @@ def validate(lib, *, complete: bool, meta=None) -> list:
             add("filename", f"Dateiname {ch.path.name} passt nicht zu {ch.id} (erwartet {expected}<slug>.md)")
         if ch.shelf not in shelves:
             add("shelf-exists", f"Regal {ch.shelf!r} fehlt in _shelves.yaml")
-        _check_body(ch, add, planned, goal_targets)
+        _check_body(ch, add, planned, goal_targets, answers_required)
         if meta_by_id is not None:
             _check_contract(ch, meta_by_id.get(ch.id), add)
     orders = {}
@@ -453,8 +481,10 @@ def build(root, *, write: bool, complete: bool = False) -> int:
 
     root = Path(root).resolve()
     lib = lm.load_library(root)
-    meta = load_meta() if root == DEFAULT_LIBRARY.resolve() else None
-    problems = validate(lib, complete=complete, meta=meta)
+    is_default = root == DEFAULT_LIBRARY.resolve()
+    meta = load_meta() if is_default else None
+    problems = validate(lib, complete=complete, meta=meta,
+                        answers_required=load_answers_required() if is_default else frozenset())
     if problems:
         print("Build abgebrochen, der Validator meldet Befunde:")
         return _print(problems)
@@ -503,13 +533,20 @@ def main(argv=None) -> int:
             chapter = args.chapter.resolve()
             lib = lm.load_library(chapter.parent)
             rel = _rel(chapter)
-            meta = load_meta() if chapter.parent == DEFAULT_LIBRARY.resolve() else None
-            found = [p for p in validate(lib, complete=False, meta=meta) if p.path == rel]
+            is_default = chapter.parent == DEFAULT_LIBRARY.resolve()
+            meta = load_meta() if is_default else None
+            required = load_answers_required() if is_default else frozenset()
+            found = [p for p in validate(lib, complete=False, meta=meta, answers_required=required) if p.path == rel]
             if not found and chapter not in {c.path.resolve() for c in lib.chapters}:
                 found = [Problem(rel, "parse", "Datei wurde nicht als Kapitel geladen (Dateiname oder Pfad prüfen)")]
             return _print(found)
-        meta = load_meta() if args.root.resolve() == DEFAULT_LIBRARY.resolve() else None
-        return _print(validate(lm.load_library(args.root), complete=args.complete, meta=meta))
+        is_default = args.root.resolve() == DEFAULT_LIBRARY.resolve()
+        meta = load_meta() if is_default else None
+        lib = lm.load_library(args.root)
+        code = _print(validate(lib, complete=args.complete, meta=meta,
+                               answers_required=load_answers_required() if is_default else frozenset()))
+        print(coverage(lib))
+        return code
     return 2
 
 

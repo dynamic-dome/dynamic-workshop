@@ -5,6 +5,7 @@
     "setup"
    ],
    "analogy": "",
+   "answers": null,
    "area": "basics",
    "checkpoint": "Du kannst Claude Code installieren und anmelden und mit `claude --version`, `claude --print` und den Playground-Tests nachweisen, dass deine Werkstatt steht.",
    "demo": null,
@@ -27,6 +28,11 @@
      "Keine, bis du eine der beiden Anmeldungen wieder entfernt hast."
     ]
    },
+   "recall": [
+    "Wofür brauchst du Node.js, wenn Claude Code selbst über den nativen Installer kommt?",
+    "Wo liegt der `workshop-playground` nach dem Klonen?",
+    "Was tust du, wenn die Shell nach der Installation `claude` nicht kennt?"
+   ],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,
@@ -48,6 +54,7 @@
   {
    "aliases": [],
    "analogy": "Denk an deine Einarbeitung in einer Sicherheitszentrale. Am Anfang steht der Einsatzauftrag: welches Objekt, welche Aufgaben, was ausdrücklich nicht dazugehört. Das ist die Mission. Ins Ausbildungsnachweisheft kommt eine Station erst, wenn du sie am echten Pult vorgeführt hast; die Unterschrift unter der Dienstanweisung zählt nicht. Das sind die Lernprotokolle. Und ob das Wissen hält, zeigt nicht die Wiederholung am selben Nachmittag, sondern die unangekündigte Übung einige Wochen später.",
+   "answers": null,
    "area": null,
    "checkpoint": "Du kannst erklären, warum ein Lernprotokoll erst nach einem Nachweis entsteht und warum Abruf mit Abstand mehr festigt als Wiederlesen, und du prüfst bei einer Antwort des Tutors, aus welcher Quelle sie stammt.",
    "demo": null,
@@ -62,6 +69,11 @@
    "order": 15,
    "outcome": "Ich kann einen Lernordner mit MISSION.md anlegen, mit dem Workshop-Tutor über start, next, learn, review und guide lernen und prüfen, aus welcher Quelle eine Antwort des Tutors stammt.",
    "quiz": null,
+   "recall": [
+    "Welche vier Anlässe rechtfertigen ein Lernprotokoll, und welcher häufige Anlass gerade nicht?",
+    "Was unterscheidet Abrufflüssigkeit von Speicherstärke, und welche der beiden täuscht?",
+    "Was soll der Tutor tun, wenn ein Kapitel in seiner Installation fehlt?"
+   ],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,
@@ -81,6 +93,11 @@
     "1.1"
    ],
    "analogy": "Die CLI ist ein Berater mit Ausweis: Er darf ins Gebäude, Türen öffnen und selbst Hand anlegen. Dieses Kapitel ist sein erster Gang durchs Haus. Du sagst ihm, was du willst, er erledigt es vor deinen Augen, und du prüfst, was dabei herauskommt.",
+   "answers": [
+    "Claude schlägt die Datei vor, fragt je nach Rechte-Modus um Freigabe, schreibt sie, führt sie aus und zeigt dir die Ausgabe im Terminal.",
+    "Seit v2.1.283 startet eine interaktive Sitzung im Terminal standardmäßig im Modus `auto`: Ein Klassifikator prüft die Aktionen an deiner Stelle, und die Abfrage kann ausbleiben. Mit `claude --permission-mode default` fragt Claude vor den meisten Dateiänderungen und Shell-Befehlen.",
+    "Zum Beispiel: Codebasen lesen, Dateien schreiben und ändern, Befehle ausführen. Die Liste nennt außerdem Git bedienen, im Web suchen, Agenten koordinieren, über MCP andocken und sich über Sitzungen hinweg erinnern."
+   ],
    "area": "basics",
    "checkpoint": "Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine kleine Datei bauen und ausführen lassen und die Schleife beschreiben, handeln, Ergebnis sehen an deinem eigenen Beispiel erklären.",
    "demo": "../moderation/vorfuehren/s1-01-erster-kontakt.md",
@@ -103,6 +120,11 @@
      "Claude speichert die Datei im Auto-Memory, damit sie beim nächsten Start der Sitzung automatisch wieder bereitsteht."
     ]
    },
+   "recall": [
+    "Welche Schritte laufen nach einem Auftrag wie `Create a file hello.py … and run it.` ab?",
+    "Warum siehst du in einer neuen Sitzung womöglich keine Freigabe-Abfrage, und wie startest du so, dass Claude fragt?",
+    "Nenne drei Dinge, die Claude Code laut „Was Claude Code kann\" für dich erledigt."
+   ],
    "requires": [
     "S0.1"
    ],
@@ -127,6 +149,7 @@
   {
    "aliases": [],
    "analogy": "Der Chat auf claude.ai ist ein Sicherheitsberater am Telefon: Er hört zu, analysiert und rät, fasst aber nichts an. Claude Code ist derselbe Berater mit Besucherausweis: Er legt selbst Hand an, in deiner Umgebung, unter deiner Aufsicht, mit echter Wirkung.",
+   "answers": null,
    "area": "basics",
    "checkpoint": "Du kannst in einem Satz erklären, warum Claude Code kein Chat-Tool ist, und benennen, welche Folge das für jede Freigabe hat.",
    "demo": "../moderation/vorfuehren/s1-02-agent-statt-chat.md",
@@ -149,6 +172,11 @@
      "Die CLI arbeitet mit einem größeren Kontextfenster als der Chat und verarbeitet deshalb auch größere Codebasen."
     ]
    },
+   "recall": [
+    "Was tut ein Coding-Agent selbst, das ein Chat-Assistent dir überlässt?",
+    "Nenne drei Dinge, die Claude Code nicht kann oder nicht von sich aus tut.",
+    "Wer sorgt dafür, dass Claude Code deine laufenden Panels nicht anfasst?"
+   ],
    "requires": [
     "S1.1"
    ],
@@ -174,6 +202,7 @@
   {
    "aliases": [],
    "analogy": "Es bleibt derselbe Berater mit Ausweis wie in S1.2, nur sein Arbeitsplatz ändert sich. In der CLI steht er am Terminal, in der Desktop-App sitzt er an einem richtigen Schreibtisch mit Monitor, in der IDE sitzt er direkt neben dir, und über Web und Handy erreichst du ihn von unterwegs.",
+   "answers": null,
    "area": "basics",
    "checkpoint": "Du kannst für eine Arbeitssituation die passende Oberfläche wählen, sagen, welche lokal und welche in der Cloud arbeitet, und eine Terminal-Sitzung mit `/desktop` an die Desktop-App übergeben.",
    "demo": null,
@@ -196,6 +225,11 @@
      "`/permissions`: Er schaltet die Ansicht um und zeigt alle Änderungen der Sitzung als grafischen Diff im Terminal."
     ]
    },
+   "recall": [
+    "Welche Oberflächen arbeiten mit deinem lokalen Dateisystem, welche mit einem GitHub-Repository in der Cloud?",
+    "Was tun `/mobile` und `/chrome` wirklich?",
+    "Warum zählt der Chat auf claude.ai nicht zu den Oberflächen von Claude Code?"
+   ],
    "requires": [
     "S1.2"
    ],
@@ -222,6 +256,7 @@
   {
    "aliases": [],
    "analogy": "Jedes Tool ist eine eigene Zutrittszone. `Read` ist die Lobby: Da kommt jeder rein. `Bash` ist der Serverraum: Dafür brauchst du eine ausdrückliche Berechtigung. Wenn du Rechte (allow/deny-Regeln) oder Hook-Matcher einrichtest, sprichst du die Zonen mit genau diesen Namen an.",
+   "answers": null,
    "area": "basics",
    "checkpoint": "Du kannst die sechs Alltags-Werkzeuge mit exaktem Namen nennen, sagen, welche eine Freigabe brauchen, und erklären, wo du diese Namen später einsetzt.",
    "demo": null,
@@ -244,6 +279,11 @@
      "Beschreibungen wie „Dateisystem\" funktionieren nur in `CLAUDE.local.md`; in `settings.json` gehen nur die Werkzeugnamen."
     ]
    },
+   "recall": [
+    "Welche drei Alltags-Werkzeuge lesen nur, welche drei ändern oder führen aus?",
+    "In welchen zwei Fällen weicht das Verhalten von der Spalte „Freigabe nötig?\" ab?",
+    "Warum sieht ein Hook auf `Grep` unter macOS keine Suchaufrufe?"
+   ],
    "requires": [
     "S1.1"
    ],
@@ -268,6 +308,7 @@
   {
    "aliases": [],
    "analogy": "Rechte-Modi sind Ausweisstufen an der Zutrittskontrolle. Der Besucherausweis (`default`) bringt dich durch die Lobby, aber nicht in den Serverraum: Lesen ist frei, für alles andere fragt der Empfang nach. Der Wartungsausweis (`acceptEdits`) öffnet zusätzlich die Technikräume, und dort darfst du auch Kabel abklemmen, ohne zu fragen: Dateisystem-Befehle wie `rm` laufen mit. Der Modus legt die Grundstufe fest; Allow- und Deny-Regeln schalten einzelne Türen frei oder sperren sie.",
+   "answers": null,
    "area": "permissions",
    "checkpoint": "Du kannst sagen, was `default` und `acceptEdits` ohne Rückfrage erlauben, eine Sitzung gezielt in einem der beiden Modi starten und eine Deny-Regel schreiben, die auch in `acceptEdits` hält.",
    "demo": null,
@@ -290,6 +331,11 @@
      "Eine Rückfrage, weil du den Modus per Flag gesetzt hast; nur mit `Shift+Tab` gewählt gilt die Ausnahme für die Dateisystem-Befehle."
     ]
    },
+   "recall": [
+    "Was läuft in `acceptEdits` ohne Rückfrage, das in `default` nachfragen würde, und was fragt in beiden Modi weiter?",
+    "In welchem Modus startet eine neue interaktive Sitzung ohne Flag, und wie startest du gezielt in Manual?",
+    "Warum hält `\"deny\": [\"Bash(rm *)\"]` auch in `acceptEdits`, und welche Formen des Löschens trifft die Regel nicht?"
+   ],
    "requires": [
     "S1.2"
    ],
@@ -316,6 +362,7 @@
   {
    "aliases": [],
    "analogy": "Die sechs Modi sind die Freigabestufen einer Zutrittskontrolle, vom Besucherausweis bis zum Generalschlüssel. `default` ist der Besucherausweis (nur die Lobby), `acceptEdits` der Wartungsausweis (auch die Technikräume), `plan` die Einsatzbesprechung (erst der Plan, dann die Freigabe). `auto` ist der Smart Badge: Das System entscheidet an jeder Tür selbst. `dontAsk` ist der Automat ohne Wachmann, der nur Karten auf seiner Liste durchlässt. `bypassPermissions` ist der Generalschlüssel ohne Schlösser; den gibst du keinem Handwerker im laufenden Gebäude, nur in der abgeschlossenen Testhalle.",
+   "answers": null,
    "area": "permissions",
    "checkpoint": "Du kannst die sechs Rechte-Modi danach ordnen, wer statt dir prüft, den Startmodus deiner Sitzung ablesen und begründen, warum `bypassPermissions` nur in einen isolierten Container gehört.",
    "demo": null,
@@ -338,6 +385,11 @@
      "Die Cloud-Sitzung übernimmt den `defaultMode` `bypassPermissions`, wenn er in der eingecheckten settings.json steht."
     ]
    },
+   "recall": [
+    "Kurzcheck (60 Sekunden, unbenotet): Welche Freigabestufe gibst du Claude für ein Repository, das du noch nie gesehen hast? Gute Antworten wählen `default` oder `plan` und nennen das Prinzip der geringsten Rechte.",
+    "Was passiert mit einer Aktion, die eigentlich eine Rückfrage bräuchte, in `auto` und was in `dontAsk`?",
+    "Welche Modi bietet eine Cloud-Sitzung auf claude.ai/code an, und welcher fehlt immer?"
+   ],
    "requires": [
     "S1.5"
    ],
@@ -365,6 +417,7 @@
   {
    "aliases": [],
    "analogy": "Denk an einen Wachdienst, der ein Objekt mit gemischtem Personal betreut: eine erfahrene Streifenkraft, ein Auszubildender und eine Fachkraft für technische Alarme, jeder mit eigenem Stundensatz. Stellst du die Fachkraft die ganze Nacht an den Empfang, verbrennst du Budget. Setzt du den Auszubildenden bei einem Vorfall an die Alarmzentrale, fehlt die Kompetenz vor Ort. Die Kunst ist, die richtige Person in die richtige Schicht zu stellen. Bei Claude Code ist Opus die Fachkraft, Sonnet die erfahrene Streifenkraft, Haiku der Auszubildende.",
+   "answers": null,
    "area": "cost",
    "checkpoint": "Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur für eine Sitzung oder dauerhaft umstellen und erklären, warum Haiku an einer großen Codebasis scheitern kann.",
    "demo": null,
@@ -387,6 +440,11 @@
      "Haiku läuft fest auf `low`, und höhere Effort-Stufen lassen sich für große Analysen nicht freischalten."
     ]
    },
+   "recall": [
+    "Welches Tier nimmst du für die Analyse einer ganzen Codebasis, und warum nicht Haiku?",
+    "Was ändert eine höhere Effort-Stufe, und welches Tier kennt gar keinen Effort?",
+    "Wie stellst du Modell und Effort für eine einzige Sitzung ein, ohne deinen Standard zu ändern?"
+   ],
    "requires": [
     "S1.1"
    ],
@@ -414,6 +472,7 @@
     "1.2"
    ],
    "analogy": "Deine Leitstelle hat eine Monitorwand: 200 Kameras, aber nur 20 Monitorplätze. Meldet Tür 47 einen Alarm, schaltest du ihren Feed auf. Dafür muss ein älterer Feed ins Archiv. Der Operator kann ihn zurückholen, aber das kostet Zeit und Mühe.",
+   "answers": null,
    "area": "context",
    "checkpoint": "Du kannst erklären, was mit frühen Gesprächsinhalten passiert, wenn das Kontextfenster voll wird, und warum wichtige Absprachen deshalb in die CLAUDE.md gehören.",
    "demo": null,
@@ -436,6 +495,11 @@
      "Ein Modellwechsel mitten in der Session hat den Kontext geleert, weil zwei Modelle keine gemeinsame Session haben können."
     ]
    },
+   "recall": [
+    "Was liegt alles im Kontextfenster einer Session? Nenne mindestens vier Dinge.",
+    "Was macht Claude Code, wenn das Fenster voll wird, und was kann dabei verloren gehen?",
+    "Woran merkst du, dass die Verdichtung gerade zuschlägt?"
+   ],
    "requires": [
     "S1.2"
    ],
@@ -463,6 +527,7 @@
   {
    "aliases": [],
    "analogy": "Ein guter Operator wartet nicht, bis die Monitorwand von selbst alte Feeds ins Archiv schiebt. Er schaut nach, wie voll die Wand ist, und räumt selbst auf: Er legt fest, welche Feeds bleiben, und fasst den Rest in einem kurzen Lagebericht zusammen. War eine Umschaltung falsch, springt er auf einen gespeicherten Stand zurück, statt jeden Schritt einzeln rückgängig zu machen. Beginnt ein ganz neuer Einsatz, macht er die Wand frei.",
+   "answers": null,
    "area": "context",
    "checkpoint": "Du kannst in einem Satz sagen, wann du `/compact` und wann `/rewind` nimmst, und was keins von beiden leistet: Wissen über Sessions hinweg sichern.",
    "demo": null,
@@ -485,6 +550,11 @@
      "Beide wirken gleich, wenn du `/compact reset` aufrufst, weil das den Kontext und alle Dateien auf den Start zurücksetzt."
     ]
    },
+   "recall": [
+    "Was bewirkt ein Fokus-Hinweis bei `/compact`?",
+    "Welche Änderungen kann `/rewind` nicht zurückholen?",
+    "Wann ist `/clear` besser als `/compact`?"
+   ],
    "requires": [
     "S1.8"
    ],
@@ -513,6 +583,7 @@
   {
    "aliases": [],
    "analogy": "Ein neuer Auftragnehmer bekommt beim Betreten des Geländes die Hausordnung: welche Bereiche er betreten darf, welche gesperrt sind, was bei einem Alarm zu tun ist, wen er anruft. Er liest sie, bevor er mit der Arbeit anfängt, und zwar bei jedem Einsatz.",
+   "answers": null,
    "area": "context",
    "checkpoint": "Du kannst eine knappe CLAUDE.md schreiben, nach einem Neustart prüfen, dass Claude sie geladen hat, und erklären, warum sie eine Leitplanke und keine Sperre ist.",
    "demo": "../moderation/vorfuehren/s1-10-claude-md.md",
@@ -535,6 +606,11 @@
      "Erst nach `/compact`: Vorher steht die CLAUDE.md nicht im Kontext, danach wirkt die Zeile als Sperre."
     ]
    },
+   "recall": [
+    "Nenne eine Dauerregel, die für dein Team in die CLAUDE.md gehört. Gute Antworten sind dauerhafte Projektregeln, keine einmaligen Aufträge.",
+    "Welche drei Dinge gehören nicht in eine CLAUDE.md, und warum?",
+    "Wie prüfst du, ob Claude deine CLAUDE.md geladen hat?"
+   ],
    "requires": [
     "S1.2"
    ],
@@ -561,6 +637,7 @@
   {
    "aliases": [],
    "analogy": "Denk an einen Wachdienst. Das Wachbuch füllt sich von selbst: Die Streife notiert, was ihr auffällt, ohne dass jemand es anordnet. Das ist das Auto-Memory. Für einzelne Zonen gibt es eigene Anweisungen: Die Regeln für den Serverraum sind nicht die der Empfangshalle, und der Pförtner am Empfang muss die Serverraum-Regeln nicht in jeder Schicht auswendig kennen. Sie liegen erst auf dem Tisch, wenn jemand die Zone betritt. Das sind die Regeln unter `.claude/rules/`.",
+   "answers": null,
    "area": "context",
    "checkpoint": "Du kannst die Gedächtnis-Ebenen neben der CLAUDE.md benennen, sagen, wer sie schreibt und wann sie laden, und erklären, warum keine davon technisch etwas sperrt.",
    "demo": "../moderation/vorfuehren/s1-11-gedaechtnis-ebenen.md",
@@ -583,6 +660,11 @@
      "Beide leisten dasselbe; die CLAUDE.md ist nur das ältere Format und wird in neueren Versionen schrittweise vom Auto-Memory ersetzt."
     ]
    },
+   "recall": [
+    "Welchen Teil des Auto-Memory lädt Claude Code beim Start, welchen erst bei Bedarf?",
+    "Wann nimmst du `.claude/rules/` mit `paths` statt einer größeren CLAUDE.md?",
+    "Managed-CLAUDE.md und Projekt-CLAUDE.md widersprechen sich. Was passiert, und wo setzt ein Sicherheitsteam eine echte Untergrenze?"
+   ],
    "requires": [
     "S1.10"
    ],
@@ -610,6 +692,7 @@
   {
    "aliases": [],
    "analogy": "Denk an eine Hausordnung mit Anlagen. Das Hauptdokument ist kurz und verweist auf „Anlage A: Brandschutz\" und „Anlage B: Serverraum\". Zu Einsatzbeginn bekommt der Techniker alles zusammengeheftet, als ein Paket. So arbeiten `@path`-Imports: getrennt pflegbar, beim Start ein Dokument. Leichter wird das Paket dadurch nicht; gelesen wird trotzdem alles.",
+   "answers": null,
    "area": "context",
    "checkpoint": "Du kannst erklären, warum `--add-dir` standardmäßig keine CLAUDE.md aus dem fremden Ordner lädt, mit welcher Umgebungsvariable du das änderst und wann Claude eine AGENTS.md von selbst liest.",
    "demo": null,
@@ -632,6 +715,11 @@
      "`@AGENTS.md` lädt alle MCP-Server-Konfigurationen im Repo; es ist das Gegenstück zur CLAUDE.md für externe Tools."
     ]
    },
+   "recall": [
+    "Spart ein `@path`-Import Kontext? Warum nicht?",
+    "Was lädt Claude Code aus einem `--add-dir`-Ordner auch ohne die Umgebungsvariable?",
+    "Dein Repo hat nur eine AGENTS.md, und du legst eine `CLAUDE.local.md` an. Was ändert sich?"
+   ],
    "requires": [
     "S1.10"
    ],
@@ -661,6 +749,7 @@
     "1.3"
    ],
    "analogy": "Ein Prompt ist ein Wartungsauftrag an einen Techniker, der Zugang zum ganzen Gebäude hat. Einen Zettel „Tür reparieren“ gibst du ihm nicht. Du schreibst, welcher Leser an welcher Tür was nicht tut, was das Log zeigt, wo er zuerst prüft und was er am Ende dokumentiert.",
+   "answers": null,
    "area": "prompting",
    "checkpoint": "Du kannst einen vagen Prompt aus deiner eigenen Arbeit in einen Arbeitsauftrag umschreiben und dabei Ort, Ursache, Scope-Grenze und Erfolgskriterium ausdrücklich nennen.",
    "demo": "../moderation/vorfuehren/s1-13-vager-und-praeziser-auftrag.md",
@@ -683,6 +772,11 @@
      "Sein Ablageort: Steht ein Auftrag in der CLAUDE.md statt im Chat, setzt Claude ihn deutlich genauer und vollständiger um."
     ]
    },
+   "recall": [
+    "Welche vier Angaben machen aus „Fix the bug.“ einen Arbeitsauftrag?",
+    "Warum steht im Refactoring-Auftrag „Do not change the function signatures or the public interface“?",
+    "Wann ist ein vager Prompt trotzdem die richtige Wahl?"
+   ],
    "requires": [
     "S1.1"
    ],
@@ -707,6 +801,7 @@
   {
    "aliases": [],
    "analogy": "Der Plan-Modus ist das Sicherheitsbriefing vor einer Panel-Neukonfiguration. Der Techniker legt das Änderungsprotokoll auf den Tisch (Propose). Der Schichtleiter streicht zwei riskante Schritte und ergänzt einen Rückfallweg (Refine). Beide zeichnen ab, und erst dann beginnt die Änderung (Execute). Freigegeben wird die ganze Mission, bevor jemand eine Klemme löst.",
+   "answers": null,
    "area": "prompting",
    "checkpoint": "Du kannst eine Mehrdatei-Aufgabe im Plan-Modus planen lassen, den Plan mit einer zusätzlichen Grenze nachschärfen und die Umsetzung erst mit einer ausdrücklichen Freigabe starten.",
    "demo": null,
@@ -729,6 +824,11 @@
      "Bei jeder Arbeit in einer einzelnen Sitzung, weil sich der Plan-Modus erst mit mehreren Agenten lohnt."
     ]
    },
+   "recall": [
+    "Welche vier Schritte hat das Arbeitsmuster, und in welchem korrigierst du Claude?",
+    "Wie kommst du in den Plan-Modus, und wie verlässt du ihn, ohne den Plan freizugeben?",
+    "Woran erkennst du, dass du dir den Plan sparen kannst?"
+   ],
    "requires": [
     "S1.5",
     "S1.13"
@@ -758,6 +858,7 @@
   {
    "aliases": [],
    "analogy": "Ein Output Style ist die Sprechweise eines Leitstellen-Operators: Funkkurzbefehl (Concise), Schichtübergabe mit Begründungen (Explanatory) oder Einarbeitung, bei der die neue Kollegin ein Stück selbst verdrahtet (Learning). Derselbe Operator, dieselbe Dienstanweisung, nur ein anderes Protokoll.",
+   "answers": null,
    "area": "prompting",
    "checkpoint": "Du kannst erklären, wann du einen Output Style und wann ein System-Prompt-Flag nimmst, und weißt, dass `--system-prompt-file` den Standard-Systemprompt ganz ersetzt.",
    "demo": null,
@@ -780,6 +881,11 @@
      "Beide lassen den Systemprompt unverändert und schieben nur Text in deine erste Nachricht, denn der Systemprompt ist fest."
     ]
    },
+   "recall": [
+    "Mit welchem Befehl wechselst du den Output Style, und wo speichert Claude Code deine Wahl?",
+    "Was bleibt vom Standard-Systemprompt bei `--append-system-prompt`, was bei `--system-prompt-file`?",
+    "Wofür nimmst du `claude -p --output-format json` statt eines Output Styles?"
+   ],
    "requires": [
     "S1.13"
    ],
@@ -809,6 +915,7 @@
     "1.4"
    ],
    "analogy": "Stell dir das Schichtbuch einer Leitstelle vor. Jeder Eingriff an einer Anlage bekommt dort einen Eintrag: klein, mit Zeitstempel, nachprüfbar. Ein Commit ist so ein Eintrag. Der Branch ist dein eigener Arbeitsauftrag, auf dem du arbeitest, ohne den laufenden Betrieb zu stören, und der PR ist die Abnahme, bevor die Änderung in den Betrieb geht.",
+   "answers": null,
    "area": "git",
    "checkpoint": "Du kannst einen ganzen Ablauf von Branch über Diff, Tests und Commit bis zum PR in einer Claude-Code-Sitzung führen und weißt, an welchen Stellen du selbst prüfst.",
    "demo": "../moderation/vorfuehren/s1-16-git-in-einem-fluss.md",
@@ -831,6 +938,11 @@
      "Das Pushen, denn `git push` kann Claude Code nur vorschlagen; ausführen musst du es selbst in deinem Terminal."
     ]
    },
+   "recall": [
+    "In welcher Reihenfolge kommen Diff-Prüfung, Tests und Commit, und warum steht der Diff vor dem Commit?",
+    "Wann lässt du alle Dateien stagen, und wann nennst du die Pfade einzeln?",
+    "Was brauchst du, damit Claude einen PR anlegen kann?"
+   ],
    "requires": [
     "S1.5",
     "S1.13"
@@ -859,6 +971,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir das Bedienpult einer Leitstelle vor. Eine Taste zeigt die Übersicht aller Kameras (`/diff`), eine zweite spult die letzten Aktionen zurück (`/rewind`), eine dritte ruft die Abnahme vor der Übergabe auf (`/review`). Dazu kommt ein Relais, das bei einem CI-Alarm selbstständig einen Servicetechniker losschickt (`/autofix-pr`), alles vom selben Pult aus.",
+   "answers": null,
    "area": "git",
    "checkpoint": "Du kannst für jeden Anlass den passenden Befehl wählen, von `/diff` vor dem Commit bis `claude --from-pr` für die Rückkehr zu einer PR, und begründen, wann `/autofix-pr` tabu ist.",
    "demo": null,
@@ -881,6 +994,11 @@
      "Für eine PR in einem Repo mit aktivem Linter, weil sich `/autofix-pr` und der Linter sonst gegenseitig Commits überschreiben."
     ]
    },
+   "recall": [
+    "Was verzweigt `/branch`, und was verzweigt es nicht?",
+    "Welche Änderungen stellt `/rewind` nicht wieder her?",
+    "Was zeigt dir `claude --from-pr 1234` an?"
+   ],
    "requires": [
     "S1.16"
    ],
@@ -913,6 +1031,7 @@
   {
    "aliases": [],
    "analogy": "Wenn du eine neue Firmware für einen Controller testen willst, spielst du sie nicht zuerst auf das Live-System. Du hast eine Testbank: einen Nachbau der Produktionsanlage in einem eigenen Raum. Dort spielst du die Firmware auf, testest, prüfst das Verhalten und planst erst dann das Update in der Produktion.",
+   "answers": null,
    "area": "git",
    "checkpoint": "Du kannst für ein Experiment einen Worktree anlegen, von Hand oder mit `claude --worktree`, und begründen, wann er sich lohnt und welchen Wert von `worktree.baseRef` du wählst.",
    "demo": "../moderation/vorfuehren/s1-18-worktrees.md",
@@ -935,6 +1054,11 @@
      "Von deinem Arbeitsverzeichnis samt allen nicht committeten Änderungen, damit kein Zwischenstand verloren geht."
     ]
    },
+   "recall": [
+    "Was teilen sich Hauptordner und Worktree, und was hat jeder für sich?",
+    "Was ändert `-b` bei `git worktree add`?",
+    "Von wo zweigt ein neuer Worktree mit `fresh` ab, und was passiert, wenn es keinen Remote gibt?"
+   ],
    "requires": [
     "S1.16"
    ],
@@ -967,6 +1091,7 @@
     "1.5"
    ],
    "analogy": "Ein Wachdienst rechnet mit Stundenzetteln ab. Der Stundenzettel der laufenden Schicht ist `/cost`: Er zeigt, was diese Schicht bisher gekostet hat. Die Budgetgrenze ist das Tank- und Zeitbudget der Nachtstreife, die allein unterwegs ist: Ist es aufgebraucht, kehrt die Streife zurück, statt weiterzufahren. Dieses Budget gilt nur für Streifen ohne Aufsicht, also für `claude -p`-Läufe, nicht für einen Einsatz, bei dem du danebenstehst.",
+   "answers": null,
    "area": "cost",
    "checkpoint": "Du kannst mit `/cost` bzw. `/usage` den Verbrauch deiner Sitzung ablesen, einen `claude -p`-Lauf mit `--max-budget-usd` und `--max-turns` deckeln und vor einem langen Lauf mindestens einen Sparhebel nennen: Cache, Effort oder Modell pro Phase.",
    "demo": "../moderation/vorfuehren/s1-19-kosten-im-blick.md",
@@ -989,6 +1114,11 @@
      "Nirgends in Claude Code: Den Verbrauch je Skill zeigt nur das Dashboard der Claude Console im Browser an."
     ]
    },
+   "recall": [
+    "Was ist der günstigste Weg, damit eine Routineaufgabe nicht zur Kostenüberraschung wird?",
+    "In welchem Modus wirken `--max-budget-usd` und `--max-turns`, und was begrenzt jedes der beiden?",
+    "Warum startest du vor einem Modellvergleich mit `/clear` neu?"
+   ],
    "requires": [
     "S1.1"
    ],
@@ -1015,6 +1145,7 @@
   {
    "aliases": [],
    "analogy": "",
+   "answers": null,
    "area": null,
    "checkpoint": "Du kannst für deine größte Lücke aus Session 1 die passende Übung wählen, sie allein bis zu ihrer Liste „Geschafft, wenn\" durcharbeiten und in einem Satz sagen, welche Fähigkeit sie trainiert hat.",
    "demo": "../moderation/vorfuehren/s1-20-praxis-station-1.md",
@@ -1035,6 +1166,11 @@
    "order": 1200,
    "outcome": "Ich kann aus den Übungen von Session 1 die passende für meine Lücke auswählen, sie allein durchführen und an ihrer Liste Geschafft, wenn prüfen, ob sie gelungen ist.",
    "quiz": null,
+   "recall": [
+    "Welche Übung trainiert die Grundschleife, welche den Kontext über einen Neustart hinweg, welche präzise Aufträge und welche den Git-Ablauf?",
+    "Welche Übungen passen in die 15 Minuten der Station, und welche planst du für später ein?",
+    "Wie formulierst du eine Korrektur, wenn Claude in einer Übung danebenliegt?"
+   ],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,
@@ -1051,6 +1187,7 @@
     "2.1"
    ],
    "analogy": "In einer Sicherheitszentrale liegen Dienstanweisungen aus, auf Englisch SOPs (Standard Operating Procedures): laminierte Blätter, die genau festlegen, was die Wache bei einem bestimmten Alarm tut. Die Anweisung für „Bewegung im Serverraum A\" lautet etwa: Kamerabild prüfen, Schichtleitung anrufen, Streife schicken, Vorfall protokollieren. Der Alarmknopf selbst weiß davon nichts. Er löst nur aus; das Wissen steckt in der Dienstanweisung.",
+   "answers": null,
    "area": "skills",
    "checkpoint": "Du kannst erklären, warum du `/tdd` tippst, statt jedes Mal die TDD-Regeln neu zu schreiben, und den Unterschied zwischen dem Command (Auslöser) und der SKILL.md (hinterlegte Anweisung) benennen.",
    "demo": "../moderation/vorfuehren/s2-01-skills-und-commands.md",
@@ -1073,6 +1210,11 @@
      "Ein PreToolUse-Hook lädt bei jedem Prompt die passende SKILL.md; der Command ist nur eine Abkürzung daran vorbei."
     ]
    },
+   "recall": [
+    "Was steht in der SKILL.md, und was macht der Slash-Befehl?",
+    "Auf welchen zwei Wegen kommt ein Skill in den Kontext?",
+    "Wann gehört eine Anweisung in einen Skill statt in die CLAUDE.md?"
+   ],
    "requires": [
     "S1.10"
    ],
@@ -1099,6 +1241,7 @@
   {
    "aliases": [],
    "analogy": "Eine Dienstanweisung hat einen Kopf und einen Ablauf. Der Kopf sagt, wofür sie gilt und wann sie gezogen wird: „Alarm Zone A, Bewegungsmelder, nur außerhalb der Geschäftszeiten\". Der Ablauf sagt, was die Wache Schritt für Schritt tut. Das Frontmatter ist der Kopf, der Body ist der Ablauf. Ist der Kopf unklar, greift niemand zur richtigen Anweisung, egal wie gut der Ablauf geschrieben ist.",
+   "answers": null,
    "area": "skills",
    "checkpoint": "Du kannst eine SKILL.md mit gültigem Frontmatter und klarem Body anlegen, die Claude bei passenden Anfragen lädt, und erklären, wofür `description` und `when_to_use` jeweils da sind.",
    "demo": "../moderation/vorfuehren/s2-02-skill-schreiben.md",
@@ -1121,6 +1264,11 @@
      "Es legt den Befehl fest; `/name` entsteht aus dem ersten Wort der `description`, nicht aus dem Ordner."
     ]
    },
+   "recall": [
+    "Welche zwei Teile hat eine SKILL.md, und was steuert jeder davon?",
+    "Wo liegt ein persönlicher Skill, wo ein Projekt-Skill?",
+    "Warum gehört der wichtigste Einsatzfall an den Anfang der `description`?"
+   ],
    "requires": [
     "S2.1"
    ],
@@ -1148,6 +1296,7 @@
   {
    "aliases": [],
    "analogy": "Ein Alarmknopf löst nur aus, wenn ein Mensch ihn drückt. Eine Dienstanweisung im Ordner der Leitstelle dagegen darf jede Wache selbst aufschlagen, sobald die Lage zu ihrer Überschrift passt. Beide beschreiben dieselbe Prozedur, der Unterschied liegt nur darin, wer sie in Gang setzen darf. Für die Räumung eines Gebäudes willst du einen Knopf, den jemand bewusst drückt, keine Anweisung, die jemand auf Verdacht aufschlägt.",
+   "answers": null,
    "area": "skills",
    "checkpoint": "Du kannst erklären, warum Skill und Command technisch dasselbe sind, und begründen, warum ein Deploy-Skill `disable-model-invocation: true` braucht.",
    "demo": null,
@@ -1170,6 +1319,11 @@
      "Jeder verbundene MCP-Server kann den Skill dann über eine Folge von Tool-Aufrufen von außen starten."
     ]
    },
+   "recall": [
+    "Was unterscheidet `.claude/commands/deploy.md` im Betrieb von `.claude/skills/deploy/SKILL.md`?",
+    "Wer darf einen Skill mit `disable-model-invocation: true` auslösen, wer einen mit `user-invocable: false`?",
+    "Was bewirkt `allowed-tools`, und was bewirkt es nicht?"
+   ],
    "requires": [
     "S2.2"
    ],
@@ -1198,6 +1352,7 @@
   {
    "aliases": [],
    "analogy": "Mitgelieferte Skills sind wie die Dienstanweisungen, die ab Werk mit einer Sicherheitsanlage kommen. `/batch` ist wie ein Firmware-Update, das auf alle Türcontroller gleichzeitig ausgerollt wird, jeder in seinem eigenen abgeschotteten Worktree, damit ein Fehler an einem Controller die anderen nicht lahmlegt. `/verify` entspricht dem Moment, in dem du nach dem Schlosstausch die Tür wirklich öffnest: Repariert ist sie erst, wenn du sie benutzt hast.",
+   "answers": null,
    "area": "skills",
    "checkpoint": "Du kannst vier mitgelieferte Skills mit ihrem Einsatz benennen und erklären, warum `/verify` nicht durch einen Testlauf ersetzt wird.",
    "demo": null,
@@ -1220,6 +1375,11 @@
      "Er verbindet sich immer mit dem Playwright-MCP und bricht ohne aktive Browser-Verbindung mit einem Fehler ab."
     ]
    },
+   "recall": [
+    "Wie findest du heraus, welche mitgelieferten Skills auf deinem Rechner verfügbar sind?",
+    "Was macht `/run-skill-generator`, und wann führst du ihn erneut aus?",
+    "Wofür nimmst du `/batch`, wofür `/loop`?"
+   ],
    "requires": [
     "S2.1"
    ],
@@ -1248,6 +1408,7 @@
   {
    "aliases": [],
    "analogy": "Das ist wie eine Zugangskontrolle, die bei jedem Kartenscan frische Ausweisdaten aus dem Verzeichnis abruft, statt sich auf einen Ausdruck von heute Morgen zu verlassen. Die Karte, die jemand vorhält, sind die Argumente; die Live-Abfrage ist der eingebettete Befehl. Mächtig, aber auch eine neue Angriffsfläche: Wer die Abfrage manipulieren kann, bestimmt, was am Leser ankommt.",
+   "answers": null,
    "area": "skills",
    "checkpoint": "Du kannst erklären, wann genau `` !`git diff HEAD` `` in einer SKILL.md ausgeführt wird, nämlich beim Aufruf und bevor Claude den Text sieht, und warum `disableSkillShellExecution` in regulierten Umgebungen sinnvoll ist.",
    "demo": null,
@@ -1270,6 +1431,11 @@
      "Beim Start der Sitzung, als PreToolUse-Hook registriert; deshalb ist `disableSkillShellExecution` überflüssig."
     ]
    },
+   "recall": [
+    "Was sieht der Body bei `/review strict auth-service` in `$0`, `$1` und `$module`?",
+    "Was passiert mit dem ganzen Skill, wenn ein eingebetteter Befehl scheitert?",
+    "Welche Skills nimmt `disableSkillShellExecution` aus?"
+   ],
    "requires": [
     "S2.2"
    ],
@@ -1300,6 +1466,7 @@
     "2.2"
    ],
    "analogy": "In einer Zutrittskontrolle feuert der Kartenleser, sobald jemand eine Karte vorhält. Bevor die Tür aufgeht, prüft das System: Ist die Karte berechtigt, gilt sie zu dieser Uhrzeit, ist der Bereich gerade zugänglich? Das ist PreToolUse, eine Prüfung, die die Aktion verhindern kann. Der Türkontakt meldet nach dem Öffnen, wer wann durch welche Tür gegangen ist. Das ist PostToolUse, ein Protokoll nach dem Ereignis. Die Checkliste zum Schichtende läuft, wenn der Wachmann den Schichtbericht abschließt, nicht weil die Uhr 18:00 zeigt. Das ist Stop: ausgelöst durch ein Ereignis, nicht durch die Uhr.",
+   "answers": null,
    "area": "hooks",
    "checkpoint": "Du kannst die drei Eckpfeiler-Hooks benennen, erklären, welcher blockieren kann und welcher nicht, und für jeden ein konkretes Beispiel nennen.",
    "demo": "../moderation/vorfuehren/s2-06-hooks-als-sensoren.md",
@@ -1322,6 +1489,11 @@
      "PreToolUse, aber nur bei Bash; für Edit, Write und MCP-Tools bleibt dir dann nur `permissions.deny`."
     ]
    },
+   "recall": [
+    "Warum musst du an einen Hook nicht denken, damit er läuft — und was unterscheidet ihn darin von einem Skill, den du aufrufst?",
+    "Was passiert, wenn ein PreToolUse-Hook mit `exit 1` endet?",
+    "Warum ist Stop kein Uhrzeit-Ereignis?"
+   ],
    "requires": [
     "S1.5"
    ],
@@ -1349,6 +1521,7 @@
   {
    "aliases": [],
    "analogy": "PreToolUse ist der Kartenleser, der die Berechtigung prüft, *bevor* die Tür aufschließt. PostToolUse ist der Türkontakt, der das Ereignis *danach* protokolliert. SessionStart ist das Briefing zu Schichtbeginn. PreCompact ist der Moment, bevor ein Wachmann seine Notizen übergibt: Was wichtig ist, muss aufgeschrieben sein, bevor es verblasst.",
+   "answers": null,
    "area": "hooks",
    "checkpoint": "Du kannst für jedes der zwölf Hook-Ereignisse einen konkreten Einsatz nennen und erklären, warum PreCompact bei langen Sitzungen besonders wichtig ist.",
    "demo": null,
@@ -1371,6 +1544,11 @@
      "`InstructionsLoaded`, weil es nach dem Laden der CLAUDE.md feuert und Secret-Muster in eine Deny-Liste einträgt."
     ]
    },
+   "recall": [
+    "Welches Ereignis nimmst du für ein Briefing beim Start, welches für eine Zusammenfassung beim sauberen Beenden?",
+    "Warum ist PreToolUse zu spät, wenn du Secrets im Prompt abfangen willst?",
+    "Worin unterscheidet sich Stop von SessionEnd?"
+   ],
    "requires": [
     "S2.6"
    ],
@@ -1398,6 +1576,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir eine Alarmmatrix mit zwei Filterebenen vor. Die erste Ebene ist der Sensortyp: Wiegand-Leser (Bash) oder Kamera-Bewegung (Edit). Das ist der `matcher`. Die zweite Ebene ist der Bereichsfilter: „nur wenn Berechtigungsstufe unter 3 und Zone = Serverraum\". Das ist das `if`-Feld mit Rechte-Regel-Syntax. Ohne zweite Ebene löst jeder Kartenscan Alarm aus, mit ihr nur die Ereignisse, die zählen.",
+   "answers": null,
    "area": "hooks",
    "checkpoint": "Du kannst einen PreToolUse-Hook mit passendem `matcher` und `if`-Filter eintragen, der mit `exit 2` wirklich blockt, und erklären, warum ein kaputter Schutz-Hook ein offener Schutz-Hook ist.",
    "demo": "../moderation/vorfuehren/s2-08-hook-einrichten.md",
@@ -1420,6 +1599,11 @@
      "Als Rechte-Regel: Mehrere Namen mit `|` liest Claude Code wie `permissions.allow`-Einträge, und `if` filtert dann die Namen."
     ]
    },
+   "recall": [
+    "Welcher Exit-Code lässt einen PreToolUse-Hook blocken, und was passiert, wenn der Hook mit einem anderen Code abstürzt?",
+    "Wo im Eingabe-JSON steht der Bash-Befehl?",
+    "Warum ist `\"Bash|^Edit$\"` ein Regex, `\"Bash|Edit\"` aber nicht?"
+   ],
    "requires": [
     "S2.7"
    ],
@@ -1449,6 +1633,7 @@
   {
    "aliases": [],
    "analogy": "Ein Subagent-Hook ist ein Sensor, den ein Wachmann auf einer Streife mitträgt: Er kommt mit ihm zurück. Ein Skill-Hook ist ein Sensor, den der Wachmann auf der Streife an die Wand schraubt: Er bleibt bis Schichtende scharf, es sei denn, er ist so gebaut, dass er sich nach dem ersten Alarm selbst abschaltet (`once: true`).",
+   "answers": null,
    "area": "hooks",
    "checkpoint": "Du kannst erklären, wann ein `prompt`-Hook besser passt als ein `command`-Hook, und zeigen, wie ein Hook im Frontmatter einen Deploy-Skill mit eigener Vor- und Nachprüfung ausstattet, ohne die globale settings.json zu belasten.",
    "demo": null,
@@ -1471,6 +1656,11 @@
      "Nur im Frontmatter gehen die Typen `prompt` und `agent`; in settings.json sind nur `command` und `http` erlaubt."
     ]
    },
+   "recall": [
+    "Welcher Hook-Typ passt für eine feste Musterprüfung, welcher für ein Urteil, das Kontext braucht?",
+    "Wie lange lebt ein Hook im Skill-Frontmatter, wie lange einer im Subagent-Frontmatter?",
+    "Was bewirkt `once: true` an einem Handler?"
+   ],
    "requires": [
     "S2.8"
    ],
@@ -1502,6 +1692,7 @@
   {
    "aliases": [],
    "analogy": "Ein Leitstand hat mehrere Ausgabewege. Der Schwärzungsbeauftragte (`updatedToolOutput`) sitzt zwischen Außendienst und Lagebesprechung: Der Bericht kommt beim Analysten an, aber die sensiblen Kennungen sind vorher geschwärzt. Die gelbe Warnlampe (`systemMessage`, `additionalContext`) leuchtet, ohne die Tür zu sperren; der Betrieb läuft, der Leitstand weiß Bescheid. Der Pager (`terminalSequence`) erreicht den Menschen direkt, ohne Umweg über das Modell.",
+   "answers": null,
    "area": "hooks",
    "checkpoint": "Du kannst erklären, wie `updatedToolOutput` in der Form der Tool-Ausgabe verhindert, dass ein API-Key in Claudes Kontext landet, warum `exit 2` oder `permissionDecision: \"deny\"` blocken und wann ein weiches Signal (`systemMessage`, `additionalContext`) besser passt als eine Sperre.",
    "demo": "../moderation/vorfuehren/s2-10-hook-ausgaben.md",
@@ -1524,6 +1715,11 @@
      "Nur `permissions.deny` für Credential-Dateien, denn `updatedToolOutput` wirkt ausschließlich bei MCP-Tools, nicht bei Bash."
     ]
    },
+   "recall": [
+    "Wie verkleinert ein PostToolUse-Hook eine laute Ausgabe, bevor Claude sie liest?",
+    "Warum schützt `updatedToolOutput` nicht davor, dass ein Befehl etwas anrichtet?",
+    "Woran scheitert ein Pfadvergleich auf `secrets/` unter Windows?"
+   ],
    "requires": [
     "S2.8"
    ],
@@ -1555,6 +1751,7 @@
     "2.3"
    ],
    "analogy": "Denk an ein Sicherheitsmodul für deine Anlage, etwa ein biometrisches Zutrittsmodul. Darin steckt, was zusammengehört: der Fingerabdruckscanner (Sensoren = Hooks), der Abgleich-Algorithmus (Logik = Agents), die Standardabläufe für „Zutritt erlaubt\" und „Zutritt verweigert\" (Verfahren = Skills), die Tasten am Bedienteil (Bedienung = Commands) und das Typenschild mit der Konfiguration (Metadaten = `plugin.json`). Du kaufst das Modul, baust es ein, und es arbeitet mit deiner bestehenden Anlage zusammen. Du musst nicht jedes Teil selbst bauen und verdrahten.",
+   "answers": null,
    "area": "plugins",
    "checkpoint": "Du kannst die Verzeichnisstruktur eines Plugins aufzeichnen und erklären, warum das Manifest unter `.claude-plugin/plugin.json` liegt und nicht im Plugin-Root.",
    "demo": "../moderation/vorfuehren/s2-11-plugins-buendeln.md",
@@ -1577,6 +1774,11 @@
      "Das Plugin lädt nur das Manifest; die Ordner `skills/` und `commands/` bleiben dabei unbeachtet."
     ]
    },
+   "recall": [
+    "Welche Teile eines Plugins findet Claude Code von selbst, und was steht im Manifest?",
+    "Was passiert, wenn `skills/` versehentlich in `.claude-plugin/` liegt?",
+    "Wie prüfst und lädst du ein Plugin, ohne es zu installieren?"
+   ],
    "requires": [
     "S2.2",
     "S2.6"
@@ -1610,6 +1812,7 @@
   {
    "aliases": [],
    "analogy": "Scopes sind wie Zutrittszonen in einem Gebäude. Der user-Scope ist dein persönlicher Spind. Der project-Scope ist der Geräteraum des Teams. Der managed-Scope ist die gebäudeweite Sicherheitsrichtlinie, die außer dem Sicherheitsverantwortlichen niemand ändern kann. Der local-Scope ist dein eigenes Fach im Geräteraum: nur für dich, nur an diesem Ort.",
+   "answers": null,
    "area": "plugins",
    "checkpoint": "Du kannst erklären, welchen Scope ein Team-Plugin braucht, damit es über Git verteilt wird, was jede Person danach noch selbst tun muss und warum `managed` nicht dasselbe ist wie `project`.",
    "demo": null,
@@ -1632,6 +1835,11 @@
      "Sie muss die Datei erst in `settings.local.json` umbenennen, sonst greift das Plugin nicht."
     ]
    },
+   "recall": [
+    "In welche Datei schreibt `--scope local`, und wer bekommt den Eintrag zu sehen?",
+    "Was tut `claude plugin enable`, wenn eine erklärte Abhängigkeit nicht installiert ist?",
+    "Was passiert bei `claude install` ohne Argument, und warum ist das für einen gepinnten Stand gefährlich?"
+   ],
    "requires": [
     "S2.11"
    ],
@@ -1666,6 +1874,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir einen RS-485-Bus vor, an dem alle OSDP-Leser und Schlossrelais eines Gebäudes hängen. Wer ein Gerät an diesen Bus anschließt, gibt ihm Zugang zum ganzen Segment: Ein kompromittiertes Gerät kann gültig aussehende OSDP-Kommandos senden, die das System als legitim behandelt, ohne dass ein Bediener es merkt. Ein installiertes Plugin ist so ein Gerät am Bus. Was es ausführt, läuft als du.",
+   "answers": null,
    "area": "plugins",
    "checkpoint": "Du kannst die drei Plugin-Teile nennen, die du vor der Installation lesen musst (`bin/`, `hooks/hooks.json`, `.mcp.json`), und erklären, warum Versions-Pinning allein Lieferkettenangriffe nicht verhindert.",
    "demo": null,
@@ -1688,6 +1897,11 @@
      "Solange du es nicht aufrufst, verbindet Claude Code keinen seiner MCP-Server."
     ]
    },
+   "recall": [
+    "Welche Teile eines Plugins laufen außerhalb der Sandbox?",
+    "Was zeigt der Abschnitt **Will install** in `/plugin`, und was zeigt er nicht?",
+    "Warum bringt der project-Scope die Entscheidung fürs Team in den Code-Review, schützt aber nicht vor einem schlechten Update?"
+   ],
    "requires": [
     "S2.12"
    ],
@@ -1722,6 +1936,7 @@
   {
    "aliases": [],
    "analogy": "Ein anderer Wachdienst bietet dir seine bewährten Dienstanweisungen an: Alarmverfolgung, Schlüsselübergabe, Revierfahrt. Eine gute Vorlage spart dir Wochen. Trotzdem kommt keine fremde Dienstanweisung ungelesen in den Ordner der Leitstelle. Du prüfst, wer sie geschrieben hat, ob du sie verwenden darfst, welche Befugnisse sie verlangt und wen sie im Ernstfall anruft. Ein Skill ist so eine Dienstanweisung.",
+   "answers": null,
    "area": null,
    "checkpoint": "Du kannst für jede der vier Quellen sagen, wer sie baut, unter welcher Lizenz sie steht und wie du sie installierst, und einen fremden Skill mit der Prüfliste bewerten, bevor du ihn installierst.",
    "demo": null,
@@ -1736,6 +1951,11 @@
    "order": 2135,
    "outcome": "Ich kann vier belegte Skill-Quellen mit Lizenz und Installationsweg einordnen und einen fremden Skill vor der Installation mit einer Prüfliste bewerten.",
    "quiz": null,
+   "recall": [
+    "Warum reicht die Lizenzangabe im README nicht? Nenn das Beispiel aus diesem Kapitel.",
+    "Was läuft bei `superpowers` zu Beginn jeder Sitzung, und woran hast du das vor der Installation erkannt?",
+    "Was bewirkt `allowed-tools` in einem fremden Skill, und warum schaust du dort zuerst hin?"
+   ],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,
@@ -1762,6 +1982,7 @@
     "2.4"
    ],
    "analogy": "Eine moderne Gebäudeleittechnik steuert nicht nur Türen, sie bindet die anderen Anlagen ein. Die Brandmeldeanlage löst bei Rauch automatisch die Verriegelung aus. Die Kamerabilder erscheinen an der Zutrittskonsole. Vorangemeldete Besucher stehen schon im Türsystem. Kündigt die Personalabteilung jemandem, ist seine Karte automatisch gesperrt, und die Türprotokolle fließen in die Zeiterfassung. Jede Anlage bietet eine Schnittstelle, und die Leitzentrale verbindet sich mit allen. Claude Code mit MCP funktioniert genauso: Claude ist die Leitzentrale, die externen Dienste bieten MCP-Schnittstellen, und du legst fest, welche Verbindungen es gibt.",
+   "answers": null,
    "area": "mcp",
    "checkpoint": "Du kannst an einem Beispiel aus deinem Arbeitsumfeld erklären, was ein MCP-Server gegenüber Copy-Paste bringt, und hast den Playwright-Server so angebunden, dass Claude eine echte Webseite bedient.",
    "demo": "../moderation/vorfuehren/s2-14-mcp-stecker.md",
@@ -1784,6 +2005,11 @@
      "Nur die Anmeldung: MCP-Tools können sich per OAuth anmelden, Hooks dagegen nicht; ansonsten verhalten sich beide genau gleich."
     ]
    },
+   "recall": [
+    "Was stellt ein MCP-Server für Claude bereit?",
+    "Wo legst du den Server für die Übung ab, und warum fragt Claude Code beim Start nach?",
+    "Welche Daten überqueren eine Grenze, wenn Claude über Playwright dein Admin-Portal bedient, und wem gehören sie?"
+   ],
    "requires": [
     "S1.5"
    ],
@@ -1810,6 +2036,7 @@
   {
    "aliases": [],
    "analogy": "Der Transport ist die Verkabelung eines Kartenlesers am Controller. `stdio` ist die feste Leitung vor Ort, etwa RS-485 vom Leser zum Controller. `http` ist die Anbindung aus der Ferne über ein gesichertes Netzsegment. SSE weiter zu nutzen ist, wie ein Protokoll zu betreiben, dessen Support ausläuft: Es funktioniert noch, aber der Hersteller empfiehlt den Wechsel.",
+   "answers": null,
    "area": "mcp",
    "checkpoint": "Du kannst für eine Integration Transport und Scope begründen, den Server mit `claude mcp add` oder in der `.mcp.json` eintragen und prüfen, ob er verbunden ist.",
    "demo": null,
@@ -1832,6 +2059,11 @@
      "Keiner: Claude Code übernimmt nie Server aus einem Repo, jeder muss sie selbst anlegen."
     ]
    },
+   "recall": [
+    "Warum nimmst du für einen neuen entfernten Server `http` statt SSE?",
+    "Wo speichert Claude Code einen Server im Scope `local`, wo im Scope `user` und wo im Scope `project`?",
+    "Was passiert, wenn in der `.mcp.json` `${VAR}` steht, `VAR` aber nicht gesetzt ist?"
+   ],
    "requires": [
     "S2.14"
    ],
@@ -1859,6 +2091,7 @@
   {
    "aliases": [],
    "analogy": "Eine Leitstelle verliert die Verbindung zu einer Unterstation. Sie löst nicht sofort Störungsalarm aus, sondern wählt neu: nach einer Sekunde, dann nach zwei, dann nach vier, jedes Mal doppelt so lange, höchstens fünfmal. Erst danach meldet sie die Unterstation als gestört. So verbindet Claude Code einen abgerissenen Remote-Server neu.",
+   "answers": null,
    "area": "mcp",
    "checkpoint": "Du kannst erklären, wann du eine OAuth-App vorab einträgst, was mit einer zu großen MCP-Ausgabe passiert und wie ein stdio-Server sein Projekt findet.",
    "demo": null,
@@ -1881,6 +2114,11 @@
      "Nichts: Das Limit gilt nur für stdio-Server, entfernte HTTP-Server dürfen beliebig viel zurückgeben."
     ]
    },
+   "recall": [
+    "Warum steht hinter `--client-secret` kein Wert, und wie kommt das Secret in einem CI-Lauf an?",
+    "Was hebt `MAX_MCP_OUTPUT_TOKENS` an, und was bleibt fest?",
+    "Welche Server verbindet Claude Code nach einem Abbruch selbst neu, welche nicht?"
+   ],
    "requires": [
     "S2.15"
    ],
@@ -1909,6 +2147,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir einen Wiegand-OSDP-Konverter unbekannter Herkunft zwischen Leser und Controller vor. Er kann Telegramme einschleusen, die gültig aussehen, aber manipuliert sind, und der Controller kann sie nicht von echten unterscheiden. So wirkt Prompt Injection über einen MCP-Server: Die Anweisung kommt nicht aus deinem Code, sondern aus den Daten, die der Server liefert. Einen eigenen MCP-Server zu bauen ist, als setztest du selbst entwickelte Firmware ein: volle Kontrolle über den Inhalt, volle Verantwortung für das Ergebnis.",
+   "answers": null,
    "area": "mcp",
    "checkpoint": "Du kannst drei Risiken fremder MCP-Server mit je einer Gegenmaßnahme nennen und einen eigenen Minimal-Server mit fastmcp so eintragen, dass Claude seine Tools aufruft.",
    "demo": null,
@@ -1931,6 +2170,11 @@
      "Es geht nur um Tokens: MCP-Server laufen in einer OS-Sandbox ohne Zugriff auf Projektdateien, gefährdet sind allein die gespeicherten OAuth-Tokens."
     ]
    },
+   "recall": [
+    "Warum kommt Prompt Injection über MCP von der Datenseite und nicht aus dem Code des Servers?",
+    "Welche Rechte-Regel trifft jedes Tool eines Servers namens `github`?",
+    "Was ist anders, wenn dieselbe `.mcp.json` in einem `claude -p`-Lauf geladen wird?"
+   ],
    "requires": [
     "S2.15"
    ],
@@ -1963,6 +2207,7 @@
     "2.5"
    ],
    "analogy": "Stell dir vor, du holst einen Sicherheitsberater ins Haus. Sagst du ihm nichts, arbeitet er mit allgemeinem Sicherheitswissen: vernünftiger Rat, der aber nicht zu deiner Türnummerierung, deinen Alarmzonen und deinen tatsächlichen Kabelwegen passt. Gibst du ihm die Grundrisse, euer aktuelles Format für Zutrittsprotokolle und die Vorfallhistorie, arbeitet er mit deinen echten Bauplänen. Genau das ist RAG: geprüftes, konkretes und aktuelles Wissen statt Verallgemeinerungen.",
+   "answers": null,
    "area": "mcp",
    "checkpoint": "Du kannst ein Notebook mit eigenen Quellen anlegen, es aus Claude Code heraus abfragen und am Vergleich mit einer Antwort ohne Notebook zeigen, was die Zitate bringen.",
    "demo": "../moderation/vorfuehren/s2-18-rag-und-notebooklm.md",
@@ -1985,6 +2230,11 @@
      "Nur das Tempo: NotebookLM hält die Datei vorab zwischengespeichert, deshalb muss Claude sie nicht bei jeder neuen Frage wieder komplett einlesen."
     ]
    },
+   "recall": [
+    "Welche zwei Lücken in Claudes Wissen schließt RAG?",
+    "Wann nimmst du NotebookLM, statt ein großes Dokument einfach in den Chat zu holen?",
+    "Wie bringst du eine NotebookLM-Antwort in Claude Code, wenn die Kommandozeile fehlt?"
+   ],
    "requires": [
     "S2.14"
    ],
@@ -2017,6 +2267,7 @@
   {
    "aliases": [],
    "analogy": "Wer einem externen Berater die Baupläne gibt, gibt sie aus der Hand. Den Fluchtwegplan aus dem Treppenhaus darf jeder sehen; den Plan der Alarmzonen und Kabelwege im Tresorbereich gibst du nur mit Freigabe heraus. Dieselbe Abwägung triffst du bei jeder Quelle für NotebookLM: Sie verlässt deinen Perimeter.",
+   "answers": null,
    "area": "mcp",
    "checkpoint": "Du kannst für eine Quelle begründen, ob sie in ein gehostetes RAG wie NotebookLM darf oder in ein lokales RAG gehört, und du prüfst wichtige Zitate an der Quelle nach.",
    "demo": null,
@@ -2039,6 +2290,11 @@
      "Ob ihr die Web-Oberfläche statt der Kommandozeile nutzt, denn nur Uploads über die Kommandozeile landen auf Google-Servern."
     ]
    },
+   "recall": [
+    "Wo liegen deine Quellen, nachdem du sie in NotebookLM geladen hast, und was folgt daraus für proprietären Code?",
+    "Nenne drei Fehlerarten von RAG.",
+    "Warum ist eine Antwort mit Zitat nicht automatisch richtig, und was tust du dagegen?"
+   ],
    "requires": [
     "S2.18"
    ],
@@ -2070,6 +2326,7 @@
   {
    "aliases": [],
    "analogy": "",
+   "answers": null,
    "area": null,
    "checkpoint": "Du kannst eine Übung aus Session 2 passend zu deinem Ziel wählen, sie bis zu ihrer Liste „Geschafft, wenn\" durcharbeiten und begründen, welche Schicht du damit gebaut hast und wofür du sie einsetzt.",
    "demo": null,
@@ -2091,6 +2348,11 @@
    "order": 2200,
    "outcome": "Ich kann eine der sechs Übungen aus Session 2 (Skill, Safety-Hook, Plugin, MCP, Wissensbasis, Token Firewall) passend zu meinem Ziel auswählen, sie selbstständig bis zu ihrer Liste Geschafft, wenn durchführen und das Ergebnis begründen.",
    "quiz": null,
+   "recall": [
+    "Welche Übung gehört zu welcher Schicht: Skill, Hook, Plugin, MCP, Wissensbasis?",
+    "Warum gehören Hook-Experimente wie der Honeypot in eine projekt-lokale `.claude/settings.json`?",
+    "Was macht eine Übung länger als ihre Kernschritte, und was lässt du weg, wenn die Zeit knapp ist?"
+   ],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,
@@ -2107,6 +2369,7 @@
     "3.1"
    ],
    "analogy": "In einer Sicherheitszentrale macht nicht ein Wachmann alles: Kameras beobachten, auf Alarme reagieren, Karten verwalten und Vorfallberichte schreiben. Die Leitstelle schickt Spezialisten los. Jedes Streifenmitglied bekommt einen klaren Auftrag und die passende Ausrüstung und kümmert sich nur darum. Wer Kameras auswertet, rückt nicht zu Einbrüchen aus, und das Einsatzteam konfiguriert keine Kartenleser. Die Leitstelle koordiniert und führt die Berichte zusammen, sie macht nicht alles selbst.",
+   "answers": null,
    "area": "agents",
    "checkpoint": "Du kannst an einem konkreten Beispiel erklären, warum ein Subagent eine eigene Claude-Instanz mit eigenem Kontextfenster ist, ein Skill dagegen eine Anleitung für die laufende Sitzung, und wann sich das Aufteilen lohnt.",
    "demo": "../moderation/vorfuehren/s3-01-was-ist-ein-agent.md",
@@ -2129,6 +2392,11 @@
      "Subagenten sind für sicherheitskritische Prüfungen reserviert, Skills für alle anderen Aufgaben im Projekt."
     ]
    },
+   "recall": [
+    "Was bekommt ein Subagent beim Start mit, und was sieht er nicht?",
+    "Nenne zwei Gründe, warum eine einzige lange Sitzung schlechter arbeitet als mehrere spezialisierte Agenten.",
+    "Was kostet dich jeder zusätzliche Subagent?"
+   ],
    "requires": [
     "S1.2"
    ],
@@ -2155,6 +2423,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir das Stammpersonal einer Wache vor. Der Aufklärer geht die Außenanlage ab und meldet, was er sieht, aber er fasst nichts an: Das ist Explore. Der Erkunder nimmt für die Einsatzleitung die Lage auf, bevor sie den Einsatzplan vorlegt: Das ist Plan im Plan-Modus. Der Diensthabende darf erkunden und handeln und übernimmt Aufträge mit mehreren Schritten: Das ist general-purpose. Für einen Standardauftrag stellst du keine Sonderkraft ein, du gibst ihn der passenden Stammrolle.",
+   "answers": null,
    "area": "agents",
    "checkpoint": "Du kannst die drei eingebauten Subagenten nennen, sagen, welche nur lesen, und einen davon im Auftrag gezielt anfordern.",
    "demo": null,
@@ -2177,6 +2446,11 @@
      "Keiner: Eingebaute Subagenten laufen erst, wenn du sie vorher in `.claude/agents/` angelegt hast."
     ]
    },
+   "recall": [
+    "Welcher eingebaute Subagent darf Dateien ändern, welche nicht?",
+    "Wann gibt Claude Arbeit an Plan ab?",
+    "Was lädt Explore im Unterschied zu einem eigenen Subagenten nicht?"
+   ],
    "requires": [
     "S3.1"
    ],
@@ -2203,6 +2477,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir zwei Gebäude mit denselben Türen vor. Das erste ist vorbereitet, aber nicht ausgestattet: Die Türen haben Schlösser, und wer den Schlüssel hat, kommt überall hin, wo er passt. Leerrohre für Kartenleser, Sensoren und Zonen liegen schon in der Wand; was hineinkommt, entscheidest du. Im zweiten Gebäude ist die Zutrittsanlage eingebaut: Kartenleser mit Berechtigungsstufen, Sensoren an der Alarmmatrix, die Hausordnung am Eingang, Streifen für Sonderaufträge. Pi gleicht dem ersten Gebäude, Claude Code dem zweiten.",
+   "answers": null,
    "area": null,
    "checkpoint": "",
    "demo": null,
@@ -2217,6 +2492,7 @@
    "order": 3025,
    "outcome": "Ich kann an Pi zeigen, welche Schichten Claude Code um die Agenten-Schleife legt, welche davon übertragbare Denkmodelle sind, und begründen, warum ich bei einem Harness ohne erzwungene Freigaben den Schutz selbst mitbringen muss.",
    "quiz": null,
+   "recall": [],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,
@@ -2251,6 +2527,7 @@
   {
    "aliases": [],
    "analogy": "Ein eigener Subagent ist wie ein neues Streifenmitglied, das du einstellst. In der Personalakte steht, wofür es zuständig ist (die `description`), welche Ausrüstung es bekommt (`tools`) und welche Freigabestufe gilt (`permissionMode`). Ein Späher bekommt keinen Generalschlüssel und ein Prüfer keinen Werkzeugkoffer: Jeder bekommt genau das, was sein Auftrag braucht.",
+   "answers": null,
    "area": "agents",
    "checkpoint": "Du kannst einen eigenen Subagenten mit YAML-Frontmatter definieren, seine Tools nach dem Prinzip der minimalen Rechte begrenzen und erklären, warum die `description` das Routing steuert und warum Plugin-Subagenten ihre Rechte nicht selbst anheben können.",
    "demo": null,
@@ -2273,6 +2550,11 @@
      "Es übernimmt beide Felder, sofern das Plugin aus dem offiziellen Plugin-Marketplace von Anthropic stammt."
     ]
    },
+   "recall": [
+    "Welche zwei Felder sind Pflicht, und was passiert, wenn `tools` fehlt?",
+    "Welche drei Felder ignoriert Claude Code bei Subagenten aus einem Plugin?",
+    "Wann wird der `permissionMode` eines Subagenten ignoriert?"
+   ],
    "requires": [
     "S3.2"
    ],
@@ -2301,6 +2583,7 @@
   {
    "aliases": [],
    "analogy": "Fan-out ist die Leitstelle, die zwei Sicherheitsteams gleichzeitig losschickt, um zwei Etagen abzusuchen. Das eine Team nimmt den Grundriss auf, das andere sucht nach Gefahren. Beide melden unabhängig zurück, und die Leitstelle hat beide Berichte, ohne dass einer auf den anderen gewartet hat. Eine Pipeline ist der Zutrittsablauf: Karte lesen, Berechtigung prüfen, Tür freigeben, Ereignis protokollieren; jeder Schritt braucht das Ergebnis des vorigen. Eine Hierarchie ist die Alarmzentrale mit Bereichszentralen: Die Hauptleitstelle koordiniert die Bereiche, jeder Bereich seine eigenen Melder.",
+   "answers": null,
    "area": "agents",
    "checkpoint": "Du kannst zu einer beschriebenen Aufgabe mit mehreren Agenten das passende Muster wählen, für Fan-out den Zeitgewinn gegenüber dem Nacheinander abschätzen und begründen, warum die Teile dafür unabhängig sein müssen.",
    "demo": "../moderation/vorfuehren/s3-04-orchestrierungsmuster.md",
@@ -2323,6 +2606,11 @@
      "Nacheinander: Parallele Agenten teilen sich ein Kontextfenster und blockieren sich gegenseitig."
     ]
    },
+   "recall": [
+    "Woran erkennst du, dass eine Aufgabe eine Pipeline ist und kein Fan-out?",
+    "Wovon hängt die Gesamtlaufzeit beim Fan-out ab?",
+    "Wann lohnt sich eine Hierarchie?"
+   ],
    "requires": [
     "S3.1"
    ],
@@ -2350,6 +2638,7 @@
   {
    "aliases": [],
    "analogy": "`claude agents` ist die Schichttafel der Wachleitung. Jede Streife, die gerade draußen ist, steht als Zeile auf der Tafel. Du kannst dich bei jeder einklinken (`attach`), den letzten Funkverkehr abrufen (`logs`), eine zurückrufen (`stop`), dieselbe Streife erneut losschicken (`respawn`) oder einen erledigten Eintrag streichen (`rm`). Die Tafel hängt in deinem eigenen Gebäude: Fährt der Rechner herunter, endet die Schicht.",
+   "answers": null,
    "area": "agents",
    "checkpoint": "Du kannst eine Hintergrund-Sitzung mit `claude --bg` starten, sie mit `claude agents` finden und mit `claude attach <id>` übernehmen, den Unterschied zu einem Subagenten erklären und begründen, warum Agent Teams nur mit Absicht und in kleiner Besetzung laufen sollten.",
    "demo": null,
@@ -2372,6 +2661,11 @@
      "Es ist nur die Anzeige: Beides ist technisch dasselbe, die Hintergrund-Sitzung erscheint bloß zusätzlich in `claude agents`."
     ]
    },
+   "recall": [
+    "Mit welchem Befehl holst du eine Hintergrund-Sitzung in dein Terminal, und womit siehst du nur ihre letzte Ausgabe?",
+    "Wo läuft eine Hintergrund-Sitzung, und was passiert, wenn du den Rechner herunterfährst?",
+    "Wie schaltest du Agent Teams ein, und wovon hängt ihr Token-Verbrauch ab?"
+   ],
    "requires": [
     "S3.4"
    ],
@@ -2404,6 +2698,7 @@
     "3.3a"
    ],
    "analogy": "Stell dir einen Penetrationstest deiner Zutrittsanlage mit eingebautem Tribunal vor. Der Pentester schreibt den Exploit-Bericht (Ankläger). Der Entwickler erklärt, was davon wirklich ausnutzbar ist und was nicht (Verteidiger). Der Sicherheitsverantwortliche entscheidet, was nachgebessert wird (Konsens). Das Patch-Team schließt die bestätigten Lücken (Fixer). Der ganze Ablauf läuft von allein und ist vollständig dokumentiert.",
+   "answers": null,
    "area": "review",
    "checkpoint": "Du kannst die vier Stufen der Devil's-Advocate-Pipeline benennen, erklären, warum die Debatte Fehlalarme senkt, aber keine feste Quote verspricht, und am Playground zeigen, warum Erreichbarkeit und Fachlogik die Schwere eines Befunds ändern.",
    "demo": "../moderation/vorfuehren/s3-06-devils-advocate.md",
@@ -2426,6 +2721,11 @@
      "Sie läuft nur für kritische Befunde mit hoher Schwere; alle anderen Befunde gehen von den Scannern direkt und ohne Debatte an die Fixer-Agenten."
     ]
    },
+   "recall": [
+    "Warum ist ein Befund glaubwürdiger, wenn zwei Scanner ihn unabhängig voneinander finden?",
+    "Welche drei Urteile kann der Konsens-Agent fällen, und was passiert danach jeweils mit dem Befund?",
+    "Warum übersieht eine Mustersuche den fail-open-Fehler in `check_access_resilient()` leicht, und warum wiegt er in einer Zutrittsanlage trotzdem schwer?"
+   ],
    "requires": [
     "S3.4"
    ],
@@ -2454,6 +2754,7 @@
   {
    "aliases": [],
    "analogy": "Denk an die Prüfstufen einer Zutrittsanlage. `/security-review` ist die Routine-Sicherheitsprüfung: Nach jedem Umbau schaut jemand gezielt nach, ob eine neue Lücke entstanden ist. `/code-review` ist die Abnahme durch die Projektleitung: Funktioniert, was gebaut wurde? `/code-review ultra` ist der unabhängige Drittprüfer: Ein externes Team kommt mit mehreren Prüfern, stellt jeden Befund nach und meldet nur, was es selbst reproduzieren konnte.",
+   "answers": null,
    "area": "review",
    "checkpoint": "Du kannst `/security-review`, `/code-review` und `/code-review ultra` voneinander abgrenzen, vor allem lokal gegen Cloud und Branch-Diff gegen PR, und weißt, wann du zum eigenen Devil's-Advocate-Schwarm greifst.",
    "demo": null,
@@ -2476,6 +2777,11 @@
      "`/code-review` sieht nur den Branch-Diff; `ultra` liest zusätzlich die ganze Git-Historie und alle offenen Issues des Repos."
     ]
    },
+   "recall": [
+    "Was genau prüft `/security-review`, und warum findet es auf einem frischen Klon nichts?",
+    "Wo läuft `/code-review ultra`, und was passiert, wenn du nur mit einem API-Key angemeldet bist?",
+    "Wann lohnt sich ein eigener adversarialer Schwarm statt der eingebauten Reviews?"
+   ],
    "requires": [
     "S1.16"
    ],
@@ -2509,6 +2815,7 @@
     "3.3b"
    ],
    "analogy": "Stell dir vor, das Gebäude läuft nachts ohne Wachmann. Du hast drei Möglichkeiten: ein Zutrittssystem, das an jeder Tür selbst einschätzt, ob der Zutritt riskant ist (`auto`); einen Automaten, der nur Karten von der vorprogrammierten Liste durchlässt und alle anderen abweist (`dontAsk`); oder einen Generalschlüssel ohne jedes Schloss (`bypassPermissions`), den du nur in der abgeschlossenen Testhalle ausgibst. Einzelne Türen kannst du in jedem Fall fest verriegeln (Deny) oder mit Pflicht zur Gegenzeichnung versehen (Ask).",
+   "answers": null,
    "area": "permissions",
    "checkpoint": "Du kannst für einen autonomen Lauf den passenden Modus samt Allow-, Ask- und Deny-Regeln wählen und begründen, warum `bypassPermissions` nur in einen isolierten Wegwerf-Container gehört.",
    "demo": "../moderation/vorfuehren/s3-08-rechte-fuer-autonomie.md",
@@ -2531,6 +2838,11 @@
      "Er entspricht `dontAsk`; der einzige Unterschied ist, dass er zusätzlich Skills und Subagenten ohne Bestätigung starten darf."
     ]
    },
+   "recall": [
+    "Welche Dateisystem-Befehle genehmigt `acceptEdits` im Arbeitsordner still, und was fragt weiter?",
+    "Was passiert mit einem Aufruf, der zu einer Ask-Regel passt, in `auto`, in `dontAsk` und in `bypassPermissions`?",
+    "Welche zwei Flags gehören in jeden unbeaufsichtigten `dontAsk`-Lauf, damit er weder unbegrenzt kostet noch unbegrenzt läuft?"
+   ],
    "requires": [
     "S1.6"
    ],
@@ -2559,6 +2871,7 @@
   {
    "aliases": [],
    "analogy": "Geschützte Pfade sind die Tresorräume im Gebäude. Mit Besucher- oder Wartungsausweis kommst du nie ohne Gegenzeichnung hinein, und auch ein Dauereintrag auf der Zutrittsliste (eine Allow-Regel) öffnet sie nicht. Nur der Generalschlüssel sperrt sie ohne Frage auf; deshalb gibt es ihn nur in der abgeschlossenen Testhalle.",
+   "answers": null,
    "area": "permissions",
    "checkpoint": "Du kannst die geschützten Pfade nennen, sagen, in welchem Modus Claude Code trotzdem ohne Rückfrage hineinschreibt, und für eine riskante Aufgabe die passende Isolationsstufe wählen.",
    "demo": null,
@@ -2581,6 +2894,11 @@
      "Mit `/sandbox` übernimmt Docker die geschützten Pfade und ersetzt die eingebaute Liste durch eigene Mount-Regeln."
     ]
    },
+   "recall": [
+    "Was passiert mit einem Schreibzugriff auf `.git` in `default`, in `auto`, in `dontAsk` und in `bypassPermissions`?",
+    "Welche Werkzeuge begrenzt die eingebaute Sandbox, und welche nicht?",
+    "Du willst generierten, unbekannten Code ausführen, ohne den Host zu gefährden. Welche Stufe brauchst du mindestens?"
+   ],
    "requires": [
     "S3.8"
    ],
@@ -2610,6 +2928,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir einen Zutrittscontroller mit drei zusätzlichen Sperren vor. Die Domain-Sperrliste ist eine feste Schwarzliste für bestimmte Ausgänge: Durch diese Tür kommt niemand, egal welcher Ausweis sonst gilt. `hard_deny` ist die Sicherheitsverriegelung, die auch der Bereichsleiter nicht übersteuert: Die Tür zum Hochsicherheitsbereich bleibt zu, selbst mit Generalschlüssel und guter Begründung. `disableSkillShellExecution` ist der versiegelte Wartungsport am RS-485-Bus: Über ein Update der Dienstanweisung gelangt kein fremder Code mehr in die Anlage.",
+   "answers": null,
    "area": "permissions",
    "checkpoint": "Du kannst für jeden der drei Schalter sagen, was er sperrt und in welcher Settings-Datei er wirkt, und begründen, in welchem Angriffsszenario `disableSkillShellExecution` den Unterschied macht.",
    "demo": null,
@@ -2632,6 +2951,11 @@
      "Protected Paths für `.claude/skills`, denn geschützte Pfade sperren auch das Ausführen der Skills darin."
     ]
    },
+   "recall": [
+    "Was passiert mit einer Domain, die in `deniedDomains` steht und zugleich von einem Platzhalter in `allowedDomains` getroffen wird?",
+    "Warum liest der Klassifikator `autoMode` nicht aus der `.claude/settings.json` eines Repos?",
+    "Wann gehört eine Sperre in `autoMode.hard_deny`, wann in `permissions.deny`?"
+   ],
    "requires": [
     "S3.9"
    ],
@@ -2664,6 +2988,7 @@
   {
    "aliases": [],
    "analogy": "Das ist wie die Aufbewahrungsrichtlinie für Videoaufnahmen. Der Consumer-Plan ist ein 30-Tage-Ringspeicher mit Opt-in-Archiv, und wer das Archiv erlaubt, erlaubt dem Hersteller auch, die Aufnahmen zur Produktverbesserung zu nutzen. Enterprise ist derselbe 30-Tage-Ringspeicher, aber ohne Weitergabe. ZDR sind Kameras, die laufen, aber nichts aufzeichnen: maximaler Datenschutz, dafür fällt die Wiedergabe weg.",
+   "answers": null,
    "area": "review",
    "checkpoint": "Du kannst die drei Aufbewahrungsstufen nennen und für EN 50131, DSGVO und NIS2 jeweils eine passende Kontrolle aus dem Kurs zuordnen: Plan, Schalter, Rechte-Regel oder Freigabe-Gate.",
    "demo": null,
@@ -2686,6 +3011,11 @@
      "Team-Plan, Anthropics API-Domain in `sandbox.network.deniedDomains`, Auto-Memory aus, `/autofix-pr` auf allen Branches erlaubt."
     ]
    },
+   "recall": [
+    "Wie lange werden Daten bei einem Pro-Plan aufbewahrt, wenn du Training erlaubst, und wie lange, wenn nicht?",
+    "Welche Funktionen fallen unter ZDR weg, und warum?",
+    "Womit schaltest du Auto-Memory für eine sensible Sitzung ab?"
+   ],
    "requires": [
     "S3.9"
    ],
@@ -2720,6 +3050,7 @@
     "3.4"
    ],
    "analogy": "Denk an die Einsatzplanung einer Wachzentrale. `/loop` ist der Wachmann, der selbst seine Runden dreht und aufhört, wenn seine Schicht endet. `/goal` ist der Einsatz, der weiterläuft, bis die Alarmzone wieder grün ist, egal wie lange das dauert. `/schedule` trägt eine Patrouille in den Schichtplan der Zentrale ein: Die Routine startet nach Kalender, auch wenn der Schichtleiter nicht da ist, und lässt sich pausieren und wieder aktivieren.",
+   "answers": null,
    "area": "automation",
    "checkpoint": "Du kannst für die drei Fälle „jetzt live im Terminal alle 5 Minuten\", „bis alle TypeScript-Fehler behoben sind\" und „jede Nacht um 02:00\" das passende Werkzeug wählen und seine Kostenform einschätzen.",
    "demo": null,
@@ -2742,6 +3073,11 @@
      "Routinen sind die dauerhafte Form von `/loop`, und `/schedule` plant ein einmaliges `/goal`; beide haben dieselben offenen Kosten."
     ]
    },
+   "recall": [
+    "Was passiert mit einem `/loop`, wenn du die Sitzung schließt?",
+    "Woran erkennt `/goal`, dass es fertig ist?",
+    "Warum sieht eine Routine deine lokalen, nicht gepushten Änderungen nicht?"
+   ],
    "requires": [
     "S2.4"
    ],
@@ -2773,6 +3109,7 @@
   {
    "aliases": [],
    "analogy": "Das Budget ist der Tank des Patrouillenfahrzeugs: Ist er leer, steht das Fahrzeug, statt bis zum Totalausfall weiterzufahren. Das Rundenlimit ist die Zahl der Runden im Fahrtenbefehl. Der Worktree ist der Prüfstand im Labor, ein Nachbau der Anlage, an dem der Nachtjob schrauben darf, ohne die echte Anlage anzufassen. Und `worktree.baseRef` auf `fresh` ist der verplombte Ausgangszustand zu Schichtbeginn: Jede Nachtpatrouille startet von derselben geprüften Basis.",
+   "answers": null,
    "area": "automation",
    "checkpoint": "Du kannst erklären, warum jeder unbeaufsichtigte Lauf ein Budget und ein Rundenlimit braucht, was in einer interaktiven Sitzung stattdessen begrenzt und wie ein Worktree deinen Hauptbranch schützt.",
    "demo": "../moderation/vorfuehren/s3-13-autonome-loops-absichern.md",
@@ -2795,6 +3132,11 @@
      "Der Worktree, denn jeder isolierte Lauf bekommt von Claude Code ein eigenes festes Budget zugeteilt."
     ]
    },
+   "recall": [
+    "Welche zwei Flags deckeln einen `claude -p`-Lauf, und was passiert, wenn eines davon erreicht ist?",
+    "Warum ist eine interaktive Sitzung, die mit `claude --max-budget-usd 1.00` startet, nicht gedeckelt?",
+    "Von wo zweigt ein Worktree mit `worktree.baseRef: \"fresh\"` ab, und warum passt das für Nachtläufe?"
+   ],
    "requires": [
     "S3.12",
     "S1.19"
@@ -2830,6 +3172,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir ein Intrusion-Detection-System vor, das seine Signaturen selbst aktualisiert. Es erkennt ein neues Angriffsmuster (Analyse), plant eine Gegenregel (Planung), testet sie im Sandbox-Modus ohne Wirkung auf den Betrieb (TDD), prüft, dass keine Fehlalarme entstehen (Quality Gate), und schreibt die Signatur in die Live-Datenbank (Commit). Gefährlich wird es, wenn das System lernt, Fehlalarme zu unterdrücken, statt seine Signaturen zu verbessern: Das ist der Schein-Fix in Reinform.",
+   "answers": null,
    "area": "automation",
    "checkpoint": "Du kannst die vier häufigsten Fehlerbilder des Self-Improve-Loops nennen, jedem eine Gegenmaßnahme zuordnen und erklären, warum der Loop an Hardware-Endpunkten nach EN 50131 nicht ohne Freigabe-Gate laufen darf.",
    "demo": "../moderation/vorfuehren/s3-14-self-improve-loop.md",
@@ -2852,6 +3195,11 @@
      "Er wird im Gedächtnis protokolliert; Memory-Drift umgeht das, weil `.agent-memory/` die Assertions direkt umschreibt."
     ]
    },
+   "recall": [
+    "Welche sechs Schritte hat eine Iteration, und wann wird committet?",
+    "Warum ist ein grünes Quality Gate kein Beweis für einen echten Fix?",
+    "Was hält das Gedächtnis fest, und welches Risiko entsteht daraus?"
+   ],
    "requires": [
     "S3.13"
    ],
@@ -2884,6 +3232,7 @@
   {
    "aliases": [],
    "analogy": "",
+   "answers": null,
    "area": null,
    "checkpoint": "Du kannst eine Übung aus Session 3 passend zu deinem Projekt wählen, sie bis zu ihrer Liste „Geschafft, wenn\" durcharbeiten und erklären, warum die Teile einer Fan-out-Aufgabe wirklich unabhängig voneinander sein müssen.",
    "demo": null,
@@ -2901,6 +3250,11 @@
    "order": 3150,
    "outcome": "Ich kann eine Übung aus Session 3 (mehrere Agenten, Security-Audit oder Domänen-Parser) passend zu meinem Projekt auswählen, sie selbstständig durchführen und an ihrer Liste „Geschafft, wenn“ belegen, dass sie gelungen ist.",
    "quiz": null,
+   "recall": [
+    "Welche Übungen der Prioritätenliste gehören zu Session 3, welche zu Session 4?",
+    "Woran erkennst du, dass eine Aufgabe Fan-out verträgt und keine Pipeline braucht?",
+    "Warum committest du keine Fixes an den Schwachstellen im Playground?"
+   ],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,
@@ -2917,6 +3271,7 @@
     "3.2"
    ],
    "analogy": "Mehr-Modell-Orchestrierung ist der Dienstplan einer Sicherheitsfirma bei einer neuen Türanlage. Der Senior-Architekt schreibt die Leistungsbeschreibung mit den Sicherheitsanforderungen. Die Techniker montieren Leser und verlegen Kabel parallel auf mehreren Etagen. Eine Junior-Streife macht den ersten, günstigen Kontrollgang und meldet Auffälliges. Die Abnahme unterschreibt der Senior-Ingenieur: jede Tür, jeder Leser, jede Kabeltrasse. Niemand lässt den Senior selbst Kabel ziehen, und niemand lässt die Junior-Streife die Anlage abnehmen.",
+   "answers": null,
    "area": "cost",
    "checkpoint": "Du kannst für eine konkrete Aufgabe, etwa einen Refactor des Wiegand-Frame-Parsers, die drei Phasen den passenden Modellen zuordnen und die Wahl mit Kosten und Urteilsbedarf begründen.",
    "demo": null,
@@ -2939,6 +3294,11 @@
      "Bei allen Sicherheitsbefunden, weil Haiku Sicherheitsprüfungen aus Kostengründen grundsätzlich gar nicht erst durchführt."
     ]
    },
+   "recall": [
+    "Warum gehören Planung und Abnahme auf das Opus-Tier, die Masse der Umsetzung aber nicht?",
+    "Was macht Haiku im Review, und wann geht ein Befund an Opus?",
+    "Was macht der Modellwert `opusplan`, und welche Phase deckt er nicht ab?"
+   ],
    "requires": [
     "S1.7",
     "S3.4"
@@ -2969,6 +3329,7 @@
   {
    "aliases": [],
    "analogy": "Der Codex-Schwarm ist ein externes Montageteam. Der Generalunternehmer (Claude) plant und nimmt ab, der Subunternehmer (Codex bei OpenAI) montiert parallel auf mehreren Etagen. Das geht schnell, aber der Subunternehmer ist ein anderer Anbieter und sieht alles, was im Montageplan steht. Stehen dort vertrauliche Details des Sicherheitskonzepts, etwa die Alarmzonen, die Berechtigungsmatrix oder die toten Winkel der Kameras, hast du ein Datenschutzproblem. Die Lösung: Der Subunternehmer bekommt nur den Kabelplan, nicht das Sicherheitskonzept.",
+   "answers": null,
    "area": "agents",
    "checkpoint": "Du kannst die Datenfluss-Grenze im Codex-Schwarm erklären, die drei Optionen für sensiblen Code nennen und begründen, ob euer Firmware-Code an Codex gehen darf.",
    "demo": "../moderation/vorfuehren/s4-02-codex-schwarm.md",
@@ -2991,6 +3352,11 @@
      "Ob ein Enterprise-Abo von Claude vorliegt, weil Claude Code die OpenAI-Modelle über seine eigene API lizenziert."
     ]
    },
+   "recall": [
+    "Welche Regeln gelten für den Code, den der Codex-Teil der Pipeline sieht, und welche nicht?",
+    "Nenne die drei Auswege für sensiblen Code.",
+    "Warum ist die Gesamtdauer eines Schwarms die des langsamsten Agenten und nicht die Summe?"
+   ],
    "requires": [
     "S4.1"
    ],
@@ -3023,6 +3389,7 @@
     "3.6"
    ],
    "analogy": "CI/CD ist die automatische Nachtrunde des Wachdienstes: kein Gespräch, eine feste Checkliste, eine Route mit festem Budget und am Ende ein Bericht über Auffälligkeiten. Die Streife am Tag reagiert auf das, was sie sieht, und trifft Einzelentscheidungen; die Nachtrunde läuft nach Plan. Beide gehören in dieselbe Leitstelle. Claude Code ist genauso beides: ein interaktiver Partner und ein Werkzeug, das ein Skript aufruft.",
+   "answers": null,
    "area": "automation",
    "checkpoint": "Du kannst erklären, was `claude -p` in einer Pipeline anders macht als interaktives `claude`, und eine Ausgabe per Schema erzwingen, die ein Skript aus `structured_output` liest.",
    "demo": "../moderation/vorfuehren/s4-03-headless.md",
@@ -3045,6 +3412,11 @@
      "Der Job hängt und wartet auf Eingaben, weil erst `--bare` den nicht-interaktiven Modus überhaupt einschaltet."
     ]
    },
+   "recall": [
+    "Was gibt `claude -p` bei Erfolg und bei einem Fehler als Exit-Code zurück?",
+    "In welchem Feld der JSON-Antwort steht das schema-konforme Ergebnis, in welchem die reine Textantwort?",
+    "Warum ist es für CI ein Vorteil, dass jeder Headless-Aufruf frisch startet?"
+   ],
    "requires": [
     "S1.13"
    ],
@@ -3071,6 +3443,7 @@
   {
    "aliases": [],
    "analogy": "Die automatische Nachtrunde des Wachdienstes aus S4.3 bekommt ein festes Tank- und Zeitbudget. Ist es verbraucht, bricht sie ab und meldet sich, statt die ganze Nacht weiterzufahren: Das sind `--max-budget-usd` und `--max-turns`. Sie bekommt außerdem einen Schlüssel für genau diesen Auftrag. Ein Abo-Token ist wie der persönliche Dienstausweis einer Person mit einem Jahr Gültigkeit, ein API-Key wie der Firmenschlüssel, den ein Team teilt. Und ohne `--bare` folgt die Runde allen Anweisungen und Sensoren, die sie am Einsatzort vorfindet, auch denen, die ein Fremder dort angebracht hat.",
+   "answers": null,
    "area": "automation",
    "checkpoint": "Du kannst für eine CI-Stufe den passenden Zugang wählen und begründen (API-Key mit `--bare` für fremden Code, Abo-Token nur ohne `--bare` auf vertrauenswürdigem Code), jeden Lauf mit `--max-budget-usd` und `--max-turns` deckeln und die Kosten mit einem Modell pro Phase und Prompt-Caching senken.",
    "demo": "../moderation/vorfuehren/s4-04-ci-zugang-und-kosten.md",
@@ -3093,6 +3466,11 @@
      "`effort: low` für alle Phasen, weil die Effort-Stufe mehr bewirkt als die Wahl des Modells."
     ]
    },
+   "recall": [
+    "Welche Zugangsdaten liest ein `claude --bare`-Aufruf, und welche nie?",
+    "Was passiert in einem `-p`-Lauf, wenn `ANTHROPIC_API_KEY` und `CLAUDE_CODE_OAUTH_TOKEN` beide gesetzt sind?",
+    "Was läuft auf deinem Runner mit, wenn ein `-p`-Job ohne `--bare` fremden Code auscheckt?"
+   ],
    "requires": [
     "S4.3"
    ],
@@ -3123,6 +3501,7 @@
   {
    "aliases": [],
    "analogy": "Die automatische Nachtrunde des Wachdienstes aus S4.3 fährt jetzt durch mehrere Gebäude. Die Checkliste ist überall dieselbe: die Route ohne Gespräch abfahren (`-p`), das Streifenformular ausfüllen (JSON), im Tank- und Zeitbudget bleiben (`--max-budget-usd`) und mit dem passenden Dienstausweis durch die Tür gehen (Zugangsdaten). Nur die Gebäude unterscheiden sich: GitHub und GitLab haben andere Türschilder und Schlüsselkästen, also andere YAML-Felder und Variablen.",
+   "answers": null,
    "area": "automation",
    "checkpoint": "Du kannst eine CI-Stufe aus den vier Bausteinen zusammensetzen (`claude -p`, JSON-Ausgabe, Budgetgrenze, passende Zugangsdaten), sie für GitHub Actions oder GitLab CI schreiben und erkennen, warum ein Job hängt, nicht angemeldet ist oder Prosa statt JSON liefert.",
    "demo": null,
@@ -3145,6 +3524,11 @@
      "`/autofix-pr` erreicht keine externen Deploy-Dienste und kann die eigentliche Fehlerursache deshalb gar nicht lesen."
     ]
    },
+   "recall": [
+    "Warum hängt ein CI-Job, der `claude` ohne `-p` aufruft?",
+    "Auf welchen drei Wegen erreicht ein Runner ohne direkten Internetzugang das Modell?",
+    "Was unterscheidet einen Git-Pre-Commit-Hook beim Blocken von einem PreToolUse-Hook von Claude Code?"
+   ],
    "requires": [
     "S4.4"
    ],
@@ -3179,6 +3563,7 @@
     "3.5"
    ],
    "analogy": "Remote Control ist die Fernbedienung der Leitstelle auf dem Diensthandy: Eine einzelne Person ist unterwegs und bedient dieselbe Anlage, die im Gebäude weiterläuft. Die Anlage bleibt, wo sie ist; das Handy ist nur ein zweites Bedienpult. Die Telegram-Bridge ist dagegen der Gruppenchat der Leitstelle: Mehrere Operatoren koordinieren sich, und jeder Auftrag hat einen Absender. Das ist flexibler, aber eigene Infrastruktur, die du selbst betreibst und absicherst.",
+   "answers": null,
    "area": "automation",
    "checkpoint": "Du kannst erklären, in welche Richtung Remote Control und `/teleport` arbeiten, beides aus einer laufenden Sitzung aufrufen und begründen, wann eine eigene Telegram-Bridge den Mehraufwand wert ist.",
    "demo": "../moderation/vorfuehren/s4-06-remote-und-teleport.md",
@@ -3201,6 +3586,11 @@
      "`remote-control` braucht einen MCP-Server als Push-Relay; `/teleport` nutzt dagegen OAuth und keinen weiteren Server."
     ]
    },
+   "recall": [
+    "Wo läuft die Sitzung, die du mit Remote Control vom Handy aus steuerst, und was muss dafür auf deinem Rechner laufen?",
+    "Was holt `/teleport` in dein Terminal, und was prüft es vorher?",
+    "Wann schickt `PushNotification` auch eine Nachricht aufs Handy?"
+   ],
    "requires": [
     "S1.3"
    ],
@@ -3230,6 +3620,7 @@
   {
    "aliases": [],
    "analogy": "Ein headless-Lauf ist die nächtliche Wachrunde nach Checkliste: Sie beginnt, arbeitet ihre Punkte ab und endet. Ein Dauer-Agent ist der Wachmann, der rund um die Uhr in der Pforte sitzt, einen Schlüsselbund trägt und Aufträge per Funk annimmt. Die entscheidende Frage ist nicht, ob er fleißig ist, sondern wer auf seiner Frequenz funken kann, und dass jeder Zettel, den er auf dem Rundgang aufhebt, eine neue Anweisung enthalten kann.",
+   "answers": null,
    "area": null,
    "checkpoint": "Du kannst für einen Dauer-Agenten zeigen, an welchen Stellen Text von außen zur Aktion wird, für jede Stelle ein Gegenmittel und seine Entsprechung in Claude Code nennen und den Agenten stoppen, ohne ihn darum zu bitten.",
    "demo": null,
@@ -3244,6 +3635,11 @@
    "order": 4065,
    "outcome": "Ich kann für einen Agenten im Dauerbetrieb die Stellen zeigen, an denen Text von außen zur Aktion wird, je Risiko ein belegtes Gegenmittel und seine Entsprechung in Claude Code nennen und den Agenten im Ernstfall stoppen.",
    "quiz": null,
+   "recall": [
+    "Warum reicht es nicht, dass nur du dem Bot schreiben darfst?",
+    "Welche Standardwerte halten bei OpenClaw den Eingang zu, und welche zwei lassen die Werkzeuge offen?",
+    "Was unterscheidet `openclaw channels logout` vom Widerruf eines Tokens beim Anbieter?"
+   ],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,
@@ -3296,6 +3692,7 @@
   {
    "aliases": [],
    "analogy": "Ein Worktree ist die Testbank aus S1.18: ein Nachbau der Anlage in einem eigenen Raum, mit derselben Ausstattung und getrennt vom Live-System. Mehrere Techniker arbeiten an mehreren Testbänken gleichzeitig, ohne sich in die Quere zu kommen. Alle Testbänke stehen aber im selben Gebäude.",
+   "answers": null,
    "area": "git",
    "checkpoint": "Du kannst für eine Aufgabe begründen, ob ein Worktree reicht oder ein Container nötig ist, `worktree.baseRef` für parallele Agenten ausdrücklich setzen und erklären, was `--tmux` beim Start mehrerer Worktree-Sitzungen tut.",
    "demo": "../moderation/vorfuehren/s4-07-isolation-docker-worktrees.md",
@@ -3318,6 +3715,11 @@
      "Weil `claude --worktree` ohne ausdrückliche Einstellung immer vom lokalen `HEAD` abzweigt und `fresh` nie der Standard ist."
     ]
    },
+   "recall": [
+    "Was isoliert ein Worktree, und was isoliert er nicht?",
+    "Wovon zweigt ein neuer Worktree mit `fresh` ab, wovon mit `head`?",
+    "Wie setzt du `worktree.baseRef` für einen einzigen Aufruf, ohne eine Settings-Datei zu ändern?"
+   ],
    "requires": [
     "S1.18"
    ],
@@ -3349,6 +3751,7 @@
   {
    "aliases": [],
    "analogy": "Stell dir vor, du hast für deine Software einen Sicherheitsleitstand (SOC) gebaut. Er überwacht laufend, ermittelt selbst, schickt Spezialisten los und isoliert riskante Arbeit. Er greift sich selbst mit Angriffstests an, behebt bestätigte Befunde und führt ein lückenloses Protokoll. Seine Meldungen kommen auf dem Kanal an, den du angeschlossen hast: Terminal, Web, Push-Nachricht oder eine eigene Brücke.",
+   "answers": null,
    "area": null,
    "checkpoint": "Du kannst eine kleine Playground-Mission eigenständig mit Claude Code treiben: den Umfang festlegen, ein Feature oder einen Fix umsetzen, einen Hook oder Guardrail ergänzen, eng verifizieren und eine PR-fertige Übergabe formulieren.",
    "demo": "../moderation/vorfuehren/s4-08-abschlussprojekt.md",
@@ -3371,6 +3774,11 @@
      "Worktrees umgehen eine Sperre, nach der ein Subagent mit einem kleineren Modell nicht direkt in den Arbeitsordner des Orchestrators schreiben darf."
     ]
    },
+   "recall": [
+    "Welche vier Ergebnisse muss dein Build liefern, und was gehört in die PR-Übergabe?",
+    "Ab wie vielen Punkten ist das Abschlussprojekt bestanden, und welche zwei Rubrik-Zeilen dürfen keine 0 haben?",
+    "Was unterscheidet in der Rubrik eine Verifikation mit 2 Punkten von einer mit 3?"
+   ],
    "requires": [
     "S3.4",
     "S3.8",
@@ -3414,6 +3822,7 @@
     "3.7"
    ],
    "analogy": "Stell dir eine Zutrittsanlage vor, an der eine Tür nicht aufgeht. Der Fehler kann am Sensor sitzen, in der Verkabelung, in der Zentrale oder in der Übertragung zur Leitstelle. Ein guter Techniker tauscht nicht zuerst den Leser. Er geht die Ebenen der Reihe nach durch und schließt jede mit einem kurzen Test aus: Störungssuche an der Alarmzentrale, Sensor → Verkabelung → Zentrale → Übertragung.",
+   "answers": null,
    "area": "troubleshooting",
    "checkpoint": "Du kannst für eine Diagnosefrage das passende Werkzeug nennen und erklären, warum `/context` und `--verbose` beschreiben, `/doctor` verordnet und `/debug` ermittelt.",
    "demo": null,
@@ -3436,6 +3845,11 @@
      "Nur das Format unterscheidet sie: `--verbose` gibt YAML aus, `/doctor` gibt JSON aus, damit CI-Pipelines die Befunde maschinell lesen."
     ]
    },
+   "recall": [
+    "Ab wann zeichnet `/debug` auf, und was musst du danach tun?",
+    "Wo findest du das Log, das `claude --debug` schreibt?",
+    "Was tut `/doctor`, bevor es etwas an deiner Einrichtung ändert?"
+   ],
    "requires": [
     "S1.4"
    ],
@@ -3463,6 +3877,7 @@
   {
    "aliases": [],
    "analogy": "Eine Tür geht nicht auf. Der Techniker tauscht nicht zuerst den Leser, sondern geht seine Liste in fester Reihenfolge durch und schließt jede Stufe mit einem kurzen Test aus: Ist das Programm der Zentrale geladen? Sind die Leser angemeldet? Stecken die Zusatzmodule? Ist die Controller-Logik scharf? Steht die Verbindung zur Leitstelle? Ist die Berechtigungsstufe für diese Kartenklasse freigegeben? Erst wenn all das stimmt, nimmt er sich die Karte selbst vor. In Claude Code heißen die Stufen CLAUDE.md, Skills, Plugins, Hooks, MCP und Rechte; die Karte ist dein Prompt.",
+   "answers": null,
    "area": "troubleshooting",
    "checkpoint": "Du kannst die Diagnose-Checkliste in der richtigen Reihenfolge durchgehen, für jeden der vier klassischen Hook-Fehler die Abhilfe nennen und einen Hook mit einer Eingabe im echten Format von Hand testen.",
    "demo": "../moderation/vorfuehren/s4-10-diagnose-schritt-fuer-schritt.md",
@@ -3485,6 +3900,11 @@
      "Den Matcher auf `\".*\"` erweitern, damit der Hook bei jedem Tool feuert und keinen Aufruf mehr verpasst."
     ]
    },
+   "recall": [
+    "Warum ist ein abgestürzter Schutz-Hook gefährlicher als einer, der alles blockt?",
+    "In welcher Reihenfolge prüfst du, wenn ein Skill installiert ist, aber nie ausgelöst wird?",
+    "Was gehört in den `matcher`, was ins Feld `if`?"
+   ],
    "requires": [
     "S4.9",
     "S2.8"

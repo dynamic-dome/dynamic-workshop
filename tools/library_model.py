@@ -44,6 +44,10 @@ QUIZ_BLOCK = re.compile(r"<details><summary>Quizfrage</summary>(.*?)</details>",
 QUIZ_QUESTION = re.compile(r"^\*\*Frage:\*\*\s*(.+?)\s*$", re.M)
 QUIZ_RIGHT = re.compile(r"^- \*\*Richtig:\*\*\s*(.+?)\s*$", re.M)
 QUIZ_WRONG = re.compile(r"^- Falsch:\s*(.+?)\s*$", re.M)
+ANSWER_SUMMARY = "<details><summary>Auflösung</summary>"
+ANSWER_BLOCK = re.compile(re.escape(ANSWER_SUMMARY) + r"(.*?)</details>", re.S)
+DETAILS_BLOCK = re.compile(r"<details>.*?</details>", re.S)
+NUMBERED = re.compile(r"^\d+\.\s+(.+?)\s*$", re.M)
 
 
 class ChapterError(Exception):
@@ -94,6 +98,8 @@ class Chapter:
     mermaid: list
     links: list
     demo: Path | None = None  # file in the moderation layer, if this chapter has a demo
+    recall: list = field(default_factory=list)  # numbered recall questions of the Check section
+    answers: list | None = None  # their answers from the block "Auflösung"; None if the chapter has no such block
 
     @property
     def order(self) -> int:
@@ -273,6 +279,22 @@ def _quiz(check_text: str):
     return Quiz(question.group(1) if question else "", rights[0] if rights else "", wrong, len(rights))
 
 
+def _recall(check_text: str):
+    """(questions, answers or None): the numbered questions of '## Check' and the block that answers them.
+
+    Questions are the numbered items outside any <details>. An answer block that is opened but not closed
+    yields an empty answer list, so the validator sees a count that cannot match.
+    """
+    text = check_text or ""
+    block = ANSWER_BLOCK.search(text)
+    if block and '<details>' not in block.group(1):
+        answers = NUMBERED.findall(block.group(1))
+    else:  # no block, or one that runs into the next <details> because its own </details> is missing
+        answers = [] if ANSWER_SUMMARY in text else None
+    outside = DETAILS_BLOCK.sub("", text).split("<details>", 1)[0]
+    return NUMBERED.findall(outside), answers
+
+
 def _links(body: str) -> list:
     out, in_fence = [], False
     for line in body.split("\n"):
@@ -306,6 +328,7 @@ def parse_chapter(path) -> Chapter:
     mermaid = [content for text in sections.values() for fl, content, _ in _fences(text) if fl == "mermaid"]
     minutes = front.get("minutes")
     demo = demo_dir(path.parent) / path.name
+    recall, answers = _recall(sections.get("Check", ""))
     return Chapter(
         path=path,
         id=str(front.get("id", "")),
@@ -337,6 +360,8 @@ def parse_chapter(path) -> Chapter:
         mermaid=mermaid,
         links=_links(body),
         demo=demo if demo.is_file() else None,
+        recall=recall,
+        answers=answers,
     )
 
 

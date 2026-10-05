@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P2: 688).
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P3: 696).
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -27,8 +27,8 @@
 |---|---|---|---|
 | P0 | Gate fällt geschlossen; „nur exit 2“ präzisiert (R1, R2) | — | [x] `fcab910` |
 | P1 | Moderationsschicht: „Vorführen“ aus den Kapiteln in eigene Dateien | — | [x] `d6c40d5`, `597f9ce` |
-| P2 | Cockpit und Tutor zeigen bei „durcharbeiten“ Lehrtext und Übung (R19) | P1 | [x] siehe Abschluss P2 |
-| P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [ ] |
+| P2 | Cockpit und Tutor zeigen bei „durcharbeiten“ Lehrtext und Übung (R19) | P1 | [x] `4c98ba0` |
+| P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [x] siehe Abschluss P3 |
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [ ] |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [ ] |
 | P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [ ] |
@@ -204,6 +204,19 @@ Je Antwort ein bis drei Sätze, nur aus dem Kapiteltext belegbar, gleiche Nummer
 
 **Fertig, wenn:** Suite grün, Negativprobe gesehen (eine Antwort zu wenig → Validator rot), S1.1 im Cockpit mit
 aufklappbarer Auflösung, Cockpit-Datei unter der Größengrenze von 3 MB.
+
+### Abschluss P3 (2026-10-05)
+
+- Format wie oben beschrieben; der Parser liefert je Kapitel `recall` und `answers` (`None` ohne Block).
+- Validator: `answers-count` (Anzahl ungleich, leere Antwort, Block ohne Fragen, Block nicht geschlossen),
+  `answers-required` für Kapitel aus `tools/fixtures/answers-required.txt` (heute: S1.1). Negativprobe am echten
+  Kapitel gesehen (eine Antwort entfernt → Exit 1).
+- `validate` nennt am Ende den Fortschritt. Stand: Lektionen mit Übung 27 von 61, mit Auflösung 1 von 61.
+- Cockpit: Die Kurzansicht zeigt jetzt die Abruffragen (vorher gar nicht) und je Frage eine eigene, eingeklappte
+  Auflösung; in der Vollansicht steht der Block aus dem Kapitel. Datei 2,53 MB.
+- Tutor: stellt die Fragen einzeln, zeigt die Auflösung erst nach der Antwort.
+- Anleitung für alle, die Auflösungen schreiben: ein bis drei Sätze, eine Zeile je Antwort, gleiche Nummer wie
+  die Frage, nur was im Kapitel steht.
 
 ---
 

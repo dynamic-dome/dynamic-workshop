@@ -56,6 +56,9 @@ def catalog(lib):
                      if ch.quiz else None),
             # moderation layer: demo and moderator notes, relative to the library folder (or None)
             "demo": _demo_link(ch),
+            # recall questions of the Check section and their answers (None: the chapter has no answer block yet)
+            "recall": list(ch.recall),
+            "answers": list(ch.answers) if ch.answers is not None else None,
         })
     cat["shelves"] = [{k: s.get(k, "") for k in ("id", "title", "zone", "purpose", "intro")} for s in lib.shelves]
     return cat
