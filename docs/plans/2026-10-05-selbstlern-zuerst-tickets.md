@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7c: 729) und `python tools/build_library.py validate --complete`.
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7d: 729) und `python tools/build_library.py validate --complete`.
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -32,7 +32,7 @@
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] `664d5ca` |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [x] `359c9db` und Folge-Commit, siehe Abschluss P5 |
 | P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a, S2.20 mit P7c erledigt; S3.15 folgt mit P7e |
-| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d bis P7f [ ] |
+| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e, P7f [ ] (Schreiber fertig oder laufend, siehe „Stand P7e und P7f“) |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [ ] |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [ ] |
 
@@ -558,6 +558,41 @@ Danach übernimmt, wer abnimmt: alle Kapitel lesen, jede Hauptübung durchspiele
   Sitzung, alles Interaktive unter Windows.
 - **Für P8 notiert:** `claude plugin list` zeigt über claude.ai gekommene Plugins in einem eigenen Abschnitt; die
   Moderationsdateien zu S2.11, S2.14 und S2.18 beschreiben noch die alten Demos.
+
+### Abschluss P7d (2026-10-05)
+
+- **Schreiber** (Sonnet, acht Commits `8861587..b4e5abd`): S3.1 bis S3.7 und X.3. Jedes Kapitel des Agenten-Regals
+  hat jetzt eine Hauptübung (vier von sieben hatten keine). S3.6 funktioniert ohne Plugin und ohne Playground:
+  Ankläger und Verteidiger als eigene Subagenten an einem Türprogramm mit 40 Zeilen, Auflösung nach der Übung; die
+  Aussage „zwei Scanner einig, also echt“ ist ersetzt. Übernommen als Merge `8e75575`.
+- **Durchgespielt:** alle Hauptübungen und die Extras von S3.1 (Fork) und S3.6 (Test belegt den Fehler). S3.1, S3.2,
+  S3.4, S3.6 und S3.7 liefen wie geschrieben; `/security-review` arbeitet gegen ein lokales Bare-Repository als
+  `origin`. **S3.3 korrigiert:** Wer um die Schreibfreigabe bittet, ist an der Rückfrage nicht abzulesen (beim
+  lesenden Agenten fragte das Hauptgespräch, beim Agenten mit falschem Feldnamen der Subagent selbst); beide werden
+  jetzt zuerst nach ihren Werkzeugen gefragt. **S3.5 korrigiert:** Nach `/exit` in einer angehängten Sitzung landet
+  man auf der Tafel, nicht in der Shell (`Esc`). Auf dem Testrechner blieb kein Hintergrunddienst zurück.
+- **Vertrag:** Minuten S3.1 20, S3.2 15, S3.3 25, S3.4 25, S3.5 20, S3.6 35, S3.7 25, X.3 25; Katalog, Golden. Fünf
+  alte Codeblöcke mit Begründung.
+- **Codex-Gegenprüfung (lesend, zwei Läufe):** beide FAIL, vier Befunde, alle bestätigt und eingearbeitet
+  (`3a0f513`): `omitClaudeMd` (S3.2, S3.1), CLAUDE.md kommt trotz eigenem System-Prompt an (S3.3), Platzhalter im
+  Suchbefehl (S3.6), „der Ordner“ als Grenze (X.3).
+- **Nicht durchgespielt:** die Inventur in X.3, `--agents`, alles unter Windows.
+- **Offen (→ P8, mit R24):** S3.7 vor S3.6 stellen und S3.6 teilen (ändert Kapitelbestand oder Nummern);
+  Voraussetzungen S3.6 → S3.3 und S3.7 → S1.17; ein Quizblock in Community-Kapiteln (der Validator lässt keinen zu);
+  X.3 nennt den Wegwerf-Ordner an zwei Stellen noch als äußere Grenze (mit F7 prüfen).
+
+### Stand P7e und P7f (2026-10-05, 16:20)
+
+- **P7e:** Schreiber fertig, Worktree `~/AI/worktrees/workshop-p7e`, Branch `p7e-schreiber` (neun Commits
+  `a107ff0..f1a92ab`, Basis `b72b648`). Noch nicht gelesen, nicht durchgespielt, nicht gemergt. Vom Schreiber als
+  unsicher gemeldet, in dieser Reihenfolge: S3.13 (Stopp am Turn-Limit, Exit-Wert, Worktree aufräumen), S3.8
+  (Ask-Regel beim Commit in `dontAsk`), S3.12 (`/loop`, `/goal`), S3.10 (`echo` im Skill ohne Rückfrage), S3.14
+  (hält Claude die Konvention im ersten Lauf wirklich nicht ein?), S4.1 (zweite Modellzeile in `/cost` nach
+  `opusplan`). S3.11 bringt eine Python-Fassung des Scanner-Hooks mit, die keine getestete Vorlage ist: bei der
+  Abnahme entscheiden (als Vorlage mit Test aufnehmen oder streichen). Neun alte Codeblöcke brauchen eine Begründung.
+  Danach S3.15 als Abschluss von Session 3 neu schreiben (Muster S1.20, S2.20).
+- **P7f:** Schreiber gestartet, Worktree `~/AI/worktrees/workshop-p7f`, Branch `p7f-schreiber` (Basis `8e75575`):
+  S4.3 bis S4.7, S4.9, S4.10, X.4.
 
 ---
 
