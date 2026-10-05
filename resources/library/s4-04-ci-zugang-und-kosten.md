@@ -33,7 +33,7 @@ aliases: []
 
 ## Auf einen Blick
 
-`claude -p` ohne `--bare` führt die Hooks und MCP-Server eines fremden Repos aus, ohne Vertrauensdialog. Für Code, den du nicht selbst geschrieben hast, nimmst du deshalb einen API-Key und `--bare`. Ein Abo-Token aus `claude setup-token` liest `--bare` nie; es gehört nur in Jobs ohne `--bare` auf Code, dem du vertraust. Jeden unbeaufsichtigten Lauf deckelst du mit `--max-budget-usd` und `--max-turns`. Die Kosten-Feinarbeit über Wochen steht in anderen Kapiteln; hier gibt es dazu nur Verweise.
+`claude -p` ohne `--bare` führt die Hooks und MCP-Server eines fremden Repos aus, ohne Vertrauensdialog. Für Code, den du nicht selbst geschrieben hast, nimmst du deshalb einen API-Key und `--bare`. Ein Abo-Token aus `claude setup-token` liest `--bare` nie; es gehört nur in Jobs ohne `--bare` auf Code, dem du vertraust. Jeden unbeaufsichtigten Lauf deckelst du mit `--max-budget-usd` und `--max-turns`. Der Kosten-Feinschliff über Wochen steht in anderen Kapiteln; hier gibt es dazu nur Verweise.
 
 ## Bild im Kopf
 
