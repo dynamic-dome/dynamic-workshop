@@ -33,7 +33,7 @@
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [x] `359c9db` und Folge-Commit, siehe Abschluss P5 |
 | P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a, S2.20 mit P7c, S3.15 mit P7e erledigt |
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [x] cc1052a |
-| P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [ ] |
+| P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [x] siehe „Abschluss P8“ |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [ ] |
 
 DCO-Todos unter #9632: P1 #9636 · P2 #9637 · P3 #9638 · P4 #9639 · P5 #9640 · P6 #9641 · P7 #9642 · P8 #9643 · P9 #9644.
@@ -668,7 +668,7 @@ Haiku-Datum, X.1), R11 (bis auf „Stop feuert nach jeder Antwort“), R23 für 
 | P8b | Vorlagen: Python-Fassungen von `redact-output` und `token-firewall` mit Tests (laufen unter Windows ohne Git Bash und `jq`; die Bash-Fassungen bleiben), Bash-Scanner blockt die Eingabe `null`; Windows-Weg der beiden Extras in S2.10 | [x] `cf44429` |
 | P8c | Moderationsschicht nachziehen: Die Dateien zu S1.10, S1.13, S1.16, S1.18, S1.19, S2.8 (R7), S2.11, S2.14, S2.18, S3.8, S3.13, S3.14, S4.2 beschreiben Demos an Übungsständen, die es im Kapitel nicht mehr gibt; die Dateien zu den P7f-Kapiteln gegenlesen | [x] `dbed0c3` |
 | P8d | Kleine Hinweise aus den Läufen: S3.13 (Hooks aus den Benutzer-Einstellungen hinterlassen Dateien im Worktree), S4.3 (`--output-format json` als Array bei `verbose`), X.3 (Wegwerf-Ordner als Grenze), `claude plugin list` (eigener Abschnitt für claude.ai-Plugins), `/model`-Vorgabe | [x] `2345d5b` |
-| P8e | Aufbau (R24, R29, R30 und die Voraussetzungen): Voraussetzungen umgesetzt (siehe „Stand P8e“); der Rest braucht eine Entscheidung des Owners | [ ] teilweise |
+| P8e | Aufbau (R24, R29, R30 und die Voraussetzungen): Voraussetzungen umgesetzt (siehe „Stand P8e“); der Rest braucht eine Entscheidung des Owners | [x] `b58c76d`; Rest entschieden: bleibt, wie es ist |
 
 **Abweichung von der Paketbeschreibung, mit Begründung.** Die Beschreibung nennt `.ps1`-Fassungen für Schwärzung und
 Token Firewall. Gebaut werden Python-Fassungen: eine Datei für alle Systeme, ohne `jq`, wie beim Gate
@@ -713,6 +713,15 @@ und Golden neu.
   `--output-format json` (Array statt Objekt, durch einen Lauf belegt); S3.13 sagt, was zu tun ist, wenn git einen
   Worktree mit fremden Dateien nicht entfernt. Ohne Änderung geprüft: `claude plugin list` (steht in S2.12),
   `/model`-Vorgabe (von `model-config.md` gedeckt).
+
+### Abschluss P8 (2026-10-05)
+
+Der Owner hat entschieden (Fragerunde 1 unter P9, „alle wie empfohlen“): **E1** Der Aufbau bleibt. Kein Kapitel wird
+geteilt, nichts umnummeriert; R24 und R30 sind damit geschlossen (Begründung dort). **E2** Die Moderationsschicht
+bleibt in der Form von P8c. P8 ist damit fertig: P8a `f55d9a9`, P8b `cf44429`, P8c `dbed0c3`, P8d `2345d5b`, P8e
+`b58c76d`, Codex-Korrekturen `b1a5243`. 769 Tests, `validate --complete` ohne Befund. Nicht umgesetzt und begründet
+abgelegt: die Voraussetzungen S3.7 → S1.17, S3.10 → S2.5, X.4 → S3.13/S4.4 und die Vorschläge der Schreiber zu S1.11
+und S1.15.
 
 ### Stand P8c und Codex-Gegenprüfung (2026-10-05)
 
@@ -787,7 +796,7 @@ Bilder: `~/AI/analysis-artifacts/workshop-review-2026-10-05/cockpit-2026-10-05/`
 - Sechs Ansichten (`renderStart`, `renderPlacement`, `renderPath`, `renderLibrary`, `renderChapter`,
   `renderReview`), eine erzeugte Datei von 2,9 MB, 14 Browser-Tests.
 
-### Fragerunde 1 (gestellt am 2026-10-05, offen; DCO #9657)
+### Fragerunde 1 (gestellt und beantwortet am 2026-10-05: „alle wie empfohlen“; DCO #9657)
 
 Vorab zwei Entscheidungen zu P8:
 
