@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 6 Etappen, zusammen etwa 12 Stunden (669 Min durcharbeiten, 50 Min überfliegen).
+**Umfang:** 6 Etappen, zusammen etwa 13 Stunden (730 Min durcharbeiten, 50 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -49,16 +49,16 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
 - [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) — durcharbeiten
 
-## Etappe 5 (~134 Min)
+## Etappe 5 (~135 Min)
 
 - [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) 🛡 — durcharbeiten
 - [S4.1 Das richtige Modell pro Phase](../library/s4-01-modell-pro-phase.md) — durcharbeiten
 - [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) — durcharbeiten
 - [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) 🛡 — durcharbeiten
 - [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](../library/s4-05-ci-pipelines.md) — durcharbeiten
+
+## Etappe 6 (~90 Min)
+
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
-
-## Etappe 6 (~30 Min)
-
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

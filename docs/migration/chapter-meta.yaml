@@ -735,7 +735,7 @@
   title: 'Headless: claude -p als Pipeline-Stufe'
   shelf: headless-ci
   level: deep-dive
-  minutes: 15
+  minutes: 25
   requires:
   - S1.13
   safety_floor: false
@@ -748,7 +748,7 @@
   title: CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff
   shelf: headless-ci
   level: deep-dive
-  minutes: 18
+  minutes: 30
   requires:
   - S4.3
   safety_floor: true
@@ -760,7 +760,7 @@
   title: CI-Pipelines bauen mit GitHub Actions und GitLab
   shelf: headless-ci
   level: deep-dive
-  minutes: 18
+  minutes: 30
   requires:
   - S4.4
   safety_floor: false
@@ -772,7 +772,7 @@
   title: 'Unterwegs: Remote Control und /teleport'
   shelf: remote-isolation
   level: bonus
-  minutes: 12
+  minutes: 20
   requires:
   - S1.3
   safety_floor: false
@@ -785,7 +785,7 @@
   title: Isolation mit Docker und Worktrees
   shelf: remote-isolation
   level: bonus
-  minutes: 15
+  minutes: 25
   requires:
   - S1.18
   safety_floor: false
@@ -811,7 +811,7 @@
   title: 'Fehlersuche: /debug, --verbose, /doctor'
   shelf: troubleshooting
   level: core
-  minutes: 15
+  minutes: 30
   requires:
   - S1.4
   safety_floor: false
@@ -824,7 +824,7 @@
   title: Diagnose Schritt für Schritt
   shelf: troubleshooting
   level: core
-  minutes: 18
+  minutes: 30
   requires:
   - S4.9
   - S2.8
@@ -887,7 +887,7 @@
   title: 'Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann'
   shelf: community
   level: bonus
-  minutes: 15
+  minutes: 35
   after: S4.7
   requires: []
   safety_floor: false

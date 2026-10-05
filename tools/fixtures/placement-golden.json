@@ -517,13 +517,13 @@
     "n": 4
    },
    {
-    "minutes": 93,
+    "minutes": 120,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 628
+   "work_min": 655
   },
   "version": 1,
   "warnings": []
@@ -1543,12 +1543,12 @@
   ],
   "stages": [
    {
-    "minutes": 133,
+    "minutes": 142,
     "n": 1
    }
   ],
   "totals": {
-   "skim_min": 103,
+   "skim_min": 112,
    "work_min": 30
   },
   "version": 1,
@@ -2060,12 +2060,12 @@
     "n": 1
    },
    {
-    "minutes": 127,
+    "minutes": 140,
     "n": 2
    }
   ],
   "totals": {
-   "skim_min": 185,
+   "skim_min": 198,
    "work_min": 120
   },
   "version": 1,
@@ -2511,7 +2511,7 @@
     "id": "S4.4",
     "override": false,
     "reason": "new",
-    "stage": 4,
+    "stage": 5,
     "status": "work"
    },
    {
@@ -2585,17 +2585,17 @@
     "n": 3
    },
    {
-    "minutes": 143,
+    "minutes": 135,
     "n": 4
    },
    {
-    "minutes": 81,
+    "minutes": 150,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 50,
-   "work_min": 584
+   "work_min": 645
   },
   "version": 1,
   "warnings": []
@@ -3096,7 +3096,7 @@
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 7,
+    "stage": 8,
     "status": "work"
    }
   ],
@@ -3126,13 +3126,17 @@
     "n": 6
    },
    {
-    "minutes": 124,
+    "minutes": 142,
     "n": 7
+   },
+   {
+    "minutes": 30,
+    "n": 8
    }
   ],
   "totals": {
-   "skim_min": 85,
-   "work_min": 886
+   "skim_min": 94,
+   "work_min": 925
   },
   "version": 1,
   "warnings": [
@@ -3683,13 +3687,13 @@
     "n": 4
    },
    {
-    "minutes": 93,
+    "minutes": 120,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 613
+   "work_min": 640
   },
   "version": 1,
   "warnings": [
@@ -4191,7 +4195,7 @@
     "id": "S4.8",
     "override": false,
     "reason": "capstone",
-    "stage": 8,
+    "stage": 9,
     "status": "work"
    },
    {
@@ -4246,17 +4250,17 @@
     "n": 7
    },
    {
-    "minutes": 148,
+    "minutes": 99,
     "n": 8
    },
    {
-    "minutes": 63,
+    "minutes": 145,
     "n": 9
    }
   ],
   "totals": {
-   "skim_min": 57,
-   "work_min": 1133
+   "skim_min": 63,
+   "work_min": 1160
   },
   "version": 1,
   "warnings": []
@@ -4736,14 +4740,14 @@
     "id": "S4.8",
     "override": false,
     "reason": "capstone",
-    "stage": 10,
+    "stage": 11,
     "status": "work"
    },
    {
     "id": "S4.9",
     "override": false,
     "reason": "new",
-    "stage": 10,
+    "stage": 11,
     "status": "work"
    },
    {
@@ -4799,17 +4803,17 @@
     "n": 9
    },
    {
-    "minutes": 148,
+    "minutes": 130,
     "n": 10
    },
    {
-    "minutes": 48,
+    "minutes": 145,
     "n": 11
    }
   ],
   "totals": {
    "skim_min": 0,
-   "work_min": 1461
+   "work_min": 1540
   },
   "version": 1,
   "warnings": []
@@ -5332,13 +5336,13 @@
     "n": 4
    },
    {
-    "minutes": 93,
+    "minutes": 120,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 628
+   "work_min": 655
   },
   "version": 1,
   "warnings": []
@@ -5861,13 +5865,13 @@
     "n": 4
    },
    {
-    "minutes": 93,
+    "minutes": 120,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 51,
-   "work_min": 628
+   "work_min": 655
   },
   "version": 1,
   "warnings": []
@@ -6354,14 +6358,14 @@
     "id": "S4.9",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
     "id": "S4.10",
     "override": false,
     "reason": "new",
-    "stage": 5,
+    "stage": 6,
     "status": "work"
    },
    {
@@ -6390,17 +6394,17 @@
     "n": 4
    },
    {
-    "minutes": 134,
+    "minutes": 135,
     "n": 5
    },
    {
-    "minutes": 30,
+    "minutes": 90,
     "n": 6
    }
   ],
   "totals": {
    "skim_min": 50,
-   "work_min": 669
+   "work_min": 730
   },
   "version": 1,
   "warnings": []
@@ -6927,13 +6931,13 @@
     "n": 5
    },
    {
-    "minutes": 113,
+    "minutes": 140,
     "n": 6
    }
   ],
   "totals": {
    "skim_min": 69,
-   "work_min": 718
+   "work_min": 745
   },
   "version": 1,
   "warnings": []
@@ -7484,7 +7488,7 @@
     "n": 11
    },
    {
-    "minutes": 33,
+    "minutes": 60,
     "n": 12
    },
    {
@@ -7494,7 +7498,7 @@
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 628
+   "work_min": 655
   },
   "version": 1,
   "warnings": []
@@ -8501,7 +8505,7 @@
     "id": "S4.10",
     "override": false,
     "reason": "new",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    },
    {
@@ -8534,17 +8538,17 @@
     "n": 5
    },
    {
-    "minutes": 126,
+    "minutes": 129,
     "n": 6
    },
    {
-    "minutes": 30,
+    "minutes": 60,
     "n": 7
    }
   ],
   "totals": {
-   "skim_min": 72,
-   "work_min": 788
+   "skim_min": 78,
+   "work_min": 815
   },
   "version": 1,
   "warnings": []
@@ -9031,14 +9035,14 @@
     "id": "S4.9",
     "override": false,
     "reason": "assess",
-    "stage": 2,
+    "stage": 3,
     "status": "skim"
    },
    {
     "id": "S4.10",
     "override": false,
     "reason": "assess",
-    "stage": 2,
+    "stage": 3,
     "status": "skim"
    },
    {
@@ -9055,16 +9059,16 @@
     "n": 1
    },
    {
-    "minutes": 149,
+    "minutes": 144,
     "n": 2
    },
    {
-    "minutes": 9,
+    "minutes": 27,
     "n": 3
    }
   ],
   "totals": {
-   "skim_min": 185,
+   "skim_min": 198,
    "work_min": 120
   },
   "version": 1,
@@ -9588,13 +9592,13 @@
     "n": 4
    },
    {
-    "minutes": 123,
+    "minutes": 150,
     "n": 5
    }
   ],
   "totals": {
    "skim_min": 43,
-   "work_min": 653
+   "work_min": 680
   },
   "version": 1,
   "warnings": [
@@ -10129,13 +10133,13 @@
     "n": 5
    },
    {
-    "minutes": 113,
+    "minutes": 140,
     "n": 6
    }
   ],
   "totals": {
    "skim_min": 50,
-   "work_min": 778
+   "work_min": 805
   },
   "version": 1,
   "warnings": []
@@ -10622,7 +10626,7 @@
     "id": "S4.9",
     "override": false,
     "reason": "new",
-    "stage": 6,
+    "stage": 7,
     "status": "work"
    },
    {
@@ -10662,17 +10666,17 @@
     "n": 5
    },
    {
-    "minutes": 150,
+    "minutes": 141,
     "n": 6
    },
    {
-    "minutes": 48,
+    "minutes": 90,
     "n": 7
    }
   ],
   "totals": {
-   "skim_min": 88,
-   "work_min": 833
+   "skim_min": 94,
+   "work_min": 860
   },
   "version": 1,
   "warnings": []

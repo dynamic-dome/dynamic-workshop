@@ -96,10 +96,10 @@ claude --model opus
 
 **Startzustand:** ein neuer, leerer Ordner `~/cc-workshop/phasen` (`mkdir -p ~/cc-workshop/phasen && cd ~/cc-workshop/phasen`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\phasen" | Out-Null; Set-Location "$HOME\cc-workshop\phasen"`). Du nutzt nur Start-Flags, die für die Sitzung gelten. Gib in diesen Sitzungen weder `/model` noch `/effort` ein, denn beide würden deine Wahl als Standard speichern. Fehlt dir der Zugang zu einem Modell, lass die Phase aus.
 
-1. **Phase 1 und 2.** Starte `claude --model opusplan --permission-mode plan` und gib ein: `Plan a small Python script wordcount.py that prints the number of words in a text file given as its first argument. Do not write code yet.` Claude liest und legt einen Plan vor. Wähl bei der Freigabe die Variante, bei der du jede Änderung einzeln bestätigst (die Doku nennt: automatisch, Änderungen automatisch annehmen oder einzeln freigeben). Bestätige das Anlegen von `wordcount.py`. Erwartet: Die Datei entsteht erst nach der Freigabe.
+1. **Phase 1 und 2.** Starte `claude --model opusplan --permission-mode plan` und gib ein: `Plan a small Python script wordcount.py that prints the number of words in a text file given as its first argument. Do not write code yet.` Claude liest und legt einen Plan vor. Wähl bei der Freigabe die Variante, bei der du jede Änderung einzeln bestätigst (die Doku nennt: automatisch, Änderungen automatisch annehmen oder einzeln freigeben). Bestätige das Anlegen von `wordcount.py`. Erwartet: Die Datei entsteht erst nach der Freigabe. Will Claude danach Prüfbefehle ausführen, kannst du sie bestätigen oder ablehnen; warte, bis die Antwort fertig ist, bevor du weitermachst.
 2. **Ablesen.** Gib `/cost` ein. Erwartet: Im Block „Session“ steht „Usage by model“, nach der Doku mit einer Zeile je Modell. Hier sollten zwei Zeilen stehen, eine mit einem Opus- und eine mit einem Sonnet-Namen; der Plan lief auf dem einen, die Umsetzung auf dem anderen. Notier die Namen und Beträge. Schließ die Ansicht mit `Esc`. Gib dann `/status` ein, notier die Modellzeile und schließ die Ansicht mit `Esc`. Beende die Sitzung mit `/exit`.
-3. **Phase 3.** Starte `claude --model haiku --permission-mode default` und gib ein: `Review wordcount.py. List only clear defects with the line they are on. Mark anything you are unsure about as "ask a stronger model". Do not change the file.` Erwartet: eine kurze Liste, getrennt nach eindeutigen Befunden und unsicheren Punkten. Beende die Sitzung.
-4. **Entscheide.** Ordne jeden Befund einer Entscheidung zu: zurück an die Umsetzung, an `opus` oder verwerfen. Schreib auf, ob du `opus` hier den ganzen Code oder nur die markierten Stellen lesen ließest und warum. Die Datei ist klein; bei einem sicherheitskritischen Programm wäre die Antwort eine andere.
+3. **Phase 3.** Starte `claude --model haiku --permission-mode default` und gib ein: `Review wordcount.py. List only clear defects with the line they are on. Mark anything you are unsure about as "ask a stronger model". Do not change the file.` Erwartet: eine kurze Liste, getrennt nach eindeutigen Befunden und unsicheren Punkten, oder die Auskunft, dass es keine eindeutigen Befunde gibt (so im Probelauf). Beende die Sitzung.
+4. **Entscheide.** Ordne jeden Befund einer Entscheidung zu: zurück an die Umsetzung, an `opus` oder verwerfen. Hat Haiku nichts gefunden, entscheide, ob dir das für dieses Programm genügt. Schreib auf, ob du `opus` hier den ganzen Code oder nur die markierten Stellen lesen ließest und warum. Die Datei ist klein; bei einem sicherheitskritischen Programm wäre die Antwort eine andere.
 5. **Deine Aufgabe.** Nimm eine echte Aufgabe der nächsten Woche. Schreib die drei Phasen auf, je Phase den Alias und zwei Sätze Begründung zu Urteilsbedarf und Kosten.
 6. **Standard prüfen.** Starte `claude` ohne Flags und lies die Kopfzeile. Sie nennt dein gewohntes Modell, nicht `haiku` oder `opusplan`.
 
@@ -108,7 +108,7 @@ claude --model opus
 **Geschafft, wenn:**
 
 - [ ] `/cost` nach der Sitzung mit `opusplan` zwei Modelle nannte und du ihre Namen notiert hast
-- [ ] du jeden Befund der Haiku-Prüfung einer Entscheidung zugeordnet und begründet hast, was `opus` liest
+- [ ] du jeden Befund der Haiku-Prüfung einer Entscheidung zugeordnet (oder „kein Befund“ bewertet) und begründet hast, was `opus` liest
 - [ ] du für deine echte Aufgabe drei Phasen mit je einem Alias und einer Begründung aufgeschrieben hast
 - [ ] die Kopfzeile von `claude` ohne Flags dein gewohntes Modell nennt
 

@@ -168,3 +168,20 @@ ed60d5009d964f80 resources/modules/block-3-advanced.md:962 P7e/S3.12: entfernt. 
 b8269c2977ef8482 resources/exercises/block-3-exercises.md:241 P7e/S3.12: ersetzt. Das nackte `/schedule` der alten Optionen A und B ist jetzt ein Extra mit Auftrag, Lauf und Löschen der Routine; die Hauptübung bleibt in der Sitzung.
 b8269c2977ef8482 resources/exercises/block-3-exercises.md:248 P7e/S3.12: ersetzt. Das nackte `/schedule` der alten Optionen A und B ist jetzt ein Extra mit Auftrag, Lauf und Löschen der Routine; die Hauptübung bleibt in der Sitzung.
 2699ba04e0d66b5e resources/exercises/block-3-exercises.md:255 P7e/S3.12: ersetzt durch `/loop 1m` mit einem Auftrag, dessen Durchgänge sich zählen lassen.
+547a37a03b843e0a resources/modules/block-3-advanced.md:1202 P7f/S4.7: ersetzt. Das Beispiel mit `git worktree add` von Hand steht in S1.18; die Übung startet den Worktree mit `claude --worktree` und sucht seine Grenzen.
+7bfe5c85e694344b resources/modules/block-3-advanced.md:1233 P7f/S4.7: gekürzt auf einen Satz. Das `--tmux`-Beispiel war Beiwerk zum Thema Isolation.
+5d4886da9af49b64 resources/modules/block-3-advanced.md:1388 P7f/S4.3: ersetzt. Das Schema-Beispiel hat jetzt `required`, damit beide Felder sicher in `structured_output` stehen.
+cf066237ec116acb resources/modules/block-3-advanced.md:1448 P7f/S4.4: ersetzt durch die Übung (Hook eines fremden Ordners, `--bare`, Budgetdeckel); das Release-Notes-Beispiel gehörte zum Kosten-Feinschliff.
+3b8616d91a4e586a resources/modules/block-3-advanced.md:1462 P7f/S4.4: ersetzt. Der Kommentar „just the model“ widersprach dem Text: Auch mit `--bare` bleiben Bash und die Datei-Werkzeuge.
+7c7813815957c0b7 resources/modules/block-3-advanced.md:1492 P7f/S4.4: entfernt. `--system-prompt-file` gehört nicht zum Sicherheitskern; das Kapitel verweist auf die CLI-Referenz und S1.15.
+9e2994d23098d3c7 resources/modules/block-3-advanced.md:1620 P7f/S4.5: ersetzt durch Fließtext (Proxy-Variablen); die Aussagen zu VPC und SigV4 waren nicht belegt (F6).
+ab92a29ad05542f3 resources/modules/block-3-advanced.md:1630 P7f/S4.5: ersetzt durch Fließtext (Bedrock); siehe 9e2994d23098d3c7.
+3972c5641d31c0f6 resources/modules/block-3-advanced.md:1641 P7f/S4.5: ersetzt durch Fließtext (Vertex); siehe 9e2994d23098d3c7.
+d4f4633b9be9aef8 resources/modules/block-3-advanced.md:1667 P7f/S4.5: ersetzt. Die Skizze des Pre-Commit-Hooks wertete den Exit-Code als Urteil; der Hook der Übung ersetzt sie.
+b1d3ce7199304b08 resources/modules/block-3-advanced.md:1833 P7f/S4.10: ersetzt. Der Handtest gilt jetzt dem Python-Wächter der Übung, mit Eingabe im echten Format.
+fa3546fed8ac0c5e resources/modules/block-3-advanced.md:1922 P7f/S4.10: entfernt. Der Abschnitt zum Auto-Memory (`cat MEMORY.md`) gehörte nicht zur Diagnose eines Hooks; das Thema steht in S1.11.
+e3775ecd479bbe79 resources/exercises/block-3-exercises.md:410 P7f/S4.5: ersetzt. Die Pre-Commit-Übung arbeitet jetzt im Wegwerf-Repository `precommit`, und der Hook trennt den Exit-Code des Aufrufs vom Urteil.
+5e963743701e3dd0 resources/exercises/block-3-exercises.md:416 P7f/S4.5: ersetzt, PowerShell-Fassung des Startblocks; siehe e3775ecd479bbe79.
+1666494938fb0da6 resources/exercises/block-3-exercises.md:430 P7f/S4.5: ersetzt, altes Hook-Skript; siehe e3775ecd479bbe79.
+63d77c3c5a053afd resources/exercises/block-3-exercises.md:455 P7f/S4.5: ersetzt, `chmod +x` steht jetzt im Schritt; siehe e3775ecd479bbe79.
+b98ba9e03c161b82 resources/exercises/block-3-exercises.md:473 P7f/S4.4: entfernt. Die Trace-Log-Zeile war ein Bonus-Schritt, der in drei Kapiteln stand (D7); die Diagnose steht in S4.9 und S4.10.

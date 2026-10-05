@@ -2,7 +2,7 @@
 
 <!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
 
-71 Kapitel in 19 Regalen, zusammen etwa 26 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
+71 Kapitel in 19 Regalen, zusammen etwa 28 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
 
 ## So findest du deinen Weg
 
@@ -263,9 +263,9 @@ Mit `claude -p` wird der Agent zur Pipeline-Stufe: Eingabe über stdin, Ausgabe 
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S4.3 Headless: claude -p als Pipeline-Stufe](s4-03-headless.md) | Vertiefung | 15 |  |
-| [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](s4-04-ci-zugang-und-kosten.md) | Vertiefung | 18 | 🛡 |
-| [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](s4-05-ci-pipelines.md) | Vertiefung | 18 |  |
+| [S4.3 Headless: claude -p als Pipeline-Stufe](s4-03-headless.md) | Vertiefung | 25 |  |
+| [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](s4-04-ci-zugang-und-kosten.md) | Vertiefung | 30 | 🛡 |
+| [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](s4-05-ci-pipelines.md) | Vertiefung | 30 |  |
 
 <a id="remote-isolation"></a>
 
@@ -277,8 +277,8 @@ Fernzugriff und Isolation gehören zusammen. Mit Remote Control steuerst du eine
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S4.6 Unterwegs: Remote Control und /teleport](s4-06-remote-und-teleport.md) | Kür | 12 |  |
-| [S4.7 Isolation mit Docker und Worktrees](s4-07-isolation-docker-worktrees.md) | Kür | 15 |  |
+| [S4.6 Unterwegs: Remote Control und /teleport](s4-06-remote-und-teleport.md) | Kür | 20 |  |
+| [S4.7 Isolation mit Docker und Worktrees](s4-07-isolation-docker-worktrees.md) | Kür | 25 |  |
 
 <a id="troubleshooting"></a>
 
@@ -290,8 +290,8 @@ Die Diagnose-Werkzeuge machen aus der Blackbox einen Glaskasten. Du gehst Schich
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S4.9 Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md) | Kern | 15 |  |
-| [S4.10 Diagnose Schritt für Schritt](s4-10-diagnose-schritt-fuer-schritt.md) | Kern | 18 |  |
+| [S4.9 Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md) | Kern | 30 |  |
+| [S4.10 Diagnose Schritt für Schritt](s4-10-diagnose-schritt-fuer-schritt.md) | Kern | 30 |  |
 
 <a id="capstone"></a>
 
@@ -333,4 +333,4 @@ Nicht alles muss man selbst bauen. Dieses Regal stellt belegte Skill-Sammlungen 
 | [X.2 Mit Claude Code lernen](x-02-lernen-mit-claude-code.md) | Kür | 35 |  |
 | [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) | Kür | 30 |  |
 | [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) | Kür | 25 |  |
-| [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) | Kür | 15 |  |
+| [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) | Kür | 35 |  |

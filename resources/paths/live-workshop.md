@@ -90,20 +90,20 @@ Kern 285 Min · Vertiefung 65 Min · Kür 20 Min
 
 ## Session 4 — Fortgeschritten: Kür
 
-Kern 63 Min · Vertiefung 76 Min · Kür 107 Min
+Kern 90 Min · Vertiefung 110 Min · Kür 125 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
 | [S4.1 Das richtige Modell pro Phase](../library/s4-01-modell-pro-phase.md) | Vertiefung | 25 |  |  |
 | [S4.2 Codex-Schwarm und die Datenfluss-Grenze](../library/s4-02-codex-schwarm.md) | Kür | 25 |  | [Demo](../moderation/vorfuehren/s4-02-codex-schwarm.md) |
-| [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) | Vertiefung | 15 |  | [Demo](../moderation/vorfuehren/s4-03-headless.md) |
-| [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) | Vertiefung | 18 | 🛡 | [Demo](../moderation/vorfuehren/s4-04-ci-zugang-und-kosten.md) |
-| [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](../library/s4-05-ci-pipelines.md) | Vertiefung | 18 |  |  |
-| [S4.6 Unterwegs: Remote Control und /teleport](../library/s4-06-remote-und-teleport.md) | Kür | 12 |  | [Demo](../moderation/vorfuehren/s4-06-remote-und-teleport.md) |
-| [S4.7 Isolation mit Docker und Worktrees](../library/s4-07-isolation-docker-worktrees.md) | Kür | 15 |  | [Demo](../moderation/vorfuehren/s4-07-isolation-docker-worktrees.md) |
+| [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) | Vertiefung | 25 |  | [Demo](../moderation/vorfuehren/s4-03-headless.md) |
+| [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) | Vertiefung | 30 | 🛡 | [Demo](../moderation/vorfuehren/s4-04-ci-zugang-und-kosten.md) |
+| [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](../library/s4-05-ci-pipelines.md) | Vertiefung | 30 |  |  |
+| [S4.6 Unterwegs: Remote Control und /teleport](../library/s4-06-remote-und-teleport.md) | Kür | 20 |  | [Demo](../moderation/vorfuehren/s4-06-remote-und-teleport.md) |
+| [S4.7 Isolation mit Docker und Worktrees](../library/s4-07-isolation-docker-worktrees.md) | Kür | 25 |  | [Demo](../moderation/vorfuehren/s4-07-isolation-docker-worktrees.md) |
 | [S4.8 Abschlussprojekt mit Bewertung](../library/s4-08-abschlussprojekt.md) | Kür | 55 |  | [Demo](../moderation/vorfuehren/s4-08-abschlussprojekt.md) |
-| [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) | Kern | 15 |  |  |
-| [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) | Kern | 18 |  | [Demo](../moderation/vorfuehren/s4-10-diagnose-schritt-fuer-schritt.md) |
+| [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) | Kern | 30 |  |  |
+| [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) | Kern | 30 |  | [Demo](../moderation/vorfuehren/s4-10-diagnose-schritt-fuer-schritt.md) |
 | [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) | Kern | 30 |  |  |
 
 ## Außerhalb der Sessions
@@ -113,4 +113,4 @@ Kern 63 Min · Vertiefung 76 Min · Kür 107 Min
 | [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) | Kür | 35 |
 | [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) | Kür | 30 |
 | [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) | Kür | 25 |
-| [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) | Kür | 15 |
+| [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) | Kür | 35 |

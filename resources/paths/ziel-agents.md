@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 7 Etappen, zusammen etwa 14,5 Stunden (788 Min durcharbeiten, 72 Min überfliegen).
+**Umfang:** 7 Etappen, zusammen etwa 15 Stunden (815 Min durcharbeiten, 78 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -60,15 +60,15 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) — durcharbeiten
 - [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) 🛡 — durcharbeiten
 
-## Etappe 6 (~126 Min)
+## Etappe 6 (~129 Min)
 
 - [S3.15 Praxis-Station Session 3: alles in einem Ablauf](../library/s3-15-praxis-station-3.md) — durcharbeiten
 - [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) — überfliegen
 - [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) — überfliegen
 - [S4.8 Abschlussprojekt mit Bewertung](../library/s4-08-abschlussprojekt.md) — durcharbeiten
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
+
+## Etappe 7 (~60 Min)
+
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
-
-## Etappe 7 (~30 Min)
-
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

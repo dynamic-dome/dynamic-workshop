@@ -3636,34 +3636,38 @@
    "aliases": [
     "3.6"
    ],
-   "analogy": "CI/CD ist die automatische Nachtrunde des Wachdienstes: kein Gespräch, eine feste Checkliste, eine Route mit festem Budget und am Ende ein Bericht über Auffälligkeiten. Die Streife am Tag reagiert auf das, was sie sieht, und trifft Einzelentscheidungen; die Nachtrunde läuft nach Plan. Beide gehören in dieselbe Leitstelle. Claude Code ist genauso beides: ein interaktiver Partner und ein Werkzeug, das ein Skript aufruft.",
-   "answers": null,
+   "analogy": "CI/CD ist die automatische Nachtrunde des Wachdienstes: kein Gespräch, eine feste Checkliste, eine Route mit festem Budget und am Ende ein Bericht. Die Streife am Tag reagiert auf das, was sie sieht; die Nachtrunde läuft nach Plan. Claude Code ist beides: ein interaktiver Partner und ein Werkzeug, das ein Skript aufruft.",
+   "answers": [
+    "Er sagt, ob der Lauf durchgekommen ist: 0 bei Erfolg, ungleich 0 bei einem Fehler, etwa bei einem erreichten `--max-turns` oder einem ungültigen Schema. Er sagt nicht, ob Claude etwas gefunden hat; das steht in der Ausgabe.",
+    "Das Ergebnis nach Schema steht in `structured_output`, die Textantwort ohne Schema in `result`.",
+    "Mit `--continue` für das jüngste Gespräch oder `--resume` mit einer Session-ID. Ohne eines von beiden startet jeder Aufruf frisch, ohne Transkript."
+   ],
    "area": "automation",
-   "checkpoint": "Du kannst erklären, was `claude -p` in einer Pipeline anders macht als interaktives `claude`, und eine Ausgabe per Schema erzwingen, die ein Skript aus `structured_output` liest.",
+   "checkpoint": "Du kannst erklären, was `claude -p` in einer Pipeline anders macht als interaktives `claude`, was der Exit-Code aussagt, und eine Ausgabe per Schema erzwingen, die ein Skript aus `structured_output` liest.",
    "demo": "../moderation/vorfuehren/s4-03-headless.md",
-   "example": "claude -p \"Categorize this issue\" \\\n  --output-format json \\\n  --json-schema '{\n    \"type\":\"object\",\n    \"properties\":{\n      \"category\":{\"type\":\"string\",\"enum\":[\"bug\",\"feature\",\"docs\"]},\n      \"severity\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":5}\n    }\n  }'",
+   "example": "claude -p \"Categorize this issue\" \\\n  --output-format json \\\n  --json-schema '{\n    \"type\":\"object\",\n    \"properties\":{\n      \"category\":{\"type\":\"string\",\"enum\":[\"bug\",\"feature\",\"docs\"]},\n      \"severity\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":5}\n    },\n    \"required\":[\"category\",\"severity\"]\n  }'",
    "example_lang": "bash",
    "file": "s4-03-headless.md",
-   "glance": "`claude -p \"<prompt>\"` macht aus Claude einen einmaligen Befehl: Eingabe über stdin oder den Prompt, Ausgabe auf stdout, Exit-Code 0 bei Erfolg und ungleich 0 bei einem Fehler. Jeder Aufruf startet frisch, ohne das Transkript einer interaktiven Sitzung. Mit `--output-format json` und `--json-schema` erzwingst du eine maschinenlesbare Antwort; das schema-konforme Ergebnis steht im Feld `structured_output`, und ein nachgelagertes Skript kann es sicher parsen.",
+   "glance": "`claude -p \"<prompt>\"` macht aus Claude einen einmaligen Befehl: Eingabe über stdin oder den Prompt, Ausgabe auf stdout, Exit-Code 0 bei Erfolg und ungleich 0, wenn der Lauf scheitert. Der Exit-Code sagt nur, ob der Lauf durchgekommen ist. Ob Claude etwas gefunden hat, steht in der Ausgabe. Jeder Aufruf startet frisch, ohne das Transkript einer interaktiven Sitzung. Mit `--output-format json` und `--json-schema` erzwingst du eine maschinenlesbare Antwort: Das schema-konforme Ergebnis steht im Feld `structured_output` des JSON-Umschlags.",
    "id": "S4.3",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4030,
-   "outcome": "Ich kann Claude mit claude -p als einmaligen Kommandozeilen-Schritt aufrufen und die Ausgabe per --output-format json und --json-schema so erzwingen, dass ein nachgelagertes Skript sie sicher aus structured_output liest.",
+   "outcome": "Ich kann Claude mit claude -p als einmaligen Kommandozeilen-Schritt aufrufen, den Exit-Code lesen, Eingaben per Pipe hineingeben und die Ausgabe per --output-format json und --json-schema so erzwingen, dass ein Skript sie sicher aus structured_output liest.",
    "quiz": {
-    "correct": "Der Job startet langsamer und verhält sich je nach Rechner anders, weil Hooks, Skills und MCP-Server mitladen.",
-    "q": "Welches Symptom zeigt an, dass `--bare` in einem CI-Job fehlt, obwohl der Job keine Skills braucht?",
+    "correct": "Das Ergebnis steht eine Ebene tiefer im Umschlag: Das Skript muss `.structured_output.category` lesen.",
+    "q": "Dein Skript ruft `claude -p … --output-format json --json-schema '<gültiges Schema>'` auf und liest mit `jq -r '.category'`. Der Lauf endet mit Exit-Code 0, aber `jq` gibt `null` aus. Woran liegt es?",
     "wrong": [
-     "Ein Auth-Fehler, weil Claude ohne `--bare` den API-Key ignoriert und nur das Abo-Token aus `claude setup-token` liest.",
-     "`--output-format json` wird ignoriert und der Job liefert Prosa, weil ein geladener Skill das Format überschreibt.",
-     "Der Job hängt und wartet auf Eingaben, weil erst `--bare` den nicht-interaktiven Modus überhaupt einschaltet."
+     "Das Schema ist ungültig, und Claude hat still Prosa geliefert, in der es kein Feld `category` gibt.",
+     "Mit Schema steht das Ergebnis im Feld `.result`; `jq -r '.result.category'` wäre die richtige Abfrage.",
+     "Claude hat die Kategorie nicht erkannt und liefert `null` für unklare Fälle; ein strengerer Prompt behebt es."
     ]
    },
    "recall": [
-    "Was gibt `claude -p` bei Erfolg und bei einem Fehler als Exit-Code zurück?",
+    "Was sagt der Exit-Code eines `claude -p`-Laufs aus, und was sagt er nicht?",
     "In welchem Feld der JSON-Antwort steht das schema-konforme Ergebnis, in welchem die reine Textantwort?",
-    "Warum ist es für CI ein Vorteil, dass jeder Headless-Aufruf frisch startet?"
+    "Wie setzt du in einem zweiten Aufruf ein früheres Gespräch fort, und was passiert, wenn du es nicht tust?"
    ],
    "requires": [
     "S1.13"
@@ -3677,8 +3681,8 @@
    "session": 4,
    "shelf": "headless-ci",
    "skip_check": [
-    "Hast du schon einmal `claude -p` mit `--output-format json` und `--json-schema` in ein Skript eingebaut und das Ergebnis mit `jq` weiterverarbeitet?",
-    "Kannst du ohne Nachschlagen erklären, warum jeder Headless-Aufruf frisch ohne Transkript startet und warum das für CI ein Vorteil ist?"
+    "Hast du schon einmal `claude -p` mit `--output-format json` und `--json-schema` in ein Skript eingebaut und das Ergebnis weiterverarbeitet?",
+    "Kannst du ohne Nachschlagen sagen, was der Exit-Code eines `claude -p`-Laufs aussagt und was nicht?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/headless",
@@ -3691,33 +3695,37 @@
   {
    "aliases": [],
    "analogy": "Die automatische Nachtrunde des Wachdienstes aus S4.3 bekommt ein festes Tank- und Zeitbudget. Ist es verbraucht, bricht sie ab und meldet sich, statt die ganze Nacht weiterzufahren: Das sind `--max-budget-usd` und `--max-turns`. Sie bekommt außerdem einen Schlüssel für genau diesen Auftrag. Ein Abo-Token ist wie der persönliche Dienstausweis einer Person mit einem Jahr Gültigkeit, ein API-Key wie der Firmenschlüssel, den ein Team teilt. Und ohne `--bare` folgt die Runde allen Anweisungen und Sensoren, die sie am Einsatzort vorfindet, auch denen, die ein Fremder dort angebracht hat.",
-   "answers": null,
+   "answers": [
+    "`ANTHROPIC_API_KEY` oder einen `apiKeyHelper`. Nie liest `--bare` OAuth-Anmeldungen, den Schlüsselbund, `CLAUDE_CODE_OAUTH_TOKEN` oder Federation-Profile.",
+    "Der API-Key gewinnt, denn er steht in der Rangfolge vor dem Abo-Token; im `-p`-Modus nutzt Claude Code ihn ohne Rückfrage. Ohne `--bare` laufen die Hooks aus der `.claude/settings.json` und die Server aus der `.mcp.json` des ausgecheckten Repos, ohne Vertrauensdialog.",
+    "`--max-budget-usd` begrenzt die Ausgaben (Subagenten zählen mit), `--max-turns` die Zahl der Arbeitsschritte. Die Antwort, die die Dollargrenze überschreitet, wird noch bezahlt."
+   ],
    "area": "automation",
-   "checkpoint": "Du kannst für eine CI-Stufe den passenden Zugang wählen und begründen (API-Key mit `--bare` für fremden Code, Abo-Token nur ohne `--bare` auf vertrauenswürdigem Code), jeden Lauf mit `--max-budget-usd` und `--max-turns` deckeln und die Kosten mit einem Modell pro Phase und Prompt-Caching senken.",
+   "checkpoint": "Du kannst für eine CI-Stufe den passenden Zugang wählen und begründen, sagen, was `--bare` weglässt und braucht, und jeden Lauf mit `--max-budget-usd` und `--max-turns` deckeln.",
    "demo": "../moderation/vorfuehren/s4-04-ci-zugang-und-kosten.md",
-   "example": "claude -p \"Generate release notes\" --max-budget-usd 0.20 --max-turns 10",
-   "example_lang": "bash",
+   "example": "   {\n     \"hooks\": {\n       \"SessionStart\": [\n         {\n           \"hooks\": [\n             {\"type\": \"command\", \"command\": \"echo ran >> \\\"${CLAUDE_PROJECT_DIR}/hook-ran.txt\\\"\"}\n           ]\n         }\n       ]\n     }\n   }",
+   "example_lang": "json",
    "file": "s4-04-ci-zugang-und-kosten.md",
-   "glance": "`claude -p` ohne `--bare` führt die Hooks und MCP-Server eines fremden Repos aus, ohne Vertrauensdialog. Für Code, den du nicht selbst geschrieben hast, nimmst du deshalb einen API-Key und `--bare`. Ein Abo-Token aus `claude setup-token` liest `--bare` nie; es gehört nur in Jobs ohne `--bare` auf Code, dem du vertraust. Jeden unbeaufsichtigten Lauf deckelst du mit `--max-budget-usd` und `--max-turns`.",
+   "glance": "`claude -p` ohne `--bare` führt die Hooks und MCP-Server eines fremden Repos aus, ohne Vertrauensdialog. Für Code, den du nicht selbst geschrieben hast, nimmst du deshalb einen API-Key und `--bare`. Ein Abo-Token aus `claude setup-token` liest `--bare` nie; es gehört nur in Jobs ohne `--bare` auf Code, dem du vertraust. Jeden unbeaufsichtigten Lauf deckelst du mit `--max-budget-usd` und `--max-turns`. Der Kosten-Feinschliff über Wochen steht in anderen Kapiteln; hier gibt es dazu nur Verweise.",
    "id": "S4.4",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4040,
-   "outcome": "Ich kann für einen CI-Lauf den passenden Zugang wählen (API-Key mit --bare, Abo-Token nur ohne --bare, oder gar kein langlebiges Secret), jeden Lauf mit --max-budget-usd und --max-turns deckeln und die Kosten mit /usage, Prompt-Caching und einem Modell pro Phase gezielt senken.",
+   "outcome": "Ich kann für einen CI-Lauf den passenden Zugang wählen (API-Key mit --bare, Abo-Token nur ohne --bare, oder gar kein langlebiges Secret), sagen und an einem Lauf zeigen, was --bare nicht lädt und was es braucht, und jeden Lauf mit --max-budget-usd und --max-turns deckeln.",
    "quiz": {
-    "correct": "Planen mit dem Opus-Tier, Umsetzen mit Sonnet, Prüfen mit Haiku: grob 1,75x statt 3x.",
-    "q": "Welcher Ansatz senkt laut diesem Kapitel die Kosten einer anspruchsvollen Aufgabe, ohne auf Qualität zu verzichten?",
+    "correct": "Auf einen API-Key aus der Console wechseln und `--bare` hinzufügen. Das Abo-Token liest `--bare` nie, ein Job mit `--bare` und nur dem Token wäre nicht angemeldet.",
+    "q": "Eine Pipeline prüft Pull Requests von Beitragenden. Sie nutzt bisher das Abo-Token deines Projekts (`CLAUDE_CODE_OAUTH_TOKEN`), ohne `--bare`. Du willst fremde Hooks aussperren. Was ist richtig?",
     "wrong": [
-     "`--bare` für alle Subagenten, weil geladene Hooks und Plugins die Kosten treiben, nicht die Modellwahl.",
-     "Prompt-Caching allein, weil ein warmer Cache die Input-Tokens aller Subagenten auf null senkt.",
-     "`effort: low` für alle Phasen, weil die Effort-Stufe mehr bewirkt als die Wahl des Modells."
+     "`--bare` zum bestehenden Aufruf hinzufügen und das Abo-Token behalten, denn `--bare` übernimmt die Anmeldung aus der Umgebung.",
+     "Nichts ändern, denn Hooks eines Repos laufen in `-p` erst, nachdem jemand den Vertrauensdialog für den Ordner bestätigt hat.",
+     "Zusätzlich einen API-Key setzen und das Token behalten, denn bei zwei Zugängen gilt das Abo und der Key bleibt ungenutzt."
     ]
    },
    "recall": [
-    "Welche Zugangsdaten liest ein `claude --bare`-Aufruf, und welche nie?",
-    "Was passiert in einem `-p`-Lauf, wenn `ANTHROPIC_API_KEY` und `CLAUDE_CODE_OAUTH_TOKEN` beide gesetzt sind?",
-    "Was läuft auf deinem Runner mit, wenn ein `-p`-Job ohne `--bare` fremden Code auscheckt?"
+    "Welche Zugangsdaten liest ein `claude --bare`-Aufruf für die Anthropic-API, und welche nie?",
+    "Was passiert in einem `-p`-Lauf, wenn `ANTHROPIC_API_KEY` und `CLAUDE_CODE_OAUTH_TOKEN` beide gesetzt sind, und was läuft auf deinem Runner mit, wenn ein `-p`-Job ohne `--bare` fremden Code auscheckt?",
+    "Was begrenzt `--max-budget-usd`, was `--max-turns`, und warum können die Kosten trotzdem etwas über der Dollargrenze liegen?"
    ],
    "requires": [
     "S4.3"
@@ -3733,7 +3741,7 @@
    "shelf": "headless-ci",
    "skip_check": [
     "Kannst du ohne Nachschlagen sagen, welche Zugangsdaten ein `--bare`-Lauf liest und welche nicht, und was passiert, wenn API-Key und Abo-Token beide gesetzt sind?",
-    "Hast du schon einmal einen unbeaufsichtigten Claude-Lauf mit harter Dollar- und Rundengrenze abgesichert und danach nachgesehen, was er wirklich gekostet hat?"
+    "Weißt du, was ein `claude -p`-Lauf ohne `--bare` aus einem ausgecheckten fremden Repository mitlädt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/authentication",
@@ -3749,20 +3757,24 @@
   {
    "aliases": [],
    "analogy": "Die automatische Nachtrunde des Wachdienstes aus S4.3 fährt jetzt durch mehrere Gebäude. Die Checkliste ist überall dieselbe: die Route ohne Gespräch abfahren (`-p`), das Streifenformular ausfüllen (JSON), im Tank- und Zeitbudget bleiben (`--max-budget-usd`) und mit dem passenden Dienstausweis durch die Tür gehen (Zugangsdaten). Nur die Gebäude unterscheiden sich: GitHub und GitLab haben andere Türschilder und Schlüsselkästen, also andere YAML-Felder und Variablen.",
-   "answers": null,
+   "answers": [
+    "`claude` ohne `-p` startet eine interaktive Sitzung und wartet auf Eingabe, die in CI niemand liefert; der Job hängt.",
+    "Der Exit-Code sagt, ob der Lauf durchgekommen ist, die Antwort ist das Urteil. Ohne die Trennung sähe ein Lauf, der gar nicht startete (nicht gefunden, nicht angemeldet), wie ein „nicht OK\" aus.",
+    "Git bricht den Commit bei jedem Exit-Code ungleich 0 ab. Ein PreToolUse-Hook von Claude Code blockt über den Code allein nur mit `exit 2` (oder einer JSON-Entscheidung); jeder andere Code lässt den Aufruf laufen."
+   ],
    "area": "automation",
-   "checkpoint": "Du kannst eine CI-Stufe aus den vier Bausteinen zusammensetzen (`claude -p`, JSON-Ausgabe, Budgetgrenze, passende Zugangsdaten), sie für GitHub Actions oder GitLab CI schreiben und erkennen, warum ein Job hängt, nicht angemeldet ist oder Prosa statt JSON liefert.",
+   "checkpoint": "Du kannst eine CI-Stufe aus den Bausteinen zusammensetzen (`claude -p`, JSON-Ausgabe, Grenzen, passende Zugangsdaten), in einem Pre-Commit-Hook Exit-Code und Urteil trennen und erkennen, warum ein Job hängt, nicht angemeldet ist oder Prosa statt JSON liefert.",
    "demo": null,
-   "example": "#!/bin/bash\nSTAGED=$(git diff --cached)\nif [ -z \"$STAGED\" ]; then exit 0; fi\n\nRESULT=$(echo \"$STAGED\" | claude --bare -p \\\n  \"Check this staged diff for obvious bugs, security issues, or leftover debug statements (print, console.log, debugger). Reply with 'OK' if clean, otherwise list the issues one per line.\" \\\n  --max-budget-usd 0.10 \\\n  --output-format text)\n\nif [[ \"$RESULT\" != \"OK\"* ]]; then\n  echo \"Pre-commit check failed:\"\n  echo \"$RESULT\"\n  exit 1\nfi\nexit 0",
+   "example": "   #!/bin/bash\n   STAGED=$(git diff --cached)\n   if [ -z \"$STAGED\" ]; then exit 0; fi\n\n   RESULT=$(echo \"$STAGED\" | claude -p \\\n     \"Check this staged diff for leftover debug statements (print, console.log, debugger) and obvious bugs. Reply with the single word OK if clean, otherwise list the issues one per line.\" \\\n     --model haiku --max-turns 3 --max-budget-usd 0.10 --permission-mode dontAsk --output-format text)\n   STATUS=$?\n\n   if [ \"$STATUS\" -ne 0 ]; then\n     echo \"Pre-commit check could not run (claude exit $STATUS). Commit blocked.\"\n     echo \"$RESULT\"\n     exit 1\n   fi\n   if [[ \"$RESULT\" != \"OK\"* ]]; then\n     echo \"Pre-commit check found issues:\"\n     echo \"$RESULT\"\n     exit 1\n   fi\n   exit 0",
    "example_lang": "bash",
    "file": "s4-05-ci-pipelines.md",
-   "glance": "Eine Claude-Stufe in CI besteht immer aus denselben vier Bausteinen: `claude -p` statt einer interaktiven Sitzung, `--output-format json` für die nächste Stufe, `--max-budget-usd` als harte Kostengrenze und Zugangsdaten, die zum Aufruf passen (für `--bare` ein API-Key). Ob GitHub Actions, GitLab CI oder ein lokaler Pre-Commit-Hook: Es wechseln nur die YAML-Oberfläche und die Variablen der Plattform.",
+   "glance": "Eine Claude-Stufe in CI besteht immer aus denselben vier Bausteinen: `claude -p` statt einer interaktiven Sitzung, `--output-format json` für die nächste Stufe, `--max-budget-usd` (und `--max-turns`) als harte Grenzen und Zugangsdaten, die zum Aufruf passen ([S4.4](s4-04-ci-zugang-und-kosten.md)). Ob GitHub Actions, GitLab CI oder ein lokaler Pre-Commit-Hook: Es wechseln nur die YAML-Oberfläche und die Variablen der Plattform.",
    "id": "S4.5",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4050,
-   "outcome": "Ich kann Claude Code mit --bare, JSON-Ausgabe und Budgetgrenze als Stufe in GitHub Actions, GitLab CI oder einen Git-Pre-Commit-Hook einbauen und die typischen Fehlerbilder (Anmeldung, Prosa statt JSON, hängender Runner) selbst beheben.",
+   "outcome": "Ich kann Claude Code mit JSON-Ausgabe und Budgetgrenze als Stufe in einen Git-Pre-Commit-Hook einbauen, dabei Exit-Code und Urteil trennen, und die Bausteine einer GitHub-Actions- oder GitLab-CI-Stufe lesen und ihre typischen Fehlerbilder (Anmeldung, Prosa statt JSON, hängender Runner) deuten.",
    "quiz": {
     "correct": "Ein scheiternder Deploy braucht menschliches Urteil über Zustand und Rollback; ein Auto-Fix kann den Schaden vergrößern.",
     "q": "Warum ist `/autofix-pr` für einen fehlgeschlagenen Produktions-Deploy in der CI ungeeignet?",
@@ -3774,8 +3786,8 @@
    },
    "recall": [
     "Warum hängt ein CI-Job, der `claude` ohne `-p` aufruft?",
-    "Auf welchen drei Wegen erreicht ein Runner ohne direkten Internetzugang das Modell?",
-    "Was unterscheidet einen Git-Pre-Commit-Hook beim Blocken von einem PreToolUse-Hook von Claude Code?"
+    "Warum prüft der Pre-Commit-Hook der Übung den Exit-Code von `claude`, bevor er die Antwort liest?",
+    "Womit blockt ein Git-Pre-Commit-Hook einen Commit, womit ein PreToolUse-Hook von Claude Code einen Tool-Aufruf?"
    ],
    "requires": [
     "S4.4"
@@ -3791,7 +3803,7 @@
    "session": 4,
    "shelf": "headless-ci",
    "skip_check": [
-    "Hast du schon einmal einen Review-Job in GitHub Actions oder GitLab CI laufen lassen, der einen Diff mit `claude --bare -p` prüft und das Ergebnis an die nächste Stufe weitergibt?",
+    "Hast du schon einmal einen Review-Job in GitHub Actions oder GitLab CI laufen lassen, der einen Diff mit `claude -p` prüft und das Ergebnis an die nächste Stufe weitergibt?",
     "Kannst du ohne Nachschlagen drei Fehler nennen, die in CI nie passieren dürfen, etwa `claude` ohne `-p`, und jeweils begründen, warum?"
    ],
    "sources": [
@@ -3810,34 +3822,38 @@
    "aliases": [
     "3.5"
    ],
-   "analogy": "Remote Control ist die Fernbedienung der Leitstelle auf dem Diensthandy: Eine einzelne Person ist unterwegs und bedient dieselbe Anlage, die im Gebäude weiterläuft. Die Anlage bleibt, wo sie ist; das Handy ist nur ein zweites Bedienpult. Die Telegram-Bridge ist dagegen der Gruppenchat der Leitstelle: Mehrere Operatoren koordinieren sich, und jeder Auftrag hat einen Absender. Das ist flexibler, aber eigene Infrastruktur, die du selbst betreibst und absicherst.",
-   "answers": null,
+   "analogy": "Remote Control ist die Fernbedienung der Leitstelle auf dem Diensthandy: Eine einzelne Person ist unterwegs und bedient dieselbe Anlage, die im Gebäude weiterläuft. Die Anlage bleibt, wo sie ist; das Handy ist nur ein zweites Bedienpult. Fährt der Leitstellenrechner herunter, ist die Fernbedienung wirkungslos. Dazu kommt: Wer den Dienstausweis (dein Konto) hat, kann das Pult bedienen.",
+   "answers": [
+    "Auf deinem Rechner. Dein Rechner muss an sein und der `claude`-Prozess weiterlaufen; Handy und Browser sind nur ein Fenster in diese lokale Sitzung.",
+    "Es holt eine Cloud-Sitzung samt Branch und Gesprächsverlauf. Vorher prüft es: sauberer Git-Stand, eine Arbeitskopie desselben Repositories (kein Fork), ein auf den Remote gepushter Branch und dasselbe claude.ai-Konto.",
+    "Das Transkript der Sitzung (Nachrichten, Antworten, Werkzeugaktivität) liegt auf Anthropics Servern. Ausführung und Dateizugriff bleiben auf deinem Rechner; die lokale Sitzung öffnet keine eingehenden Ports."
+   ],
    "area": "automation",
-   "checkpoint": "Du kannst erklären, in welche Richtung Remote Control und `/teleport` arbeiten, beides aus einer laufenden Sitzung aufrufen und begründen, wann eine eigene Telegram-Bridge den Mehraufwand wert ist.",
+   "checkpoint": "Du kannst erklären, in welche Richtung Remote Control und `/teleport` arbeiten, Remote Control aus einer laufenden Sitzung ein- und ausschalten und sagen, was dafür vorausgesetzt wird.",
    "demo": "../moderation/vorfuehren/s4-06-remote-und-teleport.md",
-   "example": "/remote-control",
+   "example": "   /remote-control Workshop-Test",
    "example_lang": "",
    "file": "s4-06-remote-und-teleport.md",
-   "glance": "Remote Control macht eine Sitzung, die auf deinem Rechner läuft, von claude.ai/code oder der Claude-App aus steuerbar: Du schickst Prompts vom Handy, Claude führt sie lokal aus, und die Ausgabe kommt zurück. `/teleport` geht den umgekehrten Weg und holt eine Cloud-Sitzung samt Branch in dein Terminal. Eine eigene Telegram-Bridge lohnt den Aufwand nur, wenn mehrere Leute steuern, ein Gruppenchat die Oberfläche ist oder du ein Audit je Absender brauchst.",
+   "glance": "**Voraussetzung für die Übung:** eine Anmeldung über claude.ai mit einem der vier Abos (bei Team und Enterprise muss ein Owner Remote Control freigeschaltet haben), dazu ein zweiter Bildschirm: ein Browser-Tab auf claude.ai/code reicht, das Handy mit der Claude-App geht auch. Es läuft nichts außerhalb deines Rechners außer der Verbindung, und die Übung beendet sie wieder.",
    "id": "S4.6",
    "level": "bonus",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 4060,
-   "outcome": "Ich kann eine lokale Sitzung mit Remote Control vom Handy oder Browser aus steuern, eine Cloud-Sitzung mit /teleport ins Terminal holen und begründen, wann sich stattdessen eine eigene Telegram-Bridge lohnt.",
+   "outcome": "Ich kann eine lokale Sitzung mit Remote Control im Browser oder in der Claude-App öffnen und wieder trennen, sagen, in welche Richtung /teleport arbeitet und was beide Wege voraussetzen, und begründen, wann ein anderer Weg (Channels) passt.",
    "quiz": {
-    "correct": "Bei Remote Control kommen die Prompts von außen und laufen lokal; `/teleport` holt eine Cloud-Sitzung ins Terminal.",
-    "q": "Was ist der entscheidende Unterschied zwischen `claude remote-control` und `/teleport`?",
+    "correct": "Es geht nicht: Remote Control unterstützt keine API-Keys. Du meldest dich mit `/login` über claude.ai an, mit Pro, Max, Team oder Enterprise.",
+    "q": "Du arbeitest im Terminal mit einem API-Key aus der Console und willst die laufende Sitzung vom Handy aus steuern. Was gilt?",
     "wrong": [
-     "`/teleport` lässt sich nur aus der iOS-App auslösen; `remote-control` ist ein reiner CLI-Befehl ohne App-Verbindung.",
-     "Beide öffnen denselben Kanal in beide Richtungen; es unterscheidet sich nur, welche Seite die Verbindung zuerst aufbaut.",
-     "`remote-control` braucht einen MCP-Server als Push-Relay; `/teleport` nutzt dagegen OAuth und keinen weiteren Server."
+     "Es geht, wenn du die Sitzung mit `/remote-control` aus dem laufenden Terminal startest; nur der Unterbefehl `claude remote-control` prüft die Anmeldung.",
+     "Es geht über Amazon Bedrock, weil die Sitzung lokal läuft und nur das Modell aus der Cloud kommt.",
+     "Es geht, wenn du `ANTHROPIC_BASE_URL` auf ein Gateway setzt, das die Anfragen an claude.ai weiterreicht."
     ]
    },
    "recall": [
     "Wo läuft die Sitzung, die du mit Remote Control vom Handy aus steuerst, und was muss dafür auf deinem Rechner laufen?",
     "Was holt `/teleport` in dein Terminal, und was prüft es vorher?",
-    "Wann schickt `PushNotification` auch eine Nachricht aufs Handy?"
+    "Was liegt auf Anthropics Servern, solange Remote Control verbunden ist, und was bleibt auf deinem Rechner?"
    ],
    "requires": [
     "S1.3"
@@ -3852,12 +3868,13 @@
    "session": 4,
    "shelf": "remote-isolation",
    "skip_check": [
-    "Hast du schon einmal eine laufende Claude-Code-Sitzung vom Handy oder aus dem Browser mit Remote Control gesteuert oder eine Cloud-Sitzung mit `/teleport` ins Terminal geholt?",
-    "Kannst du ohne Nachschlagen drei Fälle nennen, in denen sich eine eigene Telegram-Bridge gegenüber Remote Control lohnt?"
+    "Bist du mit einem claude.ai-Abo (Pro, Max, Team oder Enterprise) angemeldet, nicht mit einem API-Key, Bedrock oder Vertex? Ohne das kannst du dieses Kapitel nur lesen: Remote Control und `/teleport` setzen die Anmeldung über claude.ai voraus.",
+    "Kannst du ohne Nachschlagen sagen, in welche Richtung Remote Control arbeitet und in welche `/teleport`?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/remote-control",
     "https://code.claude.com/docs/en/claude-code-on-the-web",
+    "https://code.claude.com/docs/en/mobile",
     "https://code.claude.com/docs/en/commands",
     "https://code.claude.com/docs/en/tools-reference"
    ],
@@ -3867,34 +3884,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein Worktree ist die Testbank aus S1.18: ein Nachbau der Anlage in einem eigenen Raum, mit derselben Ausstattung und getrennt vom Live-System. Mehrere Techniker arbeiten an mehreren Testbänken gleichzeitig, ohne sich in die Quere zu kommen. Alle Testbänke stehen aber im selben Gebäude.",
-   "answers": null,
+   "analogy": "Ein Worktree ist die Testbank aus S1.18: ein Nachbau der Anlage in einem eigenen Raum, mit derselben Ausstattung und getrennt vom Live-System. Mehrere Techniker arbeiten an mehreren Testbänken gleichzeitig, ohne sich in die Quere zu kommen. Alle Testbänke stehen aber im selben Gebäude und hängen am selben Archiv: Was ein Techniker ins Archiv einträgt, sehen alle.",
+   "answers": [
+    "Sie teilen das `.git`-Verzeichnis des Repositories (Commits und Branches sind sofort in beiden sichtbar) und gespeicherte Freigaben. Der Worktree hat eigene Dateien und einen eigenen Branch; gitignorierte Dateien fehlen darin.",
+    "Ein Worktree isoliert Dateiänderungen und lässt Claude Code die Bearbeitung des Hauptordners ablehnen. Prozesse, Ports, Datenbanken und dein Benutzerkonto bleiben dieselben. Ein Container oder eine VM trennt den Host.",
+    "`fresh` zweigt vom Standard-Branch des Repositories ab, `head` von deinem lokalen `HEAD` samt ungepushten Commits."
+   ],
    "area": "git",
-   "checkpoint": "Du kannst für eine Aufgabe begründen, ob ein Worktree reicht oder ein Container nötig ist, `worktree.baseRef` für parallele Agenten ausdrücklich setzen und erklären, was `--tmux` beim Start mehrerer Worktree-Sitzungen tut.",
+   "checkpoint": "Du kannst an einer Worktree-Sitzung zeigen, was sie vom Hauptordner trennt und was sie teilt, und begründen, wann ein Container nötig ist.",
    "demo": "../moderation/vorfuehren/s4-07-isolation-docker-worktrees.md",
-   "example": "git worktree add ../agent-task-1 -b agent/task-1\n\n# Agent works in ../agent-task-1\n# Your main directory is completely untouched\n# Changes are in git but isolated to that branch\n\ngit merge agent/task-1               # Accept\ngit worktree remove ../agent-task-1  # Or discard entirely",
+   "example": "   claude --worktree isolation-a --permission-mode acceptEdits",
    "example_lang": "bash",
    "file": "s4-07-isolation-docker-worktrees.md",
-   "glance": "Ein Worktree isoliert Dateien: Jeder Agent bekommt einen eigenen Arbeitsordner auf einem eigenen Branch im selben Repository, ohne Container und sofort. Ein Docker-Container trennt Claude Code vollständig vom Host, mit eigenem Dateisystem; ihn brauchst du für generierten Code, der gefährlich sein könnte, und für fremde Repositories. Lässt du mehrere Agenten parallel in Worktrees arbeiten, setz `worktree.baseRef` ausdrücklich, damit alle vom selben Stand abzweigen.",
+   "glance": "Ein Worktree isoliert Dateien: Jeder Agent bekommt einen eigenen Arbeitsordner auf einem eigenen Branch im selben Repository, ohne Container und sofort. Claude Code hält eine Worktree-Sitzung dabei aktiv davon ab, Dateien im Hauptordner zu bearbeiten. Das Repository selbst, gespeicherte Freigaben und alles, was nicht aus Dateien besteht, teilt der Worktree dagegen mit dem Hauptordner. Ein Container (Docker) gibt Claude Code ein eigenes Dateisystem und eigene Prozesse; ihn brauchst du für generierten Code, der gefährlich sein könnte. Vollständig ist auch diese Trennung nicht: Was du einbindest oder hineinreichst (das Repository, Zugangsdaten, Netz), bleibt erreichbar. Für ein Repository, dem du nicht traust, nennt die Doku eine eigene VM oder eine Cloud-Sitzung. Die Übung zeigt an einem Worktree, wo seine Grenze verläuft. Container bleiben Lesestoff.",
    "id": "S4.7",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4070,
-   "outcome": "Ich kann für eine riskante Aufgabe zwischen Worktree und Docker-Container wählen, parallele Agenten mit ausdrücklich gesetztem worktree.baseRef vom selben Stand abzweigen lassen und mit --tmux jede Worktree-Sitzung in einer eigenen tmux-Sitzung starten.",
+   "outcome": "Ich kann an einer Worktree-Sitzung zeigen, was ein Worktree isoliert (Dateiänderungen am Hauptordner) und was er mit dem Hauptordner teilt (das Repository, gespeicherte Freigaben), und begründen, wann statt eines Worktrees ein Container nötig ist.",
    "quiz": {
-    "correct": "Damit alle vom selben Stand auf `origin/<default>` abzweigen, egal welche lokalen Commits oder welcher CLI-Standard gelten.",
-    "q": "Fünf Agenten sollen dieselbe Migration parallel in eigenen Worktrees bearbeiten. Warum setzt du `worktree.baseRef` ausdrücklich auf `fresh`?",
+    "correct": "Claude Code lehnt die Bearbeitung ab, weil der Pfad im Hauptordner liegt; Claude sieht einen Tool-Fehler.",
+    "q": "Du arbeitest in einer `claude --worktree`-Sitzung und bittest Claude, mit dem Edit-Werkzeug eine Datei im Hauptordner zu ändern. Was passiert?",
     "wrong": [
-     "Weil Worktrees sonst nur lesen dürfen und erst `fresh` den Schreibzugriff auf den neuen Branch des Worktrees freigibt.",
-     "Weil `baseRef` festlegt, ob ein Worktree ein eigenes `.git`-Verzeichnis bekommt oder nur einen Symlink auf das Haupt-Repository.",
-     "Weil `claude --worktree` ohne ausdrückliche Einstellung immer vom lokalen `HEAD` abzweigt und `fresh` nie der Standard ist."
+     "Die Änderung gelingt, denn Worktree und Hauptordner teilen dasselbe Repository und damit dieselben Dateien.",
+     "Claude Code blockt alles, auch `git commit` im Worktree, weil das gemeinsame `.git`-Verzeichnis im Hauptordner liegt.",
+     "Die Änderung gelingt nach einer Rückfrage; die Prüfung gilt nur für Dateien, die Git verfolgt, nicht für die im Hauptordner."
     ]
    },
    "recall": [
-    "Was isoliert ein Worktree, und was isoliert er nicht?",
-    "Wovon zweigt ein neuer Worktree mit `fresh` ab, wovon mit `head`?",
-    "Wie setzt du `worktree.baseRef` für einen einzigen Aufruf, ohne eine Settings-Datei zu ändern?"
+    "Was teilen sich Hauptordner und Worktree, und was hat der Worktree für sich?",
+    "Warum ersetzt ein Worktree keinen Container?",
+    "Wovon zweigt ein neuer Worktree mit `fresh` ab, wovon mit `head`?"
    ],
    "requires": [
     "S1.18"
@@ -3913,11 +3934,12 @@
    "shelf": "remote-isolation",
    "skip_check": [
     "Hast du schon einmal mehrere `claude --worktree`-Sitzungen parallel laufen lassen und danach einen Branch gemergt oder verworfen?",
-    "Kannst du ohne Nachschlagen sagen, wann `worktree.baseRef` auf `fresh` gehört und wann auf `head`?"
+    "Kannst du ohne Nachschlagen sagen, was ein Worktree vom Hauptordner trennt und was Hauptordner und Worktree teilen?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/worktrees",
-    "https://code.claude.com/docs/en/settings-reference",
+    "https://code.claude.com/docs/en/sandbox-environments",
+    "https://code.claude.com/docs/en/devcontainer",
     "https://code.claude.com/docs/en/cli-reference"
    ],
    "title": "Isolation mit Docker und Worktrees",
@@ -3927,24 +3949,30 @@
   {
    "aliases": [],
    "analogy": "Ein headless-Lauf ist die nächtliche Wachrunde nach Checkliste: Sie beginnt, arbeitet ihre Punkte ab und endet. Ein Dauer-Agent ist der Wachmann, der rund um die Uhr in der Pforte sitzt, einen Schlüsselbund trägt und Aufträge per Funk annimmt. Die entscheidende Frage ist nicht, ob er fleißig ist, sondern wer auf seiner Frequenz funken kann, und dass jeder Zettel, den er auf dem Rundgang aufhebt, eine neue Anweisung enthalten kann.",
-   "answers": null,
+   "answers": [
+    "Prompt Injection braucht laut Doku keine öffentlichen DMs: Jeder Inhalt, den der Agent liest (Webseiten, Mails, Anhänge, eingefügte Logs), kann Anweisungen tragen.",
+    "Den Eingang halten `gateway.bind: loopback`, `dmPolicy: pairing` und `groupPolicy: allowlist`. Offen sind die Werkzeuge: Die Sandbox ist aus, und die Shell auf dem Gateway-Host läuft mit `security: \"full\"` und `ask: \"off\"`.",
+    "`claude stop <id>` stoppt sie, `claude rm <id>` entfernt sie. Ob sie weg ist, zeigt `claude agents --json --all`: erst `\"state\": \"stopped\"`, nach dem Entfernen steht sie nicht mehr in der Liste.",
+    "`openclaw channels logout` räumt nur die gespeicherten Zugangsdaten des Kanals. Ob das Token beim Anbieter widerrufen ist, sagt es nicht; widerrufen musst du dort."
+   ],
    "area": null,
-   "checkpoint": "Du kannst für einen Dauer-Agenten zeigen, an welchen Stellen Text von außen zur Aktion wird, für jede Stelle ein Gegenmittel und seine Entsprechung in Claude Code nennen und den Agenten stoppen, ohne ihn darum zu bitten.",
+   "checkpoint": "Du kannst für einen Dauer-Agenten zeigen, an welchen Stellen Text von außen zur Aktion wird, für jede Stelle ein Gegenmittel und seine Entsprechung in Claude Code nennen und eine eigene Automation stoppen und entfernen, ohne sie darum zu bitten.",
    "demo": null,
-   "example": "# Bevor ein Agent bei mir dauerhaft läuft\nAutomation: ______________   Geprüft am: ______________\n\n## Eingang\n- [ ] Alle Wege, auf denen Text den Agenten erreicht, stehen auf einer Liste:\n      Kanäle, Webhooks, gelesene Webseiten, Mails, Anhänge.\n      Beleg:\n- [ ] Nur Absender auf einer Allowlist lösen etwas aus; Unbekannte werden\n      verworfen oder müssen erst gekoppelt werden.\n      Beleg:\n- [ ] In Gruppen reagiert der Agent nur, wo ich es freigegeben habe,\n      und nur, wenn er erwähnt wird.\n      Beleg:\n- [ ] Der Steuerzugang (Gateway, Dashboard, API) ist nicht aus dem Netz\n      erreichbar oder verlangt einen langen, zufälligen Schlüssel.\n      Beleg:\n\n## Reichweite\n- [ ] Für jedes erlaubte Werkzeug steht ein Grund da; alles andere ist\n      ausdrücklich verboten, nicht nur „nicht erwähnt\".\n      Beleg:\n- [ ] Befehle mit Schreib- oder Netzwerkwirkung laufen in Sandbox,\n      Container oder Worktree, nicht direkt auf meinem Arbeitsrechner.\n      Beleg:\n- [ ] Geheimnisse stehen weder im Prompt noch im Gedächtnis noch in\n      Dateien, die der Agent lesen kann.\n      Beleg:\n- [ ] Jeder fremde Skill, jedes Plugin und jeder MCP-Server ist gelesen\n      und auf eine Version festgelegt.\n      Beleg:\n- [ ] Ich habe das Langzeit-Gedächtnis einmal gelesen und weiß, welche\n      Quellen dort hineinschreiben dürfen.\n      Beleg:\n\n## Betrieb\n- [ ] Takt, Kontext pro Lauf und eine harte Kostengrenze stehen fest\n      (bei claude -p: --max-budget-usd und --max-turns).\n      Beleg:\n- [ ] Ich habe den Notaus einmal ausgeführt: Lauf abbrechen, Dienst\n      stoppen, Zeitplan abschalten.\n      Beleg:\n- [ ] Ich weiß, welche Schlüssel ich wo widerrufe, und habe eine\n      Sicherung, von der ich zurückkann.\n      Beleg:",
+   "example": "   # Bevor ein Agent bei mir dauerhaft läuft\n   Automation: ______________   Geprüft am: ______________\n\n   ## Eingang\n   - [ ] Alle Wege, auf denen Text den Agenten erreicht, stehen auf einer Liste:\n         Kanäle, Webhooks, gelesene Webseiten, Mails, Anhänge.\n         Beleg:\n   - [ ] Nur Absender auf einer Allowlist lösen etwas aus; Unbekannte werden\n         verworfen oder müssen erst gekoppelt werden.\n         Beleg:\n   - [ ] In Gruppen reagiert der Agent nur, wo ich es freigegeben habe,\n         und nur, wenn er erwähnt wird.\n         Beleg:\n   - [ ] Der Steuerzugang (Gateway, Dashboard, API) ist nicht aus dem Netz\n         erreichbar oder verlangt einen langen, zufälligen Schlüssel.\n         Beleg:\n\n   ## Reichweite\n   - [ ] Für jedes erlaubte Werkzeug steht ein Grund da; alles andere ist\n         ausdrücklich verboten, nicht nur „nicht erwähnt\".\n         Beleg:\n   - [ ] Befehle mit Schreib- oder Netzwerkwirkung laufen in Sandbox,\n         Container oder Worktree, nicht direkt auf meinem Arbeitsrechner.\n         Beleg:\n   - [ ] Geheimnisse stehen weder im Prompt noch im Gedächtnis noch in\n         Dateien, die der Agent lesen kann.\n         Beleg:\n   - [ ] Jeder fremde Skill, jedes Plugin und jeder MCP-Server ist gelesen\n         und auf eine Version festgelegt.\n         Beleg:\n   - [ ] Ich habe das Langzeit-Gedächtnis einmal gelesen und weiß, welche\n         Quellen dort hineinschreiben dürfen.\n         Beleg:\n\n   ## Betrieb\n   - [ ] Takt, Kontext pro Lauf und eine harte Kostengrenze stehen fest\n         (bei claude -p: --max-budget-usd und --max-turns).\n         Beleg:\n   - [ ] Ich habe den Notaus einmal ausgeführt: Lauf abbrechen, Dienst\n         stoppen, Zeitplan abschalten.\n         Beleg:\n   - [ ] Ich weiß, welche Schlüssel ich wo widerrufe, und habe eine\n         Sicherung, von der ich zurückkann.\n         Beleg:",
    "example_lang": "markdown",
    "file": "x-04-agenten-im-dauerbetrieb.md",
    "glance": "OpenClaw ist ein quelloffener persönlicher Agent, den du selbst betreibst: Ein Gateway-Prozess läuft dauerhaft auf deinem Rechner oder Server, verbindet Chat-Apps wie Telegram, Discord oder WhatsApp mit einem Agenten und weckt ihn auch nach Zeitplan. Daraus folgt die eine Lehre dieses Kapitels, und sie gilt für jede Automation, auch für deine mit Claude Code: Jede Nachricht aus einem Kanal und jeder Inhalt, den der Agent liest, ist nicht vertrauenswürdige Eingabe an einen Agenten mit Werkzeugen und Rechten.",
    "id": "X.4",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 35,
    "offers": [],
    "order": 4075,
-   "outcome": "Ich kann für einen Agenten im Dauerbetrieb die Stellen zeigen, an denen Text von außen zur Aktion wird, je Risiko ein belegtes Gegenmittel und seine Entsprechung in Claude Code nennen und den Agenten im Ernstfall stoppen.",
+   "outcome": "Ich kann für einen Agenten im Dauerbetrieb die Stellen zeigen, an denen Text von außen zur Aktion wird, je Risiko ein belegtes Gegenmittel und seine Entsprechung in Claude Code nennen und eine eigene Claude-Code-Automation im Ernstfall stoppen und entfernen.",
    "quiz": null,
    "recall": [
     "Warum reicht es nicht, dass nur du dem Bot schreiben darfst?",
     "Welche Standardwerte halten bei OpenClaw den Eingang zu, und welche zwei lassen die Werkzeuge offen?",
+    "Mit welchen zwei Befehlen stoppst du eine Hintergrund-Sitzung von Claude Code und nimmst sie aus der Liste, und woran siehst du, dass sie weg ist?",
     "Was unterscheidet `openclaw channels logout` vom Widerruf eines Tokens beim Anbieter?"
    ],
    "requires": [],
@@ -4073,34 +4101,38 @@
    "aliases": [
     "3.7"
    ],
-   "analogy": "Stell dir eine Zutrittsanlage vor, an der eine Tür nicht aufgeht. Der Fehler kann am Sensor sitzen, in der Verkabelung, in der Zentrale oder in der Übertragung zur Leitstelle. Ein guter Techniker tauscht nicht zuerst den Leser. Er geht die Ebenen der Reihe nach durch und schließt jede mit einem kurzen Test aus: Störungssuche an der Alarmzentrale, Sensor → Verkabelung → Zentrale → Übertragung.",
-   "answers": null,
+   "analogy": "Stell dir eine Zutrittsanlage vor, an der eine Tür nicht aufgeht. Der Fehler kann am Sensor sitzen, in der Verkabelung, in der Zentrale oder in der Übertragung zur Leitstelle. Ein guter Techniker tauscht nicht zuerst den Leser. Er geht die Ebenen der Reihe nach durch und schließt jede mit einem kurzen Test aus.",
+   "answers": [
+    "Ab dem Aufruf. Danach löst du das Problem noch einmal aus, damit es im Log steht.",
+    "In `~/.claude/debug/<session-id>.txt`, nicht im Terminal; mit `--debug-file <path>` bestimmst du den Ort selbst.",
+    "`/doctor` meldet zuerst, was es gefunden hat, und fragt, bevor es etwas ändert. `claude doctor` gibt die Diagnose von Installation und Einstellungen nur aus, ohne Sitzung und ohne etwas zu ändern."
+   ],
    "area": "troubleshooting",
    "checkpoint": "Du kannst für eine Diagnosefrage das passende Werkzeug nennen und erklären, warum `/context` und `--verbose` beschreiben, `/doctor` verordnet und `/debug` ermittelt.",
    "demo": null,
    "example": "/debug skill-not-triggering",
    "example_lang": "",
    "file": "s4-09-fehlersuche-werkzeuge.md",
-   "glance": "Für jede Diagnosefrage gibt es ein eigenes Werkzeug. `/context` und die Listen `/skills`, `/hooks` und `/mcp` zeigen, was geladen ist; `/doctor` prüft Installation und Einstellungen und schlägt Reparaturen vor, die du erst bestätigst; `/debug` schaltet das Debug-Log ein und lässt Claude darin nach der Ursache suchen. `claude --verbose` zeigt jeden Zug vollständig an, ist aber kein Startprotokoll.",
+   "glance": "Für jede Diagnosefrage gibt es ein eigenes Werkzeug. `/context` und die Listen `/skills`, `/hooks` und `/mcp` zeigen, was geladen ist; `/doctor` prüft Installation und Einstellungen und schlägt Reparaturen vor, die du erst bestätigst; `/debug` schaltet das Debug-Log ein und lässt Claude darin nach der Ursache suchen. `claude --verbose` zeigt jeden Zug vollständig an, ist aber kein Startprotokoll. Wer eine Einrichtung debuggt, fragt zuerst, ob etwas überhaupt geladen wurde.",
    "id": "S4.9",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 4090,
-   "outcome": "Ich kann bei einem Konfigurationsproblem nach der Frage das passende Werkzeug wählen: /context für das Geladene, /doctor für Fehler mit Reparaturvorschlag, /debug für das, was in einem Zug passiert ist, und claude --verbose für die vollständige Ausgabe jedes Zugs.",
+   "outcome": "Ich kann bei einem Konfigurationsproblem nach der Frage das passende Werkzeug wählen (/context und die Listen /hooks, /skills, /mcp für das Geladene, /doctor für Fehler mit Reparaturvorschlag, /debug und claude --debug für das, was in einem Zug passiert ist, claude --verbose für die vollständige Ausgabe) und damit einen ungültigen Hook, einen nicht erkannten Skill und einen nicht startenden MCP-Server in einem Testordner finden.",
    "quiz": {
-    "correct": "`/doctor` prüft Installation und Einstellungen auf Fehler und schlägt Reparaturen vor; `--verbose` zeigt nur jeden Zug ausführlich.",
-    "q": "Deine Einrichtung verhält sich seltsam, und du willst wissen, was daran kaputt ist. Was unterscheidet `/doctor` von `claude --verbose`?",
+    "correct": "Der `matcher` ist ein JSON-Array statt eines Strings; Claude Code lädt den Eintrag dann nicht.",
+    "q": "Du hast einen PreToolUse-Hook in die `settings.json` eingetragen, aber `/hooks` listet ihn nicht auf. Was ist die wahrscheinlichste Ursache?",
     "wrong": [
-     "`/doctor` gibt es nur in Team- und Enterprise-Plänen, weil es deine Kontodaten liest; `--verbose` prüft dasselbe in jedem Plan.",
-     "`--verbose` bleibt für alle folgenden Sitzungen an, bis du es abschaltest; `/doctor` prüft einmal und ändert nie etwas.",
-     "Nur das Format unterscheidet sie: `--verbose` gibt YAML aus, `/doctor` gibt JSON aus, damit CI-Pipelines die Befunde maschinell lesen."
+     "Der Hook erscheint erst in `/hooks`, nachdem er zum ersten Mal gefeuert hat; vorher kennt Claude Code ihn noch nicht.",
+     "`/hooks` zeigt nur Hooks aus deiner Benutzerdatei `~/.claude/settings.json`, nicht die aus der Projektdatei.",
+     "Hooks gehören in eine eigene Datei `.claude/hooks.json`; in der `settings.json` liest Claude Code sie nicht."
     ]
    },
    "recall": [
     "Ab wann zeichnet `/debug` auf, und was musst du danach tun?",
     "Wo findest du das Log, das `claude --debug` schreibt?",
-    "Was tut `/doctor`, bevor es etwas an deiner Einrichtung ändert?"
+    "Was tut `/doctor`, bevor es etwas an deiner Einrichtung ändert, und was zeigt `claude doctor` im Terminal?"
    ],
    "requires": [
     "S1.4"
@@ -4114,7 +4146,7 @@
    "session": 4,
    "shelf": "troubleshooting",
    "skip_check": [
-    "Hast du schon einmal mit `/debug` oder dem Debug-Log nachvollzogen, warum ein Skill oder Hook bei einem bestimmten Prompt nicht gegriffen hat?",
+    "Hast du schon einmal mit `/hooks`, `/skills` oder `/mcp` nachgesehen, warum etwas, das du eingerichtet hast, nicht greift?",
     "Kannst du ohne Nachschlagen sagen, welches Werkzeug du für „Was ist geladen?\", „Ist meine Einrichtung in Ordnung?\" und „Was ist in diesem Zug passiert?\" nimmst?"
    ],
    "sources": [
@@ -4128,32 +4160,36 @@
   },
   {
    "aliases": [],
-   "analogy": "Eine Tür geht nicht auf. Der Techniker tauscht nicht zuerst den Leser, sondern geht seine Liste in fester Reihenfolge durch und schließt jede Stufe mit einem kurzen Test aus: Ist das Programm der Zentrale geladen? Sind die Leser angemeldet? Stecken die Zusatzmodule? Ist die Controller-Logik scharf? Steht die Verbindung zur Leitstelle? Ist die Berechtigungsstufe für diese Kartenklasse freigegeben? Erst wenn all das stimmt, nimmt er sich die Karte selbst vor. In Claude Code heißen die Stufen CLAUDE.md, Skills, Plugins, Hooks, MCP und Rechte; die Karte ist dein Prompt.",
-   "answers": null,
+   "analogy": "Eine Tür geht nicht auf. Der Techniker tauscht nicht zuerst den Leser, sondern macht den Selbsttest der Anlage und geht dann seine Liste in fester Reihenfolge durch: Programm der Zentrale, Leser, Zusatzmodule, Controller-Logik, Verbindung zur Leitstelle, Berechtigungsstufe. In Claude Code heißen die Stufen CLAUDE.md, Skills, Plugins, Hooks, MCP und Rechte.",
+   "answers": [
+    "Er blockt nichts und meldet nichts: Claude Code wertet Exit 0 als Zustimmung, und der Wächter wirkt eingerichtet, obwohl alles durchläuft. Ein Hook, der alles blockt, fällt sofort auf.",
+    "`/skills`, dann das Frontmatter, dann ausdrücklich auslösen, dann `/debug` mit demselben Prompt.",
+    "In den `matcher` kommt der Tool-Name (oder eine Liste mit `|`), etwa `\"Bash|PowerShell\"`; die Rechte-Regel-Syntax wie `Bash(git *)` gehört ins Feld `if`."
+   ],
    "area": "troubleshooting",
-   "checkpoint": "Du kannst die Diagnose-Checkliste in der richtigen Reihenfolge durchgehen, für jeden der vier klassischen Hook-Fehler die Abhilfe nennen und einen Hook mit einer Eingabe im echten Format von Hand testen.",
+   "checkpoint": "Du kannst die Diagnose-Checkliste in der richtigen Reihenfolge durchgehen, für die klassischen Hook-Fehler die Abhilfe nennen und einen Hook mit einer Eingabe im echten Format von Hand testen.",
    "demo": "../moderation/vorfuehren/s4-10-diagnose-schritt-fuer-schritt.md",
-   "example": "TIMESTAMP=$(date -Iseconds)\nACTION=$(echo \"$INPUT\" | jq -r '.tool_name // \"unknown\"')\nDECISION=\"allow\"   # or \"block\" depending on your hook logic\necho \"$TIMESTAMP | $ACTION | $DECISION\" >> ~/.claude/hook-trace.log",
+   "example": "   echo '{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"echo x > release.lock\"}}' | python .claude/hooks/guard.py; echo \"exit=$?\"",
    "example_lang": "bash",
    "file": "s4-10-diagnose-schritt-fuer-schritt.md",
-   "glance": "Wenn etwas nicht greift, gehst du die Schichten in fester Reihenfolge durch: CLAUDE.md, Skills, Plugins, Hooks, MCP, Rechte, dann Debug-Log und `/doctor`. Du fragst die Werkzeuge, was sie sehen, statt zu raten, und reparierst erst, wenn eine Schicht ihren Fehler zeigt. Bei Hooks zählt die Fehlerrichtung: Ein Schutz-Hook, der abstürzt oder in einen Timeout läuft, blockt nicht, der Befehl läuft weiter.",
+   "glance": "Wenn etwas nicht greift, prüfst du zuerst die Einrichtung mit `/doctor`, dann die Schichten in fester Reihenfolge: CLAUDE.md, Skills, Plugins, Hooks, MCP, Rechte, schließlich das Debug-Log. Du fragst die Werkzeuge, was sie sehen, statt zu raten, und reparierst erst, wenn eine Schicht ihren Fehler zeigt. Bei Hooks zählt die Fehlerrichtung: Ein Schutz-Hook, der abstürzt, in einen Timeout läuft oder seinen Fehler verschluckt, blockt nicht, der Befehl läuft weiter. Der gefährlichste Fall ist der, der still bleibt: Nichts meldet einen Fehler, und der Wächter winkt alles durch.",
    "id": "S4.10",
    "level": "core",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4100,
-   "outcome": "Ich kann Hook-, Skill-, Plugin- und MCP-Fehler mit der Diagnose-Checkliste Schicht für Schicht eingrenzen und einen kaputten Hook mit /hooks, einem Lauf von Hand und einer Eingabe im echten Format finden, auch wenn er still offen fällt.",
+   "outcome": "Ich kann Hook-, Skill-, Plugin- und MCP-Fehler mit der Diagnose-Checkliste Schicht für Schicht eingrenzen und einen Schutz-Hook, der still offen fällt, mit /hooks, einem Lauf von Hand mit Eingabe im echten Format und dem Debug-Log finden, reparieren und mit einem geblockten Befehl belegen.",
    "quiz": {
-    "correct": "Das Skript von Hand mit dem echten JSON auf stdin füttern und den Exit-Code prüfen, denn nur Exit 2 blockt.",
-    "q": "Dein Schutz-Hook steht in `/hooks`, lässt aber `rm -rf` durch, und im Transkript erscheint ein `hook error`. Was ist der nächste Diagnoseschritt?",
+    "correct": "Im Skript einen abgefangenen Fehler suchen, ihn sichtbar machen und den Handler geschlossen fallen lassen (`exit 2`).",
+    "q": "Dein Wächter steht in `/hooks`, im Transkript erscheint kein `hook error`, aber ein Befehl, den er blocken soll, läuft durch. Von Hand liefert das Skript mit echter Eingabe `exit=0` ohne Ausgabe. Was ist der nächste Diagnoseschritt?",
     "wrong": [
-     "Den Hook löschen und neu anlegen, weil ein `hook error` fast immer eine beschädigte Installation meldet.",
-     "Die Sitzung mit `--dangerously-skip-permissions` neu starten, damit der Hook ohne Rechte-Prüfung sauber läuft.",
-     "Den Matcher auf `\".*\"` erweitern, damit der Hook bei jedem Tool feuert und keinen Aufruf mehr verpasst."
+     "Den Matcher auf `\".*\"` erweitern, damit der Hook bei jedem Tool feuert und so keinen einzigen Aufruf mehr verpasst.",
+     "Den `timeout` des Hooks verlängern, weil ein zu kurzer Timeout das Urteil des Skripts abschneidet und sonst alles durchläuft.",
+     "Den Hook löschen und neu anlegen, weil ein Hook, der in `/hooks` steht und doch nichts blockt, auf eine beschädigte Installation hindeutet."
     ]
    },
    "recall": [
-    "Warum ist ein abgestürzter Schutz-Hook gefährlicher als einer, der alles blockt?",
+    "Warum ist ein Schutz-Hook, der seine Fehler verschluckt und mit 0 endet, gefährlicher als einer, der alles blockt?",
     "In welcher Reihenfolge prüfst du, wenn ein Skill installiert ist, aber nie ausgelöst wird?",
     "Was gehört in den `matcher`, was ins Feld `if`?"
    ],
@@ -4176,7 +4212,7 @@
    "session": 4,
    "shelf": "troubleshooting",
    "skip_check": [
-    "Hast du schon einmal einen Hook von Hand mit einer Eingabe im echten Format gefüttert (`echo '{…}' | bash script.sh`) und den Exit-Code geprüft?",
+    "Hast du schon einmal einen Hook von Hand mit einer Eingabe im echten Format gefüttert (`echo '{…}' | python script.py`) und den Exit-Code geprüft?",
     "Kannst du ohne Nachschlagen sagen, in welcher Reihenfolge du vorgehst, wenn ein Skill installiert ist, aber nie ausgelöst wird?"
    ],
    "sources": [

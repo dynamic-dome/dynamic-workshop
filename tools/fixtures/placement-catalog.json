@@ -1312,7 +1312,7 @@
    "area": "automation",
    "id": "S4.3",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4030,
    "requires": [
@@ -1332,7 +1332,7 @@
    "area": "automation",
    "id": "S4.4",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4040,
    "requires": [
@@ -1353,7 +1353,7 @@
    "area": "automation",
    "id": "S4.5",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4050,
    "requires": [
@@ -1375,7 +1375,7 @@
    "area": "automation",
    "id": "S4.6",
    "level": "bonus",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 4060,
    "requires": [
@@ -1396,7 +1396,7 @@
    "area": "git",
    "id": "S4.7",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4070,
    "requires": [
@@ -1420,7 +1420,7 @@
    "area": null,
    "id": "X.4",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 35,
    "offers": [],
    "order": 4075,
    "requires": [],
@@ -1467,7 +1467,7 @@
    "area": "troubleshooting",
    "id": "S4.9",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 4090,
    "requires": [
@@ -1487,7 +1487,7 @@
    "area": "troubleshooting",
    "id": "S4.10",
    "level": "core",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4100,
    "requires": [
