@@ -236,3 +236,23 @@ Zehn Übungen eines Schreibers wurden durchgespielt; neun liefen wie geschrieben
   das; der Wächter-Test der echten Bibliothek läuft seitdem vollständig.
 - **Bewährt am Auftrag:** je Kapitel ein Commit, Rückmeldung mit Doku-Zitaten, Minuten nur als Meldung. Der Auftrag
   steht in `docs/plans/2026-10-05-selbstlern-zuerst-tickets.md` beim Abschluss von P7a.
+
+## Aus P7b und P7c mitzunehmen (S2.1 bis S2.20, Commits `2c9f792`, `b72b648`)
+
+- **Ein Schritt, der einen Fehlschlag zeigen soll, braucht einen Befehl, der überall fehlschlägt.** `git status`
+  scheitert nur außerhalb eines Repositorys; liegt der Übungsordner unter einem, gelingt er. Jetzt:
+  `git show no-such-commit`.
+- **Soll die Übung zeigen, dass Claude etwas nicht entscheiden kann, darf im Material kein Hinweis stecken.** Eine
+  Jahreszahl im Dateinamen reichte, und Claude erklärte die alte Quelle selbst für überholt.
+- **Eine Sperre nimmt das Werkzeug weg, nicht den Weg.** Ist ein Skill verborgen oder ein Tool gesperrt, kann Claude
+  die Datei dahinter als gewöhnliche Datei finden. Der Schritt sagt, welche Rückfrage dann abzulehnen ist.
+- **Dialoge haben eine Vorauswahl.** Der Vertrauensdialog wählt „No, exit“ vor, die Server-Freigabe „Continue
+  without using this MCP server“. Der Schritt nennt die Antwort, die gemeint ist.
+- **Geänderte Dateien brauchen einen Moment.** Eine gespeicherte SKILL.md gilt nach ein paar Sekunden, nicht sofort.
+- **Startbefehle hängen nie an einem früheren Übungsordner.** Was aus einem anderen Kapitel kommt, steht als Satz
+  mit beiden Wegen da (kopieren oder neu anlegen), nicht im Befehlsblock.
+- **Was ein Befehl selbst schreibt, vorher ansehen.** `claude mcp add` legt schon ein leeres `env` an; „füg hinzu“
+  hätte einen doppelten Schlüssel ergeben.
+- **Aufräumen heißt nachsehen.** Nach Deinstallieren und Entfernen des Marketplace lag die Plugin-Kopie noch im
+  Cache. Wer eine Übung schreibt, die außerhalb des Ordners etwas anlegt, vergleicht vorher und nachher.
+

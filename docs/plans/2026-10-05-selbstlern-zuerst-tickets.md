@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7a: 729) und `python tools/build_library.py validate --complete`.
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P7c: 729) und `python tools/build_library.py validate --complete`.
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -31,8 +31,8 @@
 | P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [x] `d03ea85` |
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] `664d5ca` |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [x] `359c9db` und Folge-Commit, siehe Abschluss P5 |
-| P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a erledigt, S2.20 und S3.15 folgen mit P7c und P7e |
-| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b bis P7f [ ] |
+| P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a, S2.20 mit P7c erledigt; S3.15 folgt mit P7e |
+| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d bis P7f [ ] |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [ ] |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [ ] |
 
@@ -510,6 +510,54 @@ Danach übernimmt, wer abnimmt: alle Kapitel lesen, jede Hauptübung durchspiele
 - **Vorbereitung P7b:** `safety-check.sh` und `safety-check.ps1` blocken jetzt jede Eingabe, die kein JSON-Objekt
   ist (Tests zuerst: die Bash-Fassung ließ `null` durch, die PowerShell-Fassung auch leere Eingabe, Listen und
   bloße Werte). Die Snippets in S2.8 sind mitgezogen.
+
+### Abschluss P7b (2026-10-05)
+
+- **Schreiber** (Sonnet, zehn Commits `e70f6cb..b705de0`): S2.1 bis S2.10. Keine Übung schreibt mehr in die globale
+  Konfiguration: Skills, Hook-Skripte und Registrierung liegen im Wegwerf-Ordner (`${CLAUDE_PROJECT_DIR}`). Befund
+  R3 (PostToolUse nur nach Erfolg) steht im Text und in einer Übung. Übernommen als Merge `2c9f792`.
+- **Durchgespielt:** alle zehn Hauptübungen, der `if`-Filter, das offene Gate und drei Handtest-Extras (Linux, tmux);
+  unter Windows headless die Echo-Hooks aus S2.6 (Git Bash und `"shell": "powershell"`) und der Wächter aus S2.8 in
+  der Exec-Form. Alle liefen wie geschrieben. Ergänzt: nach dem Speichern einer geänderten SKILL.md ein paar Sekunden
+  warten (S2.2, S2.5).
+- **Vertrag:** Minuten S2.1 bis S2.5 je 25, S2.6, S2.7, S2.9 je 20, S2.8 und S2.10 je 35; Golden. 26 alte Codeblöcke
+  mit Begründung.
+- **Codex-Gegenprüfung (lesend, zwei Läufe):** beide FAIL, fünf Befunde, alle bestätigt und eingearbeitet
+  (`dc7e02e`): S2.3 (Claude kann die SKILL.md als Datei finden und von Hand befolgen; verwaltete Rechner), S2.6
+  (`git status` schlägt nur außerhalb eines Repositorys fehl, jetzt `git show no-such-commit`, nachgespielt), S2.7
+  (SessionStart feuert auch nach `/clear`, beim Fortsetzen und nach dem Komprimieren; das Extra braucht den Ordner).
+- **Nicht durchgespielt:** PreCompact-Extra (S2.7), Panel-Migration (S2.2), interaktive Rückfragen unter Windows.
+- **Offen (→ P8, mit R24):** S2.8 teilen (35 Minuten); das Gate aus S2.10 als eigenes Kapitel.
+
+### Abschluss P7c (2026-10-05)
+
+- **Schreiber** (Sonnet, dreizehn Commits `03d3e72..84c90de`): S2.11 bis S2.19 und X.1. Die MCP-Kapitel brauchen
+  kein Node.js mehr: S2.14 bringt einen Server aus 75 Zeilen Python (nur Standardbibliothek), S2.15 und S2.17 nutzen
+  ihn weiter, S2.16 hat einen zweiten mit 60.000 Zeichen Ausgabe. Playwright und NotebookLM sind Extras. Befund R4
+  (Token als Rückfallwert) ist behoben. Übernommen als Merge `b72b648`.
+- **S2.20** ist der Abschluss von Session 2 (neuer Titel „alles in einem Ablauf“): ein Skill ruft ein MCP-Tool und
+  liest eine Wissensdatei, ein Hook schreibt den Aufruf mit, eine Regel sperrt das andere Tool; darunter die Tabelle
+  der neunzehn Übungen. Durchgespielt samt Extra (derselbe Skill als Plugin).
+- **Durchgespielt:** jede Hauptübung, die Extras von S2.11, S2.12 (ganzer Lebenszyklus im Scope `local`), S2.17 und
+  S2.18 (Linux, tmux). Unter Windows headless: `plugin validate`, `plugin details`, die PowerShell-Pipe aus S2.14
+  und der Server mit `"command": "python"`. **Sicherheitsprobe** für S2.13 und X.1: `plugin validate`,
+  `plugin details` und `plugin list` mit `--plugin-dir` führen weder den SessionStart-Hook aus noch starten sie den
+  MCP-Server eines Marker-Plugins.
+- **Korrigiert nach den Läufen:** Die Server-Freigabe wählt „Continue without using this MCP server“ vor;
+  `claude mcp add` schreibt schon ein leeres `env`; S2.16 Schritt 4 trifft die Zeichengrenze und formuliert anders;
+  S2.17 fragte nach einem Standortnamen, der dort „unset“ ist; in S2.19 löste Claude den Widerspruch selbst, weil
+  die alte Datei die Jahreszahl im Namen trug (jetzt ohne Datum, und der Vermerk in der Quelle ist ein eigener
+  Schritt); nach dem Lebenszyklus in S2.12 bleibt die Kopie im Plugin-Cache liegen (zehnter Schritt).
+- **Vertrag:** Minuten S2.11 25, S2.12 20, S2.13 25, S2.14 25, S2.15 25, S2.16 20, S2.17 25, S2.18 25, S2.19 20,
+  S2.20 25, X.1 30; Titel S2.20; Katalog, Golden. 16 alte Codeblöcke mit Begründung.
+- **Codex-Gegenprüfung (lesend, zwei Läufe):** beide FAIL, sieben Befunde; sechs eingearbeitet (`bdb9082`): „Will
+  install“ ist nicht bei jedem Plugin eine Komponentenliste; zwei Ausnahmen der `./`-Regel; der Kopierbefehl der
+  Station hing an einem Ordner, den S2.17 löschen lässt; „jeder gelungene Aufruf“; zwei Formulierungen als
+  Beobachtung. Einer widerlegt (das Zeichenlimit je Tool ersetzt für Text auch das Token-Limit, mcp.md und Lauf).
+- **Nicht durchgespielt:** Playwright (S2.14), NotebookLM (S2.18), die zweite Frage aus S2.19 in einer frischen
+  Sitzung, alles Interaktive unter Windows.
+- **Für P8 notiert:** `claude plugin list` zeigt über claude.ai gekommene Plugins in einem eigenen Abschnitt; die
+  Moderationsdateien zu S2.11, S2.14 und S2.18 beschreiben noch die alten Demos.
 
 ---
 
