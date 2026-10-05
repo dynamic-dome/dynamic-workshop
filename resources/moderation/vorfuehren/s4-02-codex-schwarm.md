@@ -2,50 +2,35 @@
 
 > Demo und Hinweise für Moderierende zum Kapitel [S4.2 · Codex-Schwarm und die Datenfluss-Grenze](../../library/s4-02-codex-schwarm.md). Diese Seite gehört zur Moderationsschicht; wer allein lernt, braucht sie nicht.
 
-### Demo: Codex-Schwarm
+### Demo: Codex-Schwarm und die Datenfluss-Grenze
 
-**Ziel:** Die Multi-Modell-Pipeline zeigen: Claude plant, Codex baut parallel, Claude prüft.
+**Ziel:** Zeigen, was ein zweiter Anbieter sieht, und wie das Team entscheidet, was ihn erreichen darf. Wenn die Voraussetzungen stehen, dazu die Multi-Modell-Pipeline: Claude plant, Codex baut parallel, Claude prüft.
 
-**Voraussetzung:** Die Codex CLI ist installiert und angemeldet. Prüfen mit `codex --version`. Dazu das Plugin `multi-model-orchestrator`.
+**Teil 1: die Übung aus dem Kapitel live (Pflicht, etwa 15 Minuten, ohne Plugin und ohne Konto).** Zeig die Übung „die Dateien eines Projekts für einen zweiten Anbieter sortieren“ in [S4.2](../../library/s4-02-codex-schwarm.md). Startzustand wie dort: die Tabelle mit den zehn Dateien des Projekts `zugangsportal` an der Wand oder auf dem Bildschirm, Papier oder eine Notiz. Ablauf: Schritt 1 (jede Datei: darf raus, darf nicht raus, nur Signatur, mit einem Stichwort) lässt du die Gruppe in Paaren machen, Schritt 2 (die Entscheidung für eine Änderung innerhalb von `access_rules.py`) im Plenum. Erst danach zeigst du den Vergleich aus dem Kapitel.
 
-**Schritt 1: den Schwarm mit Zerlegung starten**
+**Teil 2: der Schwarm live (nur wenn die Voraussetzungen stehen).** Die Codex CLI ist installiert und angemeldet (`codex --version`), dazu das Plugin `multi-model-orchestrator`, und die Gruppe weiß vorher, dass der Quellcode dabei zusätzlich an OpenAI geht. Nimm dafür ein Wegwerf-Projekt ohne Vertrauliches, nicht die Dateien aus Teil 1:
 
 ```
-/multi-model-orchestrator:codex-swarm --decompose
+/multi-model-orchestrator:codex-swarm --decompose "Build a Python CLI with scan, check, report commands"
 ```
 
-Wenn nach der Aufgabe gefragt wird, gib ein:
-
-> "Build a Python CLI security tool with three commands:
-> 1. scan: given a hostname, attempt connections to ports 21, 22, 23, 25, 80, 443, 3306, 5432, 8080, 8443 and report which are open
-> 2. check: given a URL, make an HTTP GET request with a 5-second timeout and report the status code and response time in milliseconds
-> 3. report: run both scan and check on a given target and output a JSON report with timestamp, target, open ports, and HTTP status
-> Include a CLI entry point using argparse, proper error handling, and a test file."
-
-**Schritt 2: die Zerlegung beobachten**
-
-Zeig, dass Claude die Aufgabe analysiert und in unabhängige Teilaufgaben zerlegt, bevor ein einziger Codex-Agent startet. Benenne jede Teilaufgabe, sobald Claude sie erkennt.
-
-**Schritt 3: die parallele Ausführung beobachten**
-
-Zeig, wie die N Codex-Agenten gleichzeitig hochfahren. Betone, dass sie parallel arbeiten: Die Uhr läuft für alle zugleich.
-
-**Schritt 4: Claude prüft**
-
-Sieh zu, wie Claude alle erzeugten Dateien liest. Zeig, was es findet: Integrationsfehler, fehlende Fehlerbehandlung, Lücken in der Testabdeckung.
+Zeig, dass Claude die Aufgabe in unabhängige Teilaufgaben zerlegt, bevor ein Codex-Agent startet, dass die Codex-Agenten parallel hochfahren (die Gesamtdauer ist die des langsamsten Agenten) und dass Claude zum Schluss alle Ergebnisse liest und Integrationsfehler sucht.
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** etwa 12 Minuten geplant; reserviere live etwa 18 Minuten (× 1,5), weil Zerlegung und Start der Codex-Agenten unterschiedlich lange dauern.
+**Dauer:** Teil 1 etwa 15 Minuten; Teil 2 etwa 12 Minuten geplant, reserviere live etwa 18 Minuten (× 1,5), weil Zerlegung und Start der Codex-Agenten unterschiedlich lange dauern.
 
 **Sagen:**
 
-„Das ist das Modell Architekt, Monteur, Prüfer. Claude (Opus-Tier) hat die Spezifikation entworfen. Die Codex-Agenten haben die Komponenten parallel gebaut, wie Monteure, die auf verschiedenen Etagen gleichzeitig Leser installieren. Jetzt prüft Claude jede Komponente vor der Abnahme. Drei verschiedene Stärken, eine Pipeline. Das Ergebnis ist besser als jedes einzelne für sich."
+- Einstieg: „Was Claude liest, geht an Anthropic. Was in den Aufträgen für Codex steht, geht an OpenAI. Die Datenregeln von Anthropic decken nur die Claude-Seite ab. Das gilt für jeden zweiten Anbieter, den ihr anbindet, nicht nur für Codex."
+- Teil 1, Schritt 1: Lass die Paare begründen, nicht nur zuordnen. Die Dateien mit Kundendaten, Geheimnissen oder vertraulichem Herstellermaterial bleiben im Haus. Für die Zugriffslogik genügt dem Anbieter die Signatur, solange er sie nur aufrufen soll.
+- Schritt 2: „Soll der Anbieter die Logik selbst ändern, reicht das Gerüst nicht: Dann bleibt nur, den Codex-Schritt wegzulassen oder ein lokales Modell zu nehmen." Frag nach: Was verlässt dein Haus, und was kostet dich die Wahl?
+- Teil 2: „Das ist das Modell Architekt, Monteur, Prüfer. Claude hat die Aufgabe zerlegt. Die Codex-Agenten bauen die Teile parallel, wie Monteure, die auf verschiedenen Etagen gleichzeitig Leser installieren. Jetzt prüft Claude vor der Abnahme. Und der Subunternehmer sieht alles, was im Montageplan steht."
 
 **Wenn etwas ausfällt:**
 
-- **Codex CLI nicht installiert:** Lass den Live-Lauf weg, zeig eine Aufzeichnung oder Screenshots aus der Vorbereitung und besprich stattdessen das Muster.
-- **Plugin `multi-model-orchestrator` nicht installiert:** Zeig die README des Plugins auf GitHub oder ersetze die Demo durch einen Prompt an Claude: „Pretend you're a Codex swarm with N agents. Show what each would generate."
+- **Codex CLI nicht installiert:** Lass Teil 2 weg, zeig eine Aufzeichnung oder Screenshots aus der Vorbereitung und besprich stattdessen das Muster. Teil 1 braucht nichts davon.
+- **Plugin `multi-model-orchestrator` nicht installiert:** Es ist ein eigenes Plugin, kein Teil von Claude Code. Lass Teil 2 weg oder ersetze ihn durch einen Prompt an Claude: „Pretend you're a Codex swarm with N agents. Show what each would generate."
 - **Codex-Anmeldung schlägt fehl:** wie „nicht installiert", zurück zur Diskussion. Erwähne, dass außerhalb des Workshops eine Anmeldung mit `codex login` nötig ist.
 - **`--decompose` wird nicht erkannt:** Ältere Plugin-Versionen kennen das Flag nicht. Lass es weg, lass Claude die Aufgabe zuerst von Hand zerlegen und starte dann die Agenten.
 
