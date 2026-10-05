@@ -4,11 +4,11 @@ type: lesson
 title: Grenzen von RAG und Datenschutz
 shelf: mcp-knowledge
 level: deep-dive
-minutes: 10
+minutes: 20
 requires: [S2.18]
 safety_floor: false
 transferable: true
-outcome: "Ich kann entscheiden, welche Quellen in ein gehostetes RAG wie NotebookLM dürfen und welche lokal bleiben müssen, und ich prüfe wichtige Zitate stichprobenartig an der Quelle nach."
+outcome: "Ich kann Quellen danach sortieren, ob sie in ein gehostetes RAG wie NotebookLM dürfen oder lokal bleiben, und eine Antwort mit Quellenangabe an der Fundstelle prüfen, auch wenn zwei Quellen sich widersprechen."
 sources:
   - https://support.google.com/notebooklm/answer/17004255
   - https://support.google.com/notebooklm/answer/16337734
@@ -28,17 +28,17 @@ aliases: []
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen sagen, welches Material du nicht in NotebookLM hochladen würdest und was du stattdessen nimmst?
-- Hast du bei einer RAG-Antwort schon einmal die zitierte Stelle geöffnet und mit der Wiedergabe verglichen?
+- Hast du bei einer Antwort mit Quellenangabe schon einmal die zitierte Stelle geöffnet und mit der Wiedergabe verglichen?
 
 ## Auf einen Blick
 
-Alles, was du in NotebookLM lädst, ob URL, PDF, eingefügter Text oder Code, liegt danach auf Google-Servern und wird dort indexiert. Proprietären Quellcode gibst du nur hinein, wenn deine Firma das Teilen mit Google Workspace erlaubt; für sensiblen Code nimmst du ein lokales RAG. Und auch mit den richtigen Quellen kann RAG danebenliegen: Ein Zitat ist ein Prüfpunkt, kein Beweis.
+Alles, was du in NotebookLM lädst, ob URL, PDF, eingefügter Text oder Code, liegt danach auf Google-Servern und wird dort indexiert. Proprietären Quellcode gibst du nur hinein, wenn deine Firma das Teilen mit Google Workspace erlaubt; für sensiblen Code nimmst du eine lokale Wissensbasis, zum Beispiel einen Ordner mit Dateien wie in [S2.18](s2-18-rag-und-notebooklm.md). Und auch mit den richtigen Quellen kann eine Antwort danebenliegen: Eine Quellenangabe ist ein Prüfpunkt, kein Beweis.
 
 ## Bild im Kopf
 
-Wer einem externen Berater die Baupläne gibt, gibt sie aus der Hand. Den Fluchtwegplan aus dem Treppenhaus darf jeder sehen; den Plan der Alarmzonen und Kabelwege im Tresorbereich gibst du nur mit Freigabe heraus. Dieselbe Abwägung triffst du bei jeder Quelle für NotebookLM: Sie verlässt deinen Perimeter.
+Wer einer externen Beraterin Unterlagen gibt, gibt sie aus der Hand. Den Fluchtwegplan aus dem Treppenhaus darf jeder sehen; die Zugangsdaten zum Serverraum gibst du nicht heraus. Dieselbe Abwägung triffst du bei jeder Quelle für NotebookLM: Sie verlässt deinen Rechner.
 
-Und selbst mit den richtigen Plänen kann der Berater die falsche Seite aufschlagen oder eine richtige Seite falsch wiedergeben. Deshalb schlägst du bei wichtigen Aussagen die zitierte Seite selbst nach.
+Und selbst mit den richtigen Unterlagen kann die Beraterin die falsche Seite aufschlagen oder eine richtige Seite falsch wiedergeben. Liegen zwei Fassungen desselben Handbuchs im Ordner, zitiert sie womöglich die veraltete. Deshalb schlägst du bei wichtigen Aussagen die zitierte Seite selbst nach.
 
 ```mermaid
 flowchart TD
@@ -46,9 +46,9 @@ flowchart TD
   T -- "Doku, Vorschriften,<br/>öffentliche Referenz" --> N["NotebookLM passt"]
   T -- "proprietärer Code" --> F{"Erlaubt deine Firma das Teilen<br/>mit Google Workspace?"}
   F -- "ja" --> N
-  F -- "nein" --> L["lokales RAG:<br/>eigener MCP-Server mit lokaler Vektordatenbank"]
-  T -- "sensibler Code" --> L
-  N --> V["Wichtige Antworten:<br/>Zitat an der Quelle prüfen"]
+  F -- "nein" --> L["lokal:<br/>Ordner mit Dateien"]
+  T -- "sensibel, Zugangsdaten,<br/>personenbezogen" --> L
+  N --> V["Wichtige Antworten:<br/>Fundstelle selbst prüfen"]
   L --> V
 ```
 
@@ -56,76 +56,136 @@ flowchart TD
 
 ### Wohin deine Quellen gehen
 
-NotebookLM wird von Google betrieben. Jede Quelle, die du einem Notebook hinzufügst (URLs, PDFs, eingefügter Text, Code-Schnipsel), wird auf Google-Server hochgeladen und von Googles Embedding-Pipeline indexiert. Welche Regeln gelten, hängt von deinem Konto ab. Google beschreibt das in seiner Hilfe (Stand 2026-09-30, dort unter dem neuen Namen Gemini Notebook):
+NotebookLM wird von Google betrieben. Jede Quelle, die du einem Notebook hinzufügst, wird auf Google-Server hochgeladen und dort indexiert. Welche Regeln gelten, hängt von deinem Konto ab. Google beschreibt das in seiner Hilfe (Stand 2026-09-30, dort unter dem neuen Namen Gemini Notebook):
 
-- **Privates Konto:** Es gelten die allgemeinen Google-Nutzungsbedingungen und die Google-Datenschutzerklärung. Deine Inhalte trainieren Googles Basismodelle laut Google nicht direkt, außer du gibst Feedback. Klickst du Daumen hoch oder runter, sammelt Google die zugehörigen Inhalte samt Quellen und Uploads; geschulte Teams sehen sie sich an, und sie bleiben bis zu drei Jahre gespeichert, getrennt von deinem Konto.
-- **Arbeits- oder Schulkonto (Workspace):** Wie deine Daten behandelt werden, hängt laut Google von eurer Lizenz ab. Für Arbeitskonten gelten die Google-Cloud-Bedingungen, wenn Gemini Notebook in eurer Edition ein Kerndienst oder ein Add-on ist, sonst die allgemeinen Google-Bedingungen; für Schulkonten gelten die Bedingungen von Workspace for Education. Mit dem Unternehmensschutz sehen sich keine Menschen deine Uploads, Fragen und Antworten an, auch nicht bei Feedback, und nichts davon trainiert KI-Modelle. Welche Edition ihr habt, weiß eure Workspace-Verwaltung.
+- **Privates Konto:** Es gelten die allgemeinen Google-Nutzungsbedingungen und die Google-Datenschutzerklärung. Deine Inhalte trainieren Googles Basismodelle laut Google nicht direkt, außer du gibst Feedback: Dann sammelt Google die zugehörigen Inhalte samt Quellen, und Menschen sehen sie sich an.
+- **Arbeits- oder Schulkonto (Workspace):** Wie deine Daten behandelt werden, hängt laut Google von eurer Lizenz ab. Welche Edition ihr habt, weiß eure Workspace-Verwaltung.
+
+Als Faustregel reicht: Alles liegt bei Google, und die Vorgaben deiner Firma gelten. Lies bei Bedarf die verlinkten Google-Seiten; die Einzelheiten ändern sich.
 
 ### Welche Quelle wohin
 
-Für Projekte mit Quellcode heißt das:
-
 - Gib **proprietären Quellcode** nicht in ein NotebookLM-Notebook, außer deine Firma erlaubt das Teilen mit Google Workspace.
-- Für **sensiblen Code** nimmst du ein lokales RAG, zum Beispiel einen eigenen MCP-Server mit lokaler Vektordatenbank. Wie du einen eigenen MCP-Server baust, steht in [S2.17](s2-17-mcp-sicherheit.md).
+- **Zugangsdaten, Kundenlisten und andere sensible Daten** gehören in keine Wissensbasis, die du extern betreibst.
+- **Gekaufte Normtexte** prüfst du vorher auf die Rechte: Google bittet, keine Dokumente hochzuladen, an denen du keine Rechte hast.
+- Für **sensiblen Code und alles, was lokal bleiben muss,** nimmst du die einfachste lokale Wissensbasis: einen Ordner mit Dateien, den Claude Code selbst durchsucht und liest ([S2.18](s2-18-rag-und-notebooklm.md)). Wächst der Bedarf, baust du ein Suchwerkzeug als eigenen MCP-Server ([S2.17](s2-17-mcp-sicherheit.md)).
 - Für **Dokumentation, Vorschriften und öffentliche Referenzen** passt NotebookLM.
 
 Dieselbe Frage, welche Daten wohin fließen, stellt sich auch bei Claude Code selbst und bei anderen Modellanbietern: [S3.11](s3-11-datenschutz-und-compliance.md) und [S4.2](s4-02-codex-schwarm.md).
 
 ### Das Muster, das trägt, und was es nicht ist
 
-Baust du mit Claude Code etwas Nichttriviales, stößt du irgendwann an die Grenzen des allgemeinen Wissens. Das Muster, das trägt:
+Baust du mit Claude Code etwas Nichttriviales, stößt du irgendwann an die Grenzen des allgemeinen Wissens. Das Muster, das trägt: Finde heraus, was Claude wissen muss und nicht aus dem Training kennt, bau eine Wissensbasis aus diesen Quellen und richte Claude Code so ein, dass bei Fragen aus diesem Gebiet zuerst dort nachgesehen wird ([S2.18](s2-18-rag-und-notebooklm.md)).
 
-1. Finde heraus, was Claude wissen muss und nicht aus dem Training kennt.
-2. Bau ein Notebook mit diesen Quellen.
-3. Richte Claude Code so ein, dass bei Fragen aus diesem Gebiet zuerst das Notebook befragt wird ([S2.18](s2-18-rag-und-notebooklm.md)).
+So stützen sich Claudes Antworten auf **deine tatsächliche Dokumentation**: Claude nennt konkrete Quellen, du kannst sie prüfen, und bei Fragen zu deinem Stack gibt es weniger Halluzinationen. Ein „Expertise-Upgrade“ im Sinne von Deep Learning ist das nicht. Es ist **Dokumentensuche plus Quellenangabe**, mit allen Grenzen, die dazugehören.
 
-So stützen sich Claudes Antworten auf **deine tatsächliche Dokumentation**: Claude zitiert konkrete Quellen, du kannst sie prüfen, und bei Fragen zu deinem Stack gibt es weniger Halluzinationen. Ein „Expertise-Upgrade" im Sinne von Deep Learning ist das nicht. Es ist **Dokumentensuche plus Zitat**, mit allen Grenzen, die dazugehören.
+### Drei Fehlerbilder
 
-### Fünf bekannte Fehlerarten
+Die folgenden Fehlerbilder sind allgemeine Erfahrungen mit RAG-Systemen, keine Aussagen aus Googles Hilfe:
 
-NotebookLM hat, wie jedes RAG-System, bekannte Schwachstellen:
+- **Die falsche Stelle wird gefunden.** Die Antwort steckt auf zwei Seiten, und die Suche findet nur eine, oder eine wichtige Quelle landet gar nicht unter den Treffern. *Erkennen:* Die Antwort wirkt unvollständig oder passt nicht zu deiner Frage. *Dagegen:* anders fragen, die Quelle nennen, die du meinst.
+- **Die richtige Stelle wird falsch wiedergegeben.** Die Quellenangabe stimmt, die Zusammenfassung nicht. *Erkennen:* Du öffnest die Stelle und liest etwas anderes. *Dagegen:* Fundstelle selbst lesen, bei wichtigen Aussagen immer.
+- **Die Quelle selbst ist falsch oder veraltet.** Zwei Fassungen widersprechen sich, oder die Quelle ist überholt. Claude kann das nicht entscheiden, weil beide Quellen dort stehen. *Erkennen:* Eine Frage liefert zwei verschiedene Werte aus zwei Dateien. *Dagegen:* veraltete Quellen aus der Wissensbasis nehmen, Datum und Version in die Dateien schreiben.
 
-- **Chunk-Grenzen:** Eine relevante Antwort ist auf zwei Abschnitte (Chunks) verteilt, und die Suche findet nur einen davon.
-- **Embedding-Drift:** Wächst die Quellensammlung, verschieben sich die relevantesten Chunks auf überraschende Weise.
-- **Zitat-Halluzination:** Das Modell zitiert eine echte Quelle, gibt sie aber falsch wieder. Klick dich deshalb immer bis zur Stelle durch.
-- **Veralteter Index:** Eine neue Quelle ist erst abfragbar, wenn die Indexierung fertig ist; das kann Minuten dauern.
-- **Rang-Fehler bei der Suche:** Eine wichtige Quelle landet weit unten und ist nicht unter den Top-K-Chunks, die in die Antwort eingehen.
+Bei einem gehosteten Index kommt hinzu: Eine neue Quelle ist erst abfragbar, wenn die Indexierung fertig ist.
 
 ### Zitate prüfen
 
-Bei Antworten, bei denen viel auf dem Spiel steht, lässt du dir **immer** die konkrete Quellstelle nennen und prüfst sie selbst. In NotebookLM wählst du dazu ein Zitat aus: Es springt direkt zur zitierten Stelle, und du liest sie im Zusammenhang.
+Bei Antworten, bei denen viel auf dem Spiel steht, lässt du dir die konkrete Quellstelle nennen und prüfst sie selbst. Bei allem anderen reichen Stichproben: Öffne ab und zu eine Fundstelle und vergleiche sie mit der Wiedergabe. In NotebookLM springt ein Klick auf das Zitat direkt zur Stelle. In Claude Code schreibst du die Pflicht zur Quellenangabe in den Auftrag:
 
-Arbeitest du in Claude Code mit einer Datei wie `research-notes.md` aus [S2.18](s2-18-rag-und-notebooklm.md), schreibst du die Pflicht zum Zitat gleich in den Auftrag:
-
-<!-- cockpit:example -->
 ```text
-@research-notes.md Beantworte meine Frage nur aus dieser Datei. Nenne zu jeder Aussage die Quellseite, die dort zitiert ist. Steht die Antwort nicht drin, sag das.
+Answer only from the files in kb/. Name the file and quote the line for every claim. If the answer is not there, say so.
 ```
 
-Dann öffnest du stichprobenartig die genannten Stellen und vergleichst sie mit der Wiedergabe.
+## Selbst machen
+
+### Übung: Quellen sortieren und eine Fundstelle prüfen (etwa 10 Minuten)
+
+**Ziel:** Du sortierst acht Quellen nach ihrem Weg und prüfst an einem Beispiel, dass eine Quellenangabe nicht beweist, dass die Quelle stimmt.
+
+**Startzustand:** Teil A braucht nur Papier. Teil B braucht den Ordner `~/cc-workshop/wissen` mit den drei Dateien in `kb/` aus [S2.18](s2-18-rag-und-notebooklm.md); hast du ihn gelöscht, legst du ihn nach S2.18, Schritt 1 neu an. Teil B braucht kein Konto.
+
+**Teil A: sortieren.** Ordne jede Quelle einem von drei Wegen zu: **gehostet** (NotebookLM passt), **nur mit Freigabe** (Firma oder Rechteinhaber muss zustimmen) oder **lokal** (bleibt auf deinem Rechner).
+
+1. Die Doku einer öffentlichen Open-Source-Bibliothek als URL.
+2. Eine Liste eurer internen Architekturentscheidungen.
+3. Proprietärer Quellcode eures Produkts.
+4. Eine Tabelle mit Kundennamen und Adressen.
+5. Ein gekaufter Normtext als PDF.
+6. Eure eigenen Notizen zu einer öffentlichen Spezifikation.
+7. Eine Konfigurationsdatei mit Zugangsdaten.
+8. Ein Gesetzestext von der Website der Behörde.
+
+<details><summary>Vergleich</summary>
+
+1 gehostet. 2 nur mit Freigabe (euer Datenschutz und eure Firmenvorgaben entscheiden). 3 nur mit Freigabe, sonst lokal (proprietärer Code darf nur hinein, wenn die Firma das Teilen mit Google Workspace erlaubt). 4 lokal, besser gar nicht in eine Wissensbasis. 5 nur mit Freigabe (Rechte beim Rechteinhaber prüfen). 6 gehostet. 7 lokal, besser in keine Wissensbasis (Zugangsdaten gehören nicht in Quellen). 8 gehostet. Über 2 und 5 kann man streiten; wichtig ist, dass du eine Begründung hast.
+
+</details>
+
+**Teil B: eine Fundstelle prüfen.**
+
+1. Leg im Ordner `~/cc-workshop/wissen/kb` eine vierte Datei an, `ol9-errors-2021.md`. Sie ist die veraltete Fassung eines Handbuchs, die noch im Ordner liegt:
+
+   ```markdown
+   # OL-9 error handling (2021)
+
+   - After 3 failed card reads the reader locks for 30 seconds.
+   - Error code E17 means the tamper switch is open.
+   ```
+
+2. Starte `claude --permission-mode default` im Ordner `~/cc-workshop/wissen` und frag:
+
+   <!-- cockpit:example -->
+   ```text
+   Using only the files in the kb folder: after how many failed card reads does the OL-9 lock, and for how long? Name every file you used and quote each line.
+   ```
+
+   Erwartet: Claude findet die Zahl `3` und nennt zwei Zeiten, `45 seconds` aus `ol9-errors.md` und `30 seconds` aus `ol9-errors-2021.md`, oder es nennt nur eine von beiden und die Datei dazu. Beides zeigt, was dieses Kapitel meint: Die Quellenangabe verrät dir die Stelle, aber nicht, welche Datei stimmt.
+
+3. Öffne beide Dateien. Welche ist aktuell? Hinweis: `ol9-firmware.md` sagt, dass die Einstellung der Sperrzeit mit Version 2.4 kam und der Standard 45 Sekunden ist. Beantworte für dich, woran du die aktuelle Fassung erkennst (Datum, Version, Herkunft), und ob Claude das aus den Dateien allein hätte entscheiden können.
+
+4. Räum die Wissensbasis auf: Lösch die Datei `kb/ol9-errors-2021.md`. Frag in einer neuen Sitzung noch einmal. Erwartet: nur noch `45 seconds`, mit Datei. Beende die Sitzung mit `/exit`.
+
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/wissen`.
+
+**Geschafft, wenn:**
+
+- [ ] du alle acht Quellen zugeordnet und mit dem Vergleich abgeglichen hast
+- [ ] du in Teil B zwei Werte oder zwei Dateien für dieselbe Frage gesehen hast
+- [ ] du erklären kannst, warum die Quellenangabe den Widerspruch nicht auflöst
+- [ ] nach dem Löschen der alten Datei nur noch ein Wert zurückkam
 
 ## Typische Fallen
 
-- **Eine Antwort mit Zitat für richtig halten.** Das Zitat zeigt, woher eine Aussage stammen soll. Die Wiedergabe kann trotzdem falsch sein. Öffne die Stelle.
-- **Feedback zu vertraulichen Quellen geben.** Mit einem privaten Konto sammelt Google beim Feedback die zugehörigen Inhalte samt Quellen, und Menschen sehen sie sich an. Google bittet selbst darum, keine vertraulichen oder sensiblen Informationen ins Feedback zu packen.
-- **Dokumente ohne Rechte hochladen.** Google bittet, keine Dokumente hochzuladen, an denen du keine Rechte hast. Prüf das bei gekauften Normtexten, bevor du sie als Quelle nimmst.
+- **Eine Antwort mit Quellenangabe für richtig halten.** Die Angabe zeigt, woher eine Aussage stammen soll. Die Wiedergabe kann falsch sein, und die Quelle auch. Öffne die Stelle.
+- **Veraltete Fassungen im Ordner liegen lassen.** Claude behandelt jede Datei im Ordner als Quelle. Aufräumen ist Teil der Arbeit.
+- **Feedback zu vertraulichen Quellen geben.** Mit einem privaten Konto sammelt Google beim Feedback die zugehörigen Inhalte samt Quellen, und Menschen sehen sie sich an. Google bittet selbst darum, keine vertraulichen Informationen ins Feedback zu packen.
+- **Dokumente ohne Rechte hochladen.** Google bittet, keine Dokumente hochzuladen, an denen du keine Rechte hast.
 
 ## Check
 
-Du kannst für eine Quelle begründen, ob sie in ein gehostetes RAG wie NotebookLM darf oder in ein lokales RAG gehört, und du prüfst wichtige Zitate an der Quelle nach.
+Du kannst für eine Quelle begründen, ob sie in ein gehostetes RAG wie NotebookLM darf oder lokal bleibt, und du prüfst Quellenangaben an der Fundstelle.
 
 1. Wo liegen deine Quellen, nachdem du sie in NotebookLM geladen hast, und was folgt daraus für proprietären Code?
-2. Nenne drei Fehlerarten von RAG.
-3. Warum ist eine Antwort mit Zitat nicht automatisch richtig, und was tust du dagegen?
+2. Nenne drei Fehlerbilder von RAG und zu jedem ein Gegenmittel.
+3. Warum ist eine Antwort mit Quellenangabe nicht automatisch richtig, und wie oft prüfst du die Fundstelle?
+
+<details><summary>Auflösung</summary>
+
+1. Auf Google-Servern, wo sie indexiert werden. Proprietären Code lädst du nur hoch, wenn deine Firma das Teilen mit Google Workspace erlaubt; sonst bleibt er lokal.
+2. Die falsche Stelle wird gefunden (anders fragen, Quelle nennen). Die richtige Stelle wird falsch wiedergegeben (Fundstelle selbst lesen). Die Quelle ist falsch oder veraltet (veraltete Fassungen aus der Wissensbasis nehmen).
+3. Die Angabe zeigt nur, woher eine Aussage stammen soll; die Wiedergabe und die Quelle können falsch sein. Bei wichtigen Aussagen prüfst du die Fundstelle immer, sonst in Stichproben.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Ein Team will NotebookLM nutzen, damit Claude die interne Firmware eurer Alarmzentralen besser versteht. Was entscheidet, ob der Firmware-Code als Quelle hinein darf?
+**Frage:** Ein Team will NotebookLM nutzen, damit Claude die interne Firmware eurer Produkte besser versteht. Was entscheidet, ob der Firmware-Code als Quelle hinein darf?
 
-- **Richtig:** Ob eure Firma das Teilen dieses Codes mit Google Workspace erlaubt, denn jede Quelle wird auf Google-Servern gespeichert und indexiert.
-- Falsch: Ob die Dateien unter der Größengrenze für Quellen bleiben, denn kleine Dateien verarbeitet NotebookLM lokal auf deinem Rechner.
-- Falsch: Nichts weiter, denn NotebookLM speichert nur die Embeddings und nicht den Originaltext, also verlässt kein lesbarer Code euer Firmennetz.
-- Falsch: Ob ihr die Web-Oberfläche statt der Kommandozeile nutzt, denn nur Uploads über die Kommandozeile landen auf Google-Servern.
+- **Richtig:** Ob eure Firma das Teilen dieses Codes mit Google Workspace erlaubt, denn jede Quelle liegt danach auf Google-Servern.
+- Falsch: Ob der Index Embeddings oder Originaltext speichert, denn Embeddings lassen sich nicht zurücklesen, also ist der Code nicht lesbar.
+- Falsch: Ob du das Notebook privat lässt, denn ein nicht geteiltes Notebook bleibt auf deinem Rechner und verlässt das Firmennetz nicht.
+- Falsch: Ob du die Quellen über die Kommandozeile statt über die Web-Oberfläche hochlädst, denn dann bleibt der Upload im Terminal.
 
 </details>
 
