@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 5 Etappen, zusammen etwa 11,5 Stunden (629 Min durcharbeiten, 65 Min überfliegen).
+**Umfang:** 6 Etappen, zusammen etwa 12,5 Stunden (685 Min durcharbeiten, 69 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -33,7 +33,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — überfliegen
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — überfliegen
 
-## Etappe 3 (~147 Min)
+## Etappe 3 (~131 Min)
 
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — überfliegen
 - [S2.14 MCP: der Integrationsstecker](../library/s2-14-mcp-stecker.md) — durcharbeiten
@@ -41,28 +41,31 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.16 MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](../library/s2-16-mcp-im-detail.md) — durcharbeiten
 - [S2.17 MCP-Sicherheit und ein eigener Server](../library/s2-17-mcp-sicherheit.md) 🛡 — durcharbeiten
 - [S2.18 RAG und NotebookLM: dem Agenten Baupläne geben](../library/s2-18-rag-und-notebooklm.md) — durcharbeiten
+
+## Etappe 4 (~139 Min)
+
 - [S2.19 Grenzen von RAG und Datenschutz](../library/s2-19-rag-grenzen.md) — durcharbeiten
-- [S2.20 Praxis-Station Session 2: eine Übung wählen](../library/s2-20-praxis-station-2.md) — durcharbeiten
+- [S2.20 Praxis-Station Session 2: alles in einem Ablauf](../library/s2-20-praxis-station-2.md) — durcharbeiten
 - [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
 - [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) — durcharbeiten
 - [S3.2 Eingebaute Subagenten nutzen](../library/s3-02-eingebaute-subagenten.md) — durcharbeiten
-
-## Etappe 4 (~130 Min)
-
 - [S3.3 Einen eigenen Subagenten definieren](../library/s3-03-eigener-subagent.md) — durcharbeiten
 - [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) — durcharbeiten
 - [S3.5 Hintergrund-Sitzungen und Agent Teams](../library/s3-05-hintergrund-und-teams.md) — durcharbeiten
 - [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) 🛡 — durcharbeiten
+
+## Etappe 5 (~137 Min)
+
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
 - [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](../library/s3-12-zeitgesteuert-arbeiten.md) — durcharbeiten
 - [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) 🛡 — durcharbeiten
 - [S3.15 Praxis-Station Session 3: eine Übung wählen](../library/s3-15-praxis-station-3.md) — durcharbeiten
 - [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) — überfliegen
 - [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) — überfliegen
-
-## Etappe 5 (~118 Min)
-
 - [S4.8 Abschlussprojekt mit Bewertung](../library/s4-08-abschlussprojekt.md) — durcharbeiten
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
+
+## Etappe 6 (~48 Min)
+
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

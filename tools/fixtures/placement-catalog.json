@@ -666,7 +666,7 @@
    "area": "plugins",
    "id": "S2.11",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2110,
    "requires": [
@@ -692,7 +692,7 @@
    "area": "plugins",
    "id": "S2.12",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2120,
    "requires": [
@@ -718,7 +718,7 @@
    "area": "plugins",
    "id": "S2.13",
    "level": "deep-dive",
-   "minutes": 10,
+   "minutes": 25,
    "offers": [],
    "order": 2130,
    "requires": [
@@ -745,7 +745,7 @@
    "area": "mcp",
    "id": "S2.14",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2140,
    "requires": [
@@ -766,7 +766,7 @@
    "area": "mcp",
    "id": "S2.15",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2150,
    "requires": [
@@ -788,7 +788,7 @@
    "area": "mcp",
    "id": "S2.16",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2160,
    "requires": [
@@ -811,7 +811,7 @@
    "area": "mcp",
    "id": "S2.17",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2170,
    "requires": [
@@ -834,7 +834,7 @@
    "area": "mcp",
    "id": "S2.18",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2180,
    "requires": [
@@ -856,7 +856,7 @@
    "area": "mcp",
    "id": "S2.19",
    "level": "deep-dive",
-   "minutes": 10,
+   "minutes": 20,
    "offers": [],
    "order": 2190,
    "requires": [
@@ -879,7 +879,7 @@
    "area": null,
    "id": "S2.20",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [
     "S2.2",
     "S2.8",
@@ -900,7 +900,7 @@
    "area": null,
    "id": "X.1",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 2205,
    "requires": [],

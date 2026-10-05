@@ -41,7 +41,7 @@ Kern 235 Min · Vertiefung 95 Min
 
 ## Session 2 — Das Ökosystem
 
-Kern 256 Min · Vertiefung 148 Min
+Kern 300 Min · Vertiefung 190 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
@@ -55,16 +55,16 @@ Kern 256 Min · Vertiefung 148 Min
 | [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) | Kern | 35 | 🛡 | [Demo](../moderation/vorfuehren/s2-08-hook-einrichten.md) |
 | [S2.9 Hook-Typen und Hooks in Komponenten](../library/s2-09-hook-typen.md) | Vertiefung | 20 |  |  |
 | [S2.10 Hook-Ausgaben und das Secure Diff Gate](../library/s2-10-hook-ausgaben.md) | Vertiefung | 35 |  | [Demo](../moderation/vorfuehren/s2-10-hook-ausgaben.md) |
-| [S2.11 Plugins: ein Bündel schnüren](../library/s2-11-plugins-buendeln.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s2-11-plugins-buendeln.md) |
-| [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](../library/s2-12-plugin-lebenszyklus.md) | Vertiefung | 15 |  |  |
-| [S2.13 Lieferkettenrisiken bei Plugins](../library/s2-13-plugin-lieferkette.md) | Vertiefung | 10 | 🛡 |  |
-| [S2.14 MCP: der Integrationsstecker](../library/s2-14-mcp-stecker.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s2-14-mcp-stecker.md) |
-| [S2.15 MCP einrichten: Transporte, Scopes, CLI](../library/s2-15-mcp-einrichten.md) | Kern | 15 |  |  |
-| [S2.16 MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](../library/s2-16-mcp-im-detail.md) | Vertiefung | 15 |  |  |
-| [S2.17 MCP-Sicherheit und ein eigener Server](../library/s2-17-mcp-sicherheit.md) | Vertiefung | 18 | 🛡 |  |
-| [S2.18 RAG und NotebookLM: dem Agenten Baupläne geben](../library/s2-18-rag-und-notebooklm.md) | Kern | 18 |  | [Demo](../moderation/vorfuehren/s2-18-rag-und-notebooklm.md) |
-| [S2.19 Grenzen von RAG und Datenschutz](../library/s2-19-rag-grenzen.md) | Vertiefung | 10 |  |  |
-| [S2.20 Praxis-Station Session 2: eine Übung wählen](../library/s2-20-praxis-station-2.md) | Kern | 18 |  |  |
+| [S2.11 Plugins: ein Bündel schnüren](../library/s2-11-plugins-buendeln.md) | Kern | 25 |  | [Demo](../moderation/vorfuehren/s2-11-plugins-buendeln.md) |
+| [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](../library/s2-12-plugin-lebenszyklus.md) | Vertiefung | 20 |  |  |
+| [S2.13 Lieferkettenrisiken bei Plugins](../library/s2-13-plugin-lieferkette.md) | Vertiefung | 25 | 🛡 |  |
+| [S2.14 MCP: der Integrationsstecker](../library/s2-14-mcp-stecker.md) | Kern | 25 |  | [Demo](../moderation/vorfuehren/s2-14-mcp-stecker.md) |
+| [S2.15 MCP einrichten: Transporte, Scopes, CLI](../library/s2-15-mcp-einrichten.md) | Kern | 25 |  |  |
+| [S2.16 MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](../library/s2-16-mcp-im-detail.md) | Vertiefung | 20 |  |  |
+| [S2.17 MCP-Sicherheit und ein eigener Server](../library/s2-17-mcp-sicherheit.md) | Vertiefung | 25 | 🛡 |  |
+| [S2.18 RAG und NotebookLM: dem Agenten Baupläne geben](../library/s2-18-rag-und-notebooklm.md) | Kern | 25 |  | [Demo](../moderation/vorfuehren/s2-18-rag-und-notebooklm.md) |
+| [S2.19 Grenzen von RAG und Datenschutz](../library/s2-19-rag-grenzen.md) | Vertiefung | 20 |  |  |
+| [S2.20 Praxis-Station Session 2: alles in einem Ablauf](../library/s2-20-praxis-station-2.md) | Kern | 25 |  |  |
 
 ## Session 3 — Fortgeschritten: Kern
 
@@ -111,6 +111,6 @@ Kern 63 Min · Vertiefung 66 Min · Kür 97 Min
 | Kapitel | Stufe | Min |
 |---|---|---:|
 | [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) | Kür | 35 |
-| [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) | Kür | 15 |
+| [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) | Kür | 30 |
 | [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) | Kür | 15 |
 | [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) | Kür | 15 |

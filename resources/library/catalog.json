@@ -1877,34 +1877,38 @@
    "aliases": [
     "2.3"
    ],
-   "analogy": "Denk an ein Sicherheitsmodul für deine Anlage, etwa ein biometrisches Zutrittsmodul. Darin steckt, was zusammengehört: der Fingerabdruckscanner (Sensoren = Hooks), der Abgleich-Algorithmus (Logik = Agents), die Standardabläufe für „Zutritt erlaubt\" und „Zutritt verweigert\" (Verfahren = Skills), die Tasten am Bedienteil (Bedienung = Commands) und das Typenschild mit der Konfiguration (Metadaten = `plugin.json`). Du kaufst das Modul, baust es ein, und es arbeitet mit deiner bestehenden Anlage zusammen. Du musst nicht jedes Teil selbst bauen und verdrahten.",
-   "answers": null,
+   "analogy": "Denk an ein Sicherheitsmodul für deine Anlage, etwa ein biometrisches Zutrittsmodul. Darin steckt, was zusammengehört: der Fingerabdruckscanner (die Sensoren, in Claude Code die Hooks), der Abgleich-Spezialist, an den die Zentrale die schwierigen Fälle übergibt (die Agents), die Standardabläufe für „Zutritt erlaubt“ und „Zutritt verweigert“ (die Skills) und das Typenschild mit Name und Version (das Manifest `plugin.json`). Du baust das Modul als Ganzes ein und musst nicht jedes Teil einzeln verdrahten.",
+   "answers": [
+    "Skills, Agents, Hooks und MCP-Server findet Claude Code über die Ordner und Dateien im Plugin-Root. Im Manifest stehen Name (Pflicht), Version, Beschreibung und Autor; die Komponenten zählst du dort nicht auf.",
+    "Mit `/greeter:hello`. Das Präfix ist der Plugin-Name, damit zwei Plugins jeweils einen Skill `hello` mitbringen können, ohne zu kollidieren.",
+    "Mit `claude plugin validate <path>`, und das mit einem Pfad, nicht mit einem Namen. Geladen wird mit `claude --plugin-dir <path>`, nur für diese Sitzung. Änderungen übernimmt `/reload-plugins`."
+   ],
    "area": "plugins",
-   "checkpoint": "Du kannst die Verzeichnisstruktur eines Plugins aufzeichnen und erklären, warum das Manifest unter `.claude-plugin/plugin.json` liegt und nicht im Plugin-Root.",
+   "checkpoint": "Du kannst die Verzeichnisstruktur eines Plugins aufzeichnen, es prüfen, ohne es zu installieren, und seinen Skill aufrufen.",
    "demo": "../moderation/vorfuehren/s2-11-plugins-buendeln.md",
-   "example": "claude plugin validate ./my-mini-plugin\n# expected: ✔ Validation passed",
+   "example": "   claude plugin validate ./greeter-src\n   claude --plugin-dir ./greeter-src plugin details greeter",
    "example_lang": "bash",
    "file": "s2-11-plugins-buendeln.md",
-   "glance": "Ein Plugin ist ein Verzeichnis, das Skills, Agents, Hooks, MCP-Server und weitere Komponenten bündelt; Claude Code installiert und lädt es als eine Einheit. Das Manifest liegt unter `.claude-plugin/plugin.json`, alles andere direkt im Plugin-Root, und die Komponenten findet Claude Code über die Ordner von selbst. Bevor du ein Plugin weitergibst, prüfst du es mit `claude plugin validate <path>`; zum Testen lädst du es mit `--plugin-dir`, ohne es zu installieren.",
+   "glance": "Ein Plugin ist ein Verzeichnis, das Skills, Agents, Hooks, MCP-Server und weitere Komponenten bündelt; Claude Code lädt es als eine Einheit. Das Manifest liegt unter `.claude-plugin/plugin.json`, alles andere direkt im Plugin-Root, und die Komponenten findet Claude Code über die Ordner von selbst. Mit `claude plugin validate <path>` prüfst du das Plugin, mit `--plugin-dir` lädst du es nur für eine Sitzung, ohne es zu installieren.",
    "id": "S2.11",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2110,
-   "outcome": "Ich kann ein Plugin als Verzeichnis mit .claude-plugin/plugin.json, skills/, commands/, agents/ und hooks/hooks.json aufbauen, es mit claude plugin validate <path> prüfen und mit --plugin-dir lokal laden.",
+   "outcome": "Ich kann ein Plugin als Verzeichnis mit .claude-plugin/plugin.json, skills/ und agents/ aufbauen, es mit claude plugin validate <path> prüfen, mit --plugin-dir für eine Sitzung laden und seinen Skill mit Präfix aufrufen.",
    "quiz": {
     "correct": "Das Plugin lädt ohne Manifest: Es heißt wie der Ordner, Name und Version aus deiner Datei fehlen.",
     "q": "Du legst `plugin.json` direkt in den Plugin-Root statt nach `.claude-plugin/` und startest `claude --plugin-dir ./mein-ordner`. Was passiert?",
     "wrong": [
      "Das Plugin lädt gar nicht, und Claude Code bricht den Start mit einem Manifest-Fehler ab.",
      "Claude Code liest die Datei trotzdem, weil der Loader beide Orte durchsucht und den Root bevorzugt.",
-     "Das Plugin lädt nur das Manifest; die Ordner `skills/` und `commands/` bleiben dabei unbeachtet."
+     "Das Plugin lädt nur das Manifest; die Ordner `skills/` und `agents/` bleiben dabei unbeachtet."
     ]
    },
    "recall": [
     "Welche Teile eines Plugins findet Claude Code von selbst, und was steht im Manifest?",
-    "Was passiert, wenn `skills/` versehentlich in `.claude-plugin/` liegt?",
-    "Wie prüfst und lädst du ein Plugin, ohne es zu installieren?"
+    "Wie rufst du den Skill `hello` eines Plugins `greeter` auf, und warum trägt er ein Präfix?",
+    "Wie prüfst du ein Plugin, wie lädst du es ohne Installation, und wie übernimmst du eine Änderung in einer laufenden Sitzung?"
    ],
    "requires": [
     "S2.2",
@@ -1925,7 +1929,7 @@
    "shelf": "plugins",
    "skip_check": [
     "Kannst du ohne Nachschlagen sagen, wo `plugin.json` in einem Plugin liegen muss und welche Teile Claude Code von selbst findet?",
-    "Hast du schon einmal ein Plugin mit `--plugin-dir` lokal geladen und seine Struktur angesehen?"
+    "Hast du schon einmal ein Plugin mit `--plugin-dir` geladen, ohne es zu installieren?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/plugins",
@@ -1938,21 +1942,25 @@
   },
   {
    "aliases": [],
-   "analogy": "Scopes sind wie Zutrittszonen in einem Gebäude. Der user-Scope ist dein persönlicher Spind. Der project-Scope ist der Geräteraum des Teams. Der managed-Scope ist die gebäudeweite Sicherheitsrichtlinie, die außer dem Sicherheitsverantwortlichen niemand ändern kann. Der local-Scope ist dein eigenes Fach im Geräteraum: nur für dich, nur an diesem Ort.",
-   "answers": null,
+   "analogy": "Ein Scope entscheidet, wer ein Werkzeug in die Hand bekommt, nicht, was das Werkzeug darf. Stell dir eine Werkstatt vor. Der user-Scope ist dein eigener Werkzeugkoffer: Er geht mit dir in jede Halle. Der project-Scope ist die Werkzeugliste an der Hallenwand: Sie sagt, womit hier alle arbeiten, aber jede holt sich das Werkzeug selbst aus dem Lager. Der local-Scope ist dein persönlicher Zettel an dieser Halle: nur für dich, nur hier. Der managed-Scope ist die Ausrüstung, die die Betriebsleitung vorschreibt und die du nicht änderst.",
+   "answers": [
+    "In `.claude/settings.local.json` im Projekt. Der Eintrag gilt nur für dich und nur in diesem Repo, und er wird nicht geteilt.",
+    "Mit `claude plugin disable <name> --scope local`. Local überschreibt project; die eingecheckte Datei des Teams bleibt unverändert.",
+    "Entfernst du den Marketplace aus dem letzten Scope, der ihn deklariert, löscht Claude Code seinen Cache und deinstalliert alle Plugins, die du daraus installiert hast. Zum Auffrischen gibt es `marketplace update`."
+   ],
    "area": "plugins",
-   "checkpoint": "Du kannst erklären, welchen Scope ein Team-Plugin braucht, damit es über Git verteilt wird, was jede Person danach noch selbst tun muss und warum `managed` nicht dasselbe ist wie `project`.",
+   "checkpoint": "Du kannst einem Plugin den passenden Scope zuordnen und die Befehle für den Rest des Lebenszyklus nennen.",
    "demo": null,
-   "example": "# Add the community marketplace\n/plugin marketplace add anthropics/claude-plugins-community\n\n# Install a specific plugin from a specific marketplace\n/plugin install code-review@claude-plugins-official\n/plugin install some-niche-plugin@claude-community",
+   "example": "   claude plugin list\n   claude plugin marketplace list",
    "example_lang": "bash",
    "file": "s2-12-plugin-lebenszyklus.md",
    "glance": "Plugins installierst du aus einem Marketplace, einem Katalog, den du einmal hinzufügst; danach heißt ein Plugin `<name>@<marketplace>`. Der Scope entscheidet, für wen es aktiv ist: `user` für dich in allen Projekten, `project` für alle im Repo über die eingecheckte `.claude/settings.json`, `local` nur für dich in diesem Repo; `managed` legt die Organisation fest. Die CLI begleitet den ganzen Lebenszyklus: install, enable, disable, update, uninstall und prune.",
    "id": "S2.12",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2120,
-   "outcome": "Ich kann ein Plugin aus einem Marketplace mit passendem Scope (user, project oder local) installieren, aktivieren, abschalten, aktualisieren und entfernen, erklären, was managed bedeutet, und die CLI-Version bewusst festhalten.",
+   "outcome": "Ich kann einem Plugin den passenden Scope (user, project oder local) zuordnen, mit claude plugin list lesen, was bei mir installiert ist, die Befehle zum Aktivieren, Abschalten, Aktualisieren und Entfernen nennen und sagen, was managed bedeutet.",
    "quiz": {
     "correct": "Es ist für sie aktiviert, doch sie installiert es einmal selbst mit `--scope project`.",
     "q": "Du installierst ein Plugin im project-Scope und committest `.claude/settings.json`. Eine Kollegin klont das Repo. Was gilt für sie?",
@@ -1963,9 +1971,9 @@
     ]
    },
    "recall": [
-    "In welche Datei schreibt `--scope local`, und wer bekommt den Eintrag zu sehen?",
-    "Was tut `claude plugin enable`, wenn eine erklärte Abhängigkeit nicht installiert ist?",
-    "Was passiert bei `claude install` ohne Argument, und warum ist das für einen gepinnten Stand gefährlich?"
+    "In welche Datei schreibt `--scope local`, und wer sieht den Eintrag?",
+    "Wie schaltest du ein Plugin, das dein Team im Projekt eingeschaltet hat, nur für dich ab?",
+    "Was passiert mit den Plugins, wenn du einen Marketplace mit `claude plugin marketplace remove` entfernst?"
    ],
    "requires": [
     "S2.11"
@@ -1986,7 +1994,7 @@
    "shelf": "plugins",
    "skip_check": [
     "Kannst du ohne Nachschlagen sagen, welcher Plugin-Scope ins Repo eingecheckt wird und welcher nur für dich gilt?",
-    "Hast du schon einmal `claude plugin install <name>@<marketplace>` mit `--scope` benutzt und danach mit `claude plugin list` geprüft?"
+    "Weißt du, mit welchem Befehl du ein Plugin abschaltest, ohne es zu entfernen?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/plugins/install",
@@ -2000,18 +2008,22 @@
   },
   {
    "aliases": [],
-   "analogy": "Stell dir einen RS-485-Bus vor, an dem alle OSDP-Leser und Schlossrelais eines Gebäudes hängen. Wer ein Gerät an diesen Bus anschließt, gibt ihm Zugang zum ganzen Segment: Ein kompromittiertes Gerät kann gültig aussehende OSDP-Kommandos senden, die das System als legitim behandelt, ohne dass ein Bediener es merkt. Ein installiertes Plugin ist so ein Gerät am Bus. Was es ausführt, läuft als du.",
-   "answers": null,
+   "analogy": "Stell dir ein Zusatzgerät vor, das du an den Datenbus deines Gebäudes anschließt, an dem schon Leser und Schlossrelais hängen. Ab dem Anschluss hat das Gerät Zugang zum ganzen Bus, und was es sendet, behandelt die Anlage als echt. Ein installiertes Plugin ist so ein Gerät: Was es ausführt, läuft als du.",
+   "answers": [
+    "`hooks/hooks.json`, `.mcp.json` und die Dateien in `bin/`. `plugin details` und der Abschnitt **Will install** zeigen, dass es einen Hook oder Server gibt, nicht den Befehl, den er ausführt.",
+    "Rechte-Regeln und Sandbox decken die Tool-Aufrufe ab, die Claude macht. Command-Hooks führen Shell-Befehle mit deinen vollen Benutzerrechten aus, und Hooks und MCP-Server laufen außerhalb der Sandbox.",
+    "Eine festgehaltene Version verhindert nur, dass sich die Dateien unter dir ändern. Ob sie harmlos ist, siehst du nur beim Lesen. Der project-Scope bringt die Entscheidung, welches Plugin das Team nutzt, in den Code-Review; den Plugin-Code prüft der Review nicht, weil Updates aus dem Marketplace kommen."
+   ],
    "area": "plugins",
-   "checkpoint": "Du kannst die drei Plugin-Teile nennen, die du vor der Installation lesen musst (`bin/`, `hooks/hooks.json`, `.mcp.json`), und erklären, warum Versions-Pinning allein Lieferkettenangriffe nicht verhindert.",
+   "checkpoint": "Du kannst vor der Installation eines fremden Plugins die Stellen lesen, an denen Code läuft, und sagen, was Rechte-Regeln, Versionen und Scopes davon nicht abdecken.",
    "demo": null,
-   "example": "# Before installing: where does each marketplace come from?\nclaude plugin marketplace list\n\n# Clone the plugin's repository, then list what it would add (no session starts)\nclaude --plugin-dir ./suspicious-plugin plugin details suspicious-plugin\n\n# Read what actually runs\ncat ./suspicious-plugin/hooks/hooks.json\ncat ./suspicious-plugin/.mcp.json\nls -la ./suspicious-plugin/bin/",
+   "example": "   claude plugin validate ./tidy-helper\n   claude --plugin-dir ./tidy-helper plugin details tidy-helper",
    "example_lang": "bash",
    "file": "s2-13-plugin-lieferkette.md",
-   "glance": "Ein fremdes Plugin ist fremder Code mit deinen Rechten: Seine Hooks laufen als Shell-Befehle mit deinen vollen Benutzerrechten und außerhalb der Sandbox, seine MCP-Server laufen als Prozesse auf deinem Rechner, und die Programme in seinem `bin/` stehen Claude im `PATH`. Lies deshalb vor der Installation `hooks/hooks.json`, `.mcp.json` und `bin/`, egal aus welchem Marketplace das Plugin kommt.",
+   "glance": "Ein fremdes Plugin ist fremder Code mit deinen Rechten. Seine Hooks laufen als Shell-Befehle mit deinen vollen Benutzerrechten und außerhalb der Sandbox, seine MCP-Server laufen als Prozesse auf deinem Rechner, und die Programme in seinem `bin/` stehen Claude im `PATH`. Lies deshalb vor der Installation `hooks/hooks.json`, `.mcp.json` und `bin/`, egal aus welchem Marketplace das Plugin kommt.",
    "id": "S2.13",
    "level": "deep-dive",
-   "minutes": 10,
+   "minutes": 25,
    "offers": [],
    "order": 2130,
    "outcome": "Ich kann vor der Installation eines fremden Plugins Herkunft, Hooks, bin/ und MCP-Server prüfen und erklären, warum Versions-Pinning und project-Scope das Lesen des Codes nicht ersetzen.",
@@ -2025,9 +2037,9 @@
     ]
    },
    "recall": [
-    "Welche Teile eines Plugins laufen außerhalb der Sandbox?",
-    "Was zeigt der Abschnitt **Will install** in `/plugin`, und was zeigt er nicht?",
-    "Warum bringt der project-Scope die Entscheidung fürs Team in den Code-Review, schützt aber nicht vor einem schlechten Update?"
+    "Welche drei Dateien oder Ordner eines Plugins liest du vor der Installation, und was zeigt `plugin details` davon nicht?",
+    "Warum halten Rechte-Regeln und Sandbox die Hooks eines Plugins nicht auf?",
+    "Warum ersetzt eine festgehaltene Version das Lesen des Codes nicht, und was leistet der project-Scope?"
    ],
    "requires": [
     "S2.12"
@@ -2048,8 +2060,8 @@
    "session": 2,
    "shelf": "plugins",
    "skip_check": [
-    "Kannst du ohne Nachschlagen vier Wege nennen, über die ein fremdes Plugin Schaden anrichten kann (übernommenes Repo, `bin/`, Hooks, MCP-Server)?",
-    "Hast du schon einmal `hooks/hooks.json`, `.mcp.json` und `bin/` eines Plugins gelesen, bevor du es installiert hast?"
+    "Kannst du ohne Nachschlagen sagen, welche Dateien und Ordner eines Plugins du vor der Installation liest?",
+    "Weißt du, ob deine Rechte-Regeln die Hooks eines Plugins aufhalten?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/plugins/security",
@@ -2064,34 +2076,38 @@
    "aliases": [
     "2.4"
    ],
-   "analogy": "Eine moderne Gebäudeleittechnik steuert nicht nur Türen, sie bindet die anderen Anlagen ein. Die Brandmeldeanlage löst bei Rauch automatisch die Verriegelung aus. Die Kamerabilder erscheinen an der Zutrittskonsole. Vorangemeldete Besucher stehen schon im Türsystem. Kündigt die Personalabteilung jemandem, ist seine Karte automatisch gesperrt, und die Türprotokolle fließen in die Zeiterfassung. Jede Anlage bietet eine Schnittstelle, und die Leitzentrale verbindet sich mit allen. Claude Code mit MCP funktioniert genauso: Claude ist die Leitzentrale, die externen Dienste bieten MCP-Schnittstellen, und du legst fest, welche Verbindungen es gibt.",
-   "answers": null,
+   "analogy": "Eine Leitstelle im Gebäude kennt nicht jede Anlage selbst. Sie ruft bei Bedarf die Schnittstelle der Brandmeldeanlage, der Kameras oder des Besuchermanagements ab und bekommt eine Antwort in einem festen Format. Jede Anlage bietet ihre Schnittstelle, und die Leitstelle entscheidet, wen sie fragt. Claude Code mit MCP funktioniert genauso: Claude ist die Leitstelle, die externen Dienste bieten MCP-Schnittstellen, und du legst fest, welche Verbindungen es gibt. Die Leitstelle ruft nur dann an, wenn die Aufgabe es verlangt.",
+   "answers": [
+    "Tools, Ressourcen und Prompts. In der Sitzung zeigt `/mcp` den Server mit seinem Status und der Zahl seiner Tools.",
+    "In der `.mcp.json` im Projektordner, das ist der Scope `project`. Claude Code fragt aus Sicherheitsgründen vor der Nutzung von Projekt-Servern nach; ein geklontes Repo soll sich nicht selbst Server freischalten.",
+    "Dadurch, wer auslöst: Ein MCP-Tool ruft Claude auf, wenn die Aufgabe es braucht. Ein Hook feuert von selbst bei einem festen Ereignis, ohne dass Claude darüber entscheidet."
+   ],
    "area": "mcp",
-   "checkpoint": "Du kannst an einem Beispiel aus deinem Arbeitsumfeld erklären, was ein MCP-Server gegenüber Copy-Paste bringt, und hast den Playwright-Server so angebunden, dass Claude eine echte Webseite bedient.",
+   "checkpoint": "Du kannst erklären, was ein MCP-Server gegenüber Copy-Paste bringt, und hast einen Server so angebunden, dass Claude eines seiner Tools aufgerufen hat.",
    "demo": "../moderation/vorfuehren/s2-14-mcp-stecker.md",
-   "example": "{\n  \"mcpServers\": {\n    \"playwright\": {\n      \"command\": \"npx\",\n      \"args\": [\"@playwright/mcp@latest\"],\n      \"env\": {}\n    }\n  }\n}",
+   "example": "   {\n     \"mcpServers\": {\n       \"rooms\": {\n         \"command\": \"python3\",\n         \"args\": [\"server.py\"]\n       }\n     }\n   }",
    "example_lang": "json",
    "file": "s2-14-mcp-stecker.md",
    "glance": "Von Haus aus liest Claude Code Dateien, führt Befehle im Terminal aus und sucht im Web. MCP (Model Context Protocol) ist ein offener Standard, über den Claude Code sich zusätzlich mit externen Diensten verbindet: mit einem echten Browser, mit Datenbanken, Chat-Plattformen und eigenen APIs. Ein Dienst bietet dafür einen MCP-Server an, der Tools, Ressourcen und Prompts bereitstellt, und Claude ruft diese Tools auf wie eingebaute Werkzeuge.",
    "id": "S2.14",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2140,
-   "outcome": "Ich kann erklären, was MCP als offenes Protokoll leistet, den Playwright-MCP-Server über eine .mcp.json im Projekt anbinden und Claude damit eine echte Webseite bedienen lassen.",
+   "outcome": "Ich kann erklären, was MCP als offenes Protokoll leistet, einen MCP-Server über eine .mcp.json im Projekt anbinden, in /mcp prüfen, ob er verbunden ist, und Claude eines seiner Tools aufrufen lassen.",
    "quiz": {
-    "correct": "Wer auslöst: Ein MCP-Tool ruft Claude auf, wenn es das Tool braucht; ein Hook feuert von selbst bei einem festen Ereignis.",
-    "q": "Was unterscheidet ein MCP-Tool grundsätzlich von einem Claude-Code-Hook?",
+    "correct": "Die Freigabe: Server aus einer `.mcp.json` nutzt Claude Code erst, nachdem du sie in einer interaktiven Sitzung bestätigt hast.",
+    "q": "Du hast den Server in die `.mcp.json` des Projekts eingetragen. `claude mcp list` zeigt ihn mit dem Status `Pending approval`, und in der Sitzung fehlen seine Tools. Was fehlt?",
     "wrong": [
-     "Nur der Transport: MCP-Tools laufen immer über HTTP, Hooks dagegen immer als lokales Shell-Skript auf deinem Rechner.",
-     "Nichts Wesentliches: MCP-Server ist bloß der neue Name für Hooks vom Typ `http`, die Aufgabe ist dieselbe geblieben.",
-     "Nur die Anmeldung: MCP-Tools können sich per OAuth anmelden, Hooks dagegen nicht; ansonsten verhalten sich beide genau gleich."
+     "Der Server muss mit `claude mcp add --scope user` neu eingetragen werden, weil Claude Code eine `.mcp.json` im Projekt grundsätzlich nicht liest.",
+     "Ein `/reload-plugins` lädt den Server nach, weil es alle Erweiterungen der laufenden Sitzung neu einliest.",
+     "Ein `claude mcp reset-project-choices` schaltet den Server frei, weil es alle Projekt-Server auf „zugelassen“ setzt."
     ]
    },
    "recall": [
-    "Was stellt ein MCP-Server für Claude bereit?",
-    "Wo legst du den Server für die Übung ab, und warum fragt Claude Code beim Start nach?",
-    "Welche Daten überqueren eine Grenze, wenn Claude über Playwright dein Admin-Portal bedient, und wem gehören sie?"
+    "Was stellt ein MCP-Server für Claude bereit, und woran siehst du in der Sitzung, dass er verbunden ist?",
+    "Wo hast du den Server in der Übung eingetragen, und warum fragt Claude Code vor der Nutzung nach?",
+    "Wodurch unterscheidet sich ein MCP-Tool von einem Hook?"
    ],
    "requires": [
     "S1.5"
@@ -2107,7 +2123,7 @@
    "shelf": "mcp-knowledge",
    "skip_check": [
     "Kannst du ohne Nachschlagen erklären, was Claude Code mit MCP erreicht, das es ohne MCP nicht kann?",
-    "Hast du schon einmal einen MCP-Server wie Playwright oder Context7 angebunden und nachgesehen, mit welchen Rechten er läuft?"
+    "Weißt du, warum Claude Code beim ersten Start nachfragt, bevor es einen Server aus einer `.mcp.json` nutzt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/mcp"
@@ -2118,34 +2134,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Der Transport ist die Verkabelung eines Kartenlesers am Controller. `stdio` ist die feste Leitung vor Ort, etwa RS-485 vom Leser zum Controller. `http` ist die Anbindung aus der Ferne über ein gesichertes Netzsegment. SSE weiter zu nutzen ist, wie ein Protokoll zu betreiben, dessen Support ausläuft: Es funktioniert noch, aber der Hersteller empfiehlt den Wechsel.",
-   "answers": null,
+   "analogy": "Ein Scope entscheidet, wo die Liste deiner Verbindungen hängt. `user` ist dein eigener Werkzeugkoffer: Er geht mit dir in jede Halle. `project` ist die Liste an der Hallenwand: Sie sagt, welche Verbindungen hier üblich sind, und jede bestätigt sie beim ersten Start für sich. `local` ist dein persönlicher Zettel an dieser einen Halle, aufbewahrt in deinem Koffer. Der Scope sagt nur, wer die Verbindung sieht, nicht, was der Server darf ([S2.12](s2-12-plugin-lebenszyklus.md) nutzt dasselbe Bild für Plugins).",
+   "answers": [
+    "SSE ist laut Doku veraltet; `http` ist die empfohlene Form für entfernte Server. Meldet sich ein Dienst nur per SSE, versucht Claude Code erst HTTP und wechselt dann.",
+    "`local` und `user` in `~/.claude.json` (`local` unter dem Eintrag des Projekts), `project` in der `.mcp.json` im Projektordner.",
+    "Die Konfiguration lädt trotzdem: Claude Code warnt in `claude mcp list` und `/mcp`, nennt die Variable und übernimmt `${VAR}` als Text. Ein Geheimnis darf nie als Default stehen, denn der Default steht im Klartext in der eingecheckten Datei."
+   ],
    "area": "mcp",
-   "checkpoint": "Du kannst für eine Integration Transport und Scope begründen, den Server mit `claude mcp add` oder in der `.mcp.json` eintragen und prüfen, ob er verbunden ist.",
+   "checkpoint": "Du kannst für eine Integration Transport und Scope begründen, einen Server im Scope `project` anlegen und prüfen, ob Claude Code ihn sieht.",
    "demo": null,
-   "example": "{\n  \"mcpServers\": {\n    \"playwright\": {\n      \"command\": \"npx\",\n      \"args\": [\"@playwright/mcp@latest\"],\n      \"env\": {}\n    },\n    \"slack\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-slack\"],\n      \"env\": {\n        \"SLACK_BOT_TOKEN\": \"${SLACK_BOT_TOKEN:-default-dev-token}\",\n        \"SLACK_TEAM_ID\": \"${SLACK_TEAM_ID}\"\n      }\n    },\n    \"postgres\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-postgres\"],\n      \"env\": {\n        \"POSTGRES_CONNECTION_STRING\": \"${PG_URL:-postgresql://user:pass@localhost/mydb}\"\n      }\n    }\n  }\n}",
-   "example_lang": "json",
+   "example": "   claude mcp add --transport stdio --scope project rooms -- python3 server.py",
+   "example_lang": "bash",
    "file": "s2-15-mcp-einrichten.md",
    "glance": "Für einen neuen MCP-Server wählst du zwei Dinge. Den Transport: `http` für entfernte Dienste (empfohlen) oder `stdio` für einen lokalen Prozess; SSE ist veraltet. Und den Scope: `local` (Standard, nur du, nur dieses Projekt), `project` (das Team, über die eingecheckte `.mcp.json`) oder `user` (nur du, in allen Projekten). `local` und `user` speichert Claude Code in `~/.claude.json`, nicht in einer `.mcp.json`.",
    "id": "S2.15",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2150,
-   "outcome": "Ich kann einen MCP-Server mit claude mcp add (HTTP oder stdio) im passenden Scope registrieren oder in der .mcp.json mit ${VAR:-default} eintragen und mit claude mcp list oder /mcp prüfen, ob er verbunden ist.",
+   "outcome": "Ich kann einen MCP-Server mit claude mcp add im Scope project registrieren, in der .mcp.json einen Wert mit ${VAR:-default} aus der Umgebung holen, mit claude mcp list prüfen, was Claude Code sieht, und sagen, was als Default nie in einer geteilten Datei stehen darf.",
    "quiz": {
     "correct": "`project`: Der Eintrag steht in der `.mcp.json` im Projektordner und wird mit dem Repo eingecheckt.",
     "q": "Ein MCP-Server soll für alle bereitstehen, die das Repo klonen, ohne dass jemand `claude mcp add` aufruft. Welcher Scope passt?",
     "wrong": [
      "`user`: Der Eintrag gilt in allen Projekten und reist deshalb beim Klonen automatisch mit.",
-     "`local`: Der Standard-Scope schreibt in eine `.claude/.mcp.json`, die jeder im Team automatisch mit auscheckt.",
+     "`local`: Der Standard-Scope schreibt in die `.claude/settings.local.json` des Projekts, die das Team automatisch mit auscheckt.",
      "Keiner: Claude Code übernimmt nie Server aus einem Repo, jeder muss sie selbst anlegen."
     ]
    },
    "recall": [
     "Warum nimmst du für einen neuen entfernten Server `http` statt SSE?",
     "Wo speichert Claude Code einen Server im Scope `local`, wo im Scope `user` und wo im Scope `project`?",
-    "Was passiert, wenn in der `.mcp.json` `${VAR}` steht, `VAR` aber nicht gesetzt ist?"
+    "Was passiert, wenn in der `.mcp.json` `${VAR}` steht, `VAR` aber nicht gesetzt ist, und was darf als Default nie in einer geteilten Datei stehen?"
    ],
    "requires": [
     "S2.14"
@@ -2162,7 +2182,7 @@
    "shelf": "mcp-knowledge",
    "skip_check": [
     "Kannst du ohne Nachschlagen sagen, welcher Scope in der eingecheckten `.mcp.json` landet und wo Claude Code die beiden anderen speichert?",
-    "Hast du schon einmal einen MCP-Server mit `claude mcp add` angelegt und danach mit `/mcp` oder `claude mcp list` geprüft, ob er verbunden ist?"
+    "Weißt du, was in einer `.mcp.json` passiert, wenn dort `${VAR}` steht und `VAR` nicht gesetzt ist?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/mcp"
@@ -2173,21 +2193,25 @@
   },
   {
    "aliases": [],
-   "analogy": "Eine Leitstelle verliert die Verbindung zu einer Unterstation. Sie löst nicht sofort Störungsalarm aus, sondern wählt neu: nach einer Sekunde, dann nach zwei, dann nach vier, jedes Mal doppelt so lange, höchstens fünfmal. Erst danach meldet sie die Unterstation als gestört. So verbindet Claude Code einen abgerissenen Remote-Server neu.",
-   "answers": null,
+   "analogy": "Eine Leitstelle bekommt eine lange Videoaufzeichnung. Sie passt nicht auf den Monitor im Kontrollraum, also wandert sie ins Archiv, und auf dem Monitor steht nur, wo sie liegt. Wer den Inhalt braucht, holt die Aufzeichnung aus dem Archiv. Genau das macht Claude Code mit einer MCP-Ausgabe über der Grenze: Das Bild selbst liegt in einer Datei, im Gespräch steht der Pfad.",
+   "answers": [
+    "Warnung ab 10.000 Token (fest), Maximum 25.000 Token (anhebbar mit `MAX_MCP_OUTPUT_TOKENS`) und eine Zeichengrenze von 50.000 Zeichen für Text, die die Variable nicht ändert. Ein Server hebt sie für ein Tool mit `_meta[\"anthropic/maxResultSizeChars\"]` an, bis 500.000 Zeichen.",
+    "Das Flag fragt das Secret mit verdeckter Eingabe ab; im CI liegt es in `MCP_CLIENT_SECRET`. Die vorab registrierte App brauchst du, wenn ein Server Claude Code nicht automatisch als Client registrieren kann, oder wenn ein Team dieselbe App nutzen soll.",
+    "Entfernte Server (HTTP, SSE) mit bis zu fünf Versuchen im wachsenden Abstand. stdio-Server sind lokale Prozesse und werden nicht automatisch neu verbunden."
+   ],
    "area": "mcp",
-   "checkpoint": "Du kannst erklären, wann du eine OAuth-App vorab einträgst, was mit einer zu großen MCP-Ausgabe passiert und wie ein stdio-Server sein Projekt findet.",
+   "checkpoint": "Du kannst erklären, was mit einer zu großen MCP-Ausgabe passiert, wann eine OAuth-App vorab eingetragen wird und wie ein stdio-Server sein Projekt findet.",
    "demo": null,
-   "example": "claude mcp add --transport http \\\n  --client-id your-client-id --client-secret --callback-port 8080 \\\n  my-server https://mcp.example.com/mcp",
-   "example_lang": "bash",
+   "example": "   {\n     \"mcpServers\": {\n       \"big\": {\n         \"command\": \"python3\",\n         \"args\": [\"big_server.py\"]\n       }\n     }\n   }",
+   "example_lang": "json",
    "file": "s2-16-mcp-im-detail.md",
-   "glance": "Entfernte MCP-Server melden dich per OAuth an: Claude Code öffnet den Browser und wartet auf einem Callback-Port auf die Antwort. Kann ein Server Claude Code nicht automatisch als Client registrieren, trägst du eine vorab registrierte OAuth-App mit `--client-id`, `--client-secret` und `--callback-port` ein. Große Tool-Ausgaben hält Claude Code aus dem Kontextfenster heraus: Ab 10.000 Token warnt es, über dem Limit (Standard 25.000 Token) speichert es das Ergebnis in einer Datei und gibt Claude nur den Pfad.",
+   "glance": "Große Tool-Ausgaben hält Claude Code aus dem Kontextfenster heraus: Ab 10.000 Token warnt es, und über dem Limit (Standard 25.000 Token) oder über 50.000 Zeichen Text speichert es das Ergebnis in einer Datei und gibt Claude nur den Pfad. Entfernte MCP-Server melden dich per OAuth an: Claude Code öffnet den Browser und wartet auf einem Callback-Port auf die Antwort. Kann ein Server Claude Code nicht automatisch als Client registrieren, trägst du eine vorab registrierte OAuth-App mit `--client-id`, `--client-secret` und `--callback-port` ein.",
    "id": "S2.16",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2160,
-   "outcome": "Ich kann einen OAuth-MCP-Server mit festem Callback-Port und vorab registrierter Client-ID einrichten, sagen, was mit einer MCP-Ausgabe über dem Limit passiert, und list_changed, die automatische Wiederverbindung und CLAUDE_PROJECT_DIR erklären.",
+   "outcome": "Ich kann sagen, was Claude Code mit einer MCP-Ausgabe über der Grenze macht und wie ein Server die Grenze für ein Tool anhebt, wann ein OAuth-Server vorab registrierte Zugangsdaten braucht, und die automatische Wiederverbindung und CLAUDE_PROJECT_DIR erklären.",
    "quiz": {
     "correct": "Claude Code legt das Ergebnis als Datei ab und ersetzt es im Gespräch durch einen Hinweis mit dem Pfad.",
     "q": "Ein Postgres-MCP-Server liefert auf eine Abfrage ein Ergebnis von etwa 40.000 Token. Was passiert ohne weitere Einstellung?",
@@ -2198,8 +2222,8 @@
     ]
    },
    "recall": [
-    "Warum steht hinter `--client-secret` kein Wert, und wie kommt das Secret in einem CI-Lauf an?",
-    "Was hebt `MAX_MCP_OUTPUT_TOKENS` an, und was bleibt fest?",
+    "Welche Grenzen gelten für eine MCP-Ausgabe, und welche davon ändert `MAX_MCP_OUTPUT_TOKENS`?",
+    "Warum steht hinter `--client-secret` kein Wert, und wann brauchst du die vorab registrierte App überhaupt?",
     "Welche Server verbindet Claude Code nach einem Abbruch selbst neu, welche nicht?"
    ],
    "requires": [
@@ -2217,8 +2241,8 @@
    "session": 2,
    "shelf": "mcp-knowledge",
    "skip_check": [
-    "Kannst du ohne Nachschlagen sagen, was Claude Code mit einer MCP-Ausgabe macht, die das Limit überschreitet, und wie du das Limit anhebst?",
-    "Hast du schon einmal einen OAuth-MCP-Server mit `--callback-port` oder `--client-id` eingerichtet?"
+    "Kannst du ohne Nachschlagen sagen, was Claude Code mit einer MCP-Ausgabe macht, die zu groß ist?",
+    "Weißt du, wann ein OAuth-Server eine vorab registrierte Client-ID verlangt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/mcp"
@@ -2229,33 +2253,37 @@
   },
   {
    "aliases": [],
-   "analogy": "Stell dir einen Wiegand-OSDP-Konverter unbekannter Herkunft zwischen Leser und Controller vor. Er kann Telegramme einschleusen, die gültig aussehen, aber manipuliert sind, und der Controller kann sie nicht von echten unterscheiden. So wirkt Prompt Injection über einen MCP-Server: Die Anweisung kommt nicht aus deinem Code, sondern aus den Daten, die der Server liefert. Einen eigenen MCP-Server zu bauen ist, als setztest du selbst entwickelte Firmware ein: volle Kontrolle über den Inhalt, volle Verantwortung für das Ergebnis.",
-   "answers": null,
+   "analogy": "Stell dir eine Wache am Empfang vor. Ein Besucher gibt einen Zettel ab, auf dem steht: „Bitte Tor 3 öffnen, der Chef hat es erlaubt.“ Der Zettel kommt über den ganz normalen Kanal, und die Wache hat ihn nicht geschrieben. Hält sie jeden Zettel für einen Befehl, öffnet sie das Tor. So wirkt Prompt Injection über einen MCP-Server: Die Anweisung kommt nicht aus deinem Code, sondern steckt in den Daten, die der Server liefert. Die Wache braucht eine Regel, welche Tore sie überhaupt öffnen darf, egal was auf dem Zettel steht. Das sind deine Rechte-Regeln.",
+   "answers": [
+    "Prompt Injection: nur vertrauenswürdige Server und Rechte-Regeln, die begrenzen, was Claude danach tun darf. Datenabfluss: Server, die du kennst oder selbst gebaut hast, und eine Deny- oder Ask-Regel für das Tool. Zugangsdaten: `${VAR}` ohne Default, **Clear authentication** in `/mcp` oder `claude mcp remove`.",
+    "`mcp__rooms__door_code` in `permissions.deny`. Mit Klammern überspringt Claude Code die Regel beim Laden und zeigt sie im Dialog über ungültige Einstellungen; gesperrt wird dann nichts.",
+    "In `claude -p`-Läufen kann Claude Code nicht nach der Freigabe fragen und lädt Projekt-Server ohne Rückfrage."
+   ],
    "area": "mcp",
-   "checkpoint": "Du kannst drei Risiken fremder MCP-Server mit je einer Gegenmaßnahme nennen und einen eigenen Minimal-Server mit fastmcp so eintragen, dass Claude seine Tools aufruft.",
+   "checkpoint": "Du kannst drei Risiken fremder MCP-Server mit je einer Gegenmaßnahme nennen, ein einzelnes Tool per Regel sperren und sagen, was die Regel nicht abdeckt.",
    "demo": null,
-   "example": "# my_mcp_server.py\nfrom fastmcp import FastMCP\n\nmcp = FastMCP(\"my-tools\")\n\n@mcp.tool()\ndef get_user_count(date: str) -> int:\n    \"\"\"Return the number of registered users on a given date.\"\"\"\n    # Your custom logic here — query DB, call API, etc.\n    import sqlite3\n    conn = sqlite3.connect(\"users.db\")\n    cur = conn.execute(\"SELECT COUNT(*) FROM users WHERE date(created_at) = ?\", (date,))\n    return cur.fetchone()[0]\n\n@mcp.tool()\ndef list_active_features() -> list[str]:\n    \"\"\"Return active feature flags.\"\"\"\n    # Read from your config / feature-flag service\n    return [\"new_dashboard\", \"experimental_search\"]\n\nif __name__ == \"__main__\":\n    mcp.run(transport=\"stdio\")",
-   "example_lang": "python",
+   "example": "   {\n     \"permissions\": {\n       \"allow\": [\"mcp__rooms__list_rooms\"],\n       \"deny\": [\"mcp__rooms__door_code\"]\n     }\n   }",
+   "example_lang": "json",
    "file": "s2-17-mcp-sicherheit.md",
-   "glance": "Anthropic auditiert keinen MCP-Server auf Sicherheit. Ein Server bekommt, was Claude ihm schickt, und was er zurückliefert, landet in Claudes Kontext; ein Server, der Webseiten, Tickets oder Mails abruft, kann Claude so fremde Anweisungen unterschieben (Prompt Injection). Verbinde deshalb nur Server, denen du vertraust, und begrenze ihre Tools mit Rechte-Regeln.",
+   "glance": "Anthropic auditiert keinen MCP-Server auf Sicherheit. Ein Server bekommt, was Claude ihm schickt, und was er zurückliefert, landet in Claudes Kontext; ein Server, der Webseiten, Tickets oder Mails abruft, kann Claude so fremde Anweisungen unterschieben (Prompt Injection). Verbinde deshalb nur Server, denen du vertraust, und begrenze ihre Tools mit Rechte-Regeln. Eine Regel sperrt aber nur Claudes Aufrufe, nicht den Server-Prozess selbst, der außerhalb der Sandbox läuft.",
    "id": "S2.17",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2170,
-   "outcome": "Ich kann die Risiken Prompt Injection, Datenabfluss und Token-Diebstahl bei MCP-Servern benennen, je eine Gegenmaßnahme anwenden und einen minimalen fastmcp-Server in der .mcp.json registrieren.",
+   "outcome": "Ich kann die Risiken Prompt Injection, Datenabfluss und Zugangsdaten bei MCP-Servern benennen, je eine Gegenmaßnahme zuordnen, eine Rechte-Regel für ein einzelnes MCP-Tool schreiben und prüfen, dass sie hält, und sagen, was die Regel nicht abdeckt.",
    "quiz": {
-    "correct": "Der Angriff kommt über die Daten: Abgerufene Inhalte schieben Claude Anweisungen unter. Ein Plugin bringt eigenen Code mit, der bei dir läuft.",
-    "q": "Warum ist Prompt Injection über einen MCP-Server ein anderes Risiko als ein bösartiges Plugin?",
+    "correct": "Die Sandbox begrenzt Claudes Shell-Befehle; der Server-Prozess läuft außerhalb, und nur Claudes Aufrufe seiner Tools begrenzt du mit Regeln.",
+    "q": "Du hast die Sandbox eingeschaltet und einen stdio-MCP-Server angebunden. Was ist richtig?",
     "wrong": [
-     "Es ist harmloser: Claude behandelt MCP-Ausgaben immer als reine Daten und liest darin nie Anweisungen, anders als bei Plugins.",
-     "Es ist dasselbe Risiko: Beide führen Shell-Befehle in deiner Umgebung aus und haben deshalb genau dieselbe Angriffsfläche.",
-     "Es geht nur um Tokens: MCP-Server laufen in einer OS-Sandbox ohne Zugriff auf Projektdateien, gefährdet sind allein die gespeicherten OAuth-Tokens."
+     "Der Server läuft in der Sandbox und kann deshalb nur Dateien im Projektordner lesen, egal welchen Code er selbst enthält.",
+     "Rechte-Regeln wirken nur auf die eingebauten Werkzeuge; für MCP-Tools brauchst du deshalb zusätzlich die Sandbox.",
+     "Die Sandbox sperrt jeden Tool-Aufruf an den Server, sobald sie den Netzwerkzugriff einschränkt, und ersetzt so die Regeln."
     ]
    },
    "recall": [
-    "Warum kommt Prompt Injection über MCP von der Datenseite und nicht aus dem Code des Servers?",
-    "Welche Rechte-Regel trifft jedes Tool eines Servers namens `github`?",
+    "Nenn die drei Risiken aus der Tabelle und zu jedem eine Gegenmaßnahme.",
+    "Wie lautet die Regel, die nur das Tool `door_code` des Servers `rooms` sperrt, und was passiert, wenn du sie mit Klammern schreibst?",
     "Was ist anders, wenn dieselbe `.mcp.json` in einem `claude -p`-Lauf geladen wird?"
    ],
    "requires": [
@@ -2274,11 +2302,12 @@
    "shelf": "mcp-knowledge",
    "skip_check": [
     "Kannst du ohne Nachschlagen drei Risiken nennen, die ein fremder MCP-Server mitbringt, und zu jedem eine Gegenmaßnahme?",
-    "Hast du schon einmal einen eigenen MCP-Server gebaut, etwa mit fastmcp oder einem SDK, und in eine `.mcp.json` eingetragen?"
+    "Weißt du, wie die Rechte-Regel aussieht, die genau ein Tool eines MCP-Servers sperrt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/mcp",
     "https://code.claude.com/docs/en/security",
+    "https://code.claude.com/docs/en/permissions",
     "https://code.claude.com/docs/en/channels"
    ],
    "title": "MCP-Sicherheit und ein eigener Server",
@@ -2289,34 +2318,38 @@
    "aliases": [
     "2.5"
    ],
-   "analogy": "Stell dir vor, du holst einen Sicherheitsberater ins Haus. Sagst du ihm nichts, arbeitet er mit allgemeinem Sicherheitswissen: vernünftiger Rat, der aber nicht zu deiner Türnummerierung, deinen Alarmzonen und deinen tatsächlichen Kabelwegen passt. Gibst du ihm die Grundrisse, euer aktuelles Format für Zutrittsprotokolle und die Vorfallhistorie, arbeitet er mit deinen echten Bauplänen. Genau das ist RAG: geprüftes, konkretes und aktuelles Wissen statt Verallgemeinerungen.",
-   "answers": null,
+   "analogy": "Stell dir vor, du holst eine Fachberaterin ins Haus. Sagst du ihr nichts, arbeitet sie mit allgemeinem Wissen: vernünftiger Rat, der aber nicht zu deinem System passt. Gibst du ihr die Handbücher, deine Betriebsregeln und die Fehlerhistorie, arbeitet sie mit deinen echten Unterlagen und kann jede Aussage mit einer Seitenzahl belegen. Genau das ist RAG: geprüftes, konkretes und aktuelles Wissen statt Verallgemeinerungen. Und wie bei der Beraterin gilt: Fehlt die Seite, sagt eine gute Beraterin das, statt etwas zu erfinden.",
+   "answers": [
+    "Die Aktualität (Trainingsdaten haben einen Stichtag) und das Spezialwissen (interne Dokumente, Standards und Teamwissen stehen nicht im Training).",
+    "Ein Ordner mit Dateien, `@datei`, Anweisungen in `CLAUDE.md` oder einem Skill und ein gehosteter Index wie NotebookLM (dazu kommt ein MCP-Suchwerkzeug). Den Index nimmst du für große, gemischte Sammlungen mit PDFs und URLs, wenn die Quellen auf Google-Server dürfen.",
+    "Die Antwort nennt Datei und Zeile oder Zitat, und du kannst die Stelle nachlesen. Deckt keine Quelle die Frage ab, soll Claude sagen, dass es dort nicht steht, statt etwas zu erfinden."
+   ],
    "area": "mcp",
-   "checkpoint": "Du kannst ein Notebook mit eigenen Quellen anlegen, es aus Claude Code heraus abfragen und am Vergleich mit einer Antwort ohne Notebook zeigen, was die Zitate bringen.",
+   "checkpoint": "Du kannst Claude Code Quellen geben, mit Quellenangabe antworten lassen und die Antwort mit einer ohne Quellen vergleichen.",
    "demo": "../moderation/vorfuehren/s2-18-rag-und-notebooklm.md",
-   "example": "@research-notes.md [same question you asked above]",
-   "example_lang": "",
+   "example": "   Using only the files in the kb folder, what does error code E42 mean on the OL-9 reader, and after how many failed card reads does it lock? Name the file and quote the line you used.",
+   "example_lang": "text",
    "file": "s2-18-rag-und-notebooklm.md",
-   "glance": "Claude kennt nur, was bis zu einem Stichtag in den Trainingsdaten stand, und deine internen Dokumente kennt Claude gar nicht. RAG (Retrieval-Augmented Generation) schließt diese Lücke: Vor der Antwort werden passende Stellen aus einer kuratierten Quellensammlung geholt, und die Antwort stützt sich auf dieses Material. NotebookLM von Google ist ein gehostetes RAG-System ohne eigene Infrastruktur: Du fügst Quellen hinzu, stellst eine Frage und bekommst eine Antwort mit Zitaten, die du nachprüfen kannst.",
+   "glance": "Claude kennt nur, was bis zu einem Stichtag in den Trainingsdaten stand, und deine internen Dokumente kennt Claude gar nicht. RAG (Retrieval-Augmented Generation) schließt diese Lücke: Vor der Antwort werden passende Stellen aus einer kuratierten Quellensammlung geholt, und die Antwort stützt sich auf dieses Material. Claude Code kann das mit eigenen Mitteln: Es durchsucht und liest die Dateien eines Ordners und zitiert die Fundstelle. NotebookLM von Google ist die gehostete Variante: ein Index, den du mit Quellen füllst.",
    "id": "S2.18",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2180,
-   "outcome": "Ich kann ein NotebookLM-Notebook mit eigenen Quellen anlegen, es aus Claude Code heraus abfragen und die zitierte Antwort mit einer Antwort ohne Notebook vergleichen.",
+   "outcome": "Ich kann Claude Code ein Ordner mit eigenen Quellen als Wissensbasis geben, es daraus mit Quellenangabe antworten lassen, die Antwort mit einer Antwort ohne Quellen vergleichen und prüfen, was passiert, wenn die Quellen die Frage nicht abdecken.",
    "quiz": {
-    "correct": "NotebookLM sucht pro Frage die passenden Stellen aus allen Quellen und zitiert sie; `@datei` lädt die ganze Datei ungefiltert in den Kontext.",
-    "q": "Was unterscheidet eine Abfrage über NotebookLM davon, ein Dokument mit `@datei` direkt in Claudes Kontext zu holen?",
+    "correct": "Claude bekommt nur die Dateiliste von `kb`; die Inhalte muss es erst mit seinen Lese- und Suchwerkzeugen holen.",
+    "q": "Du tippst `@kb` und stellst eine Frage zu einem Fehlercode, der nur in einer der Dateien in `kb/` steht. Was passiert mit dem Ordner?",
     "wrong": [
-     "Fachlich gar nichts: Beide liefern denselben Inhalt mit denselben Zitaten, nur einmal im Terminal und einmal im Browser.",
-     "NotebookLM nimmt nur Google Docs und PDFs an; für Textdateien und Code bleibt dir deshalb nur der Weg über `@datei`.",
-     "Nur das Tempo: NotebookLM hält die Datei vorab zwischengespeichert, deshalb muss Claude sie nicht bei jeder neuen Frage wieder komplett einlesen."
+     "Alle Dateien aus `kb` werden vollständig in das Gespräch geladen, sodass Claude den Fehlercode sofort im Kontext hat.",
+     "Claude Code baut daraus einen Suchindex und lädt nur die Absätze, die zur Frage passen, genau wie NotebookLM.",
+     "Claude Code verweigert den Verweis, weil `@` nur für einzelne Dateien erlaubt ist und nicht für ganze Ordner."
     ]
    },
    "recall": [
     "Welche zwei Lücken in Claudes Wissen schließt RAG?",
-    "Wann nimmst du NotebookLM, statt ein großes Dokument einfach in den Chat zu holen?",
-    "Wie bringst du eine NotebookLM-Antwort in Claude Code, wenn die Kommandozeile fehlt?"
+    "Welche Wege gibt es, Claude Wissen zu geben, und wann nimmst du den gehosteten Index statt eines Ordners mit Dateien?",
+    "Woran erkennst du bei einer Antwort aus einer Wissensbasis, dass sie belegt ist, und was soll Claude tun, wenn die Quellen die Frage nicht abdecken?"
    ],
    "requires": [
     "S2.14"
@@ -2332,8 +2365,8 @@
    "session": 2,
    "shelf": "mcp-knowledge",
    "skip_check": [
-    "Hast du schon einmal einer KI eine eigene Dokumentensammlung als Wissensquelle gegeben und danach die Zitate nachgeprüft?",
-    "Kannst du ohne Nachschlagen sagen, bei welchen Fragen aus deinem Alltag Claudes Trainingswissen nicht reicht und du eine eigene Wissensquelle brauchst?"
+    "Kannst du ohne Nachschlagen sagen, bei welchen Fragen aus deinem Alltag Claudes Trainingswissen nicht reicht und du eine eigene Wissensquelle brauchst?",
+    "Weißt du, was `@ordner` in Claude Code lädt: die Dateiliste oder die Inhalte?"
    ],
    "sources": [
     "https://support.google.com/notebooklm/answer/16164461",
@@ -2349,34 +2382,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Wer einem externen Berater die Baupläne gibt, gibt sie aus der Hand. Den Fluchtwegplan aus dem Treppenhaus darf jeder sehen; den Plan der Alarmzonen und Kabelwege im Tresorbereich gibst du nur mit Freigabe heraus. Dieselbe Abwägung triffst du bei jeder Quelle für NotebookLM: Sie verlässt deinen Perimeter.",
-   "answers": null,
+   "analogy": "Wer einer externen Beraterin Unterlagen gibt, gibt sie aus der Hand. Den Fluchtwegplan aus dem Treppenhaus darf jeder sehen; die Zugangsdaten zum Serverraum gibst du nicht heraus. Dieselbe Abwägung triffst du bei jeder Quelle für NotebookLM: Sie verlässt deinen Rechner.",
+   "answers": [
+    "Auf Google-Servern, wo sie indexiert werden. Proprietären Code lädst du nur hoch, wenn deine Firma das Teilen mit Google Workspace erlaubt; sonst bleibt er lokal.",
+    "Die falsche Stelle wird gefunden (anders fragen, Quelle nennen). Die richtige Stelle wird falsch wiedergegeben (Fundstelle selbst lesen). Die Quelle ist falsch oder veraltet (veraltete Fassungen aus der Wissensbasis nehmen).",
+    "Die Angabe zeigt nur, woher eine Aussage stammen soll; die Wiedergabe und die Quelle können falsch sein. Bei wichtigen Aussagen prüfst du die Fundstelle immer, sonst in Stichproben."
+   ],
    "area": "mcp",
-   "checkpoint": "Du kannst für eine Quelle begründen, ob sie in ein gehostetes RAG wie NotebookLM darf oder in ein lokales RAG gehört, und du prüfst wichtige Zitate an der Quelle nach.",
+   "checkpoint": "Du kannst für eine Quelle begründen, ob sie in ein gehostetes RAG wie NotebookLM darf oder lokal bleibt, und du prüfst Quellenangaben an der Fundstelle.",
    "demo": null,
-   "example": "@research-notes.md Beantworte meine Frage nur aus dieser Datei. Nenne zu jeder Aussage die Quellseite, die dort zitiert ist. Steht die Antwort nicht drin, sag das.",
+   "example": "   Using only the files in the kb folder: after how many failed card reads does the OL-9 lock, and for how long? Name every file you used and quote each line.",
    "example_lang": "text",
    "file": "s2-19-rag-grenzen.md",
-   "glance": "Alles, was du in NotebookLM lädst, ob URL, PDF, eingefügter Text oder Code, liegt danach auf Google-Servern und wird dort indexiert. Proprietären Quellcode gibst du nur hinein, wenn deine Firma das Teilen mit Google Workspace erlaubt; für sensiblen Code nimmst du ein lokales RAG. Und auch mit den richtigen Quellen kann RAG danebenliegen: Ein Zitat ist ein Prüfpunkt, kein Beweis.",
+   "glance": "Alles, was du in NotebookLM lädst, ob URL, PDF, eingefügter Text oder Code, liegt danach auf Google-Servern und wird dort indexiert. Proprietären Quellcode gibst du nur hinein, wenn deine Firma das Teilen mit Google Workspace erlaubt; für sensiblen Code nimmst du eine lokale Wissensbasis, zum Beispiel einen Ordner mit Dateien wie in [S2.18](s2-18-rag-und-notebooklm.md). Und auch mit den richtigen Quellen kann eine Antwort danebenliegen: Eine Quellenangabe ist ein Prüfpunkt, kein Beweis.",
    "id": "S2.19",
    "level": "deep-dive",
-   "minutes": 10,
+   "minutes": 20,
    "offers": [],
    "order": 2190,
-   "outcome": "Ich kann entscheiden, welche Quellen in ein gehostetes RAG wie NotebookLM dürfen und welche lokal bleiben müssen, und ich prüfe wichtige Zitate stichprobenartig an der Quelle nach.",
+   "outcome": "Ich kann Quellen danach sortieren, ob sie in ein gehostetes RAG wie NotebookLM dürfen oder lokal bleiben, und eine Antwort mit Quellenangabe an der Fundstelle prüfen, auch wenn zwei Quellen sich widersprechen.",
    "quiz": {
-    "correct": "Ob eure Firma das Teilen dieses Codes mit Google Workspace erlaubt, denn jede Quelle wird auf Google-Servern gespeichert und indexiert.",
-    "q": "Ein Team will NotebookLM nutzen, damit Claude die interne Firmware eurer Alarmzentralen besser versteht. Was entscheidet, ob der Firmware-Code als Quelle hinein darf?",
+    "correct": "Ob eure Firma das Teilen dieses Codes mit Google Workspace erlaubt, denn jede Quelle liegt danach auf Google-Servern.",
+    "q": "Ein Team will NotebookLM nutzen, damit Claude die interne Firmware eurer Produkte besser versteht. Was entscheidet, ob der Firmware-Code als Quelle hinein darf?",
     "wrong": [
-     "Ob die Dateien unter der Größengrenze für Quellen bleiben, denn kleine Dateien verarbeitet NotebookLM lokal auf deinem Rechner.",
-     "Nichts weiter, denn NotebookLM speichert nur die Embeddings und nicht den Originaltext, also verlässt kein lesbarer Code euer Firmennetz.",
-     "Ob ihr die Web-Oberfläche statt der Kommandozeile nutzt, denn nur Uploads über die Kommandozeile landen auf Google-Servern."
+     "Ob der Index Embeddings oder Originaltext speichert, denn Embeddings lassen sich nicht zurücklesen, also ist der Code nicht lesbar.",
+     "Ob du das Notebook privat lässt, denn ein nicht geteiltes Notebook bleibt auf deinem Rechner und verlässt das Firmennetz nicht.",
+     "Ob du die Quellen über die Kommandozeile statt über die Web-Oberfläche hochlädst, denn dann bleibt der Upload im Terminal."
     ]
    },
    "recall": [
     "Wo liegen deine Quellen, nachdem du sie in NotebookLM geladen hast, und was folgt daraus für proprietären Code?",
-    "Nenne drei Fehlerarten von RAG.",
-    "Warum ist eine Antwort mit Zitat nicht automatisch richtig, und was tust du dagegen?"
+    "Nenne drei Fehlerbilder von RAG und zu jedem ein Gegenmittel.",
+    "Warum ist eine Antwort mit Quellenangabe nicht automatisch richtig, und wie oft prüfst du die Fundstelle?"
    ],
    "requires": [
     "S2.18"
@@ -2394,7 +2431,7 @@
    "shelf": "mcp-knowledge",
    "skip_check": [
     "Kannst du ohne Nachschlagen sagen, welches Material du nicht in NotebookLM hochladen würdest und was du stattdessen nimmst?",
-    "Hast du bei einer RAG-Antwort schon einmal die zitierte Stelle geöffnet und mit der Wiedergabe verglichen?"
+    "Hast du bei einer Antwort mit Quellenangabe schon einmal die zitierte Stelle geöffnet und mit der Wiedergabe verglichen?"
    ],
    "sources": [
     "https://support.google.com/notebooklm/answer/17004255",
@@ -2409,17 +2446,21 @@
   {
    "aliases": [],
    "analogy": "",
-   "answers": null,
+   "answers": [
+    "Den Skill du, mit `/room-report`; Claude konnte ihn wegen `disable-model-invocation: true` nicht von selbst starten. Das MCP-Tool hat Claude aufgerufen, weil der Skill es verlangt. Den Hook hat Claude Code ausgelöst, bei dem Ereignis PostToolUse, ohne dass Claude darüber entscheidet.",
+    "Die Deny-Regel nimmt `door_code` aus Claudes Werkzeugen; es gab also keinen Aufruf, und PostToolUse feuert nur nach einem gelungenen Aufruf.",
+    "Der Skill, und wenn gewünscht auch Hook und Server (`hooks/hooks.json`, `.mcp.json` im Plugin). Das Team liest vorher genau diese Dateien, denn Hooks und Server eines Plugins laufen mit den Rechten der Person, die es lädt."
+   ],
    "area": null,
-   "checkpoint": "Du kannst eine Übung aus Session 2 passend zu deinem Ziel wählen, sie bis zu ihrer Liste „Geschafft, wenn\" durcharbeiten und begründen, welche Schicht du damit gebaut hast und wofür du sie einsetzt.",
+   "checkpoint": "Du kannst die Bausteine aus Session 2 in einem Projekt verbinden und für jeden sagen, wo er steht und wer ihn auslöst.",
    "demo": null,
-   "example": null,
-   "example_lang": "",
+   "example": "   ---\n   name: room-report\n   description: Reports per room who may receive its door code\n   disable-model-invocation: true\n   ---\n\n   1. Call the rooms tool list_rooms.\n   2. Read kb/house-rules.md.\n   3. For each room, print one line: the room name, then who may receive its code according to the house rules, then the file name in brackets.\n   4. End your reply with the exact line REPORT-DONE.",
+   "example_lang": "markdown",
    "file": "s2-20-praxis-station-2.md",
-   "glance": "Hier wählst du eine der sechs Übungen aus Session 2: einen Skill schreiben, einen Safety-Hook bauen, ein Plugin erkunden, einen MCP-Server anbinden, eine eigene Wissensbasis anlegen oder als Bonus eine Token Firewall bauen. Im Workshop nimmst du dir eine vor, die anderen sind fürs Selbststudium. Rechne mit 30–40 Minuten je Übung; die Kernschritte allein schaffst du in etwa 20–25.",
+   "glance": "Diese Station schließt Session 2 ab. Du baust ein kleines Projekt, in dem die Bausteine der Session zusammenarbeiten: Ein Skill ruft ein MCP-Tool auf und liest eine Wissensquelle, ein Hook schreibt jeden Aufruf mit, und eine Regel sperrt das Tool, das niemand benutzen soll. Alles liegt in einem Wegwerf-Ordner; deine eigene Konfiguration bleibt, wie sie ist. Das dauert etwa 20 Minuten.",
    "id": "S2.20",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [
     "S2.2",
     "S2.8",
@@ -2429,12 +2470,12 @@
     "S2.18"
    ],
    "order": 2200,
-   "outcome": "Ich kann eine der sechs Übungen aus Session 2 (Skill, Safety-Hook, Plugin, MCP, Wissensbasis, Token Firewall) passend zu meinem Ziel auswählen, sie selbstständig bis zu ihrer Liste Geschafft, wenn durchführen und das Ergebnis begründen.",
+   "outcome": "Ich kann die Bausteine aus Session 2 in einem Projekt verbinden: einen Skill, der ein MCP-Tool und eine Wissensquelle nutzt, einen Hook, der die Aufrufe mitschreibt, und eine Regel, die ein Tool sperrt.",
    "quiz": null,
    "recall": [
-    "Welche Übung gehört zu welcher Schicht: Skill, Hook, Plugin, MCP, Wissensbasis?",
-    "Warum gehören Hook-Experimente wie der Honeypot in eine projekt-lokale `.claude/settings.json`?",
-    "Was macht eine Übung länger als ihre Kernschritte, und was lässt du weg, wenn die Zeit knapp ist?"
+    "Wer hat in der Übung den Skill ausgelöst, wer das MCP-Tool und wer den Hook?",
+    "Warum stand nach dem gesperrten Auftrag keine neue Zeile in der Logdatei?",
+    "Was davon würde in ein Plugin wandern, wenn du das Projekt an dein Team weitergibst, und was müsste das Team vorher prüfen?"
    ],
    "requires": [],
    "requires_all": [],
@@ -2443,32 +2484,36 @@
    "shelf": "practice",
    "skip_check": [],
    "sources": [],
-   "title": "Praxis-Station Session 2: eine Übung wählen",
+   "title": "Praxis-Station Session 2: alles in einem Ablauf",
    "transferable": false,
    "type": "practice"
   },
   {
    "aliases": [],
    "analogy": "Ein anderer Wachdienst bietet dir seine bewährten Dienstanweisungen an: Alarmverfolgung, Schlüsselübergabe, Revierfahrt. Eine gute Vorlage spart dir Wochen. Trotzdem kommt keine fremde Dienstanweisung ungelesen in den Ordner der Leitstelle. Du prüfst, wer sie geschrieben hat, ob du sie verwenden darfst, welche Befugnisse sie verlangt und wen sie im Ernstfall anruft. Ein Skill ist so eine Dienstanweisung.",
-   "answers": null,
+   "answers": [
+    "`mattpocock/skills`: MIT, Plugin `mattpocock-skills` aus dem offiziellen Marketplace. `obra/superpowers`: MIT, `superpowers` aus dem offiziellen Marketplace oder aus dem eigenen Marketplace des Projekts. `anthropics/skills`: Lizenz je Skill (Apache-2.0 oder source-available), Marketplace `anthropics/skills` hinzufügen. `garrytan/gstack`: MIT, Klon nach `~/.claude/skills/gstack` plus `./setup`.",
+    "Das README kann von der Lizenz abweichen, und bei gemischten Repos wie `anthropics/skills` gibt es keine Lizenz für das ganze Repo. Du liest die LICENSE-Datei, bei gemischten Repos je Skill.",
+    "Ein `SessionStart`-Hook lädt den Skill `using-superpowers` in jede neue, geleerte oder verdichtete Sitzung; du erkennst das an `hooks/hooks.json` und am `Component inventory`. `allowed-tools` gibt Tools in dem Zug, der den Skill aufruft, ohne Rückfrage frei, deshalb schaust du dort zuerst hin."
+   ],
    "area": null,
-   "checkpoint": "Du kannst für jede der vier Quellen sagen, wer sie baut, unter welcher Lizenz sie steht und wie du sie installierst, und einen fremden Skill mit der Prüfliste bewerten, bevor du ihn installierst.",
+   "checkpoint": "Du kannst vier Quellen für Skills nach Lizenz und Installationsweg einordnen und einen fremden Skill mit der Prüfliste bewerten, bevor du ihn installierst.",
    "demo": null,
-   "example": "# Clone without installing, then read what would run\ngit clone --depth 1 https://github.com/obra/superpowers.git\nhead -3 superpowers/LICENSE\ncat superpowers/.claude-plugin/plugin.json\ncat superpowers/hooks/hooks.json\ngrep -rn \"allowed-tools\" superpowers/skills/\nclaude --plugin-dir ./superpowers plugin details superpowers",
+   "example": "git clone --depth 1 https://github.com/obra/superpowers.git\nhead -3 superpowers/LICENSE\ncat superpowers/.claude-plugin/plugin.json\ncat superpowers/hooks/hooks.json\ngrep -rn \"allowed-tools\" superpowers/skills/\nclaude --plugin-dir ./superpowers plugin details superpowers",
    "example_lang": "bash",
    "file": "x-01-community-skills.md",
    "glance": "Vier Quellen für fremde Skills sind hier belegt: Matt Pocock (`mattpocock/skills`), Jesse Vincent (`obra/superpowers`), Anthropic (`anthropics/skills` und der offizielle Marketplace `anthropics/claude-plugins-official`) und Garry Tan (`garrytan/gstack`). Jede Sammlung bringt eine eigene Arbeitsweise mit, und die Lizenzen sind verschieden. Ein fremder Skill ist fremder Text in Claudes Kontext, ein fremdes Plugin ist fremder Code mit deinen Rechten: Lies beides, bevor du es installierst.",
    "id": "X.1",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 2205,
-   "outcome": "Ich kann vier belegte Skill-Quellen mit Lizenz und Installationsweg einordnen und einen fremden Skill vor der Installation mit einer Prüfliste bewerten.",
+   "outcome": "Ich kann vier belegte Skill-Quellen nach Lizenz und Installationsweg einordnen und einen fremden Skill oder ein Plugin vor der Installation prüfen: Lizenz aus der LICENSE-Datei, Hooks, bin/, MCP-Server und allowed-tools.",
    "quiz": null,
    "recall": [
-    "Warum reicht die Lizenzangabe im README nicht? Nenn das Beispiel aus diesem Kapitel.",
-    "Was läuft bei `superpowers` zu Beginn jeder Sitzung, und woran hast du das vor der Installation erkannt?",
-    "Was bewirkt `allowed-tools` in einem fremden Skill, und warum schaust du dort zuerst hin?"
+    "Nenn für `mattpocock/skills`, `obra/superpowers`, `anthropics/skills` und `garrytan/gstack` je Lizenz und Installationsweg in Stichworten.",
+    "Warum reicht die Lizenzangabe im README nicht, und woher nimmst du sie stattdessen?",
+    "Was läuft bei `superpowers` zu Beginn jeder Sitzung, und was bewirkt `allowed-tools` in einem fremden Skill?"
    ],
    "requires": [],
    "requires_all": [],

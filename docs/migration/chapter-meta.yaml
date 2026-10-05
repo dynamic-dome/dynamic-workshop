@@ -391,7 +391,7 @@
   title: 'Plugins: ein Bündel schnüren'
   shelf: plugins
   level: core
-  minutes: 15
+  minutes: 25
   requires:
   - S2.2
   - S2.6
@@ -405,7 +405,7 @@
   title: Plugin-Lebenszyklus, Scopes und Marketplaces
   shelf: plugins
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S2.11
   safety_floor: false
@@ -417,7 +417,7 @@
   title: Lieferkettenrisiken bei Plugins
   shelf: plugins
   level: deep-dive
-  minutes: 10
+  minutes: 25
   requires:
   - S2.12
   safety_floor: true
@@ -429,7 +429,7 @@
   title: 'MCP: der Integrationsstecker'
   shelf: mcp-knowledge
   level: core
-  minutes: 15
+  minutes: 25
   requires:
   - S1.5
   safety_floor: false
@@ -442,7 +442,7 @@
   title: 'MCP einrichten: Transporte, Scopes, CLI'
   shelf: mcp-knowledge
   level: core
-  minutes: 15
+  minutes: 25
   requires:
   - S2.14
   safety_floor: false
@@ -454,7 +454,7 @@
   title: 'MCP im Detail: OAuth, Ausgabegrenzen, Protokoll'
   shelf: mcp-knowledge
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S2.15
   safety_floor: false
@@ -466,7 +466,7 @@
   title: MCP-Sicherheit und ein eigener Server
   shelf: mcp-knowledge
   level: deep-dive
-  minutes: 18
+  minutes: 25
   requires:
   - S2.15
   safety_floor: true
@@ -478,7 +478,7 @@
   title: 'RAG und NotebookLM: dem Agenten Baupläne geben'
   shelf: mcp-knowledge
   level: core
-  minutes: 18
+  minutes: 25
   requires:
   - S2.14
   safety_floor: false
@@ -491,7 +491,7 @@
   title: Grenzen von RAG und Datenschutz
   shelf: mcp-knowledge
   level: deep-dive
-  minutes: 10
+  minutes: 20
   requires:
   - S2.18
   safety_floor: false
@@ -500,10 +500,10 @@
   file: s2-19-rag-grenzen.md
 - id: S2.20
   type: practice
-  title: 'Praxis-Station Session 2: eine Übung wählen'
+  title: 'Praxis-Station Session 2: alles in einem Ablauf'
   shelf: practice
   level: core
-  minutes: 18
+  minutes: 25
   requires: []
   safety_floor: false
   transferable: false
@@ -851,7 +851,7 @@
   title: 'Community-Skills: wer baut was, das wirklich hilft'
   shelf: community
   level: bonus
-  minutes: 15
+  minutes: 30
   after: S2.20
   requires: []
   safety_floor: false

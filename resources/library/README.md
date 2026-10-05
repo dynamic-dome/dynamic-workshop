@@ -2,7 +2,7 @@
 
 <!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
 
-71 Kapitel in 19 Regalen, zusammen etwa 21,5 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
+71 Kapitel in 19 Regalen, zusammen etwa 23 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
 
 ## So findest du deinen Weg
 
@@ -186,9 +186,9 @@ Ein Plugin bündelt, was zusammengehört, und macht es teilbar. Du lernst den Au
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S2.11 Plugins: ein Bündel schnüren](s2-11-plugins-buendeln.md) | Kern | 15 |  |
-| [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](s2-12-plugin-lebenszyklus.md) | Vertiefung | 15 |  |
-| [S2.13 Lieferkettenrisiken bei Plugins](s2-13-plugin-lieferkette.md) | Vertiefung | 10 | 🛡 |
+| [S2.11 Plugins: ein Bündel schnüren](s2-11-plugins-buendeln.md) | Kern | 25 |  |
+| [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](s2-12-plugin-lebenszyklus.md) | Vertiefung | 20 |  |
+| [S2.13 Lieferkettenrisiken bei Plugins](s2-13-plugin-lieferkette.md) | Vertiefung | 25 | 🛡 |
 
 <a id="mcp-knowledge"></a>
 
@@ -200,12 +200,12 @@ MCP ist der Integrationsstecker zu Browsern, Datenbanken und Diensten; RAG und N
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S2.14 MCP: der Integrationsstecker](s2-14-mcp-stecker.md) | Kern | 15 |  |
-| [S2.15 MCP einrichten: Transporte, Scopes, CLI](s2-15-mcp-einrichten.md) | Kern | 15 |  |
-| [S2.16 MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](s2-16-mcp-im-detail.md) | Vertiefung | 15 |  |
-| [S2.17 MCP-Sicherheit und ein eigener Server](s2-17-mcp-sicherheit.md) | Vertiefung | 18 | 🛡 |
-| [S2.18 RAG und NotebookLM: dem Agenten Baupläne geben](s2-18-rag-und-notebooklm.md) | Kern | 18 |  |
-| [S2.19 Grenzen von RAG und Datenschutz](s2-19-rag-grenzen.md) | Vertiefung | 10 |  |
+| [S2.14 MCP: der Integrationsstecker](s2-14-mcp-stecker.md) | Kern | 25 |  |
+| [S2.15 MCP einrichten: Transporte, Scopes, CLI](s2-15-mcp-einrichten.md) | Kern | 25 |  |
+| [S2.16 MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](s2-16-mcp-im-detail.md) | Vertiefung | 20 |  |
+| [S2.17 MCP-Sicherheit und ein eigener Server](s2-17-mcp-sicherheit.md) | Vertiefung | 25 | 🛡 |
+| [S2.18 RAG und NotebookLM: dem Agenten Baupläne geben](s2-18-rag-und-notebooklm.md) | Kern | 25 |  |
+| [S2.19 Grenzen von RAG und Datenschutz](s2-19-rag-grenzen.md) | Vertiefung | 20 |  |
 
 <a id="agents"></a>
 
@@ -317,7 +317,7 @@ Jede Station sammelt die Übungen ihrer Session. Wähle eine, die zu deinem Pfad
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
 | [S1.20 Praxis-Station Session 1: alles in einem Ablauf](s1-20-praxis-station-1.md) | Kern | 20 |  |
-| [S2.20 Praxis-Station Session 2: eine Übung wählen](s2-20-praxis-station-2.md) | Kern | 18 |  |
+| [S2.20 Praxis-Station Session 2: alles in einem Ablauf](s2-20-praxis-station-2.md) | Kern | 25 |  |
 | [S3.15 Praxis-Station Session 3: eine Übung wählen](s3-15-praxis-station-3.md) | Kern | 15 |  |
 
 <a id="community"></a>
@@ -331,6 +331,6 @@ Nicht alles muss man selbst bauen. Dieses Regal stellt belegte Skill-Sammlungen 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
 | [X.2 Mit Claude Code lernen](x-02-lernen-mit-claude-code.md) | Kür | 35 |  |
-| [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) | Kür | 15 |  |
+| [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) | Kür | 30 |  |
 | [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) | Kür | 15 |  |
 | [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) | Kür | 15 |  |

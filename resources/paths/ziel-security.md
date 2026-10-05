@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 6 Etappen, zusammen etwa 13,5 Stunden (734 Min durcharbeiten, 69 Min überfliegen).
+**Umfang:** 7 Etappen, zusammen etwa 15 Stunden (820 Min durcharbeiten, 73 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -32,34 +32,37 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.2 Eine SKILL.md schreiben](../library/s2-02-skill-schreiben.md) — überfliegen
 - [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — überfliegen
 
-## Etappe 3 (~145 Min)
+## Etappe 3 (~130 Min)
 
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — durcharbeiten
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — durcharbeiten
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — durcharbeiten
 - [S2.9 Hook-Typen und Hooks in Komponenten](../library/s2-09-hook-typen.md) — durcharbeiten
 - [S2.10 Hook-Ausgaben und das Secure Diff Gate](../library/s2-10-hook-ausgaben.md) — durcharbeiten
+
+## Etappe 4 (~140 Min)
+
 - [S2.11 Plugins: ein Bündel schnüren](../library/s2-11-plugins-buendeln.md) — durcharbeiten
-
-## Etappe 4 (~148 Min)
-
 - [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](../library/s2-12-plugin-lebenszyklus.md) — durcharbeiten
 - [S2.13 Lieferkettenrisiken bei Plugins](../library/s2-13-plugin-lieferkette.md) 🛡 — durcharbeiten
 - [S2.14 MCP: der Integrationsstecker](../library/s2-14-mcp-stecker.md) — durcharbeiten
 - [S2.15 MCP einrichten: Transporte, Scopes, CLI](../library/s2-15-mcp-einrichten.md) — durcharbeiten
 - [S2.16 MCP im Detail: OAuth, Ausgabegrenzen, Protokoll](../library/s2-16-mcp-im-detail.md) — durcharbeiten
+
+## Etappe 5 (~143 Min)
+
 - [S2.17 MCP-Sicherheit und ein eigener Server](../library/s2-17-mcp-sicherheit.md) 🛡 — durcharbeiten
 - [S2.18 RAG und NotebookLM: dem Agenten Baupläne geben](../library/s2-18-rag-und-notebooklm.md) — durcharbeiten
 - [S2.19 Grenzen von RAG und Datenschutz](../library/s2-19-rag-grenzen.md) — durcharbeiten
-- [S2.20 Praxis-Station Session 2: eine Übung wählen](../library/s2-20-praxis-station-2.md) — durcharbeiten
+- [S2.20 Praxis-Station Session 2: alles in einem Ablauf](../library/s2-20-praxis-station-2.md) — durcharbeiten
 - [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
 - [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) — überfliegen
 - [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) — überfliegen
-
-## Etappe 5 (~147 Min)
-
 - [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](../library/s3-06-devils-advocate.md) — durcharbeiten
 - [S3.7 Die eingebauten Reviews](../library/s3-07-eingebaute-reviews.md) — durcharbeiten
+
+## Etappe 6 (~137 Min)
+
 - [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) 🛡 — durcharbeiten
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
 - [S3.10 Netzwerk und Skills härten](../library/s3-10-netzwerk-und-skills-haerten.md) — durcharbeiten
@@ -70,10 +73,10 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) — überfliegen
 - [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) — überfliegen
 - [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) 🛡 — durcharbeiten
-
-## Etappe 6 (~68 Min)
-
 - [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) — überfliegen
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
+
+## Etappe 7 (~48 Min)
+
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten

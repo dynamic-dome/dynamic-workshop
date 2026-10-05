@@ -138,3 +138,19 @@ ccb599572a84b62c resources/exercises/block-2-exercises.md:340 P7b/S2.8: ersetzt.
 3d87789e3b880dd4 resources/exercises/block-2-exercises.md:421 P7b/S2.8: entfernt, Bonus Audit-Log; siehe 49f668cc37034633.
 6549ef9919b30f86 resources/exercises/block-2-exercises.md:444 P7b/S2.8: entfernt. Die Prüfung mit json.tool galt der globalen settings.json.
 3d65ff9a0781b790 resources/exercises/block-2-exercises.md:998 P7b/S2.10: ersetzt. Die Registrierung der Token Firewall schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts; das Extra testet das Skript jetzt von Hand.
+70301c6b18fc2bf0 resources/modules/block-2-ecosystem.md:978 P7c/S2.12: ersetzt durch Fließtext. Der Block nannte `claude install` ohne Argument „latest stable“; die Doku trennt die Kanäle `latest` (Standard) und `stable`.
+13215329dce64d0e resources/modules/block-2-ecosystem.md:1181 P7c/S2.15: ersetzt durch das Beispiel der Doku. Der alte Block trug ein Token als Rückfallwert (`${SLACK_BOT_TOKEN:-default-dev-token}`), den Fehler, vor dem das Kapitel warnt (Befund R4).
+37081b267fe2caad resources/modules/block-2-ecosystem.md:1266 P7c/S2.17: gekürzt auf ein Tool. Das zweite Tool fragte eine SQLite-Datei ab, die es in keiner Übung gibt.
+943ede48f341298a resources/modules/block-2-ecosystem.md:1475 P7c/S2.20: entfernt. Das Schichtenbild trug die Modulnummern des alten Kursaufbaus; die Station zeigt die Bausteine jetzt als Tabelle der vier Dateien, die die Übung anlegt.
+4b191466996e68b7 resources/exercises/block-2-exercises.md:483 P7c/S2.11: entfernt. Die Erkundung setzte ein installiertes Plugin voraus und nannte den Cache-Pfad ohne Marketplace- und Versionsebene; die neue Übung baut ein eigenes Plugin und liest es mit `plugin details`.
+f715cc69a6ba1664 resources/exercises/block-2-exercises.md:492 P7c/S2.11: entfernt, Erkundung eines installierten Plugins; siehe 4b191466996e68b7.
+094561688594fcb5 resources/exercises/block-2-exercises.md:508 P7c/S2.11: entfernt, Erkundung eines installierten Plugins; siehe 4b191466996e68b7.
+191db09294514ddb resources/exercises/block-2-exercises.md:523 P7c/S2.11: entfernt, Erkundung eines installierten Plugins; siehe 4b191466996e68b7.
+71e0f9da5bbc18f9 resources/exercises/block-2-exercises.md:576 P7c/S2.11: ersetzt. Das Mini-Plugin heißt jetzt `greeter` und entsteht aus Dateien, die im Editor gespeichert werden (keine Heredocs); die Übung prüft Präfix, Neuladen und dass nichts installiert bleibt.
+4d44e8f36eaab3e2 resources/exercises/block-2-exercises.md:591 P7c/S2.11: ersetzt, Mini-Plugin per Heredoc; siehe 71e0f9da5bbc18f9.
+3582e97903f0e378 resources/exercises/block-2-exercises.md:606 P7c/S2.11: ersetzt, Mini-Plugin per Here-String; siehe 71e0f9da5bbc18f9.
+a55be66fb543288e resources/exercises/block-2-exercises.md:653 P7c/S2.11: ersetzt, Start des Mini-Plugins; siehe 71e0f9da5bbc18f9.
+b32b6295a24179d9 resources/exercises/block-2-exercises.md:779 P7c/S2.14: entfernt. Auftrag aus Platzhaltern ohne prüfbares Ergebnis; das Extra arbeitet mit festen, öffentlichen Seiten.
+9eb98e178d626f26 resources/exercises/block-2-exercises.md:804 P7c/S2.14: entfernt. Der Auftrag ließ Benutzername und Passwort in das Gespräch tippen; das Extra rät von Seiten mit Anmeldung ab, weil Sitzungen im Klartext unter `~/.claude/projects/` liegen.
+6c79919243f00282 resources/exercises/block-2-exercises.md:863 P7c/S2.18: ersetzt. Platzhalter-Frage ohne prüfbares Ergebnis; die Übung fragt nach einem erfundenen Gerät, dessen Antworten nur in den Quellen stehen.
+50934f988db9f938 resources/exercises/block-2-exercises.md:883 P7c/S2.18: ersetzt, Platzhalter mit `@research-notes.md`; siehe 6c79919243f00282.

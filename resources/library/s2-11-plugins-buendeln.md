@@ -4,11 +4,11 @@ type: lesson
 title: "Plugins: ein Bündel schnüren"
 shelf: plugins
 level: core
-minutes: 15
+minutes: 25
 requires: [S2.2, S2.6]
 safety_floor: false
 transferable: false
-outcome: "Ich kann ein Plugin als Verzeichnis mit .claude-plugin/plugin.json, skills/, commands/, agents/ und hooks/hooks.json aufbauen, es mit claude plugin validate <path> prüfen und mit --plugin-dir lokal laden."
+outcome: "Ich kann ein Plugin als Verzeichnis mit .claude-plugin/plugin.json, skills/ und agents/ aufbauen, es mit claude plugin validate <path> prüfen, mit --plugin-dir für eine Sitzung laden und seinen Skill mit Präfix aufrufen."
 sources:
   - https://code.claude.com/docs/en/plugins
   - https://code.claude.com/docs/en/plugins/create
@@ -19,7 +19,7 @@ aliases: ["2.3"]
 # S2.11 · Plugins: ein Bündel schnüren
 
 <!-- meta:start -->
-> **Regal:** [Plugins](README.md#plugins) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** [S2.2 Eine SKILL.md schreiben](s2-02-skill-schreiben.md) · [S2.6 Hooks als Sensoren: die drei Eckpfeiler](s2-06-hooks-als-sensoren.md)
+> **Regal:** [Plugins](README.md#plugins) · **Stufe:** Kern · **~25 Min** · **Voraussetzungen:** [S2.2 Eine SKILL.md schreiben](s2-02-skill-schreiben.md) · [S2.6 Hooks als Sensoren: die drei Eckpfeiler](s2-06-hooks-als-sensoren.md)
 >
 > ← [S2.10 Hook-Ausgaben und das Secure Diff Gate](s2-10-hook-ausgaben.md) · [Bibliothek](README.md) · [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](s2-12-plugin-lebenszyklus.md) →
 <!-- meta:end -->
@@ -27,17 +27,17 @@ aliases: ["2.3"]
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen sagen, wo `plugin.json` in einem Plugin liegen muss und welche Teile Claude Code von selbst findet?
-- Hast du schon einmal ein Plugin mit `--plugin-dir` lokal geladen und seine Struktur angesehen?
+- Hast du schon einmal ein Plugin mit `--plugin-dir` geladen, ohne es zu installieren?
 
 ## Auf einen Blick
 
-Ein Plugin ist ein Verzeichnis, das Skills, Agents, Hooks, MCP-Server und weitere Komponenten bündelt; Claude Code installiert und lädt es als eine Einheit. Das Manifest liegt unter `.claude-plugin/plugin.json`, alles andere direkt im Plugin-Root, und die Komponenten findet Claude Code über die Ordner von selbst. Bevor du ein Plugin weitergibst, prüfst du es mit `claude plugin validate <path>`; zum Testen lädst du es mit `--plugin-dir`, ohne es zu installieren.
+Ein Plugin ist ein Verzeichnis, das Skills, Agents, Hooks, MCP-Server und weitere Komponenten bündelt; Claude Code lädt es als eine Einheit. Das Manifest liegt unter `.claude-plugin/plugin.json`, alles andere direkt im Plugin-Root, und die Komponenten findet Claude Code über die Ordner von selbst. Mit `claude plugin validate <path>` prüfst du das Plugin, mit `--plugin-dir` lädst du es nur für eine Sitzung, ohne es zu installieren.
 
 ## Bild im Kopf
 
-Denk an ein Sicherheitsmodul für deine Anlage, etwa ein biometrisches Zutrittsmodul. Darin steckt, was zusammengehört: der Fingerabdruckscanner (Sensoren = Hooks), der Abgleich-Algorithmus (Logik = Agents), die Standardabläufe für „Zutritt erlaubt" und „Zutritt verweigert" (Verfahren = Skills), die Tasten am Bedienteil (Bedienung = Commands) und das Typenschild mit der Konfiguration (Metadaten = `plugin.json`). Du kaufst das Modul, baust es ein, und es arbeitet mit deiner bestehenden Anlage zusammen. Du musst nicht jedes Teil selbst bauen und verdrahten.
+Denk an ein Sicherheitsmodul für deine Anlage, etwa ein biometrisches Zutrittsmodul. Darin steckt, was zusammengehört: der Fingerabdruckscanner (die Sensoren, in Claude Code die Hooks), der Abgleich-Spezialist, an den die Zentrale die schwierigen Fälle übergibt (die Agents), die Standardabläufe für „Zutritt erlaubt“ und „Zutritt verweigert“ (die Skills) und das Typenschild mit Name und Version (das Manifest `plugin.json`). Du baust das Modul als Ganzes ein und musst nicht jedes Teil einzeln verdrahten.
 
-Ein Claude-Code-Plugin ist dieselbe Idee: einmal installieren, und du bekommst einen zusammenhängenden Satz neuer Fähigkeiten.
+Ein Claude-Code-Plugin ist dieselbe Idee: ein Bündel, das du als Einheit lädst.
 
 ```mermaid
 flowchart LR
@@ -59,17 +59,15 @@ flowchart LR
 
 ### Was ein Plugin ist
 
-Sammelst du Skills, Hooks, Agents und Commands, willst du sie irgendwann zusammen packen. Ein **Plugin** ist dieses Paket: ein in sich geschlossenes Bündel, das du weitergeben kannst und das Claude Code einen zusammenhängenden Satz von Fähigkeiten hinzufügt.
+Sammelst du Skills, Hooks und Agents, willst du sie irgendwann zusammen weitergeben. Ein **Plugin** ist dieses Paket: ein in sich geschlossenes Bündel, das Claude Code einen zusammenhängenden Satz von Fähigkeiten hinzufügt. Es kann enthalten:
 
-Ein Plugin kann enthalten:
-
-- zusammengehörige Skills (etwa alle Skills für einen Code-Review-Ablauf)
-- eigene Commands (etwa `/review`, `/security-scan`)
+- Skills, etwa alle Skills für einen Code-Review-Ablauf
 - Agents: Subagenten-Definitionen, an die Claude Aufgaben abgeben kann
-- Hooks (automatische Abläufe)
-- MCP-Server
+- Hooks (automatische Abläufe, [S2.6](s2-06-hooks-als-sensoren.md))
+- MCP-Server ([S2.14](s2-14-mcp-stecker.md))
+- weitere Komponenten wie Monitore, ausführbare Dateien in `bin/` und LSP-Konfigurationen; die Doku listet sie unter [Plugin-Komponenten](https://code.claude.com/docs/en/plugins/components)
 
-Installiert und geladen wird das alles zusammen, als eine Einheit.
+Alles zusammen wird als eine Einheit geladen. Skills und Agents eines Plugins tragen den Plugin-Namen als Präfix. Die Doku nennt den Grund: Zwei Plugins können so jeweils einen Skill `hello` mitbringen, ohne zu kollidieren.
 
 ### Aufbau eines Plugins
 
@@ -82,41 +80,22 @@ my-plugin/
   skills/
     my-skill/
       SKILL.md             # skill instructions
-    another-skill/
-      SKILL.md
-  commands/
-    my-command.md          # flat command files (older form of skills; prefer skills/)
-    another-command.md
   agents/
-    my-agent.md            # subagent definitions
+    my-agent.md            # subagent definition
   hooks/
-    hooks.json             # plugin-bundled hook config (JSON schema = settings.json hooks)
-  monitors/
-    monitors.json          # background-monitor definitions (poll logs, PRs, files)
-  scripts/
-    format.sh              # helper scripts your hooks call by path (a convention, nothing runs them on install)
-  bin/                     # PATH-injected executables (HANDLE WITH CARE)
-    my-cli
-  .mcp.json                # bundled MCP servers (loaded with the plugin)
-  .lsp.json                # bundled LSP server configurations
-  settings.json            # plugin defaults: only agent and subagentStatusLine take effect
+    hooks.json             # plugin-bundled hook config
+  .mcp.json                # bundled MCP servers
 ```
 
 Drei Regeln zum Aufbau:
 
-- **Das Manifest liegt unter `.claude-plugin/plugin.json`**, nicht im Plugin-Root. Nur das Manifest gehört in `.claude-plugin/`. `skills/`, `commands/`, `hooks/` und alles andere liegen direkt im Plugin-Root; Komponenten, die du in `.claude-plugin/` ablegst, lädt Claude Code nicht.
-- **Das Manifest ist optional.** Fehlt es, oder liegt `plugin.json` versehentlich im Root, lädt das Plugin trotzdem, aber ohne deine Angaben: Lädst du es mit `--plugin-dir`, heißt es wie sein Ordner, und die Version ist unbekannt. Sieht Claude Code dein Plugin unter einem falschen Namen oder ohne Version, prüf das zuerst.
-- **`commands/` ist die ältere Form.** Flache Markdown-Dateien in `commands/` funktionieren weiter. Für neue Plugins empfiehlt die Doku `skills/`.
+- **Das Manifest liegt unter `.claude-plugin/plugin.json`**, nicht im Plugin-Root. Nur das Manifest gehört in `.claude-plugin/`. `skills/`, `agents/`, `hooks/` und alles andere liegen direkt im Plugin-Root. Die Doku sagt es so: „Only `plugin.json` goes inside `.claude-plugin/`.“
+- **Das Manifest ist optional.** Fehlt es, oder liegt `plugin.json` versehentlich im Root, lädt Claude Code die Komponenten trotzdem. Den Plugin-Namen nimmt es dann vom Ordner, wenn du mit `--plugin-dir` lädst. Sieht Claude Code dein Plugin unter einem falschen Namen, prüf das zuerst.
+- **`commands/` ist die ältere Form.** Flache Markdown-Dateien in `commands/` funktionieren weiter; für neue Plugins empfiehlt die Doku `skills/`.
 
-Installierte Plugins legt Claude Code als Kopie unter `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/` ab. Dort kannst du jede Datei lesen, wie in der Übung unten.
-
-### Hooks im Plugin
-
-Ältere Plugins und frühere Fassungen dieses Kurses legten rohe Shell-Dateien unter `hooks/` ab, etwa `hooks/pre-tool-use.sh`. Das ist überholt. Plugin-Hooks stehen heute in `hooks/hooks.json`, mit demselben JSON-Aufbau wie der `hooks`-Block in `settings.json` ([S2.8](s2-08-hook-einrichten.md)). Brauchst du ein Skript, verweist du aus dem JSON darauf: `"command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use.sh"`. `${CLAUDE_PLUGIN_ROOT}` ist der absolute Pfad der installierten Plugin-Version.
+Installierte Plugins legt Claude Code als Kopie unter `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/` ab; dort kannst du jede Datei lesen. Zum Selbstbauen brauchst du das nicht: Dein Plugin liegt in einem beliebigen Ordner, und du gibst Claude Code beim Start seinen Pfad.
 
 ### Das Manifest
-
-**`.claude-plugin/plugin.json`**, das Manifest:
 
 ```json
 {
@@ -125,250 +104,162 @@ Installierte Plugins legt Claude Code als Kopie unter `~/.claude/plugins/cache/<
   "description": "A plugin for automated code review and security scanning",
   "author": {
     "name": "your-name"
-  },
-  "dependencies": []
+  }
 }
 ```
 
-Pflicht ist nur `name`. Er wird zum Präfix jedes Skills und Agents des Plugins, etwa `/my-plugin:review`. `author` ist ein Objekt mit `name` (Pflicht) und optional `email` und `url`; ein einfacher Text lässt `claude plugin validate` scheitern. `dependencies` nennt Plugins, die aktiv sein müssen, damit dieses funktioniert ([S2.12](s2-12-plugin-lebenszyklus.md)).
+Pflicht ist nur `name`. Er wird zum Präfix jedes Skills und Agents des Plugins, etwa `/my-plugin:review`; Leerzeichen sind nicht erlaubt. `author` ist ein Objekt mit `name` (Pflicht) und optional `email` und `url`; ein einfacher Text lässt `claude plugin validate` scheitern. Das Manifest kann außerdem `dependencies` nennen, also Plugins, die aktiv sein müssen, damit dieses funktioniert ([S2.12](s2-12-plugin-lebenszyklus.md)).
 
-Die Komponenten zählst du im Manifest nicht auf. Skills, Commands, Agents, Hooks und MCP-Server findet Claude Code über die Ordnerstruktur (Auto-Discovery): Leg sie in den richtigen Ordner, benenne sie sinnvoll, und der Plugin-Loader findet sie. Setzt du im Manifest doch `commands` oder `agents`, ersetzt das den Standardordner, `commands/` wird dann nicht mehr durchsucht. Pfade im Manifest beginnen immer mit `./`.
+Die Komponenten zählst du im Manifest nicht auf. Skills, Agents, Hooks und MCP-Server findet Claude Code über die Ordnerstruktur (Auto-Discovery). Pfade im Manifest beginnen immer mit `./`. Ein Feld `enabled` gibt es nicht; `claude plugin validate` meldet es als unbekannt. Ein installiertes Plugin schaltest du mit `claude plugin disable <name>` ab, statt Dateien umzubenennen.
 
-Ein Feld `enabled` gibt es im Manifest nicht; `claude plugin validate` meldet es als unbekannt, und Claude Code ignoriert es. Um ein Plugin abzuschalten, ohne es zu löschen, nimmst du `claude plugin disable <name>`, statt Dateien umzubenennen.
+### Hooks im Plugin
 
-### Prüfen und lokal laden
+Plugin-Hooks stehen in `hooks/hooks.json`, mit demselben Aufbau wie der `hooks`-Block in `settings.json` ([S2.8](s2-08-hook-einrichten.md)), nur zusätzlich in einen Schlüssel `"hooks"` gepackt. Die Doku: Eine Datei, die nur die Ereignisliste ohne diesen Wrapper enthält, lädt nicht. Brauchst du ein Skript, verweist du aus dem JSON darauf:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/check.sh" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+`${CLAUDE_PLUGIN_ROOT}` ist der absolute Pfad der installierten Plugin-Version. Die Anführungszeichen um die Variable sind Absicht: Die Doku verlangt sie, damit ein Pfad mit Leerzeichen ein Wort bleibt (unter Windows etwa bei einem Benutzernamen mit Leerzeichen), und `claude plugin validate` warnt davor.
+
+### Prüfen und laden
 
 - `claude plugin validate <path>` prüft das Manifest und das Frontmatter der Skills, Agents und Commands. Der Befehl braucht einen **Pfad**, keinen Plugin-Namen. `--strict` behandelt Warnungen als Fehler, das passt für CI.
-- `claude --plugin-dir ./my-plugin` lädt das Plugin für eine Sitzung, ohne es zu installieren; ein `.zip` des Plugins geht auch. Änderst du Dateien, lädst du sie in der laufenden Sitzung mit `/reload-plugins` neu.
-- Skills und Commands eines Plugins rufst du mit Präfix auf: `/<plugin>:<skill>`.
+- `claude --plugin-dir ./my-plugin` lädt das Plugin nur für diese Sitzung („for this session only“, schreibt die Doku); ein `.zip` des Plugins geht auch. Änderst du Dateien, lädst du sie in der laufenden Sitzung mit `/reload-plugins` neu.
+- Skills eines Plugins rufst du mit Präfix auf: `/<plugin>:<skill>`.
+- `claude --plugin-dir ./my-plugin plugin details <name>` zeigt, was das Plugin mitbringt, ohne eine Sitzung zu öffnen: die Komponenten und die Token, die es jeder Sitzung hinzufügt.
 
 Wie du Plugins installierst, verwaltest und verteilst, steht in [S2.12](s2-12-plugin-lebenszyklus.md). Was ein fremdes Plugin auf deinem Rechner darf, steht in [S2.13](s2-13-plugin-lieferkette.md).
 
 ## Selbst machen
 
-### Übung: ein Plugin erkunden und selbst aufsetzen
+### Übung: ein Mini-Plugin bauen und laden (etwa 15 Minuten)
 
-**Ziel:** Die Anatomie eines echten Plugins durch Lesen verstehen und dann die Struktur eines eigenen Mini-Plugins aufsetzen. Danach sind Plugins kein Rätsel mehr, sondern Verzeichnisse mit Dateien, die du lesen und ändern kannst.
+**Ziel:** Du baust ein Plugin aus einem Skill und einem Agent, prüfst es, lädst es nur für eine Sitzung und rufst seinen Skill mit Präfix auf.
 
-**Hintergrund:** Du arbeitest schon mit Systemen aus modularen Komponenten: Alarmmodule, Zutrittszentralen, Lesermodule. Jedes hat eine klare Struktur. Um es einzubauen und zu konfigurieren, musst du die Elektronik nicht verstehen, aber die Schnittstelle. Mit Claude-Code-Plugins ist es genauso: Lies die Struktur, versteh die Schnittstelle, dann kannst du erweitern, ändern oder selbst bauen.
+**Startzustand:** ein leerer Ordner `~/cc-workshop/plugin`. Leg ihn an und wechsle hinein (`mkdir -p ~/cc-workshop/plugin && cd ~/cc-workshop/plugin`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\plugin"; Set-Location "$HOME\cc-workshop\plugin"`). Das Plugin bekommt absichtlich einen anderen Ordnernamen (`greeter-src`) als Plugin-Namen (`greeter`); das brauchst du in Schritt 5. Nichts davon wird installiert, und deine Konfiguration bleibt unberührt.
 
-**Schritt 1: ein Plugin erkunden**
+1. Leg die Ordner an.
 
-> **Hinweis:** Nimm ein Plugin, das du installiert hast (`~/.claude/plugins/cache/`), oder frag die Moderation. Alternativ erkundest du das Kurs-Repo selbst, es hat dieselbe Struktur.
->
-> **`<plugin-name>` steht in dieser Übung für den ganzen Pfad `<marketplace>/<plugin>/<version>`**, also zum Beispiel `claude-plugins-official/code-review/` und darunter der Versionsordner. So legt Claude Code installierte Plugins ab.
+   ```bash
+   mkdir -p greeter-src/.claude-plugin greeter-src/skills/hello greeter-src/agents
+   ```
 
-```bash
-# See what plugins are installed
-ls ~/.claude/plugins/cache/
+   ```powershell
+   New-Item -ItemType Directory -Force greeter-src\.claude-plugin, greeter-src\skills\hello, greeter-src\agents | Out-Null
+   ```
 
-# Pick one and go inside it
-ls ~/.claude/plugins/cache/<plugin-name>/
-```
+2. Speichere die drei Dateien mit deinem Editor. Der Pfad steht jeweils über dem Block.
 
-Lies das Manifest:
+   `greeter-src/.claude-plugin/plugin.json`
 
-```bash
-cat ~/.claude/plugins/cache/<plugin-name>/.claude-plugin/plugin.json
-```
+   ```json
+   {
+     "name": "greeter",
+     "description": "A tiny plugin to learn the layout",
+     "version": "0.1.0",
+     "author": {
+       "name": "Your Name"
+     }
+   }
+   ```
 
-> Das Manifest liegt immer unter `.claude-plugin/plugin.json`, in einem Unterordner `.claude-plugin/`, nie im Plugin-Root. Findet `cat` keine Datei, hat das Plugin kein Manifest. Das ist erlaubt; der Name kommt dann aus dem Marketplace-Eintrag.
+   `greeter-src/skills/hello/SKILL.md`
 
-Beantworte schriftlich:
+   ```markdown
+   ---
+   name: hello
+   description: Greet the user and mark the reply
+   disable-model-invocation: true
+   ---
 
-- Welche Version hat das Plugin?
-- Wie viele Skills bringt es mit? (Schau in `skills/`, das Manifest listet sie meist nicht.)
-- Hat es Commands? Wenn ja, welche?
-- Gibt es ein Feld `dependencies`? Was steht darin?
+   Greet the user in one sentence and end your reply with the exact word GREETER-V1.
+   ```
 
-**Schritt 2: einen Skill genau lesen**
+   `greeter-src/agents/haiku-writer.md`
 
-```bash
-# List available skills
-ls ~/.claude/plugins/cache/<plugin-name>/skills/
+   ```markdown
+   ---
+   name: haiku-writer
+   description: Writes one haiku about a topic the user names
+   ---
 
-# Pick one and read it fully — look for the SKILL.md file
-cat ~/.claude/plugins/cache/<plugin-name>/skills/<skill-name>/SKILL.md
-```
+   You write exactly one haiku about the topic you are given. Reply with the haiku only.
+   ```
 
-Beantworte:
+3. Prüf das Plugin und lass dir seine Komponenten zeigen.
 
-- Welche Auslöser nennt der Skill?
-- Welche Schritte soll Claude laut Skill gehen?
-- Überrascht dich etwas, eine Anweisung an Claude, auf die du selbst nicht gekommen wärst?
+   <!-- cockpit:example -->
+   ```bash
+   claude plugin validate ./greeter-src
+   claude --plugin-dir ./greeter-src plugin details greeter
+   ```
 
-**Schritt 3: eine Agent-Definition lesen**
+   Erwartet: `validate` schließt mit `✔ Validation passed` ab (so steht es in der Doku). `plugin details` nennt Name, Version und Beschreibung und danach einen Abschnitt `Component inventory` mit deinem Skill `hello` und dem Agent `haiku-writer`. Fehlt etwas, liegt eine Datei am falschen Ort.
 
-```bash
-ls ~/.claude/plugins/cache/<plugin-name>/agents/
-cat ~/.claude/plugins/cache/<plugin-name>/agents/*.md | head -60
-```
+4. Starte eine Sitzung mit dem Plugin und ruf den Skill auf.
 
-Beantworte:
+   ```bash
+   claude --permission-mode default --plugin-dir ./greeter-src
+   ```
 
-- Wie unterscheidet sich ein Agent von einem Skill? (Tipp: Schau auf die beschriebene Rolle.)
-- Reagiert der Agent (wartet, bis er gerufen wird) oder handelt er von sich aus?
+   Tipp in der Sitzung `/greeter:hello`. Erwartet: Claude grüßt und beendet die Antwort mit `GREETER-V1`.
 
-**Schritt 4: ein eigenes Mini-Plugin aufsetzen**
+5. Ändere den Skill, ohne die Sitzung zu beenden. Öffne `greeter-src/skills/hello/SKILL.md` im Editor, ersetze `GREETER-V1` durch `GREETER-V2` und speichere. Tipp in der Sitzung `/reload-plugins`. Erwartet: eine Zeile, die mit `Reloaded:` beginnt (so nennt es die Doku). Ruf `/greeter:hello` noch einmal auf. Erwartet: Die Antwort endet jetzt mit `GREETER-V2`. Beende die Sitzung mit `/exit`.
 
-Leg eine minimale Plugin-Struktur für ein erdachtes Plugin aus deiner Arbeit an, zum Beispiel `door-audit-plugin` (prüft Zutrittsprotokolle und erzeugt Berichte), `firmware-tracker` (verfolgt Firmware-Stände über alle Geräte) oder `incident-checklist` (geht dein Incident-Response-SOP durch).
+6. Prüf, dass nichts installiert wurde. Starte `claude` ohne `--plugin-dir` und tipp `/greeter:hello`. Erwartet: Es kommt kein Gruß mit `GREETER-V2`; ohne das Flag ist der Skill nicht geladen. Das Plugin gilt nur für die Sitzungen, in denen du `--plugin-dir` angibst. Beende die Sitzung.
 
-```bash
-# macOS / Linux / Git Bash
-mkdir -p ./my-mini-plugin/.claude-plugin
-mkdir -p ./my-mini-plugin/skills/my-skill
-mkdir -p ./my-mini-plugin/commands
-
-# Create the manifest at .claude-plugin/plugin.json (NOT in the plugin root)
-cat > ./my-mini-plugin/.claude-plugin/plugin.json << 'EOF'
-{
-  "name": "my-mini-plugin",
-  "version": "0.1.0",
-  "description": "My first plugin — [describe what it does]",
-  "author": {
-    "name": "[your name]"
-  }
-}
-EOF
-```
-
-```powershell
-# Windows PowerShell
-New-Item -ItemType Directory -Force -Path ".\my-mini-plugin\.claude-plugin", ".\my-mini-plugin\skills\my-skill", ".\my-mini-plugin\commands" | Out-Null
-@'
-{
-  "name": "my-mini-plugin",
-  "version": "0.1.0",
-  "description": "My first plugin - [describe what it does]",
-  "author": {
-    "name": "[your name]"
-  }
-}
-'@ | Set-Content -Encoding utf8 .\my-mini-plugin\.claude-plugin\plugin.json
-```
-
-Die Struktur danach:
-
-```
-my-mini-plugin/
-  .claude-plugin/
-    plugin.json
-  skills/
-    my-skill/
-      SKILL.md
-  commands/
-    my-command.md
-```
-
-> **Wichtig:** Das Manifest muss unter `.claude-plugin/plugin.json` liegen, nicht im Plugin-Root; warum, steht oben in „Im Detail". Es nennt nur Name, Version, Beschreibung und Autor. `skills/` und `commands/` findet Claude Code von selbst.
-
-Einen Skill anlegen:
-
-```bash
-cat > ./my-mini-plugin/skills/my-skill/SKILL.md << 'EOF'
----
-name: my-skill
-description: >
-  [What this skill does].
-when_to_use: >
-  [Your trigger phrases and situations]
----
-
-# My Skill
-
-[Your skill instructions here]
-EOF
-```
-
-```powershell
-@'
----
-name: my-skill
-description: >
-  [What this skill does].
-when_to_use: >
-  [Your trigger phrases and situations]
----
-
-# My Skill
-
-[Your skill instructions here]
-'@ | Set-Content -Encoding utf8 .\my-mini-plugin\skills\my-skill\SKILL.md
-```
-
-Einen Command anlegen:
-
-```bash
-cat > ./my-mini-plugin/commands/my-command.md << 'EOF'
----
-description: "[What this command does]"
----
-
-# My Command
-
-When invoked, execute the my-skill skill.
-EOF
-```
-
-```powershell
-@'
----
-description: "[What this command does]"
----
-
-# My Command
-
-When invoked, execute the my-skill skill.
-'@ | Set-Content -Encoding utf8 .\my-mini-plugin\commands\my-command.md
-```
-
-Die Beschreibung steht in Anführungszeichen, sonst liest YAML `[…]` als Liste, und `claude plugin validate` meldet einen Fehler. Ein Feld `name` gibt es in Command-Dateien nicht; der Name des Commands kommt aus dem Dateinamen.
-
-**Schritt 5: prüfen und laden**
-
-Prüf zuerst die Struktur:
-
-<!-- cockpit:example -->
-```bash
-claude plugin validate ./my-mini-plugin
-# expected: ✔ Validation passed
-```
-
-Starte Claude Code dann mit dem lokalen Plugin-Verzeichnis:
-
-```bash
-claude --plugin-dir ./my-mini-plugin
-```
-
-Gib dann ein:
-
-```
-/help
-```
-
-Such deinen neuen Command in der Liste. Er trägt das Plugin-Präfix, heißt also `/my-mini-plugin:my-command`; auch wenn du `/` tippst, findest du ihn dort. Ruf ihn auf.
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/plugin`. Mehr gibt es nicht aufzuräumen.
 
 **Geschafft, wenn:**
 
-- [ ] du die Struktur eines installierten Plugins auf der Kommandozeile durchgehen kannst
-- [ ] du die Fragen zum Aufbau von Skill und Agent beantwortet hast
-- [ ] `./my-mini-plugin/.claude-plugin/plugin.json` existiert und gültiges JSON ist
-- [ ] `claude plugin validate ./my-mini-plugin` „Validation passed" meldet
-- [ ] dein Mini-Plugin mindestens einen Skill und einen Command hat
-- [ ] (Extra) dein Command als `/my-mini-plugin:my-command` erscheint und sich aufrufen lässt
+- [ ] `claude plugin validate ./greeter-src` `✔ Validation passed` meldet
+- [ ] `plugin details` den Skill `hello` und den Agent `haiku-writer` zeigt
+- [ ] `/greeter:hello` in der Sitzung mit `--plugin-dir` geantwortet hat, erst mit `GREETER-V1`, nach `/reload-plugins` mit `GREETER-V2`
+- [ ] derselbe Befehl in einer Sitzung ohne das Flag unbekannt war
 
-**Was macht ein gutes Plugin aus?** Zusammenhalt. Ein Plugin soll eine Sache gut machen. Pack deinen Commit-Ablauf und deinen Doku-Generator nicht ins selbe Plugin, mach zwei daraus. Dann kannst du sie einzeln an- und abschalten.
+### Extra: Manifest am falschen Ort (etwa 5 Minuten)
 
-**Im Team verteilen:** Läuft dein Plugin, legst du es in ein Git-Repo oder einen Marketplace, und dein Team installiert es mit der CLI (`claude plugin install <name>@<marketplace> --scope local|project|user`). Lass niemanden Verzeichnisse von Hand nach `~/.claude/plugins/cache/` kopieren. Mehr dazu in [S2.12](s2-12-plugin-lebenszyklus.md).
+Verschieb `greeter-src/.claude-plugin/plugin.json` in den Ordner `greeter-src` (Bash: `mv greeter-src/.claude-plugin/plugin.json greeter-src/`, PowerShell: `Move-Item greeter-src\.claude-plugin\plugin.json greeter-src\`). Lass dir mit `claude --plugin-dir ./greeter-src plugin list` die Session-Plugins zeigen. Erwartet nach der Doku: Das Plugin erscheint unter dem Ordnernamen, `greeter-src@inline`, nicht als `greeter@inline`. Skills und Agents sind aber da, nur das Präfix ändert sich. Leg die Datei zurück und lass den Befehl noch einmal laufen: Jetzt steht `greeter@inline` dort.
 
-**Abschalten, ohne zu löschen:** Ein Plugin, das du mit `--plugin-dir` lädst, startest du einfach ohne das Flag. Ein installiertes Plugin schaltest du mit `claude plugin disable <name>` ab und mit `claude plugin enable <name>` wieder an. `plugin.json` umzubenennen hilft nicht: Das Manifest ist optional, das Plugin lädt dann trotzdem, nur ohne Namen und Version aus dem Manifest.
+### Extra: ein Hook im Plugin (etwa 10 Minuten)
+
+Leg `greeter-src/hooks/hooks.json` an. Der Hook schreibt bei jeder Eingabe eine Zeile in eine Datei im Arbeitsordner:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "echo ran >> hook-ran.txt" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+`claude --plugin-dir ./greeter-src plugin details greeter` nennt den Hook jetzt im `Component inventory`. Starte eine Sitzung im Ordner `~/cc-workshop/plugin` mit dem Flag, schick irgendeinen Auftrag ab und beende die Sitzung. Erwartet: In `~/cc-workshop/plugin` liegt eine Datei `hook-ran.txt` mit mindestens einer Zeile `ran`. Lässt du die äußere Klammer `"hooks"` weg, lädt die Datei nach der Doku nicht.
 
 ## Typische Fallen
 
-- **Das Plugin erscheint nicht oder heißt anders als erwartet.** Meist liegt das Manifest im Plugin-Root statt unter `.claude-plugin/`. Claude Code liest es dann nicht und nimmt den Ordnernamen. Prüf außerdem, ob `.claude-plugin/plugin.json` gültiges JSON ist (`python -m json.tool .claude-plugin/plugin.json` unter Windows, `python3 -m json.tool .claude-plugin/plugin.json` unter macOS/Linux), und lass `claude plugin validate <path>` laufen.
-- **Das Plugin lädt, aber die Skills fehlen.** `skills/` liegt in `.claude-plugin/` statt im Plugin-Root. Dort hinein gehört nur `plugin.json`.
-- **`claude plugin validate` meldet Pfadfehler.** Pfade im Manifest beginnen mit `./` (`"./extra-skills/"`, nicht `"extra-skills"`) und müssen existieren. Setzt du `commands` oder `agents` im Manifest, ersetzt das den Standardordner.
-- **`claude plugin validate <name>` scheitert.** Der Befehl erwartet einen Pfad zum Plugin-Verzeichnis oder zum Manifest (`claude plugin validate ./my-plugin`), keinen Plugin-Namen aus `claude plugin list`.
+- **Das Plugin erscheint nicht oder heißt anders als erwartet.** Meist liegt das Manifest im Plugin-Root statt unter `.claude-plugin/`. Claude Code nimmt dann den Ordnernamen. Prüf außerdem, ob `plugin.json` gültiges JSON ist (`python -m json.tool .claude-plugin/plugin.json`, unter macOS und Linux `python3`), und lass `claude plugin validate <path>` laufen.
+- **Das Plugin lädt, aber die Skills fehlen.** `skills/` liegt in `.claude-plugin/` statt im Plugin-Root. Dort gehört nur `plugin.json` hinein.
+- **`claude plugin validate` meldet Pfadfehler.** Pfade im Manifest beginnen mit `./` (`"./extra-skills/"`, nicht `"extra-skills"`) und müssen existieren.
+- **`claude plugin validate <name>` scheitert.** Der Befehl erwartet einen Pfad zum Plugin-Verzeichnis oder zum Manifest, keinen Plugin-Namen aus `claude plugin list`.
+- **`--plugin-dir` zeigt auf den falschen Ordner.** Die Doku: Das Flag nimmt das Wurzelverzeichnis eines Plugins, also den Ordner mit `.claude-plugin/plugin.json`. Zeigst du auf einen Marketplace-Ordner, lädt ein Plugin darunter nicht, und du siehst keinen Fehler.
 - **Der Skill reagiert nicht auf `/<skill>`.** Plugin-Skills rufst du mit Präfix auf: `/<plugin>:<skill>`.
 - **Änderungen kommen nicht an.** Nach dem Bearbeiten der Dateien lädst du sie in der laufenden Sitzung mit `/reload-plugins` neu.
 
@@ -376,11 +267,19 @@ Systematische Fehlersuche bei Plugins: [S4.10](s4-10-diagnose-schritt-fuer-schri
 
 ## Check
 
-Du kannst die Verzeichnisstruktur eines Plugins aufzeichnen und erklären, warum das Manifest unter `.claude-plugin/plugin.json` liegt und nicht im Plugin-Root.
+Du kannst die Verzeichnisstruktur eines Plugins aufzeichnen, es prüfen, ohne es zu installieren, und seinen Skill aufrufen.
 
 1. Welche Teile eines Plugins findet Claude Code von selbst, und was steht im Manifest?
-2. Was passiert, wenn `skills/` versehentlich in `.claude-plugin/` liegt?
-3. Wie prüfst und lädst du ein Plugin, ohne es zu installieren?
+2. Wie rufst du den Skill `hello` eines Plugins `greeter` auf, und warum trägt er ein Präfix?
+3. Wie prüfst du ein Plugin, wie lädst du es ohne Installation, und wie übernimmst du eine Änderung in einer laufenden Sitzung?
+
+<details><summary>Auflösung</summary>
+
+1. Skills, Agents, Hooks und MCP-Server findet Claude Code über die Ordner und Dateien im Plugin-Root. Im Manifest stehen Name (Pflicht), Version, Beschreibung und Autor; die Komponenten zählst du dort nicht auf.
+2. Mit `/greeter:hello`. Das Präfix ist der Plugin-Name, damit zwei Plugins jeweils einen Skill `hello` mitbringen können, ohne zu kollidieren.
+3. Mit `claude plugin validate <path>`, und das mit einem Pfad, nicht mit einem Namen. Geladen wird mit `claude --plugin-dir <path>`, nur für diese Sitzung. Änderungen übernimmt `/reload-plugins`.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
@@ -389,7 +288,7 @@ Du kannst die Verzeichnisstruktur eines Plugins aufzeichnen und erklären, warum
 - **Richtig:** Das Plugin lädt ohne Manifest: Es heißt wie der Ordner, Name und Version aus deiner Datei fehlen.
 - Falsch: Das Plugin lädt gar nicht, und Claude Code bricht den Start mit einem Manifest-Fehler ab.
 - Falsch: Claude Code liest die Datei trotzdem, weil der Loader beide Orte durchsucht und den Root bevorzugt.
-- Falsch: Das Plugin lädt nur das Manifest; die Ordner `skills/` und `commands/` bleiben dabei unbeachtet.
+- Falsch: Das Plugin lädt nur das Manifest; die Ordner `skills/` und `agents/` bleiben dabei unbeachtet.
 
 </details>
 

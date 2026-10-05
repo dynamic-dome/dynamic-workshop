@@ -4,11 +4,11 @@ type: lesson
 title: "MCP: der Integrationsstecker"
 shelf: mcp-knowledge
 level: core
-minutes: 15
+minutes: 25
 requires: [S1.5]
 safety_floor: false
 transferable: true
-outcome: "Ich kann erklären, was MCP als offenes Protokoll leistet, den Playwright-MCP-Server über eine .mcp.json im Projekt anbinden und Claude damit eine echte Webseite bedienen lassen."
+outcome: "Ich kann erklären, was MCP als offenes Protokoll leistet, einen MCP-Server über eine .mcp.json im Projekt anbinden, in /mcp prüfen, ob er verbunden ist, und Claude eines seiner Tools aufrufen lassen."
 sources:
   - https://code.claude.com/docs/en/mcp
 aliases: ["2.4"]
@@ -17,7 +17,7 @@ aliases: ["2.4"]
 # S2.14 · MCP: der Integrationsstecker
 
 <!-- meta:start -->
-> **Regal:** [MCP & Wissensquellen](README.md#mcp-knowledge) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** [S1.5 Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md)
+> **Regal:** [MCP & Wissensquellen](README.md#mcp-knowledge) · **Stufe:** Kern · **~25 Min** · **Voraussetzungen:** [S1.5 Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md)
 >
 > ← [S2.13 Lieferkettenrisiken bei Plugins](s2-13-plugin-lieferkette.md) · [Bibliothek](README.md) · [S2.15 MCP einrichten: Transporte, Scopes, CLI](s2-15-mcp-einrichten.md) →
 <!-- meta:end -->
@@ -25,7 +25,7 @@ aliases: ["2.4"]
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen erklären, was Claude Code mit MCP erreicht, das es ohne MCP nicht kann?
-- Hast du schon einmal einen MCP-Server wie Playwright oder Context7 angebunden und nachgesehen, mit welchen Rechten er läuft?
+- Weißt du, warum Claude Code beim ersten Start nachfragt, bevor es einen Server aus einer `.mcp.json` nutzt?
 
 ## Auf einen Blick
 
@@ -35,11 +35,11 @@ MCP-Server arbeiten mit deinen Zugangsdaten. Wie du sie einrichtest, steht in [S
 
 ## Bild im Kopf
 
-Eine moderne Gebäudeleittechnik steuert nicht nur Türen, sie bindet die anderen Anlagen ein. Die Brandmeldeanlage löst bei Rauch automatisch die Verriegelung aus. Die Kamerabilder erscheinen an der Zutrittskonsole. Vorangemeldete Besucher stehen schon im Türsystem. Kündigt die Personalabteilung jemandem, ist seine Karte automatisch gesperrt, und die Türprotokolle fließen in die Zeiterfassung. Jede Anlage bietet eine Schnittstelle, und die Leitzentrale verbindet sich mit allen. Claude Code mit MCP funktioniert genauso: Claude ist die Leitzentrale, die externen Dienste bieten MCP-Schnittstellen, und du legst fest, welche Verbindungen es gibt.
+Eine Leitstelle im Gebäude kennt nicht jede Anlage selbst. Sie ruft bei Bedarf die Schnittstelle der Brandmeldeanlage, der Kameras oder des Besuchermanagements ab und bekommt eine Antwort in einem festen Format. Jede Anlage bietet ihre Schnittstelle, und die Leitstelle entscheidet, wen sie fragt. Claude Code mit MCP funktioniert genauso: Claude ist die Leitstelle, die externen Dienste bieten MCP-Schnittstellen, und du legst fest, welche Verbindungen es gibt. Die Leitstelle ruft nur dann an, wenn die Aufgabe es verlangt.
 
 ```mermaid
 flowchart LR
-  C["Claude Code<br/>die Leitzentrale"] -- "MCP" --> P["Playwright<br/>echter Browser"]
+  C["Claude Code<br/>die Leitstelle"] -- "MCP" --> P["Playwright<br/>echter Browser"]
   C -- "MCP" --> S["Slack<br/>Kanäle und Nachrichten"]
   C -- "MCP" --> D["Datenbank<br/>Abfragen"]
   C -- "MCP" --> K["Context7<br/>aktuelle Doku"]
@@ -50,36 +50,26 @@ flowchart LR
 
 ### Die Kernidee
 
-Ohne MCP arbeitet Claude Code mit deinem Dateisystem, dem Terminal und der Websuche. MCP ergänzt **Verbindungen zu externen Diensten**: Claude Code bekommt Zugriff auf echte Browser, Datenbanken, Kommunikationsplattformen und eigene APIs.
-
-MCP ist ein offener Standard. Entwickelt hat ihn Anthropic, inzwischen ist er weit verbreitet. Jeder Dienst kann einen MCP-Server anbieten, und Claude Code kann sich mit ihm verbinden. Das Protokoll legt fest, wie ein externes System Tools, Ressourcen und Prompts für die KI bereitstellt.
+Ohne MCP arbeitet Claude Code mit deinem Dateisystem, dem Terminal und der Websuche. MCP ergänzt **Verbindungen zu externen Diensten**: Claude Code bekommt Zugriff auf echte Browser, Datenbanken, Kommunikationsplattformen und eigene APIs. Die Doku nennt MCP „an open source standard for AI-tool integrations“. Jeder Dienst kann einen MCP-Server anbieten, und Claude Code kann sich mit ihm verbinden. Das Protokoll legt fest, wie ein externes System Tools, Ressourcen und Prompts für die KI bereitstellt.
 
 Ein Server lohnt sich, sobald du Daten aus einem anderen Werkzeug von Hand in den Chat kopierst, etwa aus einem Ticketsystem oder einem Monitoring-Dashboard. Ist der Server verbunden, liest und bedient Claude das System direkt, statt mit dem zu arbeiten, was du einfügst.
+
+Die Tools eines Servers heißen in Claude Code `mcp__<server>__<tool>`. Der Server `rooms` mit dem Tool `door_code` ergibt `mcp__rooms__door_code`. Mit diesem Namen schreibst du später Rechte-Regeln ([S2.17](s2-17-mcp-sicherheit.md)).
+
+### Wie ein Server läuft
+
+Es gibt Server, die auf deinem Rechner als Prozess laufen (**stdio**), und Server im Netz (**HTTP**). Der Server aus der Übung unten ist ein kleines Python-Programm, das Claude Code selbst startet: Es liest Nachrichten von der Standardeingabe und antwortet auf der Standardausgabe. Die Doku nennt solche Server „local processes on your machine“. Die Transporte und das Anlegen per Befehl erklärt [S2.15](s2-15-mcp-einrichten.md).
 
 ### Welche Server es gibt
 
 Eine Auswahl, keine vollständige Liste.
 
-**Playwright (Browser-Steuerung).** Für Entwickler besonders nützlich. Er gibt Claude einen echten Browser, den es steuern kann:
-
-- URLs aufrufen
-- Buttons und Links klicken
-- Formulare ausfüllen
-- Screenshots machen
-- Seiteninhalte lesen
-- JavaScript ausführen
-
-Einsatz: Admin-Oberflächen automatisieren, dynamische Inhalte auslesen, UI-Abläufe testen, Dashboards überwachen.
-
-**Slack.** Kanäle lesen, Nachrichten senden, Unterhaltungen durchsuchen. Einsatz: Claude benachrichtigt dein Team, wenn Tests scheitern, postet eine Zusammenfassung nach einem Deployment oder beantwortet Fragen aus dem Slack-Verlauf.
-
-**Gmail und Google Calendar.** Mails lesen, Entwürfe anlegen, Termine verwalten. Einsatz: Antworten entwerfen, Meetings planen, Besprechungsnotizen in Aufgaben verwandeln. Beide sind von Anthropic gehostete Connectors ohne lokales OAuth aus Claude Code: Du verbindest sie in claude.ai unter den Connectors, und Claude Code übernimmt sie, wenn du mit einem claude.ai-Abo angemeldet bist.
-
-**Datenbanken (PostgreSQL, SQLite und andere).** Datenbanken direkt abfragen. Claude kann Daten analysieren, Berichte erzeugen und Auffälligkeiten finden, ohne dass du SQL von Hand schreibst.
-
-**Context7 (Doku nachschlagen).** Holt die aktuelle Dokumentation zu einer Bibliothek oder einem Framework. Das beugt erfundener API-Syntax vor, weil Claude mit echter, aktueller Doku arbeitet.
-
-**Eigene MCP-Server.** Jedes Team kann einen MCP-Server bauen, der seine internen Werkzeuge bereitstellt: Deploy-Pipeline, Monitoring, Bug-Tracker. Wie das geht, steht in [S2.17](s2-17-mcp-sicherheit.md#einen-eigenen-server-bauen).
+- **Playwright** gibt Claude einen echten Browser: URLs aufrufen, klicken, Formulare ausfüllen, Screenshots machen, Seiteninhalte lesen. Einsatz: Admin-Oberflächen automatisieren, UI-Abläufe testen.
+- **Slack:** Kanäle lesen, Nachrichten senden, den Verlauf durchsuchen.
+- **Gmail und Google Calendar** sind von Anthropic gehostete Connectors ohne lokales OAuth aus Claude Code: Du verbindest sie in claude.ai unter den Connectors, und Claude Code übernimmt sie, wenn du mit einem claude.ai-Abo angemeldet bist.
+- **Datenbanken (PostgreSQL, SQLite und andere):** direkt abfragen, ohne dass du SQL von Hand schreibst.
+- **Context7** holt die aktuelle Dokumentation zu einer Bibliothek und beugt so erfundener API-Syntax vor.
+- **Eigene MCP-Server:** Jedes Team kann einen Server bauen, der seine internen Werkzeuge bereitstellt, etwa Deploy-Pipeline, Monitoring oder Bug-Tracker. Wie das geht, steht in [S2.17](s2-17-mcp-sicherheit.md#einen-eigenen-server-bauen).
 
 ### MCP-Tool oder Hook?
 
@@ -87,13 +77,144 @@ Beide erweitern Claude Code, aber sie lösen verschieden aus. Ein MCP-Tool ruft 
 
 ## Selbst machen
 
-### Übung: einen MCP-Server anbinden
+### Übung: einen Server anbinden und ein Tool aufrufen lassen (etwa 15 Minuten)
 
-**Ziel:** Den Playwright-MCP-Server einrichten und damit Browser-Abläufe automatisieren. Danach hast du Claude einen echten Browser steuern lassen und weißt, was das für Automatisierung in deinem Bereich bedeutet.
+**Ziel:** Du bindest einen kleinen Server über eine `.mcp.json` an, prüfst in `/mcp`, dass er verbunden ist, und lässt Claude ein Tool aufrufen, dessen Antwort Claude nur dort bekommen kann.
 
-**Hintergrund:** In der Physical Security bindest du externe Anlagen wie Brandmelderzentralen, Videoüberwachung und Sprechanlagen an deine zentrale Zutrittskontrolle an. Jede Anlage bietet eine Schnittstelle, und die Plattform verbindet sich damit. MCP ist dieses Integrationsprotokoll für Claude Code. Playwright gehört zu den stärksten MCP-Servern: Er gibt Claude einen echten Browser, und jede Weboberfläche, die dein Team von Hand bedient, lässt sich automatisieren.
+**Startzustand:** ein leerer Ordner `~/cc-workshop/mcp` (`mkdir -p ~/cc-workshop/mcp && cd ~/cc-workshop/mcp`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\mcp"; Set-Location "$HOME\cc-workshop\mcp"`). Du brauchst Python, sonst nichts: Der Server benutzt nur die Standardbibliothek. Er steht nur in diesem Ordner, deine eigene Konfiguration bleibt unberührt. Dieselbe Datei nutzen [S2.15](s2-15-mcp-einrichten.md) und [S2.17](s2-17-mcp-sicherheit.md) weiter; lösch den Ordner also erst nach dem letzten dieser Kapitel.
 
-**Schritt 1: Playwright-MCP prüfen**
+1. Speichere den Server als `server.py` im Übungsordner. Er spricht das Protokoll von Hand, damit du siehst, wie wenig dazu gehört. Echte Server nutzen dafür eine Bibliothek ([S2.17](s2-17-mcp-sicherheit.md)). Er kennt zwei Tools: `list_rooms` und `door_code`, das zu einem Raum einen Türcode liefert.
+
+   ```python
+   import json
+   import os
+   import sys
+
+   SITE = os.environ.get("ROOMS_SITE", "unset")
+   CODES = {"lobby": "7421", "lab": "3088", "archive": "5517"}
+
+   TOOLS = [
+       {
+           "name": "list_rooms",
+           "description": "List the rooms that have a door code, and the site name.",
+           "inputSchema": {"type": "object", "properties": {}},
+       },
+       {
+           "name": "door_code",
+           "description": "Return the door code of one room.",
+           "inputSchema": {
+               "type": "object",
+               "properties": {"room": {"type": "string"}},
+               "required": ["room"],
+           },
+       },
+   ]
+
+
+   def send(message):
+       data = (json.dumps(message) + "\n").encode("utf-8")
+       sys.stdout.buffer.write(data)
+       sys.stdout.buffer.flush()
+
+
+   def reply(msg_id, result):
+       send({"jsonrpc": "2.0", "id": msg_id, "result": result})
+
+
+   def fail(msg_id, code, text):
+       send({"jsonrpc": "2.0", "id": msg_id, "error": {"code": code, "message": text}})
+
+
+   def text(content, is_error=False):
+       return {"content": [{"type": "text", "text": content}], "isError": is_error}
+
+
+   for line in sys.stdin:
+       line = line.strip()
+       if not line:
+           continue
+       msg = json.loads(line)
+       method = msg.get("method")
+       msg_id = msg.get("id")
+       if method == "initialize":
+           reply(msg_id, {
+               "protocolVersion": msg["params"]["protocolVersion"],
+               "capabilities": {"tools": {}},
+               "serverInfo": {"name": "rooms", "version": "0.1.0"},
+           })
+       elif method == "ping":
+           reply(msg_id, {})
+       elif method == "tools/list":
+           reply(msg_id, {"tools": TOOLS})
+       elif method == "tools/call":
+           name = msg["params"]["name"]
+           args = msg["params"].get("arguments") or {}
+           if name == "list_rooms":
+               reply(msg_id, text("site: " + SITE + "; rooms: " + ", ".join(CODES)))
+           elif name == "door_code":
+               room = args.get("room", "")
+               if room in CODES:
+                   reply(msg_id, text(CODES[room]))
+               else:
+                   reply(msg_id, text("unknown room: " + room, True))
+           else:
+               fail(msg_id, -32602, "unknown tool: " + name)
+       elif msg_id is not None:
+           fail(msg_id, -32601, "method not found: " + str(method))
+   ```
+
+2. Teste den Server allein, ohne Claude Code. Du schickst ihm eine Zeile und liest die Antwort. Unter Windows heißt der Python-Aufruf `python`, sonst `python3`.
+
+   ```bash
+   echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | python3 server.py
+   ```
+
+   ```powershell
+   '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | python server.py
+   ```
+
+   Erwartet: eine Zeile JSON, die `list_rooms` und `door_code` enthält.
+
+3. Trag den Server in die `.mcp.json` des Übungsordners ein. Das ist der Scope `project`: Der Server gilt in diesem Projekt und ließe sich mit dem Repo teilen. Unter Windows schreibst du `"command": "python"`.
+
+   <!-- cockpit:example -->
+   ```json
+   {
+     "mcpServers": {
+       "rooms": {
+         "command": "python3",
+         "args": ["server.py"]
+       }
+     }
+   }
+   ```
+
+4. Frag, was Claude Code von dem Server hält, bevor eine Sitzung läuft: `claude mcp list`. Erwartet: Der Server `rooms` steht in der Liste mit dem Status ``⏸ Pending approval (run `claude` to approve)`` (so heißt der Status in der Doku). Claude Code nutzt Server aus einer `.mcp.json` erst, wenn du sie freigibst, damit ein geklontes Repo sich keine Server unterschieben kann.
+
+5. Starte eine Sitzung im Übungsordner mit `claude --permission-mode default`. Bestätige den Dialog zum Vertrauen in den Ordner. Danach fragt Claude Code nach dem neuen Server `rooms`: Wähl „Use this MCP server“; vorausgewählt ist „Continue without using this MCP server“. Tipp dann `/mcp`. Erwartet: `rooms` steht dort als verbunden, mit der Zahl seiner Tools (zwei). Schließ die Ansicht mit `Esc`.
+
+6. Gib diesen Auftrag ein:
+
+   ```text
+   Without reading any files, use the rooms tool to list the rooms, then get the door code of the lab.
+   ```
+
+   Fragt Claude Code vor dem Aufruf um Freigabe, antworte mit „Yes“. Erwartet: Claude ruft die beiden Tools auf und nennt den Code `3088`. Ohne den Zusatz „Without reading any files“ könnte Claude den Code auch aus `server.py` lesen; so bekommt es ihn nur vom Server.
+
+7. Prüf es: Frag `Which tool did you just call, and what was its full name?` Erwartet: Claude nennt das Tool `door_code` des Servers `rooms`, in Claude Code als `mcp__rooms__door_code` geführt. Beende die Sitzung mit `/exit`.
+
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/mcp` nach [S2.17](s2-17-mcp-sicherheit.md). Mit dem Ordner ist alles weg; deine Konfiguration unter `~/.claude/` hast du nie angefasst.
+
+**Geschafft, wenn:**
+
+- [ ] `claude mcp list` den Server `rooms` mit `Pending approval` gezeigt hat
+- [ ] `/mcp` ihn als verbunden mit zwei Tools zeigte
+- [ ] Claude `3088` genannt hat, nachdem es das Tool aufgerufen hat
+- [ ] du erklären kannst, warum Claude Code vor der Nutzung gefragt hat
+
+### Extra: Playwright, ein echter Browser (etwa 15 Minuten)
+
+Der bekannteste Server gibt Claude einen echten Browser. Er braucht Node.js mit `npx` ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#nodejs)). Leg dafür einen zweiten Ordner `~/cc-workshop/mcp-browser` an und wechsle hinein. Prüf zuerst, dass `npx` da ist und der Server startet:
 
 ```bash
 # Verify npx is available
@@ -103,13 +224,8 @@ npx --version
 npx @playwright/mcp@latest --help
 ```
 
-Fehlt `npx`, installier zuerst Node.js ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#nodejs)).
+Trag den Server in die `.mcp.json` dieses Ordners ein:
 
-**Schritt 2: den MCP-Server eintragen**
-
-Leg in deinem Projektordner eine `.mcp.json` an oder ergänze die vorhandene. Das ist der Scope `project`: Der Server gilt in diesem Projekt und lässt sich mit dem Repo teilen.
-
-<!-- cockpit:example -->
 ```json
 {
   "mcpServers": {
@@ -122,106 +238,57 @@ Leg in deinem Projektordner eine `.mcp.json` an oder ergänze die vorhandene. Da
 }
 ```
 
-Prüf, ob das JSON gültig ist (unter Windows `python` statt `python3`):
+Starte `claude --permission-mode default` in diesem Ordner, gib den Server frei und frag:
 
-```bash
-# Verify the JSON is valid
-python3 -m json.tool .mcp.json
-```
-
-Willst du Playwright in allen deinen Projekten haben, legst du keine Datei unter `~/.claude/` an, sondern trägst den Server mit `claude mcp add` im Scope `user` ein ([S2.15](s2-15-mcp-einrichten.md)). Claude Code speichert ihn dann in `~/.claude.json`.
-
-**Schritt 3: Claude Code neu starten und prüfen**
-
-Starte Claude Code im Projektordner neu. Server aus einer `.mcp.json` nutzt Claude Code erst, wenn du sie bestätigt hast; stimm der Rückfrage beim Start zu. Frag dann, ob die Playwright-Tools da sind:
-
-```
+```text
 What browser tools do you have available?
 ```
 
-Claude sollte Tools wie `browser_navigate`, `browser_click`, `browser_take_screenshot` und `browser_snapshot` nennen.
+Erwartet: Tools wie `browser_navigate`, `browser_click` und `browser_take_screenshot` (die Namen stammen aus der Doku von `@playwright/mcp`, nicht von Claude Code). Dann:
 
-**Schritt 4: eine Seite aufrufen und fotografieren**
-
-```
+```text
 Navigate to example.com using the browser and take a screenshot
 ```
 
-Claude sollte:
+Erwartet: Claude ruft das Navigations-Tool mit `https://example.com` auf und danach das Screenshot-Tool. Beim ersten Aufruf kann Playwright einen Browser nachladen oder melden, dass er fehlt; die [Doku von `@playwright/mcp`](https://github.com/microsoft/playwright-mcp) sagt, wie du ihn installierst. Zum Schluss lässt du Claude mit einer echten Seite arbeiten:
 
-1. das Navigations-Tool mit `https://example.com` aufrufen
-2. das Screenshot-Tool aufrufen
-3. den Screenshot anzeigen oder beschreiben
-
-Erscheint ein Screenshot im Terminal, hat es geklappt.
-
-**Schritt 5: mit einer Seite arbeiten**
-
-```
+```text
 Navigate to github.com/anthropics and list the first 5 repositories shown on the page
 ```
 
-Claude ruft die Seite auf, liest sie und liefert eine Liste. Das ist echter Inhalt aus dem DOM, keine zwischengespeicherten Daten.
-
-**Schritt 6: Automatisierung für deinen Alltag überlegen**
-
-Denk an deinen Arbeitsalltag. Such dir eine Weboberfläche, die dein Team nutzt, und beschreib, was Claude dort automatisieren könnte. Beispiele:
-
-- „Unser Portal zur Controller-Verwaltung: Claude könnte sich anmelden, alle Türereignisse der letzten 24 Stunden ziehen und Zutritte außerhalb der Arbeitszeit markieren."
-- „Unsere Firmware-Seite: Claude könnte prüfen, ob es für jedes Gerätemodell, das wir betreuen, neue Firmware gibt."
-- „Unser Ticketsystem: Claude könnte alle offenen Tickets mit dem Tag ‚access request' finden und zusammenfassen."
-
-Im Workshop besprichst du mit deinem Nachbarn: Welche Web-Automatisierung bringt eurem Team am meisten?
-
-**Schritt 7 (Bonus): einen mehrstufigen Ablauf automatisieren**
-
-```
-Navigate to [a site you use], [describe a multi-step task], and report back what you found
-```
-
-Probier eine echte Abfolge mehrerer Schritte. Notier dir, was scheitert (Ladezeiten, Anmeldung, JavaScript-Prüfungen). Das ist normal und lässt sich mit den Warte-Befehlen von Playwright lösen.
-
-**Geschafft, wenn:**
-
-- [ ] die `.mcp.json` existiert und eine gültige Playwright-Konfiguration enthält
-- [ ] Claude nach dem Neustart auf Nachfrage Browser-Tools nennt
-- [ ] Claude mindestens eine URL aufgerufen hat
-- [ ] ein Screenshot gemacht und angezeigt oder beschrieben wurde
-- [ ] Claude Inhalte einer Live-Webseite aufgelistet hat
-- [ ] (Bonus) ein mehrstufiger Ablauf geklappt hat
+Nimm für Versuche keine Seite, die eine Anmeldung verlangt: Was du tippst, steht im Gespräch, und Claude Code legt Sitzungen im Klartext unter `~/.claude/projects/` ab. Der Browser läuft mit dem Netzwerkzugang deines Rechners, auch in einem Firmennetz mit Proxy oder SSO. Ob das Fenster sichtbar ist oder nicht, regelt ein Flag des Servers (`--headless`), nicht Claude Code. Lösch den Ordner `~/cc-workshop/mcp-browser` danach.
 
 ## Typische Fallen
 
-- **Claude sagt, es gibt keine Playwright-Tools.** Prüf, ob die `.mcp.json` gültiges JSON ist, ob `npx @playwright/mcp@latest` im Terminal ohne Fehler startet und ob du Claude Code nach dem Anlegen neu gestartet hast. Hast du die Rückfrage zum Projekt-Server abgelehnt, setzt `claude mcp reset-project-choices` die Entscheidung zurück.
-- **Die Konfiguration liegt in `~/.claude/.mcp.json`.** Ältere Fassungen dieses Kurses nannten diesen Pfad für globale Server. Claude Code liest ihn nicht: Server in den Scopes `local` und `user` stehen in `~/.claude.json`, Team-Server in der `.mcp.json` im Projektordner ([S2.15](s2-15-mcp-einrichten.md)).
-- **Die Navigation läuft in einen Timeout.** Playwright braucht beim ersten Mal einen Moment zum Starten. Versuch es noch einmal; weitere Aufrufe in derselben Sitzung gehen schneller.
-- **Die Seite verlangt eine Anmeldung.** Playwright läuft in einem Browser-Kontext. Musst du dich anmelden, sag Claude:
-
-```
-Navigate to [site], fill in username [X] and password [ask me for it], then [task]
-```
-
-Claude fragt dann nach dem Passwort. Gespeichert wird es trotzdem: Was du eintippst, steht im Gespräch, und Claude Code legt Sitzungen im Klartext unter `~/.claude/projects/` ab. Nimm für solche Versuche keine Zugangsdaten, die du schützen musst.
-
-- **Headless oder mit Fenster.** Standardmäßig läuft Playwright-MCP mit sichtbarem Browserfenster. Willst du es ausblenden, startest du den Server mit dem Flag `--headless`; Details stehen in der Doku von `@playwright/mcp`.
-- **Der Browser hat dein Netz.** Der Playwright-Browser läuft mit deinem Netzwerkzugang. Überleg dir, welche Seiten du automatisierst, gerade in Firmennetzen mit Proxy oder SSO.
+- **`/mcp` zeigt den Server nicht oder nicht verbunden.** Prüf, ob die `.mcp.json` gültiges JSON ist (`python3 -m json.tool .mcp.json`, unter Windows `python`), ob du die Sitzung im Übungsordner gestartet hast (`server.py` ist relativ) und ob du den Server freigegeben hast. Hast du die Rückfrage abgelehnt, setzt `claude mcp reset-project-choices` die Entscheidung zurück.
+- **Der Befehl `python3` existiert nicht.** Unter Windows heißt er meist `python`. Der Eintrag `command` in der `.mcp.json` muss zu deinem System passen.
+- **Die Konfiguration steht an der falschen Stelle.** Eine Datei `~/.claude/.mcp.json` liest Claude Code nicht. Server in den Scopes `local` und `user` stehen in `~/.claude.json`, Team-Server in der `.mcp.json` im Projektordner ([S2.15](s2-15-mcp-einrichten.md)).
+- **Der Server ist verbunden, aber Claude nutzt ihn nicht.** Sag es ausdrücklich: `Use the rooms tool …`. Die Tool-Beschreibung in `server.py` ist das, was Claude liest, um zu entscheiden.
 
 ## Check
 
-Du kannst an einem Beispiel aus deinem Arbeitsumfeld erklären, was ein MCP-Server gegenüber Copy-Paste bringt, und hast den Playwright-Server so angebunden, dass Claude eine echte Webseite bedient.
+Du kannst erklären, was ein MCP-Server gegenüber Copy-Paste bringt, und hast einen Server so angebunden, dass Claude eines seiner Tools aufgerufen hat.
 
-1. Was stellt ein MCP-Server für Claude bereit?
-2. Wo legst du den Server für die Übung ab, und warum fragt Claude Code beim Start nach?
-3. Welche Daten überqueren eine Grenze, wenn Claude über Playwright dein Admin-Portal bedient, und wem gehören sie?
+1. Was stellt ein MCP-Server für Claude bereit, und woran siehst du in der Sitzung, dass er verbunden ist?
+2. Wo hast du den Server in der Übung eingetragen, und warum fragt Claude Code vor der Nutzung nach?
+3. Wodurch unterscheidet sich ein MCP-Tool von einem Hook?
+
+<details><summary>Auflösung</summary>
+
+1. Tools, Ressourcen und Prompts. In der Sitzung zeigt `/mcp` den Server mit seinem Status und der Zahl seiner Tools.
+2. In der `.mcp.json` im Projektordner, das ist der Scope `project`. Claude Code fragt aus Sicherheitsgründen vor der Nutzung von Projekt-Servern nach; ein geklontes Repo soll sich nicht selbst Server freischalten.
+3. Dadurch, wer auslöst: Ein MCP-Tool ruft Claude auf, wenn die Aufgabe es braucht. Ein Hook feuert von selbst bei einem festen Ereignis, ohne dass Claude darüber entscheidet.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Was unterscheidet ein MCP-Tool grundsätzlich von einem Claude-Code-Hook?
+**Frage:** Du hast den Server in die `.mcp.json` des Projekts eingetragen. `claude mcp list` zeigt ihn mit dem Status `Pending approval`, und in der Sitzung fehlen seine Tools. Was fehlt?
 
-- **Richtig:** Wer auslöst: Ein MCP-Tool ruft Claude auf, wenn es das Tool braucht; ein Hook feuert von selbst bei einem festen Ereignis.
-- Falsch: Nur der Transport: MCP-Tools laufen immer über HTTP, Hooks dagegen immer als lokales Shell-Skript auf deinem Rechner.
-- Falsch: Nichts Wesentliches: MCP-Server ist bloß der neue Name für Hooks vom Typ `http`, die Aufgabe ist dieselbe geblieben.
-- Falsch: Nur die Anmeldung: MCP-Tools können sich per OAuth anmelden, Hooks dagegen nicht; ansonsten verhalten sich beide genau gleich.
+- **Richtig:** Die Freigabe: Server aus einer `.mcp.json` nutzt Claude Code erst, nachdem du sie in einer interaktiven Sitzung bestätigt hast.
+- Falsch: Der Server muss mit `claude mcp add --scope user` neu eingetragen werden, weil Claude Code eine `.mcp.json` im Projekt grundsätzlich nicht liest.
+- Falsch: Ein `/reload-plugins` lädt den Server nach, weil es alle Erweiterungen der laufenden Sitzung neu einliest.
+- Falsch: Ein `claude mcp reset-project-choices` schaltet den Server frei, weil es alle Projekt-Server auf „zugelassen“ setzt.
 
 </details>
 
@@ -234,4 +301,4 @@ Du kannst an einem Beispiel aus deinem Arbeitsumfeld erklären, was ein MCP-Serv
 - [S2.17 · MCP-Sicherheit und ein eigener Server](s2-17-mcp-sicherheit.md)
 - [S2.18 · RAG und NotebookLM: dem Agenten Baupläne geben](s2-18-rag-und-notebooklm.md)
 - [S2.6 · Hooks als Sensoren: die drei Eckpfeiler](s2-06-hooks-als-sensoren.md)
-- [S2.20 · Praxis-Station Session 2: eine Übung wählen](s2-20-praxis-station-2.md)
+- [S2.20 · Praxis-Station Session 2: alles in einem Ablauf](s2-20-praxis-station-2.md)

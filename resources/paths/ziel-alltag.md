@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 5 Etappen, zusammen etwa 10,5 Stunden (591 Min durcharbeiten, 39 Min überfliegen).
+**Umfang:** 5 Etappen, zusammen etwa 10,5 Stunden (598 Min durcharbeiten, 43 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -40,20 +40,20 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.2 Eine SKILL.md schreiben](../library/s2-02-skill-schreiben.md) — durcharbeiten
 - [S2.3 Skills oder Commands, und wer sie auslösen darf](../library/s2-03-wer-skills-ausloest.md) — durcharbeiten
 
-## Etappe 4 (~141 Min)
+## Etappe 4 (~137 Min)
 
 - [S2.4 Mitgelieferte Skills](../library/s2-04-mitgelieferte-skills.md) — durcharbeiten
 - [S2.5 Lebendige Prompts: Argumente und dynamischer Inhalt](../library/s2-05-lebendige-prompts.md) — durcharbeiten
 - [S2.6 Hooks als Sensoren: die drei Eckpfeiler](../library/s2-06-hooks-als-sensoren.md) — überfliegen
 - [S2.7 Die wichtigsten Hook-Ereignisse](../library/s2-07-hook-ereignisse.md) — überfliegen
 - [S2.8 Einen Hook einrichten, der wirklich blockt](../library/s2-08-hook-einrichten.md) 🛡 — überfliegen
-- [S2.20 Praxis-Station Session 2: eine Übung wählen](../library/s2-20-praxis-station-2.md) — durcharbeiten
+- [S2.20 Praxis-Station Session 2: alles in einem Ablauf](../library/s2-20-praxis-station-2.md) — durcharbeiten
 - [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
 - [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) 🛡 — durcharbeiten
 - [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) 🛡 — durcharbeiten
+
+## Etappe 5 (~63 Min)
+
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
-
-## Etappe 5 (~48 Min)
-
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten
 - [S4.11 Abschluss: ein kleiner Build](../library/s4-11-abschluss-kleiner-build.md) — durcharbeiten
