@@ -1,7 +1,7 @@
 {
   "name": "dynamic-workshop",
   "version": "2.0.0",
-  "description": "Claude Code Praxisbibliothek als Plugin: /workshop start stuft dich ein und berechnet deinen persönlichen Lernpfad über 70 Kapitel (65 Lerneinheiten in 4 Sessions plus Setup und vier Community-Kapitel); /workshop next, learn, review und guide begleiten beim Lernen und Moderieren. Mentor-Agent für Fragen.",
+  "description": "Claude Code Praxisbibliothek als Plugin: /workshop start stuft dich ein und berechnet deinen persönlichen Lernpfad über 71 Kapitel (65 Lerneinheiten in 4 Sessions plus Setup und vier Community-Kapitel); /workshop next, learn, review und guide begleiten beim Lernen und Moderieren. Mentor-Agent für Fragen.",
   "author": {
     "name": "dynamic-workshop"
   }

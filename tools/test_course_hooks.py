@@ -9,6 +9,7 @@ Payloads follow the official hooks reference (code.claude.com/docs/en/hooks, che
 """
 
 import json
+import os
 from pathlib import Path
 import re
 import shutil
@@ -120,6 +121,66 @@ def test_secure_diff_gate_allows_normal_absolute_windows_path(script):
     assert result.returncode == 0
 
 
+def run_raw(script: Path, stdin: str, env: dict | None = None) -> subprocess.CompletedProcess:
+    """Run a hook with arbitrary stdin (not necessarily JSON), optionally in a changed environment."""
+    cmd = [sys.executable, str(script)] if script.suffix == ".py" else [BASH, str(script)]
+    return subprocess.run(
+        cmd, input=stdin, capture_output=True, text=True, encoding="utf-8", check=False, timeout=60, env=env
+    )
+
+
+@pytest.mark.parametrize("script", SECURE_DIFF_GATE)
+@pytest.mark.parametrize("stdin", ["this is not json", "", "[]", "null", '"text"', "42"],
+                         ids=["garbage", "empty", "array", "null", "string", "number"])
+def test_secure_diff_gate_fails_closed_when_input_is_unreadable(script, stdin):
+    """Same rule as safety-check: a gate that cannot read its input blocks, and says that it is the gate."""
+    result = run_raw(script, stdin)
+
+    assert result.returncode == BLOCK
+    assert "BLOCKED" in result.stderr
+
+
+@pytest.mark.skipif(BASH is None, reason="bash is required")
+def test_secure_diff_gate_sh_fails_closed_when_jq_is_unusable(tmp_path):
+    """Without a working jq the script used to end with 127, which does not block: the write to .env went through."""
+    shim = tmp_path / "jq"
+    shim.write_text("#!/bin/sh\nexit 127\n", encoding="utf-8", newline="\n")
+    shim.chmod(0o755)
+    env = {**os.environ, "PATH": str(tmp_path) + os.pathsep + os.environ["PATH"]}
+    probe = subprocess.run(
+        [BASH, "-c", "jq --version"], capture_output=True, text=True, check=False, timeout=60, env=env
+    )
+    if probe.returncode != 127:
+        pytest.skip("could not put a failing jq in front of the real one on this machine")
+
+    result = run_raw(HOOKS / "secure-diff-gate.sh", json.dumps(pre_write("C:\\project\\.env", "TOKEN=x")), env=env)
+
+    assert result.returncode == BLOCK
+    assert "BLOCKED" in result.stderr
+
+
+@pytest.mark.parametrize("script", SECURE_DIFF_GATE)
+def test_secure_diff_gate_blocks_env_file_in_any_letter_case(script):
+    """Windows and the default macOS file system ignore case: .ENV is the same file as .env."""
+    result = run(script, pre_write("C:\\project\\.ENV", "TOKEN=x"))
+
+    assert result.returncode == BLOCK
+
+
+@pytest.mark.parametrize("script", SECURE_DIFF_GATE)
+def test_secure_diff_gate_handles_non_ascii_paths_and_names_them_readably(script):
+    """Claude Code sends and reads UTF-8; on Windows Python's stdin and stderr default to cp1252.
+
+    The exit codes were right before this test existed; what was broken is the reason Claude gets to read.
+    """
+    blocked = run(script, pre_write("C:\\Users\\Ángel\\project\\secrets\\panel-db.json", "{}"))
+    allowed = run(script, pre_write("C:\\Users\\Ángel\\project\\src\\app.py", "print('ok')"))
+
+    assert blocked.returncode == BLOCK
+    assert "C:/Users/Ángel/project/secrets/panel-db.json" in blocked.stderr
+    assert allowed.returncode == 0
+
+
 # --- safety-check (Exercise 2.2 + Demo 2.2, PreToolUse Bash) ---------------------------------------
 
 SAFETY_CHECK = [
@@ -177,13 +238,16 @@ def test_safety_check_allows_harmless_powershell_commands(script, command):
     assert result.returncode == 0
 
 
+@pytest.mark.parametrize("stdin", ["this is not json", "", "null", "[1, 2]", '"text"', "5"],
+                         ids=["garbage", "empty", "null", "array", "string", "number"])
 @pytest.mark.parametrize("script", SAFETY_CHECK)
-def test_safety_check_fails_closed_when_input_is_unreadable(script):
-    """A safety gate that cannot read its input must not silently wave the call through."""
+def test_safety_check_fails_closed_when_input_is_unreadable(script, stdin):
+    """A safety gate that cannot read its input must not silently wave the call through. Valid JSON that is no
+    object (null, a list, a bare value) is unreadable too: there is no command to check in it."""
     cmd_result = subprocess.run(
         [BASH, str(script)] if script.suffix == ".sh"
         else [POWERSHELL, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script)],
-        input="this is not json",
+        input=stdin,
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -197,9 +261,12 @@ def test_safety_check_fails_closed_when_input_is_unreadable(script):
 # --- sensitive-data-scanner (Bonus Exercise 3.8, PreToolUse Write|Edit) ----------------------------
 
 SCANNER = pytest.param(HOOKS / "sensitive-data-scanner.sh", marks=needs_bash_jq)
+# The Python variant needs neither bash nor jq: it is the one every learner can run (S3.11).
+SCANNER_PY = pytest.param(HOOKS / "sensitive-data-scanner.py")
+SCANNERS = [SCANNER, SCANNER_PY]
 
 
-@pytest.mark.parametrize("script", [SCANNER])
+@pytest.mark.parametrize("script", SCANNERS)
 def test_scanner_blocks_api_key_in_write_content(script):
     result = run(script, pre_write("C:\\project\\config.py", 'API_KEY = "sk-' + "a" * 24 + '"'))
 
@@ -207,26 +274,45 @@ def test_scanner_blocks_api_key_in_write_content(script):
     assert "BLOCKED" in result.stderr
 
 
-@pytest.mark.parametrize("script", [SCANNER])
+@pytest.mark.parametrize("script", SCANNERS)
 def test_scanner_blocks_card_number_in_edit_new_string(script):
     result = run(script, pre_edit("C:\\project\\notes.md", "card: TBD", "card: 4111 1111 1111 1111"))
 
     assert result.returncode == BLOCK
 
 
-@pytest.mark.parametrize("script", [SCANNER])
+@pytest.mark.parametrize("script", SCANNERS)
 def test_scanner_allows_clean_write(script):
     result = run(script, pre_write("C:\\project\\README.md", "# Access panel notes\nNothing secret here."))
 
     assert result.returncode == 0
 
 
+@pytest.mark.parametrize("script", SCANNERS)
+@pytest.mark.parametrize("stdin", ["not json", "", "[]", "null", '"text"', "42"],
+                         ids=["garbage", "empty", "array", "null", "string", "number"])
+def test_scanner_blocks_when_it_cannot_read_its_input(script, stdin):
+    result = run_raw(script, stdin)
+
+    assert result.returncode == BLOCK
+    assert "SCANNER" in result.stderr
+
+
+def test_python_scanner_does_not_echo_the_match():
+    secret = "pk_" + "c" * 22
+    result = run(HOOKS / "sensitive-data-scanner.py", pre_write("C:\\project\\t.txt", "api_key = " + secret))
+
+    assert result.returncode == BLOCK
+    assert secret not in result.stderr and secret not in result.stdout
+
+
 # --- redact-output (Module 2.2 advanced output, PostToolUse Bash) ----------------------------------
 
-REDACT = pytest.param(HOOKS / "redact-output.sh", marks=needs_bash_jq)
+# The Python variants need neither bash nor jq: they are the ones that run on Windows without Git Bash (S2.10).
+REDACT = [pytest.param(HOOKS / "redact-output.sh", marks=needs_bash_jq), pytest.param(HOOKS / "redact-output.py")]
 
 
-@pytest.mark.parametrize("script", [REDACT])
+@pytest.mark.parametrize("script", REDACT)
 def test_redact_output_replaces_secret_in_bash_stdout_with_bash_shape(script):
     secret = "sk-" + "b" * 24
     result = run(script, post_bash("cat .env", f"TOKEN={secret}\nMODE=dev\n", "warn: x"))
@@ -240,7 +326,7 @@ def test_redact_output_replaces_secret_in_bash_stdout_with_bash_shape(script):
     assert replaced["stderr"] == "warn: x"
 
 
-@pytest.mark.parametrize("script", [REDACT])
+@pytest.mark.parametrize("script", REDACT)
 def test_redact_output_stays_silent_without_secrets(script):
     result = run(script, post_bash("ls", "a.txt\nb.txt\n"))
 
@@ -248,12 +334,62 @@ def test_redact_output_stays_silent_without_secrets(script):
     assert result.stdout.strip() == ""
 
 
+@pytest.mark.parametrize("script", REDACT)
+def test_redact_output_also_cleans_stderr(script):
+    secret = "AKIA" + "A1B2" * 4
+    result = run(script, post_bash("aws configure list", "profile: dev\n", f"warn: key {secret} is old"))
+
+    replaced = updated_output(result)
+    assert secret not in replaced["stderr"] and "[REDACTED]" in replaced["stderr"]
+    assert replaced["stdout"] == "profile: dev\n"
+
+
+@pytest.mark.parametrize("script", REDACT)
+def test_redact_output_starts_at_twenty_characters_after_the_prefix(script):
+    short, shortest_match = "sk-" + "e" * 19, "sk-" + "f" * 20
+
+    assert run(script, post_bash("cat a", f"id={short}\n")).stdout.strip() == ""
+    assert updated_output(run(script, post_bash("cat a", f"key={shortest_match}\n")))["stdout"] == "key=[REDACTED]\n"
+
+
+POST_OUTPUT_HOOKS = REDACT + [
+    pytest.param(HOOKS / "token-firewall.sh", marks=needs_bash_jq),
+    pytest.param(HOOKS / "token-firewall.py"),
+]
+
+
+@pytest.mark.parametrize("script", POST_OUTPUT_HOOKS)
+def test_output_hooks_keep_fields_they_do_not_know_and_text_that_is_not_ascii(script):
+    """Claude Code 2.1.289 sends a fifth field (noOutputExpected); the replacement must stay in the tool's shape.
+    The payload goes in as raw UTF-8, the way Claude Code sends it (a Windows console stream would read cp1252)."""
+    secret = "sk-" + "d" * 24
+    payload = post_bash("pytest -q", f"Tür geöffnet ✓ passed\nTOKEN={secret} passed\n")
+    payload["tool_response"]["noOutputExpected"] = False
+    result = run_raw(script, json.dumps(payload, ensure_ascii=False))
+
+    assert result.returncode == 0
+    replaced = updated_output(result)
+    assert set(replaced) == {"stdout", "stderr", "interrupted", "isImage", "noOutputExpected"}
+    assert "Tür geöffnet ✓" in replaced["stdout"]
+
+
+@pytest.mark.parametrize("script", POST_OUTPUT_HOOKS)
+@pytest.mark.parametrize("stdin", ["not json", "", "null"], ids=["garbage", "empty", "null"])
+def test_output_hooks_change_nothing_when_they_cannot_read_their_input(script, stdin):
+    """A PostToolUse hook cannot block: the command has run. Unreadable input means no replacement and no crash."""
+    result = run_raw(script, stdin)
+
+    assert result.returncode == 0
+    assert result.stdout.strip() == ""
+    assert "Traceback" not in result.stderr
+
+
 # --- token-firewall (Bonus Exercise 2.6, PostToolUse Bash) -----------------------------------------
 
-FIREWALL = pytest.param(HOOKS / "token-firewall.sh", marks=needs_bash_jq)
+FIREWALL = [pytest.param(HOOKS / "token-firewall.sh", marks=needs_bash_jq), pytest.param(HOOKS / "token-firewall.py")]
 
 
-@pytest.mark.parametrize("script", [FIREWALL])
+@pytest.mark.parametrize("script", FIREWALL)
 def test_token_firewall_keeps_only_failures_and_summary_for_test_runs(script):
     noisy = "\n".join(f"tests/test_{i}.py::test_ok PASSED" for i in range(300))
     stdout = noisy + "\ntests/test_x.py::test_door FAILED\n=== 1 failed, 300 passed in 2.1s ==="
@@ -268,7 +404,7 @@ def test_token_firewall_keeps_only_failures_and_summary_for_test_runs(script):
     assert len(replaced["stdout"]) < len(stdout) / 10
 
 
-@pytest.mark.parametrize("script", [FIREWALL])
+@pytest.mark.parametrize("script", FIREWALL)
 def test_token_firewall_leaves_non_test_commands_alone(script):
     result = run(script, post_bash("ls -la", "total 0\n"))
 
@@ -380,6 +516,7 @@ SNIPPET_HOME = {
     "redact-output.sh": "s2-10-hook-ausgaben.md",
     "token-firewall.sh": "s2-10-hook-ausgaben.md",
     "sensitive-data-scanner.sh": "s3-11-datenschutz-und-compliance.md",
+    "sensitive-data-scanner.py": "s3-11-datenschutz-und-compliance.md",
 }
 
 

@@ -102,9 +102,12 @@ def test_stage_budget_and_totals(persona):
     result = run(persona["answers"])
     time = persona["answers"].get("time", CATALOG["placement"]["default_time"])
     budget = {t["id"]: t["stage_minutes"] for t in CATALOG["placement"]["times"]}[time]
+    last = result["stages"][-1]["n"] if result["stages"] else None
     for s in result["stages"]:
         members = [c for c in result["chapters"] if c["stage"] == s["n"]]
-        assert budget is None or s["minutes"] <= budget or len(members) == 1
+        # the last stage may carry a rest of under 30 minutes on top of its budget (finding B12)
+        room = placement.MIN_LAST_STAGE_MINUTES - 1 if s["n"] == last else 0
+        assert budget is None or s["minutes"] <= budget + room or len(members) == 1
     assert sum(s["minutes"] for s in result["stages"]) == result["totals"]["work_min"] + result["totals"]["skim_min"]
 
 
@@ -204,6 +207,20 @@ def test_duplicate_goals_count_once():
     assert run({"goals": ["einschaetzen", "einschaetzen"]}) == run({"goals": ["einschaetzen"]})
 
 
+def test_every_path_ends_with_the_small_build():
+    """Design 2026-10-05: a core capstone belongs to every goal and to the quick start; the bonus one does not."""
+    rules = CATALOG["placement"]
+    for goal in [g["id"] for g in rules["goals"]]:
+        for time in [t["id"] for t in rules["times"]]:
+            result = run({"goals": [goal], "time": time})
+            recommended = [c["id"] for c in result["chapters"] if c["status"] in ("work", "skim")]
+            assert recommended[-1] == "S4.11", (goal, time)
+            assert by_chapter(result)["S4.11"]["reason"] == "capstone"
+    assert by_chapter(run({"goals": ["alltag"]}))["S4.8"]["status"] == "later"
+    assert by_chapter(run({"goals": ["agents"]}))["S4.8"]["status"] == "work"
+    assert run({"time": "schnellstart"})["warnings"] == []
+
+
 def test_cli_markdown_links_use_link_base(tmp_path):
     cat = json.loads((FIX / "placement-catalog.json").read_text(encoding="utf-8"))
     for c in cat["chapters"]:
@@ -220,3 +237,19 @@ def test_cli_markdown_links_use_link_base(tmp_path):
     local = subprocess.run(base + ["--link-base", "C:/repo/resources/library/"], capture_output=True, text=True,
                            encoding="utf-8", check=True).stdout
     assert "(C:/repo/resources/library/s0-1-x.md)" in local and "https://github.com" not in local
+
+
+@pytest.mark.parametrize("persona", VECTORS, ids=lambda p: p["id"])
+def test_no_path_ends_with_a_stage_of_a_few_minutes(persona):
+    """Finding B12: a path ended with a stage of its own for a rest of 18 or 27 minutes."""
+    stages = run(persona["answers"])["stages"]
+    assert len(stages) < 2 or stages[-1]["minutes"] >= placement.MIN_LAST_STAGE_MINUTES
+    assert [s["n"] for s in stages] == list(range(1, len(stages) + 1))
+
+
+def test_a_small_rest_joins_the_stage_before_it():
+    result = run(BY_ID["P17"]["answers"])  # 'einschaetzen': the path used to end with a stage of 27 minutes
+    stage_numbers = {c["stage"] for c in result["chapters"] if c["stage"] is not None}
+    assert stage_numbers == {s["n"] for s in result["stages"]}
+    assert sum(s["minutes"] for s in result["stages"]) == result["totals"]["work_min"] + result["totals"]["skim_min"]
+    assert len(result["stages"]) == 2

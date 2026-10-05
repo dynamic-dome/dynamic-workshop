@@ -1,7 +1,6 @@
 """
 Access Control Management Tool
-Workshop demo application — contains intentional vulnerabilities for security audit exercise.
-DO NOT use in production.
+Workshop practice application. DO NOT use in production.
 """
 
 import argparse
@@ -13,10 +12,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-# ------------------------------------------------------------------ #
-# VULNERABILITY 1: Hardcoded credential                              #
-# ------------------------------------------------------------------ #
-ADMIN_PASSWORD = "admin123"  # hardcoded secret — should use env var or secrets manager
+ADMIN_PASSWORD = "admin123"
 
 DB_FILE = "users.json"
 LOG_DIR = "logs"
@@ -93,30 +89,18 @@ def check_access(username: str) -> bool:
     return result
 
 
-# ------------------------------------------------------------------ #
-# VULNERABILITY 5 (domain logic): Fail-OPEN access check             #
-# A pattern scanner won't flag this — there's no injection, no        #
-# hardcoded secret, no path traversal. It is a LOGIC flaw only a      #
-# physical-security reviewer catches: when the user database is       #
-# missing or corrupt, this "resilient" check GRANTS access            #
-# (fail-OPEN) so the door "keeps working" during an outage. The       #
-# correct behavior for access control is fail-SECURE — DENY on any    #
-# error. On a real panel, a corrupted users.json would unlock every   #
-# door. Contrast with check_access()/load_db(), which fail secure.    #
-# ------------------------------------------------------------------ #
 def check_access_resilient(username: str) -> bool:
     """
     'Resilient' door check used by the panel's online path.
-    VULNERABILITY (fail-open): returns True (ACCESS GRANTED) when the database
-    is missing or unreadable, instead of failing secure (ACCESS DENIED).
+    Keeps doors working while the user database is unavailable.
     """
     if not os.path.exists(DB_FILE):
-        return True  # fail-open: "don't lock people out if the DB is gone" (WRONG)
+        return True  # do not lock people out when the database is gone
     try:
         with open(DB_FILE, "r", encoding="utf-8") as f:
             db = json.load(f)
     except (json.JSONDecodeError, OSError):
-        return True  # fail-open: grant on a corrupt DB (WRONG — should DENY)
+        return True  # same when the database cannot be read
     return username in db.get("users", [])
 
 
@@ -142,29 +126,15 @@ def log_event(action: str, username: str, success: bool) -> None:
         logger.warning("Could not write to log: %s", exc)
 
 
-# ------------------------------------------------------------------ #
-# VULNERABILITY 2: Path traversal in log reading                     #
-# ------------------------------------------------------------------ #
 def read_log(log_name: str) -> str:
-    """
-    Read a log file by name.
-    VULNERABILITY: no path sanitization — path traversal is possible.
-    e.g. log_name = '../../etc/passwd' would leak system files.
-    """
-    with open(f"logs/{log_name}") as f:  # no sanitization!
+    """Read a log file by name."""
+    with open(f"logs/{log_name}") as f:
         return f.read()
 
 
-# ------------------------------------------------------------------ #
-# VULNERABILITY 3: Command injection in backup function              #
-# ------------------------------------------------------------------ #
 def backup_database(filename: str) -> None:
-    """
-    Create a backup copy of the database.
-    VULNERABILITY: shell=True with unsanitized user input allows command injection.
-    e.g. filename = 'backup.json; rm -rf /' would execute the second command.
-    """
-    subprocess.run(f"cp {DB_FILE} {filename}", shell=True)  # shell=True with user input!
+    """Create a backup copy of the database."""
+    subprocess.run(f"cp {DB_FILE} {filename}", shell=True)
     logger.info("Database backed up to '%s'.", filename)
 
 

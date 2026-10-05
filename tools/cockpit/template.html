@@ -112,8 +112,14 @@
     .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
     /* ---------- start ---------- */
-    .start-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
-    .way { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+    .start-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+    .way { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 10px; text-align: left; text-decoration: none; }
+    .way .btn { margin-top: auto; }
+    .for-moderators, .carry { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .for-moderators { margin-top: 28px; }
+    .for-moderators h2, .carry h2 { font-size: 16px; margin: 0 0 6px; color: var(--ink-2); }
+    .carry label.btn { cursor: pointer; position: relative; }
+    .carry label.btn:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
     .way:hover { border-color: var(--accent); }
     .way strong { font-size: 18px; }
     .way span { color: var(--ink-2); font-size: 15px; }
@@ -134,6 +140,8 @@
     .choice:hover { border-color: var(--ink-2); }
     .choice input { margin-top: 5px; accent-color: var(--accent); }
     .choice:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
+    .choice:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+    .goal-hint { margin: 10px 0 0; color: var(--ink-2); }
     textarea { width: 100%; min-height: 84px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; }
     .areas { display: grid; gap: 10px; }
     .area { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 12px 14px; }
@@ -190,15 +198,17 @@
     .floor:last-child { border-bottom: 0; }
     .floor-name { font-weight: 620; color: var(--ink-2); padding-top: 6px; }
     .floor-name small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
-    .rooms { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+    .rooms { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
     .room { background: var(--surface); border: 2px solid var(--line); border-radius: 4px; padding: 10px 12px 12px; position: relative; }
     .room h3 { margin: 0 0 2px; font-size: 16px; }
     .room p { margin: 0 0 10px; color: var(--muted); font-size: 13px; line-height: 1.4; }
-    .doors { display: flex; flex-wrap: wrap; gap: 6px; }
+    .doors { display: grid; gap: 5px; }
     .door {
-      min-width: 54px; padding: 4px 8px 4px 10px; border: 1px solid var(--line); border-left: 4px solid var(--later);
-      background: var(--surface-2); border-radius: 2px 6px 6px 2px; font: 13px/1.3 var(--mono); text-align: left; position: relative;
+      display: flex; gap: 8px; align-items: baseline; padding: 5px 22px 5px 10px; border: 1px solid var(--line); border-left: 4px solid var(--line);
+      background: var(--surface-2); border-radius: 2px 6px 6px 2px; text-align: left; position: relative; text-decoration: none; min-width: 0;
     }
+    .door-id { font: 13px/1.4 var(--mono); flex: none; min-width: 42px; color: var(--ink-2); }
+    .door-title { font-size: 14px; line-height: 1.4; min-width: 0; overflow-wrap: anywhere; }
     .door:hover { border-color: var(--ink-2); }
     .door.st-work { border-left-color: var(--work); color: var(--ink); }
     .door.st-skim { border-left-color: var(--skim); color: var(--ink); }
@@ -224,7 +234,8 @@
     pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; overflow-x: auto; font: 14px/1.5 var(--mono); white-space: pre; }
     code { font-family: var(--mono); font-size: .92em; }
     :not(pre) > code { background: var(--surface-2); border: 1px solid var(--line); padding: 0 5px; border-radius: 4px; overflow-wrap: anywhere; }
-    .copy { position: absolute; top: 8px; right: 8px; font-size: 13px; padding: 3px 10px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); }
+    .code-bar { display: flex; justify-content: flex-end; margin-bottom: 4px; } /* above the block: on it, the button covered the end of a line (B11) */
+    .copy { font-size: 13px; padding: 3px 10px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); }
     .quiz { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; background: var(--surface); }
     .quiz .opts { display: grid; gap: 8px; margin: 10px 0; }
     .quiz .opts button { text-align: left; border: 1px solid var(--line); background: var(--surface-2); padding: 9px 12px; border-radius: var(--radius); }
@@ -233,7 +244,14 @@
     .feedback { min-height: 1.6em; margin: 0; }
     .full { margin-top: 30px; border-top: 1px solid var(--line); padding-top: 12px; }
     .full summary { cursor: pointer; font-weight: 600; }
-    .prose { max-width: 74ch; }
+    .skip-row { margin: 14px 0 6px; }
+    .recall { margin: 10px 0 16px; padding-left: 22px; }
+    .recall li { margin: 8px 0; }
+    .answer { margin-top: 4px; }
+    .answer summary { cursor: pointer; color: var(--muted); font-size: 0.92em; }
+    .done-row { margin-top: 28px; }
+    .prose > * { max-width: 74ch; } /* reading width for text; a diagram may use the whole column (B6) */
+    .prose > .diagram { max-width: 100%; }
     .prose table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 10px 0 18px; display: block; overflow-x: auto; }
     .prose th, .prose td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; }
     .prose th { background: var(--surface-2); }
@@ -241,12 +259,27 @@
     .prose details { border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 12px; margin: 12px 0; background: var(--surface); }
     .prose details summary { cursor: pointer; color: var(--ink-2); }
     .prose blockquote { margin: 12px 0; padding: 4px 14px; border-left: 3px solid var(--line); color: var(--ink-2); }
-    .diagram { background: #1b2127; border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; overflow-x: auto; } /* SVGs are rendered dark */
-    .diagram svg { display: block; max-width: none; height: auto; margin: 0 auto; } /* natural size, the box scrolls */
+    .diagram { background: #1b2127; border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin: 14px 0; width: fit-content; min-width: min(74ch, 100%); } /* SVGs are rendered dark */
+    .diagram-scroll { overflow-x: auto; }
+    /* Natural size when it fits; else shrink with the box, but not below 72 percent (labels stay readable), then scroll. */
+    .diagram svg, .zoom-body svg { display: block; max-width: none; height: auto; margin: 0 auto; width: clamp(calc(var(--w, 100%) * .72), 100%, var(--w, 100%)); }
+    .diagram .zoom { display: none; margin-top: 8px; font-size: 13px; padding: 3px 10px; border-radius: var(--radius); border: 1px solid #313b45; background: #222a31; color: #e9edf1; }
+    .diagram.is-wide .zoom { display: inline-flex; } /* only when the diagram does not fit its box */
+    .zoom-dialog { width: 96vw; max-width: 96vw; max-height: 92vh; padding: 12px; background: #1b2127; color: #e9edf1; border: 1px solid #313b45; border-radius: var(--radius); }
+    .zoom-dialog::backdrop { background: rgba(0, 0, 0, .6); }
+    .zoom-bar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+    .zoom-body { overflow: auto; max-height: calc(92vh - 84px); }
     aside.side { position: sticky; top: 76px; align-self: start; display: grid; gap: 14px; }
     .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; min-width: 0; overflow-wrap: anywhere; }
     .panel h2 { font-size: 14px; margin: 0 0 8px; color: var(--muted); font-weight: 600; }
     .panel ul { margin: 0; padding-left: 18px; }
+    .prose h2 { scroll-margin-top: 70px; } /* a jump mark must not park the heading under the sticky header */
+    .toc ul, .toc-inline ul { list-style: none; padding: 0; }
+    .toc-inline { display: none; margin: 12px 0 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 8px 14px; max-width: 74ch; }
+    .toc-inline summary { cursor: pointer; color: var(--ink-2); }
+    .toc-inline ul { margin: 8px 0 0; }
+    .toc button, .toc-inline button { border: 0; background: none; padding: 3px 0; color: var(--ink-2); text-align: left; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+    .toc button:hover, .toc-inline button:hover { color: var(--accent); text-decoration-color: var(--accent); }
     .pager { display: flex; justify-content: space-between; gap: 10px; margin-top: 36px; }
     .pager a { max-width: 48%; }
 
@@ -255,7 +288,9 @@
 
     @media (max-width: 700px) {
       .top-inner { padding: 8px 14px; gap: 6px 10px; }
-      .nav { order: 3; width: 100%; margin-left: 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+      .top { position: static; } /* two rows of navigation would cover a sixth of a phone screen */
+      .nav { order: 3; width: 100%; margin-left: 0; flex-wrap: wrap; } /* wrap: a row that scrolls hid its last item */
+      .prose h2 { scroll-margin-top: 12px; }
       .nav button { flex: none; padding: 5px 10px; }
       .theme { margin-left: auto; padding: 4px 8px; font-size: 14px; }
       main { padding: 20px 14px 60px; }
@@ -264,13 +299,15 @@
       .start-grid { grid-template-columns: 1fr; }
       .chapter { grid-template-columns: minmax(0, 1fr); }
       aside.side { position: static; }
+      aside .toc { display: none; } /* below the text it is of no use: the folded list above the text takes over */
+      .toc-inline { display: block; }
       .rows li { grid-template-columns: 1fr; gap: 4px; }
       .rows .min { text-align: left; }
       .floor { grid-template-columns: 1fr; }
       h1 { font-size: 28px; }
     }
     @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
-    @media print { .top, .nav, aside.side, .copy, .pager { display: none; } body { background: #fff; color: #000; } }
+    @media print { .top, .nav, aside.side, .copy, .zoom, .pager { display: none; } body { background: #fff; color: #000; } }
   </style>
 </head>
 <body>
@@ -291,6 +328,7 @@
   <p class="notice" id="storageNotice" hidden>Dein Browser erlaubt hier keinen lokalen Speicher. Du kannst alles nutzen, aber Fortschritt und Einstufung gehen beim Schließen verloren.</p>
   <main id="main" tabindex="-1"></main>
   <div class="sr-only" aria-live="polite" id="live"></div>
+  <dialog class="zoom-dialog" id="zoomDialog" aria-label="Diagramm, vergrößert"><div class="zoom-bar"><button type="button" class="btn" data-action="zoom-close">Schließen</button></div><div class="zoom-body"></div></dialog>
   <script>
     "use strict";
     const LIBRARY = /*@@LIBRARY_DATA@@*/null;
@@ -298,6 +336,7 @@
     /*@@ENGINE_START@@*/
     const RANK = { later: 0, skip: 1, skim: 2, work: 3 };
     function skimMinutes(minutes, percent) { return Math.ceil((minutes * percent) / 100); }
+    const MIN_LAST_STAGE_MINUTES = 30;
     function stageMinutes(chapter, status, percent) {
       return status === "work" ? chapter.minutes : skimMinutes(chapter.minutes, percent);
     }
@@ -374,7 +413,7 @@
         });
         chapters.forEach(c => {
           if (c.type === "practice" && c.offers.some(o => relevant.has(o) && (r(byId[o]) || 0) < 2)) relevant.add(c.id);
-          else if (c.type === "capstone" && (goals.includes("agents") || goals.includes("einschaetzen"))) relevant.add(c.id);
+          else if (c.type === "capstone" && (c.level === "core" || goals.includes("agents") || goals.includes("einschaetzen"))) relevant.add(c.id);
           else if (c.type === "community") {
             const limited = (rules.chapter_goals || {})[c.id];
             if (limited ? limited.some(g => goals.includes(g)) : goals.some(g => g !== "einschaetzen")) relevant.add(c.id);
@@ -456,6 +495,13 @@
         acc += m;
       });
       if (acc > 0) stages.push({ n, minutes: acc });
+      // A rest of a few minutes is no stage of its own: it joins the one before it, even beyond the budget (B12).
+      if (stages.length > 1 && stages[stages.length - 1].minutes < MIN_LAST_STAGE_MINUTES) {
+        const rest = stages.pop();
+        const lastStage = stages[stages.length - 1];
+        lastStage.minutes += rest.minutes;
+        Object.keys(stageOf).forEach(cid => { if (stageOf[cid] === rest.n) stageOf[cid] = lastStage.n; });
+      }
       if (time === "schnellstart" && workMin + skimMin > rules.quickstart_warn_minutes) warnings.push({ code: "quickstart-long", ids: [] });
 
       const order = {};
@@ -521,11 +567,11 @@
       sheet.textContent = Object.values(DATA.diagram_css).join("\n");
       document.head.appendChild(sheet);
     }
-    const CH = {};
+    const CH = Object.create(null);  // no inherited keys: "constructor" is no chapter id
     DATA.chapters.forEach(c => { CH[c.id] = c; });
     const ORDERED = DATA.chapters.slice().sort((a, b) => a.order - b.order);
     const RULES = DATA.placement;
-    const SHELF = {};
+    const SHELF = Object.create(null);
     DATA.shelves.forEach(s => { SHELF[s.id] = s; });
     const LEVEL = { core: "Kern", "deep-dive": "Vertiefung", bonus: "Kür" };
     const SHIELD = '<svg class="ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 1.5 2.5 3.6v4.1c0 3.2 2.3 5.6 5.5 6.8 3.2-1.2 5.5-3.6 5.5-6.8V3.6Z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
@@ -597,21 +643,42 @@
       const total = ORDERED.reduce((sum, c) => sum + c.minutes, 0);
       const doneCount = ORDERED.filter(c => progress.done[c.id]).length;
       const last = progress.lastId && CH[progress.lastId] ? CH[progress.lastId] : null;
+      // With a saved placement the first way leads on along the path (B10); the placement becomes a side button.
+      const result = currentResult();
+      const order = result ? pathOrder(result) : [];
+      const next = CH[order.find(id => !progress.done[id])] || null;
+      const onPath = order.filter(id => progress.done[id]).length;
+      const firstWay = !result
+        ? `<button type="button" class="way" data-screen="einstufung"><strong>Einstufung in fünf Minuten</strong><span>Ziel, Zeit und was du schon kannst. Keine Noten, jederzeit änderbar.</span><span class="btn primary">Einstufung starten</span></button>`
+        : next
+          ? `<a class="way" href="?run=${esc(next.id)}" data-chapter="${esc(next.id)}"><strong>Weiter auf deinem Pfad</strong><span>${onPath} von ${order.length} Kapiteln erledigt. Als Nächstes: ${esc(next.title)}.</span><span class="btn primary">Weiter mit ${esc(next.id)}</span></a>`
+          : `<button type="button" class="way" data-screen="pfad"><strong>Dein Pfad ist geschafft</strong><span>Alle ${order.length} empfohlenen Kapitel sind erledigt. In der Bibliothek liegt mehr, und „Wiederholen“ hält es wach.</span><span class="btn primary">Meinen Pfad ansehen</span></button>`;
       return `
         <h1>Lerne Claude Code nach deinem Stand.</h1>
         <p class="lead">${ORDERED.length} Kapitel in ${DATA.shelves.length} Regalen — von der ersten Datei bis zu abgesicherten Agenten-Pipelines. Du musst nicht alles lesen: Sag uns kurz, wo du stehst und wohin du willst, dann bekommst du deinen Pfad.</p>
-        ${last ? `<div class="resume"><strong>Weiter, wo du warst:</strong> ${chapterLink(last)}</div>` : ""}
+        ${last && !(next && next.id === last.id) ? `<div class="resume"><strong>Weiter, wo du warst:</strong> ${chapterLink(last)}</div>` : ""}
         <div class="start-grid">
-          <button type="button" class="way" data-screen="einstufung"><strong>Einstufung in fünf Minuten</strong><span>Ziel, Zeit und was du schon kannst. Keine Noten, jederzeit änderbar.</span><span class="btn primary">Einstufung starten</span></button>
-          <button type="button" class="way" data-action="live-path"><strong>Den Live-Workshop-Pfad nehmen</strong><span>Alle Kapitel in der Reihenfolge der vier moderierten Sessions.</span><span class="btn">Pfad übernehmen</span></button>
-          <button type="button" class="way" data-screen="bibliothek"><strong>In der Bibliothek stöbern</strong><span>Alle Regale als Gebäudeplan. Jedes Kapitel beginnt mit einem Schnellcheck.</span><span class="btn">Zur Bibliothek</span></button>
+          ${firstWay}
+          <button type="button" class="way" data-screen="bibliothek"><strong>In der Bibliothek stöbern</strong><span>Alle Regale als Gebäudeplan, jedes Kapitel mit Übung und Auflösung. Du brauchst dafür keine Einstufung.</span><span class="btn">Zur Bibliothek</span></button>
         </div>
+        ${result ? `<div class="row gap-top"><button type="button" class="btn" data-screen="pfad">Mein Pfad</button><button type="button" class="btn" data-screen="einstufung">Einstufung ändern</button></div>` : ""}
         <div class="facts">
           <div><b>${ORDERED.length}</b>Kapitel</div>
           <div><b>${Math.round(total / 60)} h</b>Gesamtumfang</div>
           <div><b>${doneCount}</b>erledigt</div>
           <div><b>${profile ? "ja" : "nein"}</b>Einstufung gespeichert</div>
         </div>
+        <section class="carry" aria-labelledby="h-carry">
+          <h2 id="h-carry">Fortschritt mitnehmen</h2>
+          <p class="muted measure">Fortschritt und Einstufung liegen nur in diesem Browser, ohne Konto. Als Datei nimmst du sie auf ein anderes Gerät mit. Der Import ergänzt, was dort schon erledigt ist, und übernimmt die Einstufung aus der Datei.</p>
+          <div class="row"><button type="button" class="btn" data-action="export">Als Datei exportieren</button><label class="btn">Datei importieren<input type="file" class="sr-only" accept=".json,application/json" data-action="import"></label></div>
+          <p class="feedback small" id="carryFeedback" aria-live="polite"></p>
+        </section>
+        <section class="for-moderators" aria-labelledby="h-moderators">
+          <h2 id="h-moderators">Für Moderierende</h2>
+          <p class="muted measure">Du hältst den Workshop vor einer Gruppe? Der Live-Workshop-Pfad enthält alle Kapitel in der Reihenfolge der vier moderierten Sessions.</p>
+          <button type="button" class="btn" data-action="live-path">Live-Workshop-Pfad übernehmen</button>
+        </section>
 `;
     }
 
@@ -629,9 +696,11 @@
       const steps = STEP_TITLES.map((t, i) => `<li${i === state.step ? ' aria-current="step"' : ""}${i < state.step ? ' class="done"' : ""}>${i + 1}. ${esc(t)}</li>`).join("");
       let body = "";
       if (state.step === 0) {
+        // Two goals at most: with two chosen, the others are locked and a hint says how to change (B2).
+        const full = a.goals.length >= 2;
         body = `<fieldset><legend>Wofür willst du Claude Code lernen? (höchstens zwei)</legend><div class="choices">` +
-          RULES.goals.map(g => `<label class="choice"><input type="checkbox" name="goal" value="${esc(g.id)}"${a.goals.includes(g.id) ? " checked" : ""}><span>${esc(g.label)}</span></label>`).join("") +
-          `</div></fieldset><p class="muted small">Nichts gewählt? Dann nehmen wir „${esc(RULES.goals.find(g => g.id === RULES.default_goal).label)}".</p>`;
+          RULES.goals.map(g => `<label class="choice"><input type="checkbox" name="goal" value="${esc(g.id)}"${a.goals.includes(g.id) ? " checked" : (full ? " disabled" : "")}><span>${esc(g.label)}</span></label>`).join("") +
+          `</div><p class="goal-hint small" role="status"${full ? "" : " hidden"}>Zwei Ziele gewählt. Wähl eines ab, wenn du ein anderes nehmen willst.</p></fieldset><p class="muted small">Nichts gewählt? Dann nehmen wir „${esc(RULES.goals.find(g => g.id === RULES.default_goal).label)}".</p>`;
       } else if (state.step === 1) {
         body = `<fieldset><legend>Warum willst du das lernen? (freiwillig)</legend><label class="muted small" for="why">Bleibt nur in deinem Browser und erinnert dich später an dein Ziel.</label><textarea id="why" name="why" placeholder="Zum Beispiel: Ich will Code-Reviews in unserem Team mit Claude beschleunigen, ohne Sicherheitslücken zu riskieren.">${esc(d.why)}</textarea></fieldset>` +
           `<fieldset><legend>Wie viel Zeit hast du?</legend><div class="choices">` +
@@ -703,8 +772,8 @@
     function renderPath() {
       const result = currentResult();
       if (!result) {
-        return `<h1>Mein Pfad</h1><p class="lead">Noch keine Einstufung. Mach sie in fünf Minuten oder nimm den Pfad des Live-Workshops.</p>
-          <div class="row"><button type="button" class="btn primary" data-screen="einstufung">Einstufung starten</button><button type="button" class="btn" data-action="live-path">Live-Workshop-Pfad nehmen</button></div>`;
+        return `<h1>Mein Pfad</h1><p class="lead">Noch keine Einstufung. Mach sie in fünf Minuten, dann steht hier dein Pfad. Ohne sie findest du jedes Kapitel in der Bibliothek.</p>
+          <div class="row"><button type="button" class="btn primary" data-screen="einstufung">Einstufung starten</button><button type="button" class="btn" data-screen="bibliothek">Zur Bibliothek</button></div>`;
       }
       const total = result.totals.work_min + result.totals.skim_min;
       const doneCount = result.chapters.filter(c => (c.status === "work" || c.status === "skim") && progress.done[c.id]).length;
@@ -739,21 +808,24 @@
       const map = statusMap(currentResult());
       const zones = [];
       DATA.shelves.forEach(s => { if (!zones.includes(s.zone)) zones.push(s.zone); });
-      const legend = ["work", "skim", "skip", "later", "done"].map(s => chip(s)).join("") + ` <span class="chip safe">${SHIELD} Sicherheitsboden</span>`;
+      // Without a placement there is no recommendation to show: the doors stay neutral, the library is usable as it is.
+      const placed = Object.keys(map).length > 0;
+      const legend = (placed ? ["work", "skim", "skip", "later", "done"] : ["done"]).map(s => chip(s)).join("") + ` <span class="chip safe">${SHIELD} Sicherheitsboden</span>`;
       const floors = zones.map(z => {
         const shelves = DATA.shelves.filter(s => s.zone === z);
         const rooms = shelves.map(s => {
           const doors = ORDERED.filter(c => c.shelf === s.id).map(c => {
-            const st = map[c.id] ? map[c.id].status : "later";
+            const st = map[c.id] ? map[c.id].status : null;
             const done = progress.done[c.id];
-            return `<a class="door st-${st}${done ? " is-done" : ""}" href="?run=${esc(c.id)}" data-chapter="${esc(c.id)}" title="${esc(c.title)} — ${esc(done ? STATUS.done : STATUS[st])}, ${c.minutes} Min">${esc(c.id)}${c.safety_floor ? ` <span class="floor-mark">${SHIELD}</span>` : ""}<span class="sr-only"> ${esc(c.title)}, ${esc(done ? STATUS.done : STATUS[st])}</span></a>`;
+            const label = done ? STATUS.done : (st ? STATUS[st] : "");
+            return `<a class="door${st ? " st-" + st : ""}${done ? " is-done" : ""}" href="?run=${esc(c.id)}" data-chapter="${esc(c.id)}" title="${label ? esc(label) + ", " : ""}${c.minutes} Min"><span class="door-id">${esc(c.id)}</span><span class="door-title">${esc(c.title)}</span>${c.safety_floor ? `<span class="floor-mark" title="Sicherheitsboden">${SHIELD}<span class="sr-only">Sicherheitsboden</span></span>` : ""}${label ? `<span class="sr-only">, ${esc(label)}</span>` : ""}</a>`;
           }).join("");
           return `<section class="room" aria-labelledby="room-${esc(s.id)}"><h3 id="room-${esc(s.id)}">${esc(s.title)}</h3><p>${esc(s.purpose)}</p><div class="doors">${doors}</div></section>`;
         }).join("");
         return `<div class="floor"><div class="floor-name">${esc(z)}<small>${shelves.length} ${shelves.length === 1 ? "Regal" : "Regale"}</small></div><div class="rooms">${rooms}</div></div>`;
       }).join("");
       return `<h1>Bibliothek</h1>
-        <p class="lead">Der Gebäudeplan der Bibliothek: Stockwerke sind Themenzonen, Räume sind Regale, jede Tür ist ein Kapitel. ${map && Object.keys(map).length ? "Die Farbe zeigt deine Empfehlung." : "Mach die Einstufung, dann zeigen die Türen deine Empfehlung."}</p>
+        <p class="lead">Der Gebäudeplan der Bibliothek: Stockwerke sind Themenzonen, Räume sind Regale, jede Tür ist ein Kapitel. ${placed ? "Die Farbe zeigt deine Empfehlung." : "Du kannst überall eintreten. Mit der Einstufung zeigen die Türen zusätzlich, was sich für dich lohnt."}</p>
         <div class="legend" aria-label="Legende">${legend}</div>
         <div class="plan">${floors}</div>`;
     }
@@ -780,24 +852,45 @@
       const shelf = SHELF[c.shelf] || { title: c.shelf };
       const done = !!progress.done[id];
       const reqs = c.requires.map(r => CH[r]).filter(Boolean);
-      const diagramHtml = html => html.replace(/<div class="diagram" data-diagram="([0-9a-f]{8})"><\/div>/g, (m, key) => DATA.diagrams && DATA.diagrams[key] ? `<div class="diagram">${DATA.diagrams[key]}</div>` : m);
+      const diagramHtml = html => html.replace(/<div class="diagram" data-diagram="([0-9a-f]{8})"><\/div>/g, (m, key) => DATA.diagrams && DATA.diagrams[key] ? `<figure class="diagram"><div class="diagram-scroll">${DATA.diagrams[key]}</div><button type="button" class="zoom" data-action="zoom">Vergrößern</button></figure>` : m);
       const full = c.html ? `<details class="full"><summary>Ganzes Kapitel lesen</summary><div class="prose">${diagramHtml(c.html)}</div></details>` : (c.full_url ? `<p class="full"><a href="${esc(c.full_url)}" target="_blank" rel="noopener noreferrer">Ganzes Kapitel auf GitHub lesen</a></p>` : "");
+      // The teaching text and the exercise are the page (P2); since P9 for every chapter, with or without a
+      // placement. Only a chapter the path sets to "überfliegen" keeps the short view.
+      const working = !!(c.html && !(mine && mine.status === "skim"));
+      // jump marks: the sections of the text, in document order (render() gives the headings their ids)
+      const sections = working ? (c.html.match(/<h2>[\s\S]*?<\/h2>/g) || []).map(h => h.replace(/<[^>]+>/g, "")) : [];
+      const jumps = sections.map((s, i) => `<li><button type="button" data-action="jump" data-target="sec-${i}">${s}</button></li>`).join("");
+      const toc = sections.length > 1 ? `<nav class="panel toc" aria-label="Abschnitte dieses Kapitels"><h2>In diesem Kapitel</h2><ul>${jumps}</ul></nav>` : "";
+      // narrow screens stack the side column below the text, so they get the list folded above it (CSS shows one of the two)
+      const tocInline = sections.length > 1 ? `<details class="toc-inline"><summary>In diesem Kapitel</summary><ul>${jumps}</ul></details>` : "";
+      const doneButton = `<button type="button" class="btn ${done ? "" : "primary"}" data-action="toggle-done" data-id="${esc(id)}" aria-pressed="${done}">${done ? "Als offen markieren" : "Als erledigt markieren"}</button>`;
+      const hasQuick = c.skip_check && c.skip_check.length;
+      // recall questions, each with its own answer to open: answer first from memory, then compare (P3)
+      const answers = c.answers_html || [];
+      const recallList = c.recall && c.recall.length ? `<ol class="recall">${(c.recall_html || c.recall.map(esc)).map((q, i) => `<li>${q}${answers[i] ? `<details class="answer"><summary>Auflösung</summary><p>${answers[i]}</p></details>` : ""}</li>`).join("")}</ol>` : "";
+      const short = `${hasQuick ? `<section class="block quick" aria-labelledby="h-quick"><h2 id="h-quick">Schnellcheck</h2><ul>${(c.skip_check_html || c.skip_check.map(esc)).map(q => `<li>${q}</li>`).join("")}</ul><div class="row"><button type="button" class="btn" data-action="can-skip" data-id="${esc(id)}">Beides sicher ja — überspringen</button><span class="muted small">Sonst lies weiter.</span></div></section>` : ""}
+          ${c.glance ? `<section class="block"><h2>Auf einen Blick</h2><p>${rich(c, "glance")}</p></section>` : ""}
+          ${c.analogy ? `<section class="block"><h2>Bild im Kopf</h2><div class="analogy">${rich(c, "analogy")}</div></section>` : ""}
+          ${c.example ? `<section class="block"><h2>Ausprobieren</h2><div class="code"><div class="code-bar"><button type="button" class="copy" data-action="copy" data-id="${esc(id)}">Kopieren</button></div><pre><code>${esc(c.example)}</code></pre></div></section>` : ""}
+          ${c.checkpoint || c.quiz || recallList ? `<section class="block"><h2>Check</h2>${c.checkpoint ? `<p>${rich(c, "checkpoint")}</p>` : ""}${recallList}${quizBlock(c, "ch")}</section>` : ""}
+          ${full}
+          <p class="row done-row">${doneButton}</p>`;
+      const whole = `${hasQuick ? `<p class="row skip-row"><span class="muted small">Beide Fragen im Schnellcheck sicher ja?</span><button type="button" class="btn" data-action="can-skip" data-id="${esc(id)}">Überspringen</button></p>` : ""}
+          ${tocInline}
+          <div class="prose" data-full="open">${diagramHtml(c.html || "")}</div>
+          ${c.quiz ? `<section class="block"><h2>Quiz</h2>${quizBlock(c, "ch")}</section>` : ""}
+          <p class="row done-row">${doneButton}</p>`;
       return `<p class="crumbs"><a href="?screen=bibliothek" data-screen="bibliothek">Bibliothek</a> › ${esc(shelf.title)}</p>
         <div class="chapter"><div class="chapter-main">
           <h1>${esc(c.id)} · ${esc(c.title)}</h1>
           <div class="meta"><span class="chip">${esc(LEVEL[c.level] || c.level)}</span><span class="chip">${c.minutes} Min</span>${c.safety_floor ? `<span class="chip safe">${SHIELD} Sicherheitsboden</span>` : ""}${mine ? chip(mine.status) : ""}${done ? chip("done") : ""}</div>
           <p class="outcome">${rich(c, "outcome")}</p>
-          ${c.skip_check && c.skip_check.length ? `<section class="block quick" aria-labelledby="h-quick"><h2 id="h-quick">Schnellcheck</h2><ul>${(c.skip_check_html || c.skip_check.map(esc)).map(q => `<li>${q}</li>`).join("")}</ul><div class="row"><button type="button" class="btn" data-action="can-skip" data-id="${esc(id)}">Beides sicher ja — überspringen</button><span class="muted small">Sonst lies weiter.</span></div></section>` : ""}
-          ${c.glance ? `<section class="block"><h2>Auf einen Blick</h2><p>${rich(c, "glance")}</p></section>` : ""}
-          ${c.analogy ? `<section class="block"><h2>Bild im Kopf</h2><div class="analogy">${rich(c, "analogy")}</div></section>` : ""}
-          ${c.example ? `<section class="block"><h2>Ausprobieren</h2><div class="code"><button type="button" class="copy" data-action="copy" data-id="${esc(id)}">Kopieren</button><pre><code>${esc(c.example)}</code></pre></div></section>` : ""}
-          ${c.checkpoint || c.quiz ? `<section class="block"><h2>Check</h2>${c.checkpoint ? `<p>${rich(c, "checkpoint")}</p>` : ""}${quizBlock(c, "ch")}</section>` : ""}
-          ${full}
+          ${working ? whole : short}
           <nav class="pager" aria-label="Kapitel blättern">${prev ? `<a href="?run=${esc(prev.id)}" data-chapter="${esc(prev.id)}">← ${esc(prev.id)} ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="?run=${esc(next.id)}" data-chapter="${esc(next.id)}">${esc(next.id)} ${esc(next.title)} →</a>` : ""}</nav>
         </div>
         <aside class="side">
-          <div class="panel"><button type="button" class="btn ${done ? "" : "primary"}" data-action="toggle-done" data-id="${esc(id)}" aria-pressed="${done}">${done ? "Als offen markieren" : "Als erledigt markieren"}</button>
-          ${mine ? `<p class="small muted gap-top">${esc(reasonText(mine.reason))}</p>` : ""}</div>
+          ${toc}
+          ${mine && reasonText(mine.reason) ? `<div class="panel"><p class="small muted">${esc(reasonText(mine.reason))}</p></div>` : ""}
           ${reqs.length ? `<div class="panel"><h2>Baut auf</h2><ul>${reqs.map(r => `<li>${chapterLink(r)}</li>`).join("")}</ul></div>` : ""}
           ${c.sources && c.sources.length ? `<div class="panel"><h2>Offizielle Quellen</h2><ul>${c.sources.map(s => `<li><a href="${esc(s)}" target="_blank" rel="noopener noreferrer">${esc(s.replace(/^https:\/\//, ""))}</a></li>`).join("")}</ul></div>` : ""}
           <div class="panel"><h2>Regal</h2><p class="small">${esc(shelf.title)} — ${esc(shelf.purpose || "")}</p></div>
@@ -807,8 +900,14 @@
     function renderReview() {
       const done = ORDERED.filter(c => progress.done[c.id] && c.quiz);
       if (!done.length) return `<h1>Wiederholen</h1><p class="lead">Hier fragen wir dich später nach Kapiteln, die du erledigt hast — mit Abstand, damit es hängen bleibt. Markiere zuerst ein Kapitel als erledigt.</p>`;
-      const picked = done.slice().sort((a, b) => (progress.doneAt[a.id] || "").localeCompare(progress.doneAt[b.id] || "")).slice(0, 5);
-      return `<h1>Wiederholen</h1><p class="lead">Fünf Fragen zu Kapiteln, die du am längsten nicht gesehen hast. Abrufen aus dem Gedächtnis festigt mehr als erneutes Lesen.</p>` +
+      // Recall works with distance: a chapter is due a day after it was marked done, not at once (B9).
+      const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+      const doneTime = c => { const at = Date.parse(progress.doneAt[c.id] || ""); return Number.isFinite(at) ? at : 0; };
+      const due = done.filter(c => doneTime(c) <= dayAgo);
+      if (!due.length) return `<h1>Wiederholen</h1><p class="lead">Noch nichts fällig. Abrufen wirkt mit Abstand: Was du heute erledigt hast, fragen wir frühestens morgen ab.</p><p class="muted">${done.length === 1 ? "Ein Kapitel wartet" : done.length + " Kapitel warten"} auf seinen Tag.</p>`;
+      const picked = due.slice().sort((a, b) => doneTime(a) - doneTime(b)).slice(0, 5);
+      const count = picked.length === 1 ? "Eine Frage zu dem Kapitel" : picked.length + " Fragen zu den Kapiteln";
+      return `<h1>Wiederholen</h1><p class="lead">${count}, die du am längsten erledigt hast. Abrufen aus dem Gedächtnis festigt mehr als erneutes Lesen.</p>` +
         shuffle(picked).map(c => `<div class="review-q"><p class="small muted">${chapterLink(c)}</p>${quizBlock(c, "rv")}</div>`).join("");
     }
 
@@ -826,11 +925,91 @@
       else if (state.screen === "kapitel") html = renderChapter(state.chapter);
       else html = renderStart();
       main.innerHTML = html;
-      document.title = (state.screen === "kapitel" && CH[state.chapter] ? CH[state.chapter].id + " · " + CH[state.chapter].title + " — " : "") + "Claude Code Workshop Lern-Cockpit";
+      main.querySelectorAll("[data-full=open] h2").forEach((h, i) => { h.id = "sec-" + i; h.tabIndex = -1; });
+      markWideDiagrams();
+      document.title =(state.screen === "kapitel" && CH[state.chapter] ? CH[state.chapter].id + " · " + CH[state.chapter].title + " — " : "") + "Claude Code Workshop Lern-Cockpit";
       showStorageNotice();
     }
 
     // ---------- events ----------
+    function markWideDiagrams() {
+      // "Vergrößern" is offered only where the diagram is wider than its box (measured, so it follows the window).
+      document.querySelectorAll("main .diagram").forEach(d => {
+        const box = d.querySelector(".diagram-scroll");
+        const svg = d.querySelector("svg");
+        const natural = svg ? parseFloat(svg.getAttribute("width")) : 0;
+        if (natural) svg.style.setProperty("--w", natural + "px");  // the stylesheet scales from the natural width
+        d.classList.toggle("is-wide", !!box && box.scrollWidth > box.clientWidth + 1);
+      });
+    }
+    function carryFeedback(text) { const fb = document.getElementById("carryFeedback"); if (fb) fb.textContent = text; }
+    function exportState() {
+      const payload = { app: "cc-workshop-cockpit", v: 1, exportedAt: new Date().toISOString(), progress, profile };
+      const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 1)], { type: "application/json" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "claude-code-praxisbibliothek-fortschritt.json";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      carryFeedback("Exportiert. Die Datei liegt bei deinen Downloads.");
+    }
+    function importState(text) {
+      // Only what this cockpit knows gets in: chapter ids of this library, and a placement the engine accepts.
+      let data = null;
+      try { data = JSON.parse(text); } catch (err) { data = null; }
+      const isObject = v => !!v && typeof v === "object" && !Array.isArray(v);
+      if (!isObject(data) || data.app !== "cc-workshop-cockpit" || !isObject(data.progress)) return "Das ist keine Export-Datei dieses Cockpits. Es wurde nichts geändert.";
+      const done = isObject(data.progress.done) ? data.progress.done : {};
+      const doneAt = isObject(data.progress.doneAt) ? data.progress.doneAt : {};
+      let known = 0, added = 0;
+      Object.keys(done).forEach(id => {
+        if (!CH[id] || done[id] !== true) return;
+        known += 1;
+        if (!progress.done[id]) { progress.done[id] = true; added += 1; }
+        const at = typeof doneAt[id] === "string" && Number.isFinite(Date.parse(doneAt[id])) ? doneAt[id] : null;
+        const have = Date.parse(progress.doneAt[id] || "");
+        if (at && (!Number.isFinite(have) || Date.parse(at) < have)) progress.doneAt[id] = at;  // the earlier day counts
+        else if (!Number.isFinite(have)) progress.doneAt[id] = new Date().toISOString();
+      });
+      saveProgress();
+      let note = "";
+      if (isObject(data.profile) && isObject(data.profile.answers)) {
+        try {
+          // Store what the wizard would store: the known fields only, two goals at most. place() throws on
+          // every id it does not know (goal, time, area, scenario, chapter).
+          const a = data.profile.answers;
+          const goals = Array.from(new Set(Array.isArray(a.goals) ? a.goals : [])).slice(0, 2);
+          const answers = { version: 1, goals: goals.length ? goals : [RULES.default_goal], time: typeof a.time === "string" ? a.time : RULES.default_time,
+            areas: isObject(a.areas) ? a.areas : {}, scenarios: isObject(a.scenarios) ? a.scenarios : {}, overrides: isObject(a.overrides) ? a.overrides : {} };
+          place(DATA, answers);
+          profile = { v: 1, at: typeof data.profile.at === "string" ? data.profile.at : new Date().toISOString(), why: typeof data.profile.why === "string" ? data.profile.why.slice(0, 1000) : "", answers };
+          saveProfile();
+          note = " Die Einstufung aus der Datei gilt jetzt.";
+        } catch (err) { note = " Die Einstufung aus der Datei passt nicht zu dieser Bibliothek und wurde nicht übernommen."; }
+      }
+      return `Importiert: ${known === 1 ? "1 erledigtes Kapitel" : known + " erledigte Kapitel"}${added !== known ? " (" + added + " davon neu)" : ""}.${note}`;
+    }
+    function showStep() {
+      // A step starts at its top; the old scroll position would hide its heading under the sticky header (B1).
+      render();
+      window.scrollTo(0, 0);
+      $("#main").focus({ preventScroll: true });
+    }
+    function showDoneState(id) {
+      const done = !!progress.done[id];
+      document.querySelectorAll('[data-action="toggle-done"]').forEach(b => {
+        if (b.dataset.id !== id) return;
+        b.textContent = done ? "Als offen markieren" : "Als erledigt markieren";
+        b.setAttribute("aria-pressed", String(done));
+        b.classList.toggle("primary", !done);
+      });
+      const meta = $(".chapter .meta");
+      const mark = meta ? meta.querySelector(".st-done") : null;
+      if (meta && done && !mark) meta.insertAdjacentHTML("beforeend", chip("done"));
+      if (mark && !done) mark.remove();
+    }
     function setOverride(id, value) {
       if (!profile) return;
       const result = currentResult();
@@ -858,12 +1037,14 @@
         document.documentElement.dataset.theme = next;
         writeJson(THEME_KEY, { theme: next });
       } else if (action === "live-path") {
-        profile = { v: 1, at: new Date().toISOString(), why: profile ? profile.why || "" : "", answers: { version: 1, goals: ["moderieren"], time: RULES.default_time, areas: {}, scenarios: {}, overrides: {} } };
+        // The live path replaces a saved placement: ask once before overwriting it.
+        if (profile && target.dataset.confirm !== "1") { target.dataset.confirm = "1"; target.textContent = "Ersetzt deine Einstufung. Nochmal klicken"; return; }
+        profile ={ v: 1, at: new Date().toISOString(), why: profile ? profile.why || "" : "", answers: { version: 1, goals: ["moderieren"], time: RULES.default_time, areas: {}, scenarios: {}, overrides: {} } };
         saveProfile(); go("pfad");
       } else if (action === "step-next") {
-        if (collectStep()) { state.step = Math.min(state.step + 1, STEP_TITLES.length - 1); render(); $("#main").focus(); }
+        if (collectStep()) { state.step = Math.min(state.step + 1, STEP_TITLES.length - 1); showStep(); }
       } else if (action === "step-back") {
-        collectStep(); state.step = Math.max(0, state.step - 1); render(); $("#main").focus();
+        collectStep(); state.step = Math.max(0, state.step - 1); showStep();
       } else if (action === "finish") {
         finishPlacement();
       } else if (action === "scenario") {
@@ -877,11 +1058,29 @@
         target.classList.add(right ? "right" : "wrong");
         target.setAttribute("aria-pressed", "true");
         const fb = box.querySelector(".feedback");
-        fb.textContent = right ? "Richtig." : "Nicht ganz — lies den Abschnitt noch einmal oder frag nach.";
+        // The chapter format has no reason per option, so a wrong answer points to where the reason stands (B8).
+        const hasDetail = !!(CH[id] && (CH[id].html || "").includes("<h2>Im Detail</h2>"));
+        const where = target.closest(".review-q") ? "Das Kapitel ist über der Frage verlinkt: Lies dort nach"
+          : (hasDetail ? "Lies in „Im Detail“ nach" : "Lies im Kapitel nach") + " oder sieh dir die Auflösung im Check an";
+        fb.textContent = right ? "Richtig." : "Nicht ganz. " + where + ", dann versuch es noch einmal.";
       } else if (action === "toggle-done") {
         if (progress.done[id]) { delete progress.done[id]; delete progress.doneAt[id]; }
         else { progress.done[id] = true; progress.doneAt[id] = new Date().toISOString(); }
-        saveProgress(); render(); announce(progress.done[id] ? id + " erledigt." : id + " wieder offen.");
+        saveProgress();
+        // In a chapter only the button and the chip change: a rebuilt page would lose the quiz result, opened
+        // answers and the scroll position (B7).
+        if (state.screen === "kapitel") showDoneState(id); else render();
+        announce(progress.done[id] ? id + " erledigt." : id + " wieder offen.");
+      } else if (action === "export") {
+        exportState();
+      } else if (action === "zoom" || action === "zoom-close") {
+        const dialog = document.getElementById("zoomDialog");
+        const svg = action === "zoom" ? target.closest(".diagram").querySelector("svg") : null;
+        if (svg && dialog.showModal) { $(".zoom-body", dialog).replaceChildren(svg.cloneNode(true)); dialog.showModal(); }
+        else if (dialog.open) dialog.close();
+      } else if (action === "jump") {
+        const heading = document.getElementById(target.dataset.target);
+        if (heading) { heading.scrollIntoView({ block: "start" }); heading.focus({ preventScroll: true }); }
       } else if (action === "can-skip") {
         if (profile) setOverride(id, "skip");
         const order = pathOrder(currentResult());
@@ -903,9 +1102,23 @@
     document.addEventListener("change", event => {
       const t = event.target;
       if (t.matches("select[data-action=override]")) setOverride(t.dataset.id, t.value);
+      if (t.matches("input[data-action=import]")) {
+        const file = t.files && t.files[0];
+        if (!file) return;
+        if (file.size > 1024 * 1024) { carryFeedback("Das ist keine Export-Datei dieses Cockpits. Es wurde nichts geändert."); t.value = ""; return; }
+        const reader = new FileReader();
+        reader.onerror = () => carryFeedback("Die Datei ließ sich nicht lesen. Es wurde nichts geändert.");
+        reader.onload = () => { const message = importState(String(reader.result)); render(); carryFeedback(message); announce(message); };
+        reader.readAsText(file);
+        return;
+      }
       if (t.matches("input[name=goal]")) {
-        const checked = document.querySelectorAll("input[name=goal]:checked");
-        if (checked.length > 2) { t.checked = false; announce("Höchstens zwei Ziele."); }
+        const boxes = Array.from(document.querySelectorAll("input[name=goal]"));
+        if (boxes.filter(b => b.checked).length > 2) t.checked = false;
+        const full = boxes.filter(b => b.checked).length >= 2;
+        boxes.forEach(b => { b.disabled = full && !b.checked; });
+        const hint = $(".goal-hint");
+        if (hint) hint.hidden = !full;
       }
     });
     document.addEventListener("keydown", event => {
@@ -916,6 +1129,9 @@
       if (link && link.dataset.chapter) { event.preventDefault(); go("kapitel", link.dataset.chapter); }
     });
     window.addEventListener("popstate", () => { readLocation(); render(); });
+    window.addEventListener("resize", markWideDiagrams);
+    document.addEventListener("toggle", markWideDiagrams, true);  // a folded chapter has no layout until it opens
+    document.getElementById("zoomDialog").addEventListener("close", event => { $(".zoom-body", event.target).replaceChildren(); });
 
     // ---------- start ----------
     const theme = readJson(THEME_KEY);

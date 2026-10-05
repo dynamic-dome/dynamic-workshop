@@ -132,3 +132,25 @@ def test_cockpit_artefact_contains_the_library(lib_dir):
     assert html.count("<script") == 1 and "@@LIBRARY_DATA@@null" not in html
     assert "Einen Hook konfigurieren" in html and '\\u003c' not in html[:0]
     assert "<title>Claude Code Workshop Lern-Cockpit</title>" in html
+
+
+def test_catalog_and_live_path_point_to_the_demos_that_exist(lib_dir):
+    demos = lib_dir.parent / "moderation" / "vorfuehren"
+    demos.mkdir(parents=True)
+    (demos / "s2-08-demo-hook.md").write_text("# Vorführen: S2.8 · Einen Hook konfigurieren" + chr(10), encoding="utf-8")
+    lib = lm.load_library(lib_dir)
+    cat = gen.catalog(lib)
+    by_id = {c["id"]: c for c in cat["chapters"]}
+    assert by_id["S2.8"]["demo"] == "../moderation/vorfuehren/s2-08-demo-hook.md"
+    assert by_id["S2.7"]["demo"] is None
+    live = gen.paths(lib, cat)["live-workshop.md"]
+    assert "(../moderation/vorfuehren/s2-08-demo-hook.md)" in live
+    assert live.count("moderation/vorfuehren/") == 1
+
+
+def test_catalog_carries_recall_questions_and_answers(lib_dir):
+    cat = gen.catalog(lm.load_library(lib_dir))
+    by_id = {c["id"]: c for c in cat["chapters"]}
+    assert by_id["S2.8"]["recall"] == ["Welcher Exit-Code blockt einen Aufruf?", "Was passiert bei `exit 1`?"]
+    assert len(by_id["S2.8"]["answers"]) == 2
+    assert by_id["S2.7"]["recall"] == [] and by_id["S2.7"]["answers"] is None

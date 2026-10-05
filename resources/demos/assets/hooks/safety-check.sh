@@ -16,7 +16,12 @@
 INPUT=$(cat)
 
 # Fail closed: if the input cannot be read, block instead of silently allowing everything.
-if ! COMMAND=$(printf '%s' "$INPUT" | jq -er '.tool_input.command // ""' 2>/dev/null); then
+# Readable means: a JSON object whose command, if present, is a string. jq would turn "null" into an
+# empty command without complaint, so the type is checked explicitly.
+READ_COMMAND='if type != "object" then error("hook input is not a JSON object") else
+  (.tool_input.command // "") | if type == "string" then . else error("command is not a string") end
+end'
+if ! COMMAND=$(printf '%s' "$INPUT" | jq -er "$READ_COMMAND" 2>/dev/null); then
   echo "SAFETY HOOK: could not read the hook input (is jq installed?) - blocking to stay safe." >&2
   exit 2
 fi

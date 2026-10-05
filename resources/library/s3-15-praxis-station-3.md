@@ -1,87 +1,239 @@
 ---
 id: S3.15
 type: practice
-title: "Praxis-Station Session 3: eine Übung wählen"
+title: "Praxis-Station Session 3: alles in einem Ablauf"
 shelf: practice
 level: core
-minutes: 15
+minutes: 25
 requires: []
 safety_floor: false
 transferable: false
-outcome: "Ich kann eine Übung aus Session 3 (mehrere Agenten, Security-Audit oder Domänen-Parser) passend zu meinem Projekt auswählen, sie selbstständig durchführen und an ihrer Liste „Geschafft, wenn“ belegen, dass sie gelungen ist."
+outcome: "Ich kann die Bausteine aus Session 3 in einem Ablauf verbinden: Regeln für einen Lauf ohne mich, ein gedeckelter Lauf in einem Worktree, ein eigener Subagent als Gegenprüfung und die Übernahme erst nach meiner Prüfung."
 sources: []
 aliases: []
 offers: [S3.4, S3.6]
 ---
 
-# S3.15 · Praxis-Station Session 3: eine Übung wählen
+# S3.15 · Praxis-Station Session 3: alles in einem Ablauf
 
 <!-- meta:start -->
-> **Regal:** [Praxis-Stationen](README.md#practice) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** keine
+> **Regal:** [Praxis-Stationen](README.md#practice) · **Stufe:** Kern · **~25 Min** · **Voraussetzungen:** keine
 >
-> ← [S3.14 Self-Improve-Loop: was geht und wo es endet](s3-14-self-improve-loop.md) · [Bibliothek](README.md) · [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) →
+> ← [S3.14 Self-Improve-Loop: was geht und wo es endet](s3-14-self-improve-loop.md) · [Bibliothek](README.md) · [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick
 
-Hier wählst du eine Übung aus Session 3: eine erste Aufgabe mit mehreren Agenten, ein Security-Audit am Playground oder einen Domänen-Parser mit TDD. In die 15 Minuten der Station passt die Aufgabe mit mehreren Agenten; Audit und Parser brauchen 25–30 Minuten. Die Prioritätenliste unten zeigt, welche Übungen der fortgeschrittenen Sessions zuerst kommen und in welchem Kapitel sie heute stehen.
+Diese Station schließt Session 3 ab. Du lässt Claude einmal ohne dich arbeiten und hältst dabei alle Fäden in der Hand: Regeln legen fest, was der Lauf darf, ein Rundenlimit und ein Budget begrenzen ihn, er arbeitet in einem eigenen Worktree, ein zweiter Agent prüft das Ergebnis gegen, und in deinen Hauptordner kommt es erst, wenn du es gelesen hast. Das dauert etwa 20 Minuten und kostet einen kleinen Lauf mit `sonnet`.
+
+Hast du unterwegs eine Übung ausgelassen, findest du sie in der Tabelle am Ende wieder.
 
 ## Selbst machen
 
-### Welche Übung passt zu dir?
+### Übung: ein Lauf ohne dich, mit Gegenprüfung (etwa 20 Minuten)
 
-| Dein Ziel | Übung | Zeit | Kapitel |
+**Ziel:** Ein Lauf ohne Rückfragen behebt einen Fehler in einem Worktree. Du belegst an `git`, dass er nur die erlaubte Datei geändert hat, lässt einen eigenen Subagenten gegenprüfen und übernimmst das Ergebnis dann selbst.
+
+**Startzustand:** ein neues Git-Repository in `~/cc-workshop/station3`. Du brauchst Claude Code, Git und Python; unter macOS und Linux heißt der Befehl meist `python3`. Die Git-Identität gilt nur für dieses Repository.
+
+```bash
+# macOS / Linux / Git Bash
+mkdir -p ~/cc-workshop/station3/.claude/agents && cd ~/cc-workshop/station3
+git init -q
+git config user.name "Learner"
+git config user.email "learner@example.com"
+```
+
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force "$HOME\cc-workshop\station3\.claude\agents" | Out-Null
+Set-Location "$HOME\cc-workshop\station3"
+git init -q
+git config user.name "Learner"
+git config user.email "learner@example.com"
+```
+
+1. **Das Programm und sein Test.** Leg mit einem Editor fünf Dateien an. `calc.py` enthält einen Fehler, den du nicht korrigierst:
+
+   ```python
+   def add(a, b):
+       return a - b
+   ```
+
+   `test_calc.py`:
+
+   ```python
+   import unittest
+   from calc import add
+
+
+   class AddTest(unittest.TestCase):
+       def test_add(self):
+           self.assertEqual(add(2, 3), 5)
+
+
+   if __name__ == "__main__":
+       unittest.main()
+   ```
+
+   `.gitignore`, damit der Worktree des Laufs nicht als Änderung erscheint:
+
+   ```text
+   .claude/worktrees/
+   ```
+
+2. **Die Regeln ([S3.8](s3-08-rechte-fuer-autonomie.md)).** Speichere als `.claude/settings.json`. Der Lauf darf Dateien ändern und die Tests starten, aber die Testdatei selbst ist gesperrt. So kann er die Tests nicht grün machen, indem er sie abschwächt ([S3.14](s3-14-self-improve-loop.md)):
+
+   <!-- cockpit:example -->
+   ```json
+   {
+     "permissions": {
+       "allow": [
+         "Edit",
+         "Bash(python -m unittest*)", "Bash(python3 -m unittest*)",
+         "PowerShell(python -m unittest*)", "PowerShell(python3 -m unittest*)"
+       ],
+       "deny": ["Edit(test_calc.py)"]
+     }
+   }
+   ```
+
+3. **Der Gegenprüfer ([S3.3](s3-03-eigener-subagent.md)).** Speichere als `.claude/agents/fix-checker.md`. Er darf nur lesen:
+
+   ```md
+   ---
+   name: fix-checker
+   description: Checks whether a change is a real fix or weakens a test. Use when asked to check a fix.
+   tools: Read, Grep, Glob
+   ---
+
+   You check a change. You are given a changed file, the original file and a test file. Read all three. Say in two sentences whether the change makes the code do what the test demands, and whether the test file still demands the same as the original test file. Do not modify any files.
+   ```
+
+4. Committe alles. Der Lauf arbeitet gleich in einem Worktree, und der enthält nur, was eingecheckt ist, also auch Regeln und Agent:
+
+   ```bash
+   git add .gitignore calc.py test_calc.py .claude/settings.json .claude/agents/fix-checker.md
+   git commit -q -m "start"
+   ```
+
+5. **Vertrauen, einmal von Hand.** Allow-Regeln aus der `.claude/settings.json` eines Projekts gelten laut Doku erst, nachdem du den Vertrauensdialog für den Ordner bestätigt hast, und ein Lauf mit `-p` zeigt diesen Dialog nie. Ohne diesen Schritt würde der Lauf gleich jede Änderung ablehnen. Starte deshalb einmal `claude --permission-mode default` im Ordner. Erwartet: Der Dialog zählt die Freigaben auf, die der Ordner mitbringt (deine fünf Allow-Regeln), und warnt, dass sie ohne Rückfrage gelten werden. Bestätige ihn. Gib `/permissions` ein und such deine Regeln in den Reitern Allow und Deny. Schließ die Ansicht mit `Esc` und beende die Sitzung mit `/exit`.
+
+6. **Der Lauf ohne dich ([S3.13](s3-13-autonome-loops-absichern.md)).** Gib die Zeile in einem Stück ein, sie gilt in beiden Shells:
+
+   ```bash
+   claude -p --worktree fix-add --model sonnet --permission-mode dontAsk --max-turns 10 --max-budget-usd 0.50 "The unit tests in this folder fail. Fix the code so that they pass. Do not change test_calc.py."
+   ```
+
+   Erwartet: Der Lauf endet von selbst mit einem kurzen Bericht, ohne eine einzige Rückfrage. Dein Hauptordner ist unverändert: `git status --short` zeigt nichts. Meldet der Lauf, dass er die Tests nicht starten durfte, hat sein Befehl nicht auf deine Regel gepasst (etwa weil er mehrere Befehle in eine Zeile schrieb); den Testlauf machst du in Schritt 9 ohnehin selbst.
+
+7. **Die Prüfung an git.** Sieh nach, was der Lauf im Worktree getan hat:
+
+   ```bash
+   git -C .claude/worktrees/fix-add status --short
+   git -C .claude/worktrees/fix-add diff
+   ```
+
+   Erwartet: Nur `calc.py` ist geändert, aus `a - b` wurde `a + b`. `test_calc.py` taucht nicht auf.
+
+8. **Die Gegenprüfung ([S3.6](s3-06-devils-advocate.md)).** Starte im Hauptordner `claude --permission-mode default` und gib ein:
+
+   ```text
+   @agent-fix-checker Check the change in .claude/worktrees/fix-add/calc.py against the original calc.py in this folder. The test files are test_calc.py here and .claude/worktrees/fix-add/test_calc.py. Is it a real fix, and was the test weakened?
+   ```
+
+   Erwartet: Der Subagent liest die Dateien und meldet, dass die Änderung den Test erfüllt und die Testdatei gleich geblieben ist. Sein Urteil ist ein zweiter Blick, kein Beweis: Den Beweis liefert der Testlauf im nächsten Schritt. Beende die Sitzung mit `/exit`.
+
+9. **Die Übernahme.** Erst jetzt kommt die Änderung in deinen Hauptordner, und zwar durch dich:
+
+   ```bash
+   git -C .claude/worktrees/fix-add commit -q -am "Fix add"
+   git merge -q worktree-fix-add
+   python -m unittest
+   ```
+
+   Nimm `python3 -m unittest`, wenn `python` bei dir nicht läuft. Erwartet: Der Testlauf endet mit `OK`, und `git log --oneline` zeigt „Fix add“ über „start“.
+
+10. **Aufräumen.** Der Lauf hat seinen Worktree gesperrt zurückgelassen:
+
+   ```bash
+   git worktree unlock .claude/worktrees/fix-add
+   git worktree remove .claude/worktrees/fix-add
+   git branch -d worktree-fix-add
+   ```
+
+   Erwartet: `git worktree list` nennt nur noch den Hauptordner. Lösch danach den Ordner `~/cc-workshop/station3` selbst (in PowerShell mit `Remove-Item -Recurse -Force`, falls Windows sich an `.git` stört). Es läuft nichts weiter.
+
+**Geschafft, wenn:**
+
+- [ ] der Lauf ohne Rückfrage endete und dein Hauptordner danach unverändert war
+- [ ] im Worktree nur `calc.py` geändert war und `test_calc.py` nicht
+- [ ] der Subagent `fix-checker` die Änderung als echten Fix einstufte
+- [ ] `python -m unittest` nach deinem Merge mit `OK` endete
+- [ ] `git worktree list` am Ende nur den Hauptordner zeigte
+
+### Was jede Schicht geleistet hat
+
+| Schicht | Wo sie stand | Was ohne sie passiert wäre |
+|---|---|---|
+| Rechte-Modus `dontAsk` und Allow-Regeln | Start-Flag und `.claude/settings.json`, wirksam nach deiner Bestätigung des Ordners | der Lauf hätte auf eine Antwort gewartet oder alles gedurft |
+| Deny-Regel auf die Testdatei | `.claude/settings.json` | ein abgeschwächter Test hätte genauso „grün“ ergeben |
+| Rundenlimit und Budget | `--max-turns`, `--max-budget-usd` | ein festgefahrener Lauf hätte weiter Tokens verbraucht |
+| Worktree | `--worktree fix-add` | die Änderung wäre ungeprüft in deinem Hauptordner gelandet |
+| Gegenprüfer | `.claude/agents/fix-checker.md` | nur ein Blick, deiner, auf das Ergebnis |
+| Dein Merge | Schritt 9 | niemand hätte entschieden, dass die Änderung gut ist |
+
+### Drei Fragen zum Schluss
+
+Beantworte sie für dich, schriftlich, je ein Satz:
+
+1. Welche Aufgabe aus deiner Arbeit würdest du so laufen lassen, und welche Datei bekäme die Deny-Regel?
+2. Woran würdest du bei dieser Aufgabe ablesen, dass der Lauf nur getan hat, was er sollte?
+3. Was davon dürfte nie ohne deine Übernahme in den Hauptbranch?
+
+### Ausgelassene Übungen nachholen
+
+| Du willst üben | Übung | Zeit | Kapitel |
 |---|---|---|---|
-| Erleben, was mehrere Agenten gegenüber einer einzelnen Claude-Instanz ändern | Übung 3.1: deine erste Aufgabe mit mehreren Agenten | etwa 15 Min. | [S3.4](s3-04-orchestrierungsmuster.md#selbst-machen) |
-| An echtem Code sehen, was adversariales Sicherheitstesten findet | Übung 3.3: Security-Audit am Playground | 25–30 Min. | [S3.6](s3-06-devils-advocate.md#selbst-machen) |
-| Aus der Zutrittskontrolle kommen und einen grenzgeprüften Parser selbst bauen | Übung 3.9: einen Domänen-Parser richtig bauen (OSDP oder Wiegand, TDD) | 25–30 Min. | [S3.6](s3-06-devils-advocate.md#selbst-machen) |
+| was ein Subagent weiß und was nicht | was ein Subagent weiß und was nicht | 10 Min. | [S3.1](s3-01-was-ist-ein-agent.md#selbst-machen) |
+| einen eingebauten Subagenten anfordern | Explore anfordern und die Delegation finden | 8 Min. | [S3.2](s3-02-eingebaute-subagenten.md#selbst-machen) |
+| einen eigenen Subagenten begrenzen | einen schreibgeschützten Subagenten bauen und seine Grenze testen | 15 Min. | [S3.3](s3-03-eigener-subagent.md#selbst-machen) |
+| parallele und abhängige Aufgaben unterscheiden | Fan-out und Pipeline an einem kleinen Projekt | 15 Min. | [S3.4](s3-04-orchestrierungsmuster.md#selbst-machen) |
+| eine Sitzung im Hintergrund führen | eine Hintergrund-Sitzung starten, lesen, stoppen und entfernen | 10 Min. | [S3.5](s3-05-hintergrund-und-teams.md#selbst-machen) |
+| Befunde gegenprüfen lassen und selbst urteilen | Ankläger und Verteidiger selbst bauen | 25 Min. | [S3.6](s3-06-devils-advocate.md#selbst-machen) |
+| die eingebauten Reviews einsetzen | zwei Reviews an einem Branch mit eingebautem Fehler | 15 Min. | [S3.7](s3-07-eingebaute-reviews.md#selbst-machen) |
+| Regeln für einen Lauf ohne dich | Regeln für einen Lauf ohne dich schreiben und prüfen | 15 Min. | [S3.8](s3-08-rechte-fuer-autonomie.md#selbst-machen) |
+| was geschützte Pfade in jedem Modus tun | geschützte Pfade in drei Modi | 12 Min. | [S3.9](s3-09-geschuetzte-pfade-und-sandbox.md#selbst-machen) |
+| einen Skill ohne Shell-Befehle laden | die Skill-Shell abschalten und sehen | 10 Min. | [S3.10](s3-10-netzwerk-und-skills-haerten.md#selbst-machen) |
+| sensible Muster vor dem Schreiben abfangen | den Scanner einrichten und blocken sehen | 15 Min. | [S3.11](s3-11-datenschutz-und-compliance.md#selbst-machen) |
+| im Takt oder bis zu einer Bedingung arbeiten lassen | wählen, einrichten, prüfen, aufräumen | 15 Min. | [S3.12](s3-12-zeitgesteuert-arbeiten.md#selbst-machen) |
+| einen Lauf hart begrenzen | einen gedeckelten Lauf im Worktree stoppen sehen | 15 Min. | [S3.13](s3-13-autonome-loops-absichern.md#selbst-machen) |
+| aus einem Fehler eine Regel machen | aus einem Fehler eine Regel machen und prüfen | 12 Min. | [S3.14](s3-14-self-improve-loop.md#selbst-machen) |
 
-Für das Security-Audit nutzt du das Workshop-Plugin `devil-advocate-swarms`; fehlt es, beschreibt S3.6 den Weg ohne Plugin. Statt des Audits kannst du auch Übung 3.4 nehmen, Automation einrichten (etwa 20 Minuten), in [S3.12](s3-12-zeitgesteuert-arbeiten.md).
-
-### Prioritäten der fortgeschrittenen Übungen
-
-Die Übungen des alten Blocks 3 verteilen sich heute auf Session 3 und Session 4. Die Liste sagt dir, was zuerst kommt:
-
-| Priorität | Übung | Realistische Zeit | Kapitel |
-|---|---|---|---|
-| **1 · zuerst** | 3.1 Deine erste Aufgabe mit mehreren Agenten | etwa 15 Min. | [S3.4](s3-04-orchestrierungsmuster.md#selbst-machen) |
-| **1 · zuerst** | 3.5 Abschlussprojekt mit Architektur-Diskussion | etwa 45 Min. | [S4.8](s4-08-abschlussprojekt.md), Session 4 |
-| 2 · empfohlen | 3.3 Security-Audit **oder** 3.4 Automation einrichten | 25–30 Min. / etwa 20 Min. | [S3.6](s3-06-devils-advocate.md#selbst-machen) / [S3.12](s3-12-zeitgesteuert-arbeiten.md) |
-| 2 · empfohlen | 3.6 Einen Pre-Commit-Hook mit Claude bauen | etwa 25 Min. | [S4.5](s4-05-ci-pipelines.md), Session 4 |
-| 2 · empfohlen | 3.7 Einen kaputten Hook debuggen | etwa 20 Min. | [S4.10](s4-10-diagnose-schritt-fuer-schritt.md), Session 4 |
-| 2 · empfohlen | 3.9 Einen Domänen-Parser bauen (OSDP/Wiegand, TDD) | 25–30 Min. | [S3.6](s3-06-devils-advocate.md#selbst-machen) |
-| 3 · wenn Zeit bleibt | 3.2 Codex-Schwarm (nur als Demo) | etwa 15 Min. | [S4.2](s4-02-codex-schwarm.md#selbst-machen), Session 4 |
-| 3 · wenn Zeit bleibt | Bonus 3.8 HIPAA-Hook | etwa 20 Min. | [S3.11](s3-11-datenschutz-und-compliance.md) |
-
-Realistisch brauchst du für den Kernpfad zusammen 110–145 Minuten. Nimm die Übungen mit Priorität 1 zuerst. Für Entwicklerinnen und Entwickler von Zutrittskontrolle ist 3.9 die stärkste Wahl: Kommt die Gruppe vor allem aus diesem Fach, nimm 3.9 statt 3.6 oder 3.7.
-
-### Extra-Übungen (freiwillig)
-
-Wettkampf-, Fach- und Team-Formate aus der Sammlung der wilden Formate, gut für Energie nach einem dichten Kapitel. ⚠️ Es gilt dieselbe Regel wie beim Security-Audit (Übung 3.3): Die Schwachstellen im Playground sind Lehrziele, **committe keine Fixes**.
-
-| Extra | Art und Dauer | Passt zu | Steht in |
-|---|---|---|---|
-| Capture-the-Vulnerability-CTF | etwa 20 Min., wild | rund um das Security-Audit (Übung 3.3) | [S3.6](s3-06-devils-advocate.md#selbst-machen) |
-| Devil's-Advocate-Duell | etwa 15 Min., wild | vertieft die Debatte aus dem Audit | [S3.6](s3-06-devils-advocate.md#selbst-machen) |
-| Audit-Trail-Integrität (EN 50131) | etwa 20 Min., mittel | vertieft die Log-Fälschung aus dem Audit | [S3.6](s3-06-devils-advocate.md#selbst-machen) |
-| Alarmsturm-Korrelator | etwa 25 Min., mittel | Fach-Variante von Übung 3.1 | [S3.4](s3-04-orchestrierungsmuster.md#selbst-machen) |
-| Stille Post mit Agenten | etwa 15 Min., wild | verspielte Variante zu Übung 3.1: Kontext-Isolation | [S3.1](s3-01-was-ist-ein-agent.md#selbst-machen) |
-| Wrong-Door Heist, ein Rechte-Red-Team | etwa 25 Min., wild | Security-Audit und Rechte-Modi | [S3.8](s3-08-rechte-fuer-autonomie.md#selbst-machen) |
+Weiter geht es in Session 4 mit Modellen, Pipelines und Fehlersuche, ab [S4.1](s4-01-modell-pro-phase.md).
 
 ## Check
 
-Du kannst eine Übung aus Session 3 passend zu deinem Projekt wählen, sie bis zu ihrer Liste „Geschafft, wenn" durcharbeiten und erklären, warum die Teile einer Fan-out-Aufgabe wirklich unabhängig voneinander sein müssen.
+Du kannst einen Lauf ohne dich so aufsetzen, dass Regeln, Grenzen, Worktree, Gegenprüfung und deine Übernahme ineinandergreifen, und für jede Schicht sagen, was sie abdeckt.
 
-1. Welche Übungen der Prioritätenliste gehören zu Session 3, welche zu Session 4?
-2. Woran erkennst du, dass eine Aufgabe Fan-out verträgt und keine Pipeline braucht?
-3. Warum committest du keine Fixes an den Schwachstellen im Playground?
+1. Warum mussten die Regeln und der Subagent eingecheckt sein, bevor der Lauf startete?
+2. Was hat verhindert, dass der Lauf die Tests durch eine Änderung an der Testdatei grün macht, und was hätte dich gewarnt, wenn es doch passiert wäre?
+3. Der Subagent nannte die Änderung einen echten Fix. Warum war das noch kein Beleg, und was war der Beleg?
+
+<details><summary>Auflösung</summary>
+
+1. Der Lauf arbeitet in einem Worktree, und ein Worktree enthält nur, was eingecheckt ist. Regeln und Agent, die nur im Hauptordner liegen, gäbe es dort nicht. Dazu kam Schritt 5: Die Allow-Regeln gelten erst, seit du den Ordner einmal als vertrauenswürdig bestätigt hast.
+2. Die Deny-Regel `Edit(test_calc.py)`: Sie blockt in jedem Modus. Gewarnt hätte dich Schritt 7: `git status --short` im Worktree hätte die Testdatei als geändert gezeigt.
+3. Der Subagent ist dasselbe Modell wie der Lauf und kann sich im selben Punkt irren; sein Urteil ist ein zweiter Blick. Der Beleg war der Testlauf nach deinem Merge, zusammen mit dem Diff, den du selbst gelesen hast.
+
+</details>
 
 ## Weiterlesen
 
-- [S3.4 · Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md)
+- [S3.3 · Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md)
 - [S3.6 · Devil's Advocate: eine adversariale Prüf-Pipeline](s3-06-devils-advocate.md)
-- [S3.1 · Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md)
-- [S3.12 · Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md)
-- [S4.8 · Abschlussprojekt mit Bewertung](s4-08-abschlussprojekt.md)
-- [S1.20 · Praxis-Station Session 1: eine Übung wählen](s1-20-praxis-station-1.md)
-- [S2.20 · Praxis-Station Session 2: eine Übung wählen](s2-20-praxis-station-2.md)
+- [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md)
+- [S3.13 · Autonome Loops absichern: Budget und Worktree](s3-13-autonome-loops-absichern.md)
+- [S3.14 · Self-Improve-Loop: was geht und wo es endet](s3-14-self-improve-loop.md)
+- [S2.20 · Praxis-Station Session 2: alles in einem Ablauf](s2-20-praxis-station-2.md)
+- [S4.11 · Abschluss: ein kleiner Build](s4-11-abschluss-kleiner-build.md), der Abschluss deines ganzen Pfads

@@ -1,6 +1,6 @@
 # Claude Code Praxisbibliothek
 
-> Claude Code lernen nach deinem Stand: 70 Kapitel in 19 Regalen — von der ersten Datei bis zur abgesicherten
+> Claude Code lernen nach deinem Stand: 71 Kapitel in 19 Regalen — von der ersten Datei bis zur abgesicherten
 > Agenten-Pipeline. Eine kurze Einstufung zeigt dir, welche Kapitel zu deinem Ziel passen; du musst nicht alles lesen.
 
 Dieses Repository ist die Materialbasis hinter der Workshop-Seite von DoMe Dynamics
@@ -26,11 +26,12 @@ Wie du damit lernst, moderierst oder das Material pflegst: [HOW-TO-USE.md](HOW-T
 
 ## Was drin steckt
 
-- **Kapitel mit festem Aufbau:** Schnellcheck → Auf einen Blick → Bild im Kopf → Im Detail → Vorführen →
-  Selbst machen → Typische Fallen → Check → Weiterlesen, mit der offiziellen Doku als Primärquelle.
+- **Kapitel mit festem Aufbau:** Schnellcheck → Auf einen Blick → Bild im Kopf → Im Detail → Selbst machen →
+  Typische Fallen → Check → Weiterlesen, mit der offiziellen Doku als Primärquelle. Geschrieben für eine Person, die
+  allein lernt; Demos und Hinweise für Moderierende liegen getrennt unter `resources/moderation/`.
 - **Bilder aus der Sicherheitstechnik:** Rechte-Modi als Zutrittsebenen, Hooks als Türsensoren, Worktrees als Testlabor.
-- **Sicherheitsboden:** Neun Kapitel empfehlen wir auch Fortgeschrittenen — etwa, dass nur `exit 2` einen Hook blocken
-  lässt und `claude -p` ohne `--bare` die Hooks eines fremden Repos ausführt.
+- **Sicherheitsboden:** Neun Kapitel empfehlen wir auch Fortgeschrittenen — etwa, dass von den Exit-Codes nur `exit 2`
+  einen Hook blocken lässt und `claude -p` ohne `--bare` die Hooks eines fremden Repos ausführt.
 - **Getestet statt behauptet:** Kopierbare Hooks sind [getestete Vorlagen](resources/demos/assets/hooks/), Wächter-Tests
   verhindern bekannte Falschaussagen, ein [Übungs-Playground](workshop-playground/) mit fünf eingebauten Schwachstellen.
 - **Einstufung ohne Druck:** Verhaltensfragen statt Wissensabfrage, freiwillige Mini-Szenarien, Empfehlung mit Begründung.

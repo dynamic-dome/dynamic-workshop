@@ -4,12 +4,12 @@ type: community
 title: "Der minimale Agent: Pi als Spiegel"
 shelf: community
 level: bonus
-minutes: 15
-after: S3.2
+minutes: 25
+after: S3.15
 requires: []
 safety_floor: false
 transferable: true
-outcome: "Ich kann an Pi zeigen, welche Schichten Claude Code um die Agenten-Schleife legt, welche davon übertragbare Denkmodelle sind, und begründen, warum ich bei einem Harness ohne erzwungene Freigaben den Schutz selbst mitbringen muss."
+outcome: "Ich kann an Pi zeigen, welche Schichten Claude Code um die Agenten-Schleife legt, welche davon übertragbare Denkmodelle sind, und begründen, warum ich bei einem Agent-Harness (der Software um das Modell herum) ohne erzwungene Freigaben den Schutz selbst mitbringen muss."
 sources:
   - https://pi.dev/
   - https://pi.dev/docs/latest
@@ -36,22 +36,22 @@ aliases: []
 # X.3 · Der minimale Agent: Pi als Spiegel
 
 <!-- meta:start -->
-> **Regal:** [Community & Lernen](README.md#community) · **Stufe:** Kür · **~15 Min** · **Voraussetzungen:** keine
+> **Regal:** [Community & Lernen](README.md#community) · **Stufe:** Kür · **~25 Min** · **Voraussetzungen:** keine
 >
-> ← [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md) · [Bibliothek](README.md) · [S3.3 Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md) →
+> ← [S3.15 Praxis-Station Session 3: alles in einem Ablauf](s3-15-praxis-station-3.md) · [Bibliothek](README.md) · [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick
 
-Pi ist ein quelloffener Coding-Agent-Harness, den Earendil Inc. mit Mitwirkenden unter MIT-Lizenz herausgibt, und er ist mit Absicht minimal: ein Modell, eine Schleife, vier Standard-Werkzeuge und ein kurzer System-Prompt. Subagenten, Plan-Modus und Freigabe-Dialoge sind nicht eingebaut; wer sie braucht, baut sie als Extension oder installiert ein Paket. Genau das macht Pi zum Spiegel: Du siehst, wie wenig ein Agent im Kern braucht, und erkennst, welche Schichten Claude Code darüberlegt.
+Pi ist ein quelloffener Coding-Agent-Harness, den Earendil Inc. mit Mitwirkenden unter MIT-Lizenz herausgibt. Ein Harness ist die Software um das Modell herum: Sie schickt Anfragen an das Modell, führt die Werkzeuge aus, die es aufruft, und verwaltet den Verlauf. Pi ist mit Absicht minimal: ein Modell, eine Schleife, vier Standard-Werkzeuge und ein kurzer System-Prompt. Subagenten, Plan-Modus und Freigabe-Dialoge sind nicht eingebaut; wer sie braucht, baut sie als Extension oder installiert ein Paket. Genau das macht Pi zum Spiegel: Du siehst, wie wenig ein Agent im Kern braucht, und erkennst, welche Schichten Claude Code darüberlegt.
 
-Die wichtigste Lehre betrifft die Sicherheit: Pi fragt laut Doku nicht vor jedem Tool-Aufruf und läuft mit den Rechten des Benutzers, der ihn startet, also bringst du den Schutz selbst mit (Container, Wegwerf-Ordner, knappe Schlüssel). Stand aller Angaben zu Pi: 30.09.2026.
+Die wichtigste Lehre betrifft die Sicherheit: Pi fragt laut Doku nicht vor jedem Tool-Aufruf und läuft mit den Rechten des Benutzers, der ihn startet, also bringst du den Schutz selbst mit: einen Container oder eine VM, knappe Schlüssel und einen Arbeitsordner, in dem nichts Wertvolles liegt. Stand aller Angaben zu Pi: 30.09.2026.
 
 ## Bild im Kopf
 
 Stell dir zwei Gebäude mit denselben Türen vor. Das erste ist vorbereitet, aber nicht ausgestattet: Die Türen haben Schlösser, und wer den Schlüssel hat, kommt überall hin, wo er passt. Leerrohre für Kartenleser, Sensoren und Zonen liegen schon in der Wand; was hineinkommt, entscheidest du. Im zweiten Gebäude ist die Zutrittsanlage eingebaut: Kartenleser mit Berechtigungsstufen, Sensoren an der Alarmmatrix, die Hausordnung am Eingang, Streifen für Sonderaufträge. Pi gleicht dem ersten Gebäude, Claude Code dem zweiten.
 
-Der Schlüssel ist in beiden Gebäuden gleich mächtig, denn der Agent arbeitet mit deinen Benutzerrechten. Im vorbereiteten Gebäude hält ihn nur auf, was du selbst einbaust oder drumherum stellst. Wer dort Wertvolles lagert, sichert das Gelände: einen Zaun, eine abgeschlossene Halle für Versuche, nur die Schlüssel, die der Auftrag braucht. Beim Agenten heißt das: Container oder VM, ein Wegwerf-Ordner oder Worktree, eigene Schlüssel mit Limit.
+Der Schlüssel ist in beiden Gebäuden gleich mächtig, denn der Agent arbeitet mit deinen Benutzerrechten. Im vorbereiteten Gebäude hält ihn nur auf, was du selbst einbaust oder drumherum stellst. Wer dort Wertvolles lagert, sichert das Gelände: einen Zaun, eine abgeschlossene Halle für Versuche, nur die Schlüssel, die der Auftrag braucht. Beim Agenten heißt das: Container oder VM und eigene Schlüssel mit Limit. Ein Wegwerf-Ordner oder Worktree kommt dazu, damit im Arbeitsordner nichts Wertvolles liegt; eine Grenze ist er nicht.
 
 ```mermaid
 flowchart TB
@@ -66,7 +66,7 @@ flowchart TB
     CT -- "Ergebnis" --> CM
     CL["CLAUDE.md, Skills, Subagenten,<br/>MCP, Plan-Modus, Auto-Memory"] -.-> CM
   end
-  G["Deine äußere Grenze:<br/>Container, VM, Wegwerf-Ordner"] -.-> PI
+  G["Deine äußere Grenze:<br/>Container oder VM,<br/>Schlüssel mit Limit"] -.-> PI
   G -.-> CC
 ```
 
@@ -74,7 +74,7 @@ flowchart TB
 
 ### Was Pi ist
 
-Ein Harness ist die Software um das Modell herum: Sie schickt Anfragen an das Modell, führt die Werkzeuge aus, die es aufruft, und verwaltet den Verlauf. Pi beschreibt sich als minimalen Agent-Harness mit dem Leitsatz, Pi an deine Arbeitsweise anzupassen statt umgekehrt. Pi läuft im Terminal, arbeitet mit vielen Modellanbietern und braucht Zugang zu einem Modell: über ein Abo, einen API-Schlüssel oder ein lokales Modell.
+Pi beschreibt sich als minimalen Agent-Harness mit dem Leitsatz, Pi an deine Arbeitsweise anzupassen statt umgekehrt. Pi läuft im Terminal, arbeitet mit vielen Modellanbietern und braucht Zugang zu einem Modell: über ein Abo, einen API-Schlüssel oder ein lokales Modell.
 
 Das Repository `earendil-works/pi` macht die Schichten eines Agenten sichtbar, weil sie dort als eigene Pakete liegen:
 
@@ -121,7 +121,7 @@ Die Tabelle legt beide Werkzeuge nebeneinander. Die Pi-Spalte gibt nur wieder, w
 | Baustein | Claude Code | Pi laut Doku | Was du daraus lernst |
 |---|---|---|---|
 | Rechte und Freigaben | Rechte-Modi von `default` bis `bypassPermissions`, dazu Allow- und Deny-Regeln ([S1.5](s1-05-rechte-im-alltag.md), [S1.6](s1-06-rechte-modi.md)) | Kein eingebautes Rechtesystem. Pi fragt nicht vor jedem Tool-Aufruf und läuft mit den Rechten des Benutzers, der ihn startet. Eine eigene Bestätigung baust du als Extension, oder du lässt Pi im Container laufen. | Freigaben sind eine Schicht des Harness, nicht des Modells. Fehlt sie, schützt nur eine Grenze außerhalb. |
-| Hooks | Hooks an festen Ereignissen; PreToolUse blockt nur mit `exit 2`, ein abgestürzter Hook lässt die Aktion laufen ([S2.6](s2-06-hooks-als-sensoren.md), [S2.8](s2-08-hook-einrichten.md)) | Extensions (TypeScript-Module im Pi-Prozess) reagieren auf Ereignisse; ein `tool_call`-Handler kann die Eingabe ändern oder die Ausführung blocken. Scheitert der Handler, blockt Pi das Tool zur Sicherheit. | Ereignis, Prüfung, Blocken ist ein allgemeines Muster. In welche Richtung ein kaputter Wächter fällt, legt jeder Harness selbst fest: Prüf es. |
+| Hooks | Hooks an festen Ereignissen; PreToolUse blockt über den Exit-Code nur mit `exit 2`, ein abgestürzter Hook lässt die Aktion laufen ([S2.6](s2-06-hooks-als-sensoren.md), [S2.8](s2-08-hook-einrichten.md)) | Extensions (TypeScript-Module im Pi-Prozess) reagieren auf Ereignisse; ein `tool_call`-Handler kann die Eingabe ändern oder die Ausführung blocken. Scheitert der Handler, blockt Pi das Tool zur Sicherheit. | Ereignis, Prüfung, Blocken ist ein allgemeines Muster. In welche Richtung ein kaputter Wächter fällt, legt jeder Harness selbst fest: Prüf es. |
 | Subagenten | Explore, Plan und general-purpose sind eingebaut ([S3.2](s3-02-eingebaute-subagenten.md)) | Nicht eingebaut. Weitere Pi-Instanzen startest du per tmux, baust sie als Extension oder installierst ein Paket. | Ein Subagent ist ein frischer Kontext mit eigenem Auftrag ([S3.1](s3-01-was-ist-ein-agent.md)). Das geht auch mit einem zweiten Prozess, den du selbst startest. |
 | Plan-Modus | Claude liest und plant, Bearbeitungen bleiben gesperrt, bis du den Plan freigibst ([S1.14](s1-14-plan-modus.md)) | Nicht eingebaut. Pläne schreibst du in Dateien, oder du baust den Modus als Extension oder installierst ein Paket. | Erst planen, dann bauen geht in jedem Harness. Die Sperre ist das, was der Harness dazugibt. |
 | MCP | MCP-Server verbinden Claude mit externen Diensten ([S2.14](s2-14-mcp-stecker.md)) | Eingebaut, über stdio oder streamable HTTP. Die `mcp.json` hat das Format anderer MCP-Clients; Projekt-Server liest Pi erst nach dem Projekt-Vertrauen. | MCP ist ein offener Standard: Ein Server passt in mehrere Clients, und seine Risiken wandern mit ([S2.17](s2-17-mcp-sicherheit.md)). |
@@ -146,7 +146,7 @@ Eher Produkt als Denkmodell ist die konkrete Bedienung: welche Rechte-Modi es gi
 
 Pi sagt es offen. Das README hält fest, dass Pi kein eingebautes Rechtesystem hat, das Dateisystem, Prozesse, Netzwerk oder Zugangsdaten einschränkt; Pi läuft mit den Rechten des Benutzers und Prozesses, der Pi gestartet hat. Die Sicherheitsseite der Doku zieht daraus drei Schlüsse:
 
-- **Generierte Befehle und generierter Code sind nicht vertrauenswürdig.** Dateien, Kommentare, Befehlsausgaben und Modellantworten können das Modell per Prompt Injection steuern.
+- **Generierte Befehle und generierter Code sind nicht vertrauenswürdig.** Dateien, Kommentare, Befehlsausgaben und Modellantworten können das Modell per Prompt Injection steuern (versteckte Anweisungen in Inhalten, die das Modell liest).
 - **Zuschauen ist keine Grenze.** Den Verlauf beobachten, Projekt-Vertrauen erteilen und Änderungen prüfen schafft laut Doku keine Sicherheitsgrenze.
 - **Schutz entsteht durch Begrenzen.** Was Pi an Dateien, Zugangsdaten, Prozessen und Netzwerk erreichen kann, bestimmt den Schaden, wenn eine Aktion falsch oder feindlich ist.
 
@@ -171,29 +171,37 @@ Das gilt nicht nur für Pi. Auch in Claude Code ersetzt keine Schicht die äuße
 
 ## Selbst machen
 
-### Schicht-Inventur (etwa 10 Minuten, ohne Installation)
+### Übung: Schicht-Inventur (etwa 10 Minuten)
 
-**Ziel:** Du siehst an deiner eigenen Sitzung, welche Claude-Code-Schicht dich wo geschützt oder entlastet hat und was du in einem minimalen Harness selbst mitbringen müsstest.
+**Ziel:** Du siehst an deiner eigenen Sitzung, welche Claude-Code-Schicht dich wo geschützt oder entlastet hat, und schreibst auf, was du in einem minimalen Harness selbst mitbringen müsstest. Auch eine Schicht, die bei dir nicht aktiv ist, zählt, wenn du aufschreibst, was dir dann fehlt.
 
-1. Nimm deine Aufgabe aus [S1.1](s1-01-erster-kontakt.md) (`hello.py`) oder eine kleine Aufgabe aus deiner letzten Woche.
-2. Öffne Claude Code im selben Projekt und ruf nacheinander diese Befehle auf. Jeder zeigt eine Schicht: Regeln, Hooks, MCP-Server, Kontext.
+**Startzustand:** ein Projektordner, in dem du schon mit Claude Code gearbeitet hast, etwa der Ordner aus [S1.1](s1-01-erster-kontakt.md), oder ein neuer, leerer Ordner `~/cc-workshop/inventur` (`mkdir -p ~/cc-workshop/inventur && cd ~/cc-workshop/inventur`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\inventur"; Set-Location "$HOME\cc-workshop\inventur"`). In einem leeren Ordner sind viele Schichten nicht aktiv; das ist erlaubt. Starte darin `claude --permission-mode default`. Die Übung liest nur und braucht keine Installation.
 
-<!-- cockpit:example -->
-```text
-/permissions
-/hooks
-/mcp
-/context
-```
+1. Ruf nacheinander diese Befehle auf. Jeder zeigt eine Schicht: Regeln, Hooks, MCP-Server, Kontext. Eine Ansicht, die sich öffnet, schließt du mit `Esc`, bevor du den nächsten Befehl eingibst.
 
-3. Schau in der Statusleiste nach, welcher Rechte-Modus gilt ([S1.6](s1-06-rechte-modi.md)), und ob das Projekt eine CLAUDE.md hat ([S1.10](s1-10-claude-md.md)).
-4. Füll für jede Schicht eine Zeile aus: *Schicht · bei mir aktiv? · wo hat sie mich geschützt oder entlastet? · was müsste ich in einem minimalen Harness selbst mitbringen (Container, Extension, Datei, zweiter Prozess)?*
-5. Markier jede Zeile als **Denkmodell** (gilt in jedem Harness) oder **Produktfunktion** (Bedienung von Claude Code).
+   <!-- cockpit:example -->
+   ```text
+   /permissions
+   /hooks
+   /mcp
+   /context
+   ```
+
+   Erwartet: vier Anzeigen. Gibt es in deinem Ordner keine Regeln, Hooks oder Server, sind die Listen leer. Das ist ein Befund: Die Schicht ist nicht aktiv.
+2. Schau in der Statusleiste nach, welcher Rechte-Modus gilt ([S1.6](s1-06-rechte-modi.md)), und ob der Ordner eine CLAUDE.md hat ([S1.10](s1-10-claude-md.md)).
+3. Füll für jede Schicht eine Zeile aus: *Schicht · bei mir aktiv? · wo hat sie mich geschützt oder entlastet? · was müsste ich in einem minimalen Harness selbst mitbringen (Container, Extension, Datei, zweiter Prozess)?* Ist eine Schicht bei dir nicht aktiv, schreib stattdessen auf, was dir ohne sie fehlt.
+4. Markier jede Zeile als **Denkmodell** (gilt in jedem Harness) oder **Produktfunktion** (Bedienung von Claude Code).
+
+<details><summary>Vergleich</summary>
+
+So kann eine Zeile für eine Schicht aussehen, die nicht aktiv ist: *Hooks · nicht aktiv · hier keiner eingerichtet · ohne sie läuft jeder Befehl ohne Wächter, ein Verbot wäre nur ein Satz in der CLAUDE.md · in einem minimalen Harness bräuchte ich eine Extension oder einen Container · Denkmodell (Ereignis, Prüfung, Blocken).* Und so für eine aktive: *Rechte-Modus · `default` · hat jede Dateiänderung zur Rückfrage gemacht · ohne ihn nur eine äußere Grenze wie ein Wegwerf-Ordner · Produktfunktion, das Denkmodell dahinter ist „Freigaben sind eine Schicht des Harness“.*
+
+</details>
 
 **Geschafft, wenn:**
 
-- [ ] du mindestens vier Schichten eingetragen hast
-- [ ] du für jede sagen kannst, was ohne sie passiert wäre
+- [ ] du mindestens vier Schichten eingetragen hast, aktive oder nicht aktive
+- [ ] du für jede sagen kannst, was ohne sie passiert wäre, bei einer nicht aktiven, was dir fehlt
 - [ ] du mindestens eine Stelle gefunden hast, an der dich in einem Harness ohne Freigaben nur eine äußere Grenze geschützt hätte
 
 ### Extra: Pi in einer Wegwerf-Umgebung (etwa 20 Minuten, freiwillig, kostet Modell-Guthaben)
@@ -220,10 +228,26 @@ Ersetze `ANTHROPIC_API_KEY` durch die Zugangsdaten deines Anbieters. `-v "$PWD:/
 ## Typische Fallen
 
 - **„Minimal heißt sicher."** Weniger eingebaute Funktionen heißt auch weniger eingebaute Schranken. Pi läuft mit deinen Rechten und fragt nicht vor jedem Tool-Aufruf; ein fehlender Freigabe-Dialog ist kein Sicherheitsmerkmal.
-- **„Ich schau ja zu."** Zuschauen, Projekt-Vertrauen und Diffs lesen helfen beim Aufräumen, sind laut Pi-Doku aber keine Sicherheitsgrenze. Die Grenze ist der Container, der Ordner, der Schlüssel.
+- **„Ich schau ja zu."** Zuschauen, Projekt-Vertrauen und Diffs lesen helfen beim Aufräumen, sind laut Pi-Doku aber keine Sicherheitsgrenze. Eine Grenze ziehen der Container oder die VM und ein Schlüssel mit Limit. Ein Wegwerf-Ordner hilft nur, weil darin nichts Wertvolles liegt; aus ihm heraus kommt ein Befehl trotzdem.
 - **Fremde Extensions und Pakete sind Lieferkette.** Eine Pi-Extension läuft im Pi-Prozess mit denselben Rechten und kann Prompts, Tool-Aufrufe, Dateien, Zugangsdaten und den Sitzungsverlauf einsehen. Pakete können Extension-Code ausführen und Skills mitbringen, die das Modell Programme starten lassen. Das gilt auch für eine Extension, die Pi auf deinen Wunsch selbst schreibt. Lies den Code vor dem Installieren und halt Versionen fest, genau wie bei Plugins ([S2.13](s2-13-plugin-lieferkette.md)).
 - **Geteilte Sitzungen verraten mehr als gedacht.** `/share` lädt eine Pi-Sitzung hoch und liefert einen Link. Sie kann Prompts, Befehlsausgaben, Dateiinhalte und Zugangsdaten enthalten; lies sie vorher durch.
 - **Vergleiche veralten schnell.** Auf pi.dev steht „No MCP" inzwischen durchgestrichen, daneben „Now with MCP+Codemode". Die Tabelle oben ist eine Momentaufnahme vom 30.09.2026; prüf vor einer Entscheidung die aktuelle Doku beider Werkzeuge.
+
+## Check
+
+Du kannst an Pi zeigen, welche Schichten Claude Code um die Schleife legt, nennen, welche davon übertragbar sind, und begründen, warum du bei einem Harness ohne erzwungene Freigaben den Schutz selbst mitbringst.
+
+1. Welche Schleife steckt in jedem Agenten, und welche Schichten legt Claude Code darum, die Pi ab Werk nicht mitbringt?
+2. Nenne je ein Beispiel für ein übertragbares Denkmodell und für eine reine Produktfunktion.
+3. Du startest Pi in deinem Arbeitsrepo, schaust zu und erteilst das Projekt-Vertrauen. Eine Datei im Repo enthält eine versteckte Anweisung, die das Modell befolgt. Was begrenzt den Schaden, und was nicht?
+
+<details><summary>Auflösung</summary>
+
+1. Anfrage an das Modell, Antwort mit Tool-Aufrufen, Ausführen, Ergebnis zurück, nächster Turn. Claude Code legt darum Rechte-Modi und Freigaben, Subagenten und den Plan-Modus, dazu Hooks als eingebaute Ereignisse; bei Pi baust du das als Extension oder Paket oder startest zusätzliche Prozesse selbst.
+2. Übertragbar sind zum Beispiel die Agenten-Schleife, „Kontext ist ein Budget“, Skills im Standardformat oder die Entscheidung über die Fehlerrichtung eines Wächters. Produktfunktion ist zum Beispiel, welche Rechte-Modi es gibt, wie der Plan-Modus sperrt oder welche Subagenten mitkommen.
+3. Nur eine äußere Grenze: Container oder VM, eigene Schlüssel mit Limit, ein begrenztes Netzwerk. Ein Wegwerf-Ordner ist keine Grenze; er sorgt nur dafür, dass im Arbeitsordner nichts Wertvolles liegt. Zuschauen und das Projekt-Vertrauen sind laut Pi-Doku keine Sicherheitsgrenze; Pi läuft mit den Rechten des Benutzers, der es gestartet hat.
+
+</details>
 
 ## Weiterlesen
 

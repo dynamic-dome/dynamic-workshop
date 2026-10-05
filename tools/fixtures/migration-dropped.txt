@@ -65,3 +65,198 @@ ba8dea25a5049890 README.md:125 ersetzt durch den neuen Verzeichnisbaum im README
 068105406d6d0058 resources/demos/block-3-demos.md:421 falsch laut cli-reference.md: --max-budget-usd wirkt nur im Print-Modus (-p); eine interaktive Sitzung mit diesem Flag ist nicht gedeckelt. S3.13 (Z. 111, 144) lehrt es korrigiert
 f3526bc1bc1bcc8c resources/exercises/block-3-exercises.md:134 ersetzt: /security-review prüft nur die Änderungen des Branches gegenüber origin, im frischen Playground-Klon gibt es keine (S3.7); S3.6 nennt stattdessen einen direkten Audit-Prompt und erklärt den Grund
 7e21698e21941786 resources/modules/block-2-ecosystem.md:396 korrigiert: Kommentar 'user-invocable: true # Show in /skills list (false = background knowledge)' widersprach skills.md (false versteckt den Skill im /-Menü, Claude kann ihn weiter laden); S2.3 zeigt den Block mit berichtigtem Kommentar (Gate-B-Prüfer 2026-09-30)
+d989c511f6c88234 resources/modules/block-1-foundations.md:63 P5/S1.1: ersetzt. Die Hallo-Übung startet jetzt mit `claude --permission-mode default`, damit die Freigabe-Abfrage erscheint (permission-modes.md: "With Claude Code v2.1.283 or later, auto mode is the built-in starting permission mode for interactive terminal and VS Code sessions"); neue Fassung in s1-01-erster-kontakt.md.
+54ecb1fcf81384be resources/modules/block-1-foundations.md:69 P5/S1.1: ersetzt, PowerShell-Fassung desselben Blocks mit `claude --permission-mode default`; neue Fassung in s1-01-erster-kontakt.md.
+d05dac3fb771ecd2 resources/exercises/block-1-exercises.md:45 P5/S1.1: Dublette. Die Variante mit hello.txt übte dieselbe Schleife wie die Hallo-Übung mit hello.py (Befund D1: vier gleichartige Aufgaben); entfällt.
+3acd1e34373b3ba0 resources/exercises/block-1-exercises.md:74 P5/S1.1: ersetzt. Übungsordner heißt `~/cc-workshop/werkzeug` statt `exercises/exercise-1.1` (Kürzel des Live-Kurses), Start mit `claude --permission-mode default`; neue Fassung in s1-01-erster-kontakt.md.
+d493887718ef0cc2 resources/exercises/block-1-exercises.md:80 P5/S1.1: ersetzt, PowerShell-Fassung desselben Blocks; neue Fassung in s1-01-erster-kontakt.md.
+838e0510e6ac6555 resources/prerequisites.md:28 P5/S0.1: veraltet. Der Kommentar `v18+ or v20+` widersprach der Doku für die npm-Variante (setup.md: Node.js 22 oder neuer); die Karte werkstatt-erweitern.md verlangt die aktuelle LTS-Version und prüft mit `node --version`/`npm --version` im Text.
+b07f3375f702deee resources/prerequisites.md:82 P5/S0.1: ersetzt. Derselbe Anmeldetest stand in drei Wortlauten im Kapitel ("Say ready", "Hello", "Say hello"); vereinheitlicht auf `claude --print "Say hello"` in s0-01-werkstatt-einrichten.md.
+ab63e011219c1d1e resources/prerequisites.md:103 P5/S0.1: ersetzt durch Text. Der Block mischte Shell (`claude`) und Sitzung (`/login`) in einer Zeilenfolge (Befund D1); jetzt als zwei Sätze in s0-01-werkstatt-einrichten.md.
+cfbee13f2159201e resources/prerequisites.md:191 P5/S0.1: ersetzt. Klon-Block ohne die Zeilen "Variant A/B" (Variante B richtete sich an Teilnehmende eines moderierten Kurses); neue Fassung in resources/reference/werkstatt-erweitern.md.
+a4281c595a742291 resources/prerequisites.md:476 P5/S0.1: ersetzt. Der Ordnerbaum nannte `demos/` und `exercises/` des Live-Kurses; die Übungsordner der Kapitel heißen jetzt nach ihrem Thema (hello, rechte, kontext); neue Fassung in resources/reference/werkstatt-erweitern.md.
+3af3e671f3ecadb5 README.md:176 P6: ersetzt. `pip3 install -r requirements.txt` scheitert auf aktuellen Linux-Distributionen und mit Homebrew-Python ("error: externally-managed-environment", PEP 668; ausgeführt auf Ubuntu mit Python 3.14). Neue Fassung mit virtueller Umgebung in HOW-TO-USE.md und resources/reference/werkstatt-erweitern.md.
+90974dbcb5529fb7 resources/modules/block-1-foundations.md:465 P7a/S1.11: ersetzt. Das Frontmatter der Pfadregel steht jetzt in der Listenform der Doku (memory.md, Beispiel unter "Path-specific rules"); neue Fassung in s1-11-gedaechtnis-ebenen.md.
+f07cec7673100c8e resources/modules/block-1-foundations.md:665 P7a/S1.13: ersetzt. Die Beispiel-Prompts der alten Fassung gehörten zu einer Übung, die sich nicht am Diff prüfen ließ; die neue Übung (prices.py, vager gegen präziser Auftrag) ist durchgespielt und misst den Unterschied mit git diff.
+91e833e14539eefa resources/modules/block-1-foundations.md:729 P7a/S1.15: ersetzt. Das Persona-Beispiel ist jetzt die Übung mit --append-system-prompt "Answer in exactly one sentence." (Wirkung in einem Satz sichtbar, durchgespielt).
+1a4b2d4e64db2420 resources/modules/block-1-foundations.md:781 P7a/S1.14: ersetzt. Der Formulierungsbaustein gehörte zum alten Abschnitt über schrittweise Aufträge; die neue Übung führt denselben Dreischritt (Plan, Nachschärfen, Freigabe) an einem eigenen kleinen Projekt vor.
+a7ec876683b71466 resources/modules/block-1-foundations.md:789 P7a/S1.14: ersetzt, wie block-1-foundations.md:781.
+1aa5c70a513dac56 resources/modules/block-1-foundations.md:796 P7a/S1.14: ersetzt, wie block-1-foundations.md:781.
+a4907d36f4179133 resources/modules/block-1-foundations.md:884 P7a/S1.17: ersetzt durch Text. Der Ablauf zu /autofix-pr steht jetzt als Ausblick im Fließtext, weil er eine Cloud-Sitzung und einen PR voraussetzt und sich im Kapitel nicht üben lässt.
+d83534587b6a7e9b resources/modules/block-1-foundations.md:918 P7a/S1.17: ersetzt durch Text. `claude --from-pr 1234` steht jetzt im Fließtext und in der Zuordnungsaufgabe des Kapitels.
+83b2f4ed5a5a5f37 resources/modules/block-1-foundations.md:976 P7a/S1.18: ersetzt. Die Übung legt den Worktree jetzt mit `claude --worktree test-1` an (worktrees.md: "created under .claude/worktrees/<name>/ ... on a new branch named worktree-<name>"), durchgespielt.
+bc1e42d62e7d762a resources/modules/block-1-foundations.md:1014 P7a/S1.16: ersetzt. Die vier Ablauf-Prompts stehen jetzt als Schritte der neuen Übung (lokales Repo, Branch, Test, gezielter Commit), teils im Wortlaut geändert; durchgespielt.
+45477bb65ac5b12e resources/modules/block-1-foundations.md:1019 P7a/S1.16: ersetzt, wie block-1-foundations.md:1014. "Stage all changed files" widersprach dem Lernziel des gezielten Stagens.
+acbb84d7aa778643 resources/modules/block-1-foundations.md:1025 P7a/S1.16: ersetzt, wie block-1-foundations.md:1014.
+8bb53be62de17949 resources/modules/block-1-foundations.md:1030 P7a/S1.18: ersetzt durch Text. Der Auftrag in natürlicher Sprache steht jetzt im Fließtext; die Übung nutzt `claude --worktree`.
+c3e425bbe8c9eb6d resources/modules/block-1-foundations.md:1036 P7a/S1.16: ersetzt. Der PR-Auftrag steht jetzt im Extra des Kapitels (eigenes Test-Repo, GitHub CLI laut Karte werkstatt-erweitern.md).
+a6135a9eaa370e41 resources/modules/block-1-foundations.md:1210 P7a/S1.19: entfernt. `claude --max-budget-usd 2.00 -p "/loop ..."`: /loop braucht eine offene Sitzung (scheduled-tasks.md: "Requires open session: Yes"), ein -p-Lauf endet nach dem Auftrag; ersetzt durch den gedeckelten -p-Lauf im Extra (ausgeführt: --max-turns 1 endet mit "Error: Reached max turns (1)", Exit 1).
+7e1ae99945142ab8 resources/exercises/block-1-exercises.md:167 P7a/S1.10: ersetzt. Übungsordner heißt jetzt ~/cc-workshop/claudemd statt exercises/exercise-1.2 (Kürzel des Live-Kurses); neue Fassung in s1-10-claude-md.md.
+316a84657ecbd8f2 resources/exercises/block-1-exercises.md:173 P7a/S1.10: ersetzt, PowerShell-Fassung von block-1-exercises.md:167.
+8b06eab64d87cbaa resources/exercises/block-1-exercises.md:184 P7a/S1.10: ersetzt. Der Prompt mit Platzhaltern ("describe your project") ließ sich nicht prüfen; die neue Übung gibt drei feste Regeln vor und prüft sie nach einem Neustart (durchgespielt).
+9f7b1f9484374a73 resources/exercises/block-1-exercises.md:200 P7a/S1.10: ersetzt, wie block-1-exercises.md:184.
+39876c1b23441e4e resources/exercises/block-1-exercises.md:208 P7a/S1.10: ersetzt, wie block-1-exercises.md:184; die Kontrollfrage lautet jetzt "Without using any tools, what must every docstring in this project start with?".
+34ed489d02635a44 resources/exercises/block-1-exercises.md:237 P7a/S1.10: ersetzt. Der Test des Verbots nennt jetzt Datei und Funktion ("Add a function parse_batch(frames) to legacy_panel_parser.py"), damit das Ergebnis prüfbar ist.
+3b4369a9c13443d3 resources/exercises/block-1-exercises.md:245 P7a/S1.11: ersetzt. Die Merk-Notiz mit Platzhalter ist jetzt eine feste Notiz (Format der Tür-IDs), die sich nach dem Neustart abfragen lässt (durchgespielt).
+bf97e421c1856b51 resources/exercises/block-1-exercises.md:292 P7a/S1.13: ersetzt. Die IPv4-Übung verglich zwei frei geschriebene Lösungen; die neue Übung vergleicht zwei Diffs an derselben Datei.
+62a21fe7c062a2e8 resources/exercises/block-1-exercises.md:312 P7a/S1.13: ersetzt, wie block-1-exercises.md:292.
+5d73d3d1897b9dd8 resources/exercises/block-1-exercises.md:353 P7a/S1.13: ersetzt, wie block-1-exercises.md:292.
+dd2f7455829730a2 resources/exercises/block-1-exercises.md:399 P7a/S1.16: ersetzt. Übungsordner heißt jetzt ~/cc-workshop/git statt exercises/exercise-1.4-git; der Startzustand legt zusätzlich eine Datei an, die nicht in den Commit darf.
+cc18ccce58ed8695 resources/exercises/block-1-exercises.md:409 P7a/S1.16: ersetzt, PowerShell-Fassung von block-1-exercises.md:399.
+013645eaee99c3b2 resources/exercises/block-1-exercises.md:427 P7a/S1.16: ersetzt durch Schritt 1 der neuen Übung (gleicher Auftrag, jetzt als Zeile im Schritt statt als eigener Block).
+ecc7ca8225e18dfe resources/exercises/block-1-exercises.md:436 P7a/S1.16: ersetzt durch Schritt 2 der neuen Übung (gleicher Auftrag als Zeile im Schritt).
+0b65184ff6dfa695 resources/exercises/block-1-exercises.md:445 P7a/S1.16: ersetzt. Der Auftrag für log_formatter.py verlangt jetzt unittest statt pytest, weil S0.1 nur Python voraussetzt.
+0c9f64e8cea43eeb resources/exercises/block-1-exercises.md:460 P7a/S1.16: ersetzt. `git diff` zeigt neue, ungetrackte Dateien nicht (lokal geprüft); die Übung lässt deshalb erst stagen und dann `git diff --staged` ansehen.
+55154cce75b36040 resources/exercises/block-1-exercises.md:469 P7a/S1.16: ersetzt durch Schritt 4 der neuen Übung (gleicher Auftrag als Zeile im Schritt).
+d70c4c129edb8794 resources/exercises/block-1-exercises.md:476 P7a/S1.16: ersetzt. "Stage all new and changed files" hätte die Datei mit dem Schlüssel mit in den Commit genommen; die Übung stagt jetzt zwei benannte Dateien.
+83ad53ab6dda3440 resources/exercises/block-1-exercises.md:501 P7a/S1.18: ersetzt. Der Worktree von Hand ist jetzt das Extra des Kapitels (`git worktree add -b experiment ../worktree-experiment`).
+c04218da56aa0650 resources/exercises/block-1-exercises.md:509 P7a/S1.18: ersetzt, wie block-1-exercises.md:501.
+41cc3286810a8aef resources/exercises/block-1-exercises.md:597 P7a/S1.19: entfernt. Die Shell-Aliase mit festem Modell und Budget änderten die Shell-Konfiguration der Lernenden; die Übung nutzt Start-Flags, die nur für eine Sitzung gelten.
+65119dbfca19ac81 resources/modules/block-2-ecosystem.md:76 P7b/S2.2: ersetzt. Das tdd-Frontmatter ist auf die drei Felder gekürzt, die das Kapitel erklärt (name, description, when_to_use).
+c0378963190bdd8d resources/modules/block-2-ecosystem.md:104 P7b/S2.2: ersetzt. Das Frontmatter mit zehn Feldern entfällt; jedes Feld steht in dem Kapitel, das es erklärt (S2.3, S2.5, S2.9, S3.2, S1.7).
+fe3213430aa5c186 resources/modules/block-2-ecosystem.md:156 P7b/S2.5: ersetzt. Das Beispiel beschriftete `$1` als erstes Argument; die Zählung beginnt bei `$0` (skills.md).
+fa90894b81602292 resources/modules/block-2-ecosystem.md:181 P7b/S2.5: ersetzt. Die Zeile `pytest ... | tail` lief nur in Bash und bricht im Modus default den ganzen Skill ab (skills.md: "aborts the invocation").
+7a345644e59d6675 resources/modules/block-2-ecosystem.md:242 P7b/S2.3: ersetzt. Das Command-Frontmatter nutzte Feldnamen, die es nicht gibt (`user_invocable`); neue, korrekte Fassung im Kapitel.
+bd62b7918ec62bc6 resources/modules/block-2-ecosystem.md:382 P7b/S2.4: entfernt. Der Platzhalter `/<your-new-skill-name>` gehörte zu einem Abschnitt ohne Beleg ("dreimal pro Woche"); S2.2 zeigt, wie ein eigener Skill entsteht.
+ad9cd60dc5ebaed6 resources/modules/block-2-ecosystem.md:668 P7b/S2.9: ersetzt. Der Skill-Hook mit `once: true` ist jetzt mit `if` auf den Deploy-Befehl eingegrenzt (hooks.md: once "Only honored for hooks declared in skill frontmatter").
+68e56d9a6187797c resources/modules/block-2-ecosystem.md:775 P7b/S2.10: entfernt. Das Snippet mit `$CLAUDE_EFFORT` rief Skripte auf, die es nicht gibt.
+8bcbeed74d51ba52 resources/exercises/block-2-exercises.md:40 P7b/S2.2: ersetzt. Der Schritt schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts.
+618743364c160463 resources/exercises/block-2-exercises.md:54 P7b/S2.2: ersetzt. Der Schritt schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts.
+11dfb788d18b63e8 resources/exercises/block-2-exercises.md:61 P7b/S2.2: ersetzt. Die Vorlage mit Platzhaltern ließ sich nicht prüfen; die neue Übung gibt einen festen Skill (commit-check) mit prüfbarer Ausgabe vor.
+47fc95192f5fe98a resources/exercises/block-2-exercises.md:92 P7b/S2.2: ersetzt, Test-Prompt mit Platzhalter; siehe 11dfb788d18b63e8.
+04d2a1a22b98aed0 resources/exercises/block-2-exercises.md:97 P7b/S2.2: ersetzt, Test-Prompt mit Platzhalter; siehe 11dfb788d18b63e8.
+bc48bf2406673866 resources/exercises/block-2-exercises.md:102 P7b/S2.2: ersetzt, Test-Prompt mit Platzhalter; siehe 11dfb788d18b63e8.
+609c9331e57bd822 resources/exercises/block-2-exercises.md:155 P7b/S2.8: entfernt. Die Sicherung der globalen settings.json ist nicht mehr nötig: Die Übung trägt den Hook in die settings.json eines Wegwerf-Ordners ein.
+0ee510aa8d4badd5 resources/exercises/block-2-exercises.md:172 P7b/S2.8: ersetzt. Der Schritt schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts.
+3331324e1af92bd0 resources/exercises/block-2-exercises.md:226 P7b/S2.8: entfernt. `chmod +x` ist nicht nötig, weil der Hook das Skript mit `bash <pfad>` aufruft.
+f2b7b8763ab2327f resources/exercises/block-2-exercises.md:333 P7b/S2.8: ersetzt. Der Auftrag löscht jetzt einen Ordner `build` im Übungsordner statt `/tmp/test-directory`.
+ccb599572a84b62c resources/exercises/block-2-exercises.md:340 P7b/S2.8: ersetzt. Der Handtest zeigt jetzt drei Fälle im Projektordner (blocken, durchlassen, unlesbare Eingabe).
+51cb210e61e85233 resources/exercises/block-2-exercises.md:346 P7b/S2.8: ersetzt durch `Run the shell command echo hello.` als Zeile im Schritt.
+49f668cc37034633 resources/exercises/block-2-exercises.md:358 P7b/S2.8: entfernt (Bonus Audit-Log). Er versprach, jeden Befehl mitzuschreiben; PostToolUse feuert aber nur nach Erfolg (hooks.md). S2.6 schreibt stattdessen ein Log im Projekt und zeigt genau diese Lücke.
+4e218f98f95430f4 resources/exercises/block-2-exercises.md:369 P7b/S2.8: entfernt, Bonus Audit-Log; siehe 49f668cc37034633.
+3887d822b7998562 resources/exercises/block-2-exercises.md:375 P7b/S2.8: entfernt, Bonus Audit-Log; siehe 49f668cc37034633.
+3d87789e3b880dd4 resources/exercises/block-2-exercises.md:421 P7b/S2.8: entfernt, Bonus Audit-Log; siehe 49f668cc37034633.
+6549ef9919b30f86 resources/exercises/block-2-exercises.md:444 P7b/S2.8: entfernt. Die Prüfung mit json.tool galt der globalen settings.json.
+3d65ff9a0781b790 resources/exercises/block-2-exercises.md:998 P7b/S2.10: ersetzt. Die Registrierung der Token Firewall schrieb in die globale Konfiguration der Lernenden (~/.claude); die neue Übung arbeitet im Wegwerf-Ordner des Projekts; das Extra testet das Skript jetzt von Hand.
+70301c6b18fc2bf0 resources/modules/block-2-ecosystem.md:978 P7c/S2.12: ersetzt durch Fließtext. Der Block nannte `claude install` ohne Argument „latest stable“; die Doku trennt die Kanäle `latest` (Standard) und `stable`.
+13215329dce64d0e resources/modules/block-2-ecosystem.md:1181 P7c/S2.15: ersetzt durch das Beispiel der Doku. Der alte Block trug ein Token als Rückfallwert (`${SLACK_BOT_TOKEN:-default-dev-token}`), den Fehler, vor dem das Kapitel warnt (Befund R4).
+37081b267fe2caad resources/modules/block-2-ecosystem.md:1266 P7c/S2.17: gekürzt auf ein Tool. Das zweite Tool fragte eine SQLite-Datei ab, die es in keiner Übung gibt.
+943ede48f341298a resources/modules/block-2-ecosystem.md:1475 P7c/S2.20: entfernt. Das Schichtenbild trug die Modulnummern des alten Kursaufbaus; die Station zeigt die Bausteine jetzt als Tabelle der vier Dateien, die die Übung anlegt.
+4b191466996e68b7 resources/exercises/block-2-exercises.md:483 P7c/S2.11: entfernt. Die Erkundung setzte ein installiertes Plugin voraus und nannte den Cache-Pfad ohne Marketplace- und Versionsebene; die neue Übung baut ein eigenes Plugin und liest es mit `plugin details`.
+f715cc69a6ba1664 resources/exercises/block-2-exercises.md:492 P7c/S2.11: entfernt, Erkundung eines installierten Plugins; siehe 4b191466996e68b7.
+094561688594fcb5 resources/exercises/block-2-exercises.md:508 P7c/S2.11: entfernt, Erkundung eines installierten Plugins; siehe 4b191466996e68b7.
+191db09294514ddb resources/exercises/block-2-exercises.md:523 P7c/S2.11: entfernt, Erkundung eines installierten Plugins; siehe 4b191466996e68b7.
+71e0f9da5bbc18f9 resources/exercises/block-2-exercises.md:576 P7c/S2.11: ersetzt. Das Mini-Plugin heißt jetzt `greeter` und entsteht aus Dateien, die im Editor gespeichert werden (keine Heredocs); die Übung prüft Präfix, Neuladen und dass nichts installiert bleibt.
+4d44e8f36eaab3e2 resources/exercises/block-2-exercises.md:591 P7c/S2.11: ersetzt, Mini-Plugin per Heredoc; siehe 71e0f9da5bbc18f9.
+3582e97903f0e378 resources/exercises/block-2-exercises.md:606 P7c/S2.11: ersetzt, Mini-Plugin per Here-String; siehe 71e0f9da5bbc18f9.
+a55be66fb543288e resources/exercises/block-2-exercises.md:653 P7c/S2.11: ersetzt, Start des Mini-Plugins; siehe 71e0f9da5bbc18f9.
+b32b6295a24179d9 resources/exercises/block-2-exercises.md:779 P7c/S2.14: entfernt. Auftrag aus Platzhaltern ohne prüfbares Ergebnis; das Extra arbeitet mit festen, öffentlichen Seiten.
+9eb98e178d626f26 resources/exercises/block-2-exercises.md:804 P7c/S2.14: entfernt. Der Auftrag ließ Benutzername und Passwort in das Gespräch tippen; das Extra rät von Seiten mit Anmeldung ab, weil Sitzungen im Klartext unter `~/.claude/projects/` liegen.
+6c79919243f00282 resources/exercises/block-2-exercises.md:863 P7c/S2.18: ersetzt. Platzhalter-Frage ohne prüfbares Ergebnis; die Übung fragt nach einem erfundenen Gerät, dessen Antworten nur in den Quellen stehen.
+50934f988db9f938 resources/exercises/block-2-exercises.md:883 P7c/S2.18: ersetzt, Platzhalter mit `@research-notes.md`; siehe 6c79919243f00282.
+e518710c79e0071d resources/modules/block-3-advanced.md:371 P7d/S3.5: ersetzt durch Befehlstabelle und Übung. Der Block trug die Befehle mit Kommentaren im Bild der Streife; die Übung führt sie an einer lesenden Hintergrund-Sitzung aus.
+3a9b58ea5a9b84b5 resources/exercises/block-3-exercises.md:145 P7d/S3.6: entfernt mit dem Playground-Audit. Die Hauptübung baut Ankläger und Verteidiger an einer eigenen Datei `door.py`; das Audit am Playground setzte ein Plugin voraus, das Selbstlernende nicht bekommen.
+296c4757a52eba48 resources/exercises/block-3-exercises.md:184 P7d/S3.6: entfernt, Playground-Audit; siehe 3a9b58ea5a9b84b5.
+de19b41e7841dcfc resources/exercises/block-3-exercises.md:190 P7d/S3.6: entfernt, Playground-Audit; siehe 3a9b58ea5a9b84b5.
+f8266595fdb105c0 resources/exercises/block-3-exercises.md:685 P7d/S3.6: entfernt. Der testgetriebene Parser-Bau war eine zweite Lerneinheit im selben Kapitel (Befund D5, R24); er kommt mit der Teilung von S3.6 in P8 zurück oder entfällt.
+41a0ad338b0d0004 resources/modules/block-3-advanced.md:858 P7e/S3.11: ersetzt. Die Kommentare nannten Dienstleister (Statsig, Sentry), die die Doku nicht nennt; der Block steht mit neutralen Kommentaren im Kapitel.
+826af82a04a34581 resources/modules/block-3-advanced.md:862 P7e/S3.11: ersetzt, PowerShell-Fassung desselben Blocks; siehe 41a0ad338b0d0004.
+ed60d5009d964f80 resources/modules/block-3-advanced.md:962 P7e/S3.12: entfernt. `/loop 5m /quality-gate` rief einen Skill auf, den es nicht gibt; die Übung lässt `/loop` eine Datei lesen und berichten.
+1510f7a012ef3705 resources/modules/block-3-advanced.md:978 P7e/S3.12: ersetzt durch eine Bedingung, die Claudes eigene Ausgabe belegen kann (`python -m unittest exits 0 …, or stop after 6 turns`).
+603d4506ce9ebf53 resources/modules/block-3-advanced.md:1017 P7e/S3.13: entfernt. Das Beispiel war im Kapitel selbst als nicht tragfähig vorgeführt (`/loop` in einem `-p`-Lauf); die Übung zeigt einen gedeckelten Lauf, der wirklich stoppt.
+8e186b2e56f5710a resources/modules/block-3-advanced.md:1030 P7e/S3.13: entfernt, zweites Beispiel des alten Kurses, das nicht trägt (nächtliches Audit als `-p`-Lauf mit Routine verwechselt); siehe 603d4506ce9ebf53.
+b8269c2977ef8482 resources/exercises/block-3-exercises.md:241 P7e/S3.12: ersetzt. Das nackte `/schedule` der alten Optionen A und B ist jetzt ein Extra mit Auftrag, Lauf und Löschen der Routine; die Hauptübung bleibt in der Sitzung.
+b8269c2977ef8482 resources/exercises/block-3-exercises.md:248 P7e/S3.12: ersetzt. Das nackte `/schedule` der alten Optionen A und B ist jetzt ein Extra mit Auftrag, Lauf und Löschen der Routine; die Hauptübung bleibt in der Sitzung.
+2699ba04e0d66b5e resources/exercises/block-3-exercises.md:255 P7e/S3.12: ersetzt durch `/loop 1m` mit einem Auftrag, dessen Durchgänge sich zählen lassen.
+547a37a03b843e0a resources/modules/block-3-advanced.md:1202 P7f/S4.7: ersetzt. Das Beispiel mit `git worktree add` von Hand steht in S1.18; die Übung startet den Worktree mit `claude --worktree` und sucht seine Grenzen.
+7bfe5c85e694344b resources/modules/block-3-advanced.md:1233 P7f/S4.7: gekürzt auf einen Satz. Das `--tmux`-Beispiel war Beiwerk zum Thema Isolation.
+5d4886da9af49b64 resources/modules/block-3-advanced.md:1388 P7f/S4.3: ersetzt. Das Schema-Beispiel hat jetzt `required`, damit beide Felder sicher in `structured_output` stehen.
+cf066237ec116acb resources/modules/block-3-advanced.md:1448 P7f/S4.4: ersetzt durch die Übung (Hook eines fremden Ordners, `--bare`, Budgetdeckel); das Release-Notes-Beispiel gehörte zum Kosten-Feinschliff.
+3b8616d91a4e586a resources/modules/block-3-advanced.md:1462 P7f/S4.4: ersetzt. Der Kommentar „just the model“ widersprach dem Text: Auch mit `--bare` bleiben Bash und die Datei-Werkzeuge.
+7c7813815957c0b7 resources/modules/block-3-advanced.md:1492 P7f/S4.4: entfernt. `--system-prompt-file` gehört nicht zum Sicherheitskern; das Kapitel verweist auf die CLI-Referenz und S1.15.
+9e2994d23098d3c7 resources/modules/block-3-advanced.md:1620 P7f/S4.5: ersetzt durch Fließtext (Proxy-Variablen); die Aussagen zu VPC und SigV4 waren nicht belegt (F6).
+ab92a29ad05542f3 resources/modules/block-3-advanced.md:1630 P7f/S4.5: ersetzt durch Fließtext (Bedrock); siehe 9e2994d23098d3c7.
+3972c5641d31c0f6 resources/modules/block-3-advanced.md:1641 P7f/S4.5: ersetzt durch Fließtext (Vertex); siehe 9e2994d23098d3c7.
+d4f4633b9be9aef8 resources/modules/block-3-advanced.md:1667 P7f/S4.5: ersetzt. Die Skizze des Pre-Commit-Hooks wertete den Exit-Code als Urteil; der Hook der Übung ersetzt sie.
+b1d3ce7199304b08 resources/modules/block-3-advanced.md:1833 P7f/S4.10: ersetzt. Der Handtest gilt jetzt dem Python-Wächter der Übung, mit Eingabe im echten Format.
+fa3546fed8ac0c5e resources/modules/block-3-advanced.md:1922 P7f/S4.10: entfernt. Der Abschnitt zum Auto-Memory (`cat MEMORY.md`) gehörte nicht zur Diagnose eines Hooks; das Thema steht in S1.11.
+e3775ecd479bbe79 resources/exercises/block-3-exercises.md:410 P7f/S4.5: ersetzt. Die Pre-Commit-Übung arbeitet jetzt im Wegwerf-Repository `precommit`, und der Hook trennt den Exit-Code des Aufrufs vom Urteil.
+5e963743701e3dd0 resources/exercises/block-3-exercises.md:416 P7f/S4.5: ersetzt, PowerShell-Fassung des Startblocks; siehe e3775ecd479bbe79.
+1666494938fb0da6 resources/exercises/block-3-exercises.md:430 P7f/S4.5: ersetzt, altes Hook-Skript; siehe e3775ecd479bbe79.
+63d77c3c5a053afd resources/exercises/block-3-exercises.md:455 P7f/S4.5: ersetzt, `chmod +x` steht jetzt im Schritt; siehe e3775ecd479bbe79.
+b98ba9e03c161b82 resources/exercises/block-3-exercises.md:473 P7f/S4.4: entfernt. Die Trace-Log-Zeile war ein Bonus-Schritt, der in drei Kapiteln stand (D7); die Diagnose steht in S4.9 und S4.10.
+bb4e05d4ba00f1bd resources/exercises/block-3-exercises.md:534 P8b/S3.11: ersetzt. Der Scanner blockt jetzt jede Eingabe, die kein JSON-Objekt ist (die alte Fassung ließ die Eingabe null durch); die neue Fassung steht im selben Kapitel.
+c857d09db23e6822 resources/demos/block-1-demos.md:36 P8c/S1.1/S1.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+715b5f761d2b5a61 resources/demos/block-1-demos.md:137 P8c/S1.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+705f29614d1baed7 resources/demos/block-1-demos.md:154 P8c/S1.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+e596899f114b5162 resources/demos/block-1-demos.md:179 P8c/S1.10/S2.6: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+931916446cbe02c4 resources/demos/block-1-demos.md:196 P8c/S1.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+2ed9d2994c9d0851 resources/demos/block-1-demos.md:206 P8c/S1.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+4752708d8e142067 resources/demos/block-1-demos.md:220 P8c/S1.11: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+739a19347e937a4f resources/demos/block-1-demos.md:258 P8c/S1.13: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+6f52165a132d8494 resources/demos/block-1-demos.md:272 P8c/S1.13: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+cfa685e12bdaf829 resources/demos/block-1-demos.md:302 P8c/S1.13/S1.16: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+01cd2abf28b024ea resources/demos/block-1-demos.md:366 P8c/S1.16: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+b67d80540563617b resources/demos/block-1-demos.md:377 P8c/S1.16: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+09ed0a3c91f91c5d resources/demos/block-1-demos.md:394 P8c/S1.16: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+6375e47b09ae0227 resources/demos/block-1-demos.md:408 P8c/S1.16: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+2eb3855e2d16cc84 resources/demos/block-1-demos.md:427 P8c/S1.16: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+615d03fa99bb109d resources/demos/block-1-demos.md:441 P8c/S1.16: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+e5a1cf277b69d021 resources/demos/block-1-demos.md:458 P8c/S1.18: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+251902684a6f474b resources/demos/block-1-demos.md:466 P8c/S1.18: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+c6d435cdb908657b resources/demos/block-1-demos.md:512 P8c/S1.19: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+fd1eb20d892eea11 resources/demos/block-1-demos.md:521 P8c/S1.19/S3.13: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+a70a47f12b5b611b resources/demos/block-1-demos.md:535 P8c/S1.19: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+98cc64d205b913a0 resources/demos/block-1-demos.md:557 P8c/S1.19: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+c6ba053c827bc5d0 resources/demos/block-2-demos.md:25 P8c/S2.2: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+ec5c2f05f554d722 resources/demos/block-2-demos.md:37 P8c/S2.2: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+fcbc734ba95d5fd3 resources/demos/block-2-demos.md:42 P8c/S2.2: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+48888f50d823084e resources/demos/block-2-demos.md:51 P8c/S2.2: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+e5f417e291fdc38b resources/demos/block-2-demos.md:56 P8c/S2.2: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+31abd6c06cac492d resources/demos/block-2-demos.md:71 P8c/S2.2: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+2394be7746a14c18 resources/demos/block-2-demos.md:89 P8c/S2.2: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+ee1b8a5814f069d2 resources/demos/block-2-demos.md:111 P8c/S2.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+67aa3af9a5cf6e52 resources/demos/block-2-demos.md:141 P8c/S2.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+591a586cc285ab5a resources/demos/block-2-demos.md:154 P8c/S2.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+c27359978ff473be resources/demos/block-2-demos.md:178 P8c/S2.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+85bf512db37508ba resources/demos/block-2-demos.md:194 P8c/S2.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+4857cb7da0d78341 resources/demos/block-2-demos.md:198 P8c/S2.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+fc99d8c3a614c011 resources/demos/block-2-demos.md:231 P8c/S2.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+1e958ab92ce5b119 resources/demos/block-2-demos.md:241 P8c/S2.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+8be215f1e642fbc4 resources/demos/block-2-demos.md:275 P8c/S2.11: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+fc5f6653ac0b21c0 resources/demos/block-2-demos.md:341 P8c/S2.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+a11a7230f6a74ec9 resources/demos/block-2-demos.md:361 P8c/S2.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+769e18b9e5b78a94 resources/demos/block-2-demos.md:368 P8c/S2.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+c828b2b75164eb6d resources/demos/block-2-demos.md:376 P8c/S2.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+0d9db6b0db1fe42a resources/demos/block-2-demos.md:382 P8c/S2.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+8c22abb753aa1232 resources/demos/block-2-demos.md:436 P8c/S2.18: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+4e75d318e543c1d0 resources/demos/block-2-demos.md:441 P8c/S2.18: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+f4332b402f5b67a4 resources/demos/block-2-demos.md:461 P8c/S2.18: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+7e8d66ebfb1d700f resources/demos/block-2-demos.md:470 P8c/S2.18: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+c4476be42b8bb0c1 resources/demos/block-3-demos.md:47 P8c/S3.4: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+38a670cf755ddf2f resources/demos/block-3-demos.md:87 P8c/S4.2: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+9959b5773b0f5982 resources/demos/block-3-demos.md:252 P8c/S3.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+1a05c3d4e25e5051 resources/demos/block-3-demos.md:258 P8c/S3.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+4690f6483df28ae6 resources/demos/block-3-demos.md:265 P8c/S3.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+c335ed3fa123df88 resources/demos/block-3-demos.md:274 P8c/S3.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+f0c64aa9ea3f8e85 resources/demos/block-3-demos.md:282 P8c/S3.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+313632f3afd840bc resources/demos/block-3-demos.md:287 P8c/S3.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+da3bd1c697f3f784 resources/demos/block-3-demos.md:412 P8c/S3.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+050b592700f0e6dd resources/demos/block-3-demos.md:429 P8c/S3.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+5997b25143037aba resources/demos/block-3-demos.md:444 P8c/S3.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+0111a12d9870f065 resources/demos/block-3-demos.md:452 P8c/S3.14: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+329209cb84177caf resources/demos/block-3-demos.md:494 P8c/S3.13: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+9bfbbb1b51bff370 resources/demos/block-3-demos.md:503 P8c/S3.13/S4.7: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+03afd31a7603b077 resources/demos/block-3-demos.md:523 P8c/S4.6: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+cf3451ca44a2fe91 resources/demos/block-3-demos.md:531 P8c/S4.6/S4.8: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+5c78b518b214e96d resources/demos/block-3-demos.md:600 P8c/S4.3: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+f27d834ececaa7b1 resources/demos/block-3-demos.md:617 P8c/S4.4: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+eedc49320126a8ab resources/demos/block-3-demos.md:631 P8c/S4.4: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+189de607113a70a8 resources/demos/block-3-demos.md:661 P8c/S4.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+bc68c664a6732a29 resources/demos/block-3-demos.md:665 P8c/S4.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+74fd9300928720e1 resources/demos/block-3-demos.md:697 P8c/S2.2/S2.18: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+cb32ab025241ac32 resources/demos/block-3-demos.md:705 P8c/S4.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+bbcfefbf89c3a256 resources/demos/block-3-demos.md:733 P8c/S4.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+81d5e31035ff2e24 resources/demos/block-3-demos.md:753 P8c/S4.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+80477b5404e80b89 resources/demos/block-3-demos.md:761 P8c/S4.10: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.
+bbd4477cfa780f1b resources/modules/block-1-foundations.md:1009 P8c/S1.16: gehörte zur alten Demo; die Moderationsdatei zeigt jetzt die Übung des Kapitels live.

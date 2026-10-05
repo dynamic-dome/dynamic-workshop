@@ -1,6 +1,8 @@
 # Praxisbibliothek statt Kursordner — Design
 
 > Stand: 2026-09-30 · Branch `praxisbibliothek` (Worktree `dynamic_workshop-bibliothek`, ab `ba222d2`)
+> **Geändert am 2026-10-05** durch `docs/plans/2026-10-05-selbstlern-zuerst-design.md`: „Vorführen“ ist kein
+> Kapitelabschnitt mehr (§4.3), Demo und Moderationshinweise liegen in `resources/moderation/vorfuehren/` (§7.1).
 > Auftrag und Entscheidungen: Dominic, 2026-09-30 (siehe „Entscheidungen"). Status: v3.2 — freigegeben durch Codex-Runde 4 (APPROVE-WITH-CHANGES, §15).
 
 ## 1. Auftrag in einem Absatz

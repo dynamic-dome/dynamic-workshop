@@ -4,11 +4,11 @@ type: lesson
 title: Codex-Schwarm und die Datenfluss-Grenze
 shelf: agents
 level: bonus
-minutes: 15
-requires: [S4.1]
+minutes: 25
+requires: [S4.1, S3.11]
 safety_floor: false
 transferable: true
-outcome: "Ich kann erklären, welcher Anbieter in einer Claude-Codex-Pipeline welchen Code sieht, und für sensiblen Code eine der drei Optionen (Codex weglassen, lokales Modell, nur Signaturen senden) begründet wählen."
+outcome: "Ich kann erklären, welcher Anbieter in einer Claude-Codex-Pipeline welchen Code sieht, die Dateien eines kleinen Projekts in „darf raus“, „darf nicht raus“ und „nur Signatur“ einteilen und für sensiblen Code eine der drei Optionen (Codex weglassen, lokales Modell, nur Signaturen senden) begründet wählen."
 sources:
   - https://code.claude.com/docs/en/data-usage
   - https://code.claude.com/docs/en/plugins
@@ -18,7 +18,7 @@ aliases: []
 # S4.2 · Codex-Schwarm und die Datenfluss-Grenze
 
 <!-- meta:start -->
-> **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kür · **~15 Min** · **Voraussetzungen:** [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md)
+> **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kür · **~25 Min** · **Voraussetzungen:** [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) · [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](s3-11-datenschutz-und-compliance.md)
 >
 > ← [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) · [Bibliothek](README.md) · [S4.3 Headless: claude -p als Pipeline-Stufe](s4-03-headless.md) →
 <!-- meta:end -->
@@ -26,11 +26,11 @@ aliases: []
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen sagen, welche Teile deines Codes in einer Claude-Codex-Pipeline an OpenAI gehen und warum die Aufbewahrungsregeln von Anthropic dafür nicht gelten?
-- Hast du schon einmal eine Aufgabe mit `--decompose` in parallele Teilaufgaben zerlegen lassen und das Ergebnis im Review auf Integrationsfehler geprüft?
+- Kannst du aus dem Kopf drei Arten von Dateien in deinem Projekt nennen, die nie an einen zweiten Anbieter gehen sollten?
 
 ## Auf einen Blick
 
-Ein Codex-Schwarm schickt deinen Quellcode an OpenAI, nicht an Anthropic. Die Datenregeln von Anthropic decken nur die Claude-Seite der Pipeline ab; für den Codex-Teil gelten die Aufbewahrungs- und Trainingsregeln deines OpenAI-Vertrags. Für sensiblen Code hast du drei Auswege: den Codex-Schritt weglassen, ein lokales Modell einsetzen oder Codex nur Signaturen ohne Geschäftslogik zeigen.
+Ein Codex-Schwarm schickt deinen Quellcode zusätzlich an OpenAI: Was Claude liest, geht an Anthropic, und was in den Aufträgen für Codex steht, geht an OpenAI. Die Datenregeln von Anthropic decken nur die Claude-Seite der Pipeline ab; für den Codex-Teil gelten die Aufbewahrungs- und Trainingsregeln deines OpenAI-Vertrags. Für sensiblen Code hast du drei Auswege: den Codex-Schritt weglassen, ein lokales Modell einsetzen oder Codex nur Signaturen, also das Gerüst ohne Inhalt, zeigen. Dasselbe gilt für jeden zweiten Anbieter, den du an Claude Code anbindest, nicht nur für Codex.
 
 Technisch zerlegt Claude die Aufgabe in unabhängige Teilaufgaben, mehrere Codex-Agenten bauen sie parallel, und Claude prüft das Ergebnis. Der Schwarm kommt aus einem eigenen Plugin (`multi-model-orchestrator`), nicht aus Claude Code selbst.
 
@@ -41,38 +41,31 @@ Der Codex-Schwarm ist ein externes Montageteam. Der Generalunternehmer (Claude) 
 ```mermaid
 flowchart TB
   subgraph A["Anthropic-Vertrag"]
-    P["Claude plant und zerlegt<br/>(--decompose)"]
+    P["Claude plant und zerlegt"]
     R["Claude prüft alle Ergebnisse"]
   end
   subgraph O["OpenAI-Vertrag"]
-    C1["Codex-Agent 1"]
-    C2["Codex-Agent 2"]
-    C3["Codex-Agent N"]
+    C["Codex-Agenten<br/>bauen parallel"]
   end
-  P -- "Specs mit Quellcode<br/>verlassen den Anthropic-Vertrag" --> C1
-  P --> C2
-  P --> C3
-  C1 --> R
-  C2 --> R
-  C3 --> R
-  S{"Code sensibel?"} -- "ja" --> W1["Codex-Schritt weglassen"]
-  S -- "ja" --> W2["lokales Modell im Codex-Slot"]
-  S -- "ja" --> W3["nur Signaturen senden"]
+  P -- "Specs mit Quellcode<br/>verlassen den Anthropic-Vertrag" --> C
+  C --> R
+  S{"Code sensibel?"} -- "nein" --> OK["Specs gehen an Codex"]
+  S -- "ja: eine von drei Optionen" --> W["Codex weglassen<br/>oder lokales Modell<br/>oder nur Signaturen senden"]
 ```
 
 ## Im Detail
 
 ### Datenfluss: was geht wohin?
 
-> **Wichtig für sicherheitssensible Teams:** Ein Codex-Schwarm schickt deinen Quellcode an **OpenAI**, nicht an Anthropic. Die Datenregeln von Anthropic (Aufbewahrung und Training, siehe [S3.11](s3-11-datenschutz-und-compliance.md)) gelten nur für die Claude-Seite der Pipeline. OpenAI hat eigene Aufbewahrungs- und Trainingsregeln, festgelegt in deinem Vertrag für OpenAI Codex.
+> **Wichtig für sicherheitssensible Teams:** Ein Codex-Schwarm schickt deinen Quellcode zusätzlich an **OpenAI**, nicht nur an Anthropic. Die Datenregeln von Anthropic (Aufbewahrung und Training, siehe [S3.11](s3-11-datenschutz-und-compliance.md)) gelten nur für die Claude-Seite der Pipeline. OpenAI hat eigene Aufbewahrungs- und Trainingsregeln, festgelegt in deinem Vertrag für OpenAI Codex.
 
 Ist deine Codebasis sensibel (personenbezogene Kundendaten, proprietäre Firmware, vertraglich zugesicherte Exklusivität), hast du drei Möglichkeiten:
 
-1. **Codex-Schritt weglassen:** Sonnet übernimmt die Umsetzung. Die Kosten steigen etwas, die Daten bleiben im Vertrag mit Anthropic.
-2. **Ein lokales Modell im Codex-Slot:** Ollama oder vLLM mit einer Code-Llama-Variante. Gleiche Rolle, kein Dritter.
-3. **Sensible Teile vorher entfernen:** Formuliere den Auftrag so um, dass Codex nur Signaturen als Gerüst sieht, keine Bezeichner und keine Geschäftslogik.
+1. **Codex-Schritt weglassen:** `sonnet` übernimmt die Umsetzung. Die Kosten steigen etwas, die Daten bleiben im Vertrag mit Anthropic.
+2. **Ein lokales Modell im Codex-Slot:** ein Modell, das auf deiner eigenen Hardware läuft, etwa über Ollama oder vLLM. Gleiche Rolle, kein Dritter. Wie du es anbindest, hängt vom Werkzeug ab und steht hier nicht.
+3. **Nur Signaturen senden:** Der Anbieter sieht das Gerüst, also Namen, Parameter und Rückgabetypen, aber keine Funktionskörper. Auch Namen können Fachlogik verraten; ein Bezeichner wie `override_for_vip_after_hours` sagt mehr als sein Typ. Neutralisier solche Namen vorher. Soll der Anbieter Logik selbst ändern, reicht das Gerüst nicht: Dann bleibt nur Option 1 oder 2.
 
-Die Orchestrierungsmuster dahinter hängen an keinem Modell: Dieselbe Pipeline aus Planen, Umsetzen und Prüfen funktioniert mit jedem Anbieterpaar. Welche Phase welches Modell bekommt und warum, steht in [S4.1](s4-01-modell-pro-phase.md); die Muster selbst in [S3.4](s3-04-orchestrierungsmuster.md).
+Die Orchestrierungsmuster dahinter hängen an keinem Modell: Dieselbe Pipeline aus Planen, Umsetzen und Prüfen funktioniert mit jedem Anbieterpaar. Welche Phase welches Modell bekommt, steht in [S4.1](s4-01-modell-pro-phase.md); die Muster selbst in [S3.4](s3-04-orchestrierungsmuster.md).
 
 ### Der Codex-Schwarm
 
@@ -83,120 +76,91 @@ Die Orchestrierungsmuster dahinter hängen an keinem Modell: Dieselbe Pipeline a
 /multi-model-orchestrator:codex-swarm --decompose "Build a Python CLI with scan, check, report commands"
 ```
 
-Mit `--decompose` passiert Folgendes:
-
-1. Claude analysiert die Aufgabe und zerlegt sie in N unabhängige Teilaufgaben.
-2. N Codex-Agenten starten parallel, einer pro Teilaufgabe.
-3. Alle arbeiten gleichzeitig. Die Gesamtdauer ist die des langsamsten Agenten, nicht die Summe.
-4. Claude prüft alle Ergebnisse zusammen und findet Integrationsfehler.
-
-**Wann sich ein Codex-Schwarm lohnt:**
-
-- große Umsetzungsaufgaben, die sich parallelisieren lassen
-- du willst eine zweite Meinung von einem anderen KI-Modell
-- Tempo zählt mehr als die Kosten pro Token
-- die Aufgaben sind gut spezifiziert und mechanisch
-
-### Praxisbeispiel: ein Security-CLI
-
-Aufgabe: „Bau ein Python-Security-CLI mit drei Befehlen:
-
-- `scan` listet die offenen Ports eines Hosts
-- `check` prüft, ob eine URL mit HTTP 200 antwortet
-- `report` erzeugt einen Sicherheitsbericht als JSON"
-
-Mit `--decompose` könnte Claude so zerlegen:
-
-1. Agent 1: CLI-Gerüst und `scan` (Port-Abfrage über Sockets)
-2. Agent 2: `check` (HTTP-Anfrage, Timeout-Behandlung, Statusprüfung)
-3. Agent 3: `report` (JSON-Ausgabe, fasst die Ergebnisse zusammen)
-4. Agent 4: Testsuite für alle drei Befehle
-
-Alle vier Codex-Agenten laufen gleichzeitig. Claude prüft das zusammengesetzte Ergebnis.
-
-## Vorführen
-
-### Demo: Codex-Schwarm
-
-**Ziel:** Die Multi-Modell-Pipeline zeigen: Claude plant, Codex baut parallel, Claude prüft.
-
-**Voraussetzung:** Die Codex CLI ist installiert und angemeldet. Prüfen mit `codex --version`. Dazu das Plugin `multi-model-orchestrator`.
-
-**Schritt 1: den Schwarm mit Zerlegung starten**
-
-```
-/multi-model-orchestrator:codex-swarm --decompose
-```
-
-Wenn nach der Aufgabe gefragt wird, gib ein:
-
-> "Build a Python CLI security tool with three commands:
-> 1. scan: given a hostname, attempt connections to ports 21, 22, 23, 25, 80, 443, 3306, 5432, 8080, 8443 and report which are open
-> 2. check: given a URL, make an HTTP GET request with a 5-second timeout and report the status code and response time in milliseconds
-> 3. report: run both scan and check on a given target and output a JSON report with timestamp, target, open ports, and HTTP status
-> Include a CLI entry point using argparse, proper error handling, and a test file."
-
-**Schritt 2: die Zerlegung beobachten**
-
-Zeig, dass Claude die Aufgabe analysiert und in unabhängige Teilaufgaben zerlegt, bevor ein einziger Codex-Agent startet. Benenne jede Teilaufgabe, sobald Claude sie erkennt.
-
-**Schritt 3: die parallele Ausführung beobachten**
-
-Zeig, wie die N Codex-Agenten gleichzeitig hochfahren. Betone, dass sie parallel arbeiten: Die Uhr läuft für alle zugleich.
-
-**Schritt 4: Claude prüft**
-
-Sieh zu, wie Claude alle erzeugten Dateien liest. Zeig, was es findet: Integrationsfehler, fehlende Fehlerbehandlung, Lücken in der Testabdeckung.
-
-<details><summary>Für Moderierende</summary>
-
-**Dauer:** etwa 12 Minuten geplant; reserviere live etwa 18 Minuten (× 1,5), weil Zerlegung und Start der Codex-Agenten unterschiedlich lange dauern.
-
-**Sagen:**
-
-„Das ist das Modell Architekt, Monteur, Prüfer. Claude (Opus-Tier) hat die Spezifikation entworfen. Die Codex-Agenten haben die Komponenten parallel gebaut, wie Monteure, die auf verschiedenen Etagen gleichzeitig Leser installieren. Jetzt prüft Claude jede Komponente vor der Abnahme. Drei verschiedene Stärken, eine Pipeline. Das Ergebnis ist besser als jedes einzelne für sich."
-
-**Wenn etwas ausfällt:**
-
-- **Codex CLI nicht installiert:** Lass den Live-Lauf weg, zeig eine Aufzeichnung oder Screenshots aus der Vorbereitung und besprich stattdessen das Muster.
-- **Plugin `multi-model-orchestrator` nicht installiert:** Zeig die README des Plugins auf GitHub oder ersetze die Demo durch einen Prompt an Claude: „Pretend you're a Codex swarm with N agents. Show what each would generate."
-- **Codex-Anmeldung schlägt fehl:** wie „nicht installiert", zurück zur Diskussion. Erwähne, dass außerhalb des Workshops eine Anmeldung mit `codex login` nötig ist.
-- **`--decompose` wird nicht erkannt:** Ältere Plugin-Versionen kennen das Flag nicht. Lass es weg, lass Claude die Aufgabe zuerst von Hand zerlegen und starte dann die Agenten.
-
-</details>
+Mit `--decompose` passiert Folgendes: Claude zerlegt die Aufgabe in N unabhängige Teilaufgaben, N Codex-Agenten starten parallel, und Claude prüft alle Ergebnisse zusammen und sucht Integrationsfehler. Die Gesamtdauer ist die des langsamsten Agenten, nicht die Summe. Das lohnt sich bei großen, gut spezifizierten und mechanischen Umsetzungsaufgaben, die sich parallelisieren lassen, wenn du eine zweite Meinung von einem anderen Modell willst und Tempo mehr zählt als die Kosten pro Token. Die Übung unten kommt ohne Plugin und ohne OpenAI-Konto aus.
 
 ## Selbst machen
 
-### Übung: einen Codex-Schwarm auswerten (etwa 15 Minuten)
+### Übung: die Dateien eines Projekts für einen zweiten Anbieter sortieren (etwa 15 Minuten)
 
-**Ziel:** Die Multi-Modell-Pipeline verstehen und entscheiden, wann du sie einsetzt.
+**Ziel:** Du teilst die Dateien eines kleinen Projekts in „darf raus“, „darf nicht raus“ und „nur Signatur“ ein und entscheidest für eine Datei zwischen den drei Optionen des Kapitels.
 
-**Format:** Du siehst die Demo oben (live, als Aufzeichnung oder selbst ausgeführt). Danach besprecht ihr die Fragen in Gruppen zu zweit oder zu dritt; allein beantwortest du sie schriftlich.
+**Startzustand:** Papier oder eine Notiz. Du brauchst weder Codex noch ein OpenAI-Konto noch ein Plugin. Das Beispielprojekt `zugangsportal` ist ein kleiner Webdienst für Zutrittskontrolle. Dein Team will einen zweiten Anbieter für zwei Aufgaben einsetzen: (a) Tests für `format_utils.py` schreiben, (b) in `api.py` einen neuen Endpunkt `GET /doors/<id>/status` ergänzen, der die vorhandene Funktion `door_status(door_id)` aus `access_rules.py` aufruft. Nimm die Beschreibungen, wie sie sind, als Tatsachen.
 
-1. **Qualität der Zerlegung:** Wie gut hat Claude die Aufgabe in unabhängige Teilaufgaben zerlegt? Waren die Grenzen sauber? Hättest du anders zerlegt?
-2. **Codex und Claude im Vergleich:** Passt das, was Codex erzeugt hat, zu dem, was Claude geschrieben hätte? Wo liegen die Unterschiede? Fühlt sich der Code von Codex anders an?
-3. **Wirkung des Reviews:** Was hat der Prüfschritt von Claude gefunden? Siehst du im erzeugten Code weitere Probleme?
-4. **Dein Einsatzfall:** Wo in deiner Arbeit würdest du einen Codex-Schwarm einsetzen? Welche Aufgabe profitiert vom Modell Architekt, Monteur, Prüfer? Und darf der Code dafür überhaupt an OpenAI gehen (Abschnitt „Datenfluss")?
-5. **Kosten und Tempo:** Diese Pipeline nutzt das Opus-Tier für Planung und Prüfung und Codex für die Umsetzung. Wann lohnen sich die Kosten? Wann würdest du einfach direkt Claude nehmen?
+| Nr. | Datei | Beschreibung |
+|---|---|---|
+| 1 | `README.md` | Projektbeschreibung, liegt öffentlich auf GitHub |
+| 2 | `docs/protocol-notes.md` | Notizen zum proprietären Protokoll eines Kartenlesers, vom Hersteller unter Vertraulichkeitsvereinbarung geliefert |
+| 3 | `src/format_utils.py` | Hilfsfunktionen für Datum und Uhrzeit, ohne Projektbezug |
+| 4 | `src/access_rules.py` | die Zugriffslogik: wer wann welche Tür öffnen darf, samt Ausnahmen für Sonderfälle einzelner Kunden |
+| 5 | `src/crypto_keys.py` | lädt Schlüssel aus der Umgebung und enthält fest eingetragene Testschlüssel für die Entwicklung |
+| 6 | `tests/test_format_utils.py` | vorhandene Tests zu `format_utils.py` |
+| 7 | `tests/fixtures/customers.csv` | Export echter Kundendaten mit Namen und Kartennummern |
+| 8 | `src/api.py` | HTTP-Endpunkte: Routen, Parameter, Rückgabeformate; die Funktionskörper rufen nur `access_rules.py` auf |
+| 9 | `config/settings.example.toml` | Beispielkonfiguration ohne Geheimnisse |
+| 10 | `scripts/deploy.sh` | Deployment-Skript mit internem Hostnamen und Benutzernamen |
 
-**Zurückmelden:** Jede Gruppe teilt ihre interessanteste Antwort, insgesamt 5 Minuten.
+1. Schreib für jede Datei eine der drei Zuordnungen und ein Stichwort als Grund: **darf raus** (nichts Vertrauliches), **darf nicht raus** (Geheimnis, personenbezogene Daten, vertrauliche Fremdinformation oder Geschäftslogik) oder **nur Signatur** (der Anbieter braucht die Form, nicht den Inhalt). Berücksichtige beide Aufgaben (a) und (b).
+2. **Entscheide.** Das Team will zusätzlich, dass der zweite Anbieter eine Änderung innerhalb von `access_rules.py` selbst umsetzt (ein neuer Sonderfall bei den Zutrittszeiten). Wähl eine der drei Optionen aus „Datenfluss“ und begründe in zwei Sätzen: Was verlässt dein Haus, und was kostet dich die Wahl?
+
+<details><summary>Vergleich</summary>
+
+Für die Zuordnung gilt unter den Annahmen der Beschreibungen:
+
+| Nr. | Zuordnung | Grund |
+|---|---|---|
+| 1 | darf raus | öffentlich |
+| 2 | darf nicht raus | vertrauliche Fremdinformation, und für die Aufgaben nicht nötig |
+| 3 | darf raus | ohne Projektbezug, gebraucht für (a) |
+| 4 | nur Signatur | Geschäftslogik; für (b) genügt, was `door_status(door_id)` annimmt und zurückgibt |
+| 5 | darf nicht raus | fest eingetragene Schlüssel; auch Testschlüssel gehören nicht zu einem Dritten |
+| 6 | darf raus | zu (a) gehörig, ohne Vertrauliches |
+| 7 | darf nicht raus | personenbezogene Daten |
+| 8 | darf raus | wird für (b) geändert und enthält nach der Beschreibung nichts Vertrauliches |
+| 9 | darf raus | Beispielwerte ohne Geheimnisse |
+| 10 | darf nicht raus | interne Namen, für die Aufgaben nicht nötig |
+
+Zur Entscheidung in Schritt 2: „Nur Signaturen senden“ reicht nicht, wenn der Anbieter die Logik selbst ändern soll, denn er bräuchte den Inhalt. Die naheliegende Wahl ist Option 1, den Codex-Schritt für diese Datei wegzulassen und mit `sonnet` umzusetzen: Es verlässt nichts den Vertrag mit Anthropic, und du zahlst etwas mehr. Option 2 ist möglich, wenn du ein lokales Modell hast. Andere Zuordnungen sind vertretbar, wenn du sie mit den Beschreibungen begründest, etwa eine strengere Einstufung von `api.py`.
+
+</details>
+
+**Geschafft, wenn:**
+
+- [ ] du alle zehn Dateien mit einem Grund zugeordnet hast und die Zuordnung mit dem Vergleich abgleichen konntest
+- [ ] du für die Änderung in `access_rules.py` eine Option gewählt und mit „was verlässt das Haus, was kostet es“ begründet hast
+- [ ] du nach der Übung deine Antwort auf den Schnellcheck („drei Arten von Dateien“) für dein eigenes Projekt geändert oder bestätigt hast
+
+## Typische Fallen
+
+- **Die Regeln von Anthropic gelten für das ganze Projekt.** Sie gelten nur für die Claude-Seite. Alles, was an einen zweiten Anbieter geht, fällt unter dessen Regeln.
+- **Testschlüssel und Beispieldaten gelten als harmlos.** Fest eingetragene Schlüssel und echte Datensätze in Testdaten verlassen mit dem Code dein Haus.
+- **Umbenennen gilt als Anonymisieren.** Neutrale Namen entschärfen Bezeichner, aber ein Gerüst mit vielen Details verrät trotzdem die Struktur der Logik.
+- **Option 3 für Aufgaben, die Logik ändern.** Wer nur das Gerüst sieht, kann keine Logik ändern. Dann bleibt der Codex-Schritt weg.
+- **Ein Schwarm ohne Prüfung der Daten.** Prüf vor dem ersten Einsatz, welche Dateien in den Specs landen, nicht erst danach.
 
 ## Check
 
-Du kannst die Datenfluss-Grenze im Codex-Schwarm erklären, die drei Optionen für sensiblen Code nennen und begründen, ob euer Firmware-Code an Codex gehen darf.
+Du kannst die Datenfluss-Grenze im Codex-Schwarm erklären, Dateien eines Projekts einteilen und für sensiblen Code eine der drei Optionen begründen.
 
 1. Welche Regeln gelten für den Code, den der Codex-Teil der Pipeline sieht, und welche nicht?
-2. Nenne die drei Auswege für sensiblen Code.
-3. Warum ist die Gesamtdauer eines Schwarms die des langsamsten Agenten und nicht die Summe?
+2. Nenne die drei Auswege für sensiblen Code und je einen Preis, den du dafür zahlst.
+3. Der zweite Anbieter soll eine Änderung innerhalb einer vertraulichen Datei umsetzen. Warum hilft „nur Signaturen“ nicht, und was wählst du stattdessen?
+
+<details><summary>Auflösung</summary>
+
+1. Für den Codex-Teil gelten die Aufbewahrungs- und Trainingsregeln deines OpenAI-Vertrags; die Datenregeln von Anthropic gelten nur für die Claude-Seite der Pipeline.
+2. Codex weglassen: `sonnet` setzt um, die Kosten steigen etwas. Lokales Modell: kein Dritter, aber du brauchst eigene Hardware und eine Anbindung. Nur Signaturen: das Gerüst ohne Inhalt, aber der Anbieter kann keine Logik ändern, und Namen können Fachlogik verraten.
+3. Der Anbieter bräuchte den Inhalt der Datei, ein Gerüst zeigt ihn nicht. Du lässt den Codex-Schritt für diese Datei weg oder nimmst ein lokales Modell.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Ein Softwarehaus für Zutrittskontrolle will einen Codex-Schwarm für seinen OSDP-Firmware-Analyzer einsetzen. Was ist vor dem ersten Einsatz die wichtigste Compliance-Frage?
+**Frage:** Ein zweiter Anbieter soll in `api.py` einen neuen Endpunkt bauen. `api.py` ruft Funktionen aus `access_rules.py` auf, die vertrauliche Zugriffslogik enthält. Was gibst du ihm von `access_rules.py`?
 
-- **Richtig:** Ob der Firmware-Code an OpenAI gehen darf: Dort gelten OpenAIs Aufbewahrungsregeln, nicht die von Anthropic.
-- Falsch: Ob `--decompose` die Protokolllogik sauber zerlegt, denn eine schlechte Zerlegung ist das größte Compliance-Risiko.
-- Falsch: Ob `--max-budget-usd` gesetzt ist, weil N parallele Agenten die Kosten vervielfachen und das Budget sprengen.
-- Falsch: Ob ein Enterprise-Abo von Claude vorliegt, weil Claude Code die OpenAI-Modelle über seine eigene API lizenziert.
+- **Richtig:** Nur die Signaturen der Funktionen, die `api.py` aufruft: Namen, Parameter, Rückgabetypen, ohne Funktionskörper.
+- Falsch: Die ganze Datei, denn der Vertrag mit Anthropic deckt auch den Code ab, den ein zweiter Anbieter im Auftrag von Claude bekommt.
+- Falsch: Nichts außer der Aufgabenbeschreibung, denn der Anbieter errät die Schnittstelle der Funktionen zuverlässig aus ihren Namen.
+- Falsch: Die ganze Datei mit umbenannten Variablen, denn Umbenennen macht die Zugriffslogik für Außenstehende unkenntlich und damit unbedenklich.
 
 </details>
 

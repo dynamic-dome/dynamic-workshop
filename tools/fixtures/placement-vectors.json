@@ -79,11 +79,14 @@
      "X.4": [
       "later",
       "not-goal"
+     ],
+     "S4.11": [
+      "work",
+      "capstone"
      ]
     },
     "first_stage": [
      "S0.1",
-     "X.2",
      "S1.1",
      "S1.2",
      "S1.3",
@@ -91,10 +94,9 @@
      "S1.5",
      "S1.6",
      "S1.7",
-     "S1.8",
-     "S1.9"
+     "S1.8"
     ],
-    "first_stage_minutes": 144,
+    "first_stage_minutes": 150,
     "warnings": []
    }
   },
@@ -115,7 +117,8 @@
      "S1.13",
      "S1.14",
      "S1.16",
-     "S1.19"
+     "S1.19",
+     "S4.11"
     ],
     "status": {
      "S1.3": [
@@ -132,7 +135,7 @@
      ]
     },
     "stages": 1,
-    "first_stage_minutes": 152,
+    "first_stage_minutes": 205,
     "warnings": []
    }
   },
@@ -224,19 +227,20 @@
      ]
     },
     "recommended": [
-     "X.2",
      "S1.5",
      "S1.6",
+     "X.2",
      "S2.8",
      "S2.13",
-     "X.1",
      "S2.17",
-     "X.3",
+     "X.1",
      "S3.8",
      "S3.9",
      "S3.13",
+     "X.3",
      "S4.4",
-     "X.4"
+     "X.4",
+     "S4.11"
     ],
     "warnings": []
    }
@@ -303,6 +307,10 @@
      "S4.10": [
       "skim",
       "assess"
+     ],
+     "S4.11": [
+      "skim",
+      "capstone"
      ]
     },
     "warnings": []
@@ -368,6 +376,10 @@
      "S3.12": [
       "work",
       "new"
+     ],
+     "S4.11": [
+      "work",
+      "capstone"
      ]
     },
     "warnings": []
@@ -425,6 +437,13 @@
       "code": "override-prereq",
       "ids": [
        "S2.8",
+       "S3.11"
+      ]
+     },
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S2.8",
        "S4.10"
       ]
      },
@@ -476,6 +495,13 @@
       "ids": [
        "S1.16",
        "S1.18"
+      ]
+     },
+     {
+      "code": "override-prereq",
+      "ids": [
+       "S1.16",
+       "S4.11"
       ]
      }
     ]
@@ -573,6 +599,10 @@
      "X.2": [
       "later",
       "not-goal"
+     ],
+     "S4.11": [
+      "work",
+      "capstone"
      ]
     },
     "all_session_chapters_recommended": true,
@@ -702,12 +732,9 @@
    "expect": {
     "first_stage": [
      "S0.1",
-     "X.2",
-     "S1.1",
-     "S1.2",
-     "S1.3"
+     "S1.1"
     ],
-    "first_stage_minutes": 60,
+    "first_stage_minutes": 50,
     "max_stage_minutes": 60,
     "warnings": []
    }
@@ -731,7 +758,8 @@
      "S1.5",
      "S1.6",
      "S3.8",
-     "S3.9"
+     "S3.9",
+     "S4.11"
     ],
     "status": {
      "S1.5": [

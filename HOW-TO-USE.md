@@ -5,8 +5,10 @@
 ## 1 · Selbst lernen
 
 **Einrichten.** Kapitel [S0.1 Werkstatt einrichten](resources/library/s0-01-werkstatt-einrichten.md): Claude Code
-installieren und anmelden, Git und Python prüfen, Arbeitsordner `~/cc-workshop` anlegen. Unter Windows funktionieren alle
-Beispiele in Git Bash; wo es nötig ist, stehen PowerShell-Varianten daneben.
+installieren und anmelden, Git und Python prüfen. Mehr brauchst du für den Anfang nicht; das Workshop-Repo, die GitHub
+CLI, `jq` und Node.js rüstest du nach, wenn ein Kapitel sie verlangt
+([Werkstatt erweitern](resources/reference/werkstatt-erweitern.md)). Deine Übungsordner liegen unter `~/cc-workshop`.
+Unter Windows funktionieren alle Beispiele in Git Bash; wo es nötig ist, stehen PowerShell-Varianten daneben.
 
 **Einstufen.** Fünf Minuten, keine Noten, jederzeit änderbar — auf einer von drei Oberflächen:
 
@@ -47,8 +49,9 @@ beantwortet auf Wunsch der Mentor-Agent („frag den Mentor").
 
 ```bash
 cd workshop-playground
-pip3 install -r requirements.txt   # Windows: pip install -r requirements.txt
-python3 -m pytest -v               # Windows: python -m pytest -v
+python3 -m venv .venv && source .venv/bin/activate   # macOS/Linux; unter Windows weglassen
+pip install -r requirements.txt
+python -m pytest -v
 ```
 
 ## 2 · Moderieren
@@ -58,7 +61,9 @@ python3 -m pytest -v               # Windows: python -m pytest -v
 - Reihenfolge und Minuten der vier Sessions: [`resources/paths/live-workshop.md`](resources/paths/live-workshop.md) (generiert).
 - Foliensatz für den Einstieg jeder Session: [`resources/media/claude-code-praxisbibliothek.pptx`](resources/media/claude-code-praxisbibliothek.pptx)
   — Diagramme als bearbeitbare Formen, Sprechernotizen auf Deutsch.
-- Im Kapitel steht unter „Vorführen" die Demo; Talking Points und Recovery-Hinweise liegen dort in „Für Moderierende".
+- Die Kapitel sind für Selbstlernende geschrieben. Demo, Talking Points und Recovery-Hinweise je Kapitel liegen in
+  [`resources/moderation/vorfuehren/`](resources/moderation/vorfuehren/), eine Datei je Kapitel; der Live-Pfad verlinkt
+  sie in der Spalte „Vorführen".
 - Co-Pilot während der Session: `/dynamic-workshop:workshop guide S1` bis `guide S4` oder `guide <Kapitel>`.
 
 ## 3 · Pflegen (Maintainer und Agenten)
@@ -67,7 +72,8 @@ python3 -m pytest -v               # Windows: python -m pytest -v
 
 | Information | Quelle | Daraus erzeugt |
 |---|---|---|
-| Lehrinhalt, Demo, Übung, Quiz, Schnellcheck | `resources/library/<kapitel>.md` | Cockpit, Katalog, Referenz `analogien.md` |
+| Lehrinhalt, Übung, Quiz, Schnellcheck | `resources/library/<kapitel>.md` | Cockpit, Katalog, Referenz `analogien.md` |
+| Demo und Hinweise für Moderierende je Kapitel | `resources/moderation/vorfuehren/<kapitel>.md` | Spalte „Vorführen" im Live-Pfad, Katalogfeld `demo` |
 | Reihenfolge, Stufe, Minuten, Voraussetzungen | Frontmatter der Kapitel (Vertrag: `docs/migration/chapter-meta.yaml`) | Pfade, Katalog, Deck |
 | Regale | `resources/library/_shelves.yaml` | Bibliotheks-Übersicht, Cockpit, Deck |
 | Einstufung (Fragen, Regeln, Texte) | `resources/library/_placement.yaml` | Katalog, `einstufung.md`, Pfade |
@@ -81,6 +87,7 @@ python tools/build_library.py validate --complete   # Format, Verweise, Quiz, Vo
 python tools/build_library.py build                 # Katalog, Übersichten, Pfade, Meta-Blöcke, Cockpit
 python -m pytest tools -q                           # alle Wächter, Engine Python und JS, Browser-Tests
 python tools/lint_currency.py                       # Modellgenerationen nur im Kanon
+python tools/cockpit_shots.py <url> <ordner>        # Bilder aller Cockpit-Ansichten (Server vorher: python -m http.server 8765 --bind 127.0.0.1)
 ```
 
 `python tools/build_library.py check` prüft ohne zu schreiben, ob alle generierten Dateien aktuell sind.

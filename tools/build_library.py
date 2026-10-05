@@ -31,20 +31,24 @@ import library_model as lm  # noqa: E402
 ROOT = TOOLS.parent
 DEFAULT_LIBRARY = ROOT / "resources" / "library"
 CHAPTER_META = ROOT / "docs" / "migration" / "chapter-meta.yaml"
+# Chapters whose recall questions must carry answers. The list grows shelf by shelf (design 2026-10-05, packages
+# P5 and P7) and is replaced by the rule "every lesson" once all shelves are done.
+MINUTES_TOLERANCE = 5  # declared minutes may differ this much from reading time plus exercises
 CONTRACT_FIELDS = ("id", "type", "title", "shelf", "level", "minutes", "requires", "safety_floor", "transferable",
                    "aliases", "offers", "after")
 
 REQUIRED_IDS = (["S0.1"] + [f"S1.{n}" for n in range(1, 21)] + [f"S2.{n}" for n in range(1, 21)]
-                + [f"S3.{n}" for n in range(1, 16)] + [f"S4.{n}" for n in range(1, 11)] + ["X.1", "X.2", "X.3", "X.4"])
+                + [f"S3.{n}" for n in range(1, 16)] + [f"S4.{n}" for n in range(1, 12)] + ["X.1", "X.2", "X.3", "X.4"])
 
 ALL = set(lm.SECTION_ORDER)
 # Allowed and required H2 sections per chapter type (spec 4.3).
+# "Vorführen" is no chapter section any more: demos live in the moderation layer (_check_demos).
 ALLOWED = {
     "lesson": ALL,
-    "setup": ALL - {"Vorführen"},
+    "setup": ALL,
     "practice": {"Auf einen Blick", "Selbst machen", "Check", "Weiterlesen"},
     "capstone": ALL,
-    "community": ALL - {"Schnellcheck", "Vorführen"},
+    "community": ALL - {"Schnellcheck"},
 }
 REQUIRED = {
     "lesson": {"Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail", "Check", "Weiterlesen"},
@@ -147,7 +151,7 @@ def anchors_of(path: Path) -> set:
     return found
 
 
-def _check_body(ch, add, planned=frozenset()):
+def _check_body(ch, add, planned=frozenset(), goal_targets=(), standard=frozenset()):
     t = ch.type if ch.type in ALLOWED else "lesson"
     for title in ch.section_order:
         if title not in ALLOWED[t]:
@@ -187,6 +191,15 @@ def _check_body(ch, add, planned=frozenset()):
             if len(q.correct) > QUIZ_TELL_MAX * mean or min(len(w) for w in q.wrong) < QUIZ_TELL_MIN * len(q.correct):
                 add("quiz-length-tell", f"Antwortlängen verraten die Lösung (richtig {len(q.correct)} Zeichen, "
                     f"falsch Ø {mean:.0f}); angleichen auf ≤ {QUIZ_TELL_MAX} × Mittel")
+    if ch.answers is not None:
+        if not ch.recall or len(ch.answers) != len(ch.recall) or not all(a.strip() for a in ch.answers):
+            add("answers-count", f"{len(ch.answers)} Auflösungen zu {len(ch.recall)} Abruffragen "
+                "(je Frage genau eine, gleiche Nummer, Block mit </details> geschlossen)")
+    elif ch.recall and ch.id in standard:
+        add("answers-required", f"{len(ch.recall)} Abruffragen ohne Block 'Auflösung' "
+            "(<details><summary>Auflösung</summary> nach den Fragen)")
+    if ch.id in standard:
+        _check_standard(ch, add)
     if t == "lesson" and len(ch.skip_check) != 2:
         add("skip-check-count", f"Schnellcheck braucht genau 2 Fragen, hat {len(ch.skip_check)}")
     elif "Schnellcheck" in ch.sections and len(ch.skip_check) != 2:
@@ -194,22 +207,64 @@ def _check_body(ch, add, planned=frozenset()):
     raw = ch.path.read_text(encoding="utf-8")
     if "TODO(migration)" in raw:
         add("no-migration-todo", "offene TODO(migration)-Markierung")
+    if lm.MODERATOR_BLOCK in raw:
+        add("no-moderation-block", "Block 'Für Moderierende' gehört in die Moderationsschicht "
+            "(resources/moderation/vorfuehren/), nicht ins Kapitel")
     for src in ch.sources:
         if not src.startswith("https://"):
             add("sources-https", f"Quelle ohne https: {src}")
     if t in SOURCES_REQUIRED and not ch.sources:
         add("sources-required", "mindestens eine offizielle Quelle unter sources")
-    for target in ch.links:
+    _check_links(ch.path, ch.links, add, planned, generated=GENERATED_TARGETS + tuple(goal_targets))
+
+
+def _check_links(path, links, add, planned=frozenset(), generated=GENERATED_TARGETS):
+    """Relative links of one Markdown file lead to an existing file and, for .md targets, an existing anchor."""
+    for target in links:
         if re.match(r"^[a-z]+:", target) or target.startswith("#"):
             continue
         file_part, _, fragment = target.partition("#")
-        if file_part in planned or file_part in GENERATED_TARGETS or file_part.startswith("../paths/ziel-"):
+        if file_part in planned or file_part in generated:
             continue
-        dest = (ch.path.parent / file_part).resolve() if file_part else ch.path.resolve()
+        dest = (path.parent / file_part).resolve() if file_part else path.resolve()
         if file_part and not dest.exists():
             add("links-resolve", f"Link-Ziel existiert nicht: {target}")
         elif fragment and dest.suffix == ".md" and fragment not in anchors_of(dest):
             add("links-resolve", f"Anker #{fragment} gibt es in {dest.name} nicht")
+
+
+# Generated files as seen from a demo file (two folders below resources/).
+DEMO_GENERATED_TARGETS = tuple("../" + t if t.startswith("../") else "../../library/" + t for t in GENERATED_TARGETS)
+
+
+def goal_path_targets(lib) -> tuple:
+    """Goal paths the generator writes (one per goal, none for 'moderieren'), as linked from a chapter."""
+    goals = (lib.placement or {}).get("goals", []) or []
+    return tuple(f"../paths/ziel-{g['id']}.md" for g in goals
+                 if isinstance(g, dict) and g.get("id") and g["id"] != "moderieren")
+
+
+def _check_demos(lib, report):
+    """Moderation layer: every demo file belongs to one chapter, names it, and its links resolve."""
+    folder = lib.demo_dir
+    if not folder.is_dir():
+        return
+    by_file = {ch.path.name: ch for ch in lib.chapters}
+    for path in sorted(folder.glob("*.md")):
+        add = report(path)
+        ch = by_file.get(path.name)
+        if ch is None:
+            add("demo-orphan", "zu dieser Demo-Datei gibt es kein Kapitel mit demselben Dateinamen")
+            continue
+        text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        expected = f"# Vorführen: {ch.id} · {ch.title}"
+        first = text.split("\n", 1)[0].rstrip()
+        if first != expected:
+            add("demo-h1", f"erste Zeile muss '{expected}' lauten, ist '{first}'")
+        if lm.EXAMPLE_MARKER in text:
+            add("demo-no-example-marker", "cockpit:example gehört ins Kapitel, nicht in die Demo-Datei")
+        _check_links(path, lm._links(text), add,
+                     generated=DEMO_GENERATED_TARGETS + tuple("../" + t for t in goal_path_targets(lib)))
 
 
 def _check_graph(lib, by_id, report, planned_orders=None):
@@ -307,6 +362,38 @@ def _check_placement(lib, by_id, report, planned_ids=frozenset()):
             add("placement-refs", f"Szenario {sc.get('id')}: Kapitel {sc.get('chapter')} gibt es nicht")
 
 
+def _check_standard(ch, add):
+    """Rules for chapters written for one person learning alone (docs/plans/2026-10-05-selbstlern-zuerst-massstab.md)."""
+    exercise = ch.sections.get("Selbst machen")
+    if exercise is None:
+        if ch.type == "lesson" and ch.level == "core":
+            add("exercise-required", "Kern-Lektion ohne Abschnitt '## Selbst machen'")
+    else:
+        if not lm.timed_exercises(exercise):
+            add("exercise-shape", "keine Übung mit Zeitangabe: Überschrift '### … (etwa N Minuten)'")
+        if lm.DONE_LIST not in exercise:
+            add("exercise-shape", f"der Übung fehlt die Liste '{lm.DONE_LIST}'")
+    honest = lm.honest_minutes(ch)
+    if ch.minutes % 5 or abs(ch.minutes - honest) > MINUTES_TOLERANCE:
+        add("minutes-honest", f"minutes: {ch.minutes}, gerechnet {honest:.0f} ({lm.reading_words(ch)} Wörter bei "
+            f"{lm.READING_WORDS_PER_MINUTE} je Minute + Übungen {lm.exercise_minutes(ch)}); erlaubt ist ein Vielfaches "
+            f"von 5 mit höchstens {MINUTES_TOLERANCE} Abstand")
+
+
+def load_standard(lib) -> frozenset:
+    """IDs of the chapters that must meet the standard for self-learners: since package P7 every chapter."""
+    return frozenset(ch.id for ch in lib.chapters)
+
+
+def coverage(lib) -> str:
+    """How far the library is on its way to 'every lesson ends in something to do and can be checked alone'."""
+    lessons = [c for c in lib.chapters if c.type == "lesson"]
+    with_exercise = sum(1 for c in lessons if "Selbst machen" in c.sections)
+    with_answers = sum(1 for c in lessons if c.answers and len(c.answers) == len(c.recall))
+    return (f"Lektionen mit Übung: {with_exercise} von {len(lessons)} · "
+            f"mit Auflösung: {with_answers} von {len(lessons)}")
+
+
 def load_meta(path=CHAPTER_META):
     import yaml
     return yaml.safe_load(Path(path).read_text(encoding="utf-8")) if Path(path).exists() else None
@@ -325,8 +412,9 @@ def _check_contract(ch, entry, add):
             add("meta-contract", f"{key}: Metadaten {want!r}, Kapitel {have!r}")
 
 
-def validate(lib, *, complete: bool, meta=None) -> list:
-    """meta: binding chapter metadata (list of dicts) or None to skip the contract rule."""
+def validate(lib, *, complete: bool, meta=None, standard=frozenset()) -> list:
+    """meta: binding chapter metadata (list of dicts) or None to skip the contract rule.
+    standard: IDs of chapters that must meet the standard for self-learners (answers, exercise, honest minutes)."""
     problems = []
     meta_by_id = {e["id"]: e for e in meta} if meta else None
     planned = frozenset() if complete or not meta else frozenset(e["file"] for e in meta)
@@ -338,6 +426,7 @@ def validate(lib, *, complete: bool, meta=None) -> list:
     for err in lib.problems:
         report(err.path)("parse", err.message)
     shelves = {s.get("id") for s in lib.shelves if isinstance(s, dict)}
+    goal_targets = goal_path_targets(lib)
     by_id, aliases = {}, {}
     for ch in lib.chapters:
         add = report(ch.path)
@@ -363,9 +452,11 @@ def validate(lib, *, complete: bool, meta=None) -> list:
             add("filename", f"Dateiname {ch.path.name} passt nicht zu {ch.id} (erwartet {expected}<slug>.md)")
         if ch.shelf not in shelves:
             add("shelf-exists", f"Regal {ch.shelf!r} fehlt in _shelves.yaml")
-        _check_body(ch, add, planned)
+        _check_body(ch, add, planned, goal_targets, standard)
         if meta_by_id is not None:
             _check_contract(ch, meta_by_id.get(ch.id), add)
+    for cid in sorted(standard - {ch.id for ch in lib.chapters}):
+        problems.append(Problem(_rel(lib.root), "standard-list", f"{cid} soll den Maßstab erfüllen, das Kapitel gibt es nicht"))
     orders = {}
     for ch in lib.chapters:
         try:
@@ -386,6 +477,7 @@ def validate(lib, *, complete: bool, meta=None) -> list:
     _check_graph(lib, by_id, report, planned_orders)
     planned_ids = frozenset() if complete or not meta else frozenset(e["id"] for e in meta)
     _check_placement(lib, by_id, report, planned_ids)
+    _check_demos(lib, report)
     if complete:
         quizzes = [c.quiz for c in lib.chapters if c.quiz and c.quiz.closed and len(c.quiz.wrong) == 3]
         longest = sum(1 for q in quizzes if len(q.correct) > max(len(w) for w in q.wrong))
@@ -408,8 +500,10 @@ def build(root, *, write: bool, complete: bool = False) -> int:
 
     root = Path(root).resolve()
     lib = lm.load_library(root)
-    meta = load_meta() if root == DEFAULT_LIBRARY.resolve() else None
-    problems = validate(lib, complete=complete, meta=meta)
+    is_default = root == DEFAULT_LIBRARY.resolve()
+    meta = load_meta() if is_default else None
+    problems = validate(lib, complete=complete, meta=meta,
+                        standard=load_standard(lib) if is_default else frozenset())
     if problems:
         print("Build abgebrochen, der Validator meldet Befunde:")
         return _print(problems)
@@ -458,13 +552,20 @@ def main(argv=None) -> int:
             chapter = args.chapter.resolve()
             lib = lm.load_library(chapter.parent)
             rel = _rel(chapter)
-            meta = load_meta() if chapter.parent == DEFAULT_LIBRARY.resolve() else None
-            found = [p for p in validate(lib, complete=False, meta=meta) if p.path == rel]
+            is_default = chapter.parent == DEFAULT_LIBRARY.resolve()
+            meta = load_meta() if is_default else None
+            standard = load_standard(lib) if is_default else frozenset()
+            found = [p for p in validate(lib, complete=False, meta=meta, standard=standard) if p.path == rel]
             if not found and chapter not in {c.path.resolve() for c in lib.chapters}:
                 found = [Problem(rel, "parse", "Datei wurde nicht als Kapitel geladen (Dateiname oder Pfad prüfen)")]
             return _print(found)
-        meta = load_meta() if args.root.resolve() == DEFAULT_LIBRARY.resolve() else None
-        return _print(validate(lm.load_library(args.root), complete=args.complete, meta=meta))
+        is_default = args.root.resolve() == DEFAULT_LIBRARY.resolve()
+        meta = load_meta() if is_default else None
+        lib = lm.load_library(args.root)
+        code = _print(validate(lib, complete=args.complete, meta=meta,
+                               standard=load_standard(lib) if is_default else frozenset()))
+        print(coverage(lib))
+        return code
     return 2
 
 

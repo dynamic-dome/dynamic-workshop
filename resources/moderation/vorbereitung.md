@@ -1,7 +1,9 @@
 # Vorbereitung für Moderierende
 
 > Was vor den Terminen installiert, kopiert und geprüft sein muss. Das Setup der Teilnehmenden steht in
-> [S0.1 Werkstatt einrichten](../library/s0-01-werkstatt-einrichten.md); hier geht es um die Extras für die Demos und
+> [S0.1 Werkstatt einrichten](../library/s0-01-werkstatt-einrichten.md). Für einen moderierten Kurs bringen sie
+> zusätzlich alles von der Karte [Werkstatt erweitern](../reference/werkstatt-erweitern.md) mit (Workshop-Repo mit
+> Playground, GitHub CLI, `jq`, Node.js), dazu gern eine eigene Projektidee. Hier geht es um die Extras für die Demos und
 > um deine eigene Maschine. Ablauf, Pre-Flight am Workshop-Tag und Go/No-Go stehen im [Handbuch](handbuch.md).
 >
 > Stand: 2026-09-30.
@@ -149,7 +151,7 @@ Der Hook ist das getestete Safety-Skript aus dem Repo (`resources/demos/assets/h
 die Übung in S2.8 baut. Es liest den Befehl aus `tool_input.command` und blockt mit **exit 2**, dem einzigen
 Exit-Code, der blockt. Kopier es, statt es abzutippen.
 
-**macOS, Linux, Git Bash** (braucht `jq`, siehe [S0.1](../library/s0-01-werkstatt-einrichten.md)):
+**macOS, Linux, Git Bash** (braucht `jq`, siehe [Werkstatt erweitern](../reference/werkstatt-erweitern.md#jq)):
 
 ```bash
 mkdir -p ~/.claude/hooks
@@ -189,7 +191,7 @@ Trag den Hook in `~/.claude/settings.json` ein. Nimm den `command`, der zu deine
 
 > **Windows:** Ersetze den Wert von `command` durch `"pwsh -NoProfile -ExecutionPolicy Bypass -File $HOME/.claude/hooks/security-check.ps1"` (oder
 > `powershell -NoProfile -ExecutionPolicy Bypass -File ...` für Windows PowerShell 5.1). Willst du die bash-Variante, installiere **Git Bash und `jq`**
-> (siehe [S0.1](../library/s0-01-werkstatt-einrichten.md)) und behalte den Befehl `bash ...`. Der matcher bleibt in
+> (siehe [Werkstatt erweitern](../reference/werkstatt-erweitern.md#jq)) und behalte den Befehl `bash ...`. Der matcher bleibt in
 > beiden Fällen `Bash|PowerShell`: Unter Windows laufen Shell-Befehle meist über das PowerShell-Tool, ein Hook nur
 > auf `Bash` feuert dort nie ([S2.8](../library/s2-08-hook-einrichten.md)).
 

@@ -4,11 +4,11 @@ type: lesson
 title: Einen eigenen Subagenten definieren
 shelf: agents
 level: core
-minutes: 18
+minutes: 25
 requires: [S3.2]
 safety_floor: false
 transferable: false
-outcome: "Ich kann eine Subagent-Datei mit YAML-Frontmatter (name, description, tools, model, permissionMode, maxTurns) schreiben, sie nach dem Prinzip der minimalen Rechte begrenzen und sagen, welche Felder Claude Code bei Plugin-Subagenten ignoriert."
+outcome: "Ich kann eine Subagent-Datei mit YAML-Frontmatter (name, description, tools, model, maxTurns) schreiben, sie nach dem Prinzip der minimalen Rechte auf lesende Tools begrenzen, einen stillen Feldnamen-Fehler erkennen und sagen, welche Felder Claude Code bei Plugin-Subagenten ignoriert."
 sources:
   - https://code.claude.com/docs/en/sub-agents
   - https://code.claude.com/docs/en/cli-reference
@@ -18,9 +18,9 @@ aliases: []
 # S3.3 · Einen eigenen Subagenten definieren
 
 <!-- meta:start -->
-> **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kern · **~18 Min** · **Voraussetzungen:** [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md)
+> **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kern · **~25 Min** · **Voraussetzungen:** [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md)
 >
-> ← [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) · [Bibliothek](README.md) · [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) →
+> ← [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md) · [Bibliothek](README.md) · [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) →
 <!-- meta:end -->
 
 ## Schnellcheck
@@ -34,7 +34,7 @@ Einen eigenen Subagenten legst du als Markdown-Datei mit YAML-Frontmatter an, im
 
 ## Bild im Kopf
 
-Ein eigener Subagent ist wie ein neues Streifenmitglied, das du einstellst. In der Personalakte steht, wofür es zuständig ist (die `description`), welche Ausrüstung es bekommt (`tools`) und welche Freigabestufe gilt (`permissionMode`). Ein Späher bekommt keinen Generalschlüssel und ein Prüfer keinen Werkzeugkoffer: Jeder bekommt genau das, was sein Auftrag braucht.
+Ein eigener Subagent ist wie ein neues Streifenmitglied, das du einstellst. In der Personalakte steht, wofür es zuständig ist (die `description`), und welche Ausrüstung es bekommt (`tools`). Ein Späher bekommt keinen Generalschlüssel und ein Prüfer keinen Werkzeugkoffer: Jeder bekommt genau das, was sein Auftrag braucht.
 
 Für Fremdpersonal gilt eine harte Regel. Ein Auftragnehmer, der mit einem Plugin ins Gebäude kommt, kann sich nicht selbst eine höhere Freigabe eintragen und keine eigenen Dienstanweisungen mitbringen. Die Freigabe legt der Betreiber fest, nicht der Gast.
 
@@ -42,9 +42,8 @@ Für Fremdpersonal gilt eine harte Regel. Ein Auftragnehmer, der mit einem Plugi
 
 ### Aufbau einer Agent-Datei
 
-Agenten definierst du als YAML-Frontmatter plus Text in `.md`-Dateien:
+Agenten definierst du als YAML-Frontmatter plus Text in `.md`-Dateien. Das Beispiel nutzt mehr Felder, als die Übung unten braucht:
 
-<!-- cockpit:example -->
 ```yaml
 ---
 name: code-explorer
@@ -74,40 +73,21 @@ When asked to explore a project:
 Never modify files.  Never execute code.  Explore only.
 ```
 
-Der Text unter dem Frontmatter ist der System-Prompt des Subagenten. Er bekommt nur diesen Prompt plus Angaben zur Umgebung wie das Arbeitsverzeichnis, nicht den System-Prompt von Claude Code.
+Der Text unter dem Frontmatter ist der System-Prompt des Subagenten. Er bekommt nur diesen Prompt plus Angaben zur Umgebung wie das Arbeitsverzeichnis, nicht den System-Prompt von Claude Code. Deine CLAUDE.md-Dateien kommen trotzdem bei ihm an, als Teil der Nachrichten ([S3.1](s3-01-was-ist-ein-agent.md)).
 
-Wo die Datei liegt, bestimmt, für wen der Agent gilt:
-
-- `.claude/agents/`: nur dieses Projekt. Checkst du den Ordner ins Repo ein, nutzt das Team den Agenten mit.
-- `~/.claude/agents/`: alle deine Projekte auf diesem Rechner.
-
-Gibt es denselben `name` mehrfach, gewinnt der Ort mit der höheren Priorität: Projekt schlägt Benutzer, Agenten aus Plugins haben die niedrigste.
+Wo die Datei liegt, bestimmt, für wen der Agent gilt: `.claude/agents/` nur für dieses Projekt (checkst du den Ordner ein, nutzt das Team den Agenten mit), `~/.claude/agents/` für alle deine Projekte auf diesem Rechner. Gibt es denselben `name` mehrfach, gewinnt der Ort mit der höheren Priorität: Projekt schlägt Benutzer, Agenten aus Plugins haben die niedrigste.
 
 ### Die Kernfelder
 
 - **`name`**: eindeutige Kennung des Agenten. Pflicht.
-- **`description`**: Daran entscheidet Claude, *wann* es an diesen Agenten delegiert. Das ist die Routing-Logik. Pflicht. Schreib hinein, wofür der Agent da ist und woran man einen passenden Auftrag erkennt. Halte sie trotzdem kurz: Die Beschreibungen aller Subagenten belegen Kontext; Details gehören in den System-Prompt, der erst lädt, wenn der Agent läuft. Mit „use proactively" in der Beschreibung ermunterst du Claude, von sich aus zu delegieren.
-- **`model`**: ein Alias `haiku`, `sonnet`, `opus` oder `fable`, `inherit` für das Modell des Hauptgesprächs oder eine volle Modell-ID (die aktuellen IDs stehen im [Kanon](../_canonical.md)). Faustregel: Haiku für schnelles Lesen, Sonnet für Analyse, Opus für Architekturentscheidungen. Ohne Angabe nimmt Claude Code in der Regel das Modell des Hauptgesprächs.
-- **`tools`**: **Sicherheit durch minimale Rechte.** Ein Explorer bekommt kein Write, ein Reviewer kein Bash. Gib genau das frei, was gebraucht wird. Lässt du `tools` weg, erbt der Subagent alle Tools, die Subagenten zur Verfügung stehen. Das Feld heißt `tools`, nicht `allowed_tools`.
-- **`permissionMode`**: der Rechte-Modus des Subagenten: `default`, `acceptEdits`, `plan`, `auto`, `dontAsk` oder `bypassPermissions` ([S1.6](s1-06-rechte-modi.md)). Er gilt nicht in jedem Fall, siehe „Typische Fallen".
+- **`description`**: Daran entscheidet Claude, *wann* es an diesen Agenten delegiert. Das ist die Routing-Logik. Pflicht. Schreib hinein, wofür der Agent da ist und woran man einen passenden Auftrag erkennt, aber halte sie kurz: Die Beschreibungen aller Subagenten belegen Kontext; Details gehören in den System-Prompt, der erst lädt, wenn der Agent läuft. Mit „use proactively“ ermunterst du Claude, von sich aus zu delegieren.
+- **`tools`**: **Sicherheit durch minimale Rechte.** Ein Explorer bekommt kein Write, ein Reviewer weder Write noch Edit; braucht er `git diff`, kommt Bash dazu. Gib genau das frei, was gebraucht wird. Lässt du `tools` weg, erbt der Subagent alle Tools, die Subagenten zur Verfügung stehen. Das Feld heißt `tools`, nicht `allowed_tools`; als Wert geht eine kommagetrennte Zeichenkette (`Read, Grep, Glob`) oder eine YAML-Liste.
+- **`model`**: ein Alias `haiku`, `sonnet`, `opus` oder `fable`, `inherit` für das Modell des Hauptgesprächs oder eine volle Modell-ID (die aktuellen IDs stehen im [Kanon](../_canonical.md)). Als Faustregel: Haiku für schnelles Lesen, Sonnet für Analyse, Opus für Architekturentscheidungen. Ohne Angabe nimmt Claude Code in der Regel das Modell des Hauptgesprächs.
 - **`maxTurns`**: harte Obergrenze für die Zahl der Runden, ein Schutz gegen Kosten und Endlosläufe. Erreicht der Subagent sie, gibt Claude Code sein Ergebnis als unvollständig markiert zurück.
-- **`color`**: Farbe des Agenten in der Aufgabenliste und im Verlauf (`red`, `blue`, `green`, `yellow`, `purple`, `orange`, `pink` oder `cyan`). Das hilft, parallele Läufe auseinanderzuhalten.
+- **`permissionMode`**: der Rechte-Modus des Subagenten ([S1.6](s1-06-rechte-modi.md)). Er gilt nicht in jedem Fall, siehe „Typische Fallen“.
+- **`color`**: Farbe des Agenten in der Aufgabenliste und im Verlauf. Das hilft, parallele Läufe auseinanderzuhalten.
 
-### Weitere Felder
-
-| Feld | Typ | Zweck |
-|---|---|---|
-| `disallowedTools` | Liste | Sperrliste statt Allowlist. Nützlich, wenn „alles außer X" kürzer ist als die Allowlist. |
-| `skills` | Liste | Skills, deren vollen Inhalt der Subagent beim Start vorab geladen bekommt |
-| `mcpServers` | Liste | MCP-Server für diesen Subagenten: der Name eines schon eingerichteten Servers oder eine eigene Definition |
-| `hooks` | Objekt | Hooks, die nur laufen, solange dieser Subagent aktiv ist ([S2.9](s2-09-hook-typen.md)) |
-| `memory` | String | `user`, `project` oder `local`: ein eigenes, dauerhaftes Gedächtnis-Verzeichnis über Sitzungen hinweg |
-| `background` | Bool | `true` hält den Subagenten im Hintergrund, auch wenn Claude ihn im Vordergrund starten will |
-| `isolation` | String | `worktree` startet den Subagenten in einem temporären Git-Worktree ([S1.18](s1-18-worktrees.md)) |
-| `effort` | String | `low`, `medium`, `high`, `xhigh` oder `max`; überschreibt den Effort der Sitzung, die verfügbaren Stufen hängen vom Modell ab |
-| `initialPrompt` | String | wird automatisch als erste Eingabe gesendet, wenn der Agent als Hauptagent der Sitzung läuft (`--agent`) |
-
-Die vollständige Liste steht in der Frontmatter-Referenz der offiziellen Doku.
+Weitere Felder wie `disallowedTools`, `skills`, `mcpServers`, `hooks`, `memory`, `background`, `isolation` und `effort` stehen in der [Frontmatter-Referenz](https://code.claude.com/docs/en/sub-agents#supported-frontmatter-fields) der offiziellen Doku. Wichtig ist die Grundregel dort: Claude Code ignoriert ein Feld, das es nicht kennt, ohne Fehlermeldung.
 
 ### Plugin-Subagenten: drei Felder zählen nicht
 
@@ -119,44 +99,152 @@ Brauchst du diese Felder, kopierst du die Agent-Datei nach `.claude/agents/` ode
 
 Claude delegiert anhand der `description` von selbst. Willst du mehr Kontrolle, gibt es drei Stufen:
 
-- **Im Auftrag nennen:** „Use the code-explorer subagent to …". Claude entscheidet weiterhin, ob es delegiert.
-- **@-Erwähnung:** Tipp `@` und wähl den Agenten aus der Liste, oder schreib `@agent-code-explorer`. Dann läuft genau dieser Subagent für diese Aufgabe.
+- **Im Auftrag nennen:** „Use the code-explorer subagent to …“. Claude entscheidet weiterhin, ob es delegiert.
+- **@-Erwähnung:** Tipp `@` und wähl den Agenten aus der Liste, oder schreib `@agent-code-explorer`. Dann läuft genau dieser Subagent für diese Aufgabe. Dein ganzer Satz geht weiter an Claude, das den Auftrag für den Subagenten formuliert.
 - **Ganze Sitzung:** `claude --agent code-explorer` startet eine Sitzung, in der das Hauptgespräch selbst die Tool-Grenzen und das Modell des Agenten übernimmt.
 
-### Inline per `--agents` (für Skripte und CI)
+### Ohne Datei: `--agents` (für Skripte und CI)
 
-Für Skript- und CI-Läufe kannst du Subagenten ohne Datei definieren, als JSON-Objekt, das nur für diese eine Sitzung gilt. Jeder Schlüssel ist der Name eines Agenten, sein Wert die Definition: `description`, `prompt` (entspricht dem Text unter dem Frontmatter) und die übrigen Frontmatter-Felder:
+Für Skript- und CI-Läufe kannst du Subagenten ohne Datei definieren, als JSON-Objekt, das nur für diese eine Sitzung gilt. Jeder Schlüssel ist der Name eines Agenten, sein Wert die Definition: `description`, `prompt` (entspricht dem Text unter dem Frontmatter) und die übrigen Felder. Das Beispiel ist für bash und Git Bash geschrieben; PowerShell braucht anderes Quoting für die Anführungszeichen im JSON, und das ist hier nicht durchgespielt. Das `-p` startet einen einmaligen Lauf ohne Sitzung ([S4.3](s4-03-headless.md)).
 
 ```bash
 claude --agents '{"reviewer":{"description":"Reviews code","prompt":"You are a code reviewer","model":"sonnet","tools":["Read","Grep"],"permissionMode":"default"}}' \
        -p "Review the latest diff and report any security concerns."
 ```
 
-Das ist nützlich, wenn der CI-Runner kein dauerhaftes `.claude/agents/`-Verzeichnis hat oder du die Definition neben der Workflow-YAML versionieren willst. CI-Pipelines baust du in [S4.5](s4-05-ci-pipelines.md).
+CI-Pipelines baust du in [S4.5](s4-05-ci-pipelines.md).
+
+## Selbst machen
+
+### Übung: einen schreibgeschützten Subagenten bauen und seine Grenze testen (etwa 15 Minuten)
+
+**Ziel:** Du schreibst einen Subagenten, der nur lesen darf, rufst ihn per @-Erwähnung auf, siehst ihn an der Grenze scheitern und erlebst, wie ein falscher Feldname die Grenze still aufhebt.
+
+**Startzustand:** ein neuer Ordner `~/cc-workshop/agent-datei`, in dem der Ordner `.claude/agents` schon existiert, bevor du Claude Code startest (`mkdir -p ~/cc-workshop/agent-datei/.claude/agents && cd ~/cc-workshop/agent-datei`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\agent-datei\.claude\agents"; Set-Location "$HOME\cc-workshop\agent-datei"`). Claude Code beobachtet laut Doku nur `agents`-Ordner, die beim Start der Sitzung schon da waren. Leg im Ordner `agent-datei` außerdem mit einem Editor eine Datei `README.md` an:
+
+```md
+# Door Notes
+
+A small tool that reads door events.
+
+## Usage
+
+Run it with a card id.
+```
+
+1. Leg mit dem Editor die Datei `.claude/agents/readme-reviewer.md` an. Sie hat nur lesende Tools:
+
+   <!-- cockpit:example -->
+   ```md
+   ---
+   name: readme-reviewer
+   description: Reviews a README file for missing steps and unclear wording. Use when the user asks for a README review.
+   tools: Read, Grep, Glob
+   model: inherit
+   maxTurns: 10
+   ---
+
+   You review README files. Read the file you are given and list up to five concrete problems, each with the line it refers to. Follow the request you are given.
+   ```
+2. Starte `claude --permission-mode default` im Ordner und bestätige den Vertrauensdialog.
+3. Ruf den Agenten per @-Erwähnung auf:
+
+   ```text
+   @agent-readme-reviewer Review README.md and list the problems you find.
+   ```
+
+   Erwartet: Im Transkript (`Ctrl+O`) steht eine Zeile mit `readme-reviewer`, und die Antwort nennt Probleme mit Zeilenangaben, etwa den fehlenden Installationsschritt.
+4. Frag ihn nach seiner Ausrüstung:
+
+   ```text
+   @agent-readme-reviewer List the names of all tools you can call. Do not call any of them.
+   ```
+
+   Erwartet: `Read`, `Grep` und `Glob`, kein Werkzeug zum Schreiben.
+5. Bitte ihn um etwas, das ihm fehlt:
+
+   ```text
+   @agent-readme-reviewer Write your findings into a new file called review.txt.
+   ```
+
+   Erwartet: Vom Subagenten kommt keine Datei. Claude weiß meist schon, dass er nur lesen darf, und will `review.txt` deshalb selbst anlegen: Die Rückfrage stammt dann aus deinem Hauptgespräch. Lehn sie ab. Die Grenze gilt für den Subagenten, nicht für dein Hauptgespräch. Prüf in einem zweiten Terminal im selben Ordner (`ls`, in PowerShell `Get-ChildItem`): Es gibt keine `review.txt`.
+6. Provozier den stillen Fehler. Leg, während die Sitzung läuft, die Datei `.claude/agents/readme-checker.md` an. Sie ist bis auf Name und die Zeile mit den Tools gleich; der Feldname ist falsch:
+
+   ```md
+   ---
+   name: readme-checker
+   description: Checks a README file for missing steps and unclear wording. Use when the user asks for a README check.
+   allowed_tools: Read, Grep, Glob
+   model: inherit
+   maxTurns: 10
+   ---
+
+   You review README files. Read the file you are given and list up to five concrete problems, each with the line it refers to. Follow the request you are given.
+   ```
+
+   Claude Code erkennt neue Dateien in einem schon vorhandenen Ordner nach wenigen Sekunden. Findet Claude den Agenten im nächsten Schritt nicht, beende die Sitzung und starte sie neu.
+7. Stell ihm dieselbe Frage wie in Schritt 4:
+
+   ```text
+   @agent-readme-checker List the names of all tools you can call. Do not call any of them.
+   ```
+
+   Erwartet: eine lange Liste, darunter `Write`, `Edit` und `Bash`, dazu die Tools der MCP-Server, die bei dir verbunden sind. Eine Fehlermeldung zu `allowed_tools` gab es nicht.
+8. Lass ihn schreiben:
+
+   ```text
+   @agent-readme-checker Review README.md and write your findings into a new file called check.txt.
+   ```
+
+   Erwartet: Claude Code fragt, ob die Datei `check.txt` angelegt werden darf; diesmal kommt die Rückfrage vom Subagenten selbst. Gib sie mit „Yes“ frei und prüf, dass `check.txt` im Ordner liegt.
+
+**Aufräumen:** Beende die Sitzung mit `/exit` und lösch den Ordner `~/cc-workshop/agent-datei` selbst. Die Agenten lagen nur in diesem Projekt.
+
+<details><summary>Vergleich</summary>
+
+Beide Dateien unterscheiden sich nur in einer Zeile: `tools:` gegen `allowed_tools:`. Claude Code kennt `allowed_tools` nicht und ignoriert es ohne Meldung. Ohne `tools` erbt der Subagent alle Tools, die Subagenten zur Verfügung stehen, auch Write und die Tools deiner MCP-Server. Ein Tippfehler hat die Grenze aufgehoben, ohne dass du etwas gemerkt hättest, bis du sie getestet hast. Teste jede Grenze, die dir wichtig ist.
+
+</details>
+
+**Geschafft, wenn:**
+
+- [ ] `readme-reviewer` per @-Erwähnung lief und Probleme mit Zeilenangaben nannte
+- [ ] er nur `Read`, `Grep` und `Glob` nannte und keine `review.txt` entstand
+- [ ] `readme-checker` ohne Fehlermeldung auch Schreibwerkzeuge nannte und `check.txt` anlegte
+- [ ] du erklären kannst, warum: Unbekannte Felder werden ignoriert, ohne `tools` erbt der Agent alle Tools
 
 ## Typische Fallen
 
-- **Ein falscher Feldname fällt nicht auf.** Claude Code ignoriert Felder, die es nicht kennt, ohne Fehlermeldung. Mehrwortige Felder schreibst du in camelCase (`maxTurns`, `disallowedTools`). `allowed_tools` steht nicht in der Frontmatter-Referenz: Verlass dich nicht darauf, sonst erbt der Agent womöglich alle Tools. Skills verwenden übrigens `allowed-tools` mit Bindestrich ([S2.3](s2-03-wer-skills-ausloest.md)), Subagenten `tools`.
+- **Ein falscher Feldname fällt nicht auf.** Das hast du in der Übung gesehen. Mehrwortige Felder schreibst du in camelCase (`maxTurns`, `disallowedTools`). Skills verwenden übrigens `allowed-tools` mit Bindestrich ([S2.3](s2-03-wer-skills-ausloest.md)), Subagenten `tools`.
 - **`permissionMode` greift nicht immer.** Läuft das Hauptgespräch in `bypassPermissions`, `acceptEdits` oder `auto`, läuft der Subagent im selben Modus, und dein Feld wird ignoriert. Ein Subagent mit `bypassPermissions` bekommt diesen Modus nur, wenn das Hauptgespräch ihn auch hat. Begrenze deshalb vor allem über `tools`.
-- **Der neue Agent wird nicht gefunden.** Claude Code beobachtet nur `agents`-Ordner, die es beim Start der Sitzung schon gab. Legst du den ersten Agenten in einem neuen Ordner an, starte Claude Code neu.
+- **Der neue Agent wird nicht gefunden.** Der erste Agent in einem Ordner, den es beim Start der Sitzung noch nicht gab, wird erst nach einem Neustart geladen. Dasselbe gilt für Dateien unter `--add-dir`.
+- **Die Datei lädt gar nicht.** Fehlt `name` oder `description`, lädt Claude Code die Datei nicht und meldet das nicht in der Sitzung. Bei fehlender `description` steht der Grund im Debug-Log (`claude --debug`).
 - **`/agents` öffnet keinen Assistenten mehr.** Seit v2.1.198 zeigt `/agents` nur einen Hinweis. Neue Subagenten schreibst du als Datei oder lässt Claude die Datei anlegen.
 
 ## Check
 
-Du kannst einen eigenen Subagenten mit YAML-Frontmatter definieren, seine Tools nach dem Prinzip der minimalen Rechte begrenzen und erklären, warum die `description` das Routing steuert und warum Plugin-Subagenten ihre Rechte nicht selbst anheben können.
+Du kannst einen eigenen Subagenten mit YAML-Frontmatter definieren, seine Tools nach dem Prinzip der minimalen Rechte begrenzen, einen falsch geschriebenen Feldnamen als Ursache erkennen und erklären, warum Plugin-Subagenten ihre Rechte nicht selbst anheben können.
 
 1. Welche zwei Felder sind Pflicht, und was passiert, wenn `tools` fehlt?
-2. Welche drei Felder ignoriert Claude Code bei Subagenten aus einem Plugin?
-3. Wann wird der `permissionMode` eines Subagenten ignoriert?
+2. Was geschieht, wenn du in der Frontmatter `allowed_tools` statt `tools` schreibst?
+3. Welche drei Felder ignoriert Claude Code bei Subagenten aus einem Plugin?
+
+<details><summary>Auflösung</summary>
+
+1. `name` und `description`. Fehlt `tools`, erbt der Subagent alle Tools, die Subagenten zur Verfügung stehen.
+2. Claude Code ignoriert das unbekannte Feld ohne Fehlermeldung, und der Agent erbt alle Tools, als hättest du keine Grenze gesetzt.
+3. `hooks`, `mcpServers` und `permissionMode`.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Ein Plugin bringt einen Subagenten mit, der im Frontmatter `permissionMode: bypassPermissions` und eigene `hooks` setzt. Was macht Claude Code damit?
+**Frage:** Dein Subagent `reviewer` setzt `permissionMode: default`. Du arbeitest im Hauptgespräch im Modus `acceptEdits` und lässt ihn Änderungen prüfen. In welchem Modus läuft er?
 
-- **Richtig:** Es ignoriert beide Felder, damit ein Plugin weder seine Freigabestufe anhebt noch ungefragt Hooks einhängt.
-- Falsch: Es übernimmt beide Felder, zeigt dir aber vor dem ersten Start des Subagenten einen eigenen Bestätigungsdialog an.
-- Falsch: Es verweigert das ganze Plugin, weil Subagenten aus Plugins grundsätzlich kein YAML-Frontmatter haben dürfen.
-- Falsch: Es übernimmt beide Felder, sofern das Plugin aus dem offiziellen Plugin-Marketplace von Anthropic stammt.
+- **Richtig:** In `acceptEdits`: Das Hauptgespräch bestimmt den Modus, dein Feld wird ignoriert. Begrenzen kannst du ihn zuverlässig nur über `tools`.
+- Falsch: In `default`, denn das Feld im Subagenten hat Vorrang vor dem Modus des Hauptgesprächs, solange es in der Datei steht.
+- Falsch: Claude Code meldet einen Konflikt und lässt den Subagenten erst laufen, wenn du den Moduswechsel ausdrücklich bestätigt hast.
+- Falsch: Er startet nur, wenn beide Modi übereinstimmen; sonst bricht Claude Code den Aufruf des Subagenten mit einer Fehlermeldung ab.
 
 </details>
 
@@ -166,7 +254,6 @@ Du kannst einen eigenen Subagenten mit YAML-Frontmatter definieren, seine Tools 
 - [CLI-Referenz: `--agent` und `--agents`](https://code.claude.com/docs/en/cli-reference)
 - [S3.2 · Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md)
 - [S1.6 · Alle Rechte-Modi im Überblick](s1-06-rechte-modi.md)
-- [S2.9 · Hook-Typen und Hooks in Komponenten](s2-09-hook-typen.md)
 - [S2.11 · Plugins: ein Bündel schnüren](s2-11-plugins-buendeln.md)
 - [S2.13 · Lieferkettenrisiken bei Plugins](s2-13-plugin-lieferkette.md)
 - [S4.5 · CI-Pipelines bauen mit GitHub Actions und GitLab](s4-05-ci-pipelines.md)

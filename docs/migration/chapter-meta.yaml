@@ -5,7 +5,7 @@
   title: Werkstatt einrichten
   shelf: start
   level: core
-  minutes: 20
+  minutes: 25
   requires: []
   safety_floor: false
   transferable: false
@@ -17,7 +17,7 @@
   title: 'Erster Kontakt: sofort eine Datei bauen'
   shelf: start
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S0.1
   safety_floor: false
@@ -30,7 +30,7 @@
   title: 'Coding-Agent statt Chat: das Denkmodell'
   shelf: start
   level: core
-  minutes: 12
+  minutes: 15
   requires:
   - S1.1
   safety_floor: false
@@ -42,7 +42,7 @@
   title: 'Die Oberflächen: CLI, Desktop, IDE, Web, iOS'
   shelf: start
   level: core
-  minutes: 12
+  minutes: 10
   requires:
   - S1.2
   safety_floor: false
@@ -54,7 +54,7 @@
   title: Eingebaute Werkzeuge und ihre Namen
   shelf: start
   level: core
-  minutes: 12
+  minutes: 10
   requires:
   - S1.1
   safety_floor: false
@@ -66,7 +66,7 @@
   title: 'Rechte im Alltag: default und acceptEdits'
   shelf: permissions
   level: core
-  minutes: 15
+  minutes: 20
   requires:
   - S1.2
   safety_floor: true
@@ -115,7 +115,7 @@
   title: Kontext steuern mit /compact und /rewind
   shelf: context
   level: core
-  minutes: 12
+  minutes: 15
   requires:
   - S1.8
   safety_floor: false
@@ -139,7 +139,7 @@
   title: Alle Gedächtnis-Ebenen im Überblick
   shelf: context
   level: deep-dive
-  minutes: 18
+  minutes: 20
   requires:
   - S1.10
   safety_floor: false
@@ -151,7 +151,7 @@
   title: Imports, --add-dir und AGENTS.md
   shelf: context
   level: deep-dive
-  minutes: 12
+  minutes: 20
   requires:
   - S1.10
   safety_floor: false
@@ -189,7 +189,7 @@
   title: Output Styles und Personas
   shelf: prompting
   level: deep-dive
-  minutes: 12
+  minutes: 15
   requires:
   - S1.13
   safety_floor: false
@@ -201,7 +201,7 @@
   title: 'Git in einem Fluss: Branch, Commit, PR'
   shelf: git
   level: core
-  minutes: 18
+  minutes: 15
   requires:
   - S1.5
   - S1.13
@@ -215,7 +215,7 @@
   title: Git-Befehle in der Sitzung
   shelf: git
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S1.16
   safety_floor: false
@@ -227,7 +227,7 @@
   title: Worktrees als Testlabor
   shelf: git
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S1.16
   safety_floor: false
@@ -249,10 +249,10 @@
   file: s1-19-kosten-im-blick.md
 - id: S1.20
   type: practice
-  title: 'Praxis-Station Session 1: eine Übung wählen'
+  title: 'Praxis-Station Session 1: alles in einem Ablauf'
   shelf: practice
   level: core
-  minutes: 15
+  minutes: 20
   requires: []
   safety_floor: false
   transferable: false
@@ -269,7 +269,7 @@
   title: Skills sind Dienstanweisungen, Commands sind Knöpfe
   shelf: skills
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S1.10
   safety_floor: false
@@ -282,7 +282,7 @@
   title: Eine SKILL.md schreiben
   shelf: skills
   level: core
-  minutes: 18
+  minutes: 25
   requires:
   - S2.1
   safety_floor: false
@@ -294,7 +294,7 @@
   title: Skills oder Commands, und wer sie auslösen darf
   shelf: skills
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S2.2
   safety_floor: false
@@ -306,7 +306,7 @@
   title: Mitgelieferte Skills
   shelf: skills
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S2.1
   safety_floor: false
@@ -318,7 +318,7 @@
   title: 'Lebendige Prompts: Argumente und dynamischer Inhalt'
   shelf: skills
   level: deep-dive
-  minutes: 15
+  minutes: 25
   requires:
   - S2.2
   safety_floor: false
@@ -330,7 +330,7 @@
   title: 'Hooks als Sensoren: die drei Eckpfeiler'
   shelf: hooks
   level: core
-  minutes: 15
+  minutes: 20
   requires:
   - S1.5
   safety_floor: false
@@ -343,7 +343,7 @@
   title: Die wichtigsten Hook-Ereignisse
   shelf: hooks
   level: core
-  minutes: 12
+  minutes: 20
   requires:
   - S2.6
   safety_floor: false
@@ -355,7 +355,7 @@
   title: Einen Hook einrichten, der wirklich blockt
   shelf: hooks
   level: core
-  minutes: 15
+  minutes: 35
   requires:
   - S2.7
   safety_floor: true
@@ -367,7 +367,7 @@
   title: Hook-Typen und Hooks in Komponenten
   shelf: hooks
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S2.8
   safety_floor: false
@@ -379,7 +379,7 @@
   title: Hook-Ausgaben und das Secure Diff Gate
   shelf: hooks
   level: deep-dive
-  minutes: 15
+  minutes: 35
   requires:
   - S2.8
   safety_floor: false
@@ -391,7 +391,7 @@
   title: 'Plugins: ein Bündel schnüren'
   shelf: plugins
   level: core
-  minutes: 15
+  minutes: 25
   requires:
   - S2.2
   - S2.6
@@ -405,7 +405,7 @@
   title: Plugin-Lebenszyklus, Scopes und Marketplaces
   shelf: plugins
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S2.11
   safety_floor: false
@@ -417,7 +417,7 @@
   title: Lieferkettenrisiken bei Plugins
   shelf: plugins
   level: deep-dive
-  minutes: 10
+  minutes: 25
   requires:
   - S2.12
   safety_floor: true
@@ -429,7 +429,7 @@
   title: 'MCP: der Integrationsstecker'
   shelf: mcp-knowledge
   level: core
-  minutes: 15
+  minutes: 25
   requires:
   - S1.5
   safety_floor: false
@@ -442,7 +442,7 @@
   title: 'MCP einrichten: Transporte, Scopes, CLI'
   shelf: mcp-knowledge
   level: core
-  minutes: 15
+  minutes: 25
   requires:
   - S2.14
   safety_floor: false
@@ -454,7 +454,7 @@
   title: 'MCP im Detail: OAuth, Ausgabegrenzen, Protokoll'
   shelf: mcp-knowledge
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S2.15
   safety_floor: false
@@ -466,7 +466,7 @@
   title: MCP-Sicherheit und ein eigener Server
   shelf: mcp-knowledge
   level: deep-dive
-  minutes: 18
+  minutes: 25
   requires:
   - S2.15
   safety_floor: true
@@ -478,7 +478,7 @@
   title: 'RAG und NotebookLM: dem Agenten Baupläne geben'
   shelf: mcp-knowledge
   level: core
-  minutes: 18
+  minutes: 25
   requires:
   - S2.14
   safety_floor: false
@@ -491,7 +491,7 @@
   title: Grenzen von RAG und Datenschutz
   shelf: mcp-knowledge
   level: deep-dive
-  minutes: 10
+  minutes: 20
   requires:
   - S2.18
   safety_floor: false
@@ -500,10 +500,10 @@
   file: s2-19-rag-grenzen.md
 - id: S2.20
   type: practice
-  title: 'Praxis-Station Session 2: eine Übung wählen'
+  title: 'Praxis-Station Session 2: alles in einem Ablauf'
   shelf: practice
   level: core
-  minutes: 18
+  minutes: 25
   requires: []
   safety_floor: false
   transferable: false
@@ -521,7 +521,7 @@
   title: Was ist ein Agent? Spezialisierung statt Allrounder
   shelf: agents
   level: core
-  minutes: 12
+  minutes: 20
   requires:
   - S1.2
   safety_floor: false
@@ -534,7 +534,7 @@
   title: Eingebaute Subagenten nutzen
   shelf: agents
   level: core
-  minutes: 10
+  minutes: 15
   requires:
   - S3.1
   safety_floor: false
@@ -546,7 +546,7 @@
   title: Einen eigenen Subagenten definieren
   shelf: agents
   level: core
-  minutes: 18
+  minutes: 25
   requires:
   - S3.2
   safety_floor: false
@@ -558,7 +558,7 @@
   title: 'Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie'
   shelf: agents
   level: core
-  minutes: 15
+  minutes: 25
   requires:
   - S3.1
   safety_floor: false
@@ -570,7 +570,7 @@
   title: Hintergrund-Sitzungen und Agent Teams
   shelf: agents
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S3.4
   safety_floor: false
@@ -582,9 +582,10 @@
   title: 'Devil''s Advocate: eine adversariale Prüf-Pipeline'
   shelf: security
   level: core
-  minutes: 18
+  minutes: 35
   requires:
   - S3.4
+  - S3.3
   safety_floor: false
   transferable: true
   aliases:
@@ -596,7 +597,7 @@
   title: Die eingebauten Reviews
   shelf: security
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S1.16
   safety_floor: false
@@ -608,7 +609,7 @@
   title: Rechte für autonome Läufe
   shelf: permissions
   level: core
-  minutes: 15
+  minutes: 30
   requires:
   - S1.6
   safety_floor: true
@@ -621,7 +622,7 @@
   title: Geschützte Pfade und Sandbox-Stufen
   shelf: permissions
   level: core
-  minutes: 15
+  minutes: 30
   requires:
   - S3.8
   safety_floor: true
@@ -633,7 +634,7 @@
   title: Netzwerk und Skills härten
   shelf: security
   level: deep-dive
-  minutes: 12
+  minutes: 20
   requires:
   - S3.9
   safety_floor: false
@@ -645,9 +646,10 @@
   title: Datenschutz, Aufbewahrung und regulierte Branchen
   shelf: security
   level: deep-dive
-  minutes: 15
+  minutes: 25
   requires:
   - S3.9
+  - S2.8
   safety_floor: false
   transferable: true
   aliases: []
@@ -657,7 +659,7 @@
   title: 'Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen'
   shelf: automation
   level: core
-  minutes: 15
+  minutes: 30
   requires:
   - S2.4
   safety_floor: false
@@ -670,10 +672,11 @@
   title: 'Autonome Loops absichern: Budget und Worktree'
   shelf: automation
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S3.12
   - S1.19
+  - S3.8
   safety_floor: true
   transferable: true
   aliases: []
@@ -683,7 +686,7 @@
   title: 'Self-Improve-Loop: was geht und wo es endet'
   shelf: automation
   level: bonus
-  minutes: 15
+  minutes: 20
   requires:
   - S3.13
   safety_floor: false
@@ -692,10 +695,10 @@
   file: s3-14-self-improve-loop.md
 - id: S3.15
   type: practice
-  title: 'Praxis-Station Session 3: eine Übung wählen'
+  title: 'Praxis-Station Session 3: alles in einem Ablauf'
   shelf: practice
   level: core
-  minutes: 15
+  minutes: 25
   requires: []
   safety_floor: false
   transferable: false
@@ -709,7 +712,7 @@
   title: Das richtige Modell pro Phase
   shelf: cost
   level: deep-dive
-  minutes: 15
+  minutes: 25
   requires:
   - S1.7
   - S3.4
@@ -723,9 +726,10 @@
   title: Codex-Schwarm und die Datenfluss-Grenze
   shelf: agents
   level: bonus
-  minutes: 15
+  minutes: 25
   requires:
   - S4.1
+  - S3.11
   safety_floor: false
   transferable: true
   aliases: []
@@ -735,7 +739,7 @@
   title: 'Headless: claude -p als Pipeline-Stufe'
   shelf: headless-ci
   level: deep-dive
-  minutes: 15
+  minutes: 25
   requires:
   - S1.13
   safety_floor: false
@@ -748,7 +752,7 @@
   title: CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff
   shelf: headless-ci
   level: deep-dive
-  minutes: 18
+  minutes: 30
   requires:
   - S4.3
   safety_floor: true
@@ -760,7 +764,7 @@
   title: CI-Pipelines bauen mit GitHub Actions und GitLab
   shelf: headless-ci
   level: deep-dive
-  minutes: 18
+  minutes: 30
   requires:
   - S4.4
   safety_floor: false
@@ -772,7 +776,7 @@
   title: 'Unterwegs: Remote Control und /teleport'
   shelf: remote-isolation
   level: bonus
-  minutes: 12
+  minutes: 20
   requires:
   - S1.3
   safety_floor: false
@@ -785,7 +789,7 @@
   title: Isolation mit Docker und Worktrees
   shelf: remote-isolation
   level: bonus
-  minutes: 15
+  minutes: 25
   requires:
   - S1.18
   safety_floor: false
@@ -797,7 +801,7 @@
   title: Abschlussprojekt mit Bewertung
   shelf: capstone
   level: bonus
-  minutes: 25
+  minutes: 55
   requires:
   - S3.4
   - S3.8
@@ -811,7 +815,7 @@
   title: 'Fehlersuche: /debug, --verbose, /doctor'
   shelf: troubleshooting
   level: core
-  minutes: 15
+  minutes: 30
   requires:
   - S1.4
   safety_floor: false
@@ -824,7 +828,7 @@
   title: Diagnose Schritt für Schritt
   shelf: troubleshooting
   level: core
-  minutes: 18
+  minutes: 30
   requires:
   - S4.9
   - S2.8
@@ -832,13 +836,27 @@
   transferable: true
   aliases: []
   file: s4-10-diagnose-schritt-fuer-schritt.md
+- id: S4.11
+  type: capstone
+  title: 'Abschluss: ein kleiner Build'
+  shelf: capstone
+  level: core
+  minutes: 30
+  requires:
+  - S1.5
+  - S1.13
+  - S1.16
+  safety_floor: false
+  transferable: true
+  aliases: []
+  file: s4-11-abschluss-kleiner-build.md
 - id: X.1
   type: community
   title: 'Community-Skills: wer baut was, das wirklich hilft'
   shelf: community
   level: bonus
-  minutes: 15
-  after: S2.13
+  minutes: 30
+  after: S2.20
   requires: []
   safety_floor: false
   transferable: true
@@ -849,8 +867,8 @@
   title: Mit Claude Code lernen
   shelf: community
   level: bonus
-  minutes: 12
-  after: S0.1
+  minutes: 35
+  after: S1.20
   requires: []
   safety_floor: false
   transferable: true
@@ -861,8 +879,8 @@
   title: 'Der minimale Agent: Pi als Spiegel'
   shelf: community
   level: bonus
-  minutes: 15
-  after: S3.2
+  minutes: 25
+  after: S3.15
   requires: []
   safety_floor: false
   transferable: true
@@ -873,8 +891,8 @@
   title: 'Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann'
   shelf: community
   level: bonus
-  minutes: 15
-  after: S4.6
+  minutes: 35
+  after: S4.7
   requires: []
   safety_floor: false
   transferable: true

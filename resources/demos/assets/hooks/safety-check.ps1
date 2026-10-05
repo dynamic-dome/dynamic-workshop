@@ -15,7 +15,12 @@
 $raw = [Console]::In.ReadToEnd()
 
 # Fail closed: if the input cannot be read, block instead of silently allowing everything.
-try { $data = $raw | ConvertFrom-Json -ErrorAction Stop }
+# Readable means: a JSON object. Empty input, "null", a list or a bare value carry no command to check.
+try {
+  if ([string]::IsNullOrWhiteSpace($raw)) { throw "empty hook input" }
+  $data = $raw | ConvertFrom-Json -ErrorAction Stop
+  if ($data -isnot [System.Management.Automation.PSCustomObject]) { throw "hook input is not a JSON object" }
+}
 catch {
   [Console]::Error.WriteLine("SAFETY HOOK: could not read the hook input - blocking to stay safe.")
   exit 2

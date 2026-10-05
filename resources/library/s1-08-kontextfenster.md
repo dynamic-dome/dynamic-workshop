@@ -31,107 +31,135 @@ aliases: ["1.2"]
 
 ## Auf einen Blick
 
-Das Kontextfenster ist Claudes Arbeitsgedächtnis für eine Session: Deine Nachrichten, Claudes Antworten, gelesene Dateien, Befehlsausgaben und die CLAUDE.md liegen alle darin. Es ist begrenzt. Wird es voll, verdichtet Claude Code den Verlauf automatisch, und Details vom Anfang können dabei verloren gehen.
+Das Kontextfenster ist Claudes Arbeitsgedächtnis für eine Session: Deine Nachrichten, Claudes Antworten, gelesene Dateien und Befehlsausgaben liegen alle darin. Was nicht im Fenster liegt, weiß Claude nicht; es muss es erst lesen. Das Fenster ist begrenzt. Wird es voll, verdichtet Claude Code den Verlauf automatisch zu einer Zusammenfassung, und Details vom Anfang können dabei verloren gehen.
 
-Verlass dich deshalb in einer langen Session nicht darauf, dass Claude frühe Absprachen noch kennt. Was wichtig ist, schreibst du in eine Datei wie die CLAUDE.md und lässt Claude sie bei Bedarf neu lesen.
+Verlass dich deshalb in einer langen Session nicht darauf, dass Claude frühe Absprachen noch wörtlich kennt.
 
 ## Bild im Kopf
 
-Deine Leitstelle hat eine Monitorwand: 200 Kameras, aber nur 20 Monitorplätze. Meldet Tür 47 einen Alarm, schaltest du ihren Feed auf. Dafür muss ein älterer Feed ins Archiv. Der Operator kann ihn zurückholen, aber das kostet Zeit und Mühe.
+Deine Leitstelle hat eine Monitorwand: 200 Kameras, aber nur 20 Monitorplätze. Meldet Tür 47 einen Alarm, schaltest du ihren Feed auf. Was nicht auf einem Monitor läuft, existiert für die Entscheidung des Operators nicht.
 
-So arbeitet das Kontextfenster. Was gerade aktiv ist, steht auf den Monitoren. Älteres wird archiviert, also verdichtet. Du kannst dich darauf beziehen, aber mit weniger Detail als live. Und was nicht auf dem Schirm ist, existiert für die Entscheidung nicht.
+Ist die Wand voll, muss ein älterer Feed weichen. Der Operator schreibt dazu einen kurzen Lagebericht und schaltet den Feed ab. Fragt später jemand nach einem Detail, bekommt er, was im Bericht steht. Das Bild selbst ist weg.
 
 ```mermaid
 flowchart TB
-  A["Kontextfenster einer Session<br/>Nachrichten, gelesene Dateien,<br/>Befehlsausgaben, CLAUDE.md, Memory"] --> B{"Fenster fast voll?"}
+  A["Kontextfenster einer Session<br/>Nachrichten, gelesene Dateien,<br/>Befehlsausgaben, CLAUDE.md"] --> B{"Fenster fast voll?"}
   B -- "nein" --> W["weiterarbeiten"]
   B -- "ja" --> C["automatische Verdichtung:<br/>erst alte Tool-Ausgaben weg,<br/>dann Verlauf zusammenfassen"]
   C --> D["frühe Details können fehlen"]
-  D --> E["Gegenmittel: Wichtiges in CLAUDE.md,<br/>Datei neu lesen lassen"]
+  D --> E["Gegenmittel: Wichtiges in eine Datei,<br/>Datei neu lesen lassen"]
 ```
 
 ## Im Detail
 
 ### Was im Kontextfenster liegt
 
-Das Kontextfenster ist Claudes aktives Gedächtnis für eine Session. Alles, was Claude während deines Gesprächs „weiß", liegt in diesem Fenster:
+Alles, was Claude während deines Gesprächs „weiß“, liegt in diesem Fenster:
 
 - deine Nachrichten und Claudes Antworten
-- Dateien, die Claude liest
-- Befehlsausgaben (stdout/stderr)
-- der Inhalt der CLAUDE.md
-- Memory-Einträge, die beim Sessionstart geladen werden
+- Dateien, die Claude liest, auch die, die du mit `@dateiname` in deine Nachricht holst
+- Befehlsausgaben
+- die `CLAUDE.md`, eine Datei mit festen Vorgaben für das Projekt, die Claude Code bei jedem Start lädt ([S1.10](s1-10-claude-md.md))
 
-Schon bevor du etwas tippst, lädt Claude Code außerdem die Namen der MCP-Tools und die Beschreibungen der Skills. Wie viel Platz das alles belegt, zeigt dir `/context` ([S1.9](s1-09-kontext-steuern.md)).
+Schon bevor du etwas tippst, ist das Fenster nicht leer: Claude Code lädt seine eigenen Anweisungen und die Beschreibungen der Werkzeuge. Wie viel Platz was belegt, zeigt dir `/context`. Die Zeile „Messages“ ist der Teil, den dein Gespräch füllt.
 
 ### Wie groß das Fenster ist
 
-Die Größe hängt vom Modell ab; die aktuellen Werte stehen im [Kanon](../_canonical.md). Das klingt oft riesig, aber eine große Codebasis mit vielen Dateien füllt auch ein großes Fenster schnell.
+Die Größe hängt vom Modell ab; die aktuellen Werte stehen im [Kanon](../_canonical.md). Das klingt oft riesig, aber eine große Codebasis mit vielen Dateien und langen Befehlsausgaben füllt auch ein großes Fenster.
 
 ### Was passiert, wenn es voll wird
 
-Nähert sich das Fenster seiner Grenze, verdichtet Claude Code automatisch. Zuerst räumt es ältere Tool-Ausgaben ab, dann fasst es bei Bedarf das Gespräch zusammen. Deine Aufträge und wichtige Code-Stellen bleiben erhalten; ausführliche Anweisungen vom Anfang des Gesprächs können verloren gehen. Die Zusammenfassung ersetzt den wörtlichen Verlauf.
+Nähert sich das Fenster seiner Grenze, verdichtet Claude Code automatisch. Zuerst räumt es ältere Tool-Ausgaben ab, dann fasst es bei Bedarf das Gespräch zusammen. Deine Aufträge und wichtige Code-Stellen bleiben erhalten; ausführliche Anweisungen vom Anfang des Gesprächs können verloren gehen. Die Zusammenfassung ersetzt den wörtlichen Verlauf, und der Wortlaut lässt sich danach nicht zurückholen.
 
-Deshalb zählt ein Gedächtnis außerhalb des Gesprächs. Die CLAUDE.md im Projektordner und das Auto-Memory lädt Claude Code nach einer Verdichtung neu von der Platte, und in jeder neuen Session sowieso ([S1.10](s1-10-claude-md.md), [S1.11](s1-11-gedaechtnis-ebenen.md)).
+Deshalb zählt ein Gedächtnis außerhalb des Gesprächs. Die `CLAUDE.md` im Projektordner lädt Claude Code nach einer Verdichtung neu von der Platte, und in jeder neuen Session sowieso.
 
 ### Woran du die Verdichtung erkennst
 
-- Claude vergisst Dinge, die es vorher „wusste".
-- Antworten zu früheren Entscheidungen werden ungenauer.
-- Es erscheint die Meldung „Conversation compacted".
+- Es erscheint die Meldung „Conversation compacted“.
+- Danach beantwortet Claude Fragen zu frühen Entscheidungen ungenauer oder hat eine frühe Vorgabe nicht mehr parat.
 
 Wie du gegensteuerst, bevor es so weit ist, zeigt [S1.9](s1-09-kontext-steuern.md).
 
 ## Selbst machen
 
-### Übung: die Kontext-Streichliste (etwa 4 Minuten, leicht)
+### Übung: das Fenster füllen und leeren (etwa 8 Minuten)
 
-**Ziel:** „Kontext" greifbar machen. Dieselbe Frage wird sichtbar besser, sobald die passende Datei per `@` im Kontext liegt. Das bereitet RAG ([S2.18](s2-18-rag-und-notebooklm.md)) und die Isolation von Agenten ([S3.1](s3-01-was-ist-ein-agent.md)) vor.
+**Ziel:** Du siehst, dass Claude nur weiß, was im Fenster liegt, und misst mit `/context`, wie eine Datei das Fenster füllt und `/clear` es leert.
 
-**Analogie:** die Leitstelle mit wenigen Monitoren. Was nicht auf dem Schirm ist, existiert für die Entscheidung nicht.
+**Startzustand:** ein neuer Ordner mit zwei Dateien, die Claude noch nie gesehen hat. Der Befehl legt beide an: eine Notiz mit einem Türcode und ein Ereignisprotokoll mit 800 Zeilen.
 
-**Schritt 1:** Starte Claude Code im `workshop-playground/` und frag ohne Dateiverweis:
-
-```text
-Which three vulnerabilities are in the access control?
+```bash
+# macOS / Linux / Git Bash
+mkdir -p ~/cc-workshop/kontext && cd ~/cc-workshop/kontext
+python3 -c "open('notes.txt','w').write('The gate code for DOOR-03 is 4711.\n'); open('events.log','w').write(''.join(f'2026-03-15T09:{i%60:02d}:11 DOOR-{i%7:02d} ACCESS_GRANTED CARD-{1000+i}\n' for i in range(800)))"
+claude --permission-mode default
 ```
 
-Notier dir die Antwort: geraten oder konkret?
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\kontext" | Out-Null
+Set-Location "$HOME\cc-workshop\kontext"
+python -c "open('notes.txt','w').write('The gate code for DOOR-03 is 4711.\n'); open('events.log','w').write(''.join(f'2026-03-15T09:{i%60:02d}:11 DOOR-{i%7:02d} ACCESS_GRANTED CARD-{1000+i}\n' for i in range(800)))"
+claude --permission-mode default
+```
 
-**Schritt 2:** Füll den Kontext gezielt mit der Datei:
+1. Gib `/context` ein und notier den Wert in der Zeile „Messages“. Er ist winzig: Das Gespräch hat noch nicht begonnen.
+2. Frag nach etwas, das nur in der Datei steht, und verbiete das Nachsehen:
+
+```text
+Without using any tools: what is the gate code for DOOR-03?
+```
+
+   Claude kennt den Code nicht und sagt das. Er liegt nicht im Fenster.
+
+3. Hol die Datei ins Fenster:
 
 <!-- cockpit:example -->
 ```text
-@access_control.py Which vulnerabilities are in here, with line numbers?
+@notes.txt What is the gate code for DOOR-03?
 ```
 
-Sieh zu, wie die Antwort konkret wird.
+   Jetzt nennt Claude den Code.
 
-**Schritt 3:** Tipp `/clear` und stell die Frage aus Schritt 1 noch einmal, ohne `@`. Der Kontext ist *weg*. **Du** füllst und leerst das Fenster, nicht der Zufall.
+4. Hol das große Protokoll dazu: `@events.log How many lines mention DOOR-03?` Gib danach wieder `/context` ein. „Messages“ ist um viele tausend Tokens gewachsen: Das ganze Protokoll liegt jetzt im Fenster und bleibt dort bei jeder weiteren Nachricht.
+5. Gib `/clear` ein, dann `/context`. „Messages“ ist wieder fast leer. Stell die Frage aus Schritt 2 noch einmal: Claude kennt den Code nicht mehr.
 
-**Auflösung:** Die Frage aus Schritt 1 nennt drei Schwachstellen. In `access_control.py` stecken fünf absichtlich eingebaute; die Liste steht in `workshop-playground/CLAUDE.md`. Schau nach, ob Claude die Zahl aus der Frage einfach übernommen hat.
+**Geschafft, wenn:**
+
+- [ ] du drei Werte für „Messages“ notiert hast: am Anfang, nach `@events.log` und nach `/clear`
+- [ ] Claude den Türcode nur genannt hat, solange `notes.txt` im Fenster lag
+- [ ] du in einem Satz sagen kannst, wer das Fenster füllt und wer es leert
 
 ## Typische Fallen
 
-- **Eine frühe Absprache gilt nach langer Session nicht mehr.** Sie stand nur im Chat und ist bei der Verdichtung untergegangen. Schreib sie in die CLAUDE.md; die lädt Claude Code nach der Verdichtung neu.
-- **„Das Fenster ist riesig, da geht nichts verloren."** Auch ein großes Fenster füllt sich mit vielen Dateien und langen Befehlsausgaben. Je voller es wird, desto eher vergisst Claude frühere Anweisungen oder macht mehr Fehler.
+- **Eine frühe Absprache gilt nach langer Session nicht mehr.** Sie stand nur im Gespräch und ist bei der Verdichtung untergegangen. Was dauerhaft gelten soll, gehört in die `CLAUDE.md` ([S1.10](s1-10-claude-md.md)).
+- **„Das Fenster ist riesig, da geht nichts verloren.“** Auch ein großes Fenster füllt sich mit vielen Dateien und langen Befehlsausgaben. Je voller es wird, desto eher übersieht Claude frühere Anweisungen.
+- **Große Dateien mit `@` holen, obwohl eine Zeile reicht.** `@` lädt die ganze Datei. Für eine einzelne Auskunft genügt oft ein gezielter Auftrag wie `Count the lines in events.log that mention DOOR-03`; dann landet nur das Ergebnis im Fenster.
 
 ## Check
 
-Du kannst erklären, was mit frühen Gesprächsinhalten passiert, wenn das Kontextfenster voll wird, und warum wichtige Absprachen deshalb in die CLAUDE.md gehören.
+Du kannst erklären, was im Kontextfenster liegt, was mit frühen Gesprächsinhalten passiert, wenn es voll wird, und woran du die Verdichtung erkennst.
 
 1. Was liegt alles im Kontextfenster einer Session? Nenne mindestens vier Dinge.
 2. Was macht Claude Code, wenn das Fenster voll wird, und was kann dabei verloren gehen?
-3. Woran merkst du, dass die Verdichtung gerade zuschlägt?
+3. Woran erkennst du, dass verdichtet wurde?
+
+<details><summary>Auflösung</summary>
+
+1. Deine Nachrichten, Claudes Antworten, gelesene Dateien (auch die mit `@` geholten), Befehlsausgaben und die `CLAUDE.md`. Dazu kommen von Anfang an Claude Codes eigene Anweisungen und die Beschreibungen der Werkzeuge.
+2. Es verdichtet automatisch: Zuerst räumt es ältere Tool-Ausgaben ab, dann fasst es das Gespräch zusammen. Ausführliche Anweisungen vom Anfang können verloren gehen, weil die Zusammenfassung den wörtlichen Verlauf ersetzt.
+3. An der Meldung „Conversation compacted“ und daran, dass Claude frühe Entscheidungen danach ungenauer wiedergibt oder eine frühe Vorgabe nicht mehr parat hat.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Claude „vergisst" plötzlich eine Anforderung, die du zu Beginn der Session ausdrücklich genannt hast. Was ist die wahrscheinlichste technische Ursache?
+**Frage:** Nach drei Stunden in derselben Session hält sich Claude nicht mehr an eine Vorgabe, die du ganz am Anfang im Gespräch gemacht hast. Was ist die wahrscheinlichste Ursache?
 
-- **Richtig:** Das Fenster lief voll, Claude Code hat verdichtet, und die Anforderung steckt nur noch ungenau in der Zusammenfassung.
-- Falsch: Ein Rechte-Fehler hat den Read-Aufruf nachträglich geblockt, mit dem die Anforderung ursprünglich in den Kontext kam.
-- Falsch: Das Auto-Memory hat die Anforderung in eine Memory-Datei ausgelagert und sie dafür aus dem Kontext entfernt.
-- Falsch: Ein Modellwechsel mitten in der Session hat den Kontext geleert, weil zwei Modelle keine gemeinsame Session haben können.
+- **Richtig:** Das Fenster lief voll, Claude Code hat verdichtet, und die Vorgabe steckt nur noch ungenau in der Zusammenfassung.
+- Falsch: Claude gewichtet neuere Nachrichten grundsätzlich höher und überschreibt ältere Vorgaben, sobald sie sich widersprechen.
+- Falsch: Vorgaben aus dem Gespräch gelten nur für die nächste Antwort; für mehr hättest du sie jedes Mal wiederholen müssen.
+- Falsch: Die `CLAUDE.md` wurde nach einer Verdichtung neu geladen und hat dabei alle Vorgaben aus dem Gespräch ersetzt.
 
 </details>
 

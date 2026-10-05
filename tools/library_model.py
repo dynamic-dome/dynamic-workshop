@@ -4,6 +4,10 @@
 A chapter is a Markdown file with a narrow YAML front matter and fixed H2 sections
 (spec docs/plans/2026-09-30-praxisbibliothek-design.md, section 4). This module only
 parses; tools/build_library.py validates and generates.
+
+Chapters are written for one person learning alone. The demo and the notes for moderators of a
+chapter live in the moderation layer, resources/moderation/vorfuehren/<chapter file>
+(design docs/plans/2026-10-05-selbstlern-zuerst-design.md).
 """
 from __future__ import annotations
 
@@ -20,12 +24,15 @@ if _TOOLS not in sys.path:
 import catalog_core as _core  # noqa: E402
 
 SECTION_ORDER = [
-    "Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail", "Vorführen",
+    "Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail",
     "Selbst machen", "Typische Fallen", "Check", "Weiterlesen",
 ]
+DEMO_FOLDER = ("moderation", "vorfuehren")  # next to the library folder
+MODERATOR_BLOCK = "<summary>Für Moderierende</summary>"
 CHAPTER_TYPES = ("lesson", "setup", "practice", "capstone", "community")
 LEVELS = ("core", "deep-dive", "bonus")
 
+NL = "\n"
 SESSION_ID = _core.SESSION_ID
 EXTRA_ID = _core.EXTRA_ID
 FENCE = re.compile(r"^\s*(```|~~~)")
@@ -38,6 +45,18 @@ QUIZ_BLOCK = re.compile(r"<details><summary>Quizfrage</summary>(.*?)</details>",
 QUIZ_QUESTION = re.compile(r"^\*\*Frage:\*\*\s*(.+?)\s*$", re.M)
 QUIZ_RIGHT = re.compile(r"^- \*\*Richtig:\*\*\s*(.+?)\s*$", re.M)
 QUIZ_WRONG = re.compile(r"^- Falsch:\s*(.+?)\s*$", re.M)
+ANSWER_SUMMARY = "<details><summary>Auflösung</summary>"
+ANSWER_BLOCK = re.compile(re.escape(ANSWER_SUMMARY) + r"(.*?)</details>", re.S)
+DETAILS_BLOCK = re.compile(r"<details>.*?</details>", re.S)
+NUMBERED = re.compile(r"^\d+\.\s+(.+?)\s*$", re.M)
+# The standard for self-learners: an exercise names its time in the heading; "Extra" exercises are voluntary.
+TIMED_HEADING = re.compile(r"^###\s+(.+?)\s+\(etwa (\d+) Minuten\)\s*$", re.M)
+EXTRA_HEADING = re.compile(r"^(Extra|Kür)\b")
+DONE_LIST = "Geschafft, wenn"
+READING_WORDS_PER_MINUTE = 160
+READ_SECTIONS = ("Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail", "Selbst machen", "Typische Fallen",
+                 "Check")
+WORD = re.compile(r"[^\W_]")
 
 
 class ChapterError(Exception):
@@ -87,6 +106,9 @@ class Chapter:
     checkpoint: str
     mermaid: list
     links: list
+    demo: Path | None = None  # file in the moderation layer, if this chapter has a demo
+    recall: list = field(default_factory=list)  # numbered recall questions of the Check section
+    answers: list | None = None  # their answers from the block "Auflösung"; None if the chapter has no such block
 
     @property
     def order(self) -> int:
@@ -107,8 +129,17 @@ class Library:
     problems: list = field(default_factory=list)
 
     @property
+    def demo_dir(self) -> Path:
+        return demo_dir(self.root)
+
+    @property
     def by_id(self) -> dict:
         return {c.id: c for c in self.chapters}
+
+
+def demo_dir(library_root) -> Path:
+    """Folder of the moderation layer that belongs to a library folder."""
+    return Path(library_root).parent.joinpath(*DEMO_FOLDER)
 
 
 def order_of(chapter_id: str, after: str | None) -> int:
@@ -257,6 +288,22 @@ def _quiz(check_text: str):
     return Quiz(question.group(1) if question else "", rights[0] if rights else "", wrong, len(rights))
 
 
+def _recall(check_text: str):
+    """(questions, answers or None): the numbered questions of '## Check' and the block that answers them.
+
+    Questions are the numbered items outside any <details>. An answer block that is opened but not closed
+    yields an empty answer list, so the validator sees a count that cannot match.
+    """
+    text = check_text or ""
+    block = ANSWER_BLOCK.search(text)
+    if block and '<details>' not in block.group(1):
+        answers = NUMBERED.findall(block.group(1))
+    else:  # no block, or one that runs into the next <details> because its own </details> is missing
+        answers = [] if ANSWER_SUMMARY in text else None
+    outside = DETAILS_BLOCK.sub("", text).split("<details>", 1)[0]
+    return NUMBERED.findall(outside), answers
+
+
 def _links(body: str) -> list:
     out, in_fence = [], False
     for line in body.split("\n"):
@@ -266,6 +313,46 @@ def _links(body: str) -> list:
         if not in_fence:
             out.extend(LINK.findall(line))
     return out
+
+
+def timed_exercises(text: str) -> list:
+    """(title, minutes) of every heading '### … (etwa N Minuten)' in a section text; code blocks and HTML
+    comments are no place for a heading."""
+    visible = re.sub(r"<!--.*?-->", " ", _without_fences(text or ""), flags=re.S)
+    return [(title, int(minutes)) for title, minutes in TIMED_HEADING.findall(visible)]
+
+
+def exercise_minutes(chapter) -> int:
+    """Minutes of the hands-on parts a learner is expected to do: every timed heading in 'Im Detail' and
+    'Selbst machen' except the voluntary ones (Extra, Kür)."""
+    return sum(minutes for name in ("Im Detail", "Selbst machen")
+               for title, minutes in timed_exercises(chapter.sections.get(name, ""))
+               if not EXTRA_HEADING.match(title))
+
+
+def reading_words(chapter) -> int:
+    """Words a learner reads: all sections except the link list, without code blocks, comments and link targets."""
+    text = NL.join(_without_fences(chapter.sections.get(name, "")) for name in READ_SECTIONS)
+    text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
+    text = re.sub(r"\]\([^)]*\)", "]", text)
+    text = re.sub(r"<[^>]+>", " ", text)
+    return sum(1 for token in text.split() if WORD.search(token))
+
+
+def honest_minutes(chapter) -> float:
+    """Reading time plus exercises, unrounded."""
+    return reading_words(chapter) / READING_WORDS_PER_MINUTE + exercise_minutes(chapter)
+
+
+def _without_fences(text: str) -> str:
+    out, in_fence = [], False
+    for line in text.split(NL):
+        if FENCE.match(line):
+            in_fence = not in_fence
+            continue
+        if not in_fence:
+            out.append(line)
+    return NL.join(out)
 
 
 def _as_list(value) -> list:
@@ -282,13 +369,15 @@ def parse_chapter(path) -> Chapter:
     body = _strip_meta(body)
     h1, preamble, sections, order = _split_sections(body)
     example, lang = None, ""
-    for title in ("Selbst machen", "Vorführen", "Im Detail", "Check"):
+    for title in ("Selbst machen", "Im Detail", "Check"):
         if title in sections:
             example, lang = _example(sections[title])
             if example is not None:
                 break
     mermaid = [content for text in sections.values() for fl, content, _ in _fences(text) if fl == "mermaid"]
     minutes = front.get("minutes")
+    demo = demo_dir(path.parent) / path.name
+    recall, answers = _recall(sections.get("Check", ""))
     return Chapter(
         path=path,
         id=str(front.get("id", "")),
@@ -319,6 +408,9 @@ def parse_chapter(path) -> Chapter:
         checkpoint=_first_paragraph(sections.get("Check", "")),
         mermaid=mermaid,
         links=_links(body),
+        demo=demo if demo.is_file() else None,
+        recall=recall,
+        answers=answers,
     )
 
 

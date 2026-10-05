@@ -116,3 +116,12 @@ def test_load_library_sorts_by_order(tmp_path):
     assert lib.by_id["S2.8"].title == "Einen Hook konfigurieren"
     assert [s["id"] for s in lib.shelves][:2] == ["hooks", "practice"]
     assert lib.placement["version"] == 1
+
+
+def test_recall_questions_and_their_answers_are_parsed_from_the_check_section():
+    hook = lm.parse_chapter(FIXTURES / "s2-08-demo-hook.md")
+    assert hook.recall == ["Welcher Exit-Code blockt einen Aufruf?", "Was passiert bei `exit 1`?"]
+    assert hook.answers == ["Von den Exit-Codes blockt nur `2`.",
+                            "Der Aufruf läuft weiter, Claude Code meldet nur einen Hook-Fehler."]
+    events = lm.parse_chapter(FIXTURES / "s2-07-demo-events.md")
+    assert events.recall == [] and events.answers is None  # no questions, no answer block

@@ -70,9 +70,22 @@ def test_placement_cli_named_in_skill_exists_with_the_used_flags():
 def test_manifest_describes_the_library():
     data = json.loads(MANIFEST.read_text(encoding="utf-8"))
     assert data["name"] == "dynamic-workshop"
-    assert "70 Kapitel" in data["description"] and "/workshop start" in data["description"]
+    assert "71 Kapitel" in data["description"] and "/workshop start" in data["description"]
     assert "17 modules" not in data["description"]
 
 
 def test_no_duplicate_command_shadowing_the_skill():
     assert not (ROOT / "commands" / "workshop.md").exists()
+
+
+def test_tutor_goes_through_the_teaching_text_when_a_chapter_is_to_be_worked_through():
+    """Status 'work' means the lesson text itself, not only the summary (design 2026-10-05, package P2)."""
+    body = SKILL.read_text(encoding="utf-8")
+    section = body.split("## Ein Kapitel durchgehen", 1)[1].split(chr(10) + "## ", 1)[0]
+    for step in ("**Schnellcheck**", "**Auf einen Blick + Bild im Kopf**", "**Im Detail**", "**Selbst machen**",
+                 "**Check**", "**Abschluss**"):
+        assert step in section, step
+    assert (section.index("**Auf einen Blick + Bild im Kopf**") < section.index("**Im Detail**")
+            < section.index("**Selbst machen**") < section.index("**Check**"))
+    assert "`skim` heißt: nur Schritt 2 und 5" in section
+    assert "kein „Selbst machen" in section  # a lesson without an exercise still ends in something to do

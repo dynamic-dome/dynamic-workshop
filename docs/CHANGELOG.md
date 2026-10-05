@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-10-05 — Selbstlernende zuerst (Branch `selbstlern-zuerst`, läuft)
+
+Anlass: Durchsicht vom 2026-10-05 (`docs/reviews/2026-10-05-lernbogen-und-fakten.md`, Befunde R1 bis R31). Entwurf und
+Pakete: `docs/plans/2026-10-05-selbstlern-zuerst-design.md`, `…-tickets.md`.
+
+- **Hook-Vorlagen (R1):** `secure-diff-gate.sh` und `.py` blocken jetzt, wenn sie ihre Eingabe nicht lesen können (kein
+  `jq`, kein JSON, leer), und erkennen `.ENV` in jeder Schreibweise. Vorher endete die Bash-Fassung ohne `jq` mit 127,
+  die Python-Fassung gab bei kaputter Eingabe 0 zurück; beides blockt nicht. Der dokumentierte Windows-Aufruf mit
+  `%USERPROFILE%` wurde von keiner Hook-Shell aufgelöst; jetzt `python "$HOME/.claude/hooks/secure-diff-gate.py"`.
+  S2.10 nennt die Grenze des Gates (Shell-Befehle) und die Deny-Regel als Ergänzung.
+- **Formulierung (R2):** „blockt nur mit `exit 2`“ heißt jetzt überall „von den Exit-Codes blockt nur 2“, mit Verweis auf
+  die JSON-Entscheidung.
+- **Moderationsschicht (P1):** „Vorführen“ ist kein Abschnitt der Kapitel mehr. Demo und Hinweise für Moderierende
+  stehen je Kapitel in `resources/moderation/vorfuehren/` (30 Dateien, per Skript verschoben, 12.884 Wörter vorher wie
+  nachher). Der Validator weist „Vorführen“ und Blöcke „Für Moderierende“ im Kapitel ab und prüft die Demo-Dateien;
+  der Katalog führt je Kapitel `demo`, der Live-Pfad verlinkt die Demos, der Tutor liest sie nur im Modus `guide`.
+  Vier Lektionen, deren Cockpit-Beispiel in der Demo stand (S1.2, S3.13, S3.14, S4.6), haben einen Unterabschnitt
+  „Ausprobieren“; S3.14 nutzt dafür `/goal` statt des entfallenen Plugin-Befehls.
+- **Cockpit und Tutor (P2):** Sagt die Einstufung „durcharbeiten“, öffnet das Cockpit das Kapitel mit vollem Text und
+  Übung statt der Kurzfassung; das Quiz und „Als erledigt markieren“ stehen am Ende. Der Tutor geht bei solchen
+  Kapiteln durch „Im Detail“, bevor die Übung kommt.
+- **Auflösungen (P3):** Abruffragen können eine Auflösung tragen (eingeklappter Block im Abschnitt „Check“). Der
+  Validator prüft, dass je Frage genau eine Antwort dasteht; das Cockpit zeigt die Fragen jetzt auch in der Kurzansicht,
+  je Frage mit eigener Auflösung. Erstes Kapitel: S1.1. `validate` meldet den Fortschritt (Übungen, Auflösungen).
+- **Playground (P4):** Die Lösungen liegen jetzt in `resources/reference/playground-loesungen.md`. Die `CLAUDE.md` des
+  Playgrounds und die Kommentare im Code nennen keine Schwachstelle mehr; vorher las Claude Code die Liste in jeder
+  Sitzung mit. Das Verhalten des Codes ist unverändert.
+
 ## 2026-10-02 — Einstufung: Sicherheitsboden bei Ziel Sicherheit
 
 - **Einstufung:** Bei Ziel `security` gehören jetzt auch S3.13 (Autonome Loops absichern) und S4.4 (CI-Zugangsdaten) zum

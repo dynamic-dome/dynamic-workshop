@@ -8,7 +8,7 @@ minutes: 15
 requires: [S1.5, S1.13]
 safety_floor: false
 transferable: true
-outcome: "Ich kann bei einer Mehrdatei-Aufgabe erst im Plan-Modus einen Plan erstellen lassen, ihn korrigieren und Claude erst nach meiner ausdrücklichen Freigabe umsetzen lassen."
+outcome: "Ich kann bei einer Mehrdatei-Aufgabe erst im Plan-Modus einen Plan erstellen lassen, ihn mit einer Vorgabe oder Scope-Grenze korrigieren, Claude erst nach meiner ausdrücklichen Freigabe umsetzen lassen und sagen, wann die Sperre des Plan-Modus nicht hält."
 sources:
   - https://code.claude.com/docs/en/permission-modes
   - https://code.claude.com/docs/en/best-practices
@@ -26,15 +26,15 @@ aliases: []
 ## Schnellcheck
 
 - Hast du schon einmal einen Plan von Claude geprüft und korrigiert, bevor Code geschrieben wurde?
-- Kannst du ohne Nachschlagen die vier Schritte Explain, Propose, Refine, Execute nennen und sagen, wann sich der Plan-Modus lohnt?
+- Kannst du ohne Nachschlagen sagen, wann der Plan-Modus seine Bearbeitungssperre nicht durchsetzt?
 
 ## Auf einen Blick
 
-Bei größeren Aufgaben lässt du Claude erst einen Plan vorlegen und korrigierst ihn, bevor Code entsteht: Explain (Kontext geben), Propose (Vorschlag holen), Refine (korrigieren, Grenzen ergänzen), Execute (umsetzen lassen). Der Plan-Modus baut daraus eine Sperre: Claude liest und plant, Bearbeitungen bleiben blockiert, bis du den Plan freigibst. Kannst du den Diff in einem Satz beschreiben, sparst du dir den Plan.
+Bei größeren Aufgaben lässt du Claude erst einen Plan vorlegen und korrigierst ihn, bevor Code entsteht. Der Plan-Modus ist dafür ein Rechte-Modus: Claude liest, erkundet und plant, und Bearbeitungen bleiben blockiert, bis du den Plan freigibst. Die Sperre hat eine Ausnahme: In interaktiven Terminal-Sitzungen, in denen `bypassPermissions` im Modus-Zyklus verfügbar ist, setzt Claude Code sie nicht durch ([S1.6](s1-06-rechte-modi.md)). Kannst du den Diff in einem Satz beschreiben, sparst du dir den Plan.
 
 ## Bild im Kopf
 
-Der Plan-Modus ist das Sicherheitsbriefing vor einer Panel-Neukonfiguration. Der Techniker legt das Änderungsprotokoll auf den Tisch (Propose). Der Schichtleiter streicht zwei riskante Schritte und ergänzt einen Rückfallweg (Refine). Beide zeichnen ab, und erst dann beginnt die Änderung (Execute). Freigegeben wird die ganze Mission, bevor jemand eine Klemme löst.
+Der Plan-Modus ist das Sicherheitsbriefing vor einer Panel-Neukonfiguration. Der Techniker erklärt die Lage und legt das Änderungsprotokoll auf den Tisch. Der Schichtleiter streicht zwei riskante Schritte und ergänzt einen Rückfallweg. Beide zeichnen ab, und erst dann beginnt die Änderung. Freigegeben wird die ganze Mission, bevor jemand eine Klemme löst.
 
 ```mermaid
 flowchart LR
@@ -49,48 +49,36 @@ flowchart LR
 
 ### Das Arbeitsmuster in vier Schritten
 
-Für komplexe Aufgaben bewährt sich ein Muster aus vier Schritten:
+Dieses Muster stammt aus dieser Bibliothek. Die Doku beschreibt verwandt: erkunden, planen, umsetzen, committen.
 
 1. **Explain:** Gib Claude den Kontext. „Das bauen wir, so ist der aktuelle Stand, das ist die Einschränkung.“
-2. **Propose:** Lass Claude einen Ansatz vorschlagen, bevor es etwas umsetzt. „Wie willst du das angehen?“
-3. **Refine:** Prüf den Plan. Korrigier Missverständnisse, ergänze Grenzen. „Gut, aber nimm den vorhandenen Logger, keine print-Anweisungen.“
+2. **Propose:** Lass Claude einen Ansatz vorschlagen, bevor es etwas umsetzt.
+3. **Refine:** Prüf den Plan. Korrigier Missverständnisse, ergänze Grenzen. „Gut, aber nimm den vorhandenen Logger.“
 4. **Execute:** „Setz es um.“
 
 Das Muster verhindert, dass Claude 300 Zeilen Code in eine Richtung schreibt, die du nicht wolltest.
 
-### Der Plan-Modus: das Muster mit eingebauter Sperre
+### Der Plan-Modus: das Muster mit Sperre
 
-Der Plan-Modus ist einer der Rechte-Modi ([S1.5](s1-05-rechte-im-alltag.md), [S1.6](s1-06-rechte-modi.md)). Claude recherchiert und schlägt Änderungen vor, ohne sie zu machen: Es liest die relevanten Dateien, führt zum Erkunden auch Befehle aus und schreibt einen strukturierten Umsetzungsplan mit den Dateien, die es ändern will. Deinen Quellcode bearbeitet es nicht; Bearbeitungen bleiben gesperrt, bis du den Plan freigibst.
+Claude recherchiert und schlägt Änderungen vor, ohne sie zu machen: Es liest Dateien, führt zum Erkunden auch Befehle aus und schreibt einen Plan. Deinen Quellcode bearbeitet es nicht, solange du den Plan nicht freigibst. So kommst du hinein:
 
-So kommst du hinein:
-
-- `Shift+Tab` drücken, bis die Statuszeile `⏸ plan mode on` zeigt. Die Taste schaltet reihum durch die Rechte-Modi; je nach Startmodus drückst du sie mehrmals.
+- `Shift+Tab` drücken, bis die Statuszeile `⏸ plan mode on` zeigt. Die Taste schaltet reihum durch die Rechte-Modi.
 - Einem einzelnen Prompt `/plan` voranstellen, zum Beispiel `/plan fix the auth bug`.
 - Gleich im Plan-Modus starten: `claude --permission-mode plan`.
 
-Ist der Plan fertig, legt Claude ihn vor und fragt, wie es weitergeht:
+Ist der Plan fertig, legt Claude ihn vor und fragt, wie es weitergeht. Laut Doku stehen zur Wahl:
 
-- Mit einer der **Ja-Optionen** gibst du frei. Claude verlässt den Plan-Modus, wechselt in den Rechte-Modus, den die Option nennt, und beginnt zu bearbeiten.
-- Mit **„No, keep planning“** bleibst du im Plan-Modus und sagst, was sich ändern soll. Das ist Schritt 3, Refine.
-- `Ctrl+G` öffnet den Plan in deinem Editor; dort änderst du ihn direkt, bevor Claude weitermacht.
-- Erneutes `Shift+Tab` verlässt den Plan-Modus, ohne den Plan freizugeben.
+- **Yes, manually approve edits:** Du gibst den Plan frei und prüfst jede Änderung einzeln.
+- **Eine Ja-Option mit Auto-Modus** (je nach Sitzung „Yes, and use auto mode“ oder „Yes, auto-accept edits“): Du gibst frei, und Claude bearbeitet ohne Einzelrückfragen. Das Wort der Option nennt den Rechte-Modus, in den die Sitzung danach wechselt.
+- **No, keep planning:** Du bleibst im Plan-Modus und sagst, was sich ändern soll. Das ist Refine. So nennt die Doku die Antwort; in Version 2.1.289 heißt sie in der Oberfläche „Tell Claude what to change“.
 
-Nimm den Plan-Modus für:
+`Ctrl+G` öffnet den Plan in deinem Editor, damit du ihn direkt änderst. Erneutes `Shift+Tab` verlässt den Plan-Modus, ohne den Plan freizugeben.
 
-- Aufgaben, die mehr als zwei bis drei Dateien berühren
-- alles, bei dem du den Ansatz prüfen willst, bevor Code entsteht
-- Refactorings über ein ganzes Modul oder Teilsystem
-- jede Aufgabe, bei der ein Fehler teuer rückgängig zu machen wäre
+### Wann lohnt sich ein Plan?
 
-Der Plan kostet auch Zeit. Kleine Änderungen mit klarem Scope, etwa einen Tippfehler, eine Log-Zeile oder eine Umbenennung, lässt du Claude direkt machen. Faustregel aus der offiziellen Doku: Kannst du den Diff in einem Satz beschreiben, lass den Plan weg.
+Der Plan kostet Zeit. Die Doku nennt ihn nützlich, wenn du beim Ansatz unsicher bist, wenn die Änderung mehrere Dateien betrifft oder wenn du den Code nicht kennst. Kleine Änderungen mit klarem Scope, etwa ein Tippfehler oder eine Umbenennung, lässt du Claude direkt machen. Faustregel der Doku: Kannst du den Diff in einem Satz beschreiben, lass den Plan weg.
 
-### Effort passend zur Aufgabe
-
-Auch der Effort ist ein Hebel beim Prompten. Manche Aufgaben profitieren von `/effort xhigh`: Architekturentscheidungen, die Ursachensuche bei subtilen Fehlern, Refactorings über mehrere Dateien mit Nebenwirkungen, die bedacht werden müssen. Andere gehen besser mit `/effort low`: Boilerplate, Tippfehler, reine Formatänderungen. Den Effort passend zu wählen, gehört selbst zum Prompten: `max` für einen einzeiligen Tippfehler verschwendet Tokens, `low` für eine Architekturentscheidung liefert flache Ergebnisse. Richte den Effort nach der Denklast der Aufgabe. Wie Effort und Modellwahl zusammenspielen, steht in [S1.7](s1-07-modellwahl-und-effort.md).
-
-### Bewährte Formulierungen
-
-Diese Muster kannst du sofort übernehmen.
+### Zwei Formulierungen, die den Plan erzwingen
 
 **„Erst X lesen, dann vorschlagen“**
 
@@ -104,66 +92,75 @@ Claude stützt seine Vorschläge auf den echten Code statt auf Annahmen.
 
 **„Erst den Plan zeigen, dann umsetzen“**
 
-<!-- cockpit:example -->
 ```
 Show me your implementation plan before writing any code. I want to
 review the approach and the list of files you'll change.
 ```
 
-Du bekommst einen Prüfpunkt, bevor sich irgendetwas ändert. Das ist Propose, auch ohne Plan-Modus.
+Du bekommst einen Prüfpunkt, bevor sich etwas ändert, auch ohne Plan-Modus. Der Unterschied: Im Plan-Modus sperrt Claude Code das Bearbeiten, ohne ihn bittest du nur darum.
 
-**„Nur X ändern, Y nicht anfassen“**
+## Selbst machen
 
-```
-Update the database connection pool settings in config/db.py.
-Do not touch any other configuration files or the connection pool
-implementation itself — only the settings values.
-```
+### Übung: planen, korrigieren, freigeben (etwa 10 Minuten)
 
-Ausdrückliche Ausschlüsse verhindern, dass der Auftrag unbemerkt wächst. Das ist die Scope-Grenze aus [S1.13](s1-13-vager-und-praeziser-auftrag.md) als feste Formel.
+**Ziel:** Du siehst, dass im Plan-Modus nichts geändert wird, schärfst einen Plan mit einer Scope-Grenze nach und gibst ihn erst dann frei.
 
-**„Mit Z testen“**
+**Startzustand:** ein neuer Ordner `~/cc-workshop/plan` mit Git und Python (beides aus [S0.1](s0-01-werkstatt-einrichten.md)). Leg ihn an und wechsle hinein (`mkdir -p ~/cc-workshop/plan && cd ~/cc-workshop/plan`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\plan"; Set-Location "$HOME\cc-workshop\plan"`).
 
-```
-After making changes, run pytest tests/test_auth.py -v and show me
-the output before we move on.
-```
+1. Starte `claude --permission-mode acceptEdits` und gib ein: `Create events.csv with six lines (columns door,time,result), log_reader.py with read_events(path), report.py with count_by_door(events), and main.py that prints the count per door.` Beende die Sitzung mit `/exit`. Führ `git init`, `git add .` und `python main.py` aus. Erwartet: eine Zählung je Tür.
+2. Starte `claude --permission-mode plan`. Die Statuszeile zeigt `⏸ plan mode on`. Gib ein:
 
-Die Prüfung steckt im Auftrag. Du siehst die Testergebnisse, bevor du committest. In Demo und Übung von [S1.13](s1-13-vager-und-praeziser-auftrag.md) ist das der Schritt „Run the tests“.
+   <!-- cockpit:example -->
+   ```text
+   Add a --json flag to main.py that prints the door counts as JSON instead of text. Show me your plan first.
+   ```
 
-**„Erklär, was du gemacht hast“**
+   Erwartet: Claude liest die Dateien und legt einen Plan vor. Er nennt die Dateien, die es ändern will, und fragt, wie es weitergehen soll.
+3. Antworte noch nicht. Öffne ein zweites Terminal im Ordner und führ `git diff` aus. Erwartet: keine Ausgabe, also keine Änderung an deinen Dateien seit Schritt 1. Die Sperre hat gehalten.
+4. Wähl im ersten Terminal die Antwort zum Nachschärfen (**Tell Claude what to change**, in der Doku „No, keep planning“) und schreib: `Put the JSON formatting in a new function to_json(counts) in report.py and call it from main.py. Do not change log_reader.py.` Erwartet: ein neuer Plan, der jetzt auch `report.py` nennt und `log_reader.py` ausdrücklich unangetastet lässt.
+5. Gib jetzt frei, mit der Option **Yes, manually approve edits**. Bestätige die Änderungen einzeln. Erwartet: Erst jetzt entstehen Änderungen. Beende die Sitzung.
+6. Führ `git diff --stat` und `python main.py --json` aus. Erwartet: Das Diff zeigt `main.py` und `report.py`, nicht `log_reader.py`; in `report.py` steht die Funktion `to_json`, und der Aufruf druckt JSON.
 
-```
-Explain the changes you made and why, in plain language. Then show
-the diff.
-```
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/plan` selbst.
 
-Claude muss seine Gründe aussprechen. So fallen dir Missverständnisse leichter auf.
+**Geschafft, wenn:**
+
+- [ ] `git diff` vor der Freigabe leer war
+- [ ] der überarbeitete Plan deine Vorgabe aufnahm (`to_json` in `report.py`)
+- [ ] `git diff --stat` nach der Umsetzung `main.py` und `report.py` zeigt, nicht `log_reader.py`
+- [ ] `python main.py --json` JSON druckt
 
 ## Typische Fallen
 
-- **Mehrere Aufgaben in einem Prompt.** „Behebe den Fehler UND bau das Feature UND aktualisier die Doku“ teilt Claudes Aufmerksamkeit und macht es schwer, jeden Teil für sich zu prüfen.
-- **Kritische Grenzen nur im Gespräch.** Verlass dich bei wichtigen Einschränkungen nicht auf Claudes Gedächtnis. Wenn „never modify the legacy parser“ wirklich zählt, gehört es in die CLAUDE.md ([S1.10](s1-10-claude-md.md)).
-- **Die erste Ausgabe ungeprüft übernehmen.** Lass Claude seine Gründe erklären und Grenzfälle bedenken. Frag: „Was könnte bei diesem Ansatz schiefgehen?“
-- **Vage Freigabe.** „Sieht gut aus“ kann Claude zu einem nächsten Schritt bewegen, den du nicht wolltest. Sag genau, was gilt: „Sieht gut aus, setz es um“ oder „Sieht gut aus, hier aufhören“.
-- **Auf die Sperre vertrauen, obwohl Bypass verfügbar ist.** Startest du eine interaktive Terminal-Sitzung so, dass `bypassPermissions` im Modus-Zyklus liegt, setzt Claude Code die Sperre des Plan-Modus nicht durch. Claude soll dann zwar nur planen, aber eine Bearbeitung oder ein Befehl, den es trotzdem versucht, läuft ohne Rückfrage ([S1.6](s1-06-rechte-modi.md)).
+- **Mehrere Aufgaben in einem Prompt.** „Behebe den Fehler UND bau das Feature UND aktualisier die Doku“ macht es schwer, jeden Teil für sich zu prüfen.
+- **Kritische Grenzen nur im Gespräch.** Wenn „never modify the legacy parser“ wirklich zählt, gehört es in die CLAUDE.md ([S1.10](s1-10-claude-md.md)), und für eine harte Sperre in eine Deny-Regel ([S1.5](s1-05-rechte-im-alltag.md)) oder einen Hook.
+- **Vage Freigabe.** „Sieht gut aus“ kann Claude zu einem Schritt bewegen, den du nicht wolltest. Sag genau, was gilt: „Sieht gut aus, setz es um“ oder „Sieht gut aus, hier aufhören“.
+- **Auf die Sperre vertrauen, obwohl Bypass verfügbar ist.** Liegt `bypassPermissions` im Modus-Zyklus deiner Sitzung, setzt Claude Code die Sperre des Plan-Modus nicht durch. Eine Bearbeitung oder ein Befehl, den Claude trotzdem versucht, läuft dann ohne Rückfrage. Er kommt in den Zyklus, wenn du mit `--permission-mode bypassPermissions`, `--dangerously-skip-permissions` oder `--allow-dangerously-skip-permissions` startest oder `permissions.defaultMode` entsprechend setzt. Dann zeigt `Shift+Tab` auch `⏵⏵ bypass permissions on`.
 
 ## Check
 
 Du kannst eine Mehrdatei-Aufgabe im Plan-Modus planen lassen, den Plan mit einer zusätzlichen Grenze nachschärfen und die Umsetzung erst mit einer ausdrücklichen Freigabe starten.
 
-1. Welche vier Schritte hat das Arbeitsmuster, und in welchem korrigierst du Claude?
-2. Wie kommst du in den Plan-Modus, und wie verlässt du ihn, ohne den Plan freizugeben?
-3. Woran erkennst du, dass du dir den Plan sparen kannst?
+1. Wie startest du im Plan-Modus, und woran erkennst du ihn?
+2. Wann lohnt sich der Plan-Modus nicht mehr, und woran erkennst du das?
+3. Unter welcher Bedingung setzt Claude Code die Bearbeitungssperre des Plan-Modus nicht durch, und was folgt daraus für dich?
+
+<details><summary>Auflösung</summary>
+
+1. Mit `claude --permission-mode plan`, mit `Shift+Tab` oder mit `/plan` vor einem Prompt. Die Statuszeile zeigt `⏸ plan mode on`.
+2. Bei kleinen Änderungen mit klarem Scope: Kannst du den Diff in einem Satz beschreiben, lass den Plan weg.
+3. In interaktiven Terminal-Sitzungen, in denen `bypassPermissions` im Modus-Zyklus verfügbar ist. Dann kann eine Bearbeitung ohne Rückfrage laufen, du darfst dich also nicht auf die Sperre verlassen.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Wann ist es richtig, Claude direkt umsetzen zu lassen, statt zuerst den Plan-Modus zu nutzen?
+**Frage:** Der Plan sieht gut aus, aber ein Schritt fasst die Konfigurationsdatei an, die du nicht anfassen willst. Was antwortest du?
 
-- **Richtig:** Bei einer kleinen Änderung mit klarem Scope, deren Diff du in einem einzigen Satz beschreiben kannst.
-- Falsch: Nur wenn die CLAUDE.md keine Verbotsregel enthält, weil Claude solche Grenzen ohne Plan-Modus übergeht.
-- Falsch: Fast immer, weil der Plan-Modus Mehrkosten verursacht und die Qualität der Ergebnisse nicht verbessert.
-- Falsch: Bei jeder Arbeit in einer einzelnen Sitzung, weil sich der Plan-Modus erst mit mehreren Agenten lohnt.
+- **Richtig:** Die Antwort zum Nachschärfen wählen und die Grenze nennen („Do not change the config file“), dann den neuen Plan prüfen.
+- Falsch: „Sieht gut aus“ antworten, denn Claude lässt den Schritt dann von selbst weg und fragt vor der Änderung nach.
+- Falsch: Den Plan freigeben und die Änderung hinterher mit `/rewind` zurücknehmen, weil ein Checkpoint auch Shell-Befehle erfasst.
+- Falsch: `Shift+Tab` drücken, weil das den Plan mit der Grenze neu schreibt und ihn zugleich zur Umsetzung freigibt.
 
 </details>
 

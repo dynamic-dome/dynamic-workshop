@@ -57,8 +57,9 @@
   zone: Erweitern
   purpose: Aktionen des Agenten automatisch prüfen, blocken oder protokollieren.
   intro: >-
-    Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können eine Aktion stoppen — aber nur mit
-    `exit 2`. Ein abstürzender Hook ist ein offener Hook. Dieses Regal zeigt, wie du Hooks baust, denen du trauen kannst.
+    Hooks sind Sensoren an den Türen: Sie feuern bei festen Ereignissen und können eine Aktion stoppen — über den
+    Exit-Code aber nur mit `exit 2`. Ein abstürzender Hook ist ein offener Hook. Dieses Regal zeigt, wie du Hooks baust,
+    denen du trauen kannst.
 - id: plugins
   title: Plugins
   zone: Erweitern
@@ -122,11 +123,11 @@
 - id: capstone
   title: Abschlussprojekt
   zone: Betrieb & Abschluss
-  purpose: Die Bausteine zu einem eigenen, begrenzten Agenten-Workflow zusammensetzen und bewerten.
+  purpose: Am Ende des Pfads das Gelernte zu einem kleinen, echten Build zusammensetzen und selbst bewerten.
   intro: >-
-    Im Abschlussprojekt setzt du die Bausteine zu einem kleinen, echten Build zusammen: Im Playground lieferst du in 35
-    bis 45 Minuten ein Feature oder einen Fix, einen Guardrail, eine enge Verifikation und eine PR-fertige Übergabe.
-    Eine Rubrik zeigt dir, wo du stehst.
+    Jeder Pfad endet mit einem kleinen Build: Im Playground lieferst du in etwa 20 Minuten eine Änderung, einen
+    Guardrail, eine enge Prüfung und eine Übergabe und bewertest dich an fünf Kriterien (S4.11). Die große Fassung mit
+    Plan über die fortgeschrittenen Bausteine und einer Rubrik mit Punkten ist das Abschlussprojekt (S4.8).
 - id: practice
   title: Praxis-Stationen
   zone: Begleitend

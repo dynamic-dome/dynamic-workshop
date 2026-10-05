@@ -4,7 +4,7 @@
    "area": "basics",
    "id": "S0.1",
    "level": "core",
-   "minutes": 20,
+   "minutes": 25,
    "offers": [],
    "order": 10,
    "requires": [],
@@ -15,24 +15,10 @@
    "type": "setup"
   },
   {
-   "area": null,
-   "id": "X.2",
-   "level": "bonus",
-   "minutes": 12,
-   "offers": [],
-   "order": 15,
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "type": "community"
-  },
-  {
    "area": "basics",
    "id": "S1.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 1010,
    "requires": [
@@ -50,7 +36,7 @@
    "area": "basics",
    "id": "S1.2",
    "level": "core",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1020,
    "requires": [
@@ -69,7 +55,7 @@
    "area": "basics",
    "id": "S1.3",
    "level": "core",
-   "minutes": 12,
+   "minutes": 10,
    "offers": [],
    "order": 1030,
    "requires": [
@@ -89,7 +75,7 @@
    "area": "basics",
    "id": "S1.4",
    "level": "core",
-   "minutes": 12,
+   "minutes": 10,
    "offers": [],
    "order": 1040,
    "requires": [
@@ -108,7 +94,7 @@
    "area": "permissions",
    "id": "S1.5",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1050,
    "requires": [
@@ -188,7 +174,7 @@
    "area": "context",
    "id": "S1.9",
    "level": "core",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1090,
    "requires": [
@@ -229,7 +215,7 @@
    "area": "context",
    "id": "S1.11",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 20,
    "offers": [],
    "order": 1110,
    "requires": [
@@ -250,7 +236,7 @@
    "area": "context",
    "id": "S1.12",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 1120,
    "requires": [
@@ -313,7 +299,7 @@
    "area": "prompting",
    "id": "S1.15",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1150,
    "requires": [
@@ -333,7 +319,7 @@
    "area": "git",
    "id": "S1.16",
    "level": "core",
-   "minutes": 18,
+   "minutes": 15,
    "offers": [],
    "order": 1160,
    "requires": [
@@ -356,7 +342,7 @@
    "area": "git",
    "id": "S1.17",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1170,
    "requires": [
@@ -379,7 +365,7 @@
    "area": "git",
    "id": "S1.18",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1180,
    "requires": [
@@ -421,7 +407,7 @@
    "area": null,
    "id": "S1.20",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [
     "S1.1",
     "S1.10",
@@ -438,10 +424,24 @@
    "type": "practice"
   },
   {
+   "area": null,
+   "id": "X.2",
+   "level": "bonus",
+   "minutes": 35,
+   "offers": [],
+   "order": 1205,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
    "area": "skills",
    "id": "S2.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2010,
    "requires": [
@@ -462,7 +462,7 @@
    "area": "skills",
    "id": "S2.2",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2020,
    "requires": [
@@ -484,7 +484,7 @@
    "area": "skills",
    "id": "S2.3",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2030,
    "requires": [
@@ -507,7 +507,7 @@
    "area": "skills",
    "id": "S2.4",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 2040,
    "requires": [
@@ -529,7 +529,7 @@
    "area": "skills",
    "id": "S2.5",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2050,
    "requires": [
@@ -552,7 +552,7 @@
    "area": "hooks",
    "id": "S2.6",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2060,
    "requires": [
@@ -573,7 +573,7 @@
    "area": "hooks",
    "id": "S2.7",
    "level": "core",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 2070,
    "requires": [
@@ -595,7 +595,7 @@
    "area": "hooks",
    "id": "S2.8",
    "level": "core",
-   "minutes": 15,
+   "minutes": 35,
    "offers": [],
    "order": 2080,
    "requires": [
@@ -618,7 +618,7 @@
    "area": "hooks",
    "id": "S2.9",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2090,
    "requires": [
@@ -642,7 +642,7 @@
    "area": "hooks",
    "id": "S2.10",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 35,
    "offers": [],
    "order": 2100,
    "requires": [
@@ -666,7 +666,7 @@
    "area": "plugins",
    "id": "S2.11",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2110,
    "requires": [
@@ -692,7 +692,7 @@
    "area": "plugins",
    "id": "S2.12",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2120,
    "requires": [
@@ -718,7 +718,7 @@
    "area": "plugins",
    "id": "S2.13",
    "level": "deep-dive",
-   "minutes": 10,
+   "minutes": 25,
    "offers": [],
    "order": 2130,
    "requires": [
@@ -742,24 +742,10 @@
    "type": "lesson"
   },
   {
-   "area": null,
-   "id": "X.1",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 2135,
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "type": "community"
-  },
-  {
    "area": "mcp",
    "id": "S2.14",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2140,
    "requires": [
@@ -780,7 +766,7 @@
    "area": "mcp",
    "id": "S2.15",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 2150,
    "requires": [
@@ -802,7 +788,7 @@
    "area": "mcp",
    "id": "S2.16",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 2160,
    "requires": [
@@ -825,7 +811,7 @@
    "area": "mcp",
    "id": "S2.17",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2170,
    "requires": [
@@ -848,7 +834,7 @@
    "area": "mcp",
    "id": "S2.18",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 2180,
    "requires": [
@@ -870,7 +856,7 @@
    "area": "mcp",
    "id": "S2.19",
    "level": "deep-dive",
-   "minutes": 10,
+   "minutes": 20,
    "offers": [],
    "order": 2190,
    "requires": [
@@ -893,7 +879,7 @@
    "area": null,
    "id": "S2.20",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [
     "S2.2",
     "S2.8",
@@ -911,10 +897,24 @@
    "type": "practice"
   },
   {
+   "area": null,
+   "id": "X.1",
+   "level": "bonus",
+   "minutes": 30,
+   "offers": [],
+   "order": 2205,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
    "area": "agents",
    "id": "S3.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 3010,
    "requires": [
@@ -934,7 +934,7 @@
    "area": "agents",
    "id": "S3.2",
    "level": "core",
-   "minutes": 10,
+   "minutes": 15,
    "offers": [],
    "order": 3020,
    "requires": [
@@ -952,24 +952,10 @@
    "type": "lesson"
   },
   {
-   "area": null,
-   "id": "X.3",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 3025,
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "type": "community"
-  },
-  {
    "area": "agents",
    "id": "S3.3",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 3030,
    "requires": [
@@ -991,7 +977,7 @@
    "area": "agents",
    "id": "S3.4",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 3040,
    "requires": [
@@ -1012,7 +998,7 @@
    "area": "agents",
    "id": "S3.5",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 3050,
    "requires": [
@@ -1034,17 +1020,20 @@
    "area": "review",
    "id": "S3.6",
    "level": "core",
-   "minutes": 18,
+   "minutes": 35,
    "offers": [],
    "order": 3060,
    "requires": [
-    "S3.4"
+    "S3.4",
+    "S3.3"
    ],
    "requires_all": [
     "S0.1",
     "S1.1",
     "S1.2",
     "S3.1",
+    "S3.2",
+    "S3.3",
     "S3.4"
    ],
    "safety_floor": false,
@@ -1056,7 +1045,7 @@
    "area": "review",
    "id": "S3.7",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 3070,
    "requires": [
@@ -1079,7 +1068,7 @@
    "area": "permissions",
    "id": "S3.8",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3080,
    "requires": [
@@ -1101,7 +1090,7 @@
    "area": "permissions",
    "id": "S3.9",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3090,
    "requires": [
@@ -1124,7 +1113,7 @@
    "area": "permissions",
    "id": "S3.10",
    "level": "deep-dive",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 3100,
    "requires": [
@@ -1148,11 +1137,12 @@
    "area": "review",
    "id": "S3.11",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 3110,
    "requires": [
-    "S3.9"
+    "S3.9",
+    "S2.8"
    ],
    "requires_all": [
     "S0.1",
@@ -1160,6 +1150,9 @@
     "S1.2",
     "S1.5",
     "S1.6",
+    "S2.6",
+    "S2.7",
+    "S2.8",
     "S3.8",
     "S3.9"
    ],
@@ -1172,7 +1165,7 @@
    "area": "automation",
    "id": "S3.12",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 3120,
    "requires": [
@@ -1195,21 +1188,25 @@
    "area": "automation",
    "id": "S3.13",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 3130,
    "requires": [
     "S3.12",
-    "S1.19"
+    "S1.19",
+    "S3.8"
    ],
    "requires_all": [
     "S0.1",
     "S1.1",
     "S1.2",
+    "S1.5",
+    "S1.6",
     "S1.10",
     "S1.19",
     "S2.1",
     "S2.4",
+    "S3.8",
     "S3.12"
    ],
    "safety_floor": true,
@@ -1221,7 +1218,7 @@
    "area": "automation",
    "id": "S3.14",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 3140,
    "requires": [
@@ -1231,10 +1228,13 @@
     "S0.1",
     "S1.1",
     "S1.2",
+    "S1.5",
+    "S1.6",
     "S1.10",
     "S1.19",
     "S2.1",
     "S2.4",
+    "S3.8",
     "S3.12",
     "S3.13"
    ],
@@ -1247,7 +1247,7 @@
    "area": null,
    "id": "S3.15",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [
     "S3.4",
     "S3.6"
@@ -1261,10 +1261,24 @@
    "type": "practice"
   },
   {
+   "area": null,
+   "id": "X.3",
+   "level": "bonus",
+   "minutes": 25,
+   "offers": [],
+   "order": 3155,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
    "area": "cost",
    "id": "S4.1",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4010,
    "requires": [
@@ -1288,19 +1302,28 @@
    "area": "agents",
    "id": "S4.2",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4020,
    "requires": [
-    "S4.1"
+    "S4.1",
+    "S3.11"
    ],
    "requires_all": [
     "S0.1",
     "S1.1",
     "S1.2",
+    "S1.5",
+    "S1.6",
     "S1.7",
+    "S2.6",
+    "S2.7",
+    "S2.8",
     "S3.1",
     "S3.4",
+    "S3.8",
+    "S3.9",
+    "S3.11",
     "S4.1"
    ],
    "safety_floor": false,
@@ -1312,7 +1335,7 @@
    "area": "automation",
    "id": "S4.3",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4030,
    "requires": [
@@ -1332,7 +1355,7 @@
    "area": "automation",
    "id": "S4.4",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4040,
    "requires": [
@@ -1353,7 +1376,7 @@
    "area": "automation",
    "id": "S4.5",
    "level": "deep-dive",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4050,
    "requires": [
@@ -1375,7 +1398,7 @@
    "area": "automation",
    "id": "S4.6",
    "level": "bonus",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 4060,
    "requires": [
@@ -1393,24 +1416,10 @@
    "type": "lesson"
   },
   {
-   "area": null,
-   "id": "X.4",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 4065,
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "type": "community"
-  },
-  {
    "area": "git",
    "id": "S4.7",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 4070,
    "requires": [
@@ -1432,9 +1441,23 @@
   },
   {
    "area": null,
+   "id": "X.4",
+   "level": "bonus",
+   "minutes": 35,
+   "offers": [],
+   "order": 4075,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
+   "area": null,
    "id": "S4.8",
    "level": "bonus",
-   "minutes": 25,
+   "minutes": 55,
    "offers": [],
    "order": 4080,
    "requires": [
@@ -1467,7 +1490,7 @@
    "area": "troubleshooting",
    "id": "S4.9",
    "level": "core",
-   "minutes": 15,
+   "minutes": 30,
    "offers": [],
    "order": 4090,
    "requires": [
@@ -1487,7 +1510,7 @@
    "area": "troubleshooting",
    "id": "S4.10",
    "level": "core",
-   "minutes": 18,
+   "minutes": 30,
    "offers": [],
    "order": 4100,
    "requires": [
@@ -1509,6 +1532,31 @@
    "session": 4,
    "shelf": "troubleshooting",
    "type": "lesson"
+  },
+  {
+   "area": null,
+   "id": "S4.11",
+   "level": "core",
+   "minutes": 30,
+   "offers": [],
+   "order": 4110,
+   "requires": [
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "requires_all": [
+    "S0.1",
+    "S1.1",
+    "S1.2",
+    "S1.5",
+    "S1.13",
+    "S1.16"
+   ],
+   "safety_floor": false,
+   "session": 4,
+   "shelf": "capstone",
+   "type": "capstone"
   }
  ],
  "placement": {
@@ -1777,14 +1825,15 @@
    "S1.13",
    "S1.14",
    "S1.16",
-   "S1.19"
+   "S1.19",
+   "S4.11"
   ],
-  "quickstart_warn_minutes": 180,
+  "quickstart_warn_minutes": 240,
   "reasons": {
    "after-quickstart": "Nach dem Schnellstart, wenn du weitermachen willst.",
    "assess": "Zum Einschätzen reicht der Überblick.",
    "capstone": "Abschlussprojekt für dein Ziel.",
-   "community": "Leute und Skills, die weiterhelfen.",
+   "community": "Blick über den Tellerrand: überfliegen reicht.",
    "deep-focus": "Vertiefung in deinem Schwerpunkt.",
    "heard": "Du hast davon gehört — überfliegen reicht.",
    "known": "Kennst du schon — der Schnellcheck reicht.",

@@ -4,11 +4,11 @@ type: lesson
 title: Datenschutz, Aufbewahrung und regulierte Branchen
 shelf: security
 level: deep-dive
-minutes: 15
-requires: [S3.9]
+minutes: 25
+requires: [S3.9, S2.8]
 safety_floor: false
 transferable: true
-outcome: "Ich kann die Aufbewahrungsstufen der Claude-Pläne benennen, für eine regulierte Branche passende Kontrollen aus dem Kurs zuordnen und einen PreToolUse-Hook einsetzen, der sensible Muster in Datei-Schreibzugriffen blockt."
+outcome: "Ich kann die Aufbewahrungsstufen der Claude-Pläne benennen, Anliegen wie „nichts speichern“, „kein Gedächtnis“ oder „keine Schlüssel in Dateien“ einer Kontrolle zuordnen und einen PreToolUse-Hook einrichten, der sensible Muster in Datei-Schreibzugriffen blockt."
 sources:
   - https://code.claude.com/docs/en/data-usage
   - https://code.claude.com/docs/en/zero-data-retention
@@ -20,25 +20,25 @@ aliases: []
 # S3.11 · Datenschutz, Aufbewahrung und regulierte Branchen
 
 <!-- meta:start -->
-> **Regal:** [Gegenprüfung & Compliance](README.md#security) · **Stufe:** Vertiefung · **~15 Min** · **Voraussetzungen:** [S3.9 Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md)
+> **Regal:** [Gegenprüfung & Compliance](README.md#security) · **Stufe:** Vertiefung · **~25 Min** · **Voraussetzungen:** [S3.9 Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md) · [S2.8 Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md)
 >
 > ← [S3.10 Netzwerk und Skills härten](s3-10-netzwerk-und-skills-haerten.md) · [Bibliothek](README.md) · [S3.12 Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md) →
 <!-- meta:end -->
 
 ## Schnellcheck
 
-- Hast du schon geprüft, welche Trainings- und Aufbewahrungsregeln für deinen Claude-Plan gelten und ob Zero Data Retention (ZDR) für euch in Frage kommt?
-- Kannst du ohne Nachschlagen einen PreToolUse-Hook skizzieren, der sensible Muster in Datei-Schreibzugriffen blockt?
+- Weißt du, welche Trainings- und Aufbewahrungsregel für deinen Claude-Plan gilt?
+- Kannst du ohne Nachschlagen sagen, welcher Exit-Code einen PreToolUse-Hook zum Blocken bringt?
 
 ## Auf einen Blick
 
-Wie lange Anthropic deine Prompts und Antworten aufbewahrt und ob damit trainiert wird, hängt vom Plan ab: bei Free, Pro und Max je nach deiner Einstellung 5 Jahre oder 30 Tage, bei Team, Enterprise und API 30 Tage ohne Training, mit Zero Data Retention (ZDR, nur für geprüfte Enterprise-Organisationen) keine Speicherung nach der Antwort. In regulierten Umgebungen kommen Kontrollen aus dem Kurs dazu: Auto-Memory aus, Freigabe-Gates in jeder Automation, ein Hook gegen sensible Daten und eine Allowlist für ausgehende Anfragen.
+Wie lange Anthropic deine Prompts und Antworten aufbewahrt und ob damit trainiert wird, hängt vom Plan ab: bei Free, Pro und Max je nach deiner Einstellung 5 Jahre oder 30 Tage, bei Team, Enterprise und API 30 Tage ohne Training, mit Zero Data Retention (ZDR, nur für von Anthropic freigeschaltete Organisationen) keine Speicherung nach der Antwort. Daneben gibt es Kontrollen auf deiner Seite: Auto-Memory abschalten, ein Hook gegen sensible Muster, Regeln für ausgehende Anfragen, menschliche Freigabe.
 
-Die Muster hier sind Vorlagen, keine Rechtsberatung. Wie EN 50131, DSGVO oder NIS2 für dein Unternehmen auszulegen sind, entscheidet dein Compliance-Team.
+Dieses Kapitel ist keine Rechtsberatung. Welche Vorschrift für dich gilt und was sie verlangt, klärt dein Compliance-Team. Hier lernst du, was jede Kontrolle technisch tut und wo sie endet.
 
 ## Bild im Kopf
 
-Das ist wie die Aufbewahrungsrichtlinie für Videoaufnahmen. Der Consumer-Plan ist ein 30-Tage-Ringspeicher mit Opt-in-Archiv, und wer das Archiv erlaubt, erlaubt dem Hersteller auch, die Aufnahmen zur Produktverbesserung zu nutzen. Enterprise ist derselbe 30-Tage-Ringspeicher, aber ohne Weitergabe. ZDR sind Kameras, die laufen, aber nichts aufzeichnen: maximaler Datenschutz, dafür fällt die Wiedergabe weg.
+Denk an die Aufbewahrungsrichtlinie für Videoaufnahmen. Der Consumer-Plan ist ein Ringspeicher, dessen Dauer davon abhängt, ob du das Archiv erlaubst; wer es erlaubt, erlaubt dem Hersteller auch, die Aufnahmen zur Produktverbesserung zu nutzen. Ein kommerzieller Plan ist ein 30-Tage-Ringspeicher ohne Weitergabe. ZDR sind Kameras, die laufen, aber nichts aufzeichnen: Dafür fallen Funktionen weg, die eine Aufzeichnung brauchen.
 
 ## Im Detail
 
@@ -48,88 +48,49 @@ Das ist wie die Aufbewahrungsrichtlinie für Videoaufnahmen. Der Consumer-Plan i
 |---|---|---|---|
 | **Free, Pro, Max** | nur, wenn du es erlaubst | erlaubt: 5 Jahre; nicht erlaubt: 30 Tage | Consumer-Pläne; die Einstellung änderst du jederzeit unter claude.ai/settings/data-privacy-controls |
 | **Team, Enterprise, API** | nein (Standard) | 30 Tage | kommerzielle Pläne |
-| **Enterprise mit ZDR** | nein | keine Speicherung nach der Antwort | nur für geprüfte Organisationen; einige Funktionen sind abgeschaltet |
+| **Enterprise mit ZDR** | nein | keine Speicherung nach der Antwort | nur für freigeschaltete Organisationen; einige Funktionen sind abgeschaltet |
 
-ZDR ist nicht im normalen Enterprise-Plan enthalten und lässt sich nicht in den Admin-Einstellungen einschalten. Anthropic prüft die Berechtigung und schaltet ZDR je Organisation frei. Auch mit ZDR darf Anthropic Daten aufbewahren, wo das Gesetz es verlangt oder um Missbrauch zu bekämpfen. Weil nichts gespeichert wird, sind Funktionen abgeschaltet, die gespeicherte Sitzungsdaten brauchen, darunter Cloud-Sitzungen, Remote Control und `/feedback`. ZDR gilt nur für die direkte Anthropic-Plattform; bei Amazon Bedrock, Google Cloud oder Microsoft Foundry gelten deren Regeln.
+ZDR ist nicht im normalen Enterprise-Plan enthalten und lässt sich nicht in den Admin-Einstellungen einschalten. Anthropic prüft die Berechtigung und schaltet ZDR je Organisation frei. Auch mit ZDR darf Anthropic Daten aufbewahren, wo das Gesetz es verlangt oder um Missbrauch zu bekämpfen. Weil nichts gespeichert wird, sind Funktionen abgeschaltet, die gespeicherte Sitzungsdaten brauchen, darunter Cloud-Sitzungen, Remote Control und `/feedback`. ZDR gilt nur für die direkte Anthropic-Plattform; bei Amazon Bedrock, Google Cloud oder Microsoft Foundry gelten deren Regeln. Es deckt auch nicht alles: Chat auf claude.ai, Cowork und was MCP-Server oder andere Integrationen verarbeiten, fallen nicht darunter.
 
-### Verschlüsselung: unterwegs, beim Anbieter, auf deinem Rechner
+### Was auf deinem Rechner bleibt
 
-Prompts und Antworten gehen per TLS 1.2 oder neuer verschlüsselt an den Anbieter. Wie sie dort gespeichert sind, hängt vom Anbieter ab: Die Anthropic-API verschlüsselt ihre Datenträger mit AES-256, Bedrock nutzt AES-256 mit von AWS verwalteten Schlüsseln (eigene Schlüssel über AWS KMS), Google Cloud von Google verwaltete Schlüssel (eigene über CMEK), bei Foundry hängt es von der Hosting-Variante ab.
-
-Auf deinem Rechner speichert Claude Code die Sitzungsprotokolle im Klartext unter `~/.claude/projects/`, standardmäßig 30 Tage lang, damit du Sitzungen fortsetzen kannst. Die Dauer stellst du mit `cleanupPeriodDays` ein. Personendaten, die in einer Sitzung auftauchen, liegen also auch lokal.
+Prompts und Antworten gehen per TLS 1.2 oder neuer verschlüsselt an den Anbieter; wie sie dort gespeichert sind, hängt vom Anbieter ab. Auf deinem Rechner speichert Claude Code die Sitzungsprotokolle im Klartext unter `~/.claude/projects/`, standardmäßig 30 Tage lang, damit du Sitzungen fortsetzen kannst. Die Dauer stellst du mit `cleanupPeriodDays` ein. Personendaten, die in einer Sitzung auftauchen, liegen also auch lokal.
 
 ### Telemetrie abschalten
 
 Claude Code sendet, je nach Anbieter und Anmeldung, Nutzungsmetriken und Fehlerberichte. Die Metriken enthalten laut Doku nie deinen Code, deine Prompts oder Dateipfade. Abschalten kannst du beides getrennt:
 
 ```bash
-export DISABLE_TELEMETRY=1           # No operational metrics (Statsig)   — macOS/Linux/Git Bash
-export DISABLE_ERROR_REPORTING=1     # No error logging (Sentry)
+export DISABLE_TELEMETRY=1           # no operational metrics; macOS/Linux/Git Bash
+export DISABLE_ERROR_REPORTING=1     # no error reports
 ```
 
 ```powershell
-$env:DISABLE_TELEMETRY = "1"         # Windows PowerShell (session); persist with setx
+$env:DISABLE_TELEMETRY = "1"         # Windows PowerShell, this session only
 $env:DISABLE_ERROR_REPORTING = "1"
 ```
 
 Telemetrie abzuschalten ändert nichts daran, ob mit deinen Gesprächen trainiert wird; das regeln Plan und Datenschutzeinstellung oben.
 
-### Regulierte Branchen: welche Kontrolle wofür
+### Welche Kontrolle für welches Anliegen
 
-Branchen und Rechtsräume regeln unterschiedlich, was du automatisieren darfst. Für den Blick aus der physischen Sicherheit sind **EN 50131/50132, DSGVO und NIS2** der Kern. HIPAA, PCI-DSS, DORA und MiFID II stehen als Transferbeispiele in der Tabelle: Dieselben Schutzmechanismen lassen sich übertragen, sie sind aber nicht das Hauptziel.
+Jede Kontrolle tut etwas Bestimmtes und lässt anderes offen. Welche davon dein Unternehmen für welche Vorschrift verlangt, legt dein Compliance-Team fest; die Tabelle zeigt nur, was sie technisch leisten.
 
-| Branche / Region | Regelwerk | Was das für Claude Code heißt |
-|---|---|---|
-| **EU, physische Sicherheit** | EN 50131 (Einbruchmeldeanlagen), EN 50132 (Videoüberwachung) | Autonome Firmware-Updates an Alarm- und Zutrittscontrollern sind nicht zulässig: Freigabe-Gate und Audit-Trail sind Pflicht. Drift der Auto-Memory bei Firmware-Code vermeiden ([S4.10](s4-10-diagnose-schritt-fuer-schritt.md)). |
-| **EU allgemein** | DSGVO | Personendaten in Zutrittsprotokollen oder Video-Metadaten: Auto-Memory kann sie in Prompts ziehen, also für sensible Sitzungen abschalten (Grundsatz 1). ZDR (Enterprise) für produktive Datenflüsse. Anthropic im Vertrag zur Auftragsverarbeitung als Auftragsverarbeiter nennen. |
-| **US, Gesundheit** | HIPAA | Gesundheitsdaten (PHI) dürfen deine Kontrolle nicht verlassen. ZDR dringend empfohlen; für produktive PHI ist ein Business Associate Agreement (BAA) mit Anthropic nötig. Siehe die Übung unten. |
-| **US, Finanzen** | PCI-DSS | Kartendaten in Test-Fixtures oder Logs per PreToolUse-Hook blocken (dasselbe Muster wie in der Übung unten) und eine `WebFetch(domain:...)`-Allowlist setzen. |
-| **EU, Finanzen** | DORA, MiFID II | Audit-Trail ist Pflicht. Auto-Memory und Transkript-Export zusammen nutzen, damit die Begründungen nachvollziehbar bleiben. `/autofix-pr` auf PRs regulierter Systeme nicht ohne menschliches Review. |
-| **EU, Industrie und kritische Infrastruktur** | NIS2-Richtlinie | Betreiber kritischer Infrastruktur: Freigabe-Gates in jeder Automationsschleife. Den Datenfluss von Claude Code in der NIS2-Risikobewertung dokumentieren. |
+| Anliegen | Kontrolle | Was sie tut | Was sie nicht abdeckt |
+|---|---|---|---|
+| Nach der Antwort nichts bei Anthropic speichern | ZDR | keine Speicherung nach der Antwort | gilt nur für die direkte Plattform; Chat, Cowork und Integrationen bleiben draußen |
+| Keine Inhalte aus früheren Sitzungen in neue Prompts ziehen | Auto-Memory aus: `"autoMemoryEnabled": false` in den Settings, der Schalter in `/memory` oder `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` | Claude schreibt und liest kein Gedächtnis mehr | die Sitzungsprotokolle auf deinem Rechner bleiben |
+| Keine Schlüssel oder Nummern in Dateien | PreToolUse-Hook mit Matcher `Write\|Edit` (siehe unten) | blockt einen Schreibzugriff, wenn ein Muster passt | erkennt nur Muster, die er kennt; Schreibwege über die Shell, etwa eine Umleitung `>`, deckt er nicht ab |
+| Ausgehende Webabrufe begrenzen | `WebFetch(domain:…)`-Regeln, für Sandbox-Befehle `sandbox.network.deniedDomains` ([S3.10](s3-10-netzwerk-und-skills-haerten.md)) | Webabrufe auf freigegebene Domains beschränken, einzelne Domains sperren | jede Regel gilt nur für ihr Werkzeug |
+| Ein Mensch gibt Änderungen frei | ein Modus, der fragt (`default`), oder eine Ask-Regel ([S3.8](s3-08-rechte-fuer-autonomie.md)) | Claude Code fragt vor der Aktion | in `dontAsk` fragt niemand, eine Ask-Regel wird dort abgelehnt; in `auto` fragt nur noch die ausdrückliche Ask-Regel, nicht mehr der Modus |
 
-**Grundsätze für regulierte Arbeit:**
+Ein Beispiel dafür, wie das zusammenspielt: Zutrittsprotokolle enthalten Personendaten. Wer sie mit Claude Code bearbeitet, könnte Auto-Memory abschalten, einen Hook gegen Personenkennzahlen setzen und bei sensiblen Änderungen eine Freigabe verlangen. Ob dein Unternehmen das fordert und ob es genügt, ist nicht Sache dieses Kapitels.
 
-1. **Auto-Memory für sensible Sitzungen abschalten**, damit keine Personendaten versehentlich dauerhaft gespeichert werden: `"autoMemoryEnabled": false` in den Projekt- oder Nutzer-Settings (oder der Schalter in `/memory`), per Umgebungsvariable `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`. `--bare` ist dafür kein Schalter: Es ist ein Modus für Skripte und `-p`-Läufe, der beim Start Hooks, Skills, Plugins, MCP-Server, Auto-Memory und CLAUDE.md nicht lädt ([S4.3](s4-03-headless.md)).
-2. **ZDR nutzen**, wo das Regelwerk verlangt, dass der Auftragsverarbeiter nichts aufbewahrt (HIPAA mit BAA, manche Auslegungen der DSGVO, Behördenverträge mit ZDR-Pflicht).
-3. **Disziplin beim Audit-Trail:** Git-Commits mit klarer Urheberschaft; `/autofix-pr` nie auf geschützte Branches pushen lassen; Transkripte für die Aufbewahrungsfrist der Aufsicht archivieren.
-4. **Datenfluss an deinen Datenschutzbeauftragten melden:** Anthropic für Claude (`api.anthropic.com` oder euer Bedrock- bzw. Google-Cloud-Mandant), OpenAI für Codex, falls du es anbindest ([S4.2](s4-02-codex-schwarm.md)), Google für NotebookLM ([S2.18](s2-18-rag-und-notebooklm.md)). Jeder davon ist eine eigene Auftragsverarbeitung. Auch mit ZDR gilt: Daten, die MCP-Server und andere Integrationen verarbeiten, deckt ZDR nicht ab.
-5. **Rechte-Regel `WebFetch(domain:...)`:** ausgehende HTTP-Anfragen auf freigegebene Domains beschränken, damit nichts versehentlich bei Scraping-Diensten landet.
-6. **Sandbox-Netz mit `sandbox.network.deniedDomains`:** versehentlichen Abfluss schon in der Sandbox sperren ([S3.10](s3-10-netzwerk-und-skills-haerten.md)).
+Jeder weitere Anbieter, den du anbindest, bekommt Daten unter seinen eigenen Regeln: ein zweites Coding-Werkzeug ([S4.2](s4-02-codex-schwarm.md)) ebenso wie ein Notizbuch-Dienst ([S2.18](s2-18-rag-und-notebooklm.md)). Die Regeln des Abschnitts „Aufbewahrung und Training je Plan“ gelten nur für Anthropic.
 
-**Vorbehalt:** Jedes Unternehmen legt diese Regelwerke anders aus, und nationale Behörden (BfDI in Deutschland, CNIL in Frankreich, ICO im Vereinigten Königreich) weichen teils voneinander ab. Der Kurs liefert Muster; **die Auslegung für euren Fall macht euer Compliance-Team.** Im Zweifel nimm den vorsichtigeren Weg: menschliche Freigabe, ZDR, Auto-Memory aus.
+### Ein Hook gegen sensible Muster
 
-### Bekannte Schwachstellen als Lehrbeispiele
-
-- **CVE-2025-53110:** Pfad-Traversal in der Pfadprüfung eines MCP-Servers. Die Prüfung mit `startsWith()` ließ sich mit `../`-Folgen umgehen; behoben wurde das mit strikter Pfad-Normalisierung. Die Lehre: Pfade nie per einfachem Zeichenvergleich prüfen. Schon der alte Kurs vermerkte (Stand 2026-05), dass die aktuelle Claude-Code-Doku dieses CVE nicht mehr in dieser Form als Beispiel führt. Das Muster dahinter, Präfixvergleich statt Kanonisierung, bleibt aktuell ([S2.17](s2-17-mcp-sicherheit.md)).
-- **Lieferkette:** Verlassene Repositories in Skill-Marktplätzen lassen sich übernehmen, und über das nächste Update landen bösartige Skills bei ahnungslosen Nutzern. Muster und Gegenmaßnahmen stehen in [S2.13](s2-13-plugin-lieferkette.md).
-
-Beide Beispiele zeigen an echten Fällen, warum das Rechtesystem und die Prüfung von Plugins zählen.
-
-## Selbst machen
-
-### Bonus-Übung: Leitplanke für sensible Daten im HIPAA-Stil (etwa 20 Minuten, allein)
-
-**Ziel:** Einen Hook bauen, der jeden Schreibzugriff auf sensible Datenmuster prüft, als Nachbau einer Compliance-Leitplanke.
-
-> **Nicht in den USA?** Die Übung nutzt HIPAA als konkretes Beispiel. Das Muster, sensible Daten per PreToolUse-Hook von unsicheren Orten fernzuhalten, gilt genauso für die DSGVO (Personendaten in der EU), PCI-DSS (Zahlungskarten) und EN 50131 (Zutrittsprotokolle der physischen Sicherheit). Pass die Muster an dein Regelwerk an; der Hook-Mechanismus bleibt gleich. Welche Kontrolle zu welchem Regelwerk passt, steht oben unter „Regulierte Branchen".
-
-**Hintergrund:** Im Gesundheitswesen (HIPAA), in der Finanzbranche (PCI-DSS) und in der physischen Sicherheit (Zutrittsprotokolle mit Personendaten) gibt es strenge Regeln, welche Daten in Dateien landen dürfen. Dieser PreToolUse-Hook hält Claude davon ab, versehentlich sensible Muster in Code oder Konfigurationsdateien zu schreiben. Die Grundlagen zu Hooks stehen in [S2.8](s2-08-hook-einrichten.md).
-
-**Analogie:** Der Scanner am Ausgang eines Hochsicherheitsgeländes, der prüft, dass niemand Verschlusssachen aus dem Gebäude trägt.
-
-**Schritt 1: sensible Muster festlegen**
-
-Wähl Muster für deine Domäne (geschrieben für `grep -E`, das kein `\d` kennt):
-
-- US-Sozialversicherungsnummern: `[0-9]{3}-[0-9]{2}-[0-9]{4}`
-- Kreditkartennummern: `[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}`
-- API-Schlüssel: `(sk-|pk_)[A-Za-z0-9]{20,}` und `AKIA[A-Z0-9]{16}`
-- Ausweis-IDs (deine Domäne!): Muster aus dem Format deiner Kartenleser
-- IP-Adressen der internen Infrastruktur: `10\.[0-9]+\.[0-9]+\.[0-9]+` oder `192\.168\.`
-
-**Schritt 2: den Scanner-Hook anlegen**
-
-Leg `~/.claude/hooks/sensitive-data-scanner.sh` an (getestet im Repo als [`resources/demos/assets/hooks/sensitive-data-scanner.sh`](../demos/assets/hooks/sensitive-data-scanner.sh)). `grep -E` versteht kein `\d`, deshalb schreibt das Skript Ziffern als `[0-9]`.
+Der Hook prüft vor jedem Schreibzugriff den neuen Dateitext. Write schickt ihn als `tool_input.content`, Edit als `tool_input.new_string`. Von den Exit-Codes blockt nur `exit 2` den Schreibzugriff, jeder andere Code lässt ihn durch ([S2.8](s2-08-hook-einrichten.md)). Kann das Skript seine Eingabe nicht lesen, blockt es lieber, statt still alles durchzulassen. Den Treffer selbst gibt es absichtlich nicht aus, weil stderr als Begründung an Claude geht. Das ist die getestete Vorlage (Bash, braucht `jq`):
 
 <!-- cockpit:example -->
 ```bash
@@ -143,7 +104,11 @@ Leg `~/.claude/hooks/sensitive-data-scanner.sh` an (getestet im Repo als [`resou
 INPUT=$(cat)
 
 # Fail closed: if the input cannot be read, block instead of silently allowing the write.
-if ! CONTENT=$(printf '%s' "$INPUT" | jq -er '.tool_input.content // .tool_input.new_string // ""' 2>/dev/null); then
+# Readable means a JSON object: jq would turn "null" into empty content without complaint.
+READ_CONTENT='if type != "object" then error("hook input is not a JSON object") else
+  .tool_input.content // .tool_input.new_string // ""
+end'
+if ! CONTENT=$(printf '%s' "$INPUT" | jq -er "$READ_CONTENT" 2>/dev/null); then
   echo "SCANNER: could not read the hook input (is jq installed?) - blocking to stay safe." >&2
   exit 2
 fi
@@ -161,50 +126,180 @@ fi
 exit 0
 ```
 
-Write schickt den neuen Dateitext als `tool_input.content`, Edit als `tool_input.new_string`. Von den Exit-Codes blockt nur `exit 2` den Schreibzugriff. Kann das Skript seine Eingabe nicht lesen, blockt es lieber, statt still alles durchzulassen. Den Treffer selbst gibt es absichtlich nicht aus, weil stderr als Begründung an Claude geht.
+Dieselbe Prüfung als zweite getestete Vorlage in Python, für Rechner ohne Bash oder `jq`:
 
-**Schritt 3: eintragen und testen**
+```python
+# sensitive-data-scanner.py - PreToolUse hook (matcher "Write|Edit"): block sensitive data in file writes.
+# tested asset: resources/demos/assets/hooks/sensitive-data-scanner.py
+#
+# Same checks as sensitive-data-scanner.sh, for machines without bash or jq.
+# exit 2 blocks the write; any other non-zero exit code would let it through.
+import json
+import re
+import sys
 
-Trag den Hook unter einem `Write|Edit`-Matcher ein. **Führe** ihn in deine bestehende `hooks`-Struktur ein, statt den ganzen Block zu überschreiben, und prüf danach mit `python -m json.tool ~/.claude/settings.json`. Nimm am besten eine projekt-lokale `.claude/settings.json`, dann bleibt deine globale Konfiguration unberührt. Zum Testen bittest du Claude, eine Konfigurationsdatei mit einem fest eingetragenen API-Schlüssel anzulegen.
+PATTERN = re.compile(
+    r"[0-9]{3}-[0-9]{2}-[0-9]{4}"
+    r"|[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}"
+    r"|(sk-|pk_)[A-Za-z0-9]{20,}"
+    r"|AKIA[A-Z0-9]{16}"
+    r'|password\s*=\s*"[^"]+"',
+    re.IGNORECASE,
+)
+
+# Fail closed: if the input cannot be read, block instead of silently allowing the write.
+try:
+    tool_input = json.load(sys.stdin)["tool_input"]
+    content = tool_input.get("content") or tool_input.get("new_string") or ""
+    if not isinstance(content, str):
+        raise ValueError("content is not a string")
+except Exception:
+    print("SCANNER: could not read the hook input - blocking to stay safe.", file=sys.stderr)
+    sys.exit(2)
+
+if PATTERN.search(content):
+    # Do not print the match itself: stderr goes to Claude as the block reason.
+    print("BLOCKED: sensitive data pattern detected in the file content.", file=sys.stderr)
+    print("Redact or remove it before writing (use an environment variable or a secret store).", file=sys.stderr)
+    sys.exit(2)
+sys.exit(0)
+```
+
+Die Muster sind Beispiele für Schlüssel, Kartennummern und Kennwort-Zuweisungen; ersetze sie durch die Formate deiner Arbeit. Hooks sind Wächter nach bestem Bemühen, keine harte Grenze.
+
+## Selbst machen
+
+### Übung: den Scanner einrichten und blocken sehen (etwa 15 Minuten)
+
+**Ziel:** Du richtest den Scanner in einem Wegwerf-Projekt ein, prüfst ihn von Hand und siehst, wie er einen Schreibzugriff mit einem Schlüssel blockt und einen harmlosen durchlässt.
+
+**Startzustand:** Du arbeitest im Ordner `~/cc-workshop/scanner`; deine globale Konfiguration bleibt unberührt. Wähl deine Variante. **Variante A (Bash):** macOS, Linux oder Windows mit Git Bash, dazu `jq` ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#jq)). **Variante B (Python):** nur Python, ohne `jq`; sie nutzt die zweite getestete Vorlage unten, mit denselben Mustern, und läuft auf jedem System. Unter macOS und Linux heißt Python oft `python3`: Nimm dann überall `python3` statt `python`.
+
+1. Leg den Ordner an und wechsle hinein. Bash:
+
+   ```bash
+   mkdir -p ~/cc-workshop/scanner/.claude/hooks
+   cd ~/cc-workshop/scanner
+   ```
+
+   PowerShell:
+
+   ```powershell
+   New-Item -ItemType Directory -Force "$HOME\cc-workshop\scanner\.claude\hooks" | Out-Null
+   Set-Location "$HOME\cc-workshop\scanner"
+   ```
+
+2. Leg das Skript mit einem Editor an (`.claude` ist ein geschützter Pfad, Claude würde dort nachfragen). Variante A: der Bash-Block aus „Im Detail“ als `.claude/hooks/sensitive-data-scanner.sh`. Variante B: der Python-Block aus „Im Detail“ als `.claude/hooks/sensitive-data-scanner.py`.
+
+3. Teste das Skript von Hand, bevor Claude es benutzt. Variante A in Bash:
+
+   ```bash
+   echo '{"tool_name":"Write","tool_input":{"file_path":"t.txt","content":"api_key = pk_abcdefghijklmnopqrstuv"}}' | bash .claude/hooks/sensitive-data-scanner.sh; echo "exit=$?"
+   echo '{"tool_name":"Write","tool_input":{"file_path":"t.txt","content":"hello"}}' | bash .claude/hooks/sensitive-data-scanner.sh; echo "exit=$?"
+   echo 'not json' | bash .claude/hooks/sensitive-data-scanner.sh; echo "exit=$?"
+   ```
+
+   Variante A in PowerShell (mit Git Bash) und Variante B: Schreib vor das `|` dieselben JSON-Zeilen, hinter das `|` `bash .claude/hooks/sensitive-data-scanner.sh` bzw. `python .claude/hooks/sensitive-data-scanner.py`, und gib den Code in PowerShell mit `"exit=$LASTEXITCODE"` aus, in Bash mit `echo "exit=$?"`. Erwartet: Beim ersten Aufruf erscheint `BLOCKED: sensitive data pattern detected in the file content.` und `exit=2`. Beim zweiten kommt keine Ausgabe und `exit=0`. Beim dritten, einer Eingabe ohne JSON, erscheint `SCANNER: could not read the hook input` und `exit=2`: Der Scanner fällt geschlossen.
+4. Trag den Hook in `.claude/settings.json` ein. Variante A:
+
+   ```json
+   {
+     "hooks": {
+       "PreToolUse": [
+         {
+           "matcher": "Write|Edit",
+           "hooks": [
+             {
+               "type": "command",
+               "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/sensitive-data-scanner.sh"
+             }
+           ]
+         }
+       ]
+     }
+   }
+   ```
+
+   Variante B (Exec-Form nach der Hooks-Doku, ohne Quoting-Fallen):
+
+   ```json
+   {
+     "hooks": {
+       "PreToolUse": [
+         {
+           "matcher": "Write|Edit",
+           "hooks": [
+             {
+               "type": "command",
+               "command": "python",
+               "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/sensitive-data-scanner.py"]
+             }
+           ]
+         }
+       ]
+     }
+   }
+   ```
+
+5. Starte `claude --permission-mode acceptEdits`, bestätige den Vertrauensdialog und gib `/hooks` ein. Erwartet: ein Eintrag unter PreToolUse. Schließ die Ansicht mit `Esc`.
+6. Gib ein: `Create the file settings-test.txt containing exactly this line: api_key = pk_abcdefghijklmnopqrstuv`. Erwartet: Die Datei entsteht nicht, ohne dass eine Rückfrage kam. Im Transkript (`Ctrl+O`) oder in Claudes Antwort steht `BLOCKED: sensitive data pattern detected`; dieser Text stammt aus deinem Skript. Weigert sich Claude von selbst und die Meldung fehlt, hat nicht der Hook geblockt: Formulier den Auftrag um.
+7. Gib ein: `Create the file ok.txt containing exactly this line: hello`. Erwartet: Die Datei entsteht ohne Hook-Meldung.
+8. Beende die Sitzung mit `/exit` und prüf in einem zweiten Terminal: `ls` (PowerShell `dir`) zeigt `ok.txt`, aber kein `settings-test.txt`.
+
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/scanner` selbst. Der Hook galt nur dort.
 
 **Geschafft, wenn:**
 
-- [ ] der Hook Schreibzugriffe mit sensiblen Mustern blockt
-- [ ] normale Schreibzugriffe ohne sensible Daten durchgehen
-- [ ] du mindestens ein Muster an deine Domäne angepasst hast
-- [ ] du erklären kannst, warum von den Exit-Codes nur `exit 2` blockt und was passiert, wenn der Scanner mit einem anderen Code abstürzt (der Schreibzugriff geht durch: Der Scanner fällt offen)
+- [ ] der Handtest `exit=2` für den Schlüssel, `exit=0` für `hello` und `exit=2` für die Eingabe ohne JSON zeigte
+- [ ] `/hooks` den Eintrag unter PreToolUse zeigte
+- [ ] `settings-test.txt` nicht existierte und `ok.txt` existierte
+- [ ] du erklären kannst, was passiert wäre, hätte das Skript bei einem Treffer mit `exit 1` geendet
 
-**Zum Nachdenken**
+### Extra: ein eigenes Muster (etwa 5 Minuten)
 
-1. Welche sensiblen Datenmuster gibt es in deinen echten Projekten?
-2. Könntest du den Hook auch als PostToolUse-Hook laufen lassen, der nur protokolliert statt zu blocken?
-3. Wie gehst du mit Fehlalarmen um, etwa mit Testdaten, die wie echte Zugangsdaten aussehen?
+**Ziel:** Du passt den Scanner an ein Format an, das in deiner Arbeit vorkommt.
 
-Eine weitere Übung mit Compliance-Bezug, die Integrität des Audit-Trails nach EN 50131, steht als Extra in [S3.6](s3-06-devils-advocate.md).
+**Startzustand:** der Ordner `~/cc-workshop/scanner` aus der Übung, falls noch nicht gelöscht.
+
+1. Ergänz im Skript ein Muster, etwa für ein Ausweis-ID-Format deiner Arbeit, in `grep -E`-Schreibweise `[0-9]` statt `\d`. Teste es mit dem Handtest aus Schritt 3 mit einem erfundenen Wert in `content`.
+
+**Geschafft, wenn:**
+
+- [ ] dein Muster einen erfundenen Wert blockt und `hello` weiter durchläuft
 
 ## Typische Fallen
 
 - **Telemetrie aus heißt nicht Training aus.** `DISABLE_TELEMETRY` stoppt Nutzungsmetriken. Ob mit deinen Gesprächen trainiert wird, regeln Plan und Datenschutzeinstellung.
-- **`--bare` als Memory-Schalter.** `--bare` ist für Skripte und `-p`-Läufe gedacht und liest dein Abo-Login gar nicht, sondern einen API-Schlüssel oder die Zugangsdaten eines Cloud-Anbieters. In deiner normalen Sitzung schaltest du Auto-Memory mit `autoMemoryEnabled` oder `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` ab.
-- **ZDR deckt nicht alles.** Chat auf claude.ai, Cowork und Daten, die MCP-Server oder andere Integrationen verarbeiten, fallen nicht darunter. Und ZDR gilt nur für Anmeldungen in der ZDR-Organisation: Wer sich mit einem privaten Konto oder mit einem API-Schlüssel aus einer anderen Organisation anmeldet, ist nicht abgedeckt.
-- **Der Scanner lässt alles durch.** Endet er bei einem Treffer mit `exit 1` statt `exit 2`, läuft der Schreibzugriff trotzdem. Warum, steht in [S2.8](s2-08-hook-einrichten.md).
+- **Plötzlich wird jeder Schreibzugriff geblockt.** Das Skript konnte seine Eingabe nicht lesen und ist absichtlich geschlossen gefallen. Bei Variante A fehlt meist `jq`: Installier es oder nimm Variante B.
+- **Der Hook läuft gar nicht.** Hast du den Vertrauensdialog bestätigt? Stimmt der Pfad in `settings.json`? Ein falscher Pfad lässt den Wächter still ausgeschaltet. `/hooks` zeigt, was registriert ist.
+- **Der Scanner lässt den Schlüssel durch.** Endet er bei einem Treffer mit `exit 1` statt `exit 2`, läuft der Schreibzugriff trotzdem. Auch ein Schreibweg über die Shell (`echo … > datei`) trifft den Matcher `Write|Edit` nicht.
+- **Auto-Memory abschalten mit `--bare`.** `--bare` ist ein Modus für Skripte, der beim Start Hooks, Skills, Plugins, MCP-Server, Auto-Memory und CLAUDE.md gar nicht lädt ([S4.3](s4-03-headless.md)). In deiner normalen Sitzung schaltest du Auto-Memory mit `autoMemoryEnabled` oder `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` ab.
+- **ZDR gilt für jede Anmeldung.** Es gilt nur für Anmeldungen in der ZDR-Organisation: Wer sich mit einem privaten Konto oder einem API-Schlüssel aus einer anderen Organisation anmeldet, ist nicht abgedeckt.
 
 ## Check
 
-Du kannst die drei Aufbewahrungsstufen nennen und für EN 50131, DSGVO und NIS2 jeweils eine passende Kontrolle aus dem Kurs zuordnen: Plan, Schalter, Rechte-Regel oder Freigabe-Gate.
+Du kannst die Aufbewahrungsstufen nennen, Anliegen einer Kontrolle zuordnen und einen Hook gegen sensible Muster einrichten.
 
-1. Wie lange werden Daten bei einem Pro-Plan aufbewahrt, wenn du Training erlaubst, und wie lange, wenn nicht?
-2. Welche Funktionen fallen unter ZDR weg, und warum?
-3. Womit schaltest du Auto-Memory für eine sensible Sitzung ab?
+1. Ordne zu: Welche Kontrolle passt zu (a) „nach der Antwort nichts bei Anthropic speichern“, (b) „keine Inhalte früherer Sitzungen in neue Prompts ziehen“, (c) „keine Schlüssel in Dateien schreiben“, und was deckt jede nicht ab?
+2. Welcher Exit-Code lässt einen PreToolUse-Hook blocken, und was tut der Scanner dieses Kapitels, wenn er seine Eingabe nicht lesen kann?
+3. Wie lange werden Daten bei einem Pro-Plan aufbewahrt, wenn du Training erlaubst, und wie lange, wenn nicht?
+
+<details><summary>Auflösung</summary>
+
+1. (a) ZDR; es gilt nur für die direkte Anthropic-Plattform, Chat, Cowork und Integrationen bleiben draußen. (b) Auto-Memory aus; die Sitzungsprotokolle auf deinem Rechner bleiben. (c) der PreToolUse-Hook auf `Write|Edit`; er erkennt nur bekannte Muster und deckt Schreibwege über die Shell nicht ab.
+2. `exit 2`; jeder andere Code lässt den Schreibzugriff durch. Der Scanner endet bei unlesbarer Eingabe selbst mit `exit 2` und blockt: Ein kaputter Wächter soll die Tür schließen, nicht öffnen.
+3. Mit erlaubtem Training 5 Jahre, ohne 30 Tage.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Eine Firma für Sicherheitstechnik prüft, ob sie Claude Code für Code-Reviews an der Firmware einer nach EN 50131 zertifizierten Alarmzentrale einsetzen darf. Welche Kombination passt zu den Mustern dieses Kapitels?
+**Frage:** Ein Team auf dem Team-Plan soll laut seiner Datenschutzabteilung „nichts mehr bei Anthropic speichern“. Was sagst du?
 
-- **Richtig:** Enterprise-Plan, bei Bedarf mit ZDR, Auto-Memory aus, Freigabe-Gate in jeder Automation, kein `/autofix-pr` auf geschützten Branches.
-- Falsch: Pro-Plan, `DISABLE_TELEMETRY=1` gegen das Training, Auto-Memory an, Firmware-Updates dürfen autonom in einer nächtlichen Schleife laufen.
-- Falsch: Enterprise mit ZDR, das allein erfüllt EN 50131, DSGVO und NIS2 schon; Auto-Memory darf an bleiben, Freigabe-Gates entfallen.
-- Falsch: Team-Plan, Anthropics API-Domain in `sandbox.network.deniedDomains`, Auto-Memory aus, `/autofix-pr` auf allen Branches erlaubt.
+- **Richtig:** Dafür braucht es ZDR, das Anthropic je Organisation freischaltet. Der Team-Plan trainiert standardmäßig nicht, bewahrt aber 30 Tage auf.
+- Falsch: `DISABLE_TELEMETRY=1` in den Umgebungsvariablen aller Rechner genügt, denn damit speichert Claude Code nichts mehr bei Anthropic.
+- Falsch: Ein Admin schaltet ZDR in den Einstellungen der Organisation ein, danach gilt es für alle Anmeldungen und für alle Funktionen.
+- Falsch: Jeder Enterprise-Plan enthält ZDR bereits, deshalb ist der Wechsel vom Team-Plan auf Enterprise die einzige nötige Änderung.
 
 </details>
 
@@ -222,5 +317,4 @@ Du kannst die drei Aufbewahrungsstufen nennen und für EN 50131, DSGVO und NIS2 
 - [S4.2 · Codex-Schwarm und die Datenfluss-Grenze](s4-02-codex-schwarm.md)
 - [S2.18 · RAG und NotebookLM: dem Agenten Baupläne geben](s2-18-rag-und-notebooklm.md)
 - [S4.3 · Headless: claude -p als Pipeline-Stufe](s4-03-headless.md)
-- [S4.10 · Diagnose Schritt für Schritt](s4-10-diagnose-schritt-fuer-schritt.md)
-- Getestete Hook-Datei: [`sensitive-data-scanner.sh`](../demos/assets/hooks/sensitive-data-scanner.sh)
+- Getestete Hook-Dateien: [`sensitive-data-scanner.sh`](../demos/assets/hooks/sensitive-data-scanner.sh), [`sensitive-data-scanner.py`](../demos/assets/hooks/sensitive-data-scanner.py)
