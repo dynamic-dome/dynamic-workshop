@@ -15,13 +15,13 @@ Zeichne das Architekturbild aus „Im Detail" an oder zeig es. Geh diese Station
 
 Nutze das Bild als Rückblick. Erkläre an jedem Knoten, was er tut und wo seine Sicherheitsgrenze liegt.
 
-Die übrigen Schritte dieser Vorführung stehen bei ihren Kapiteln: Worktree-Isolation in [S4.7](s4-07-isolation-docker-worktrees.md), Remote Control, `/teleport` und die Telegram-Bridge in [S4.6](s4-06-remote-und-teleport.md).
+Die übrigen Stationen zeigen ihre Kapitel: Worktree-Isolation die Demo in [S4.7](s4-07-isolation-docker-worktrees.md), Remote Control und `/teleport` die Demo in [S4.6](s4-06-remote-und-teleport.md). Die Telegram-Bridge im Bild ist ein Workshop-Eigenbau (🔧), im Kapitel [S4.8](../../library/s4-08-abschlussprojekt.md) als solcher gekennzeichnet; vorgeführt wird sie nicht.
 
 <details><summary>Für Moderierende</summary>
 
 **Dauer:** 3–4 Minuten.
 
-**Sagen (zum Abschluss):** „Ihr habt jetzt alle fünf Erweiterungsebenen dieses Kurses gesehen: Skills, Hooks, Plugins, MCP, RAG, dazu Multi-Agent, Sicherheit, Automation und CI/CD. Die Telegram-Bridge ist ein selbst gebautes Beispiel für das Muster ‚Fernkoordination‘. Dasselbe Muster gibt es offiziell: `claude remote-control` und Channels (MCP-Push, noch Research Preview)."
+**Sagen (zum Abschluss):** „Ihr habt jetzt alle fünf Erweiterungsebenen dieses Kurses gesehen: Skills, Hooks, Plugins, MCP, RAG, dazu Multi-Agent, Sicherheit, Automation und CI/CD. Die Telegram-Bridge im Bild ist ein selbst gebautes Beispiel für das Muster ‚Fernkoordination‘. Dasselbe Muster gibt es offiziell: `claude remote-control` für das Handy als Bedienpult und Channels (Research Preview) für Nachrichten, die von außen in eine Sitzung kommen."
 
 Die Fehlersuche ([S4.9](../../library/s4-09-fehlersuche-werkzeuge.md), [S4.10](../../library/s4-10-diagnose-schritt-fuer-schritt.md)) folgt nach dem Abschlussprojekt.
 
