@@ -32,7 +32,7 @@
 | P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] `664d5ca` |
 | P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [x] `359c9db` und Folge-Commit, siehe Abschluss P5 |
 | P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [x] `8a96a4a`; S1.20 mit P7a, S2.20 mit P7c, S3.15 mit P7e erledigt |
-| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] siehe Abschluss P7e · P7f [ ] (Schreiber gestartet, siehe „Stand P7f“) |
+| P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [ ] (Schreiber gestartet, siehe „Stand P7f“) |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [ ] |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [ ] |
 
@@ -585,7 +585,7 @@ Danach übernimmt, wer abnimmt: alle Kapitel lesen, jede Hauptübung durchspiele
 
 - **Schreiber** (Sonnet, neun Commits `a107ff0..f1a92ab`): S3.8 bis S3.14, S4.1, S4.2. Die Sicherheitskapitel haben
   Übungen, deren Ergebnis an `git` abzulesen ist; S3.14 hängt nicht mehr an einem Plugin-Befehl, den es nicht gibt;
-  S4.2 hat eine Übung ohne zweiten Anbieter. Übernommen als Merge (Hash im Log: „Merge branch 'p7e-schreiber'“).
+  S4.2 hat eine Übung ohne zweiten Anbieter. Übernommen als Merge `7b75b5e`.
 - **S3.15** ist der Abschluss von Session 3 (neuer Titel „alles in einem Ablauf“): Regeln, gedeckelter Lauf im
   Worktree, eigener Subagent als Gegenprüfung, Übernahme erst durch den eigenen Merge.
 - **Neue getestete Vorlage:** `sensitive-data-scanner.py` (Tests zuerst; beide Scanner teilen die Tests). Damit
