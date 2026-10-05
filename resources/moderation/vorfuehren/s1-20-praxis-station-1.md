@@ -5,7 +5,7 @@
 **Vor Session 1: Checkliste für die Demos**
 
 - [ ] Terminal offen, Claude Code installiert (`claude --version`) und angemeldet (`claude auth status`)
-- [ ] Arbeitsordner an einem neutralen Ort, etwa `~/cc-workshop/demos/`
+- [ ] Arbeitsordner an einem neutralen Ort: Jede Demo zeigt die Übung ihres Kapitels und legt ihren Ordner unter `~/cc-workshop/<name>` an (`hello`, `claudemd`, `auftrag`, `git`, `worktree`, `kosten`, `station1`)
 - [ ] keine sensiblen Dateien offen oder sichtbar
 - [ ] Schrift groß genug für die Leinwand (Terminal-Schriftgröße 16 oder mehr)
 - [ ] `gh` (GitHub CLI) angemeldet, falls die Git-Demo ([S1.16](s1-16-git-in-einem-fluss.md)) einen PR anlegt
@@ -15,7 +15,7 @@ Dein Publikum sind erfahrene Entwicklerinnen und Entwickler aus der physischen S
 
 **Wenn es in einer Demo hakt**
 
-- **Claude liefert etwas Falsches.** Versteck es nicht, mach einen Lehrmoment daraus: „Genau deshalb prüfen wir, bevor wir etwas übernehmen. Ich zeige euch, wie man den Kurs korrigiert." Dann korrigierst du mit dem Muster aus „Wenn Claude danebenliegt" oben.
+- **Claude liefert etwas Falsches.** Versteck es nicht, mach einen Lehrmoment daraus: „Genau deshalb prüfen wir, bevor wir etwas übernehmen. Ich zeige euch, wie man den Kurs korrigiert." Dann korrigierst du mit dem Muster aus dem Abschnitt „Wenn Claude danebenliegt" in [S1.20](../../library/s1-20-praxis-station-1.md).
 - **Die Demo läuft langsam.** Erklär die Konzepte weiter, während du wartest: „Während Claude nachdenkt, erkläre ich euch, was unter der Haube passiert …"
 - **Jemand fragt nach einer Funktion, die in der Demo nicht vorkommt.** „Gute Frage. Die parken wir für die Übungszeit, da habt ihr Zeit zum Ausprobieren. Kommen wir nicht dazu, sprecht mich in der Pause an."
 - **Die Terminal-Ausgabe ist auf der Leinwand schlecht lesbar.** Setz vor der Demo den Terminaltyp:
