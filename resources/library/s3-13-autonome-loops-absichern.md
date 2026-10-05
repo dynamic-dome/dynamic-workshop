@@ -4,11 +4,11 @@ type: lesson
 title: "Autonome Loops absichern: Budget und Worktree"
 shelf: automation
 level: core
-minutes: 12
+minutes: 25
 requires: [S3.12, S1.19]
 safety_floor: true
 transferable: true
-outcome: "Ich kann einen unbeaufsichtigten Lauf mit --max-budget-usd und --max-turns deckeln, ihn in einem eigenen Worktree laufen lassen und sagen, was eine interaktive Sitzung stattdessen begrenzt."
+outcome: "Ich kann einen unbeaufsichtigten Lauf mit --max-budget-usd und --max-turns deckeln, ihn in einem eigenen Worktree laufen lassen, den Stopp am Ergebnis ablesen und sagen, was eine interaktive Sitzung stattdessen begrenzt."
 sources:
   - https://code.claude.com/docs/en/cli-reference
   - https://code.claude.com/docs/en/worktrees
@@ -28,18 +28,16 @@ aliases: []
 
 ## Schnellcheck
 
-- Hast du schon einmal einen autonomen Lauf mit `--max-budget-usd` gestartet und gesehen, wie er beim Limit stoppt?
-- Kannst du ohne Nachschlagen erklären, wie ein Lauf mit `--worktree` deinen Hauptbranch vor einem Nachtjob schützt?
+- Weißt du, mit welchem Start ein `--max-budget-usd` überhaupt greift?
+- Kannst du sagen, was ein Lauf in einem Worktree nach seinem Ende auf deiner Platte hinterlässt?
 
 ## Auf einen Blick
 
-Setz die Grenzen, bevor ein autonomer Lauf startet: `--max-budget-usd` deckelt die Kosten, `--max-turns` die Zahl der Runden, und `--worktree` sperrt den Lauf in einen eigenen Arbeitsbaum, damit dein Hauptbranch unberührt bleibt. Beide Limits wirken nur im Print-Modus (`claude -p`); in einer interaktiven Sitzung greifen sie nicht, dort begrenzt du `/goal` über eine Runden- oder Zeitklausel in der Bedingung und stoppst `/loop` selbst.
-
-Für einen unbeaufsichtigten Lauf auf deinem Rechner ist deshalb `claude -p` mit `/goal` der belegte Weg: `/goal` läuft mit `-p` in einem Aufruf bis zum Ende. `/loop` gehört dagegen zur offenen Sitzung.
+Setz die Grenzen, bevor ein autonomer Lauf startet: `--max-budget-usd` deckelt die Kosten, `--max-turns` die Zahl der Runden, und `--worktree` lässt den Lauf in einem eigenen Arbeitsordner arbeiten, damit dein Hauptordner unberührt bleibt. Beide Limits wirken nur im Print-Modus (`claude -p`), der einen einzelnen Lauf ohne Dialog startet: Auftrag hinein, Antwort heraus, Ende (mehr dazu in [S4.3](s4-03-headless.md)). In einer interaktiven Sitzung greifen sie nicht; dort begrenzt du `/goal` über eine Runden- oder Zeitklausel in der Bedingung und stoppst `/loop` selbst.
 
 ## Bild im Kopf
 
-Das Budget ist der Tank des Patrouillenfahrzeugs: Ist er leer, steht das Fahrzeug, statt bis zum Totalausfall weiterzufahren. Das Rundenlimit ist die Zahl der Runden im Fahrtenbefehl. Der Worktree ist der Prüfstand im Labor, ein Nachbau der Anlage, an dem der Nachtjob schrauben darf, ohne die echte Anlage anzufassen. Und `worktree.baseRef` auf `fresh` ist der verplombte Ausgangszustand zu Schichtbeginn: Jede Nachtpatrouille startet von derselben geprüften Basis.
+Das Budget ist der Tank des Patrouillenfahrzeugs: Ist er leer, steht das Fahrzeug, statt bis zum Totalausfall weiterzufahren. Das Rundenlimit ist die Zahl der Runden im Fahrtenbefehl. Der Worktree ist der Prüfstand im Labor, ein Nachbau der Anlage, an dem der Nachtjob schrauben darf, ohne die echte Anlage anzufassen.
 
 ```mermaid
 flowchart LR
@@ -49,111 +47,155 @@ flowchart LR
   B -- "ja" --> X["Stopp"]
   B -- "nein" --> T{"--max-turns<br/>erreicht?"}
   T -- "ja" --> X
-  T -- "nein" --> G{"Ziel erfüllt?"}
+  T -- "nein" --> G{"Aufgabe fertig?"}
   G -- "nein" --> R
   G -- "ja" --> E["Ergebnis auf eigenem Branch<br/>du prüfst den Diff"]
 ```
 
 ## Im Detail
 
-### Warum Loops Grenzen brauchen
+### Warum Läufe Grenzen brauchen
 
-`/loop`, `/goal` und Self-Improve-Loops ([S3.14](s3-14-self-improve-loop.md)) können in einer engen Schleife Tokens verbrennen, wenn ein Tool immer wieder scheitert und Claude es immer wieder versucht. Die harte Grenze dagegen sitzt in der CLI.
+Ein autonomer Lauf kann in einer engen Schleife Tokens verbrennen, wenn ein Tool immer wieder scheitert und Claude es immer wieder versucht. Die harte Grenze dagegen sitzt in der CLI. Statt regelmäßig nachzufragen, kannst du dir Ereignisse auch in die Sitzung schieben lassen (Channels, eine Research Preview; [S4.6](s4-06-remote-und-teleport.md)).
 
 ### Budget und Rundenlimit
 
 - `--max-budget-usd <betrag>`: höchster Dollarbetrag für API-Aufrufe, danach stoppt der Lauf. Ausgaben von Subagenten zählen mit; ist das Budget erreicht, startet kein weiterer Subagent mehr.
-- `--max-turns <n>`: höchste Zahl an Agenten-Runden; ist sie erreicht, endet der Lauf mit einem Fehler. Die CLI-Referenz dokumentiert das Flag, `claude --help` listet es nicht.
+- `--max-turns <n>`: höchste Zahl an Agenten-Runden; ist sie erreicht, endet der Lauf mit einem Fehler.
 
-Beide gelten laut CLI-Referenz nur im Print-Modus („print mode only"); beim Budget steht das auch in `claude --help` („only works with --print"). Die Grundlagen stehen in [S1.19](s1-19-kosten-im-blick.md), die Praxis für CI in [S4.4](s4-04-ci-zugang-und-kosten.md).
+Beide gelten laut CLI-Referenz nur im Print-Modus („print mode only“). Die Grundlagen zu Kosten stehen in [S1.19](s1-19-kosten-im-blick.md), die Praxis für CI in [S4.4](s4-04-ci-zugang-und-kosten.md). Ein unbeaufsichtigter Lauf braucht außerdem einen Rechte-Modus, der nicht auf eine Antwort wartet: `dontAsk` mit Allow-Regeln ([S3.8](s3-08-rechte-fuer-autonomie.md)). Mit `/goal` im Print-Modus (`claude -p "/goal …"`) läuft die Schleife in einem einzigen Aufruf bis zum Ende; das Budget deckelt sie.
 
-Der alte Kurs zeigte für autonome Loops diese beiden Aufrufe:
-
-```bash
-claude --max-budget-usd 5.00 -p "/loop 10m /quality-gate"
-claude --max-budget-usd 2.00 -p "/goal Tests grün"
-```
-
-Die zweite Zeile trägt: `/goal` läuft mit `-p` in einem Aufruf, bis die Bedingung erfüllt ist, und das Budget deckelt ihn. Ein `--max-turns` dazu begrenzt zusätzlich die Runden. Die erste Zeile trägt nicht als Schleife: `/loop`-Aufgaben feuern laut Doku nur, solange Claude Code läuft und untätig ist, und dass ein `-p`-Lauf auf spätere Durchgänge wartet, beschreibt die Doku nirgends. Einen Loop, der wirklich wiederkehrt, lässt du in einer offenen Sitzung laufen oder planst ihn als Routine ([S3.12](s3-12-zeitgesteuert-arbeiten.md)).
+`/loop` gehört dagegen zur offenen Sitzung. Dass ein `-p`-Lauf auf spätere Durchgänge wartet, beschreibt die Doku nirgends; einen Loop, der wirklich wiederkehrt, lässt du in einer offenen Sitzung laufen oder planst ihn als Routine ([S3.12](s3-12-zeitgesteuert-arbeiten.md)).
 
 ### Interaktiv: was dann begrenzt
 
 In einer interaktiven Sitzung wirken `--max-budget-usd` und `--max-turns` nicht, auch nicht mit `/loop` oder `/goal`. Dort hast du drei Hebel:
 
-- **`/goal` mit Klausel:** Schreib eine Runden- oder Zeitgrenze in die Bedingung, etwa „… or stop after 20 turns". Claude meldet in jeder Runde den Stand, und der Prüfer beurteilt die Klausel aus dem Gespräch. Das ist eine weiche Grenze, kein hartes Limit.
-- **`/loop` stoppen:** `Esc` beendet einen selbst getakteten Loop, der auf den nächsten Durchgang wartet. Aufgaben mit festem Intervall laufen, bis du sie löschst (etwa mit „cancel the deploy check job") oder bis sieben Tage um sind.
-- **Rechte:** `/goal` ändert deinen Rechte-Modus nicht. Im Standardmodus fragt Claude weiter vor Tool-Aufrufen, die deine Settings nicht schon erlauben. Welche Rechte ein Lauf ohne Aufsicht bekommen darf, steht in [S3.8](s3-08-rechte-fuer-autonomie.md).
+- **`/goal` mit Klausel:** Schreib eine Runden- oder Zeitgrenze in die Bedingung, etwa „… or stop after 20 turns“. Claude meldet in jeder Runde den Stand, und der Prüfer beurteilt die Klausel aus dem Gespräch. Das ist eine weiche Grenze, kein hartes Limit.
+- **`/loop` stoppen:** `Esc` beendet einen selbst getakteten Loop, der auf den nächsten Durchgang wartet. Aufgaben mit festem Intervall laufen, bis du sie löschst oder bis sieben Tage um sind.
+- **Rechte:** `/goal` ändert deinen Rechte-Modus nicht. Im Standardmodus fragt Claude weiter vor Tool-Aufrufen, die deine Settings nicht schon erlauben.
 
-### Worktree: der Nachtjob arbeitet auf dem Prüfstand
+### Worktree: der Lauf arbeitet auf dem Prüfstand
 
-`--worktree` (kurz `-w`) ist ein Flag von `claude` selbst, nicht von `/loop` oder `/schedule`. `claude --worktree <name>` legt einen Worktree unter `.claude/worktrees/<name>/` auf einem neuen Branch `worktree-<name>` an und startet die Sitzung darin. Dein Haupt-Arbeitsbaum bleibt unberührt: Solange eine Sitzung so isoliert ist, blockt Claude Code Datei-Änderungen und Befehle, die in den Haupt-Checkout zielen, auch bei jedem Subagenten, den sie startet.
+`--worktree` (kurz `-w`) ist ein Flag von `claude` selbst. `claude --worktree <name>` legt einen Worktree unter `.claude/worktrees/<name>/` auf einem neuen Branch `worktree-<name>` an und startet die Sitzung darin. In einer solchen Sitzung blockt Claude Code laut Doku Dateiänderungen, die in den Haupt-Checkout zielen, und Befehle, die dort arbeiten, auch bei jedem Subagenten. Das ist keine Sandbox: Nicht zu den Prüfungen gehören Netz und Pfade außerhalb des Repositorys ([S3.9](s3-09-geschuetzte-pfade-und-sandbox.md)).
 
-Der Worktree gibt dem Lauf einen frischen Ausgangsstand, einen eigenen Dateistand und eine saubere Stelle zum Zusammenführen. Von wo er abzweigt, bestimmt `worktree.baseRef`: `fresh` (laut Doku der Standard) nimmt den Standardbranch auf dem Remote, `head` deinen lokalen `HEAD` samt ungepushter Commits. Für Nachtläufe, deren Ergebnisse vergleichbar sein sollen, passt `fresh`. Die Mechanik steht in [S1.18](s1-18-worktrees.md), Isolation mit Docker in [S4.7](s4-07-isolation-docker-worktrees.md).
+Von wo der Worktree abzweigt, bestimmt `worktree.baseRef`: `fresh` (der Standard) nimmt den Standardbranch auf dem Remote, `head` deinen lokalen `HEAD`. Ist kein Remote eingerichtet, fällt ein frischer Worktree laut Doku auf deinen lokalen `HEAD` zurück; deshalb funktioniert die Übung unten in einem Wegwerf-Repository ohne Remote. Aufgeräumt wird ein Worktree nach einem `-p`-Lauf nicht: Ohne Dialog am Ende bleibt er samt Sperre liegen, und du entfernst ihn selbst mit `git worktree remove` (bei einer Sperre erst `git worktree unlock`). Die Mechanik steht in [S1.18](s1-18-worktrees.md), Isolation mit Docker in [S4.7](s4-07-isolation-docker-worktrees.md).
 
-**Einsatz:** Audit-Loops im Hintergrund, geplante Refactoring-Experimente und jeder autonome Job, der Dateien schreibt, aber deine interaktive Arbeit auf `main` nicht stören soll.
+## Selbst machen
 
-### Statt pollen: Channels
+### Übung: einen gedeckelten Lauf im Worktree stoppen sehen (etwa 15 Minuten)
 
-Ein `/loop` fragt regelmäßig nach, ob sich etwas getan hat. Channels drehen das um: Ein MCP-Server schiebt Nachrichten, Alarme oder Webhooks direkt in deine laufende Claude-Code-Sitzung, etwa ein CI-Ergebnis. Das ist der offizielle Weg für das Muster, das [S4.6](s4-06-remote-und-teleport.md) mit der 🔧 Telegram-Bridge als Eigenbau zeigt: gleiches Muster, kein eigener Brücken-Code. Die Bridge bleibt ein Lehrbeispiel; im Betrieb greifst du zuerst zu Channels.
+**Ziel:** Du startest einen unbeaufsichtigten Lauf mit Budget und Rundenlimit in einem Worktree, siehst ihn am Rundenlimit enden, siehst ihn mit mehr Runden fertig werden und räumst den Worktree wieder weg.
 
-Channels sind eine Research Preview. Für autonome Läufe zählen drei Punkte:
+**Startzustand:** Du arbeitest im Ordner `~/cc-workshop/nachtlauf`, einem Wegwerf-Repository ohne Remote mit fünf kleinen Dateien, die eine Kette bilden. Die Aufgabe ist nur lesen und kostet mit dem Modell `haiku` wenig. Mehr als Claude Code, Git und Python brauchst du nicht.
 
-- Ereignisse kommen nur an, solange die Sitzung offen ist.
-- Ein Kanal läuft erst, wenn du ihn für die Sitzung mit `--channels` einschaltest, und nur Absender auf seiner Allowlist können Nachrichten schicken.
-- Leitet ein Kanal Rechte-Anfragen weiter, kann jeder, der über den Kanal antworten darf, Tool-Aufrufe in deiner Sitzung freigeben oder ablehnen. Setz nur Absender auf die Allowlist, denen du das zutraust.
-
-### Ausprobieren
-
-So legst du für einen riskanten Versuch einen abgeschotteten Arbeitsbaum an:
-
-<!-- cockpit:example -->
-```bash
-git worktree add ../experiment-async-processing -b feature/async-experiment
-cd ../experiment-async-processing
-claude
-# Make experimental changes — the main branch stays untouched
-```
-
-Ist das Experiment fertig, verwirf es oder führ es zusammen:
+Bash:
 
 ```bash
-git worktree remove ../experiment-async-processing
+mkdir -p ~/cc-workshop/nachtlauf && cd ~/cc-workshop/nachtlauf
+for i in 1 2 3 4; do printf 'next: notes-%s.txt\n' "$((i+1))" > "notes-$i.txt"; done
+printf 'END\n' > notes-5.txt
+printf '.claude/worktrees/\n' > .gitignore
+git init -q
+git config user.name "Learner"
+git config user.email "learner@example.com"
+git add .gitignore notes-1.txt notes-2.txt notes-3.txt notes-4.txt notes-5.txt
+git commit -q -m "start"
 ```
+
+PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\cc-workshop\nachtlauf" | Out-Null
+Set-Location "$HOME\cc-workshop\nachtlauf"
+1..4 | ForEach-Object { Set-Content "notes-$_.txt" "next: notes-$($_ + 1).txt" }
+Set-Content notes-5.txt "END"
+Set-Content .gitignore ".claude/worktrees/" -NoNewline
+git init -q
+git config user.name "Learner"
+git config user.email "learner@example.com"
+git add .gitignore notes-1.txt notes-2.txt notes-3.txt notes-4.txt notes-5.txt
+git commit -q -m "start"
+```
+
+Die Kette ist absichtlich nur nacheinander lesbar: Jede Datei nennt die nächste, Claude braucht also mindestens fünf Runden.
+
+1. **Lauf 1, mit Rundenlimit 2.** Gib die Zeile in einem Stück ein (sie gilt in beiden Shells):
+
+   <!-- cockpit:example -->
+   ```bash
+   claude -p --worktree kette-kurz --model haiku --permission-mode dontAsk --max-turns 2 --max-budget-usd 0.50 "Read notes-1.txt. Each file names the next file to read, until one says END. Follow the chain one file at a time and report the file names in order."
+   ```
+
+   Die Flags im Einzelnen: `-p` startet den Lauf ohne Dialog, `--worktree kette-kurz` lässt ihn in einem eigenen Worktree arbeiten, `--model haiku` wählt das günstige Modell, `--permission-mode dontAsk` sorgt dafür, dass der Lauf nie auf eine Antwort wartet, `--max-turns 2` ist die Rundengrenze und `--max-budget-usd 0.50` die Kostengrenze. Erwartet: Der Lauf endet, ohne die ganze Kette zu melden, mit einem Fehler zum Rundenlimit; die Doku sagt für `--max-turns`: „Exits with an error when the limit is reached“ (Wortlaut der Doku).
+2. Lies den Rückgabewert des letzten Befehls ab, in Bash mit `echo "exit=$?"`, in PowerShell mit `"exit=$LASTEXITCODE"`. Erwartet: ein Wert ungleich 0.
+3. **Lauf 2, mit Rundenlimit 12.** Starte denselben Befehl mit `--worktree kette-lang` und `--max-turns 12`. Erwartet: Der Lauf endet normal und nennt die Dateien in der Reihenfolge `notes-1.txt` bis `notes-5.txt`. Das Budget von 0,50 Dollar ist bei dieser kleinen Aufgabe ein Sicherheitsnetz, das du nicht erreichst: Das Rundenlimit hat in Lauf 1 gestoppt.
+4. **Prüf, wohin der Lauf gearbeitet hat.** Im Hauptordner: `git status --short` zeigt nichts (der Worktree-Ordner steht in `.gitignore`), und `git worktree list` nennt neben dem Hauptordner die beiden Worktrees unter `.claude/worktrees/` mit den Branches `worktree-kette-kurz` und `worktree-kette-lang`.
+5. **Aufräumen.** Ein `-p`-Lauf räumt seinen Worktree nicht auf. Entferne beide selbst:
+
+   ```bash
+   git worktree remove .claude/worktrees/kette-kurz
+   git worktree remove .claude/worktrees/kette-lang
+   git branch -D worktree-kette-kurz worktree-kette-lang
+   ```
+
+   Verweigert Git das Entfernen, weil der Worktree gesperrt ist, führ vorher `git worktree unlock .claude/worktrees/kette-kurz` (bzw. `kette-lang`) aus. Prüf mit `git worktree list`: Nur der Hauptordner steht noch da.
+
+**Aufräumen am Ende:** Lösch den Ordner `~/cc-workshop/nachtlauf` (in PowerShell mit `Remove-Item -Recurse -Force`). Nichts läuft weiter.
+
+**Geschafft, wenn:**
+
+- [ ] Lauf 1 ohne vollständige Kette endete und der Rückgabewert ungleich 0 war
+- [ ] Lauf 2 die Kette bis `notes-5.txt` meldete
+- [ ] `git status --short` im Hauptordner leer war und `git worktree list` beide Worktrees nannte
+- [ ] `git worktree list` nach dem Aufräumen nur noch den Hauptordner zeigte
+
+### Extra: das Budget als Auslöser (etwa 5 Minuten)
+
+**Ziel:** Du siehst, dass das Budget einen Lauf stoppt, bevor die Runden aufgebraucht sind.
+
+**Startzustand:** der Ordner `~/cc-workshop/nachtlauf` aus der Übung, falls noch nicht gelöscht, ohne Worktrees.
+
+1. Starte den Befehl aus Lauf 1 mit `--worktree kette-budget`, `--max-turns 12` und `--max-budget-usd 0.01`.
+2. Lies die Ausgabe. Wie viele Runden bis zum Stopp nötig sind, hängt vom Verbrauch ab; die Doku nennt nur, dass der Lauf stoppt, wenn der Betrag erreicht ist. Endet er normal, war der Betrag zu hoch: Wiederhol ihn mit `0.001`.
+3. Entferne den Worktree und den Branch wie in Schritt 5.
+
+**Geschafft, wenn:**
+
+- [ ] der Lauf mit 12 erlaubten Runden endete, ohne die Kette zu vollenden, und du den Worktree entfernt hast
 
 ## Typische Fallen
 
 - **Die interaktive Sitzung gilt als gedeckelt.** `claude --max-budget-usd 1.00` ohne `-p` begrenzt nichts; das Flag wirkt nur im Print-Modus.
 - **Die Rundenklausel gilt als hartes Limit.** Bei `/goal` in einer interaktiven Sitzung beurteilt ein Modell die Klausel aus dem Gespräch. Muss die Grenze hart sein, nimm `claude -p` mit `--max-turns`.
-- **Jeder Absender darf freigeben.** Ein Kanal, der Rechte-Anfragen weiterleitet, macht jeden Absender auf seiner Allowlist zu jemandem, der Tool-Aufrufe freigeben kann.
-
-**Worktree und Routine verwechselt.** Auch diese Aufrufe standen im alten Kurs:
-
-```bash
-# Nightly audit on a dedicated branch; main branch untouched
-claude --worktree audit/nightly --max-budget-usd 1.00 -p "/loop 24h /security-audit"
-
-# Routine that lives entirely on its own branch
-claude --worktree routines/daily-build-report -p "/schedule daily 06:00 ..."
-```
-
-Beide tragen nicht. Die erste Zeile hat dasselbe Problem wie oben: `/loop` gehört zur offenen Sitzung, und dass ein `-p`-Lauf auf die nächsten Durchgänge wartet, ist nicht belegt. Die zweite legt eine Routine an, die in der Cloud mit einem frischen Klon vom Standardbranch läuft und auf `claude/`-Branches schreibt; dein lokaler Worktree spielt für sie keine Rolle. Außerdem ist `/schedule` als Gespräch gedacht: Claude geht dieselben Angaben durch, die das Web-Formular abfragt, und speichert die Routine erst danach. Für einen Nachtjob nimmst du eine Routine ([S3.12](s3-12-zeitgesteuert-arbeiten.md)), eine geplante Aufgabe in der Desktop-App oder einen Zeitplan in der CI ([S4.5](s4-05-ci-pipelines.md)).
+- **Der Lauf wartet auf eine Freigabe.** Ohne passenden Rechte-Modus bleibt ein unbeaufsichtigter Lauf an einer Rückfrage hängen oder scheitert an ihr. Starte ihn mit `--permission-mode dontAsk` und Allow-Regeln.
+- **Der Worktree bleibt liegen.** Ein `-p`-Lauf räumt ihn nicht auf und lässt seine Sperre stehen. Entferne ihn mit `git worktree remove`, bei einer Sperre erst `git worktree unlock`.
+- **Worktree und Routine verwechselt.** `--worktree` isoliert einen lokalen Lauf. Eine Routine mit `/schedule` läuft in der Cloud mit einem frischen Klon vom Standardbranch und schreibt auf `claude/`-Branches; dein lokaler Worktree spielt für sie keine Rolle ([S3.12](s3-12-zeitgesteuert-arbeiten.md)).
 
 ## Check
 
-Du kannst erklären, warum jeder unbeaufsichtigte Lauf ein Budget und ein Rundenlimit braucht, was in einer interaktiven Sitzung stattdessen begrenzt und wie ein Worktree deinen Hauptbranch schützt.
+Du kannst einen unbeaufsichtigten Lauf mit Budget und Rundenlimit in einem Worktree starten, den Stopp ablesen und sagen, was interaktiv stattdessen begrenzt.
 
-1. Welche zwei Flags deckeln einen `claude -p`-Lauf, und was passiert, wenn eines davon erreicht ist?
-2. Warum ist eine interaktive Sitzung, die mit `claude --max-budget-usd 1.00` startet, nicht gedeckelt?
-3. Von wo zweigt ein Worktree mit `worktree.baseRef: "fresh"` ab, und warum passt das für Nachtläufe?
+1. Welche zwei Flags deckeln einen `claude -p`-Lauf, und was passiert, wenn das Rundenlimit erreicht ist?
+2. Wie begrenzt du ein `/goal` in einer interaktiven Sitzung, und warum ist das keine harte Grenze?
+3. Was hinterlässt ein `claude -p --worktree`-Lauf auf deiner Platte, und wie räumst du es auf?
+
+<details><summary>Auflösung</summary>
+
+1. `--max-budget-usd` und `--max-turns`. Beim Rundenlimit endet der Lauf mit einem Fehler.
+2. Mit einer Runden- oder Zeitklausel in der Bedingung. Ein Modell beurteilt sie aus dem Gespräch, deshalb ist sie weich; hart wird die Grenze erst mit `claude -p` und `--max-turns`.
+3. Einen Worktree unter `.claude/worktrees/<name>/` mit dem Branch `worktree-<name>`. Ohne Dialog am Ende räumt Claude nicht auf: Du entfernst ihn mit `git worktree remove` (bei Sperre erst `git worktree unlock`) und den Branch mit `git branch -D`.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
 **Frage:** Du startest eine interaktive Sitzung mit `claude --max-budget-usd 1.00` und setzt darin `/goal alle Tests grün`. Was begrenzt die Kosten dieses Laufs hart?
 
 - **Richtig:** Nichts davon: Das Flag wirkt nur mit `-p`. Hart wird die Grenze erst, wenn der Lauf mit `claude -p` startet.
-- Falsch: Das Budget-Flag, denn es gilt ab dem Start für jede Sitzung, die du mit ihm aufrufst, auch für eine interaktive.
-- Falsch: Der Prüfer von `/goal`, denn er bricht den Lauf von selbst ab, sobald ein Dollar Budget verbraucht ist.
-- Falsch: Der Worktree, denn jeder isolierte Lauf bekommt von Claude Code ein eigenes festes Budget zugeteilt.
+- Falsch: Das Budget-Flag, denn es gilt ab dem Start für jede Sitzung, die du mit ihm aufrufst, auch für eine interaktive Sitzung.
+- Falsch: Der Prüfer von `/goal`, denn er bricht den Lauf von selbst ab, sobald ein Dollar Budget in der Sitzung verbraucht ist.
+- Falsch: Der Worktree, denn jeder isolierte Lauf bekommt von Claude Code ein eigenes festes Budget zugeteilt, das er nicht überschreitet.
 
 </details>
 
@@ -171,4 +213,5 @@ Du kannst erklären, warum jeder unbeaufsichtigte Lauf ein Budget und ein Runden
 - [S4.7 · Isolation mit Docker und Worktrees](s4-07-isolation-docker-worktrees.md)
 - [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md)
 - [S4.4 · CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](s4-04-ci-zugang-und-kosten.md)
+- [S4.3 · Headless: claude -p als Pipeline-Stufe](s4-03-headless.md)
 - [S4.6 · Unterwegs: Remote Control und /teleport](s4-06-remote-und-teleport.md)
