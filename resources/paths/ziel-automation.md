@@ -4,7 +4,7 @@
 
 Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Einstufung — dann wird der Pfad kürzer.
 
-**Umfang:** 5 Etappen, zusammen etwa 11 Stunden (601 Min durcharbeiten, 45 Min überfliegen).
+**Umfang:** 5 Etappen, zusammen etwa 11 Stunden (601 Min durcharbeiten, 50 Min überfliegen).
 
 ## Etappe 1 (~150 Min)
 
@@ -39,7 +39,7 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S2.9 Hook-Typen und Hooks in Komponenten](../library/s2-09-hook-typen.md) — durcharbeiten
 - [S2.10 Hook-Ausgaben und das Secure Diff Gate](../library/s2-10-hook-ausgaben.md) — durcharbeiten
 
-## Etappe 4 (~148 Min)
+## Etappe 4 (~135 Min)
 
 - [S2.20 Praxis-Station Session 2: alles in einem Ablauf](../library/s2-20-praxis-station-2.md) — durcharbeiten
 - [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) — überfliegen
@@ -51,10 +51,10 @@ Vorschlag für alle, die hier noch neu sind. Kennst du Teile schon, mach die Ein
 - [S3.13 Autonome Loops absichern: Budget und Worktree](../library/s3-13-autonome-loops-absichern.md) 🛡 — durcharbeiten
 - [S4.1 Das richtige Modell pro Phase](../library/s4-01-modell-pro-phase.md) — durcharbeiten
 - [S4.3 Headless: claude -p als Pipeline-Stufe](../library/s4-03-headless.md) — durcharbeiten
+
+## Etappe 5 (~99 Min)
+
 - [S4.4 CI-Zugangsdaten, Kostengrenzen und Kosten-Feinschliff](../library/s4-04-ci-zugang-und-kosten.md) 🛡 — durcharbeiten
-
-## Etappe 5 (~81 Min)
-
 - [S4.5 CI-Pipelines bauen mit GitHub Actions und GitLab](../library/s4-05-ci-pipelines.md) — durcharbeiten
 - [S4.9 Fehlersuche: /debug, --verbose, /doctor](../library/s4-09-fehlersuche-werkzeuge.md) — durcharbeiten
 - [S4.10 Diagnose Schritt für Schritt](../library/s4-10-diagnose-schritt-fuer-schritt.md) — durcharbeiten

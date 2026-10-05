@@ -4,11 +4,11 @@ type: lesson
 title: "Devil's Advocate: eine adversariale Prüf-Pipeline"
 shelf: security
 level: core
-minutes: 18
+minutes: 35
 requires: [S3.4]
 safety_floor: false
 transferable: true
-outcome: "Ich kann die vier Stufen Scan, Debatte, Konsens und Fix einer adversarialen Prüf-Pipeline erklären, begründen, warum Überlappung und Debatte Fehlalarme senken, aber nicht ausschließen, und am Playground zeigen, warum Erreichbarkeit und Fachlogik die Schwere eines Befunds ändern."
+outcome: "Ich kann ein Ankläger-Verteidiger-Paar aus zwei Subagenten selbst bauen und nacheinander einsetzen, erklären, warum die Übereinstimmung zweier Scanner kein Beweis ist und eine Reproduktion mehr trägt, und an einem Beispiel zeigen, warum Erreichbarkeit und Fachlogik die Schwere eines Befunds ändern."
 sources:
   - https://code.claude.com/docs/en/sub-agents
   - https://code.claude.com/docs/en/security
@@ -18,7 +18,7 @@ aliases: ["3.3", "3.3a"]
 # S3.6 · Devil's Advocate: eine adversariale Prüf-Pipeline
 
 <!-- meta:start -->
-> **Regal:** [Gegenprüfung & Compliance](README.md#security) · **Stufe:** Kern · **~18 Min** · **Voraussetzungen:** [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md)
+> **Regal:** [Gegenprüfung & Compliance](README.md#security) · **Stufe:** Kern · **~35 Min** · **Voraussetzungen:** [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md)
 >
 > ← [S3.5 Hintergrund-Sitzungen und Agent Teams](s3-05-hintergrund-und-teams.md) · [Bibliothek](README.md) · [S3.7 Die eingebauten Reviews](s3-07-eingebaute-reviews.md) →
 <!-- meta:end -->
@@ -26,295 +26,212 @@ aliases: ["3.3", "3.3a"]
 ## Schnellcheck
 
 - Hast du schon einmal Sicherheitsbefunde von einem zweiten Agenten widerlegen lassen, bevor du sie behoben hast?
-- Kannst du ohne Nachschlagen erklären, warum eine reine Mustersuche einen fail-open-Zugriffscheck kaum findet?
+- Kannst du ohne Nachschlagen erklären, warum ein festes Passwort in Code, den nie jemand aufruft, weniger schwer wiegt als eine Prüfung, die bei einem Fehler die Tür öffnet?
 
 ## Auf einen Blick
 
-Eine Devil's-Advocate-Pipeline lässt Agenten gegeneinander arbeiten. Mehrere Scanner suchen parallel nach Problemen, in der Debatte greift ein Ankläger jeden Befund an und ein Verteidiger hält dagegen. Ein Konsens-Agent entscheidet, und nur bestätigte Befunde gehen an Fixer, die minimal patchen und einen Regressionstest schreiben. Die Debatte senkt Fehlalarme, schließt sie aber nicht aus.
+Eine adversariale Gegenprüfung lässt zwei Agenten gegeneinander arbeiten. Ein Ankläger listet alle Verdachtsfälle auf und argumentiert jeden so stark wie möglich. Ein Verteidiger prüft zu jedem, ob ein Angreifer den Fund erreichen kann und was er dann anrichtet. Das Urteil fällst du. Beide sind Subagenten, die du in dieser Lektion selbst schreibst und nacheinander einsetzt ([S3.3](s3-03-eigener-subagent.md), [S3.4](s3-04-orchestrierungsmuster.md)).
 
-🔧 Die Pipeline ist kein eingebauter Befehl, sondern ein Workshop-Plugin; die eingebauten Reviews stehen in [S3.7](s3-07-eingebaute-reviews.md). Die wichtigste Lektion hängt aber nicht am Plugin: Eine Mustersuche findet Muster. Ob eine Tür bei einem Datenbankfehler aufgeht, erkennt erst, wer die Fachlogik kennt.
+Die Gegenprobe senkt die Zahl der Fehlalarme, aber sie schafft keine Gewissheit: Beide Agenten sind dasselbe Modell, und ihre Fehler hängen zusammen. Die wichtigste Lektion hängt deshalb nicht am Werkzeug. Ob ein Befund schwer wiegt, entscheiden Erreichbarkeit und Fachwissen. Die eingebauten Reviews beschreibt [S3.7](s3-07-eingebaute-reviews.md).
 
 ## Bild im Kopf
 
-Stell dir einen Penetrationstest deiner Zutrittsanlage mit eingebautem Tribunal vor. Der Pentester schreibt den Exploit-Bericht (Ankläger). Der Entwickler erklärt, was davon wirklich ausnutzbar ist und was nicht (Verteidiger). Der Sicherheitsverantwortliche entscheidet, was nachgebessert wird (Konsens). Das Patch-Team schließt die bestätigten Lücken (Fixer). Der ganze Ablauf läuft von allein und ist vollständig dokumentiert.
+Stell dir einen Penetrationstest an einer Zutrittsanlage vor. Der Pentester schreibt den Exploit-Bericht und übertreibt dabei gern: Das ist der Ankläger. Der Anlagenbetreiber geht den Bericht Punkt für Punkt durch und fragt: Kommt man da überhaupt hin, und was passiert dann? Das ist der Verteidiger. Entscheiden, was nachgebessert wird, musst du als Sicherheitsverantwortliche oder Sicherheitsverantwortlicher.
 
-Die Scanner davor arbeiten wie ein physisches Sicherheitsaudit mit zwei unabhängigen Teams: Beide prüfen getrennt, danach vergleicht ihr die Befunde. Was beide gefunden haben, ist mit hoher Wahrscheinlichkeit echt.
+Beide Seiten kommen aus derselben Firma und haben dieselbe Ausbildung. Sie können dieselbe Lücke übersehen, und sie können sich im selben Punkt irren.
 
 ```mermaid
 flowchart LR
-  A["Security-Scanner"] --> D
-  B["Quality-Scanner"] --> D
-  C["Architecture-Scanner"] --> D
-  D["Debatte<br/>Ankläger gegen Verteidiger"] --> E{"Konsens"}
-  E -- "CONFIRMED" --> F["Fixer<br/>kleinster Fix + Regressionstest"]
-  E -- "FALSE POSITIVE" --> G["verworfen,<br/>mit Begründung protokolliert"]
-  E -- "NEEDS INVESTIGATION" --> H["ein Mensch prüft"]
+  A["Ankläger<br/>listet Verdachtsfälle"] --> D["Verteidiger<br/>prüft Erreichbarkeit und Schaden"]
+  D --> E{"Dein Urteil<br/>je Befund"}
+  E -- "echt" --> B["Beleg: Test oder Programmlauf"]
+  E -- "Fehlalarm" --> G["verworfen,<br/>mit Begründung"]
+  E -- "unklar" --> H["du prüfst von Hand"]
+  B --> F["kleinster Fix<br/>plus Regressionstest"]
 ```
 
 ## Im Detail
 
-### Ein Workshop-Muster, kein eingebauter Befehl
+### Das Muster in vier Schritten
 
-> 🔧 **Workshop-Baustein:** Die Pipeline ist kein eingebauter Claude-Code-Befehl. Sie ist ein Muster aus dem Workshop-Plugin `devil-advocate-swarms`, das in keinem offiziellen Marketplace liegt, und zeigt, wie ein Multi-Agent-Review aussehen kann. Die eingebauten Alternativen stehen in [S3.7](s3-07-eingebaute-reviews.md).
+1. **Anklage.** Der Ankläger liest den Code und listet jeden Verdacht mit Angriffsszenario und Schwere. Er urteilt nicht über Erreichbarkeit.
+2. **Verteidigung.** Der Verteidiger bekommt die Liste und prüft zu jedem Befund im Code: Wer ruft die Stelle auf? Welche Eingabe kommt dort an? Welche Prüfung steht davor? Was wäre der Schaden?
+3. **Urteil.** Du entscheidest je Befund: echt, Fehlalarm oder unklar.
+4. **Beleg und Fix.** Ein bestätigter Befund wird belegt (ein Test, der ihn reproduziert, oder ein Programmlauf) und erst dann behoben, mit dem kleinsten Fix und einem Regressionstest.
 
-Die Pipeline ist ein Multi-Agent-System, das Sicherheits- und Qualitätsprobleme findet und behebt. Sie bildet ein professionelles Security-Review nach, mit einem Unterschied: Sie läuft automatisch. Sie hat vier Stufen.
+Ein Workshop-Plugin hat dieselben Stufen als fertige Pipeline gebaut; Selbstlernende bekommen es nicht, und du brauchst es nicht. Zwei Subagenten und ein Pipeline-Auftrag genügen.
 
-### Stufe 1: Scanner
+### Warum Übereinstimmung nicht reicht
 
-Mehrere Scanner-Agenten analysieren den Code gleichzeitig aus verschiedenen Blickwinkeln:
+Es ist verlockend, einen Befund für echt zu halten, wenn zwei Prüfer ihn nennen. Das trägt nur begrenzt. Ankläger, Verteidiger und weitere Scanner sind dasselbe Modell mit anderen Aufträgen, ihre Irrtümer sind nicht unabhängig: Hält einer ein festes Passwort für kritisch, tun es meist alle. Übereinstimmung hilft gegen Zufallsrauschen, nicht gegen einen systematischen Fehler des Modells. Das ist eine Überlegung dieser Bibliothek, keine Aussage der Doku.
 
-- **Security-Scanner:** Injection-Lücken, fest eingetragene Zugangsdaten, unsichere Muster, fehlende Authentifizierung
-- **Quality-Scanner:** Lücken in der Fehlerbehandlung, fehlende Eingabeprüfung, unsichere Typannahmen
-- **Architecture-Scanner:** verletzte Vertrauensgrenzen, Wege zur Rechteausweitung, riskante Datenflüsse
+Mehr Gewicht haben Belege, die nicht vom Modell abhängen: ein Test, der den Fehler reproduziert, ein Programmlauf, der ihn zeigt, und dein Fachwissen. Auch die Debatte ist kein Garantieschein. Wie viele Fehlalarme sie aussortiert, hängt von Prompts und Code ab; eine feste Quote verspricht hier niemand.
 
-Warum mehrere Scanner mit Überlappung? Finden zwei Scanner dasselbe Problem, ist es mit hoher Wahrscheinlichkeit echt. Findet einer etwas, das der andere übersieht, schau genau hin. Die Überlappung ist eine Bestätigung durch Übereinstimmung.
+### Erreichbarkeit und Fachlogik
 
-### Stufe 2: Debatte
+Zwei Arten von Befunden ordnen Scanner leicht falsch ein:
 
-Zu jedem Befund argumentieren zwei Agenten. Der **Ankläger** (Prosecutor) legt das Angriffsszenario vor:
+- **Gefährlich aussehend, aber nicht erreichbar.** Der Fund steckt in Code, den nie jemand aufruft, oder hinter einer Prüfung, die den Angriff abfängt. Das Muster ist schlimm, ein Angriffsweg fehlt.
+- **Harmlos aussehend, aber nach Fachurteil falsch.** Der Code tut genau, was dasteht, aber das Fachwissen sagt, es müsste anders sein. Ein Beispiel: Ein Zahlungsdienst gibt die Zahlung frei, wenn der Prüfdienst nicht antwortet. Eine Mustersuche hat dafür keinen Anhaltspunkt, denn es gibt keine Injection, kein Geheimnis, kein auffälliges Muster.
 
-> „Ein Angreifer kann über den Suchparameter beliebige Befehle einschleusen. Die Eingabe erreicht ohne Bereinigung einen Shell-Aufruf. Hier ist eine Proof-of-Concept-Payload."
-
-Der **Verteidiger** (Defender) stellt den Befund infrage:
-
-> „Die Eingabe wird gegen eine Whitelist erlaubter Zeichen geprüft, bevor sie diesen Codepfad erreicht. Die Prüfung weist alle Shell-Metazeichen ab. So, wie der Code geschrieben ist, lässt sich das nicht ausnutzen."
-
-Der Ankläger argumentiert jeden Befund, als schriebe er einen Exploit-Bericht für einen zahlenden Kunden. Der Verteidiger sucht jeden Grund, warum der Befund in Wahrheit nicht ausnutzbar ist. Ein Befund übersteht die Debatte nur, wenn der Ankläger überzeugend gewinnt.
-
-Die Debatte **senkt** Fehlalarme (False Positives), sie beseitigt sie nicht. Sie soll viele davon aussortieren, bevor ein Mensch sie ansieht. Wie viele, hängt von der Qualität der Prompts, der Wahl der Scanner und der Codebasis ab; gegen einen gelabelten Datensatz gemessen wurde das nicht. Behandle die Debatte als nützlichen adversarialen Filter, nicht als Garantie gegen Fehlalarme.
-
-### Stufe 3: Konsens
-
-Ein Konsens-Agent liest die ganze Debatte und entscheidet:
-
-- **CONFIRMED:** echte Schwachstelle, kommt in die Warteschlange für Fixes
-- **FALSE POSITIVE:** im Kontext nicht ausnutzbar, wird mit Begründung verworfen
-- **NEEDS INVESTIGATION:** unklar, ein Mensch muss prüfen
-
-Nur CONFIRMED-Befunde gehen weiter. Alles andere wird protokolliert; das ist dein Audit-Trail.
-
-### Stufe 4: Fixer
-
-Für jeden bestätigten Befund arbeitet ein Fixer-Agent so:
-
-- Er liest den genauen Befund und den ganzen Verlauf der Debatte.
-- Er setzt den **kleinsten gezielten Fix** um: kein Refactoring, keine Ausweitung des Auftrags.
-- Er schreibt einen Regressionstest, der die Schwachstelle gefunden hätte.
-- Er dokumentiert, warum der Fix korrekt ist.
-
-### Das Übungsziel: fünf eingebaute Schwachstellen
-
-Die Übung prüft `workshop-playground/access_control.py`. Die Datei enthält absichtlich fünf Schwachstellen:
-
-| Schwachstelle | Ort | Was passiert |
-|---|---|---|
-| Command Injection | `backup_database()` | `subprocess.run(f"cp {DB_FILE} {filename}", shell=True)` mit ungeprüfter Eingabe aus dem CLI-Befehl `backup` |
-| Fest eingetragenes Passwort | `ADMIN_PASSWORD = "admin123"` auf Modulebene | ein Geheimnis im Klartext, aber **toter Code**: Kein erreichbarer Anmeldeweg nutzt es |
-| Path Traversal | `read_log()` | `open(f"logs/{log_name}")` ohne Bereinigung, erreichbar über den CLI-Befehl `read-log` |
-| Fail-open-Zugriffslogik | `check_access_resilient()` | fehlt `users.json` oder ist die Datei kaputt, gibt die Funktion den Zutritt frei, statt sicher zu schließen |
-| Log-Injection | `log_event()` | `username` und `action` landen ungefiltert im Log; ein Zeilenumbruch fälscht Einträge im Audit-Log |
-
-Die Orte stehen als Funktionsnamen da, nicht als Zeilennummern, damit sie auch nach Änderungen an der Datei stimmen. Die Schwachstellen sind Lehrziel: Behebe sie nicht dauerhaft und committe keinen Fix, die nächste Runde braucht sie wieder.
-
-Drei Befunde lehren mehr als Mustersuche:
-
-- **Log-Injection ist kein Bonus.** In einer Anlage der physischen Sicherheit ist sie ein Fehler in der Integrität des Audit-Trails, und ein manipulierter Audit-Trail fällt klar unter **EN 50131** (Norm für Einbruchmeldeanlagen). Die Compliance-Tabelle dazu steht in [S3.11](s3-11-datenschutz-und-compliance.md).
-- **Fail-open ist die Lektion über Fachurteil.** Hier gibt es keine Injection, kein Geheimnis und keinen Pfad, an dem sich ein Regex festhalten könnte. Nur wer Zutrittskontrolle kennt, sieht, dass „die Tür soll bei einem Ausfall weiter funktionieren" genau falsch herum ist: Eine Zutrittsanlage muss sicher schließen (fail-secure), wenn die Datenbank des Controllers fehlt. `check_access()` und `load_db()` im selben Programm verweigern bei einem Fehler, so ist es richtig.
-- **Das Passwort zeigt, dass Erreichbarkeit die Schwere ändert.** Ein fest eingetragenes Geheimnis in totem Code ist ein echter Mangel. Eine kaputte Tür-Datenbank, die Zutritt gewährt, ist ein akuter Sicherheitsausfall.
-
-Der zweite Playground `osdp_frame_decoder.c` ist ein vereinfachter Decoder für OSDP-Frames, wie er auf einem Zutritts-Controller laufen könnte. Er enthält vier absichtliche Speicherfehler, typisch für Firmware:
-
-- Buffer Overflow in `decode_data_payload()`
-- Integer Overflow in `compute_crc()` (die `uint8_t`-Arithmetik läuft über)
-- Format String in `log_frame()`
-- Off-by-one in `read_frame_crc()` (liest die CRC ein Byte hinter dem Frame-Ende)
+Als Faustregel dieser Bibliothek gilt: Die Schwere hängt davon ab, ob ein Angreifer die Stelle erreicht und wie groß der Schaden dort ist, nicht davon, wie schlimm das Muster aussieht. Beides prüfst du am Code, nicht am Bericht.
 
 ## Selbst machen
 
-### Übung: Security-Audit am Playground (etwa 25–30 Minuten)
+### Übung: Ankläger und Verteidiger selbst bauen (etwa 25 Minuten)
 
-**Form:** allein oder zu zweit.
+**Ziel:** Du baust zwei Subagenten, lässt sie nacheinander ein kleines Türprogramm prüfen und entscheidest je Befund selbst, was echt ist.
 
-**Ziel:** Adversariales Sicherheitstesten an echtem Code ausführen und sehen, was es findet.
+**Startzustand:** ein neuer Ordner `~/cc-workshop/gegenpruefung`, in dem `.claude/agents` schon existiert, bevor du Claude Code startest (`mkdir -p ~/cc-workshop/gegenpruefung/.claude/agents && cd ~/cc-workshop/gegenpruefung`, in PowerShell `New-Item -ItemType Directory -Force "$HOME\cc-workshop\gegenpruefung\.claude\agents"; Set-Location "$HOME\cc-workshop\gegenpruefung"`). Du brauchst Python (`python`, unter Linux und macOS eventuell `python3`). Alles bleibt in diesem Ordner. Das Beispiel stammt aus der Zutrittstechnik; nimm es, wie es ist.
 
-**Vorbereitung:** Du nimmst `workshop-playground/access_control.py` mit seinen fünf eingebauten Schwachstellen (Tabelle in „Im Detail"). Du musst nichts einbauen.
+1. Leg mit einem Editor die Datei `door.py` im Ordner `gegenpruefung` an:
 
-> **🔧 Plugin nötig, sonst der Weg ohne Plugin.** Schritt 2 nutzt das Workshop-Plugin `devil-advocate-swarms`. Es liegt in keinem offiziellen Marketplace; im Live-Workshop stellt es die Moderation bereit. Prüf mit `claude plugin list`, ob es installiert ist. Fehlt es, **bleib nicht hängen**: Bitte Claude im Playground direkt um das Audit und spring zu Schritt 3:
->
-> *„Audit access_control.py for security vulnerabilities — injection, hardcoded secrets, path traversal, log forging, and fail-open access-control logic — and explain each with severity."*
->
-> So sind alle fünf Schwachstellen ebenfalls auffindbar; du siehst nur die Stufen Debatte und Konsens nicht. Der Rest der Übung (Bericht, Fix, `pytest`) ist gleich. `/security-review` hilft hier nicht: Es prüft nur die Änderungen deines Branches gegenüber dem Standard-Branch von `origin`, und auf einem frischen Klon gibt es keine ([S3.7](s3-07-eingebaute-reviews.md)).
+   ```python
+   import json
+   import os
+   import sys
 
-**Schritt 1: den Playground öffnen**
+   USERS_FILE = "users.json"
+   DOORS = {"lobby", "lab", "server"}
+   MASTER_PASSWORD = "letmein-2019"
 
-```bash
-cd workshop-playground/
-ls access_control.py     # confirm you have the file
-```
 
-**Schritt 2: den Schwarm auf `access_control.py` ansetzen**
+   def load_users():
+       with open(USERS_FILE) as f:
+           return json.load(f)
 
-<!-- cockpit:example -->
-```
-/devil-advocate-swarms:swarm scan access_control.py
-```
 
-**Schritt 3: warten und zusehen**
+   def may_enter(card_id, door):
+       try:
+           users = load_users()
+       except (OSError, ValueError):
+           return True
+       user = users.get(card_id)
+       if user is None:
+           return False
+       return door in user["doors"]
 
-Spring nicht vor. Beobachte jede Stufe:
 
-- Scanner: Was hat jeder gefunden? Alle fünf eingebauten Probleme? Mehr?
-- Debatte: Welche Befunde werden verhandelt? Wer gewinnt?
-- Konsens: Wie viele CONFIRMED, wie viele FALSE POSITIVE?
-- Fixer: Wie sieht der Fix für jeden bestätigten Befund aus?
+   def record(door, granted):
+       if door not in DOORS:
+           raise ValueError("unknown door")
+       os.system("echo audit " + door + (" granted" if granted else " denied"))
 
-Der Schwarm sollte alle fünf finden. Übersieht er den fail-open-Fehler, halte an und überleg, warum gerade dieser Befund Fachwissen aus der physischen Sicherheit braucht.
 
-> ⚠️ **Erwarte kein glattes „5 von 5 CONFIRMED".** `ADMIN_PASSWORD` ist toter Code, kein Anmeldeweg erreicht es. Ein guter Verteidiger bringt genau das in der Debatte vor, deshalb kann das Passwort zu Recht als **CONFIRMED mit niedriger Schwere** oder sogar als **NEEDS INVESTIGATION** enden. Den fail-open-Fehler übersehen Muster-Scanner womöglich, weil er Fachlogik ist. Dieser Streit *ist* die Lektion: **Erreichbarkeit und Fachlogik ändern die Schwere.** Besprecht, warum.
+   def legacy_login(password):
+       return password == MASTER_PASSWORD
 
-**Schritt 4: einen Befund beheben, vorübergehend**
 
-> 📌 **Das ist eine bewusste, erlaubte Ausnahme, und du nimmst sie zurück.** Die Regel des Playgrounds gilt: Der Stand auf `main` ist das Übungsmaterial, die eingebauten Schwachstellen müssen für die nächste Runde erhalten bleiben. Nur für diesen Schritt machst du eine kontrollierte, vorübergehende Ausnahme: Du siehst einen Fix landen, prüfst, dass er die Tests nicht bricht, und stellst das Original wieder her. **Committe den Fix nie.** Die Regel verbietet, Fixes zu *behalten*; hier spielst du einen ein, prüfst und nimmst ihn zurück.
+   if __name__ == "__main__":
+       card_id, door = sys.argv[1], sys.argv[2]
+       granted = may_enter(card_id, door)
+       record(door, granted)
+       print("open" if granted else "closed")
+   ```
 
-Wähle **einen** der bestätigten Befunde und lass Claude den Fix in `access_control.py` umsetzen. Danach:
+   Lies das Programm einmal selbst durch und notier dir in Stichworten, was dir auffällt. Das ist dein Vergleichswert, bevor die Agenten etwas sagen.
+2. Leg die Datei `.claude/agents/accuser.md` an. Der Ankläger darf nur lesen:
 
-```bash
-pytest -v   # run from the playground root — the baseline must stay green
-```
+   <!-- cockpit:example -->
+   ```md
+   ---
+   name: accuser
+   description: Lists suspected security findings in a Python file. Use when asked to accuse or scan a file for findings.
+   tools: Read, Grep, Glob
+   ---
 
-Der Fix zählt nur, wenn die vorhandene Testsuite grün bleibt. Stell danach das Lehrziel wieder her:
+   You are the prosecutor in a security review. Read the file you are given and list every suspected security finding as a numbered list. For each finding give the function or line, the attack in one or two sentences, and a severity (high, medium, low). Argue each finding as strongly as you can. Do not judge whether a finding is reachable and do not suggest fixes. Do not modify any files.
+   ```
+3. Leg die Datei `.claude/agents/defender.md` an:
 
-```bash
-git checkout -- access_control.py
-```
+   ```md
+   ---
+   name: defender
+   description: Tests a numbered list of security findings for reachability and impact. Use after the accuser has produced a list.
+   tools: Read, Grep, Glob
+   ---
 
-> Willst du das Original gar nicht anfassen? Kopier es vorher (`cp access_control.py /tmp/fix-try.py`) und lass Claude die Kopie reparieren. Dann kannst du die vorhandenen Tests aber nicht gegen die Kopie laufen lassen, denn sie importieren `access_control`.
+   You are the defense in a security review. You receive a file name and a numbered list of findings. For each finding check in the code whether an attacker can actually reach it: who calls the function, which input arrives there, which checks come before it. Then answer reachable or not reachable, name the impact if it is reachable, and give a severity. Quote the lines you rely on. Do not modify any files.
+   ```
+4. Starte `claude --permission-mode default` im Ordner und bestätige den Vertrauensdialog.
+5. Setz beide Agenten nacheinander ein:
 
-**Berichte:**
+   ```text
+   Run two subagents one after the other on door.py. First the accuser subagent. Then pass its numbered list of findings word for word to the defender subagent. Show me both results in full, accuser first.
+   ```
 
-1. Wie viele der fünf Schwachstellen hat der Schwarm bestätigt, und in welcher Stufe?
-2. Hat er beide fachlich wichtigen, nicht offensichtlichen Probleme gefunden: den fail-open-Zutritt in `check_access_resilient()` und die Log-Injection in `log_event()`?
-3. Gab es Fehlalarme? Was hat der Verteidiger jeweils vorgebracht?
-4. Welchen Befund hast du behoben, und bricht der Fix einen der vorhandenen Tests?
+   Erwartet: Mit `Ctrl+O` siehst du zwei Delegationen, die zweite erst nach der ersten. Du bekommst zuerst eine nummerierte Liste vom Ankläger und danach zu jedem Punkt ein Urteil des Verteidigers mit zitierten Zeilen. Wie viele Befunde es sind und welche, kann sich von Lauf zu Lauf unterscheiden. Findet Claude einen der beiden Agenten nicht, beende die Sitzung und starte sie neu.
+6. Leg eine kleine Tabelle an, auf Papier oder in einer Datei außerhalb des Übungsordners, den du am Ende löschst: je Befund eine Zeile mit den Spalten *Befund · erreichbar? · Schaden · deine Schwere (hoch, mittel, niedrig oder kein Befund) · dein Beleg*. Das Urteil ist deins, nicht das des Verteidigers. Ergänz eine Zeile für alles, was du in Schritt 1 gesehen hast und keiner der Agenten nannte.
+7. Belege dein Urteil am Programm, nicht an der Argumentation. Such nach den Aufrufen einer Funktion, die du für tot hältst (`grep -n "name" door.py`, in PowerShell `Select-String "name" door.py`). Starte das Programm mit einer Karte und einer Tür (`python door.py C-1 lobby`); es gibt keine `users.json`. Probier eine Eingabe aus, die ein Angreifer wählen würde.
+8. Erst jetzt: Öffne den Vergleich und gleiche deine Tabelle ab.
 
-**Tipps:**
+**Aufräumen:** Beende die Sitzung mit `/exit` und lösch den Ordner `~/cc-workshop/gegenpruefung` selbst.
 
-- Die Debatte ist der spannendste Teil. Lies die Argumente von Ankläger und Verteidiger.
-- Manche Befunde enden als Fehlalarm; dort sollte der Verteidiger gewinnen.
-- Übersieht der Schwarm eine der fünf Schwachstellen, ist auch das interessant: Warum?
-- Achte auf den Regressionstest des Fixers. Prüft er das Richtige?
+<details><summary>Vergleich</summary>
 
-**Für die Security-Fachleute:** Dein Berufsinstinkt sagt dir, ob die Argumente des Anklägers realistisch sind. Sind die Angriffsszenarien in der Debatte plausibel? Würdest du eine CVE so schreiben? Wo bleibt die automatische Analyse hinter menschlichem Fachurteil zurück, wo erreicht oder übertrifft sie es?
+Das Programm enthält drei Dinge, die ein Scan melden kann:
 
-> 🎯 **Scanner gegen Fachwissen.** Hat der Schwarm den fail-open-Fehler in `check_access_resilient()` (der Pfad `door-check`) gemeldet? Wenn nicht, ist genau das die Lektion: Ein automatischer Scan findet *Muster*, fail-open gegen fail-secure ist *Fachurteil*. Probier es aus: Führ im Playground `python access_control.py door-check eve` aus, solange es dort keine `users.json` gibt (sie entsteht erst, wenn du mit `add` jemanden anlegst), und sieh zu, wie der Zutritt gewährt wird. Erkläre dann, warum ein Datenbankfehler den Zutritt verweigern muss.
+| Befund | Erreichbar? | Schaden | Schwere | Beleg |
+|---|---|---|---|---|
+| `may_enter` gibt `True` zurück, wenn `users.json` fehlt oder kaputt ist | ja, bei jedem Ausfall oder jeder Beschädigung der Datei | jede Karte öffnet jede Tür | hoch | `python door.py C-1 server` ohne `users.json` meldet `open` |
+| `MASTER_PASSWORD` und `legacy_login` | nein: Nur die Definition von `legacy_login` kommt vor, niemand ruft sie auf | keiner, solange der Code tot bleibt | niedrig (ein Mangel, das Passwort gehört raus) | die Suche nach Aufrufen findet nur die Definition |
+| `os.system` mit der Tür im Befehlstext | nicht ausnutzbar: `record` lässt nur Türnamen aus `DOORS` durch | keiner | kein Befund (Fehlalarm) | `python door.py C-1 "lab; echo X"` endet mit `ValueError: unknown door`, ohne dass der Befehl läuft |
 
-### Übung: einen Domänen-Parser richtig bauen (OSDP oder Wiegand, etwa 25–30 Minuten)
+Der erste Befund ist ein **Fail-open**: Bei einem Fehler wird erlaubt statt verweigert. Eine Zutrittsanlage muss in dem Fall sicher schließen (fail-secure). Das ist ein Fachurteil: Der Code tut genau, was dasteht, es gibt kein Muster, an dem ein Scan sich festhalten könnte, und trotzdem ist es die schwerste der drei Stellen. Das Passwort sieht schlimmer aus, ist aber unerreichbar. Der Shell-Aufruf sieht nach Injection aus, ist aber durch die Prüfung davor abgefangen.
 
-**Form:** allein oder zu zweit. **Priorität:** empfohlen (optional, aber für Entwickler von Zutrittskontrolle die wertvollste Übung).
+Nannte der Ankläger den ersten Befund nicht, steht er auch beim Verteidiger nicht zur Debatte: Dann hat nur deine eigene Durchsicht aus Schritt 1 ihn gefunden. Hat der Verteidiger das Passwort als erreichbar eingestuft, hat er sich geirrt; die Aufrufsuche zeigt es. Dein Urteil zählt, nicht ihres.
 
-**Ziel:** Mit TDD und dem Multi-Agent-Vorgehen einen *korrekten, grenzgeprüften* Parser für die physische Sicherheit bauen, das Gegenstück zum verwundbaren `workshop-playground/osdp_frame_decoder.c`.
-
-**Hintergrund:** Im CTF unten sucht der Schwarm die eingebauten Speicherfehler in `osdp_frame_decoder.c`: Buffer Overflow, Integer Overflow, Format String, Off-by-one. Diese Übung dreht es um. Statt Fehler im Parser von jemand anderem zu finden, **baust du selbst einen sicheren, testgetrieben**. Hier trifft das abstrakte Material zu TDD und Multi-Agent-Arbeit auf dein Fachgebiet.
-
-Nimm **eine** Variante; beide nutzen dieselbe Schleife Red → Green → Refactor.
-
-**Bild dazu:** Ein Parser zwischen Leser und Controller ist der Schließzylinder des ganzen Systems. Liest er einen Frame falsch, geht die falsche Person durch die falsche Tür. Eine Berechtigung parst man nicht „meistens".
-
-#### Variante A: den OSDP-Frame-Decoder härten
-
-**Ziel:** Einen grenzgeprüften OSDP-Frame-Parser bauen, den der Schwarm nicht mehr knackt.
-
-**1. Red: zuerst die Tests.** Lass Claude eine Testsuite schreiben (oder schreib sie selbst und lass Claude sie erweitern), und zwar gegen die *echte* OSDP-Frame-Form aus dem Kopfkommentar von `workshop-playground/osdp_frame_decoder.c`: SOM `0x53`, ADDR vor einem 16-Bit-LEN in Little Endian, CRC-16/CCITT. Abzudecken sind: ein gültiger Minimal-Frame; ein `LEN`, das größer ist als der Puffer (der Buffer-Overflow-Fall); leere oder ungerade lange Hex-Eingabe (der Fall, gegen den `main()` gehärtet ist); ein Frame, dessen CRC am letzten Byte sitzt (der Off-by-one-Fall). Gegen einen frischen Parser laufen die Tests rot.
-
-```
-   /plan  Build a bounds-checked OSDP frame parser in osdp_safe.c that passes these tests,
-          rejecting malformed frames instead of reading out of bounds.
-```
-
-**2. Green.** Lass Claude `osdp_safe.c` umsetzen, bis die Tests grün sind. Besteh auf einer ausdrücklichen Längenprüfung vor jedem `memcpy` und jedem Indexzugriff.
-
-**3. Refactor und adversariale Gegenprobe.** Setz den Devil's-Advocate-Schwarm auf dein neues `osdp_safe.c` an, oder `/security-review`, sobald der neue Parser als Änderung auf einem eigenen Branch liegt. Ein sauberer Parser sollte denselben Schwarm überstehen, der das Original zerlegt hat.
-
-**4. Property-based Fuzzing (Bonus).** Lass Claude einen Property-Test ergänzen, der `LEN` über `0..65535` variiert und prüft, dass der Parser nie über die Eingabe hinaus liest. Diesen Test hätte das Original nicht bestanden.
-
-#### Variante B: ein Wiegand-26-Parser mit TDD
-
-**Ziel:** Eine 26-Bit-Wiegand-Berechtigung testgetrieben parsen: 1 führendes Bit für gerade Parität, 8 Bit Facility Code, 16 Bit Kartennummer, 1 abschließendes Bit für ungerade Parität.
-
-1. **Red.** Zuerst die Tests: gerade Parität über die ersten 13 Bits, ungerade Parität über die letzten 13 Bits, Facility `0..255`, Karte `0..65535` und ausdrückliche Fehlerfälle (falsche Parität, falsche Bitlänge). Laufen lassen: rot.
-2. **Green.** Setz `parse_wiegand26(bits)` um, bis alles grün ist. **Weise** bei falscher Parität **ab**, statt es „nach bestem Bemühen" zu versuchen: Ein falsch gelesenes Paritätsbit heißt falsche Berechtigung, also die falsche Person an der Tür.
-3. **Refactor.** Lass Claude vereinfachen und die Suite erneut laufen.
-4. **Einen Fehler einbauen (Bonus).** Lass Claude die Paritätsprüfung vertauschen (gerade ↔ ungerade) und prüf, dass dein Test das merkt. Merkt er es nicht, sind deine Tests noch nicht stark genug; das ist die Lektion.
+</details>
 
 **Geschafft, wenn:**
 
-- [ ] du die Tests **vor** der Umsetzung geschrieben hast (erst rot, dann grün)
-- [ ] der Parser fehlerhafte Eingaben (zu großes `LEN`, falsche Parität, falsche Länge) **abweist**, statt über das Ende hinaus zu lesen oder zu raten
-- [ ] (Variante A) der adversariale Schwarm oder `/security-review` in deinem gehärteten Parser nichts findet
-- [ ] (Bonus) deine vorhandenen Tests einen absichtlich eingebauten Fehler finden
+- [ ] beide Subagenten nacheinander liefen und die zweite Delegation nach der ersten im Transkript stand
+- [ ] deine Tabelle zu jedem Befund ein eigenes Urteil mit einem Beleg aus Aufrufsuche oder Programmlauf enthält
+- [ ] du den Vergleich erst nach deiner Tabelle geöffnet hast
+- [ ] du in einem Satz erklären kannst, warum der unscheinbarste der drei Befunde der schwerste ist
 
-**Tipps:**
+### Extra: den Fehler mit einem Test belegen (etwa 10 Minuten)
 
-- Die verwundbare Vorlage ist `workshop-playground/osdp_frame_decoder.c`. Lies ihren Kopfkommentar für die *echte* OSDP-Frame-Form; die Struktur im Code ist absichtlich vereinfacht.
-- Leg Parser und Tests in eigene Wegwerf-Dateien (`osdp_safe.c` oder `wiegand.py`). Du **ergänzt** sauberen Code neben dem Playground, du reparierst nicht die absichtlichen Schwachstellen an Ort und Stelle.
-- Es geht nicht um einen perfekten Parser in 25 Minuten. Es geht um den Unterschied zwischen „Claude hat Code geschrieben" und „Claude hat Code geschrieben, der eine fachkundige Testsuite besteht, die *du* vorher festgelegt hast".
+Mach das Extra erst nach dem Vergleich, denn es nennt den Fehler. Eine Reproduktion trägt mehr als zwei einig urteilende Agenten. Bitte in derselben Sitzung (vor dem Beenden):
 
-### Extra-Übungen (optional)
+```text
+Write test_door.py with the unittest module. One test must prove that may_enter denies access when users.json is missing. Run it with python -m unittest and show me the result. Do not change door.py.
+```
 
-Wettkampf-, Fach- und Team-Formate, gut für Energie nach einem dichten Block. ⚠️ Es gilt dieselbe Regel wie oben: Die Schwachstellen im Playground sind Lehrziel, **committe keine Fixes**.
-
-#### 🏴 Capture-the-Vulnerability-CTF (etwa 20 Minuten, wild)
-
-**Ziel:** Adversariale Analyse als Spiel auf Zeit: menschliches Urteil gegen Agenten-Scan.
-**Bild dazu:** ein interner Pentest an der Zutrittsanlage; der Devil's-Advocate-Schwarm ist das adversariale Pentest-Team.
-
-1. **Runde 1 (ohne Claude):** Die Teams listen jede Schwachstelle, die sie mit bloßem Auge in `access_control.py` und `osdp_frame_decoder.c` finden. Jede zählt eine Flagge.
-2. **Runde 2 (mit Claude oder dem Schwarm):** Punkte für die *neuen*, die ihr übersehen habt.
-3. **Runde 3 (doppelte Punkte):** Erklärt den Off-by-one in `read_frame_crc()`, also *warum* `raw[frame_len]` ein Byte hinter dem Ende liegt, **und** findet den fail-open-Fehler in `check_access_resilient()`, den ein Scanner meist übersieht. Nichts reparieren (Playground-Regel).
-
-#### ⚖️ Devil's-Advocate-Duell (etwa 15 Minuten, wild)
-
-**Ziel:** Das Urteil über Anklage, Verteidigung und Schwere trainieren, das die Debattenstufe des Schwarms automatisiert.
-**Bild dazu:** ein Audit-Befund, den Pentester und Anlagenbetreiber miteinander aushandeln.
-
-1. Der Fall: `ADMIN_PASSWORD = "admin123"`, ein fest eingetragenes Geheimnis in **totem Code** (nie erreicht).
-2. **Spieler A (Ankläger):** 90 Sekunden dafür, dass der Befund CONFIRMED mit hoher Schwere ist.
-3. **Spieler B (Verteidiger):** 90 Sekunden für Fehlalarm, nicht erreichbar, niedrige Schwere.
-4. Claude ist Richter: Bitte Claude um ein Urteil mit Schweregrad und Begründung. Aha: Erreichbarkeit *ändert* die Schwere, genau die Lektion aus der ersten Übung.
-
-#### 📋 Audit-Trail-Integrität (EN 50131, etwa 20 Minuten, mittel)
-
-**Ziel:** Die Log-Fälschung erst ausnutzen, dann beheben, mit der Compliance-Geschichte dazu.
-**Bild dazu:** Wer den Audit-Trail fälscht, bricht die Beweiskette.
-
-1. Auf einer **Kopie** von `access_control.py`: Leg mit `add` einen Nutzer an, dessen Name einen Zeilenumbruch und eine gefälschte Logzeile enthält. Prüf, dass `logs/access.log` jetzt einen falschen Admin-Eintrag hat (`log_event` schreibt `username` und `action` ungefiltert).
-2. Erkläre den Bezug zu **EN 50131**: Die Integrität des Audit-Trails ist eine regulatorische Anforderung, kein Extra (Compliance-Tabelle in [S3.11](s3-11-datenschutz-und-compliance.md)).
-3. Fix: Zeilenumbrüche in `log_event` bereinigen. Beweise es mit einem Test (`pytest` grün auf der Kopie).
-4. Bonus: ein PostToolUse-Hook, der Logzeilen meldet, die nicht der erwarteten Form `timestamp | action | user | status` entsprechen ([S2.8](s2-08-hook-einrichten.md)).
+Beantworte Rückfragen zum Anlegen der Datei und zum Ausführen mit „Yes“. Erwartet: Der Test schlägt fehl, weil `may_enter` `True` liefert. Ein roter Test, der den Fehler benennt, ist der Beleg; `door.py` bleibt unverändert. Erst jetzt wäre der Fix dran: eine Zeile, `return False`, und derselbe Test wird grün.
 
 ## Typische Fallen
 
-- **Der Schwarm meldet Dinge, die keine Schwachstellen sind.** Genau dafür gibt es die Debatte: Ohne sie würdest du auf Rauschen reagieren. Lies nach, was der Verteidiger vorgebracht hat.
-- **Der Schwarm übersieht eine eingebaute Schwachstelle.** Automatische Werkzeuge haben blinde Flecken, kombiniere sie mit menschlichem Review. Fehlt der fail-open-Fehler, untersuch `check_access_resilient()` von Hand und verbinde ihn mit fail-secure-Zutrittskontrolle.
-- **Die Fixes bleiben liegen.** Die Fixer und Schritt 4 der Übung ändern `access_control.py`. Setz die Datei mit `git checkout -- access_control.py` zurück und committe nie einen Fix, sonst fehlt der nächsten Runde das Lehrziel.
-- **`backup` scheitert unter Windows.** Die Command Injection steckt in `backup_database()`, und die ruft den Unix-Befehl `cp` auf, den es unter Windows nicht gibt. Der Schwarm findet die Schwachstelle trotzdem **statisch**, denn es zählt das gefährliche Muster (`subprocess.run` mit `shell=True` und ungeprüfter Eingabe). Für eine Ausnutzung live öffne Git Bash oder WSL; für die Lektion reicht der statische Befund.
+- **Der Verteidiger stimmt dem Ankläger einfach zu.** Beide sind dasselbe Modell. Stuft der Verteidiger einen Fund als erreichbar ein, such selbst nach den Aufrufen, statt dich auf sein Zitat zu verlassen.
+- **Beide übersehen dasselbe.** Hat keiner den Fachfehler genannt, ist die Gegenprobe blind dafür. Deshalb steht in der Übung deine eigene Durchsicht vor den Agenten.
+- **Der Verteidiger bekommt eine gekürzte Liste.** Claude fasst gern zusammen. Der Auftrag verlangt „word for word“, damit der Verteidiger dieselben Befunde sieht wie du.
+- **Eine Argumentation gilt als Beweis.** Zwei überzeugende Texte ersetzen keinen Aufruf, keinen Programmlauf und keinen Test.
+- **Der Agent wird nicht gefunden.** Den ersten Agenten in einem Ordner `.claude/agents`, den es beim Start noch nicht gab, lädt Claude Code erst nach einem Neustart ([S3.3](s3-03-eigener-subagent.md)).
 
 ## Check
 
-Du kannst die vier Stufen der Devil's-Advocate-Pipeline benennen, erklären, warum die Debatte Fehlalarme senkt, aber keine feste Quote verspricht, und am Playground zeigen, warum Erreichbarkeit und Fachlogik die Schwere eines Befunds ändern.
+Du kannst ein Ankläger-Verteidiger-Paar selbst bauen und einsetzen, erklären, warum Übereinstimmung zweier Scanner kein Beweis ist, und an einem Beispiel zeigen, warum Erreichbarkeit und Fachlogik die Schwere ändern.
 
-1. Warum ist ein Befund glaubwürdiger, wenn zwei Scanner ihn unabhängig voneinander finden?
-2. Welche drei Urteile kann der Konsens-Agent fällen, und was passiert danach jeweils mit dem Befund?
-3. Warum übersieht eine Mustersuche den fail-open-Fehler in `check_access_resilient()` leicht, und warum wiegt er in einer Zutrittsanlage trotzdem schwer?
+1. Warum beweist es nicht, dass ein Befund echt ist, wenn Ankläger und ein zweiter Prüfer ihn beide nennen, und was trägt mehr?
+2. Welche Aufgabe hat der Verteidiger, und was soll er nicht tun?
+3. Was unterscheidet fail-open von fail-secure, und warum findet eine reine Mustersuche einen fail-open-Fehler schlecht?
+
+<details><summary>Auflösung</summary>
+
+1. Beide sind dasselbe Modell, ihre Irrtümer sind nicht unabhängig: Was einer für kritisch hält, halten meist alle dafür. Übereinstimmung hilft gegen Zufallsrauschen, nicht gegen einen systematischen Fehler. Mehr trägt ein Beleg, der nicht vom Modell abhängt: ein reproduzierender Test, ein Programmlauf, dein Fachwissen.
+2. Er prüft je Befund im Code, ob ein Angreifer ihn erreicht, und nennt Schaden und Schwere mit zitierten Zeilen. Er soll nichts ändern und nichts beheben.
+3. Fail-open erlaubt bei einem Fehler, fail-secure verweigert. Eine Mustersuche sucht auffällige Muster; der Fehler steckt aber im Fachurteil („bei einem Ausfall darf die Tür aufgehen“), und der Code sieht normal aus.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Welche Aussage über die Debatte in der Devil's-Advocate-Pipeline stimmt?
+**Frage:** Ein Scan meldet zwei Funde in einem Zugangssystem. (1) Eine SQL-Abfrage per Textverkettung steckt in einer Funktion, die nur ein Testskript aufruft. (2) Eine Prüfung gibt den Zutritt frei, wenn der Rechtedienst nicht antwortet. Welchen behebst du zuerst?
 
-- **Richtig:** Sie senkt Fehlalarme, weil Ankläger und Verteidiger jeden Befund abwägen, beseitigt sie aber nicht; wie stark, hängt von Prompts, Scannern und Codebasis ab.
-- Falsch: Sie garantiert, dass am Ende keine Fehlalarme übrig bleiben, weil Ankläger und Verteidiger einander vollständig kontrollieren und jede Lücke gemeinsam abdecken.
-- Falsch: Gewinnt der Ankläger, gilt der Befund sofort als CONFIRMED; der Konsens-Agent entscheidet nur die Fälle, in denen die Debatte unentschieden endet.
-- Falsch: Sie läuft nur für kritische Befunde mit hoher Schwere; alle anderen Befunde gehen von den Scannern direkt und ohne Debatte an die Fixer-Agenten.
+- **Richtig:** Fund 2: Er greift im Betrieb bei jedem Ausfall, und der Schaden ist groß; Fund 1 hat keinen Angriffsweg, solange nur der Test die Funktion aufruft.
+- Falsch: Fund 1: Eine SQL-Injection steht auf jeder Liste der schwersten Lücken, also zählt das Muster, auch wenn niemand die Funktion aufruft.
+- Falsch: Beide gleichzeitig, denn derselbe Scan hat beide gemeldet, und was ein Scan nennt, hat dieselbe Schwere wie sein Nachbar.
+- Falsch: Keinen: Ein Ausfall ist kein Angriff, und die Funktion ist nur ein Test, also sind beide Funde Fehlalarme ohne Handlungsbedarf.
 
 </details>
 
@@ -322,9 +239,6 @@ Du kannst die vier Stufen der Devil's-Advocate-Pipeline benennen, erklären, war
 
 - [Subagenten](https://code.claude.com/docs/en/sub-agents)
 - [Sicherheit in Claude Code](https://code.claude.com/docs/en/security)
-- [S3.7 · Die eingebauten Reviews](s3-07-eingebaute-reviews.md)
+- [S3.3 · Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md)
 - [S3.4 · Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md)
-- [S3.11 · Datenschutz, Aufbewahrung und regulierte Branchen](s3-11-datenschutz-und-compliance.md)
-- [S1.14 · Plan-Modus und schrittweises Vorgehen](s1-14-plan-modus.md)
-- [S4.5 · CI-Pipelines bauen mit GitHub Actions und GitLab](s4-05-ci-pipelines.md)
-- [S3.15 · Praxis-Station Session 3: eine Übung wählen](s3-15-praxis-station-3.md)
+- [S3.7 · Die eingebauten Reviews](s3-07-eingebaute-reviews.md)

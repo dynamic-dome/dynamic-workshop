@@ -68,17 +68,17 @@ Kern 300 Min · Vertiefung 190 Min
 
 ## Session 3 — Fortgeschritten: Kern
 
-Kern 157 Min · Vertiefung 42 Min · Kür 15 Min
+Kern 217 Min · Vertiefung 47 Min · Kür 15 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
-| [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) | Kern | 12 |  | [Demo](../moderation/vorfuehren/s3-01-was-ist-ein-agent.md) |
-| [S3.2 Eingebaute Subagenten nutzen](../library/s3-02-eingebaute-subagenten.md) | Kern | 10 |  |  |
-| [S3.3 Einen eigenen Subagenten definieren](../library/s3-03-eigener-subagent.md) | Kern | 18 |  |  |
-| [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s3-04-orchestrierungsmuster.md) |
-| [S3.5 Hintergrund-Sitzungen und Agent Teams](../library/s3-05-hintergrund-und-teams.md) | Vertiefung | 15 |  |  |
-| [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](../library/s3-06-devils-advocate.md) | Kern | 18 |  | [Demo](../moderation/vorfuehren/s3-06-devils-advocate.md) |
-| [S3.7 Die eingebauten Reviews](../library/s3-07-eingebaute-reviews.md) | Kern | 12 |  |  |
+| [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](../library/s3-01-was-ist-ein-agent.md) | Kern | 20 |  | [Demo](../moderation/vorfuehren/s3-01-was-ist-ein-agent.md) |
+| [S3.2 Eingebaute Subagenten nutzen](../library/s3-02-eingebaute-subagenten.md) | Kern | 15 |  |  |
+| [S3.3 Einen eigenen Subagenten definieren](../library/s3-03-eigener-subagent.md) | Kern | 25 |  |  |
+| [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](../library/s3-04-orchestrierungsmuster.md) | Kern | 25 |  | [Demo](../moderation/vorfuehren/s3-04-orchestrierungsmuster.md) |
+| [S3.5 Hintergrund-Sitzungen und Agent Teams](../library/s3-05-hintergrund-und-teams.md) | Vertiefung | 20 |  |  |
+| [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](../library/s3-06-devils-advocate.md) | Kern | 35 |  | [Demo](../moderation/vorfuehren/s3-06-devils-advocate.md) |
+| [S3.7 Die eingebauten Reviews](../library/s3-07-eingebaute-reviews.md) | Kern | 25 |  |  |
 | [S3.8 Rechte für autonome Läufe](../library/s3-08-rechte-fuer-autonomie.md) | Kern | 15 | 🛡 | [Demo](../moderation/vorfuehren/s3-08-rechte-fuer-autonomie.md) |
 | [S3.9 Geschützte Pfade und Sandbox-Stufen](../library/s3-09-geschuetzte-pfade-und-sandbox.md) | Kern | 15 | 🛡 |  |
 | [S3.10 Netzwerk und Skills härten](../library/s3-10-netzwerk-und-skills-haerten.md) | Vertiefung | 12 |  |  |
@@ -112,5 +112,5 @@ Kern 63 Min · Vertiefung 66 Min · Kür 97 Min
 |---|---|---:|
 | [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) | Kür | 35 |
 | [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) | Kür | 30 |
-| [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) | Kür | 15 |
+| [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) | Kür | 25 |
 | [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) | Kür | 15 |

@@ -2540,33 +2540,37 @@
    "aliases": [
     "3.1"
    ],
-   "analogy": "In einer Sicherheitszentrale macht nicht ein Wachmann alles: Kameras beobachten, auf Alarme reagieren, Karten verwalten und Vorfallberichte schreiben. Die Leitstelle schickt Spezialisten los. Jedes Streifenmitglied bekommt einen klaren Auftrag und die passende Ausrüstung und kümmert sich nur darum. Wer Kameras auswertet, rückt nicht zu Einbrüchen aus, und das Einsatzteam konfiguriert keine Kartenleser. Die Leitstelle koordiniert und führt die Berichte zusammen, sie macht nicht alles selbst.",
-   "answers": null,
+   "analogy": "In einer Sicherheitszentrale macht nicht ein Wachmann alles: Kameras beobachten, auf Alarme reagieren, Karten verwalten und Vorfallberichte schreiben. Die Leitstelle schickt Spezialisten los. Jedes Streifenmitglied bekommt einen klaren Auftrag und die passende Ausrüstung und kümmert sich nur darum. Die Leitstelle koordiniert und führt die Berichte zusammen, sie macht nicht alles selbst.",
+   "answers": [
+    "Er bekommt den Auftrag, den Claude für ihn schreibt, seinen eigenen System-Prompt und deine CLAUDE.md-Dateien (Explore und Plan überspringen sie). Deinen Gesprächsverlauf sieht er nicht; nur ein Fork erbt ihn.",
+    "Ein Subagent ist eine eigene Claude-Instanz mit frischem Kontextfenster, eigener Rolle und eigenen Tools und gibt nur eine Zusammenfassung zurück. Ein Skill leitet die laufende Sitzung im selben Kontext an.",
+    "Er schickt eigene Anfragen, die auf dieselben Nutzungsgrenzen zählen wie dein Hauptgespräch, und sein Ergebnis landet wieder in deinem Kontextfenster."
+   ],
    "area": "agents",
-   "checkpoint": "Du kannst an einem konkreten Beispiel erklären, warum ein Subagent eine eigene Claude-Instanz mit eigenem Kontextfenster ist, ein Skill dagegen eine Anleitung für die laufende Sitzung, und wann sich das Aufteilen lohnt.",
+   "checkpoint": "Du kannst an einem Versuch zeigen, dass ein Subagent nur den Auftrag kennt, erklären, warum er kein Skill ist, und begründen, wann das Aufteilen sich lohnt.",
    "demo": "../moderation/vorfuehren/s3-01-was-ist-ein-agent.md",
-   "example": "Start a chain of 3 subagents. Agent 1 gets this message and summarizes it in ONE sentence. Agent 2 gets ONLY Agent 1's sentence and summarizes again. Agent 3 likewise.",
+   "example": "   Use the Agent tool to start one subagent of type general-purpose. Give it exactly this task and nothing else: \"What is the project codeword? Answer from your own context only, use no tools, and answer UNKNOWN if you do not know it.\" Do not add any other information to the task.",
    "example_lang": "text",
    "file": "s3-01-was-ist-ein-agent.md",
    "glance": "Ein Subagent ist eine spezialisierte Claude-Instanz mit eigener Rolle, eigenen Tools und eigenem Kontextfenster. Er ist kein Skill: Ein Skill leitet die laufende Sitzung an, ein Subagent bekommt einen eigenen Auftrag, arbeitet getrennt und gibt nur eine Zusammenfassung zurück. Weil ihn nichts anderes ablenkt, macht er seinen Teil gut, und dein Hauptgespräch bleibt frei von Suchergebnissen und Logs.",
    "id": "S3.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 3010,
-   "outcome": "Ich kann erklären, warum ein Subagent eine eigene Claude-Instanz mit eigenem Kontextfenster, eigenen Tools und einer klaren Rolle ist und kein Skill, und begründen, wann Spezialisierung besser ist als eine Sitzung, die alles macht.",
+   "outcome": "Ich kann an einem Versuch zeigen, dass ein Subagent nur kennt, was im Auftrag steht, erklären, warum er eine eigene Claude-Instanz mit eigenem Kontextfenster, eigenen Tools und klarer Rolle ist und kein Skill, und begründen, wann sich das Aufteilen lohnt und wann nicht.",
    "quiz": {
-    "correct": "Ein Subagent arbeitet in eigenem, frischem Kontext mit eigenen Tools; ein Skill leitet nur die laufende Sitzung an.",
-    "q": "Du willst drei Module parallel untersuchen lassen. Welcher Unterschied zwischen Skill und Subagent entscheidet, was du dafür nimmst?",
+    "correct": "Im Hauptgespräch bleiben: Die Phasen teilen viel Kontext, du willst eingreifen, und ein Subagent müsste jedes Mal neu einsteigen.",
+    "q": "Du änderst in einer Datei zwei zusammengehörige Funktionen: erst Plan, dann Umsetzung, dann Test, mit Rückfragen zwischendurch. Wie gehst du vor?",
     "wrong": [
-     "Ein Skill kann keine Shell-Befehle ausführen, ein Subagent schon; der Unterschied liegt allein in den Tools.",
-     "Ein Subagent teilt sich dein Kontextfenster und bekommt nur eine andere Rolle; ein Skill startet einen eigenen Prozess.",
-     "Subagenten sind für sicherheitskritische Prüfungen reserviert, Skills für alle anderen Aufgaben im Projekt."
+     "Je Phase einen Subagenten starten, damit jede Phase mit frischem, unbelastetem Kontext beginnt und sauber arbeitet.",
+     "Die Funktionen parallel von zwei Subagenten bearbeiten lassen, weil parallele Arbeit die Zeit auf die Dauer des langsamsten verkürzt.",
+     "Einen Subagenten mit allen Tools starten, der alles in Ruhe selbst erledigt und dir nur das fertige Ergebnis zurückmeldet."
     ]
    },
    "recall": [
     "Was bekommt ein Subagent beim Start mit, und was sieht er nicht?",
-    "Nenne zwei Gründe, warum eine einzige lange Sitzung schlechter arbeitet als mehrere spezialisierte Agenten.",
+    "Worin unterscheidet sich ein Subagent von einem Skill?",
     "Was kostet dich jeder zusätzliche Subagent?"
    ],
    "requires": [
@@ -2582,7 +2586,7 @@
    "shelf": "agents",
    "skip_check": [
     "Kannst du ohne Nachschlagen erklären, worin sich ein Subagent von einem Skill unterscheidet (Kontext, Tools, Rolle)?",
-    "Hast du schon einmal bewusst eine Aufgabe auf mehrere Agenten mit frischem Kontext verteilt, statt eine lange Sitzung zu überladen?"
+    "Kannst du sagen, was ein Subagent beim Start über dein Gespräch weiß, und woran du merkst, dass sich das Aufteilen einer Aufgabe nicht lohnt?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/sub-agents",
@@ -2594,33 +2598,37 @@
   },
   {
    "aliases": [],
-   "analogy": "Stell dir das Stammpersonal einer Wache vor. Der Aufklärer geht die Außenanlage ab und meldet, was er sieht, aber er fasst nichts an: Das ist Explore. Der Erkunder nimmt für die Einsatzleitung die Lage auf, bevor sie den Einsatzplan vorlegt: Das ist Plan im Plan-Modus. Der Diensthabende darf erkunden und handeln und übernimmt Aufträge mit mehreren Schritten: Das ist general-purpose. Für einen Standardauftrag stellst du keine Sonderkraft ein, du gibst ihn der passenden Stammrolle.",
-   "answers": null,
+   "analogy": "Stell dir das Stammpersonal einer Wache vor. Der **Späher** geht die Außenanlage ab und meldet, was er sieht; er fasst nichts an. Das ist Explore, und du schickst ihn los, wenn du wissen willst, wo etwas liegt. Der **Zuarbeiter der Einsatzleitung** sitzt im Lageraum und trägt Fakten zusammen, bevor die Leitung ihren Einsatzplan vorlegt. Den Plan schreibt er nicht, und die Leitung setzt ihn von sich aus ein: Das ist Plan im Plan-Modus. Der **Diensthabende** darf erkunden und handeln und übernimmt Aufträge mit mehreren Schritten: Das ist general-purpose. Für einen Standardauftrag stellst du keine Sonderkraft ein, du gibst ihn der passenden Stammrolle.",
+   "answers": [
+    "general-purpose hat alle Tools, die Subagenten zur Verfügung stehen, und darf damit ändern. Explore und Plan sind nur lesend; Write und Edit sind gesperrt.",
+    "Im Plan-Modus, wenn Claude deine Codebasis verstehen muss, bevor es den Plan vorlegt. Du musst ihn nicht anfordern.",
+    "Deine CLAUDE.md-Dateien und den Schnappschuss des Git-Status."
+   ],
    "area": "agents",
-   "checkpoint": "Du kannst die drei eingebauten Subagenten nennen, sagen, welche nur lesen, und einen davon im Auftrag gezielt anfordern.",
+   "checkpoint": "Du kannst die drei eingebauten Subagenten nennen, sagen, welche nur lesen, Explore im Auftrag gezielt anfordern und im Transkript die Delegation finden.",
    "demo": null,
-   "example": "Use the Explore subagent to map all OSDP-related files in firmware/ and report module boundaries.",
+   "example": "   Use the Explore subagent to find out which of the .cfg files in this folder has mode pin, and report its file name and its timeout value. Do not search yourself.",
    "example_lang": "text",
    "file": "s3-02-eingebaute-subagenten.md",
    "glance": "Claude Code bringt Subagenten mit, die du nicht erst definieren musst. Explore durchsucht und analysiert eine Codebasis nur lesend, Plan sammelt im Plan-Modus lesend Kontext, bevor Claude dir einen Plan vorlegt, und general-purpose übernimmt Aufgaben, die Erkunden und Ändern oder mehrere abhängige Schritte brauchen. Claude delegiert von selbst an sie, du kannst sie aber auch im Auftrag beim Namen nennen.",
    "id": "S3.2",
    "level": "core",
-   "minutes": 10,
+   "minutes": 15,
    "offers": [],
    "order": 3020,
-   "outcome": "Ich kann für eine Aufgabe (Codebasis durchsuchen, Kontext für einen Plan sammeln, erkunden und ändern) den passenden eingebauten Subagenten Explore, Plan oder general-purpose wählen und ihn im Auftrag gezielt anfordern.",
+   "outcome": "Ich kann für eine Aufgabe (Codebasis durchsuchen, Kontext für einen Plan sammeln, erkunden und ändern) den passenden eingebauten Subagenten Explore, Plan oder general-purpose wählen, Explore im Auftrag gezielt anfordern und im Transkript erkennen, dass das Hauptgespräch nur seine Zusammenfassung bekommt.",
    "quiz": {
     "correct": "Explore: Er liest nur, Write und Edit sind gesperrt, und seine Suche bleibt in seinem eigenen Kontext.",
     "q": "Vor einem Umbau willst du wissen, wo in `firmware/` alle OSDP-Dateien liegen. Nichts soll geändert werden, und die Suchergebnisse sollen nicht dein Hauptgespräch füllen. Welcher eingebaute Subagent passt?",
     "wrong": [
-     "Plan: Er schreibt dir einen fertigen Umbauplan und legt die dafür nötigen Dateien gleich im Repo an.",
-     "general-purpose: Nur er darf überhaupt Dateien lesen, Explore und Plan sehen ausschließlich die Dateinamen.",
+     "Plan: Er schreibt dir den fertigen Umbauplan und legt die dafür nötigen Dateien gleich im Repo an.",
+     "general-purpose: Er findet dieselben Dateien, und dass er auch ändern darf, schadet nicht, solange du nichts verlangst.",
      "Keiner: Eingebaute Subagenten laufen erst, wenn du sie vorher in `.claude/agents/` angelegt hast."
     ]
    },
    "recall": [
     "Welcher eingebaute Subagent darf Dateien ändern, welche nicht?",
-    "Wann gibt Claude Arbeit an Plan ab?",
+    "Wann gibt Claude Arbeit an Plan ab, und musst du ihn dafür anfordern?",
     "Was lädt Explore im Unterschied zu einem eigenen Subagenten nicht?"
    ],
    "requires": [
@@ -2648,34 +2656,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein eigener Subagent ist wie ein neues Streifenmitglied, das du einstellst. In der Personalakte steht, wofür es zuständig ist (die `description`), welche Ausrüstung es bekommt (`tools`) und welche Freigabestufe gilt (`permissionMode`). Ein Späher bekommt keinen Generalschlüssel und ein Prüfer keinen Werkzeugkoffer: Jeder bekommt genau das, was sein Auftrag braucht.",
-   "answers": null,
+   "analogy": "Ein eigener Subagent ist wie ein neues Streifenmitglied, das du einstellst. In der Personalakte steht, wofür es zuständig ist (die `description`), und welche Ausrüstung es bekommt (`tools`). Ein Späher bekommt keinen Generalschlüssel und ein Prüfer keinen Werkzeugkoffer: Jeder bekommt genau das, was sein Auftrag braucht.",
+   "answers": [
+    "`name` und `description`. Fehlt `tools`, erbt der Subagent alle Tools, die Subagenten zur Verfügung stehen.",
+    "Claude Code ignoriert das unbekannte Feld ohne Fehlermeldung, und der Agent erbt alle Tools, als hättest du keine Grenze gesetzt.",
+    "`hooks`, `mcpServers` und `permissionMode`."
+   ],
    "area": "agents",
-   "checkpoint": "Du kannst einen eigenen Subagenten mit YAML-Frontmatter definieren, seine Tools nach dem Prinzip der minimalen Rechte begrenzen und erklären, warum die `description` das Routing steuert und warum Plugin-Subagenten ihre Rechte nicht selbst anheben können.",
+   "checkpoint": "Du kannst einen eigenen Subagenten mit YAML-Frontmatter definieren, seine Tools nach dem Prinzip der minimalen Rechte begrenzen, einen falsch geschriebenen Feldnamen als Ursache erkennen und erklären, warum Plugin-Subagenten ihre Rechte nicht selbst anheben können.",
    "demo": null,
-   "example": "---\nname: code-explorer\ndescription: >\n  Analyzes codebases to understand structure, dependencies, and patterns.\n  Use when you need: project overview, file map, dependency graph, entry points.\n  Examples: \"explore this project\", \"what does this codebase do\", \"map the architecture\"\nmodel: haiku\ncolor: cyan\ntools:\n  - Read\n  - Glob\n  - Grep\npermissionMode: default\nmaxTurns: 20\n---\n\nYou are a code exploration specialist.  Your job is to understand, not to change.\n\nWhen asked to explore a project:\n1. Start with the directory structure\n2. Read key files: README, main entry points, config\n3. Map the dependency graph\n4. Identify architectural patterns\n5. Report clearly — structure, purpose, notable patterns, risks\n\nNever modify files.  Never execute code.  Explore only.",
-   "example_lang": "yaml",
+   "example": "   ---\n   name: readme-reviewer\n   description: Reviews a README file for missing steps and unclear wording. Use when the user asks for a README review.\n   tools: Read, Grep, Glob\n   model: inherit\n   maxTurns: 10\n   ---\n\n   You review README files. Read the file you are given and list up to five concrete problems, each with the line it refers to. Follow the request you are given.",
+   "example_lang": "md",
    "file": "s3-03-eigener-subagent.md",
    "glance": "Einen eigenen Subagenten legst du als Markdown-Datei mit YAML-Frontmatter an, im Projekt unter `.claude/agents/` oder für alle deine Projekte unter `~/.claude/agents/`. Pflicht sind nur `name` und `description`; die `description` entscheidet, wann Claude an den Agenten delegiert. Mit `tools` gibst du ihm nur die Werkzeuge, die er braucht, denn ohne das Feld erbt er alle. Der Text unter dem Frontmatter wird sein System-Prompt.",
    "id": "S3.3",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 3030,
-   "outcome": "Ich kann eine Subagent-Datei mit YAML-Frontmatter (name, description, tools, model, permissionMode, maxTurns) schreiben, sie nach dem Prinzip der minimalen Rechte begrenzen und sagen, welche Felder Claude Code bei Plugin-Subagenten ignoriert.",
+   "outcome": "Ich kann eine Subagent-Datei mit YAML-Frontmatter (name, description, tools, model, maxTurns) schreiben, sie nach dem Prinzip der minimalen Rechte auf lesende Tools begrenzen, einen stillen Feldnamen-Fehler erkennen und sagen, welche Felder Claude Code bei Plugin-Subagenten ignoriert.",
    "quiz": {
-    "correct": "Es ignoriert beide Felder, damit ein Plugin weder seine Freigabestufe anhebt noch ungefragt Hooks einhängt.",
-    "q": "Ein Plugin bringt einen Subagenten mit, der im Frontmatter `permissionMode: bypassPermissions` und eigene `hooks` setzt. Was macht Claude Code damit?",
+    "correct": "In `acceptEdits`: Das Hauptgespräch bestimmt den Modus, dein Feld wird ignoriert. Begrenzen kannst du ihn zuverlässig nur über `tools`.",
+    "q": "Dein Subagent `reviewer` setzt `permissionMode: default`. Du arbeitest im Hauptgespräch im Modus `acceptEdits` und lässt ihn Änderungen prüfen. In welchem Modus läuft er?",
     "wrong": [
-     "Es übernimmt beide Felder, zeigt dir aber vor dem ersten Start des Subagenten einen eigenen Bestätigungsdialog an.",
-     "Es verweigert das ganze Plugin, weil Subagenten aus Plugins grundsätzlich kein YAML-Frontmatter haben dürfen.",
-     "Es übernimmt beide Felder, sofern das Plugin aus dem offiziellen Plugin-Marketplace von Anthropic stammt."
+     "In `default`, denn das Feld im Subagenten hat Vorrang vor dem Modus des Hauptgesprächs, solange es in der Datei steht.",
+     "Claude Code meldet einen Konflikt und lässt den Subagenten erst laufen, wenn du den Moduswechsel ausdrücklich bestätigt hast.",
+     "Er startet nur, wenn beide Modi übereinstimmen; sonst bricht Claude Code den Aufruf des Subagenten mit einer Fehlermeldung ab."
     ]
    },
    "recall": [
     "Welche zwei Felder sind Pflicht, und was passiert, wenn `tools` fehlt?",
-    "Welche drei Felder ignoriert Claude Code bei Subagenten aus einem Plugin?",
-    "Wann wird der `permissionMode` eines Subagenten ignoriert?"
+    "Was geschieht, wenn du in der Frontmatter `allowed_tools` statt `tools` schreibst?",
+    "Welche drei Felder ignoriert Claude Code bei Subagenten aus einem Plugin?"
    ],
    "requires": [
     "S3.2"
@@ -2705,27 +2717,31 @@
   {
    "aliases": [],
    "analogy": "Fan-out ist die Leitstelle, die zwei Sicherheitsteams gleichzeitig losschickt, um zwei Etagen abzusuchen. Das eine Team nimmt den Grundriss auf, das andere sucht nach Gefahren. Beide melden unabhängig zurück, und die Leitstelle hat beide Berichte, ohne dass einer auf den anderen gewartet hat. Eine Pipeline ist der Zutrittsablauf: Karte lesen, Berechtigung prüfen, Tür freigeben, Ereignis protokollieren; jeder Schritt braucht das Ergebnis des vorigen. Eine Hierarchie ist die Alarmzentrale mit Bereichszentralen: Die Hauptleitstelle koordiniert die Bereiche, jeder Bereich seine eigenen Melder.",
-   "answers": null,
+   "answers": [
+    "Der Auftrag für einen späteren Agenten enthält etwas, das erst ein früherer herausfinden muss: Jeder Schritt braucht das Ergebnis des vorigen.",
+    "Vom langsamsten Agenten, nicht von der Summe aller Laufzeiten. Tokens sparst du dabei nicht.",
+    "Wenn sich das Problem auf mehreren Ebenen zerlegen lässt, etwa in großen Codebasen; ein Subagent darf dann eigene Subagenten starten, standardmäßig bis zu drei Ebenen tief."
+   ],
    "area": "agents",
    "checkpoint": "Du kannst zu einer beschriebenen Aufgabe mit mehreren Agenten das passende Muster wählen, für Fan-out den Zeitgewinn gegenüber dem Nacheinander abschätzen und begründen, warum die Teile dafür unabhängig sein müssen.",
    "demo": "../moderation/vorfuehren/s3-04-orchestrierungsmuster.md",
-   "example": "Use separate agents running in parallel for each part.\nPart 1: [describe Part 1]\nPart 2: [describe Part 2]\nReport the results together.",
+   "example": "   Use two separate subagents running in parallel. Subagent 1 reads access.log and reports how many lines contain DENIED. Subagent 2 reads reader.py and lists every TODO and FIXME comment with its line number. Then give me both results in one short report.",
    "example_lang": "text",
    "file": "s3-04-orchestrierungsmuster.md",
    "glance": "Drei Muster decken die meisten Aufgaben mit mehreren Agenten ab. Fan-out/Fan-in startet unabhängige Agenten parallel und führt ihre Ergebnisse zusammen; eine Pipeline reicht das Ergebnis eines Agenten an den nächsten weiter, weil jeder Schritt den vorigen braucht; eine Hierarchie schachtelt Unter-Orchestratoren für Aufgaben, die sich auf mehreren Ebenen zerlegen lassen. Die wichtigste Prüfung vor jedem Fan-out: Sind die Teile wirklich unabhängig?",
    "id": "S3.4",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 3040,
-   "outcome": "Ich kann bei einer Mehrteil-Aufgabe begründet zwischen Fan-out/Fan-in, Pipeline und Hierarchie wählen und prüfen, ob die Teilaufgaben wirklich unabhängig sind.",
+   "outcome": "Ich kann bei einer Mehrteil-Aufgabe begründet zwischen Fan-out/Fan-in, Pipeline und Hierarchie wählen, prüfen, ob die Teilaufgaben wirklich unabhängig sind, und an den Aufträgen der Subagenten ablesen, ob eine Abhängigkeit bestand.",
    "quiz": {
-    "correct": "Fan-out/Fan-in: fünf Scanner parallel, der Orchestrator führt zusammen; etwa 90 s statt 450 s.",
-    "q": "Fünf unabhängige Firmware-Module sollen auf Speichersicherheitslücken gescannt werden, jeder Scan dauert 90 Sekunden. Welches Muster passt, und wie lange dauert es ungefähr?",
+    "correct": "Pipeline: Agent 2 braucht die Liste von Agent 1, und liefe er parallel, müsste er die Funktionen raten.",
+    "q": "Du willst `reader.py` verbessern lassen: Agent 1 listet alle Funktionen ohne Prüfung der Eingabe, Agent 2 schreibt Tests für genau diese Funktionen. Welches Muster passt?",
     "wrong": [
-     "Pipeline: Jeder Scanner baut auf dem vorigen auf und reicht Modulwissen weiter; etwa 450 s insgesamt.",
-     "Hierarchie: Fünf parallele Agenten brauchen immer Unter-Orchestratoren gegen Schreibkonflikte.",
-     "Nacheinander: Parallele Agenten teilen sich ein Kontextfenster und blockieren sich gegenseitig."
+     "Fan-out/Fan-in: Beide Agenten lesen dieselbe Datei, also sind ihre Teilaufgaben unabhängig und laufen gleichzeitig.",
+     "Hierarchie: Zwei zusammenarbeitende Agenten brauchen einen Unter-Orchestrator, der ihre Ergebnisse laufend abgleicht.",
+     "Fan-out/Fan-in: Parallel ist schneller, also starten beide gleichzeitig und Claude gleicht die Ergebnisse nachher ab."
     ]
    },
    "recall": [
@@ -2760,33 +2776,37 @@
   {
    "aliases": [],
    "analogy": "`claude agents` ist die Schichttafel der Wachleitung. Jede Streife, die gerade draußen ist, steht als Zeile auf der Tafel. Du kannst dich bei jeder einklinken (`attach`), den letzten Funkverkehr abrufen (`logs`), eine zurückrufen (`stop`), dieselbe Streife erneut losschicken (`respawn`) oder einen erledigten Eintrag streichen (`rm`). Die Tafel hängt in deinem eigenen Gebäude: Fährt der Rechner herunter, endet die Schicht.",
-   "answers": null,
+   "answers": [
+    "`claude attach <id>` holt sie in dein Terminal, `claude logs <id>` zeigt nur ihre letzte Ausgabe.",
+    "Ein Subagent gehört zu deiner Sitzung und meldet ihr sein Ergebnis. Eine Hintergrund-Sitzung ist eine eigenständige Sitzung, die dein Terminal überdauert und ihr Ergebnis nur dir meldet.",
+    "Sind Agent Teams eingeschaltet, startet ein Subagent, dem Claude einen Namen gibt, als Teammitglied. Der Verbrauch wächst mit der Zahl der aktiven Teammitglieder, denn jedes ist eine eigene Instanz."
+   ],
    "area": "agents",
-   "checkpoint": "Du kannst eine Hintergrund-Sitzung mit `claude --bg` starten, sie mit `claude agents` finden und mit `claude attach <id>` übernehmen, den Unterschied zu einem Subagenten erklären und begründen, warum Agent Teams nur mit Absicht und in kleiner Besetzung laufen sollten.",
+   "checkpoint": "Du kannst eine Hintergrund-Sitzung mit `claude --bg` starten, sie mit `claude agents`, `claude logs` und `claude attach` verwalten, den Unterschied zu einem Subagenten erklären und begründen, warum Agent Teams nur mit Absicht und in kleiner Besetzung laufen sollten.",
    "demo": null,
-   "example": "claude --bg \"Generate API documentation for every public function in src/api/\"",
+   "example": "   claude --bg --name \"bg-uebung\" \"List the files in this folder and describe each one in one sentence. Do not change anything.\"",
    "example_lang": "bash",
    "file": "s3-05-hintergrund-und-teams.md",
-   "glance": "Eine Hintergrund-Sitzung ist eine vollständige Claude-Code-Sitzung, die ohne angehängtes Terminal weiterläuft: Du startest sie mit `claude --bg` oder schickst die laufende mit `/background` weg und behältst alle mit `claude agents` im Blick. Sie läuft auf deinem Rechner, nicht in der Cloud. Agent Teams gehen weiter: Mehrere Sitzungen mit eigenem Kontext stimmen sich über Nachrichten und eine gemeinsame Aufgabenliste ab, geführt von einer Lead-Sitzung. Beides ist noch nicht fertig: Agent view ist eine Research Preview, Agent Teams sind experimentell und standardmäßig aus.",
+   "glance": "Eine Hintergrund-Sitzung ist eine vollständige Claude-Code-Sitzung, die ohne angehängtes Terminal weiterläuft: Du startest sie mit `claude --bg` oder schickst die laufende mit `/background` weg und behältst alle mit `claude agents` im Blick. Sie läuft auf deinem Rechner, nicht in der Cloud. Agent Teams gehen weiter: Mehrere Sitzungen mit eigenem Kontext stimmen sich ab, geführt von einer Lead-Sitzung. Beides ist noch nicht fertig: Agent view ist eine Research Preview, Agent Teams sind experimentell und standardmäßig aus. Diese Lektion übt die Hintergrund-Sitzungen; Agent Teams bekommen einen kurzen Ausblick.",
    "id": "S3.5",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 3050,
-   "outcome": "Ich kann einen langen Auftrag mit claude --bg als Hintergrund-Sitzung starten, ihn mit claude agents, attach, logs und stop verwalten und Agent Teams als experimentelle Koordination mehrerer Sitzungen mit Kostenrisiko einordnen.",
+   "outcome": "Ich kann einen Auftrag mit claude --bg als Hintergrund-Sitzung starten, sie mit claude agents, logs, attach, stop und rm verwalten und Agent Teams als experimentelle Koordination mehrerer Sitzungen mit Kostenrisiko einordnen.",
    "quiz": {
-    "correct": "Ein Subagent gehört zu deiner Sitzung und meldet ihr sein Ergebnis; eine Hintergrund-Sitzung läuft eigenständig ohne Terminal.",
-    "q": "Worin unterscheidet sich ein Subagent grundlegend von einer Hintergrund-Sitzung, die du mit `claude --bg` startest?",
+    "correct": "Das Herunterfahren hat die Sitzung gestoppt; sie steht noch in der Liste, und `claude attach <id>` setzt sie dort fort, wo sie war.",
+    "q": "Du startest `claude --bg` mit einem langen Auftrag, schließt das Terminal und fährst abends den Rechner herunter. Am nächsten Morgen willst du das Ergebnis lesen. Was ist passiert?",
     "wrong": [
-     "Die Hintergrund-Sitzung läuft in der Cloud weiter, auch wenn du den Rechner ausschaltest; ein Subagent läuft dagegen nur lokal bei dir.",
-     "Nur Subagenten können parallel laufen; von `claude --bg` ist immer nur eine Sitzung zur selben Zeit aktiv, weitere warten.",
-     "Es ist nur die Anzeige: Beides ist technisch dasselbe, die Hintergrund-Sitzung erscheint bloß zusätzlich in `claude agents`."
+     "Die Sitzung lief über Nacht weiter und hat den Auftrag erledigt, denn Hintergrund-Sitzungen laufen unabhängig von deinem Rechner.",
+     "Das Schließen des Terminals hat die Sitzung beendet; vom Auftrag bleibt nichts außer dem Protokoll, und du musst von vorn beginnen.",
+     "Die Sitzung ist gelöscht worden, weil eine gestoppte Hintergrund-Sitzung sich nicht fortsetzen lässt; nur `claude rm` zeigt noch den Rest."
     ]
    },
    "recall": [
     "Mit welchem Befehl holst du eine Hintergrund-Sitzung in dein Terminal, und womit siehst du nur ihre letzte Ausgabe?",
-    "Wo läuft eine Hintergrund-Sitzung, und was passiert, wenn du den Rechner herunterfährst?",
-    "Wie schaltest du Agent Teams ein, und wovon hängt ihr Token-Verbrauch ab?"
+    "Worin unterscheidet sich eine Hintergrund-Sitzung von einem Subagenten?",
+    "Warum kann ein Agent Team entstehen, ohne dass du es verlangst, und wovon hängt sein Token-Verbrauch ab?"
    ],
    "requires": [
     "S3.4"
@@ -2819,34 +2839,38 @@
     "3.3",
     "3.3a"
    ],
-   "analogy": "Stell dir einen Penetrationstest deiner Zutrittsanlage mit eingebautem Tribunal vor. Der Pentester schreibt den Exploit-Bericht (Ankläger). Der Entwickler erklärt, was davon wirklich ausnutzbar ist und was nicht (Verteidiger). Der Sicherheitsverantwortliche entscheidet, was nachgebessert wird (Konsens). Das Patch-Team schließt die bestätigten Lücken (Fixer). Der ganze Ablauf läuft von allein und ist vollständig dokumentiert.",
-   "answers": null,
+   "analogy": "Stell dir einen Penetrationstest an einer Zutrittsanlage vor. Der Pentester schreibt den Exploit-Bericht und übertreibt dabei gern: Das ist der Ankläger. Der Anlagenbetreiber geht den Bericht Punkt für Punkt durch und fragt: Kommt man da überhaupt hin, und was passiert dann? Das ist der Verteidiger. Entscheiden, was nachgebessert wird, musst du als Sicherheitsverantwortliche oder Sicherheitsverantwortlicher.",
+   "answers": [
+    "Beide sind dasselbe Modell, ihre Irrtümer sind nicht unabhängig: Was einer für kritisch hält, halten meist alle dafür. Übereinstimmung hilft gegen Zufallsrauschen, nicht gegen einen systematischen Fehler. Mehr trägt ein Beleg, der nicht vom Modell abhängt: ein reproduzierender Test, ein Programmlauf, dein Fachwissen.",
+    "Er prüft je Befund im Code, ob ein Angreifer ihn erreicht, und nennt Schaden und Schwere mit zitierten Zeilen. Er soll nichts ändern und nichts beheben.",
+    "Fail-open erlaubt bei einem Fehler, fail-secure verweigert. Eine Mustersuche sucht auffällige Muster; der Fehler steckt aber im Fachurteil („bei einem Ausfall darf die Tür aufgehen“), und der Code sieht normal aus."
+   ],
    "area": "review",
-   "checkpoint": "Du kannst die vier Stufen der Devil's-Advocate-Pipeline benennen, erklären, warum die Debatte Fehlalarme senkt, aber keine feste Quote verspricht, und am Playground zeigen, warum Erreichbarkeit und Fachlogik die Schwere eines Befunds ändern.",
+   "checkpoint": "Du kannst ein Ankläger-Verteidiger-Paar selbst bauen und einsetzen, erklären, warum Übereinstimmung zweier Scanner kein Beweis ist, und an einem Beispiel zeigen, warum Erreichbarkeit und Fachlogik die Schwere ändern.",
    "demo": "../moderation/vorfuehren/s3-06-devils-advocate.md",
-   "example": "/devil-advocate-swarms:swarm scan access_control.py",
-   "example_lang": "",
+   "example": "   ---\n   name: accuser\n   description: Lists suspected security findings in a Python file. Use when asked to accuse or scan a file for findings.\n   tools: Read, Grep, Glob\n   ---\n\n   You are the prosecutor in a security review. Read the file you are given and list every suspected security finding as a numbered list. For each finding give the function or line, the attack in one or two sentences, and a severity (high, medium, low). Argue each finding as strongly as you can. Do not judge whether a finding is reachable and do not suggest fixes. Do not modify any files.",
+   "example_lang": "md",
    "file": "s3-06-devils-advocate.md",
-   "glance": "Eine Devil's-Advocate-Pipeline lässt Agenten gegeneinander arbeiten. Mehrere Scanner suchen parallel nach Problemen, in der Debatte greift ein Ankläger jeden Befund an und ein Verteidiger hält dagegen. Ein Konsens-Agent entscheidet, und nur bestätigte Befunde gehen an Fixer, die minimal patchen und einen Regressionstest schreiben. Die Debatte senkt Fehlalarme, schließt sie aber nicht aus.",
+   "glance": "Eine adversariale Gegenprüfung lässt zwei Agenten gegeneinander arbeiten. Ein Ankläger listet alle Verdachtsfälle auf und argumentiert jeden so stark wie möglich. Ein Verteidiger prüft zu jedem, ob ein Angreifer den Fund erreichen kann und was er dann anrichtet. Das Urteil fällst du. Beide sind Subagenten, die du in dieser Lektion selbst schreibst und nacheinander einsetzt ([S3.3](s3-03-eigener-subagent.md), [S3.4](s3-04-orchestrierungsmuster.md)).",
    "id": "S3.6",
    "level": "core",
-   "minutes": 18,
+   "minutes": 35,
    "offers": [],
    "order": 3060,
-   "outcome": "Ich kann die vier Stufen Scan, Debatte, Konsens und Fix einer adversarialen Prüf-Pipeline erklären, begründen, warum Überlappung und Debatte Fehlalarme senken, aber nicht ausschließen, und am Playground zeigen, warum Erreichbarkeit und Fachlogik die Schwere eines Befunds ändern.",
+   "outcome": "Ich kann ein Ankläger-Verteidiger-Paar aus zwei Subagenten selbst bauen und nacheinander einsetzen, erklären, warum die Übereinstimmung zweier Scanner kein Beweis ist und eine Reproduktion mehr trägt, und an einem Beispiel zeigen, warum Erreichbarkeit und Fachlogik die Schwere eines Befunds ändern.",
    "quiz": {
-    "correct": "Sie senkt Fehlalarme, weil Ankläger und Verteidiger jeden Befund abwägen, beseitigt sie aber nicht; wie stark, hängt von Prompts, Scannern und Codebasis ab.",
-    "q": "Welche Aussage über die Debatte in der Devil's-Advocate-Pipeline stimmt?",
+    "correct": "Fund 2: Er greift im Betrieb bei jedem Ausfall, und der Schaden ist groß; Fund 1 hat keinen Angriffsweg, solange nur der Test die Funktion aufruft.",
+    "q": "Ein Scan meldet zwei Funde in einem Zugangssystem. (1) Eine SQL-Abfrage per Textverkettung steckt in einer Funktion, die nur ein Testskript aufruft. (2) Eine Prüfung gibt den Zutritt frei, wenn der Rechtedienst nicht antwortet. Welchen behebst du zuerst?",
     "wrong": [
-     "Sie garantiert, dass am Ende keine Fehlalarme übrig bleiben, weil Ankläger und Verteidiger einander vollständig kontrollieren und jede Lücke gemeinsam abdecken.",
-     "Gewinnt der Ankläger, gilt der Befund sofort als CONFIRMED; der Konsens-Agent entscheidet nur die Fälle, in denen die Debatte unentschieden endet.",
-     "Sie läuft nur für kritische Befunde mit hoher Schwere; alle anderen Befunde gehen von den Scannern direkt und ohne Debatte an die Fixer-Agenten."
+     "Fund 1: Eine SQL-Injection steht auf jeder Liste der schwersten Lücken, also zählt das Muster, auch wenn niemand die Funktion aufruft.",
+     "Beide gleichzeitig, denn derselbe Scan hat beide gemeldet, und was ein Scan nennt, hat dieselbe Schwere wie sein Nachbar.",
+     "Keinen: Ein Ausfall ist kein Angriff, und die Funktion ist nur ein Test, also sind beide Funde Fehlalarme ohne Handlungsbedarf."
     ]
    },
    "recall": [
-    "Warum ist ein Befund glaubwürdiger, wenn zwei Scanner ihn unabhängig voneinander finden?",
-    "Welche drei Urteile kann der Konsens-Agent fällen, und was passiert danach jeweils mit dem Befund?",
-    "Warum übersieht eine Mustersuche den fail-open-Fehler in `check_access_resilient()` leicht, und warum wiegt er in einer Zutrittsanlage trotzdem schwer?"
+    "Warum beweist es nicht, dass ein Befund echt ist, wenn Ankläger und ein zweiter Prüfer ihn beide nennen, und was trägt mehr?",
+    "Welche Aufgabe hat der Verteidiger, und was soll er nicht tun?",
+    "Was unterscheidet fail-open von fail-secure, und warum findet eine reine Mustersuche einen fail-open-Fehler schlecht?"
    ],
    "requires": [
     "S3.4"
@@ -2863,7 +2887,7 @@
    "shelf": "security",
    "skip_check": [
     "Hast du schon einmal Sicherheitsbefunde von einem zweiten Agenten widerlegen lassen, bevor du sie behoben hast?",
-    "Kannst du ohne Nachschlagen erklären, warum eine reine Mustersuche einen fail-open-Zugriffscheck kaum findet?"
+    "Kannst du ohne Nachschlagen erklären, warum ein festes Passwort in Code, den nie jemand aufruft, weniger schwer wiegt als eine Prüfung, die bei einem Fehler die Tür öffnet?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/sub-agents",
@@ -2876,9 +2900,13 @@
   {
    "aliases": [],
    "analogy": "Denk an die Prüfstufen einer Zutrittsanlage. `/security-review` ist die Routine-Sicherheitsprüfung: Nach jedem Umbau schaut jemand gezielt nach, ob eine neue Lücke entstanden ist. `/code-review` ist die Abnahme durch die Projektleitung: Funktioniert, was gebaut wurde? `/code-review ultra` ist der unabhängige Drittprüfer: Ein externes Team kommt mit mehreren Prüfern, stellt jeden Befund nach und meldet nur, was es selbst reproduzieren konnte.",
-   "answers": null,
+   "answers": [
+    "Die Änderungen deines Branches gegenüber dem Standard-Branch von `origin`, auf Risiken wie Injection, Auth-Probleme und offengelegte Daten. Auf einem frischen Klon gibt es keine Änderung, also ist der Diff leer.",
+    "In einer Cloud-Sandbox bei Anthropic, mit einer Flotte von Prüf-Agenten. Nur mit einem API-Key läuft stattdessen ein lokaler Review; für die Cloud brauchst du eine Anmeldung mit claude.ai.",
+    "Wenn du bestimmte Prompts, ein bestimmtes Modell oder fachliche Regeln brauchst, die die Standardprüfungen nicht abdecken."
+   ],
    "area": "review",
-   "checkpoint": "Du kannst `/security-review`, `/code-review` und `/code-review ultra` voneinander abgrenzen, vor allem lokal gegen Cloud und Branch-Diff gegen PR, und weißt, wann du zum eigenen Devil's-Advocate-Schwarm greifst.",
+   "checkpoint": "Du kannst `/security-review`, `/code-review` und `/code-review ultra` voneinander abgrenzen, vor allem lokal gegen Cloud und Branch-Diff gegen PR, für einen Fall den passenden wählen und weißt, wann du zu einem eigenen Gegenprüf-Setup greifst.",
    "demo": null,
    "example": "/security-review\n# oder für einen bestimmten PR, gründlich in der Cloud:\n/code-review ultra 1234",
    "example_lang": "text",
@@ -2886,23 +2914,23 @@
    "glance": "Claude Code bringt drei Reviews mit, die ohne Einrichtung laufen. `/security-review` prüft die Änderungen deines Branches auf Sicherheitslücken. `/code-review` (Alias `/review`) sucht lokal nach Fehlern im aktuellen Diff, in einem PR, einem Branch oder einem Pfad. `/code-review ultra` (Alias `/ultrareview`) schickt eine Flotte von Prüf-Agenten in eine Cloud-Sandbox und lässt jeden Befund unabhängig nachprüfen.",
    "id": "S3.7",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 3070,
-   "outcome": "Ich kann für einen Review-Fall wählen, ob /security-review, /code-review oder /code-review ultra passt, und sagen, wann ein eigenes adversariales Setup den Aufwand lohnt.",
+   "outcome": "Ich kann /security-review und /code-review an einem Branch ausführen, für einen Review-Fall begründet zwischen /security-review, /code-review und /code-review ultra wählen und sagen, wann ein eigenes Gegenprüf-Setup den Aufwand lohnt.",
    "quiz": {
-    "correct": "`/code-review` prüft lokal in deiner Sitzung; `ultra` startet in einer Cloud-Sandbox viele Prüf-Agenten und prüft jeden Befund unabhängig nach.",
-    "q": "Welcher Unterschied zwischen `/code-review` und `/code-review ultra` entscheidet, welchen der beiden du bei einem großen, riskanten PR vor dem Merge einsetzt?",
+    "correct": "`/security-review`: Es prüft den Diff deines Branches gegen den Standard-Branch von `origin` auf Lücken wie Injection.",
+    "q": "Du hast auf einem Branch eine Funktion geändert, die Nutzereingaben in eine Shell-Zeile setzt. Die Änderung ist committet, und vor dem Merge willst du nur wissen, ob du eine Sicherheitslücke eingebaut hast. Was nimmst du?",
     "wrong": [
-     "`/code-review` sucht nur Sicherheitslücken, `ultra` ergänzt Stil und Testabdeckung; der Unterschied liegt im Prüfumfang, nicht im Ort, an dem sie laufen.",
-     "`ultra` reicht den Diff an einen Review-MCP-Server weiter, der lokal als Subprozess auf deiner eigenen Maschine läuft.",
-     "`/code-review` sieht nur den Branch-Diff; `ultra` liest zusätzlich die ganze Git-Historie und alle offenen Issues des Repos."
+     "`/code-review ultra`: Die Cloud-Flotte prüft am gründlichsten, also nimmst du sie für jede Änderung, auch für kleine.",
+     "`/simplify`: Der Befehl prüft die geänderten Dateien und behebt dabei auch Sicherheitslücken, die er findet.",
+     "`/code-review`: Es ist die Standardprüfung für Sicherheitslücken, und `/security-review` ist nur ihr Alias."
     ]
    },
    "recall": [
     "Was genau prüft `/security-review`, und warum findet es auf einem frischen Klon nichts?",
     "Wo läuft `/code-review ultra`, und was passiert, wenn du nur mit einem API-Key angemeldet bist?",
-    "Wann lohnt sich ein eigener adversarialer Schwarm statt der eingebauten Reviews?"
+    "Wann lohnt sich ein eigenes Setup statt der eingebauten Reviews?"
    ],
    "requires": [
     "S1.16"
@@ -3391,22 +3419,30 @@
   {
    "aliases": [],
    "analogy": "Stell dir zwei Gebäude mit denselben Türen vor. Das erste ist vorbereitet, aber nicht ausgestattet: Die Türen haben Schlösser, und wer den Schlüssel hat, kommt überall hin, wo er passt. Leerrohre für Kartenleser, Sensoren und Zonen liegen schon in der Wand; was hineinkommt, entscheidest du. Im zweiten Gebäude ist die Zutrittsanlage eingebaut: Kartenleser mit Berechtigungsstufen, Sensoren an der Alarmmatrix, die Hausordnung am Eingang, Streifen für Sonderaufträge. Pi gleicht dem ersten Gebäude, Claude Code dem zweiten.",
-   "answers": null,
+   "answers": [
+    "Anfrage an das Modell, Antwort mit Tool-Aufrufen, Ausführen, Ergebnis zurück, nächster Turn. Claude Code legt darum Rechte-Modi und Freigaben, Subagenten und den Plan-Modus, dazu Hooks als eingebaute Ereignisse; bei Pi baust du das als Extension oder Paket oder startest zusätzliche Prozesse selbst.",
+    "Übertragbar sind zum Beispiel die Agenten-Schleife, „Kontext ist ein Budget“, Skills im Standardformat oder die Entscheidung über die Fehlerrichtung eines Wächters. Produktfunktion ist zum Beispiel, welche Rechte-Modi es gibt, wie der Plan-Modus sperrt oder welche Subagenten mitkommen.",
+    "Nur eine äußere Grenze: Container oder VM, Wegwerf-Ordner, eigene Schlüssel mit Limit, ein begrenztes Netzwerk. Zuschauen und das Projekt-Vertrauen sind laut Pi-Doku keine Sicherheitsgrenze; Pi läuft mit den Rechten des Benutzers, der es gestartet hat."
+   ],
    "area": null,
-   "checkpoint": "",
+   "checkpoint": "Du kannst an Pi zeigen, welche Schichten Claude Code um die Schleife legt, nennen, welche davon übertragbar sind, und begründen, warum du bei einem Harness ohne erzwungene Freigaben den Schutz selbst mitbringst.",
    "demo": null,
-   "example": "/permissions\n/hooks\n/mcp\n/context",
+   "example": "   /permissions\n   /hooks\n   /mcp\n   /context",
    "example_lang": "text",
    "file": "x-03-pi-als-spiegel.md",
-   "glance": "Pi ist ein quelloffener Coding-Agent-Harness, den Earendil Inc. mit Mitwirkenden unter MIT-Lizenz herausgibt, und er ist mit Absicht minimal: ein Modell, eine Schleife, vier Standard-Werkzeuge und ein kurzer System-Prompt. Subagenten, Plan-Modus und Freigabe-Dialoge sind nicht eingebaut; wer sie braucht, baut sie als Extension oder installiert ein Paket. Genau das macht Pi zum Spiegel: Du siehst, wie wenig ein Agent im Kern braucht, und erkennst, welche Schichten Claude Code darüberlegt.",
+   "glance": "Pi ist ein quelloffener Coding-Agent-Harness, den Earendil Inc. mit Mitwirkenden unter MIT-Lizenz herausgibt. Ein Harness ist die Software um das Modell herum: Sie schickt Anfragen an das Modell, führt die Werkzeuge aus, die es aufruft, und verwaltet den Verlauf. Pi ist mit Absicht minimal: ein Modell, eine Schleife, vier Standard-Werkzeuge und ein kurzer System-Prompt. Subagenten, Plan-Modus und Freigabe-Dialoge sind nicht eingebaut; wer sie braucht, baut sie als Extension oder installiert ein Paket. Genau das macht Pi zum Spiegel: Du siehst, wie wenig ein Agent im Kern braucht, und erkennst, welche Schichten Claude Code darüberlegt.",
    "id": "X.3",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 3155,
-   "outcome": "Ich kann an Pi zeigen, welche Schichten Claude Code um die Agenten-Schleife legt, welche davon übertragbare Denkmodelle sind, und begründen, warum ich bei einem Harness ohne erzwungene Freigaben den Schutz selbst mitbringen muss.",
+   "outcome": "Ich kann an Pi zeigen, welche Schichten Claude Code um die Agenten-Schleife legt, welche davon übertragbare Denkmodelle sind, und begründen, warum ich bei einem Agent-Harness (der Software um das Modell herum) ohne erzwungene Freigaben den Schutz selbst mitbringen muss.",
    "quiz": null,
-   "recall": [],
+   "recall": [
+    "Welche Schleife steckt in jedem Agenten, und welche Schichten legt Claude Code darum, die Pi ab Werk nicht mitbringt?",
+    "Nenne je ein Beispiel für ein übertragbares Denkmodell und für eine reine Produktfunktion.",
+    "Du startest Pi in deinem Arbeitsrepo, schaust zu und erteilst das Projekt-Vertrauen. Eine Datei im Repo enthält eine versteckte Anweisung, die das Modell befolgt. Was begrenzt den Schaden, und was nicht?"
+   ],
    "requires": [],
    "requires_all": [],
    "safety_floor": false,

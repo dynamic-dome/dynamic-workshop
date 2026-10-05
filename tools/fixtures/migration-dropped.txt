@@ -154,3 +154,8 @@ b32b6295a24179d9 resources/exercises/block-2-exercises.md:779 P7c/S2.14: entfern
 9eb98e178d626f26 resources/exercises/block-2-exercises.md:804 P7c/S2.14: entfernt. Der Auftrag ließ Benutzername und Passwort in das Gespräch tippen; das Extra rät von Seiten mit Anmeldung ab, weil Sitzungen im Klartext unter `~/.claude/projects/` liegen.
 6c79919243f00282 resources/exercises/block-2-exercises.md:863 P7c/S2.18: ersetzt. Platzhalter-Frage ohne prüfbares Ergebnis; die Übung fragt nach einem erfundenen Gerät, dessen Antworten nur in den Quellen stehen.
 50934f988db9f938 resources/exercises/block-2-exercises.md:883 P7c/S2.18: ersetzt, Platzhalter mit `@research-notes.md`; siehe 6c79919243f00282.
+e518710c79e0071d resources/modules/block-3-advanced.md:371 P7d/S3.5: ersetzt durch Befehlstabelle und Übung. Der Block trug die Befehle mit Kommentaren im Bild der Streife; die Übung führt sie an einer lesenden Hintergrund-Sitzung aus.
+3a9b58ea5a9b84b5 resources/exercises/block-3-exercises.md:145 P7d/S3.6: entfernt mit dem Playground-Audit. Die Hauptübung baut Ankläger und Verteidiger an einer eigenen Datei `door.py`; das Audit am Playground setzte ein Plugin voraus, das Selbstlernende nicht bekommen.
+296c4757a52eba48 resources/exercises/block-3-exercises.md:184 P7d/S3.6: entfernt, Playground-Audit; siehe 3a9b58ea5a9b84b5.
+de19b41e7841dcfc resources/exercises/block-3-exercises.md:190 P7d/S3.6: entfernt, Playground-Audit; siehe 3a9b58ea5a9b84b5.
+f8266595fdb105c0 resources/exercises/block-3-exercises.md:685 P7d/S3.6: entfernt. Der testgetriebene Parser-Bau war eine zweite Lerneinheit im selben Kapitel (Befund D5, R24); er kommt mit der Teilung von S3.6 in P8 zurück oder entfällt.

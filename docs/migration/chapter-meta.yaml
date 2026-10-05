@@ -521,7 +521,7 @@
   title: Was ist ein Agent? Spezialisierung statt Allrounder
   shelf: agents
   level: core
-  minutes: 12
+  minutes: 20
   requires:
   - S1.2
   safety_floor: false
@@ -534,7 +534,7 @@
   title: Eingebaute Subagenten nutzen
   shelf: agents
   level: core
-  minutes: 10
+  minutes: 15
   requires:
   - S3.1
   safety_floor: false
@@ -546,7 +546,7 @@
   title: Einen eigenen Subagenten definieren
   shelf: agents
   level: core
-  minutes: 18
+  minutes: 25
   requires:
   - S3.2
   safety_floor: false
@@ -558,7 +558,7 @@
   title: 'Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie'
   shelf: agents
   level: core
-  minutes: 15
+  minutes: 25
   requires:
   - S3.1
   safety_floor: false
@@ -570,7 +570,7 @@
   title: Hintergrund-Sitzungen und Agent Teams
   shelf: agents
   level: deep-dive
-  minutes: 15
+  minutes: 20
   requires:
   - S3.4
   safety_floor: false
@@ -582,7 +582,7 @@
   title: 'Devil''s Advocate: eine adversariale Prüf-Pipeline'
   shelf: security
   level: core
-  minutes: 18
+  minutes: 35
   requires:
   - S3.4
   safety_floor: false
@@ -596,7 +596,7 @@
   title: Die eingebauten Reviews
   shelf: security
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S1.16
   safety_floor: false
@@ -875,7 +875,7 @@
   title: 'Der minimale Agent: Pi als Spiegel'
   shelf: community
   level: bonus
-  minutes: 15
+  minutes: 25
   after: S3.15
   requires: []
   safety_floor: false

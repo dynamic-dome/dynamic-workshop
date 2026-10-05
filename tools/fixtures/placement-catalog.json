@@ -914,7 +914,7 @@
    "area": "agents",
    "id": "S3.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 20,
    "offers": [],
    "order": 3010,
    "requires": [
@@ -934,7 +934,7 @@
    "area": "agents",
    "id": "S3.2",
    "level": "core",
-   "minutes": 10,
+   "minutes": 15,
    "offers": [],
    "order": 3020,
    "requires": [
@@ -955,7 +955,7 @@
    "area": "agents",
    "id": "S3.3",
    "level": "core",
-   "minutes": 18,
+   "minutes": 25,
    "offers": [],
    "order": 3030,
    "requires": [
@@ -977,7 +977,7 @@
    "area": "agents",
    "id": "S3.4",
    "level": "core",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 3040,
    "requires": [
@@ -998,7 +998,7 @@
    "area": "agents",
    "id": "S3.5",
    "level": "deep-dive",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 3050,
    "requires": [
@@ -1020,7 +1020,7 @@
    "area": "review",
    "id": "S3.6",
    "level": "core",
-   "minutes": 18,
+   "minutes": 35,
    "offers": [],
    "order": 3060,
    "requires": [
@@ -1042,7 +1042,7 @@
    "area": "review",
    "id": "S3.7",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 3070,
    "requires": [
@@ -1250,7 +1250,7 @@
    "area": null,
    "id": "X.3",
    "level": "bonus",
-   "minutes": 15,
+   "minutes": 25,
    "offers": [],
    "order": 3155,
    "requires": [],

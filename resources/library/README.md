@@ -2,7 +2,7 @@
 
 <!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
 
-71 Kapitel in 19 Regalen, zusammen etwa 23 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
+71 Kapitel in 19 Regalen, zusammen etwa 24,5 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
 
 ## So findest du deinen Weg
 
@@ -217,11 +217,11 @@ Statt eines Allrounders arbeiten spezialisierte Rollen mit klaren Grenzen, wie T
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md) | Kern | 12 |  |
-| [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md) | Kern | 10 |  |
-| [S3.3 Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md) | Kern | 18 |  |
-| [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) | Kern | 15 |  |
-| [S3.5 Hintergrund-Sitzungen und Agent Teams](s3-05-hintergrund-und-teams.md) | Vertiefung | 15 |  |
+| [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md) | Kern | 20 |  |
+| [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md) | Kern | 15 |  |
+| [S3.3 Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md) | Kern | 25 |  |
+| [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) | Kern | 25 |  |
+| [S3.5 Hintergrund-Sitzungen und Agent Teams](s3-05-hintergrund-und-teams.md) | Vertiefung | 20 |  |
 | [S4.2 Codex-Schwarm und die Datenfluss-Grenze](s4-02-codex-schwarm.md) | Kür | 15 |  |
 
 <a id="security"></a>
@@ -234,8 +234,8 @@ Ein grüner Bericht ist kein Beweis. Hier lässt du Code von einer adversarialen
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](s3-06-devils-advocate.md) | Kern | 18 |  |
-| [S3.7 Die eingebauten Reviews](s3-07-eingebaute-reviews.md) | Kern | 12 |  |
+| [S3.6 Devil's Advocate: eine adversariale Prüf-Pipeline](s3-06-devils-advocate.md) | Kern | 35 |  |
+| [S3.7 Die eingebauten Reviews](s3-07-eingebaute-reviews.md) | Kern | 25 |  |
 | [S3.10 Netzwerk und Skills härten](s3-10-netzwerk-und-skills-haerten.md) | Vertiefung | 12 |  |
 | [S3.11 Datenschutz, Aufbewahrung und regulierte Branchen](s3-11-datenschutz-und-compliance.md) | Vertiefung | 15 |  |
 
@@ -332,5 +332,5 @@ Nicht alles muss man selbst bauen. Dieses Regal stellt belegte Skill-Sammlungen 
 |---|---|---:|---|
 | [X.2 Mit Claude Code lernen](x-02-lernen-mit-claude-code.md) | Kür | 35 |  |
 | [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) | Kür | 30 |  |
-| [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) | Kür | 15 |  |
+| [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) | Kür | 25 |  |
 | [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) | Kür | 15 |  |
