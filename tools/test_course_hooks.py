@@ -130,7 +130,8 @@ def run_raw(script: Path, stdin: str, env: dict | None = None) -> subprocess.Com
 
 
 @pytest.mark.parametrize("script", SECURE_DIFF_GATE)
-@pytest.mark.parametrize("stdin", ["this is not json", "", "[]"], ids=["garbage", "empty", "not-an-object"])
+@pytest.mark.parametrize("stdin", ["this is not json", "", "[]", "null", '"text"', "42"],
+                         ids=["garbage", "empty", "array", "null", "string", "number"])
 def test_secure_diff_gate_fails_closed_when_input_is_unreadable(script, stdin):
     """Same rule as safety-check: a gate that cannot read its input blocks, and says that it is the gate."""
     result = run_raw(script, stdin)

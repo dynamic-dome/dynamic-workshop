@@ -21,8 +21,12 @@
 
 INPUT=$(cat)
 
-# Fail closed: if the input cannot be read (no jq, no JSON, empty), block instead of allowing the write.
-if ! FILE=$(printf '%s' "$INPUT" | jq -er '.tool_input.file_path // .file_path // .path // ""' 2>/dev/null); then
+# Fail closed: if the input cannot be read (no jq, no JSON, empty, not an object), block instead of allowing
+# the write. jq would turn `null.tool_input` into null without complaint, hence the explicit type checks.
+READ_PATH='if type != "object" then error("hook input is not a JSON object") else
+  (.tool_input.file_path // .file_path // .path // "") | if type == "string" then . else error("path is not a string") end
+end'
+if ! FILE=$(printf '%s' "$INPUT" | jq -er "$READ_PATH" 2>/dev/null); then
   echo "BLOCKED: secure-diff-gate could not read the hook input (is jq installed?) - blocking to stay safe." >&2
   exit 2
 fi

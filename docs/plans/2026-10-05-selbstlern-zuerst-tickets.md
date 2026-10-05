@@ -120,6 +120,17 @@ den Kapiteltext gehört: S2.6 (Hooks sind Best-Effort-Wächter), S2.10 (Windows-
 - **Kapitel ohne Übung und jetzt auch ohne Demo:** S1.2, S2.1, S2.6, S3.13, S3.14, S4.3, S4.6, S4.7 (→ P5, P7).
 - **Nicht angefasst:** `minutes` der Kapitel (enthielten die Demo-Zeit; werden mit der Regel „ehrliche Zeit“ in P5
   und P7 neu gesetzt, zusammen mit dem Einstufungsvertrag).
+- **Codex-Gegenprüfung (lesend, Werkzeugänderungen P0 und P1, Stand `d6c40d5`):** Urteil FAIL mit fünf Befunden.
+  An der Quelle geprüft: zwei bestätigt und testgetrieben behoben, drei ohne realen Fall.
+  - Bestätigt: `secure-diff-gate.sh` ließ die Eingabe `null` durch (jq macht aus `null.tool_input` stillschweigend
+    `null`); jetzt gilt nur ein JSON-Objekt mit Zeichenketten-Pfad als lesbar. Tests für `null`, Zeichenkette, Zahl.
+  - Bestätigt: Links auf `paths/ziel-*.md` wurden nie geprüft (auch vor P1 nicht). Jetzt darf nur fehlen, was der
+    Generator wirklich schreibt (ein Pfad je Ziel).
+  - Ohne realen Fall: `--check` übersieht geänderte Link-Titel (es gibt keine); `fixups.py` hätte eine vorhandene
+    Demo-Datei überschrieben (S1.20 hatte keine; Schutz nachgetragen); Anker `#vorführen` innerhalb einer Demo
+    (kommt nicht vor, der Validator würde ihn melden).
+  - **Folgepunkt für P7b:** `safety-check.sh` lässt `null` ebenfalls durch (ausgeführt: Exit 0). Die Vorlage steht
+    wortgleich in S2.8; Skript, `.ps1` und Kapitel-Snippet gemeinsam ändern.
 
 ---
 

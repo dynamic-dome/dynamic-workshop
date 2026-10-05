@@ -53,6 +53,7 @@ def move_moderator_block(name):
         rest += "\n"
     chapter_id, title = migrate.front_of(text, LIBRARY / name)
     has_demo = {p.name for p in DEMOS.glob("*.md")}
+    assert name not in has_demo, f"{name}: a demo file exists already; merge by hand instead of overwriting it"
     (DEMOS / name).write_text(migrate.demo_text(chapter_id, title, name, body, has_demo), encoding="utf-8", newline="\n")
     write(name, rest)
     print(f"Moderationsblock verschoben: {name} ({len(body.split())} Wörter)")

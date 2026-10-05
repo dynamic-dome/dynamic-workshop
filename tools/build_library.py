@@ -148,7 +148,7 @@ def anchors_of(path: Path) -> set:
     return found
 
 
-def _check_body(ch, add, planned=frozenset()):
+def _check_body(ch, add, planned=frozenset(), goal_targets=()):
     t = ch.type if ch.type in ALLOWED else "lesson"
     for title in ch.section_order:
         if title not in ALLOWED[t]:
@@ -203,7 +203,7 @@ def _check_body(ch, add, planned=frozenset()):
             add("sources-https", f"Quelle ohne https: {src}")
     if t in SOURCES_REQUIRED and not ch.sources:
         add("sources-required", "mindestens eine offizielle Quelle unter sources")
-    _check_links(ch.path, ch.links, add, planned)
+    _check_links(ch.path, ch.links, add, planned, generated=GENERATED_TARGETS + tuple(goal_targets))
 
 
 def _check_links(path, links, add, planned=frozenset(), generated=GENERATED_TARGETS):
@@ -212,7 +212,7 @@ def _check_links(path, links, add, planned=frozenset(), generated=GENERATED_TARG
         if re.match(r"^[a-z]+:", target) or target.startswith("#"):
             continue
         file_part, _, fragment = target.partition("#")
-        if file_part in planned or file_part in generated or "/paths/ziel-" in "/" + file_part:
+        if file_part in planned or file_part in generated:
             continue
         dest = (path.parent / file_part).resolve() if file_part else path.resolve()
         if file_part and not dest.exists():
@@ -223,6 +223,13 @@ def _check_links(path, links, add, planned=frozenset(), generated=GENERATED_TARG
 
 # Generated files as seen from a demo file (two folders below resources/).
 DEMO_GENERATED_TARGETS = tuple("../" + t if t.startswith("../") else "../../library/" + t for t in GENERATED_TARGETS)
+
+
+def goal_path_targets(lib) -> tuple:
+    """Goal paths the generator writes (one per goal, none for 'moderieren'), as linked from a chapter."""
+    goals = (lib.placement or {}).get("goals", []) or []
+    return tuple(f"../paths/ziel-{g['id']}.md" for g in goals
+                 if isinstance(g, dict) and g.get("id") and g["id"] != "moderieren")
 
 
 def _check_demos(lib, report):
@@ -244,7 +251,8 @@ def _check_demos(lib, report):
             add("demo-h1", f"erste Zeile muss '{expected}' lauten, ist '{first}'")
         if lm.EXAMPLE_MARKER in text:
             add("demo-no-example-marker", "cockpit:example gehört ins Kapitel, nicht in die Demo-Datei")
-        _check_links(path, lm._links(text), add, generated=DEMO_GENERATED_TARGETS)
+        _check_links(path, lm._links(text), add,
+                     generated=DEMO_GENERATED_TARGETS + tuple("../" + t for t in goal_path_targets(lib)))
 
 
 def _check_graph(lib, by_id, report, planned_orders=None):
@@ -373,6 +381,7 @@ def validate(lib, *, complete: bool, meta=None) -> list:
     for err in lib.problems:
         report(err.path)("parse", err.message)
     shelves = {s.get("id") for s in lib.shelves if isinstance(s, dict)}
+    goal_targets = goal_path_targets(lib)
     by_id, aliases = {}, {}
     for ch in lib.chapters:
         add = report(ch.path)
@@ -398,7 +407,7 @@ def validate(lib, *, complete: bool, meta=None) -> list:
             add("filename", f"Dateiname {ch.path.name} passt nicht zu {ch.id} (erwartet {expected}<slug>.md)")
         if ch.shelf not in shelves:
             add("shelf-exists", f"Regal {ch.shelf!r} fehlt in _shelves.yaml")
-        _check_body(ch, add, planned)
+        _check_body(ch, add, planned, goal_targets)
         if meta_by_id is not None:
             _check_contract(ch, meta_by_id.get(ch.id), add)
     orders = {}
