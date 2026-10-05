@@ -4,11 +4,11 @@ type: lesson
 title: Worktrees als Testlabor
 shelf: git
 level: deep-dive
-minutes: 15
+minutes: 20
 requires: [S1.16]
 safety_floor: false
 transferable: true
-outcome: "Ich kann für ein Experiment einen Worktree anlegen, von Hand mit git worktree oder mit claude --worktree, und erklären, wann sich ein Worktree lohnt und was worktree.baseRef bestimmt."
+outcome: "Ich kann mit claude --worktree einen Worktree anlegen, darin arbeiten und ihn beim Beenden entfernen oder behalten, sagen, wann sich ein Worktree lohnt und was er nicht isoliert, und worktree.baseRef als Einstellung für den Abzweigpunkt nennen."
 sources:
   - https://code.claude.com/docs/en/worktrees
   - https://code.claude.com/docs/en/settings-reference
@@ -27,24 +27,24 @@ aliases: []
 ## Schnellcheck
 
 - Hast du schon einmal mit `git worktree` oder `claude --worktree` parallel an zwei Branches gearbeitet?
-- Kannst du ohne Nachschlagen sagen, von wo ein neuer Worktree standardmäßig abzweigt und wie du das mit `worktree.baseRef` änderst?
+- Kannst du ohne Nachschlagen sagen, was ein Worktree von deinem Rechner trennt und was nicht?
 
 ## Auf einen Blick
 
 Ein Git-Worktree ist ein zweites Arbeitsverzeichnis mit eigenem Branch, das dasselbe Repository teilt. Darin probierst du etwas aus oder machst einen Hotfix, ohne deinen laufenden Branch anzufassen: kein Stash, kein Branch-Wechsel mitten in der Arbeit. Klappt das Experiment, mergst du; klappt es nicht, entfernst du den Worktree.
 
-`claude --worktree <name>` legt den Worktree an und startet darin eine Sitzung. Ob er vom Standard-Branch auf dem Remote abzweigt (`fresh`, der Standard) oder von deinem lokalen `HEAD` (`head`), bestimmt die Einstellung `worktree.baseRef`.
+Ein Worktree trennt Dateiänderungen und Branches. Die Doku nennt als Zweck, Dateiänderungen paralleler Sitzungen zu trennen. Prozesse, Datenbanken, Ports und deine Rechte trennt er nicht. Den Schutz für deinen Rechner baust du anders ([S4.7](s4-07-isolation-docker-worktrees.md)).
+
+`claude --worktree <name>` legt den Worktree an und startet darin eine Sitzung.
 
 ## Bild im Kopf
 
-Wenn du eine neue Firmware für einen Controller testen willst, spielst du sie nicht zuerst auf das Live-System. Du hast eine Testbank: einen Nachbau der Produktionsanlage in einem eigenen Raum. Dort spielst du die Firmware auf, testest, prüfst das Verhalten und planst erst dann das Update in der Produktion.
-
-Ein Git-Worktree ist deine Testbank für Software: ein eigener Raum mit derselben Ausstattung, getrennt vom Live-System. Du kannst dort etwas kaputtmachen, ohne die Produktion zu berühren. Wenn du dir sicher bist, mergst du.
+Ein Worktree ist ein zweiter Arbeitstisch am selben Archiv. Auf jedem Tisch liegen eigene Unterlagen: eigene Dateien, ein eigener Branch. Aber beide Tische ziehen aus derselben Aktenablage, dem gemeinsamen `.git`, und stehen im selben Gebäude. Was am Tisch geschieht, trennt die Papiere voneinander, nicht das Gebäude vom Experiment.
 
 ```mermaid
 flowchart LR
   M["./ Hauptordner<br/>main, laufende Arbeit"] --> G[("ein gemeinsames .git<br/>eine Historie")]
-  W["../experiment-async-processing<br/>Branch feature/async-experiment"] --> G
+  W[".claude/worktrees/test-1<br/>Branch worktree-test-1"] --> G
   subgraph B["Abzweigpunkt für claude --worktree: worktree.baseRef"]
     F["fresh, Standard:<br/>Standard-Branch auf dem Remote"]
     H["head:<br/>dein lokales HEAD"]
@@ -53,73 +53,40 @@ flowchart LR
 
 ## Im Detail
 
-### Was ein Worktree ist
-
-Ein Git-Worktree ist ein eigenes Arbeitsverzeichnis, das dasselbe Git-Repository teilt. Du kannst mehrere Worktrees gleichzeitig haben, jeden auf einem anderen Branch.
-
 ### Warum das zählt: der Hotfix mitten im Refactor
 
-Stell dir vor, du steckst in einem großen Refactor auf dem Branch `refactor/alarm-correlator`. Da wird ein kritischer Fehler in der Produktion gemeldet. Normalerweise würdest du:
-
-- die Refactor-Änderungen stashen
-- den Branch wechseln
-- den Fehler beheben
-- committen und pushen
-- den Stash zurückholen
-- mit dem Refactor weitermachen
-
-Mit Worktrees:
-
-- bleibt dein Refactor-Branch genau, wo er ist, in seinem Ordner
-- legst du für den Hotfix einen neuen Worktree an
-- behebst du den Fehler im Hotfix-Worktree
-- committest und pushst du von dort
-- kehrst du zu deinem unveränderten Refactor-Worktree zurück
-
-Die beiden Branches liegen nebeneinander als eigene Ordner. Kein Stash, kein Kontextwechsel in deinem Arbeitsverzeichnis.
-
-### Einen Worktree von Hand anlegen
-
-```
-# Create a worktree for an experiment
-git worktree add ../experiment-async-processing feature/async-experiment
-
-# Now you have:
-# ./                          (main branch, ongoing work)
-# ../experiment-async-processing   (experiment branch, isolated)
-```
-
-Ohne `-b` checkt Git einen Branch aus, den es schon gibt: `feature/async-experiment` muss hier also bereits existieren, lokal oder auf dem Remote. Mit `-b <branch>` legt Git einen neuen Branch an, ausgehend von deinem aktuellen `HEAD`.
-
-Du kannst Claude den Worktree auch in normaler Sprache anlegen lassen:
-
-```
-Create a worktree at ../alarm-refactor-experiment on a new branch
-called experiment/alarm-refactor so I can test this approach in isolation
-```
-
-`git worktree list` zeigt alle Worktrees, `git worktree remove ../<ordner>` räumt einen wieder ab.
+Du steckst in einem großen Refactor auf dem Branch `refactor/alarm-correlator`. Da wird ein kritischer Fehler in der Produktion gemeldet. Normalerweise würdest du die Änderungen stashen, den Branch wechseln, den Fehler beheben, committen und pushen, den Stash zurückholen und weitermachen. Mit Worktrees bleibt dein Refactor-Branch in seinem Ordner, wo er ist. Du legst für den Hotfix einen eigenen Worktree an, behebst und pushst von dort und kehrst zu deinem unveränderten Refactor zurück.
 
 ### In einem Schritt: claude --worktree
-
-Claude Code kann den Worktree auch selbst anlegen, ohne eigenes `git worktree add`:
 
 ```bash
 claude --worktree feature-zone-correlation
 ```
 
-Das startet eine frische Claude-Sitzung in einem neuen Worktree unter `<repo>/.claude/worktrees/`. Das Argument ist der Name des Worktrees, kein bestehender Branch: Standardmäßig heißt der Ordner `.claude/worktrees/<name>/`, und Claude Code legt dafür einen neuen Branch `worktree-<name>` an. Die offiziellen Beispiele nutzen Namen ohne Schrägstrich, etwa `feature-auth`; so hält es auch das Beispiel oben. Du legst keinen Ordner von Hand an und brauchst kein `cd`, und weil alle Worktrees gesammelt unter `.claude/` liegen, räumst du sie später leicht auf. Steckt beim Beenden der Sitzung noch Arbeit im Worktree, fragt Claude Code, ob du ihn behalten oder entfernen willst.
+Das startet eine Claude-Sitzung in einem neuen Worktree unter `<repo>/.claude/worktrees/<name>/`. Das Argument ist der Name des Worktrees, kein bestehender Branch: Claude Code legt dafür einen neuen Branch `worktree-<name>` an. Läuft Claude im Ordner zum ersten Mal, brauchst du vorher einmal eine normale Sitzung dort, in der du dem Ordner vertraust; sonst bricht `--worktree` mit einer Fehlermeldung ab. Ein Worktree ist ein frischer Checkout: Was nicht in Git liegt, etwa eine `.env` oder ein virtuelles Python-Environment, fehlt dort. Trag `.claude/worktrees/` in deine `.gitignore` ein, damit die Worktrees im Hauptordner nicht als ungetrackte Dateien erscheinen.
+
+Beim Beenden prüft Claude Code den Worktree. Ist er sauber und die Sitzung unbenannt, entfernt es ihn samt Branch. Steckt noch Arbeit darin (geänderte oder ungetrackte Dateien, neue Commits), fragt es, ob du ihn behalten oder entfernen willst. Behalten bewahrt Ordner und Branch. Entfernen löscht den Worktree-Ordner und seinen Branch samt der Arbeit darin.
+
+### Einen Worktree von Hand anlegen
+
+```bash
+# Worktree auf einem neuen Branch, ausgehend vom aktuellen HEAD
+git worktree add -b experiment/async ../experiment-async
+
+git worktree list
+git worktree remove ../experiment-async
+```
+
+Ohne `-b` checkt Git einen Branch aus, den es schon gibt. Mit `-b <branch>` legt es einen neuen an und scheitert, wenn er schon existiert. `git worktree remove` löscht den Branch nicht; den räumst du mit `git branch -d` ab. Du kannst Claude den Worktree auch in normaler Sprache anlegen lassen.
 
 ### worktree.baseRef: von wo der Worktree abzweigt
 
-Wo `claude --worktree` abzweigt, steuert die Einstellung `worktree.baseRef`. Sie kennt zwei Werte:
+Wo `claude --worktree` abzweigt, steuert die Einstellung `worktree.baseRef`:
 
-- `"fresh"` (Standard): zweigt von `origin/<default-branch>` ab, dem Standard-Branch auf dem Remote, und lässt deinen lokalen Stand außen vor
-- `"head"`: zweigt von deinem lokalen `HEAD` ab, mit deinen ungepushten Commits und dem Stand deines Feature-Branchs
+- `"fresh"` (Standard): zweigt vom Standard-Branch auf dem Remote ab und lässt deinen lokalen Stand außen vor.
+- `"head"`: zweigt von deinem lokalen `HEAD` ab, mit deinen ungepushten Commits.
 
-Du trägst sie in eine Settings-Datei ein, etwa `{ "worktree": { "baseRef": "fresh" } }` in `settings.json`. Der Standard hat sich zwischen CLI-Versionen verschoben; verlass dich deshalb nicht auf ihn, sondern setz den Wert ausdrücklich. Einen Branch-Namen kannst du dort nicht eintragen; für einen bestimmten Branch legst du den Worktree von Hand mit Git an. Gibt es keinen Remote, fällt `fresh` auf dein lokales `HEAD` zurück.
-
-`fresh` ist besonders wichtig, wenn mehrere Agenten parallel in Worktrees arbeiten: Jeder bekommt einen sauberen Ausgangspunkt, der dem Stand auf dem Remote entspricht, statt auf lokalen Commits aufzubauen, die noch niemand gepusht hat. Auch die Worktrees von Subagenten zweigen nach dieser Einstellung ab. Diese Muster vertiefst du in [S4.7](s4-07-isolation-docker-worktrees.md).
+Einen Branch-Namen kannst du dort nicht eintragen; für einen bestimmten Branch legst du den Worktree von Hand an. Gibt es keinen Remote, fällt `fresh` laut Doku auf dein lokales `HEAD` zurück. Die Einstellung zählt vor allem, wenn mehrere Agenten parallel arbeiten ([S4.7](s4-07-isolation-docker-worktrees.md)).
 
 ### Wann sich ein Worktree lohnt
 
@@ -129,73 +96,95 @@ Du trägst sie in eine Settings-Datei ein, etwa `{ "worktree": { "baseRef": "fre
 | Zwei Ansätze direkt nebeneinander vergleichen | Ja, beide laufen gleichzeitig |
 | Riskanter Refactor, den du vielleicht verwirfst | Ja, der main-Branch bleibt sauber |
 | Normale Feature-Entwicklung | Nein, ein einzelner Branch reicht |
-| Zwei verschiedene Testkonfigurationen | Ja, jeder Worktree hat seinen eigenen Arbeitsstand |
 
 ## Selbst machen
 
-### Bonus-Übung: einen Experiment-Worktree anlegen
+### Übung: ein Worktree, den du wieder abräumst (etwa 10 Minuten)
 
-**Ziel:** Neben dem Repo aus der Git-Übung in [S1.16](s1-16-git-in-einem-fluss.md) einen Experiment-Worktree anlegen und verstehen, wie er dir hilft. Du brauchst dafür den Ordner `exercise-1.4-git` mit dem Commit aus dieser Übung.
+**Ziel:** Du legst mit `claude --worktree` einen Worktree an, änderst darin eine Datei, siehst, dass dein Hauptordner unberührt bleibt, und räumst den Worktree beim Beenden wieder weg.
 
-**1. Einen Experiment-Worktree anlegen**
+**Startzustand:** ein neues lokales Repository in `~/cc-workshop/worktree` mit mindestens einem Commit, mit Git aus [S0.1](s0-01-werkstatt-einrichten.md). Git braucht für den Commit einen Namen und eine E-Mail-Adresse (`git config user.name`, `git config user.email`).
 
-Frag Claude:
-
-<!-- cockpit:example -->
-```
-Create a git worktree at ../log-formatter-experiment on a new branch
-called experiment/json-log-format
-```
-
-**2. Prüfen, ob er existiert**
-
-Frag Claude:
-
-```
-List all git worktrees
+```bash
+# macOS / Linux / Git Bash
+mkdir -p ~/cc-workshop/worktree && cd ~/cc-workshop/worktree
+git init
+echo "# Worktree test" > README.md
+echo ".claude/worktrees/" > .gitignore
+git add README.md .gitignore
+git commit -m "Initial commit"
 ```
 
-Du solltest zwei sehen: den Hauptordner und das Experiment.
+```powershell
+# Windows PowerShell
+New-Item -ItemType Directory -Force "$HOME\cc-workshop\worktree"; Set-Location "$HOME\cc-workshop\worktree"
+git init
+"# Worktree test" | Set-Content README.md
+".claude/worktrees/" | Set-Content .gitignore
+git add README.md .gitignore
+git commit -m "Initial commit"
+```
 
-**3. Den Ablauf durchdenken**
+Starte einmal `claude` in diesem Ordner, bestätige den Vertrauensdialog mit „Yes, I trust this folder“ ([S1.1](s1-01-erster-kontakt.md)) und beende die Sitzung mit `/exit`.
 
-Stell dir vor, du willst jetzt eine ganz andere Umsetzung ausprobieren: JSON-Logs statt der gut lesbaren Textzeile. Wie hilft dir der eigene Worktree dabei?
+1. Starte den Worktree:
 
-Im Experiment-Worktree würdest du:
+   <!-- cockpit:example -->
+   ```bash
+   claude --worktree test-1 --permission-mode acceptEdits
+   ```
 
-- `log_formatter.py` so ändern, dass es JSON ausgibt
-- die Tests laufen lassen, um zu sehen, ob der Ansatz trägt
-- beide Ansätze nebeneinander vergleichen
-- entscheiden, welchen du mergst und welchen du verwirfst
+   Erwartet: Eine Sitzung startet, aber in einem anderen Ordner als dein Hauptordner.
+2. Gib ein: `Create a file experiment.txt containing the word hello.` Erwartet: Die Datei entsteht.
+3. Öffne ein zweites Terminal im Hauptordner `~/cc-workshop/worktree` und führ `git worktree list` aus. Erwartet: zwei Einträge, der Hauptordner und `.claude/worktrees/test-1` mit dem Branch `worktree-test-1`. Sieh dann nach, ob `experiment.txt` im Hauptordner liegt (`ls`, in PowerShell `Get-ChildItem`). Erwartet: nein, nur im Worktree.
+4. Beende die Sitzung mit `/exit`. Erwartet: Claude Code fragt, ob du den Worktree behalten oder entfernen willst, weil noch eine ungetrackte Datei darin liegt. Wähl „entfernen“.
+5. Führ im Hauptordner `git worktree list` und `git branch` aus. Erwartet: Nur der Hauptordner steht noch in der Liste, und der Branch `worktree-test-1` ist weg.
 
-Umsetzen musst du das jetzt nicht. Ziel ist, das Modell zu verstehen. Willst du sehen, was im Worktree-Ordner liegt, frag Claude: „List the files in ../log-formatter-experiment". Zum Aufräumen lässt du Claude den Worktree mit `git worktree remove ../log-formatter-experiment` entfernen.
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/worktree` selbst.
 
 **Geschafft, wenn:**
 
-- [ ] der Worktree angelegt ist und in `git worktree list` erscheint
+- [ ] `git worktree list` während der Sitzung zwei Einträge zeigte
+- [ ] `experiment.txt` nur im Worktree lag, nicht im Hauptordner
+- [ ] nach dem Entfernen weder der Worktree noch der Branch `worktree-test-1` existierte
+- [ ] du sagen kannst, was der Worktree nicht von deinem Rechner getrennt hätte
+
+### Extra: ein Worktree von Hand (etwa 5 Minuten)
+
+Leg im Übungsordner einen Worktree von Hand an: `git worktree add -b experiment ../worktree-experiment`. Prüf ihn mit `git worktree list`, entferne ihn mit `git worktree remove ../worktree-experiment` und stell fest, dass der Branch `experiment` danach noch existiert (`git branch`). Lösch ihn mit `git branch -d experiment`.
 
 ## Typische Fallen
 
-- **`git worktree add` meldet, dass es den Branch schon gibt.** `-b` legt nur neue Branches an. Nimm einen neuen Branch mit leicht anderem Namen, oder lass `-b` weg, dann checkt Git den vorhandenen Branch aus. `--orphan` hilft hier nicht: Es legt einen leeren Worktree mit einem neuen Branch ohne Commits an, deine Dateien sind dort nicht.
+- **`claude --worktree` bricht mit einer Fehlermeldung ab.** Du hast in diesem Ordner noch nie Claude gestartet: Starte einmal `claude`, bestätige den Vertrauensdialog und versuch es erneut.
+- **`git worktree add` meldet, dass es den Branch schon gibt.** `-b` legt nur neue Branches an. Nimm einen neuen Namen, oder lass `-b` weg, dann checkt Git den vorhandenen Branch aus.
 - **Im neuen Worktree fehlen deine ungepushten Commits.** Mit dem Standard `fresh` zweigt `claude --worktree` vom Standard-Branch auf dem Remote ab. Brauchst du deinen lokalen Stand, setz `worktree.baseRef` auf `"head"`.
-- **Der Worktree taucht im Hauptordner als ungetrackte Dateien auf.** `claude --worktree` legt Worktrees unter `.claude/worktrees/` im Repo an. Trag `.claude/worktrees/` in deine `.gitignore` ein, sonst erscheinen sie in `git status`.
+- **Im Worktree fehlt die `.env` oder das virtuelle Environment.** Ein Worktree ist ein frischer Checkout. Richte die Umgebung dort neu ein.
+- **Beim Entfernen ist die Arbeit weg.** Entfernen löscht Ordner und Branch samt Arbeit. Willst du sie behalten, wähl „behalten“ oder committe vorher.
 
 ## Check
 
-Du kannst für ein Experiment einen Worktree anlegen, von Hand oder mit `claude --worktree`, und begründen, wann er sich lohnt und welchen Wert von `worktree.baseRef` du wählst.
+Du kannst für ein Experiment einen Worktree anlegen, begründen, wann er sich lohnt, und sagen, was er nicht isoliert.
 
 1. Was teilen sich Hauptordner und Worktree, und was hat jeder für sich?
-2. Was ändert `-b` bei `git worktree add`?
-3. Von wo zweigt ein neuer Worktree mit `fresh` ab, und was passiert, wenn es keinen Remote gibt?
+2. Was trennt ein Worktree nicht, obwohl er wie ein „Testlabor“ aussieht?
+3. Was passiert beim Beenden einer `claude --worktree`-Sitzung, wenn noch Arbeit im Worktree liegt?
+
+<details><summary>Auflösung</summary>
+
+1. Sie teilen das Repository mit seiner Historie und dem Remote. Jeder hat seine eigenen Dateien und seinen eigenen Branch.
+2. Prozesse, Datenbanken, Ports und deine Rechte. Ein Worktree trennt Dateiänderungen und Branches, nicht dein System.
+3. Claude Code fragt, ob du den Worktree behalten oder entfernen willst. Behalten bewahrt Ordner und Branch, Entfernen löscht beides samt der Arbeit.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Dein Feature-Branch hat ungepushte Commits. Du startest zwei Agenten mit `claude --worktree`, und `worktree.baseRef` steht auf `fresh`. Wovon gehen die beiden Worktrees aus?
+**Frage:** Du lässt Claude in einem Worktree ein Migrationsskript ausprobieren, das gegen deine lokale Entwicklungsdatenbank läuft. Was schützt der Worktree?
 
-- **Richtig:** Vom Standard-Branch auf dem Remote; deine ungepushten Commits sind in keinem der beiden Worktrees enthalten.
-- Falsch: Von deinem lokalen HEAD; beide Worktrees starten also mit deinen ungepushten Commits als gemeinsamer Basis.
-- Falsch: Vom letzten Commit des jeweils anderen Agenten, damit die beiden Worktrees nach jedem Commit synchron bleiben.
-- Falsch: Von deinem Arbeitsverzeichnis samt allen nicht committeten Änderungen, damit kein Zwischenstand verloren geht.
+- **Richtig:** Nur Dateien und Branch: Die Datenbank ist dieselbe wie im Hauptordner, das Skript kann sie also verändern.
+- Falsch: Alles, denn ein Worktree ist eine abgetrennte Testumgebung mit eigener Kopie der Datenbank und der Dienste.
+- Falsch: Die Datenbank, denn Claude Code startet Befehle in einem Worktree automatisch in einer Sandbox ohne Zugriff.
+- Falsch: Nichts, denn ein Worktree schützt nur lesende Zugriffe, schreibende Dateiänderungen landen im Hauptordner.
 
 </details>
 
