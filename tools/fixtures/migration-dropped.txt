@@ -185,3 +185,4 @@ e3775ecd479bbe79 resources/exercises/block-3-exercises.md:410 P7f/S4.5: ersetzt.
 1666494938fb0da6 resources/exercises/block-3-exercises.md:430 P7f/S4.5: ersetzt, altes Hook-Skript; siehe e3775ecd479bbe79.
 63d77c3c5a053afd resources/exercises/block-3-exercises.md:455 P7f/S4.5: ersetzt, `chmod +x` steht jetzt im Schritt; siehe e3775ecd479bbe79.
 b98ba9e03c161b82 resources/exercises/block-3-exercises.md:473 P7f/S4.4: entfernt. Die Trace-Log-Zeile war ein Bonus-Schritt, der in drei Kapiteln stand (D7); die Diagnose steht in S4.9 und S4.10.
+bb4e05d4ba00f1bd resources/exercises/block-3-exercises.md:534 P8b/S3.11: ersetzt. Der Scanner blockt jetzt jede Eingabe, die kein JSON-Objekt ist (die alte Fassung ließ die Eingabe null durch); die neue Fassung steht im selben Kapitel.

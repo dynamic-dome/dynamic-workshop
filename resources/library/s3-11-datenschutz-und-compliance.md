@@ -104,7 +104,11 @@ Der Hook prüft vor jedem Schreibzugriff den neuen Dateitext. Write schickt ihn 
 INPUT=$(cat)
 
 # Fail closed: if the input cannot be read, block instead of silently allowing the write.
-if ! CONTENT=$(printf '%s' "$INPUT" | jq -er '.tool_input.content // .tool_input.new_string // ""' 2>/dev/null); then
+# Readable means a JSON object: jq would turn "null" into empty content without complaint.
+READ_CONTENT='if type != "object" then error("hook input is not a JSON object") else
+  .tool_input.content // .tool_input.new_string // ""
+end'
+if ! CONTENT=$(printf '%s' "$INPUT" | jq -er "$READ_CONTENT" 2>/dev/null); then
   echo "SCANNER: could not read the hook input (is jq installed?) - blocking to stay safe." >&2
   exit 2
 fi

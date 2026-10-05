@@ -289,7 +289,8 @@ def test_scanner_allows_clean_write(script):
 
 
 @pytest.mark.parametrize("script", SCANNERS)
-@pytest.mark.parametrize("stdin", ["not json", "", "[]"], ids=["garbage", "empty", "array"])
+@pytest.mark.parametrize("stdin", ["not json", "", "[]", "null", '"text"', "42"],
+                         ids=["garbage", "empty", "array", "null", "string", "number"])
 def test_scanner_blocks_when_it_cannot_read_its_input(script, stdin):
     result = run_raw(script, stdin)
 
@@ -307,10 +308,11 @@ def test_python_scanner_does_not_echo_the_match():
 
 # --- redact-output (Module 2.2 advanced output, PostToolUse Bash) ----------------------------------
 
-REDACT = pytest.param(HOOKS / "redact-output.sh", marks=needs_bash_jq)
+# The Python variants need neither bash nor jq: they are the ones that run on Windows without Git Bash (S2.10).
+REDACT = [pytest.param(HOOKS / "redact-output.sh", marks=needs_bash_jq), pytest.param(HOOKS / "redact-output.py")]
 
 
-@pytest.mark.parametrize("script", [REDACT])
+@pytest.mark.parametrize("script", REDACT)
 def test_redact_output_replaces_secret_in_bash_stdout_with_bash_shape(script):
     secret = "sk-" + "b" * 24
     result = run(script, post_bash("cat .env", f"TOKEN={secret}\nMODE=dev\n", "warn: x"))
@@ -324,7 +326,7 @@ def test_redact_output_replaces_secret_in_bash_stdout_with_bash_shape(script):
     assert replaced["stderr"] == "warn: x"
 
 
-@pytest.mark.parametrize("script", [REDACT])
+@pytest.mark.parametrize("script", REDACT)
 def test_redact_output_stays_silent_without_secrets(script):
     result = run(script, post_bash("ls", "a.txt\nb.txt\n"))
 
@@ -332,12 +334,54 @@ def test_redact_output_stays_silent_without_secrets(script):
     assert result.stdout.strip() == ""
 
 
+@pytest.mark.parametrize("script", REDACT)
+def test_redact_output_also_cleans_stderr(script):
+    secret = "AKIA" + "A1B2" * 4
+    result = run(script, post_bash("aws configure list", "profile: dev\n", f"warn: key {secret} is old"))
+
+    replaced = updated_output(result)
+    assert secret not in replaced["stderr"] and "[REDACTED]" in replaced["stderr"]
+    assert replaced["stdout"] == "profile: dev\n"
+
+
+POST_OUTPUT_HOOKS = REDACT + [
+    pytest.param(HOOKS / "token-firewall.sh", marks=needs_bash_jq),
+    pytest.param(HOOKS / "token-firewall.py"),
+]
+
+
+@pytest.mark.parametrize("script", POST_OUTPUT_HOOKS)
+def test_output_hooks_keep_fields_they_do_not_know_and_text_that_is_not_ascii(script):
+    """Claude Code 2.1.289 sends a fifth field (noOutputExpected); the replacement must stay in the tool's shape.
+    The payload goes in as raw UTF-8, the way Claude Code sends it (a Windows console stream would read cp1252)."""
+    secret = "sk-" + "d" * 24
+    payload = post_bash("pytest -q", f"Tür geöffnet ✓ passed\nTOKEN={secret} passed\n")
+    payload["tool_response"]["noOutputExpected"] = False
+    result = run_raw(script, json.dumps(payload, ensure_ascii=False))
+
+    assert result.returncode == 0
+    replaced = updated_output(result)
+    assert set(replaced) == {"stdout", "stderr", "interrupted", "isImage", "noOutputExpected"}
+    assert "Tür geöffnet ✓" in replaced["stdout"]
+
+
+@pytest.mark.parametrize("script", POST_OUTPUT_HOOKS)
+@pytest.mark.parametrize("stdin", ["not json", "", "null"], ids=["garbage", "empty", "null"])
+def test_output_hooks_change_nothing_when_they_cannot_read_their_input(script, stdin):
+    """A PostToolUse hook cannot block: the command has run. Unreadable input means no replacement and no crash."""
+    result = run_raw(script, stdin)
+
+    assert result.returncode == 0
+    assert result.stdout.strip() == ""
+    assert "Traceback" not in result.stderr
+
+
 # --- token-firewall (Bonus Exercise 2.6, PostToolUse Bash) -----------------------------------------
 
-FIREWALL = pytest.param(HOOKS / "token-firewall.sh", marks=needs_bash_jq)
+FIREWALL = [pytest.param(HOOKS / "token-firewall.sh", marks=needs_bash_jq), pytest.param(HOOKS / "token-firewall.py")]
 
 
-@pytest.mark.parametrize("script", [FIREWALL])
+@pytest.mark.parametrize("script", FIREWALL)
 def test_token_firewall_keeps_only_failures_and_summary_for_test_runs(script):
     noisy = "\n".join(f"tests/test_{i}.py::test_ok PASSED" for i in range(300))
     stdout = noisy + "\ntests/test_x.py::test_door FAILED\n=== 1 failed, 300 passed in 2.1s ==="
@@ -352,7 +396,7 @@ def test_token_firewall_keeps_only_failures_and_summary_for_test_runs(script):
     assert len(replaced["stdout"]) < len(stdout) / 10
 
 
-@pytest.mark.parametrize("script", [FIREWALL])
+@pytest.mark.parametrize("script", FIREWALL)
 def test_token_firewall_leaves_non_test_commands_alone(script):
     result = run(script, post_bash("ls -la", "total 0\n"))
 

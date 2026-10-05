@@ -110,7 +110,9 @@ printf '%s' "$INPUT" | jq --arg re "$SECRETS" '{
 exit 0
 ```
 
-**Einsatz:** API-Keys, Tokens oder personenbezogene Daten aus Tool-Ausgaben entfernen, bevor Claude sie in sein Reasoning übernimmt (und womöglich in spätere Nachrichten). **Grenzen:** Der Befehl ist schon gelaufen, und die Telemetrie zeichnet die Originalausgabe auf. Willst du verhindern, dass etwas überhaupt passiert, nimm einen PreToolUse-Hook. Außerdem feuert PostToolUse nur nach einem erfolgreichen Aufruf: Ein Befehl, der mit einem Fehlercode endet, geht an diesem Hook vorbei, seine Ausgabe sieht Claude ungeschwärzt. Und der Matcher `Bash` sieht nur das Bash-Tool; wie die Ausgabe des PowerShell-Tools aussieht, beschreibt die Hook-Doku nicht.
+**Einsatz:** API-Keys, Tokens oder personenbezogene Daten aus Tool-Ausgaben entfernen, bevor Claude sie in sein Reasoning übernimmt (und womöglich in spätere Nachrichten). **Grenzen:** Der Befehl ist schon gelaufen, und die Telemetrie zeichnet die Originalausgabe auf. Willst du verhindern, dass etwas überhaupt passiert, nimm einen PreToolUse-Hook. Außerdem feuert PostToolUse nur nach einem erfolgreichen Aufruf: Ein Befehl, der mit einem Fehlercode endet, geht an diesem Hook vorbei, seine Ausgabe sieht Claude ungeschwärzt. Und der Matcher `Bash` sieht nur das Bash-Tool. Unter Windows laufen Shell-Befehle meist über das PowerShell-Tool; wie dessen Ausgabe aussieht, beschreibt die Hook-Doku nicht. Im Probelauf (Claude Code 2.1.289) hatte sie dieselben Felder `stdout`, `stderr`, `interrupted` und `isImage`.
+
+Neben dem Skript liegt im Repo die Python-Fassung `redact-output.py`. Sie verhält sich gleich, braucht weder Bash noch `jq` und reicht Felder durch, die sie nicht kennt. Trag sie mit dem Matcher `Bash|PowerShell` ein, wenn dein Rechner Shell-Befehle über das PowerShell-Tool ausführt.
 
 ### terminalSequence: den Menschen direkt erreichen
 
@@ -211,9 +213,9 @@ Auch bei exit 2 liest Claude Code gültiges JSON auf stdout; die Doku nennt das 
 
 ### Extra: Schwärzen von Hand testen (etwa 5 Minuten)
 
-**Ziel:** Du siehst, wie `redact-output.sh` eine Tool-Ausgabe ersetzt und eine harmlose unberührt lässt.
+**Ziel:** Du siehst, wie das Schwärzungs-Skript eine Tool-Ausgabe ersetzt und eine harmlose unberührt lässt.
 
-**Startzustand:** Bash und `jq` ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#jq)); das Skript liegt im geklonten Repo. Unter Windows ohne Git Bash gibt es dafür keine PowerShell-Fassung: Lies die Übung dann nur mit.
+**Startzustand:** Die Skripte liegen im geklonten Repo. Für `redact-output.sh` brauchst du Bash und `jq` ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#jq)), für `redact-output.py` nur Python; nimm in PowerShell die Python-Fassung.
 
 1. Wechsel in den Ordner `~/cc-workshop/dynamic-workshop/resources/demos/assets/hooks`. Bau eine Eingabe mit einem erfundenen Schlüssel und schick sie durch das Skript:
 
@@ -222,8 +224,15 @@ Auch bei exit 2 liest Claude Code gültiges JSON auf stdout; die Doku nennt das 
    jq -nc --arg k "key=$KEY" '{tool_input:{command:"cat config"},tool_response:{stdout:$k,stderr:"",interrupted:false,isImage:false}}' | bash redact-output.sh
    ```
 
+   In PowerShell:
+
+   ```powershell
+   $key = "sk-" + ("a" * 24)
+   '{"tool_input":{"command":"cat config"},"tool_response":{"stdout":"key=' + $key + '","stderr":"","interrupted":false,"isImage":false}}' | python redact-output.py
+   ```
+
    Erwartet: ein JSON-Objekt, in dem `"stdout": "key=[REDACTED]"` steht.
-2. Ersetz den Schlüssel durch `nothing secret`. Erwartet: keine Ausgabe, denn es gibt nichts zu schwärzen; Claude sähe dann das Original.
+2. Ersetz den Schlüssel durch `nothing secret` (in PowerShell: den Teil `key=' + $key + '` im JSON). Erwartet: keine Ausgabe, denn es gibt nichts zu schwärzen; Claude sähe dann das Original.
 
 **Geschafft, wenn:**
 
@@ -236,7 +245,7 @@ Auch bei exit 2 liest Claude Code gültiges JSON auf stdout; die Doku nennt das 
 
 **Hintergrund:** Führt Claude in einem großen Projekt `npm test` oder `pytest` aus, kann die volle Ausgabe Tausende Zeilen lang sein. Eine „Token Firewall" bekommt das fertige Bash-Ergebnis und tauscht die Ausgabe, die Claude lesen wird, gegen eine kompakte Übersicht (`updatedToolOutput`). Der Testlauf selbst bleibt gleich, nur was in Claudes Kontext kommt, schrumpft.
 
-**Startzustand:** wie im vorigen Extra (Bash und `jq`, Skript im geklonten Repo). Das Skript:
+**Startzustand:** wie im vorigen Extra: `token-firewall.sh` mit Bash und `jq` oder `token-firewall.py` mit Python, beide im geklonten Repo. Das Skript in der Bash-Fassung:
 
 ```bash
 #!/bin/bash
@@ -271,15 +280,21 @@ exit 0
 1. Schick im Hook-Ordner des Repos eine Beispielausgabe hindurch:
 
    ```bash
-   echo '{"tool_input":{"command":"pytest"},"tool_response":{"stdout":"a PASSED\nb FAILED\n1 failed, 1 passed","stderr":"","interrupted":false,"isImage":false}}' | bash token-firewall.sh
+   echo '{"tool_input":{"command":"pytest | tail -n 40"},"tool_response":{"stdout":"a PASSED\nb FAILED\n1 failed, 1 passed","stderr":"","interrupted":false,"isImage":false}}' | bash token-firewall.sh
    ```
 
-   Erwartet: Im `stdout` des Ergebnisses steht nur noch `b FAILED\n1 failed, 1 passed` mit der Markierungszeile am Ende; `a PASSED` ist weg. Ersetz danach im Feld `command` des JSON `pytest` durch `ls`: Dann kommt keine Ausgabe, denn der Hook rührt andere Befehle nicht an.
+   In PowerShell:
+
+   ```powershell
+   '{"tool_input":{"command":"pytest | tail -n 40"},"tool_response":{"stdout":"a PASSED\nb FAILED\n1 failed, 1 passed","stderr":"","interrupted":false,"isImage":false}}' | python token-firewall.py
+   ```
+
+   Erwartet: Im `stdout` des Ergebnisses steht nur noch `b FAILED\n1 failed, 1 passed` mit der Markierungszeile am Ende; `a PASSED` ist weg. Ersetz danach im Feld `command` des JSON `pytest | tail -n 40` durch `ls`: Dann kommt keine Ausgabe, denn der Hook rührt andere Befehle nicht an.
 2. Überleg, was der Filter wegwirft: Er behält nur Zeilen mit `FAIL`, `ERROR`, `Error`, `passed`, `failed` oder `Summary`. Die Tracebacks und Assert-Details eines Fehlschlags stehen in Zeilen ohne diese Wörter und fielen weg. Claude sähe dann, *dass* ein Test scheiterte, aber nicht, warum.
 
 <details><summary>Vergleich</summary>
 
-Der Hook spart Kontext, kostet aber Ursachen. Das Skript lässt `stderr` deshalb unverändert, doch Pytest schreibt Fehlerdetails auf `stdout`. Und es gibt eine zweite Lücke: PostToolUse feuert nur nach Erfolg. Ein Testlauf mit Fehlschlägen endet mit einem Fehlercode, fällt unter PostToolUseFailure und läuft an diesem Hook vorbei; dort kennt die Doku nur `additionalContext`, kein Ersetzen. Der Filter verkleinert in der Praxis vor allem Läufe, die durchgingen. Wer ihn einsetzt, muss das wissen. Als Vorgehen taugt das Muster für jeden lauten Befehl: Build-Logs, Lint-Ausgaben, Installation von Abhängigkeiten.
+Der Hook spart Kontext, kostet aber Ursachen. Das Skript lässt `stderr` deshalb unverändert, doch Pytest schreibt Fehlerdetails auf `stdout`. Und es gibt eine zweite Lücke: PostToolUse feuert nur nach Erfolg. Ein Testlauf mit Fehlschlägen endet mit einem Fehlercode, fällt unter PostToolUseFailure und läuft an diesem Hook vorbei; dort kennt die Doku nur `additionalContext`, kein Ersetzen. Die Beispieleingabe oben erreicht den Hook nur, weil der Befehl hinter einer Pipe steht: Bei `pytest | tail -n 40` zählt der Exit-Code von `tail`, also 0. Im Probelauf feuerte für einen solchen Befehl PostToolUse, für denselben ohne Pipe PostToolUseFailure. Der Filter verkleinert in der Praxis also Läufe, die durchgingen, und solche, deren Fehlercode eine Pipe verschluckt hat. Wer ihn einsetzt, muss das wissen. Als Vorgehen taugt das Muster für jeden lauten Befehl: Build-Logs, Lint-Ausgaben, Installation von Abhängigkeiten.
 
 </details>
 
