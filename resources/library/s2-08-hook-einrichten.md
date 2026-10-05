@@ -467,7 +467,9 @@ Hooks setzen **automatische Wächter** an feste Ereignisse. Sie arbeiten nach be
 - **Der Matcher ist zu breit.** `".*"` oder gar kein Matcher trifft jedes Tool. Wähl einen engeren, etwa `"Bash|PowerShell"` für Shell-Befehle oder `"Write|Edit"` für Dateiänderungen.
 - **Die settings.json ist nach dem Bearbeiten kein gültiges JSON.** Prüf sie mit `python -m json.tool .claude/settings.json` (`python3` unter macOS und Linux).
 
-Systematische Fehlersuche bei Hooks: [S4.10](s4-10-diagnose-schritt-fuer-schritt.md).
+- **Suchen, bevor klar ist, ob der Hook geladen ist.** `/hooks` zeigt alle Hooks der Sitzung. Fehlt deiner dort, liest Claude Code die Datei nicht oder hält den Eintrag für ungültig; `claude doctor` im Terminal nennt ungültige Einstellungen mit einem Korrekturvorschlag.
+
+Welches Werkzeug was zeigt: [S4.9](s4-09-fehlersuche-werkzeuge.md). Systematische Fehlersuche bei Hooks: [S4.10](s4-10-diagnose-schritt-fuer-schritt.md).
 
 ## Check
 

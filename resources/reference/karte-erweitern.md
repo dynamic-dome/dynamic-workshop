@@ -76,9 +76,10 @@ Ist ein Plugin in mehreren Scopes gesetzt, gilt local vor project vor user.
 |---|---|---|
 | Warnung | ab 10.000 Tokens je Tool-Ausgabe | fest |
 | Obergrenze | 25.000 Tokens (Standard) | `MAX_MCP_OUTPUT_TOKENS` hebt sie an |
+| Zeichengrenze für Text | 50.000 Zeichen | fest; `MAX_MCP_OUTPUT_TOKENS` ändert sie nicht |
 | je Tool, gesetzt vom Server-Autor | bis 500.000 Zeichen | `_meta["anthropic/maxResultSizeChars"]` im `tools/list`-Eintrag |
 
-Ein Text-Ergebnis über der Grenze wird nicht abgeschnitten: Claude Code legt es als Datei ab und setzt den Pfad in den Verlauf. Bilder zählen immer gegen `MAX_MCP_OUTPUT_TOKENS`.
+Ein Text-Ergebnis über einer der beiden Grenzen wird nicht abgeschnitten: Claude Code legt es als Datei ab und setzt den Pfad in den Verlauf. Die Zeichengrenze gilt unabhängig von der Token-Zahl; nur die Angabe des Server-Autors hebt sie für ein Tool an. Bilder zählen immer gegen `MAX_MCP_OUTPUT_TOKENS`.
 
 ## Typische Fallen
 

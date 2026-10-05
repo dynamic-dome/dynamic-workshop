@@ -48,7 +48,7 @@ Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon B
 | Amazon Bedrock, Google Cloud | Opus 5.5 | Sonnet 4.5 |
 | Microsoft Foundry | Opus 4.6 | Sonnet 4.5 |
 
-Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, Sonnet 4.5, Opus 4.6). Das früheste Retirement von Sonnet 4.5 ist laut Deprecations-Seite „Not sooner than September 29, 2026“ – vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen.
+Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, Sonnet 4.5, Opus 4.6). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (nachgesehen am 2026-10-05). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen.
 
 - `fable` löst auf Fable 5.1 auf (u. a. überschreibbar per `ANTHROPIC_DEFAULT_FABLE_MODEL`), im Claude-apps-Gateway auf Fable 5; `best` = `fable`, wo Fable verfügbar ist, sonst `opus`.
 - Weitere Werte: `opusplan` (Opus im Plan-Modus, dann Sonnet), `sonnet[1m]`, `opus[1m]`.
@@ -70,13 +70,13 @@ Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, So
 | Wie du Claude Code startest | Eingebauter Startmodus |
 |---|---|
 | Eine Settings-Datei setzt `disableAutoMode` auf `"disable"` | `default` (Manual) |
-| `claude -p` oder Agent SDK | `default` (Manual) |
+| `claude -p` oder Agent SDK | `default` (Manual) in Sitzungen, die Feature-Flags abrufen; ohne Abruf, etwa bei einem Drittanbieter oder mit abgeschalteter Telemetrie, `auto` ab CLI 2.1.285, davor `default`. Hält die Richtlinie einer Organisation die `auto`-Vorgabe zurück, `default` |
 | Terminal oder VS Code-Erweiterung | `auto` ab CLI 2.1.283; davor `auto` nur auf Pro, Max, Team, sonst `default` |
 
 - Ist `auto` für die Session nicht verfügbar (Modell, Einstellung, serverseitig aus), startet sie in Manual.
 - Die erste Session nach Installation oder Upgrade kann abweichen; die nächste folgt der Tabelle.
-- Changelog 2.1.285: `claude -p` und das Python-SDK starten bei Drittanbietern oder abgeschalteter Telemetrie ohne
-  konfigurierten Modus ebenfalls in `auto`; die Doku-Tabelle oben nennt das noch nicht (Stand 2026-09-30).
+- Die Zeile zu `claude -p` steht seit dem Doku-Stand vom 2026-10-05 so in der Tabelle (vorher nur im Changelog
+  2.1.285). Für Läufe ohne Aufsicht heißt das: den Modus immer selbst setzen (`--permission-mode`).
 - Kapitel S1.6, die Karte „Rechte“ und der Mentor verweisen hierher, statt den Startmodus selbst zu nennen.
 
 ## Struktur

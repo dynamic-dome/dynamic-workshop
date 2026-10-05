@@ -52,7 +52,7 @@ Jeder Baustein des Kurses hat in diesem Leitstand seinen Platz:
 | Telegram-Bridge 🔧 | Gruppenchat der Leitstelle | [S4.6](s4-06-remote-und-teleport.md) |
 | Devil's-Advocate-Swarm 🔧 | Pentest-Team mit eingebautem Tribunal | [S3.6](s3-06-devils-advocate.md) |
 | Quality Gates | Compliance-Checkliste vor der Abnahme | [S3.14](s3-14-self-improve-loop.md) |
-| Self-Improve-Loop 🔧 | laufende automatische Härtung, nur für Code und CI; in regulierten Anlagen nach EN 50131 kein autonomes Patchen von Endgeräten | [S3.14](s3-14-self-improve-loop.md) |
+| Self-Improve-Loop 🔧 | laufende automatische Härtung, nur für Code und CI; Geräte im Feld patcht kein autonomer Lauf | [S3.14](s3-14-self-improve-loop.md) |
 | Zeitgesteuerte Aufgaben | automatische Streifengänge | [S3.12](s3-12-zeitgesteuert-arbeiten.md) |
 | Hooks | Zutritts- und Alarmsensoren, die bei jedem Ereignis auslösen | [S2.6](s2-06-hooks-als-sensoren.md) |
 | Gedächtnis der Agenten | Einsatzprotokolle und Nachbesprechungen | [S1.11](s1-11-gedaechtnis-ebenen.md) |

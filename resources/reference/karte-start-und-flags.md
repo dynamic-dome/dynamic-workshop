@@ -24,7 +24,7 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quell
 | `-p "prompt"` · `--print` | Einmal ausführen, Antwort auf stdout, dann Ende; Eingabe auch per Pipe: `cat logs.txt \| claude -p "explain"` |
 | `--output-format json` | JSON mit Ergebnis und `total_cost_usd` (Schätzung, nicht die Rechnung) |
 | `--allowedTools "Read,Edit"` | Diese Tools laufen ohne Rückfrage |
-| `--permission-mode dontAsk` | Lehnt alles ab, was fragen würde; ohne Angabe startet `-p` in `default` |
+| `--permission-mode dontAsk` | Lehnt alles ab, was fragen würde. Ohne Angabe gilt der eingebaute Startmodus: meist `default`, bei einem Drittanbieter `auto`; setz ihn in Skripten immer selbst |
 | `--max-budget-usd 0.50` | Kostengrenze; Ausgaben von Subagenten zählen mit |
 | `--max-turns 5` | Grenze für Agenten-Runden; beim Erreichen endet der Lauf mit Fehler |
 

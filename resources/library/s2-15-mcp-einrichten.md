@@ -208,7 +208,7 @@ Ein Default steht selbst in der eingecheckten Datei. Ein geheimer Wert wäre dam
 - **`claude mcp add` meldet `error: missing required argument 'name'`.** `--header` nimmt mehrere Werte an und schluckt Name und URL, wenn sie dahinter stehen. Schreib `--header` hinter die URL, wie im Beispiel oben.
 - **`Invalid environment variable format: github`.** Auch `--env` nimmt mehrere Paare an. Folgt der Servername direkt auf das Paar, liest die CLI ihn als weiteres Paar und lehnt ihn ab. Setz eine andere Option wie `--transport stdio` zwischen `--env` und den Namen.
 - **Der Server steht auf `⏸ Pending approval`.** Das ist ein Server aus der `.mcp.json`, den du noch nicht bestätigt hast. Start `claude` interaktiv im Projekt und bestätige ihn.
-- **Der Server verbindet nicht oder läuft in einen Timeout.** `/mcp` zeigt den Status und führt bei Bedarf durch eine neue Anmeldung. `claude mcp get <name>` zeigt die Konfiguration und bei `✘ Failed to connect` in der Zeile `Issue:` den Grund.
+- **Der Server verbindet nicht oder läuft in einen Timeout.** `/mcp` zeigt den Status und führt bei Bedarf durch eine neue Anmeldung. `claude mcp get <name>` zeigt die Konfiguration und bei `✘ Failed to connect` in der Zeile `Issue:` den Grund. Reicht das nicht, schreibt `claude --debug=mcp` den Startversuch ins Debug-Log ([S4.9](s4-09-fehlersuche-werkzeuge.md)).
 - **Der Rückfallwert ist ein Geheimnis.** `${TOKEN:-mein-echtes-token}` in einer eingecheckten Datei verrät das Token. Ein Default steht im Klartext in der Datei.
 - **Die Server stehen nicht dort, wo du sie suchst.** `local` und `user` liegen in `~/.claude.json`, `project` in der `.mcp.json` im Projektordner. Eine Datei `~/.claude/.mcp.json` liest Claude Code nicht.
 

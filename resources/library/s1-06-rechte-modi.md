@@ -87,7 +87,7 @@ Die schnelle Antwort steht in der Statusleiste. Die Regel dahinter: Es gilt das 
 2. `permissions.defaultMode` in einer Settings-Datei
 3. der eingebaute Startmodus
 
-Der eingebaute Startmodus ist im Terminal und in der VS-Code-Erweiterung `auto`, bei `claude -p` und im Agent SDK `default`. Ist `auto` für die Sitzung nicht verfügbar, etwa weil das Modell ihn nicht unterstützt oder die Organisation ihn abgeschaltet hat, startet sie in Manual. Ausnahmen und ältere Versionen führt der [Kanon](../_canonical.md#rechte-startmodus-quelle-permission-modesmd-which-mode-a-session-starts-in).
+Der eingebaute Startmodus ist im Terminal und in der VS-Code-Erweiterung `auto`, bei `claude -p` und im Agent SDK meist `default`; bei einem Drittanbieter oder mit abgeschalteter Telemetrie kann es `auto` sein, setz den Modus in Skripten deshalb immer selbst. Ist `auto` für die Sitzung nicht verfügbar, etwa weil das Modell ihn nicht unterstützt oder die Organisation ihn abgeschaltet hat, startet sie in Manual. Ausnahmen und ältere Versionen führt der [Kanon](../_canonical.md#rechte-startmodus-quelle-permission-modesmd-which-mode-a-session-starts-in).
 
 Willst du jede Terminal-Sitzung auf deinem Rechner in Manual starten, schreibst du den Startmodus in `~/.claude/settings.json`:
 
