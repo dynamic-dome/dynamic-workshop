@@ -8,7 +8,7 @@
 ## Für jede Sitzung
 
 - Vor dem ersten Schritt: `git status -sb` (Branch `selbstlern-zuerst`, sauber) und
-  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P4: 701).
+  `python -m pytest tools -q -p no:cacheprovider` (grün; Stand nach P5: 716).
 - Nach jeder Änderung an Kapiteln, Regalen oder Regeln:
   `python tools/build_library.py validate --complete` · `python tools/build_library.py build` ·
   `python -m pytest tools -q -p no:cacheprovider` · `python tools/lint_currency.py`.
@@ -29,8 +29,8 @@
 | P1 | Moderationsschicht: „Vorführen“ aus den Kapiteln in eigene Dateien | — | [x] `d6c40d5`, `597f9ce` |
 | P2 | Cockpit und Tutor zeigen bei „durcharbeiten“ Lehrtext und Übung (R19) | P1 | [x] `4c98ba0` |
 | P3 | Auflösungen: Format, Validator, Cockpit, Tutor; ein Kapitel als Durchstich (R15) | — | [x] `d03ea85` |
-| P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] siehe Abschluss P4 |
-| P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [ ] |
+| P4 | Playground ohne Lösungshinweise (R18, R13) | — | [x] `664d5ca` |
+| P5 | Pilotregal Einstieg S0.1 bis S1.9 samt X.2: Maßstab für alle Inhalte (R14, R15, R17, R21, R22, R26, R28) | P1, P3, P4 | [x] `359c9db` und Folge-Commit, siehe Abschluss P5 |
 | P6 | Abschluss: Kapitel S4.11 in jedem Pfad, Praxis-Stationen als Session-Abschlüsse (R16) | P5 | [ ] |
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | [ ] |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [ ] |
@@ -298,6 +298,75 @@ bewährt haben, mit je einem Vorher-nachher-Beispiel. Das ist der Auftrag für P
 
 **Fertig, wenn:** Validator ohne Befund für die elf Kapitel inklusive Auflösungs- und Übungsregel; Suite grün;
 Codex-Gegenprüfung des Diffs (lesend) ohne offenen Befund; Maßstab-Datei geschrieben.
+
+### Abschluss P5 (2026-10-05)
+
+- **Kapitel** (`359c9db`): S0.1, S1.1 bis S1.9 neu geschrieben, X.2 angepasst. Der Maßstab steht in
+  `docs/plans/2026-10-05-selbstlern-zuerst-massstab.md` (16 Regeln, je mit Vorher und Nachher aus dem Pilot).
+  Neue Übungen: S1.2 (Rückfrage lesen und ablehnen), S1.3 (eigene Wechselmöglichkeiten), S1.6 (Modus ablesen,
+  Zyklus, Start in `plan`), S1.7 (Modell und Effort für eine Sitzung), S1.9 (`/rewind`, dann `/compact` mit Fokus).
+  Umgebaut: S1.1 (Hallo-Übung als erster Teil von „Im Detail“, Start mit `--permission-mode default`,
+  Vertrauensdialog), S1.4 (Werkzeugnamen aus dem Transkript mit `Ctrl+O`), S1.5 (dritte Runde mit Deny-Regel),
+  S1.8 (Türcode in `notes.txt`, „Messages“ in `/context` vor und nach `@` und `/clear`).
+- **Werkzeug:** `tools/fixtures/standard-chapters.txt` ersetzt `answers-required.txt`; für Kapitel darauf gelten
+  `answers-required`, `exercise-required`, `exercise-shape`, `minutes-honest`, dazu `standard-list` für unbekannte
+  IDs. Tests zuerst, rot gesehen. Stand: Lektionen mit Übung 32 von 61, mit Auflösung 9 von 61.
+- **Vertrag bewusst neu:** Minuten S0.1 25, S1.1 25, S1.2 15, S1.3 10, S1.4 10, S1.5 20, S1.6 15, S1.7 15, S1.8 15,
+  S1.9 15, X.2 35. X.2 nach S1.20, X.1 nach S2.20, X.3 nach S3.15, X.4 nach S4.7. Personas P01, P02, P03 und P14 von
+  Hand aus den neuen Metadaten abgeleitet und erst danach gegen die Engine laufen lassen: alle vier trafen. Golden
+  neu. **Der Schnellstart-Pfad braucht jetzt 178 Minuten bei einer Warnschwelle von 180;** wächst in P7a eines seiner
+  Kapitel, muss die Schwelle oder der Pfad bewusst angepasst werden.
+- **S0.1** setzt nur noch Claude Code, Anmeldung, Git und Python voraus. Node.js, `jq`, GitHub CLI, Workshop-Repo
+  mit Playground und der Doktor stehen auf der neuen Karte `resources/reference/werkstatt-erweitern.md`; S2.8,
+  S2.14, die Vorbereitung für Moderierende und die Demo zu S3.6 verweisen dorthin.
+- **Durchgespielt mit Claude Code 2.1.289** (jede Übung einmal, Wegwerf-Ordner):
+  - Linux, interaktiv über eine ferngesteuerte tmux-Sitzung, Start jeweils ohne Benutzer-Einstellungen
+    (`--setting-sources project,local`): S1.1 Hallo (Vertrauensdialog, zwei Rückfragen, Ergebnis), S1.2 (Löschen
+    abgelehnt, Datei bleibt), S1.3 (`/desktop` fehlt unter Linux, `/mobile` zeigt QR-Code, `Esc` schließt), S1.4
+    (eine Rückfrage für `Write`; `cat` und `wc -l` laufen ohne Rückfrage; `Ctrl+O` zeigt `Write(…)` und `Bash(…)`),
+    S1.5 (Runde 2 ohne Rückfrage; Runde 3: Löschen abgelehnt, `/permissions` zeigt beide Regeln), S1.6 (Start in
+    `auto`, Zyklus Manual → accept edits → plan → auto, Start in `plan`), S1.7 (Kopfzeile „with high effort“,
+    `/effort status`, Auswahl von `/model`, Haiku), S1.8 („Messages“ 10 → 16.600 → 130 Tokens; Türcode nur mit
+    `@notes.txt`), S1.9 (`/rewind` stellt lesbare Namen wieder her, `--door` bleibt; „Messages“ 18.600 → 13.000 nach
+    `/compact` mit Fokus).
+  - Windows: S1.5 Runde 2 und 3 headless (`claude -p`): Löschen läuft in `acceptEdits`, mit der Deny-Liste wird
+    der PowerShell-Befehl mit `Remove-Item` abgelehnt. Die PowerShell-Befehle für die Übungsordner und das
+    Anlegen der Dateien in S1.8 ausgeführt.
+  - **Nicht durchgespielt:** die interaktiven Rückfragen unter Windows (kein fernsteuerbares Terminal; der Wortlaut
+    der Rückfrage für das PowerShell-Tool ist deshalb in S1.2 und S1.4 nur umschrieben); `/desktop` selbst (auf dem
+    Testrechner nicht vorhanden); die Installation aus S0.1 (Befehle unverändert, nicht neu installiert); X.2
+    Übung 2 und 3 (bis auf Startzustand und Beispielfrage unverändert; der Tutor ist nicht erneut gestartet worden).
+- **Beobachtet, für P8 zu klären:** `/model` zeigt auf dem Testkonto (Max) „Default (recommended)“ mit dem
+  Fable-Tier, während `model-config.md` sagt: „Neither Fable model is the account-type default on any plan or
+  provider.“ S1.7 folgt der Doku. `/effort status` nennt auf Haiku eine Stufe, obwohl das Tier laut Doku keinen
+  Effort kennt. Auf dem Windows-Testrechner scheiterte der erste PowerShell-Aufruf einmal mit „Die Befehlszeile ist
+  zu lang“ (Eigenheit des Rechners, nicht im Kapitel).
+- **Codex-Gegenprüfung (lesend, Stand `359c9db`, zwei Läufe):**
+  - Werkzeug: Urteil FAIL, vier Befunde. Bestätigt und behoben: eine auskommentierte Übungsüberschrift zählte als
+    Übung (Test zuerst, rot gesehen); die Verdrahtung der Liste in der CLI hatte keinen Test (ergänzt; sofort grün,
+    weil das Verhalten bestand, in beide Richtungen empfindlich). Ohne realen Fall: `~~~` innerhalb eines
+    Backtick-Blocks und Linkziele mit Klammern (beides kommt in der Bibliothek nicht vor; der Parser behandelt
+    Zäune überall so).
+  - Kapitel: Urteil FAIL, drei Befunde, alle bestätigt und behoben: Die Wiederherstellung überspringt verlinkte
+    Dateien (`checkpointing.md`: „Checkpointing doesn't rewind symlinked or hard-linked files“; S1.2 sagt jetzt
+    „meist“, S1.9 nennt die dritte Grenze); die Rückfrage heißt unter Windows nicht „Bash command“ (S1.2, S1.4);
+    `s` in der Auswahl von `/model` übernimmt Modell und die dort eingestellte Stufe für die Sitzung
+    (`model-config.md`: „`s` in the `/effort` slider or the `/model` picker: apply the level to this session only“).
+- **Dabei entschieden:**
+  - Eine Karte statt verteilter Installationsanleitungen: Die Paketliste sah vor, Node, `jq`, `gh` und den Klon
+    in das Kapitel des ersten Bedarfs zu legen. `jq` und der Playground werden aber in mehreren Kapiteln gebraucht;
+    eine Stelle mit Ankern ist leichter zu pflegen.
+  - S1.5 bleibt ein Kapitel (der Bericht schlug eine Teilung vor; das änderte den Kapitelbestand und gehört, wenn
+    überhaupt, zu R24 in P8). Die überladene Regel-Passage ist in zwei Listen zerlegt.
+  - S1.3 bleibt Kern; Outcome auf das Erreichbare geändert.
+  - Aus S1.9 entfallen `/export`, `/resume`, `/memory`, `/init` und `claude -r` (weder geübt noch geprüft); aus S1.2
+    das Zitat ohne Quelle und der Vergleich mit der Kreissäge; aus S1.7 der Kasten zum System-Prompt; aus S0.1 die
+    Versionstabelle, die Zeile zum Speicherplatz und die Spalte „Empfohlen“ (nicht belegbar).
+  - `plan` heißt im Bild von S1.6 jetzt „Begehung mit Klemmbrett“ statt „Einsatzbesprechung“.
+- **Offen für P7:** S1.12 nennt `--add-dir` einen „Besucherausweis“ (P7a); S1.10 und S1.16 nutzen noch
+  `exercises/exercise-1.x` als Ordnernamen (P7a); S1.7 verweist für das Ablesen des Verbrauchs auf S1.19 (P7a prüft,
+  ob die Übung dort an S1.7 anschließt); X.1, X.3 und X.4 haben nur ihre neue Position, der Text folgt in P7c,
+  P7d und P7f.
 
 ---
 

@@ -80,7 +80,7 @@ Die Spalte gilt für den Modus `default` und für Pfade in deinem Arbeitsordner.
 
 In der normalen Ansicht fasst Claude Code vieles zusammen: „Read 1 file“, „Ran 1 shell command“. Die genauen Aufrufe zeigt das ausführliche Transkript. `Ctrl+O` schaltet es ein und wieder aus. Dort steht jeder Aufruf mit Name und Argument, etwa `Write(notes.txt)` oder `Bash(wc -l notes.txt)`.
 
-Auch die Rückfrage nennt das Werkzeug: Über einem Shell-Befehl steht „Bash command“, über einer neuen Datei „Create file“.
+Auch die Rückfrage nennt das Werkzeug: Über einem Shell-Befehl steht „Bash command“ (für das PowerShell-Tool die Entsprechung), über einer neuen Datei „Create file“.
 
 ### Weitere Werkzeuge
 

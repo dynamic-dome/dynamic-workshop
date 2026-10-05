@@ -85,7 +85,7 @@ Schalte bei wirklich einfachen Aufgaben herunter; das ist genauso wichtig wie da
 
 - **Beim Start, nur für diese Sitzung:** `claude --model sonnet` wählt das Modell, `--effort <stufe>` die Effort-Stufe.
 - **In der Sitzung:** `/model` öffnet die Auswahl, `/model <alias>` wechselt direkt. `/effort <low|medium|high|xhigh|max>` setzt die Stufe, `/effort status` zeigt sie.
-- **Achtung, die Wahl in der Sitzung bleibt:** `/model <alias>` und Enter in der Auswahl speichern das Modell als Standard für neue Sitzungen. Eine Stufe hinter `/effort` wird als Standard für dieses Modell gespeichert; nur `max` gilt allein für die laufende Sitzung. Für eine einzige Sitzung drückst du in der Auswahl `s` oder nimmst die Start-Flags.
+- **Achtung, die Wahl in der Sitzung bleibt:** `/model <alias>` und Enter in der Auswahl speichern das Modell als Standard für neue Sitzungen. Eine Stufe hinter `/effort` wird als Standard für dieses Modell gespeichert; nur `max` gilt allein für die laufende Sitzung. Für eine einzige Sitzung nimmst du die Start-Flags, oder du stellst in der Auswahl von `/model` Modell und Effort ein (Effort mit den Pfeiltasten ← und →) und übernimmst mit `s` statt mit Enter.
 - **Zurück zum Standard:** `/model default` holt das Standardmodell deines Kontos zurück, `/effort auto` löscht die gespeicherte Stufe des aktiven Modells.
 
 So sieht das im Alltag aus:
@@ -157,7 +157,7 @@ Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur
 
 1. Opus oder Fable. Haikus Kontextfenster ist deutlich kleiner als das der anderen Tiers; bei vielen Dateien passt nicht alles hinein.
 2. Das Modell denkt gründlicher nach und verbraucht dafür mehr Tokens: Qualität und Kosten steigen zusammen. Haiku kennt keinen Effort.
-3. Beim Start mit `claude --model … --effort …`, oder in der Auswahl von `/model` mit `s`. `/model <alias>`, Enter in der Auswahl und eine Stufe hinter `/effort` speichern die Wahl dagegen.
+3. Beim Start mit `claude --model … --effort …`. In der Sitzung geht es über die Auswahl von `/model`: Modell wählen, Effort mit den Pfeiltasten einstellen und mit `s` übernehmen. `/model <alias>`, Enter in der Auswahl und eine Stufe hinter `/effort` speichern die Wahl dagegen.
 
 </details>
 

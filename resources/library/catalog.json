@@ -120,7 +120,7 @@
    "answers": [
     "Er ruft Werkzeuge auf: Er liest und schreibt Dateien, führt Befehle aus, liest deren Ausgabe und entscheidet danach über den nächsten Schritt. Ein Chat-Assistent schickt nur Text, umsetzen musst du.",
     "Alles, was du von der Kommandozeile aus tun kannst, also alles, was dein Benutzerkonto erreicht. Die Grenze setzt du: mit deiner Antwort auf die Rückfrage, mit Rechte-Regeln, einer Sandbox oder einem Rechner ohne Zugang zu kritischen Systemen.",
-    "Was ein Shell-Befehl gelöscht hat und was ein entferntes System verändert hat: eine Datenbank, ein Deployment, ein Push. Zurückdrehen kannst du, was Claude über seine Datei-Werkzeuge geändert hat."
+    "Was ein Shell-Befehl gelöscht hat und was ein entferntes System verändert hat: eine Datenbank, ein Deployment, ein Push. Zurückdrehen kannst du in der Regel, was Claude über seine Datei-Werkzeuge geändert hat."
    ],
    "area": "basics",
    "checkpoint": "Du kannst in einem Satz erklären, warum Claude Code kein Chat-Tool ist, und benennen, welche Folge das für jede Freigabe hat.",
@@ -409,7 +409,7 @@
    "answers": [
     "Opus oder Fable. Haikus Kontextfenster ist deutlich kleiner als das der anderen Tiers; bei vielen Dateien passt nicht alles hinein.",
     "Das Modell denkt gründlicher nach und verbraucht dafür mehr Tokens: Qualität und Kosten steigen zusammen. Haiku kennt keinen Effort.",
-    "Beim Start mit `claude --model … --effort …`, oder in der Auswahl von `/model` mit `s`. `/model <alias>`, Enter in der Auswahl und eine Stufe hinter `/effort` speichern die Wahl dagegen."
+    "Beim Start mit `claude --model … --effort …`. In der Sitzung geht es über die Auswahl von `/model`: Modell wählen, Effort mit den Pfeiltasten einstellen und mit `s` übernehmen. `/model <alias>`, Enter in der Auswahl und eine Stufe hinter `/effort` speichern die Wahl dagegen."
    ],
    "area": "cost",
    "checkpoint": "Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur für eine Sitzung oder dauerhaft umstellen und erklären, warum Haiku an einer großen Codebasis scheitern kann.",
@@ -526,7 +526,7 @@
    "analogy": "Ein guter Operator wartet nicht, bis die Monitorwand von selbst alte Feeds abschaltet. Er schaut nach, wie voll die Wand ist, und räumt selbst auf: Er legt fest, welche Feeds bleiben, und fasst den Rest in einem Lagebericht zusammen, in dem steht, was ihm wichtig ist. War eine Umschaltung falsch, springt er auf einen gespeicherten Stand zurück, statt jeden Schritt einzeln rückgängig zu machen. Beginnt ein ganz neuer Einsatz, macht er die Wand frei.",
    "answers": [
     "Die Zusammenfassung behält, was du nennst, statt was die Automatik für wichtig hält.",
-    "Den Stand vor dem gewählten Prompt, je nach Wahl Code, Gespräch oder beides. Nicht zurückholen kann es Dateien, die Claude per Shell-Befehl geändert oder gelöscht hat, etwa mit `rm` oder `mv`.",
+    "Den Stand vor dem gewählten Prompt, je nach Wahl Code, Gespräch oder beides. Nicht zurückholen kann es Dateien, die Claude per Shell-Befehl geändert oder gelöscht hat, etwa mit `rm` oder `mv`, und verlinkte Dateien.",
     "Bei einem Themenwechsel und wenn du Claude mehr als zweimal zum selben Problem korrigiert hast: Dann stört der alte Verlauf mehr, als er nützt."
    ],
    "area": "context",

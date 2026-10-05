@@ -80,7 +80,7 @@ Jeder Prompt, mit dem du einen neuen Arbeitsschritt startest, legt einen Checkpo
 - **Restore code:** nur die Dateiänderungen zurück, das Gespräch bleibt
 - **Summarize from here** und **Summarize up to here:** den Verlauf ab oder bis zu diesem Punkt zusammenfassen, wie ein gezieltes `/compact`
 
-So machst du mehrere Schritte auf einmal rückgängig, nicht nur den letzten. Zwei Grenzen: Dateien, die Claude per Shell-Befehl geändert hat (etwa mit `rm`, `mv` oder `cp`), erfasst der Checkpoint nicht. Und Checkpoints ersetzen Git nicht ([S1.17](s1-17-git-befehle.md)).
+So machst du mehrere Schritte auf einmal rückgängig, nicht nur den letzten. Drei Grenzen: Dateien, die Claude per Shell-Befehl geändert hat (etwa mit `rm`, `mv` oder `cp`), erfasst der Checkpoint nicht. Symbolisch oder hart verlinkte Dateien überspringt die Wiederherstellung. Und Checkpoints ersetzen Git nicht ([S1.17](s1-17-git-befehle.md)).
 
 So sieht das in einer laufenden Session aus:
 
@@ -142,7 +142,7 @@ Du kannst sagen, wann du `/compact`, `/rewind` oder `/clear` nimmst, und was kei
 <details><summary>Auflösung</summary>
 
 1. Die Zusammenfassung behält, was du nennst, statt was die Automatik für wichtig hält.
-2. Den Stand vor dem gewählten Prompt, je nach Wahl Code, Gespräch oder beides. Nicht zurückholen kann es Dateien, die Claude per Shell-Befehl geändert oder gelöscht hat, etwa mit `rm` oder `mv`.
+2. Den Stand vor dem gewählten Prompt, je nach Wahl Code, Gespräch oder beides. Nicht zurückholen kann es Dateien, die Claude per Shell-Befehl geändert oder gelöscht hat, etwa mit `rm` oder `mv`, und verlinkte Dateien.
 3. Bei einem Themenwechsel und wenn du Claude mehr als zweimal zum selben Problem korrigiert hast: Dann stört der alte Verlauf mehr, als er nützt.
 
 </details>

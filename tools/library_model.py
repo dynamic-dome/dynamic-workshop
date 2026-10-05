@@ -316,8 +316,10 @@ def _links(body: str) -> list:
 
 
 def timed_exercises(text: str) -> list:
-    """(title, minutes) of every heading '### … (etwa N Minuten)' in a section text."""
-    return [(title, int(minutes)) for title, minutes in TIMED_HEADING.findall(_without_fences(text or ""))]
+    """(title, minutes) of every heading '### … (etwa N Minuten)' in a section text; code blocks and HTML
+    comments are no place for a heading."""
+    visible = re.sub(r"<!--.*?-->", " ", _without_fences(text or ""), flags=re.S)
+    return [(title, int(minutes)) for title, minutes in TIMED_HEADING.findall(visible)]
 
 
 def exercise_minutes(chapter) -> int:

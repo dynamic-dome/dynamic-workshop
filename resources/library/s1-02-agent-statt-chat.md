@@ -67,7 +67,7 @@ Drei Folgen:
 
 - **Ein freigegebener Befehl läuft sofort und wirklich.** Es gibt keine Probe und keine Kopie, auf der er erst einmal arbeitet.
 - **Claude Code weiß nicht, was bei dir wichtig ist.** Ob ein Ordner Wegwerf-Material oder die Arbeit von drei Wochen enthält, sieht man einem `rm` nicht an.
-- **Nicht alles lässt sich zurückholen.** Was Claude über seine Datei-Werkzeuge ändert, kannst du in der Sitzung zurückdrehen ([S1.9](s1-09-kontext-steuern.md)). Was ein Shell-Befehl gelöscht hat oder was ein entferntes System verändert hat, eine Datenbank, ein Deployment, ein Push, holst du so nicht zurück.
+- **Nicht alles lässt sich zurückholen.** Was Claude über seine Datei-Werkzeuge ändert, kannst du in der Sitzung meist zurückdrehen; die Ausnahmen nennt [S1.9](s1-09-kontext-steuern.md). Was ein Shell-Befehl gelöscht hat oder was ein entferntes System verändert hat, eine Datenbank, ein Deployment, ein Push, holst du so nicht zurück.
 
 Deshalb liest du eine Rückfrage, bevor du sie beantwortest. Maßgeblich ist die Zeile mit dem Befehl, nicht die Überschrift darüber.
 
@@ -100,7 +100,7 @@ claude --permission-mode default
 ```
 
 2. Gib den Auftrag `Delete hello.py.`
-3. Lies die Rückfrage, bevor du antwortest. Oben steht die Art der Aktion („Bash command“), darunter der Befehl, der gleich laufen würde, etwa `rm …/hello.py`. Welche Antworten bietet Claude Code an?
+3. Lies die Rückfrage, bevor du antwortest. Oben steht die Art der Aktion, etwa „Bash command“ (unter Windows meist die Entsprechung für PowerShell), darunter der Befehl, der gleich laufen würde, etwa `rm …/hello.py` oder `Remove-Item hello.py`. Welche Antworten bietet Claude Code an?
 4. Wähl „No“. Claude Code bricht ab und fragt, was es stattdessen tun soll.
 5. Prüf nach: `List the files in this folder.` Die Datei ist noch da. Diese Frage läuft ohne Rückfrage, weil sie nur liest.
 6. Notier für die beiden folgenden Befehle je zwei Sätze: Was passiert im schlimmsten Fall, und was hätte es verhindert?
@@ -138,7 +138,7 @@ Du kannst in einem Satz erklären, warum Claude Code kein Chat-Tool ist, und ben
 
 1. Er ruft Werkzeuge auf: Er liest und schreibt Dateien, führt Befehle aus, liest deren Ausgabe und entscheidet danach über den nächsten Schritt. Ein Chat-Assistent schickt nur Text, umsetzen musst du.
 2. Alles, was du von der Kommandozeile aus tun kannst, also alles, was dein Benutzerkonto erreicht. Die Grenze setzt du: mit deiner Antwort auf die Rückfrage, mit Rechte-Regeln, einer Sandbox oder einem Rechner ohne Zugang zu kritischen Systemen.
-3. Was ein Shell-Befehl gelöscht hat und was ein entferntes System verändert hat: eine Datenbank, ein Deployment, ein Push. Zurückdrehen kannst du, was Claude über seine Datei-Werkzeuge geändert hat.
+3. Was ein Shell-Befehl gelöscht hat und was ein entferntes System verändert hat: eine Datenbank, ein Deployment, ein Push. Zurückdrehen kannst du in der Regel, was Claude über seine Datei-Werkzeuge geändert hat.
 
 </details>
 

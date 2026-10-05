@@ -363,6 +363,24 @@ def test_code_blocks_do_not_count_as_reading_time(lib_dir):
     assert rules_with_standard(lib_dir, ["S2.8"]) == []
 
 
+def test_a_commented_out_heading_is_no_exercise(lib_dir):
+    edit(lib_dir, HOOK, EXERCISE, "<!--" + chr(10) + EXERCISE + chr(10) + "-->")
+    assert rules_with_standard(lib_dir, ["S2.8"]) == ["exercise-shape", "minutes-honest"]
+
+
+def test_the_cli_applies_the_standard_list_to_the_default_library_only(lib_dir, monkeypatch, capsys):
+    edit(lib_dir, HOOK, "**Geschafft, wenn:**", "Am Ende:")
+    monkeypatch.setattr(bl, "load_standard", lambda: frozenset({"S2.8"}))
+    monkeypatch.setattr(bl, "load_meta", lambda: None)
+    chapter = str(lib_dir / HOOK)
+    assert bl.main(["validate", "--root", str(lib_dir)]) == 0  # any other folder: the list does not apply
+    assert bl.main(["validate", "--chapter", chapter]) == 0
+    monkeypatch.setattr(bl, "DEFAULT_LIBRARY", lib_dir)
+    assert bl.main(["validate", "--root", str(lib_dir)]) == 1
+    assert bl.main(["validate", "--chapter", chapter]) == 1
+    assert "exercise-shape" in capsys.readouterr().out
+
+
 def test_the_real_standard_list_names_existing_chapters_and_they_pass():
     lib = lm.load_library(ROOT / "resources" / "library")
     standard = bl.load_standard()
