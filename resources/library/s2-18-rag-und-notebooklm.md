@@ -210,6 +210,9 @@ Dann legst du ein Notebook an und fügst Quellen hinzu. Unter Windows hängst du
 
 ```bash
 notebooklm create "Claude Code Docs"
+```
+
+```bash
 notebooklm use <notebook-id>
 notebooklm source add https://code.claude.com/docs/en/hooks
 notebooklm ask "What is the correct format for hook configuration in settings.json?"
