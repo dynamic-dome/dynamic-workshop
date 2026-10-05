@@ -120,13 +120,14 @@ def test_exception_only_covers_its_own_files():
     assert finding.key == "missing:flag:--door" and finding.where == ("y.md:1",)
 
 
-def test_alias_documented_in_code_form_by_another_source_passes():
-    """`model: inherit` is not in model-config's alias table; sub-agents.md documents it in code form."""
-    course = {"a.md": "```yaml\nmodel: inherit\n```\n", "b.md": "```yaml\nmodel: nonsense\n```\n"}
-    page = "| `model` | `sonnet`, `opus`, `haiku`, or `inherit` |" + PAD
+def test_model_values_of_the_subagent_frontmatter_count_as_aliases():
+    """`model: inherit` is not in model-config's alias table; the `model` row of sub-agents.md names it. A word that is
+    merely backticked elsewhere in the docs (`plan`, a permission mode) stays red."""
+    course = {"a.md": "```yaml\nmodel: inherit\n```\n", "b.md": "```yaml\nmodel: plan\n```\n"}
+    page = "| `model` | No | Model to use: `sonnet`, `opus`, `haiku`, `fable`, a full model ID such as `claude-opus-5-5`, or `inherit` |" + PAD
     result = run(course=course, canon_text=canon(docs=DOCS + ["sub-agents.md"]),
                  available=pages(**{BASE + "sub-agents.md": page}))
-    assert [f.key for f in levels(result, "rot")] == ["missing:alias:nonsense"]
+    assert [f.key for f in levels(result, "rot")] == ["missing:alias:plan"]
 
 
 def test_foreign_source_outage_keeps_its_last_hash():

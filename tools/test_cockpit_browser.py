@@ -691,7 +691,7 @@ def test_printing_is_light_and_the_stored_theme_comes_back(browser, site, stored
     assert page.evaluate(theme) == "light"
     # light code boxes: with the dark theme kept, code would print as black boxes
     rgb = page.locator("main code").first.evaluate("el => getComputedStyle(el).backgroundColor")
-    assert min(int(v) for v in rgb[4:-1].split(",")) >= 230, rgb
+    assert min(int(v) for v in rgb[rgb.index("(") + 1:rgb.rindex(")")].split(",")[:3]) >= 230, rgb
     assert page.locator("main h1").is_visible()
     assert not page.locator(".nav").is_visible() and not page.locator("[data-action=toggle-done]").is_visible()
     page.emulate_media(media="screen")

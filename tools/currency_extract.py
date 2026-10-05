@@ -136,6 +136,7 @@ FOREIGN_LINE = re.compile(r"^- Fremdprojekt:\s*(https://\S+)\s+\((S\d\.\d+|X\.\d
 ALIAS_ROW = re.compile(r"^\|\s*\*\*`([^`]+)`\*\*\s*\|", re.M)
 MODE_ROW = re.compile(r"^\|\s*((?:\[?`[A-Za-z]+`\]?(?:\([^)]*\))?(?:,\s*)?)+)\s*\|", re.M)
 MODE_FLAG_ROW = re.compile(r"^\|\s*`--permission-mode`\s*\|(.*)$", re.M)
+MODEL_FIELD_ROW = re.compile(r"^[|] *`model` *[|](.*)$", re.M)  # sub-agents.md, frontmatter table
 UPDATE = re.compile(r'^<Update label="(\d+\.\d+\.\d+)"', re.M)
 PROVENANCE = re.compile(r"^<!-- Quelle: .*claude-code-workshop-ui\.html.*-->\s*$")
 
@@ -185,8 +186,12 @@ def parse_deprecations(text):
     return rows
 
 
-def parse_aliases(text):
-    return set(ALIAS_ROW.findall(text))
+def parse_aliases(text, subagents_text=""):
+    """Alias rows of model-config.md, plus the values the `model` frontmatter row of sub-agents.md names (`inherit`)."""
+    aliases = set(ALIAS_ROW.findall(text))
+    for match in MODEL_FIELD_ROW.finditer(subagents_text):
+        aliases.update(v for v in re.findall(r"`([A-Za-z][A-Za-z0-9-]*)`", match.group(1)) if not v.startswith("claude-"))
+    return aliases
 
 
 def parse_permission_modes(modes_text, cli_text=""):
@@ -275,8 +280,7 @@ def doc_identifiers(union):
 
 def exists_in_docs(kind, value, union, aliases, modes):
     if kind == "alias":
-        # the alias table in model-config.md, or a value another source documents in code form (`inherit` in sub-agents.md)
-        return value in aliases or re.search(r"`" + re.escape(value) + r"`", union) is not None
+        return value in aliases
     if kind == "permission_mode":
         return value in modes
     return re.search(r"(?<![\w-])" + re.escape(value) + r"(?![\w-])", union) is not None

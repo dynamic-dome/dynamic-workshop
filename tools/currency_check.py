@@ -222,7 +222,8 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
     union = "\n".join(d.text for d in docs)
     doc_ids = cx.doc_identifiers(union)
     deprecations = cx.parse_deprecations(by_name["model-deprecations.md"].text)
-    aliases = cx.parse_aliases(by_name["model-config.md"].text)
+    aliases = cx.parse_aliases(by_name["model-config.md"].text,
+                               by_name["sub-agents.md"].text if "sub-agents.md" in by_name else "")
     modes = cx.parse_permission_modes(by_name["permission-modes.md"].text, by_name["cli-reference.md"].text)
     for label, got, floor in (
         ("Flags in der Doku", len(doc_ids["flag"]), MIN_FLAGS),
