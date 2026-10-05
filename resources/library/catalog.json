@@ -2457,7 +2457,7 @@
    "example": "   ---\n   name: room-report\n   description: Reports per room who may receive its door code\n   disable-model-invocation: true\n   ---\n\n   1. Call the rooms tool list_rooms.\n   2. Read kb/house-rules.md.\n   3. For each room, print one line: the room name, then who may receive its code according to the house rules, then the file name in brackets.\n   4. End your reply with the exact line REPORT-DONE.",
    "example_lang": "markdown",
    "file": "s2-20-praxis-station-2.md",
-   "glance": "Diese Station schließt Session 2 ab. Du baust ein kleines Projekt, in dem die Bausteine der Session zusammenarbeiten: Ein Skill ruft ein MCP-Tool auf und liest eine Wissensquelle, ein Hook schreibt jeden Aufruf mit, und eine Regel sperrt das Tool, das niemand benutzen soll. Alles liegt in einem Wegwerf-Ordner; deine eigene Konfiguration bleibt, wie sie ist. Das dauert etwa 20 Minuten.",
+   "glance": "Diese Station schließt Session 2 ab. Du baust ein kleines Projekt, in dem die Bausteine der Session zusammenarbeiten: Ein Skill ruft ein MCP-Tool auf und liest eine Wissensquelle, ein Hook schreibt jeden gelungenen Aufruf mit, und eine Regel sperrt das Tool, das niemand benutzen soll. Alles liegt in einem Wegwerf-Ordner; deine eigene Konfiguration bleibt, wie sie ist. Das dauert etwa 20 Minuten.",
    "id": "S2.20",
    "level": "core",
    "minutes": 25,

@@ -90,7 +90,7 @@ Ein Risiko liegt in der Herkunft selbst: Ein aufgegebenes Repo kann gekapert wer
 Die Doku beschreibt vier Schritte:
 
 1. **Quelle des Marketplace prüfen:** `claude plugin marketplace list` zeigt für jeden Marketplace, woher er kommt, etwa ein GitHub-Repo oder ein Verzeichnis.
-2. **Detailbereich lesen:** In `/plugin` das Plugin wählen. Der Abschnitt **Will install** listet Commands, Agents, Skills, Hooks sowie MCP- und LSP-Server. Er zeigt, dass es einen Hook gibt, aber nicht, was der Hook ausführt.
+2. **Detailbereich lesen:** In `/plugin` das Plugin wählen. Der Abschnitt **Will install** listet Commands, Agents, Skills, Hooks sowie MCP- und LSP-Server. Er zeigt, dass es einen Hook gibt, aber nicht, was der Hook ausführt. Vollständig ist er nicht bei jedem Plugin: Fehlen Anthropic die Komponentendaten, steht dort laut Doku nur, was der Marketplace-Eintrag angibt, oder ein Hinweis wie `Components will be discovered at installation`. Dann weißt du aus der Anzeige nichts über Hooks und Server.
 3. **Quellcode lesen:** vor allem `hooks/hooks.json` (welcher Befehl je Hook läuft), `.mcp.json` (Befehl oder URL je Server) und jede Datei in `bin/`.
 4. **Inhalt auflisten:** das Repo mit dem Plugin klonen und `claude --plugin-dir <plugin directory> plugin details <plugin name>` ausführen. Das liest die Dateien, ohne eine Sitzung zu starten, und gibt ein `Component inventory` aus.
 

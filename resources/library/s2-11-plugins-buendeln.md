@@ -110,7 +110,7 @@ Installierte Plugins legt Claude Code als Kopie unter `~/.claude/plugins/cache/<
 
 Pflicht ist nur `name`. Er wird zum Präfix jedes Skills und Agents des Plugins, etwa `/my-plugin:review`; Leerzeichen sind nicht erlaubt. `author` ist ein Objekt mit `name` (Pflicht) und optional `email` und `url`; ein einfacher Text lässt `claude plugin validate` scheitern. Das Manifest kann außerdem `dependencies` nennen, also Plugins, die aktiv sein müssen, damit dieses funktioniert ([S2.12](s2-12-plugin-lebenszyklus.md)).
 
-Die Komponenten zählst du im Manifest nicht auf. Skills, Agents, Hooks und MCP-Server findet Claude Code über die Ordnerstruktur (Auto-Discovery). Pfade im Manifest beginnen immer mit `./`. Ein Feld `enabled` gibt es nicht; `claude plugin validate` meldet es als unbekannt. Ein installiertes Plugin schaltest du mit `claude plugin disable <name>` ab, statt Dateien umzubenennen.
+Die Komponenten zählst du im Manifest nicht auf. Skills, Agents, Hooks und MCP-Server findet Claude Code über die Ordnerstruktur (Auto-Discovery). Komponentenpfade im Manifest sind relativ zum Plugin-Root und beginnen mit `./` (die Doku nennt zwei Ausnahmen: `"."` bei `skills` und eine `https://`-Adresse bei `mcpServers`). Ein Feld `enabled` gibt es nicht; `claude plugin validate` meldet es als unbekannt. Ein installiertes Plugin schaltest du mit `claude plugin disable <name>` ab, statt Dateien umzubenennen.
 
 ### Hooks im Plugin
 

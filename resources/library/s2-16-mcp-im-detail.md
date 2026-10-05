@@ -56,7 +56,7 @@ Große Ausgaben von MCP-Tools können dein Kontextfenster fluten ([S1.8](s1-08-k
 | Warnung | 10.000 Token | Claude Code zeigt eine Warnung. Die Schwelle ist fest. |
 | Standard-Maximum | 25.000 Token | Ein größeres Ergebnis ohne Bilder speichert Claude Code als Datei und ersetzt es im Gespräch durch einen Hinweis mit dem Pfad. Anheben mit der Umgebungsvariable `MAX_MCP_OUTPUT_TOKENS`, etwa `MAX_MCP_OUTPUT_TOKENS=50000`. |
 | Zeichengrenze für Text | 50.000 Zeichen | Ein erfolgreiches Textergebnis, das länger ist, speichert Claude Code immer als Datei, egal wie viele Token es hat. `MAX_MCP_OUTPUT_TOKENS` ändert diese Schwelle nicht. |
-| Pro Tool | bis 500.000 Zeichen | Der Autor des Servers setzt `_meta["anthropic/maxResultSizeChars"]` im `tools/list`-Eintrag des Tools. Das gilt für Text, nicht für Tools, die Bilder liefern. |
+| Pro Tool | bis 500.000 Zeichen | Der Autor des Servers setzt `_meta["anthropic/maxResultSizeChars"]` im `tools/list`-Eintrag des Tools. Für Text gilt dann dieser Wert, egal wie `MAX_MCP_OUTPUT_TOKENS` steht; für Tools, die Bilder liefern, gilt er nicht. |
 
 Die Datei liegt im Ordner `tool-results` der Sitzung unter `~/.claude/projects/`. Das zählt vor allem bei Datenbankabfragen und langen Dateilisten. Brauchst du mehr Daten direkt im Gespräch, hebst du das Limit an: bei deinem eigenen Server mit `_meta` am einzelnen Tool, bei einem fremden mit `MAX_MCP_OUTPUT_TOKENS` (das aber die 50.000-Zeichen-Grenze nicht berührt). Denk dabei an die Kosten im Kontextfenster.
 
@@ -178,9 +178,9 @@ Die Variable bleibt gleich, auch wenn in der Sitzung Arbeitsverzeichnisse dazuko
 
    Fragt Claude Code vor dem Aufruf um Freigabe, antworte mit „Yes“. Erwartet: Claude kann die Zahl nicht nennen und meldet, dass es nur einen Hinweis mit einem Dateipfad bekommen hat. Der Pfad liegt im Ordner `tool-results` unter `~/.claude/projects/`. Beende die Sitzung mit `/exit`.
 
-4. Heb das Token-Limit an und stell dieselbe Frage. In Bash: `MAX_MCP_OUTPUT_TOKENS=50000 claude --permission-mode default`. In PowerShell: `$env:MAX_MCP_OUTPUT_TOKENS = "50000"; claude --permission-mode default` (danach `Remove-Item Env:MAX_MCP_OUTPUT_TOKENS`). Erwartet: wieder nur ein Hinweis mit einem Dateipfad, diesmal anders formuliert. In Schritt 3 hat das Token-Limit gegriffen; jetzt greift die Zeichengrenze, denn 60.000 Zeichen liegen über 50.000, und die ändert die Variable nicht. Beende die Sitzung.
+4. Heb das Token-Limit an und stell dieselbe Frage. In Bash: `MAX_MCP_OUTPUT_TOKENS=50000 claude --permission-mode default`. In PowerShell: `$env:MAX_MCP_OUTPUT_TOKENS = "50000"; claude --permission-mode default` (danach `Remove-Item Env:MAX_MCP_OUTPUT_TOKENS`). Erwartet: wieder nur ein Hinweis mit einem Dateipfad, denn 60.000 Zeichen liegen über der Zeichengrenze von 50.000, und die ändert die Variable nicht. Vergleich den Wortlaut mit Schritt 3: Im Probelauf nannte der Hinweis dort die Token, hier die Größe der Ausgabe. Beende die Sitzung.
 
-5. Heb die Grenze für das Tool selbst an. Entferne in `big_server.py` das `#` vor der Zeile `TOOL["_meta"] = …` und speichere. Starte eine neue Sitzung (ohne die Variable aus Schritt 4) und frag noch einmal. Erwartet: Claude nennt die Zahl `3000` (im Bericht steht sie als `03000`). Das Ergebnis kam diesmal vollständig im Gespräch an, weil der Server `_meta["anthropic/maxResultSizeChars"]` gesetzt hat. Beende die Sitzung.
+5. Heb die Grenze für das Tool selbst an. Entferne in `big_server.py` das `#` vor der Zeile `TOOL["_meta"] = …` und speichere. Starte eine neue Sitzung (ohne die Variable aus Schritt 4) und frag noch einmal. Erwartet: Claude nennt die Zahl `3000` (im Bericht steht sie als `03000`). Das Ergebnis kam diesmal vollständig im Gespräch an, weil der Server `_meta["anthropic/maxResultSizeChars"]` gesetzt hat: Für den Text dieses Tools gilt jetzt dieser Wert statt der beiden anderen Grenzen. Beende die Sitzung.
 
 **Aufräumen:** Lösch den Ordner `~/cc-workshop/mcp-grenzen`. Die Ergebnisdateien unter `~/.claude/projects/` räumt Claude Code mit den Sitzungen selbst auf.
 

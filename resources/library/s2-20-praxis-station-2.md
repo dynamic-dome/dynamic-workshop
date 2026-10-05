@@ -24,7 +24,7 @@ offers: [S2.2, S2.8, S2.10, S2.11, S2.14, S2.18]
 
 ## Auf einen Blick
 
-Diese Station schließt Session 2 ab. Du baust ein kleines Projekt, in dem die Bausteine der Session zusammenarbeiten: Ein Skill ruft ein MCP-Tool auf und liest eine Wissensquelle, ein Hook schreibt jeden Aufruf mit, und eine Regel sperrt das Tool, das niemand benutzen soll. Alles liegt in einem Wegwerf-Ordner; deine eigene Konfiguration bleibt, wie sie ist. Das dauert etwa 20 Minuten.
+Diese Station schließt Session 2 ab. Du baust ein kleines Projekt, in dem die Bausteine der Session zusammenarbeiten: Ein Skill ruft ein MCP-Tool auf und liest eine Wissensquelle, ein Hook schreibt jeden gelungenen Aufruf mit, und eine Regel sperrt das Tool, das niemand benutzen soll. Alles liegt in einem Wegwerf-Ordner; deine eigene Konfiguration bleibt, wie sie ist. Das dauert etwa 20 Minuten.
 
 Hast du unterwegs eine Übung ausgelassen, findest du sie in der Tabelle am Ende wieder.
 
@@ -34,20 +34,18 @@ Hast du unterwegs eine Übung ausgelassen, findest du sie in der Tabelle am Ende
 
 **Ziel:** Du rufst einen eigenen Skill auf, der einen Bericht aus einem MCP-Tool und einer Wissensdatei baut. Danach liest du in einer Logdatei, dass dein Hook den Aufruf gesehen hat, und prüfst, dass das gesperrte Tool gesperrt bleibt.
 
-**Startzustand:** ein neuer Ordner `~/cc-workshop/station2` mit der Datei `server.py` aus [S2.14](s2-14-mcp-stecker.md). Hast du den Ordner `~/cc-workshop/mcp` noch, kopierst du sie; sonst legst du sie nach S2.14, Schritt 1 neu an. Du brauchst nur Python.
+**Startzustand:** ein neuer Ordner `~/cc-workshop/station2` mit der Datei `server.py` aus [S2.14](s2-14-mcp-stecker.md). Leg zuerst den Ordner an (Befehle unten). Hast du `~/cc-workshop/mcp` noch, kopierst du die Datei danach hinein (`cp ~/cc-workshop/mcp/server.py .`, in PowerShell `Copy-Item "$HOME\cc-workshop\mcp\server.py" .`); sonst legst du sie nach S2.14, Schritt 1 neu an. Du brauchst nur Python.
 
 ```bash
 # macOS / Linux / Git Bash
 mkdir -p ~/cc-workshop/station2/kb ~/cc-workshop/station2/.claude/skills/room-report
 cd ~/cc-workshop/station2
-cp ~/cc-workshop/mcp/server.py .
 ```
 
 ```powershell
 # Windows PowerShell
 New-Item -ItemType Directory -Force "$HOME\cc-workshop\station2\kb", "$HOME\cc-workshop\station2\.claude\skills\room-report" | Out-Null
 Set-Location "$HOME\cc-workshop\station2"
-Copy-Item "$HOME\cc-workshop\mcp\server.py" .
 ```
 
 1. **Die Verbindung ([S2.14](s2-14-mcp-stecker.md)).** Speichere als `.mcp.json` (unter Windows `"command": "python"`):

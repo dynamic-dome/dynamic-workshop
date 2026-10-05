@@ -224,7 +224,7 @@ Greet the user in one sentence.
 7. `claude plugin list` zeigt `greeter` nicht mehr.
 8. `claude plugin marketplace remove practice-market`. Erwartet: `Successfully removed marketplace: practice-market`.
 9. `claude plugin marketplace list` nennt `practice-market` nicht mehr. Lösch den Ordner `~/cc-workshop/plugin-lifecycle`.
-10. Lösch die Kopie des Plugins im Cache, den Ordner `~/.claude/plugins/cache/practice-market`. Laut Doku bleibt sie nach dem Deinstallieren sonst 14 Tage liegen, und nach dem Deinstallieren deines letzten Plugins sogar, bis du wieder eines installierst.
+10. Sieh nach, ob der Ordner `~/.claude/plugins/cache/practice-market` noch da ist, und lösch ihn. Im Probelauf lag die Kopie des Plugins dort auch nach Schritt 8 noch. Die Doku erklärt es: Beim Deinstallieren markiert Claude Code die Kopie nur und räumt sie erst 14 Tage später weg, und nach dem Deinstallieren deines letzten Plugins bleibt sie liegen, bis du wieder eines installierst.
 
 ## Typische Fallen
 
