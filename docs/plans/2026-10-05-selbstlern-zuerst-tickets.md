@@ -35,8 +35,9 @@
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [x] cc1052a |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [x] siehe „Abschluss P8“ |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [x] siehe „Stand P9“; vom Owner am 2026-10-06 angesehen |
+| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | geplant, siehe „P10“ |
 
-DCO-Todos unter #9632: P1 #9636 · P2 #9637 · P3 #9638 · P4 #9639 · P5 #9640 · P6 #9641 · P7 #9642 · P8 #9643 · P9 #9644.
+DCO-Todos unter #9632: P1 #9636 · P2 #9637 · P3 #9638 · P4 #9639 · P5 #9640 · P6 #9641 · P7 #9642 · P8 #9643 · P9 #9644 · P10 #9665.
 
 Gegenüber der mit dem Owner besprochenen Reihenfolge steht der Playground (P4) vor dem Pilotregal, weil die Übung
 in S1.8 an ihm hängt.
@@ -881,6 +882,50 @@ P0). B8 ganz zu erfüllen hieße 61 Begründungen schreiben: eigenes Inhaltspake
   Tutor-Plugin aus einem frischen Klon). Start: `python -m http.server 8765 --bind 127.0.0.1` im Repo, dann
   `http://127.0.0.1:8765/resources/claude-code-workshop-ui.html`.
 
+## P10 — Begründung je Quiz-Antwort (B8 als Inhaltspaket)
+
+**Ziel:** Jede der 61 Lektionen begründet im Quiz jede der vier Antworten. Das Cockpit zeigt nach der Antwort die
+Begründung der gewählten Antwort (im Kapitel und in „Wiederholen“), der Tutor nutzt sie für seine Rückmeldung. Bis
+alle Begründungen stehen, zählt `validate --complete` den Stand wie bei Übung und Auflösung in P7. Die drei Quizze
+außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, zählen aber nicht ins Gate.
+
+### Fragerunde 2 (gestellt und beantwortet am 2026-10-06: „alle wie empfohlen“; DCO #9665)
+
+| Frage | Entscheidung |
+|---|---|
+| Format im Kapitel | Unter jeder Antwort ein eingerückter Punkt `- Warum: …` (1–2 Sätze). Gezielte Rückmeldung auf den Denkfehler der gewählten Antwort; 61 × 4 = 244 Texte in den Lektionen, 12 weitere in S0.1, S4.8, S4.11. |
+| Validator | Pflicht über `--complete`: `validate` prüft die Form (0 oder 4 Begründungen je Quiz, je 1 bis 220 Zeichen) und zählt in `--complete` „Lektionen mit Begründung: n von 61“; rot erst, wenn das letzte Inhaltspaket gemergt ist (P10f). Zwischenstände bleiben baubar. |
+| Cockpit | Nach der Antwort nur die Begründung der gewählten Antwort: „Richtig.“ plus Warum; „Nicht ganz.“ plus Warum dieser Antwort plus der heutige Verweis, erneut versuchen bleibt möglich. Gilt auch in „Wiederholen“. Die anderen Begründungen bleiben verdeckt (Abruf-Effekt). Ohne Begründung im Kapitel verhält sich das Quiz wie heute. |
+| Schreibweg | Sonnet-Schreiber je Paket im eigenen Worktree, vier Pakete nach Session; einzige Quelle ist der Kapiteltext (keine neuen Fakten), `validate` vor jedem Commit, lesende Codex-Gegenprüfung je Paket, Befunde an der Quelle geprüft, Owner-Stichprobe. Grob 2 bis 3 Mio. Sonnet-Tokens plus Codex, über mehrere Sessions. |
+
+**Entschieden beim Planen (Ableitungen aus den Antworten, keine neuen Fragen):**
+
+- Eine Begründung nennt den Grund aus dem Kapitel, bei „Falsch“ den Denkfehler („rm läuft über Bash, nicht über
+  Write“), und bringt keinen Fakt, der nicht im Kapitel steht; die Faktenregel der CLAUDE.md gilt damit ohne neuen
+  Beleg. Sie darf die Lösung nennen, weil sie erst nach der Antwort sichtbar wird: Die Längenregeln des Quiz
+  (`QUIZ_TELL_*`) gelten weiter nur für die Antworten.
+- Katalog: `quiz.why` als `{"correct": "…", "wrong": ["…", "…", "…"]}` in der Reihenfolge der Antworten, dazu
+  `quiz_html.why` für Code-Spans in der Begründung; fehlt die Begründung, fehlt das Feld. Das Cockpit mischt die
+  Antworten weiter; die Begründung reist mit ihrer Option (als Datenattribut, Text nur durch `esc()`).
+- Fixture-Bibliothek: ein Kapitel mit, eines ohne Begründungen, damit beide Zustände getestet sind. Vertragskatalog,
+  Personas und Golden bleiben unberührt: Das Quiz ist Inhalt, keine Einstufungs-Metadaten.
+- Spec §4.3 (Quiz-Block) wird um die `- Warum:`-Zeilen ergänzt; der Tutor (`skills/workshop/SKILL.md`, Rückmeldung
+  zum Quiz) liest die Begründung aus dem Katalog, der Mentor aus dem Kapitel; keine Inhaltskopie.
+- Reihenfolge der Inhaltspakete nach Session, weil die Schreiber dann je ein zusammenhängendes Themenfeld lesen und
+  die Pakete gleichmäßig groß sind: 19, 19, 14, 9 Lektionen.
+
+### Bauplan P10 (2026-10-06, nach Fragerunde 2)
+
+| Teil | Verhalten, das gebaut wird | Herkunft | Stand |
+|---|---|---|---|
+| P10a | **Format, Parser, Validator, Katalog.** `- Warum: …` je Antwort wird geparst (`quiz.why`); `validate` meldet 1 bis 3 Begründungen je Quiz, leere oder über 220 Zeichen lange als Befund `quiz-why`; `--complete` zählt „Lektionen mit Begründung: n von 61“. Durchstich an S1.5 (vier Begründungen), Fixture-Kapitel mit und ohne, Spec §4.3 ergänzt. Test zuerst. | Fragen 1, 2 | [ ] |
+| P10b | **Cockpit und Tutor.** Nach der Antwort die Begründung der gewählten Option (Kapitel und Wiederholen); ohne Begründung der heutige Verweis. Browser-Tests: richtig mit Warum, falsch mit Warum und Verweis, Kapitel ohne Warum unverändert, Wiederholen gleich. Tutor-Skill nennt die Begründung aus dem Katalog. | Frage 3, B8 | [ ] |
+| P10c | **Inhalte Session 1** (S1.1 bis S1.19, dazu S0.1): Sonnet-Schreiber im Worktree, je Quiz vier Begründungen aus dem Kapiteltext, `validate`; lesende Codex-Gegenprüfung (Sachfehler, neue Fakten, Widerspruch zum Kapitel); Befunde an der Quelle, Owner-Stichprobe drei Kapitel; Merge. | Frage 4 | [ ] |
+| P10d | **Inhalte Session 2** (S2.1 bis S2.19), Ablauf wie P10c. | Frage 4 | [ ] |
+| P10e | **Inhalte Session 3** (S3.1 bis S3.14), Ablauf wie P10c. | Frage 4 | [ ] |
+| P10f | **Inhalte Session 4** (S4.1 bis S4.7, S4.9, S4.10, dazu S4.8 und S4.11), Ablauf wie P10c. Danach wird `--complete` bei unter 61 rot. | Frage 4, Frage 2 | [ ] |
+| P10g | **Abnahme.** Volle Suite, `validate --complete` 61 von 61, Bilder des Quiz nach richtiger und falscher Antwort in beiden Themen (`cockpit_shots.py`), Durchgang mit dem Owner. | — | [ ] |
+
 ## Notizen für die nächsten Sessions (2026-10-06, zum Abschluss des Umbaus)
 
 **Wo der Stand liegt.** Diese Datei ist der Stand (je Paket ein Abschluss). Alles liegt auf `selbstlern-zuerst`,
@@ -897,7 +942,8 @@ Suite, `python tools/lint_currency.py`.
 2. **Website-Export des Cockpits** (DCO #9528) lohnt jetzt, weil die Ansicht für Lernende trägt. Dabei entscheiden,
    ob die Optik an die Website angeglichen wird (Antwort 6 hat das vertagt).
 3. **B8 als Inhaltspaket:** eine Begründung je Quiz-Antwort (61 Kapitel, Formatfeld im Quizblock, Validator,
-   Cockpit zeigt sie nach der Antwort). Erst dann ist die Rückmeldung im Quiz mehr als ein Verweis.
+   Cockpit zeigt sie nach der Antwort). Erst dann ist die Rückmeldung im Quiz mehr als ein Verweis. **Geplant 2026-10-06:** Fragerunde 2
+   beantwortet, Bauplan unter „P10“.
 4. **Tutor-Plugin** aus einem frischen Klon prüfen (`/dynamic-workshop:workshop start`, `next`, `learn`, `review`;
    DCO #9571): Es liest Katalog und Kapitel, die Kapitel haben sich seit dem letzten Test komplett geändert.
 
