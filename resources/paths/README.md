@@ -12,5 +12,5 @@ Jeder Pfad ist eine Empfehlung für jemanden, der neu im Thema ist. Mit der [Ein
 | [Aufgaben automatisieren und in CI einbauen](ziel-automation.md) | 6 | 13 Stunden |
 | [Eigene Agenten-Systeme bauen](ziel-agents.md) | 7 | 15 Stunden |
 | [Sicherheit und Compliance im Griff haben](ziel-security.md) | 8 | 18 Stunden |
-| [Einschätzen, ob und wie wir es einsetzen (Tech Lead)](ziel-einschaetzen.md) | 3 | 5,5 Stunden |
+| [Einschätzen, ob und wie wir es einsetzen (Tech Lead)](ziel-einschaetzen.md) | 2 | 5,5 Stunden |
 | [Live-Workshop (moderiert)](live-workshop.md) | 4 Sessions | — |

@@ -21,6 +21,9 @@ RANK = {"later": 0, "skip": 1, "skim": 2, "work": 3}
 STATUSES = tuple(RANK)
 
 
+MIN_LAST_STAGE_MINUTES = 30  # a smaller rest at the end of a path joins the stage before it (finding B12)
+
+
 def hours_text(minutes):
     """German: 'etwa 1 Stunde', 'etwa 2,5 Stunden', 'etwa 45 Minuten'."""
     if minutes < 60:
@@ -233,6 +236,13 @@ def place(catalog, answers):
         acc += m
     if acc > 0:
         stages.append({"n": n, "minutes": acc})
+    # A rest of a few minutes is no stage of its own: it joins the one before it, even beyond the budget.
+    if len(stages) > 1 and stages[-1]["minutes"] < MIN_LAST_STAGE_MINUTES:
+        rest = stages.pop()
+        stages[-1]["minutes"] += rest["minutes"]
+        for cid, stage in stage_of.items():
+            if stage == rest["n"]:
+                stage_of[cid] = stages[-1]["n"]
     if time == "schnellstart" and work_min + skim_min > rules["quickstart_warn_minutes"]:
         warnings.append({"code": "quickstart-long", "ids": []})
 

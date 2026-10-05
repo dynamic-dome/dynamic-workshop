@@ -9042,21 +9042,21 @@
     "id": "S4.9",
     "override": false,
     "reason": "assess",
-    "stage": 3,
+    "stage": 2,
     "status": "skim"
    },
    {
     "id": "S4.10",
     "override": false,
     "reason": "assess",
-    "stage": 3,
+    "stage": 2,
     "status": "skim"
    },
    {
     "id": "S4.11",
     "override": false,
     "reason": "capstone",
-    "stage": 3,
+    "stage": 2,
     "status": "skim"
    }
   ],
@@ -9066,12 +9066,8 @@
     "n": 1
    },
    {
-    "minutes": 144,
+    "minutes": 171,
     "n": 2
-   },
-   {
-    "minutes": 27,
-    "n": 3
    }
   ],
   "totals": {

@@ -326,6 +326,7 @@
     /*@@ENGINE_START@@*/
     const RANK = { later: 0, skip: 1, skim: 2, work: 3 };
     function skimMinutes(minutes, percent) { return Math.ceil((minutes * percent) / 100); }
+    const MIN_LAST_STAGE_MINUTES = 30;
     function stageMinutes(chapter, status, percent) {
       return status === "work" ? chapter.minutes : skimMinutes(chapter.minutes, percent);
     }
@@ -484,6 +485,13 @@
         acc += m;
       });
       if (acc > 0) stages.push({ n, minutes: acc });
+      // A rest of a few minutes is no stage of its own: it joins the one before it, even beyond the budget (B12).
+      if (stages.length > 1 && stages[stages.length - 1].minutes < MIN_LAST_STAGE_MINUTES) {
+        const rest = stages.pop();
+        const lastStage = stages[stages.length - 1];
+        lastStage.minutes += rest.minutes;
+        Object.keys(stageOf).forEach(cid => { if (stageOf[cid] === rest.n) stageOf[cid] = lastStage.n; });
+      }
       if (time === "schnellstart" && workMin + skimMin > rules.quickstart_warn_minutes) warnings.push({ code: "quickstart-long", ids: [] });
 
       const order = {};
@@ -872,8 +880,14 @@
     function renderReview() {
       const done = ORDERED.filter(c => progress.done[c.id] && c.quiz);
       if (!done.length) return `<h1>Wiederholen</h1><p class="lead">Hier fragen wir dich später nach Kapiteln, die du erledigt hast — mit Abstand, damit es hängen bleibt. Markiere zuerst ein Kapitel als erledigt.</p>`;
-      const picked = done.slice().sort((a, b) => (progress.doneAt[a.id] || "").localeCompare(progress.doneAt[b.id] || "")).slice(0, 5);
-      return `<h1>Wiederholen</h1><p class="lead">Fünf Fragen zu Kapiteln, die du am längsten nicht gesehen hast. Abrufen aus dem Gedächtnis festigt mehr als erneutes Lesen.</p>` +
+      // Recall works with distance: a chapter is due a day after it was marked done, not at once (B9).
+      const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+      const doneTime = c => { const at = Date.parse(progress.doneAt[c.id] || ""); return Number.isFinite(at) ? at : 0; };
+      const due = done.filter(c => doneTime(c) <= dayAgo);
+      if (!due.length) return `<h1>Wiederholen</h1><p class="lead">Noch nichts fällig. Abrufen wirkt mit Abstand: Was du heute erledigt hast, fragen wir frühestens morgen ab.</p><p class="muted">${done.length === 1 ? "Ein Kapitel wartet" : done.length + " Kapitel warten"} auf seinen Tag.</p>`;
+      const picked = due.slice().sort((a, b) => doneTime(a) - doneTime(b)).slice(0, 5);
+      const count = picked.length === 1 ? "Eine Frage zu dem Kapitel" : picked.length + " Fragen zu den Kapiteln";
+      return `<h1>Wiederholen</h1><p class="lead">${count}, die du am längsten erledigt hast. Abrufen aus dem Gedächtnis festigt mehr als erneutes Lesen.</p>` +
         shuffle(picked).map(c => `<div class="review-q"><p class="small muted">${chapterLink(c)}</p>${quizBlock(c, "rv")}</div>`).join("");
     }
 

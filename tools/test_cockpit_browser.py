@@ -503,3 +503,26 @@ def test_a_wrong_quiz_answer_says_where_to_look(browser, site):
     feedback = page.locator(".quiz .feedback").inner_text()
     assert feedback.startswith("Nicht ganz") and "Auflösung" in feedback and "Im Detail" in feedback
     page.close()
+
+
+def _done_script(days_ago):
+    return ("localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {'S2.8': true}, doneAt: {'S2.8': "
+            f"new Date(Date.now() - {days_ago} * 86400000).toISOString()}}}}));")
+
+
+def test_review_waits_a_day_before_it_asks(browser, site):
+    """B9: a chapter marked a minute ago was asked at once, under the heading 'Abrufen mit Abstand'."""
+    page, errors = open_page(browser, site + "?screen=wiederholen", init_script=_done_script(0))
+    assert page.locator(".review-q").count() == 0
+    assert "Noch nichts fällig" in page.locator("main").inner_text()
+    assert errors == []
+    page.close()
+
+
+def test_review_asks_what_is_due_and_counts_honestly(browser, site):
+    page, errors = open_page(browser, site + "?screen=wiederholen", init_script=_done_script(2))
+    assert page.locator(".review-q").count() == 1
+    lead = page.locator("main .lead").inner_text()
+    assert lead.startswith("Eine Frage") and "Fünf" not in lead
+    assert errors == []
+    page.close()
