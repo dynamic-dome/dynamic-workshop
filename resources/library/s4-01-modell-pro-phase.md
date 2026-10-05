@@ -20,7 +20,7 @@ aliases: ["3.2"]
 <!-- meta:start -->
 > **Regal:** [Modelle & Kosten](README.md#cost) · **Stufe:** Vertiefung · **~15 Min** · **Voraussetzungen:** [S1.7 Modellwahl und Effort](s1-07-modellwahl-und-effort.md) · [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md)
 >
-> ← [S3.15 Praxis-Station Session 3: eine Übung wählen](s3-15-praxis-station-3.md) · [Bibliothek](README.md) · [S4.2 Codex-Schwarm und die Datenfluss-Grenze](s4-02-codex-schwarm.md) →
+> ← [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) · [Bibliothek](README.md) · [S4.2 Codex-Schwarm und die Datenfluss-Grenze](s4-02-codex-schwarm.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

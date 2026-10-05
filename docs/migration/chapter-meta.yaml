@@ -5,7 +5,7 @@
   title: Werkstatt einrichten
   shelf: start
   level: core
-  minutes: 20
+  minutes: 25
   requires: []
   safety_floor: false
   transferable: false
@@ -17,7 +17,7 @@
   title: 'Erster Kontakt: sofort eine Datei bauen'
   shelf: start
   level: core
-  minutes: 12
+  minutes: 25
   requires:
   - S0.1
   safety_floor: false
@@ -30,7 +30,7 @@
   title: 'Coding-Agent statt Chat: das Denkmodell'
   shelf: start
   level: core
-  minutes: 12
+  minutes: 15
   requires:
   - S1.1
   safety_floor: false
@@ -42,7 +42,7 @@
   title: 'Die Oberflächen: CLI, Desktop, IDE, Web, iOS'
   shelf: start
   level: core
-  minutes: 12
+  minutes: 10
   requires:
   - S1.2
   safety_floor: false
@@ -54,7 +54,7 @@
   title: Eingebaute Werkzeuge und ihre Namen
   shelf: start
   level: core
-  minutes: 12
+  minutes: 10
   requires:
   - S1.1
   safety_floor: false
@@ -66,7 +66,7 @@
   title: 'Rechte im Alltag: default und acceptEdits'
   shelf: permissions
   level: core
-  minutes: 15
+  minutes: 20
   requires:
   - S1.2
   safety_floor: true
@@ -115,7 +115,7 @@
   title: Kontext steuern mit /compact und /rewind
   shelf: context
   level: core
-  minutes: 12
+  minutes: 15
   requires:
   - S1.8
   safety_floor: false
@@ -838,7 +838,7 @@
   shelf: community
   level: bonus
   minutes: 15
-  after: S2.13
+  after: S2.20
   requires: []
   safety_floor: false
   transferable: true
@@ -849,8 +849,8 @@
   title: Mit Claude Code lernen
   shelf: community
   level: bonus
-  minutes: 12
-  after: S0.1
+  minutes: 35
+  after: S1.20
   requires: []
   safety_floor: false
   transferable: true
@@ -862,7 +862,7 @@
   shelf: community
   level: bonus
   minutes: 15
-  after: S3.2
+  after: S3.15
   requires: []
   safety_floor: false
   transferable: true
@@ -874,7 +874,7 @@
   shelf: community
   level: bonus
   minutes: 15
-  after: S4.6
+  after: S4.7
   requires: []
   safety_floor: false
   transferable: true

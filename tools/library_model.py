@@ -32,6 +32,7 @@ MODERATOR_BLOCK = "<summary>Für Moderierende</summary>"
 CHAPTER_TYPES = ("lesson", "setup", "practice", "capstone", "community")
 LEVELS = ("core", "deep-dive", "bonus")
 
+NL = "\n"
 SESSION_ID = _core.SESSION_ID
 EXTRA_ID = _core.EXTRA_ID
 FENCE = re.compile(r"^\s*(```|~~~)")
@@ -48,6 +49,14 @@ ANSWER_SUMMARY = "<details><summary>Auflösung</summary>"
 ANSWER_BLOCK = re.compile(re.escape(ANSWER_SUMMARY) + r"(.*?)</details>", re.S)
 DETAILS_BLOCK = re.compile(r"<details>.*?</details>", re.S)
 NUMBERED = re.compile(r"^\d+\.\s+(.+?)\s*$", re.M)
+# The standard for self-learners: an exercise names its time in the heading; "Extra" exercises are voluntary.
+TIMED_HEADING = re.compile(r"^###\s+(.+?)\s+\(etwa (\d+) Minuten\)\s*$", re.M)
+EXTRA_HEADING = re.compile(r"^(Extra|Kür)\b")
+DONE_LIST = "Geschafft, wenn"
+READING_WORDS_PER_MINUTE = 160
+READ_SECTIONS = ("Schnellcheck", "Auf einen Blick", "Bild im Kopf", "Im Detail", "Selbst machen", "Typische Fallen",
+                 "Check")
+WORD = re.compile(r"[^\W_]")
 
 
 class ChapterError(Exception):
@@ -304,6 +313,44 @@ def _links(body: str) -> list:
         if not in_fence:
             out.extend(LINK.findall(line))
     return out
+
+
+def timed_exercises(text: str) -> list:
+    """(title, minutes) of every heading '### … (etwa N Minuten)' in a section text."""
+    return [(title, int(minutes)) for title, minutes in TIMED_HEADING.findall(_without_fences(text or ""))]
+
+
+def exercise_minutes(chapter) -> int:
+    """Minutes of the hands-on parts a learner is expected to do: every timed heading in 'Im Detail' and
+    'Selbst machen' except the voluntary ones (Extra, Kür)."""
+    return sum(minutes for name in ("Im Detail", "Selbst machen")
+               for title, minutes in timed_exercises(chapter.sections.get(name, ""))
+               if not EXTRA_HEADING.match(title))
+
+
+def reading_words(chapter) -> int:
+    """Words a learner reads: all sections except the link list, without code blocks, comments and link targets."""
+    text = NL.join(_without_fences(chapter.sections.get(name, "")) for name in READ_SECTIONS)
+    text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
+    text = re.sub(r"\]\([^)]*\)", "]", text)
+    text = re.sub(r"<[^>]+>", " ", text)
+    return sum(1 for token in text.split() if WORD.search(token))
+
+
+def honest_minutes(chapter) -> float:
+    """Reading time plus exercises, unrounded."""
+    return reading_words(chapter) / READING_WORDS_PER_MINUTE + exercise_minutes(chapter)
+
+
+def _without_fences(text: str) -> str:
+    out, in_fence = [], False
+    for line in text.split(NL):
+        if FENCE.match(line):
+            in_fence = not in_fence
+            continue
+        if not in_fence:
+            out.append(line)
+    return NL.join(out)
 
 
 def _as_list(value) -> list:

@@ -282,9 +282,9 @@ def test_demo_link_to_a_goal_path_that_is_not_generated_is_reported(lib_dir):
 
 # --- answers to the recall questions (design 2026-10-05, package P3) --------------------------------------
 
-def rules_with_required(lib_dir, required):
+def rules_with_standard(lib_dir, standard):
     lib = lm.load_library(lib_dir)
-    return sorted({p.rule for p in bl.validate(lib, complete=False, answers_required=frozenset(required))})
+    return sorted({p.rule for p in bl.validate(lib, complete=False, standard=frozenset(standard))})
 
 
 def test_every_recall_question_needs_exactly_one_answer(lib_dir):
@@ -299,12 +299,73 @@ def test_an_unclosed_answer_block_is_reported(lib_dir):
 
 def test_answers_are_required_only_for_chapters_on_the_list(lib_dir):
     edit(lib_dir, EVENTS, "Du ordnest Events zu.", "Du ordnest Events zu." + chr(10) * 2 + "1. Wann feuert Stop?")
-    assert rules_with_required(lib_dir, []) == []
-    assert rules_with_required(lib_dir, ["S2.7"]) == ["answers-required"]
-    assert rules_with_required(lib_dir, ["S2.8"]) == []  # S2.8 has its answers
+    assert rules_with_standard(lib_dir, []) == []
+    assert "answers-required" in rules_with_standard(lib_dir, ["S2.7"])
+    assert "answers-required" not in rules_with_standard(lib_dir, ["S2.8"])  # S2.8 has its answers
 
 
 def test_validate_reports_how_many_lessons_have_an_exercise_and_answers(lib_dir, capsys):
     assert bl.main(["validate", "--root", str(lib_dir)]) == 0
     out = capsys.readouterr().out
     assert "Lektionen mit Übung: 2 von 2" in out and "mit Auflösung: 1 von 2" in out
+
+
+# --- the standard for self-learners (design 2026-10-05, package P5) ---------------------------------------
+# Chapters listed in tools/fixtures/standard-chapters.txt carry answers, an exercise with a time and a list
+# "Geschafft, wenn", and minutes that match reading time plus exercises.
+
+EXERCISE = "### Übung: den Hook eintragen (etwa 15 Minuten)"
+
+
+def test_the_fixture_chapter_meets_the_standard(lib_dir):
+    assert rules_with_standard(lib_dir, ["S2.8"]) == []
+
+
+def test_an_unknown_id_on_the_standard_list_is_reported(lib_dir):
+    assert rules_with_standard(lib_dir, ["S9.9"]) == ["standard-list"]
+
+
+def test_a_core_lesson_on_the_standard_list_needs_an_exercise(lib_dir):
+    # without the H2 the exercise text belongs to "Im Detail" (a link to the old anchor breaks, nothing else)
+    edit(lib_dir, HOOK, "## Selbst machen" + chr(10) * 2, "")
+    assert rules_with_standard(lib_dir, []) == ["links-resolve"]
+    assert rules_with_standard(lib_dir, ["S2.8"]) == ["exercise-required", "links-resolve"]
+
+
+def test_an_exercise_needs_a_time_in_its_heading(lib_dir):
+    edit(lib_dir, HOOK, EXERCISE, "### Übung: den Hook eintragen")
+    assert rules_with_standard(lib_dir, []) == []
+    assert "exercise-shape" in rules_with_standard(lib_dir, ["S2.8"])
+
+
+def test_an_exercise_needs_a_done_list(lib_dir):
+    edit(lib_dir, HOOK, "**Geschafft, wenn:**", "Am Ende:")
+    assert rules_with_standard(lib_dir, ["S2.8"]) == ["exercise-shape"]
+
+
+@pytest.mark.parametrize("minutes", [40, 5, 12])
+def test_minutes_follow_reading_time_plus_exercises(lib_dir, minutes):
+    # the fixture needs about 16 minutes: 40 and 5 are too far off, 12 is no multiple of five
+    edit(lib_dir, HOOK, "minutes: 15", f"minutes: {minutes}")
+    assert rules_with_standard(lib_dir, []) == []
+    assert rules_with_standard(lib_dir, ["S2.8"]) == ["minutes-honest"]
+
+
+def test_extra_exercises_carry_their_own_time(lib_dir):
+    edit(lib_dir, HOOK, "## Check", "### Extra: noch ein Hook (etwa 30 Minuten)" + chr(10) * 2 + "Freiwillig."
+         + chr(10) * 2 + "## Check")
+    assert rules_with_standard(lib_dir, ["S2.8"]) == []
+
+
+def test_code_blocks_do_not_count_as_reading_time(lib_dir):
+    block = chr(10).join(["```text"] + ["wort " * 20] * 200 + ["```"])
+    edit(lib_dir, HOOK, "Text mit einem [Link]", block + chr(10) * 2 + "Text mit einem [Link]")
+    assert rules_with_standard(lib_dir, ["S2.8"]) == []
+
+
+def test_the_real_standard_list_names_existing_chapters_and_they_pass():
+    lib = lm.load_library(ROOT / "resources" / "library")
+    standard = bl.load_standard()
+    assert standard, "the list is empty"
+    found = [p for p in bl.validate(lib, complete=False, meta=bl.load_meta(), standard=standard)]
+    assert found == []

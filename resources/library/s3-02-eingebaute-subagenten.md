@@ -19,7 +19,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kern · **~10 Min** · **Voraussetzungen:** [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md)
 >
-> ← [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md) · [Bibliothek](README.md) · [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) →
+> ← [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md) · [Bibliothek](README.md) · [S3.3 Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

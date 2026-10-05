@@ -262,7 +262,7 @@ Prüf, ob es schon einen `hooks`-Abschnitt gibt. Wenn ja, führst du deinen Eint
 mkdir -p ~/.claude/hooks
 ```
 
-Schreib `~/.claude/hooks/safety-check.sh` mit dem Inhalt aus „Im Detail" (Abschnitt „Ein echter Wächter"). Das Skript braucht `jq` ([S0.1](s0-01-werkstatt-einrichten.md)); unter Windows ohne Git Bash nimmst du die PowerShell-Variante unten. Dieselbe Datei liegt getestet im Repo als [`resources/demos/assets/hooks/safety-check.sh`](../demos/assets/hooks/safety-check.sh), du kannst sie also auch kopieren, statt zu tippen.
+Schreib `~/.claude/hooks/safety-check.sh` mit dem Inhalt aus „Im Detail" (Abschnitt „Ein echter Wächter"). Das Skript braucht `jq` ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#jq)); unter Windows ohne Git Bash nimmst du die PowerShell-Variante unten. Dieselbe Datei liegt getestet im Repo als [`resources/demos/assets/hooks/safety-check.sh`](../demos/assets/hooks/safety-check.sh), du kannst sie also auch kopieren, statt zu tippen.
 
 ```bash
 # Make it executable

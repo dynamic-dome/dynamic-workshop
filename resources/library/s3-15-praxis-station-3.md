@@ -19,7 +19,7 @@ offers: [S3.4, S3.6]
 <!-- meta:start -->
 > **Regal:** [Praxis-Stationen](README.md#practice) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** keine
 >
-> ← [S3.14 Self-Improve-Loop: was geht und wo es endet](s3-14-self-improve-loop.md) · [Bibliothek](README.md) · [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) →
+> ← [S3.14 Self-Improve-Loop: was geht und wo es endet](s3-14-self-improve-loop.md) · [Bibliothek](README.md) · [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick

@@ -5,8 +5,10 @@
 ## 1 · Selbst lernen
 
 **Einrichten.** Kapitel [S0.1 Werkstatt einrichten](resources/library/s0-01-werkstatt-einrichten.md): Claude Code
-installieren und anmelden, Git und Python prüfen, Arbeitsordner `~/cc-workshop` anlegen. Unter Windows funktionieren alle
-Beispiele in Git Bash; wo es nötig ist, stehen PowerShell-Varianten daneben.
+installieren und anmelden, Git und Python prüfen. Mehr brauchst du für den Anfang nicht; das Workshop-Repo, die GitHub
+CLI, `jq` und Node.js rüstest du nach, wenn ein Kapitel sie verlangt
+([Werkstatt erweitern](resources/reference/werkstatt-erweitern.md)). Deine Übungsordner liegen unter `~/cc-workshop`.
+Unter Windows funktionieren alle Beispiele in Git Bash; wo es nötig ist, stehen PowerShell-Varianten daneben.
 
 **Einstufen.** Fünf Minuten, keine Noten, jederzeit änderbar — auf einer von drei Oberflächen:
 

@@ -21,7 +21,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Remote, Docker, Isolation](README.md#remote-isolation) · **Stufe:** Kür · **~15 Min** · **Voraussetzungen:** [S1.18 Worktrees als Testlabor](s1-18-worktrees.md)
 >
-> ← [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) · [Bibliothek](README.md) · [S4.8 Abschlussprojekt mit Bewertung](s4-08-abschlussprojekt.md) →
+> ← [S4.6 Unterwegs: Remote Control und /teleport](s4-06-remote-und-teleport.md) · [Bibliothek](README.md) · [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

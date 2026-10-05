@@ -5,7 +5,7 @@ title: "Community-Skills: wer baut was, das wirklich hilft"
 shelf: community
 level: bonus
 minutes: 15
-after: S2.13
+after: S2.20
 requires: []
 safety_floor: false
 transferable: true
@@ -28,7 +28,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Community & Lernen](README.md#community) · **Stufe:** Kür · **~15 Min** · **Voraussetzungen:** keine
 >
-> ← [S2.13 Lieferkettenrisiken bei Plugins](s2-13-plugin-lieferkette.md) · [Bibliothek](README.md) · [S2.14 MCP: der Integrationsstecker](s2-14-mcp-stecker.md) →
+> ← [S2.20 Praxis-Station Session 2: eine Übung wählen](s2-20-praxis-station-2.md) · [Bibliothek](README.md) · [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick

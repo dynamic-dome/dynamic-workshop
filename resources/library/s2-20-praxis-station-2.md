@@ -19,7 +19,7 @@ offers: [S2.2, S2.8, S2.10, S2.11, S2.14, S2.18]
 <!-- meta:start -->
 > **Regal:** [Praxis-Stationen](README.md#practice) · **Stufe:** Kern · **~18 Min** · **Voraussetzungen:** keine
 >
-> ← [S2.19 Grenzen von RAG und Datenschutz](s2-19-rag-grenzen.md) · [Bibliothek](README.md) · [S3.1 Was ist ein Agent? Spezialisierung statt Allrounder](s3-01-was-ist-ein-agent.md) →
+> ← [S2.19 Grenzen von RAG und Datenschutz](s2-19-rag-grenzen.md) · [Bibliothek](README.md) · [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick

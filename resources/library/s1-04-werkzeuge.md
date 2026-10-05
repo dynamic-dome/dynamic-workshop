@@ -4,20 +4,21 @@ type: lesson
 title: Eingebaute Werkzeuge und ihre Namen
 shelf: start
 level: core
-minutes: 12
+minutes: 10
 requires: [S1.1]
 safety_floor: false
 transferable: false
-outcome: "Ich kann die sechs Alltags-Werkzeuge Read, Glob, Grep, Edit, Write und Bash mit exaktem Namen benennen und sagen, welche eine Freigabe brauchen."
+outcome: "Ich kann die Alltags-Werkzeuge Read, Glob, Grep, Edit, Write und Bash mit exaktem Namen benennen, im Transkript ablesen, welches Claude gerade nutzt, und sagen, welche eine Freigabe brauchen."
 sources:
   - https://code.claude.com/docs/en/tools-reference
+  - https://code.claude.com/docs/en/interactive-mode
 aliases: []
 ---
 
 # S1.4 · Eingebaute Werkzeuge und ihre Namen
 
 <!-- meta:start -->
-> **Regal:** [Erste Schritte & Denkmodell](README.md#start) · **Stufe:** Kern · **~12 Min** · **Voraussetzungen:** [S1.1 Erster Kontakt: sofort eine Datei bauen](s1-01-erster-kontakt.md)
+> **Regal:** [Erste Schritte & Denkmodell](README.md#start) · **Stufe:** Kern · **~10 Min** · **Voraussetzungen:** [S1.1 Erster Kontakt: sofort eine Datei bauen](s1-01-erster-kontakt.md)
 >
 > ← [S1.3 Die Oberflächen: CLI, Desktop, IDE, Web, iOS](s1-03-oberflaechen.md) · [Bibliothek](README.md) · [S1.5 Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md) →
 <!-- meta:end -->
@@ -25,30 +26,32 @@ aliases: []
 ## Schnellcheck
 
 - Kannst du ohne Nachschlagen sagen, welche der Tools `Read`, `Glob`, `Grep`, `Edit`, `Write` und `Bash` eine Freigabe verlangen?
-- Hast du in einer Sitzung schon einmal gesehen, welches Tool Claude gerade aufruft, und den Namen einer Rechte-Regel zuordnen können?
+- Hast du in einer Sitzung schon einmal das ausführliche Transkript geöffnet und abgelesen, welches Tool Claude gerade aufgerufen hat?
 
 ## Auf einen Blick
 
-Claude Code arbeitet über Werkzeuge (Tools), und jedes hat einen festen Namen wie `Read`, `Edit` oder `Bash`. Genau diese Namen schreibst du später in Rechte-Regeln, Hook-Matcher und die Konfiguration von Agenten. Lesende Tools (`Read`, `Glob`, `Grep`) laufen in deinem Arbeitsordner ohne Rückfrage; ändernde und ausführende (`Edit`, `Write`, `Bash`) brauchen im Modus `default` deine Freigabe.
+Claude Code arbeitet über Werkzeuge (Tools), und jedes hat einen festen Namen wie `Read`, `Edit` oder `Bash`. Lesende Tools (`Read`, `Glob`, `Grep`) laufen in deinem Arbeitsordner ohne Rückfrage; ändernde und ausführende (`Edit`, `Write`, `Bash`) brauchen im Modus `default` deine Freigabe.
+
+Die Namen sind mehr als Etiketten: Mit genau diesen Namen schreibst du später Rechte-Regeln ([S1.5](s1-05-rechte-im-alltag.md)).
 
 ## Bild im Kopf
 
-Jedes Tool ist eine eigene Zutrittszone. `Read` ist die Lobby: Da kommt jeder rein. `Bash` ist der Serverraum: Dafür brauchst du eine ausdrückliche Berechtigung. Wenn du Rechte (allow/deny-Regeln) oder Hook-Matcher einrichtest, sprichst du die Zonen mit genau diesen Namen an.
+Jedes Tool ist eine eigene Zutrittszone. `Read` ist die Lobby: Da kommt jeder rein. `Bash` ist der Serverraum: Dafür brauchst du eine ausdrückliche Berechtigung. Und wie an jeder Tür ein Schild hängt, hat jede Zone einen festen Namen, mit dem du sie später in Regeln ansprichst.
 
 ```mermaid
 flowchart LR
   A["Claude will etwas tun"] --> B{"Welches Tool?"}
   B --> L["Lesen: Read, Glob, Grep<br/>ohne Freigabe im Arbeitsordner"]
   B --> W["Ändern und Ausführen:<br/>Edit, Write, Bash<br/>mit Freigabe"]
-  L -.-> N["Die Namen sind die Bausteine<br/>für Rechte-Regeln und Hook-Matcher"]
+  L -.-> N["Die Namen sind die Bausteine<br/>für Rechte-Regeln"]
   W -.-> N
 ```
 
 ## Im Detail
 
-### Die sechs Alltags-Werkzeuge
+### Die Alltags-Werkzeuge
 
-Claude Code arbeitet über **Tools**; jede Fähigkeit hat einen eigenen Tool-Namen. Diese Namen zählen für Rechte, Hooks und die Konfiguration von Agenten. Die folgenden sechs begegnen dir in den ersten Sitzungen, das ist der Alltagskern:
+Diese Werkzeuge begegnen dir in den ersten Sitzungen:
 
 | Tool | Was es tut | Freigabe nötig? |
 |------|------------|-----------------|
@@ -58,65 +61,95 @@ Claude Code arbeitet über **Tools**; jede Fähigkeit hat einen eigenen Tool-Nam
 | `Edit` | Dateien gezielt ändern (eine Stelle ersetzen) | Ja |
 | `Write` | Dateien anlegen oder überschreiben | Ja |
 | `Bash` | Shell-Befehle ausführen | Ja |
+| `PowerShell` | Shell-Befehle unter Windows ausführen | Ja |
 
-Ob `Glob` und `Grep` bei dir überhaupt auftauchen, hängt vom Betriebssystem ab; siehe „Typische Fallen".
+Welche davon bei dir auftauchen, hängt vom Betriebssystem ab:
 
-### Was „Freigabe nötig" genau heißt
+- **macOS, Linux, WSL:** `Glob` und `Grep` fehlen standardmäßig. Claude sucht dort mit `find` und `grep` über das `Bash`-Tool.
+- **Windows:** `Glob` und `Grep` gehören zum Standard. Ohne Git for Windows laufen Shell-Befehle über `PowerShell`. Mit Git for Windows gibt es `Bash`, und für Konten mit Claude-Abo oder Console-Key bleibt `PowerShell` daneben eingeschaltet.
 
-Die Spalte gilt für den Modus `default` (in der Oberfläche „Manual") und für Pfade in deinem Arbeitsordner. Zwei Feinheiten: `Read`, `Glob` und `Grep` fragen trotzdem nach, wenn sie außerhalb des Arbeitsordners und der zusätzlich freigegebenen Ordner lesen sollen. `Bash` steht auf „Ja", führt aber eine eingebaute Liste reiner Lesebefehle ohne Rückfrage aus. Im Modus `auto` entscheidet ein Klassifikator statt dir über die meisten Rückfragen. Die Modi im Einzelnen: [S1.5](s1-05-rechte-im-alltag.md) und [S1.6](s1-06-rechte-modi.md).
+### Was „Freigabe nötig“ genau heißt
 
-### Wo du die Namen brauchst
+Die Spalte gilt für den Modus `default` und für Pfade in deinem Arbeitsordner. Drei Abweichungen solltest du kennen:
 
-Wenn du Rechte (allow/deny-Regeln) oder Hook-Matcher einrichtest, verwendest du genau diese Tool-Namen. Wie das aussieht, zeigen [S1.5](s1-05-rechte-im-alltag.md) für allow/deny-Regeln, [S2.8](s2-08-hook-einrichten.md) für Hook-Matcher und [S3.3](s3-03-eigener-subagent.md) für die Werkzeugliste eines eigenen Subagenten.
+- `Read`, `Glob` und `Grep` fragen doch nach, wenn sie **außerhalb des Arbeitsordners** lesen sollen.
+- `Bash` führt eine eingebaute Liste **reiner Lesebefehle** ohne Rückfrage aus, etwa `ls` oder `cat`.
+- In anderen **Rechte-Modi** verschiebt sich, wer entscheidet. Die Modi stehen in [S1.5](s1-05-rechte-im-alltag.md) und [S1.6](s1-06-rechte-modi.md).
 
-### Die übrigen Werkzeuge
+### Wo du die Namen siehst
 
-Die vollständige Liste, mit `WebSearch`, `WebFetch`, `LSP`, `Skill`, `Agent`, `Monitor`, `AskUserQuestion`, `TaskCreate`/`TaskList`/`TaskUpdate`, `NotebookEdit`, `PowerShell` und weiteren, steht in der [offiziellen Tools-Referenz](https://code.claude.com/docs/en/tools-reference). Am ersten Tag brauchst du sie nicht. `Skill` und `Agent` lernst du ausführlich in [S2.1](s2-01-skills-und-commands.md) (Skills) und [S3.1](s3-01-was-ist-ein-agent.md) (Agenten) kennen.
+In der normalen Ansicht fasst Claude Code vieles zusammen: „Read 1 file“, „Ran 1 shell command“. Die genauen Aufrufe zeigt das ausführliche Transkript. `Ctrl+O` schaltet es ein und wieder aus. Dort steht jeder Aufruf mit Name und Argument, etwa `Write(notes.txt)` oder `Bash(wc -l notes.txt)`.
+
+Auch die Rückfrage nennt das Werkzeug: Über einem Shell-Befehl steht „Bash command“, über einer neuen Datei „Create file“.
+
+### Weitere Werkzeuge
+
+Claude Code hat mehr Werkzeuge, etwa `WebSearch` und `WebFetch` fürs Netz, `Agent` für Helfer ([S3.1](s3-01-was-ist-ein-agent.md)) und `Skill` ([S2.1](s2-01-skills-und-commands.md)). Die vollständige Liste steht in der [offiziellen Tools-Referenz](https://code.claude.com/docs/en/tools-reference). Am ersten Tag brauchst du sie nicht.
 
 ## Selbst machen
 
-### Beobachten: welche Tools Claude hat und nutzt
+### Übung: Werkzeuge im Transkript ablesen (etwa 5 Minuten)
 
-Frag Claude in einer laufenden Sitzung, welche Werkzeuge es gerade hat:
+**Ziel:** Du liest im Transkript ab, welche Werkzeuge Claude für eine kleine Aufgabe aufruft, und gleichst mit der Tabelle ab, welches gefragt hat.
+
+**Startzustand:** eine Sitzung im Ordner `~/cc-workshop/hello`, gestartet mit `claude --permission-mode default`.
+
+1. Gib diesen Auftrag ein und beantworte jede Rückfrage mit „Yes“. Zähl mit, wie oft Claude fragt:
 
 <!-- cockpit:example -->
 ```text
-What tools do you have access to?
+Create notes.txt with three short lines. Then read it back and count its lines with a shell command.
 ```
 
-Claude antwortet mit einer Zusammenfassung in eigenen Worten. Vergleiche sie mit der Tabelle oben: Welche der sechs Alltags-Werkzeuge tauchen auf, welche fehlen? `/mcp` zeigt die verbundenen MCP-Server mit Status und Zahl ihrer Tools; aufrufbar sind diese Tools unter Namen der Form `mcp__<server>__<tool>`.
+2. Drück `Ctrl+O`. Das ausführliche Transkript zeigt jeden Aufruf mit Namen.
+3. Schreib die Namen der Werkzeuge ab, die Claude benutzt hat, und notier zu jedem: Hat es gefragt?
+4. Drück noch einmal `Ctrl+O`, um zur normalen Ansicht zurückzukehren.
+5. Vergleich mit der Tabelle. Hat ein Werkzeug nicht gefragt, obwohl dort „Ja“ steht? Dann sieh dir den Befehl an: Stand er auf der Liste reiner Lesebefehle?
 
-Lass Claude danach eine kleine Aufgabe erledigen, etwa die aus [S1.1](s1-01-erster-kontakt.md), und achte darauf, welches Tool es jeweils aufruft: zum Beispiel `Write` für die neue Datei und `Bash` zum Ausführen.
+**Geschafft, wenn:**
+
+- [ ] du mindestens zwei Werkzeugnamen aus deinem eigenen Transkript abgeschrieben hast
+- [ ] du zu jedem sagen kannst, ob es eine Rückfrage ausgelöst hat
+- [ ] du jede Abweichung von der Tabelle mit einer der drei Abweichungen erklären kannst
 
 ## Typische Fallen
 
-- **Auf macOS, Linux und WSL tauchen `Glob` und `Grep` nicht auf.** Dort lässt Claude Code die beiden standardmäßig weg und sucht mit `find` und `grep` über das `Bash`-Tool. Diese Suchen kommen bei deinen Hooks und Rechte-Regeln als `Bash`-Aufrufe an. Unter Windows gehören `Glob` und `Grep` zum Standard.
-- **Unter Windows laufen Shell-Befehle oft über `PowerShell`, nicht über `Bash`.** Ohne Git Bash ist das Tool `PowerShell` automatisch aktiv, und `Bash` gibt es gar nicht. Mit Git Bash ist `PowerShell` für claude.ai- und Console-Konten standardmäßig an, und Claude nimmt es dann als Haupt-Shell. Ein Hook, der nur auf `Bash` matcht, verpasst diese Aufrufe; Hooks für Shell-Befehle matchen deshalb `Bash|PowerShell`.
+- **Auf macOS, Linux und WSL tauchen `Glob` und `Grep` nicht auf.** Claude sucht dort über das `Bash`-Tool. Eine Regel, die du später für `Grep` schreibst, sieht diese Suchen nicht; sie kommen als `Bash`-Aufrufe an.
+- **Unter Windows laufen Shell-Befehle oft über `PowerShell`, nicht über `Bash`.** Ohne Git for Windows gibt es `Bash` gar nicht. Eine Regel, die nur `Bash` nennt, greift dann nicht. Was du für Shell-Befehle festlegst, legst du deshalb für beide Werkzeuge fest.
+- **Claudes Selbstauskunft für die Liste halten.** Auf die Frage `What tools do you have access to?` antwortet Claude mit einer Zusammenfassung in eigenen Worten. Verlässlich ist, was im Transkript steht.
 
 ## Check
 
-Du kannst die sechs Alltags-Werkzeuge mit exaktem Namen nennen, sagen, welche eine Freigabe brauchen, und erklären, wo du diese Namen später einsetzt.
+Du kannst die Alltags-Werkzeuge mit exaktem Namen nennen, im Transkript ablesen, welches Claude nutzt, und sagen, welche eine Freigabe brauchen.
 
-1. Welche drei Alltags-Werkzeuge lesen nur, welche drei ändern oder führen aus?
-2. In welchen zwei Fällen weicht das Verhalten von der Spalte „Freigabe nötig?" ab?
-3. Warum sieht ein Hook auf `Grep` unter macOS keine Suchaufrufe?
+1. Welche drei Alltags-Werkzeuge lesen nur, und welche ändern oder führen aus?
+2. In welchen drei Fällen weicht das Verhalten von der Spalte „Freigabe nötig?“ ab?
+3. Warum taucht unter macOS in deinem Transkript kein `Grep`-Aufruf auf, obwohl Claude Dateien durchsucht?
+
+<details><summary>Auflösung</summary>
+
+1. `Read`, `Glob` und `Grep` lesen nur. `Edit` und `Write` ändern Dateien, `Bash` und unter Windows `PowerShell` führen Befehle aus.
+2. Lesende Werkzeuge fragen, wenn sie außerhalb des Arbeitsordners lesen sollen. `Bash` führt reine Lesebefehle wie `ls` ohne Rückfrage aus. Und in anderen Rechte-Modi als `default` verschiebt sich, wer entscheidet.
+3. Auf macOS, Linux und WSL fehlen `Glob` und `Grep` standardmäßig. Claude sucht dort mit `find` und `grep` über das `Bash`-Tool, die Suche erscheint also als `Bash`-Aufruf.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Warum schreibst du in Rechte-Regeln die exakten Werkzeugnamen wie `Bash`, `Write` oder `Edit` statt Beschreibungen wie „Dateisystem" oder „Ausführung"?
+**Frage:** Eine Sitzung läuft im Modus `default`. Claude will erst eine Datei in deinem Arbeitsordner lesen und danach eine Zeile darin ändern. Was passiert?
 
-- **Richtig:** Rechte-Regeln, Hook-Matcher und Werkzeuglisten von Subagenten arbeiten mit genau diesen Namen, nicht mit Kategorien.
-- Falsch: Nur MCP-Tools brauchen exakte Namen; eingebaute Werkzeuge erkennt Claude Code auch über Kategorien wie „Dateisystem".
-- Falsch: Die Namen folgen einem externen Standard für Funktionsaufrufe, ein abweichender Name führt deshalb zu einem API-Fehler.
-- Falsch: Beschreibungen wie „Dateisystem" funktionieren nur in `CLAUDE.local.md`; in `settings.json` gehen nur die Werkzeugnamen.
+- **Richtig:** Das Lesen läuft ohne Rückfrage, vor der Änderung fragt Claude: `Read` braucht keine Freigabe, `Edit` schon.
+- Falsch: Beides fragt nach, weil im Modus `default` ausnahmslos jeder Aufruf eines Werkzeugs deine Freigabe braucht.
+- Falsch: Beides läuft ohne Rückfrage, weil du den Ordner beim Start im Vertrauensdialog als vertraut bestätigt hast.
+- Falsch: Das Lesen fragt nach, die Änderung nicht, weil `Edit` nur eine Stelle ersetzt und nichts überschreibt.
 
 </details>
 
 ## Weiterlesen
 
 - [Tools-Referenz](https://code.claude.com/docs/en/tools-reference)
+- [Interaktiver Modus: Tastenkürzel](https://code.claude.com/docs/en/interactive-mode)
 - [S1.1 · Erster Kontakt: sofort eine Datei bauen](s1-01-erster-kontakt.md)
 - [S1.5 · Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md)
 - [S1.6 · Alle Rechte-Modi im Überblick](s1-06-rechte-modi.md)
 - [S2.8 · Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md)
-- [S4.9 · Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md)

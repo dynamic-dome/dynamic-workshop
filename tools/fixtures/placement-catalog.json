@@ -4,7 +4,7 @@
    "area": "basics",
    "id": "S0.1",
    "level": "core",
-   "minutes": 20,
+   "minutes": 25,
    "offers": [],
    "order": 10,
    "requires": [],
@@ -15,24 +15,10 @@
    "type": "setup"
   },
   {
-   "area": null,
-   "id": "X.2",
-   "level": "bonus",
-   "minutes": 12,
-   "offers": [],
-   "order": 15,
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "type": "community"
-  },
-  {
    "area": "basics",
    "id": "S1.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 1010,
    "requires": [
@@ -50,7 +36,7 @@
    "area": "basics",
    "id": "S1.2",
    "level": "core",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1020,
    "requires": [
@@ -69,7 +55,7 @@
    "area": "basics",
    "id": "S1.3",
    "level": "core",
-   "minutes": 12,
+   "minutes": 10,
    "offers": [],
    "order": 1030,
    "requires": [
@@ -89,7 +75,7 @@
    "area": "basics",
    "id": "S1.4",
    "level": "core",
-   "minutes": 12,
+   "minutes": 10,
    "offers": [],
    "order": 1040,
    "requires": [
@@ -108,7 +94,7 @@
    "area": "permissions",
    "id": "S1.5",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1050,
    "requires": [
@@ -188,7 +174,7 @@
    "area": "context",
    "id": "S1.9",
    "level": "core",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1090,
    "requires": [
@@ -436,6 +422,20 @@
    "session": 1,
    "shelf": "practice",
    "type": "practice"
+  },
+  {
+   "area": null,
+   "id": "X.2",
+   "level": "bonus",
+   "minutes": 35,
+   "offers": [],
+   "order": 1205,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
   },
   {
    "area": "skills",
@@ -742,20 +742,6 @@
    "type": "lesson"
   },
   {
-   "area": null,
-   "id": "X.1",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 2135,
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "type": "community"
-  },
-  {
    "area": "mcp",
    "id": "S2.14",
    "level": "core",
@@ -911,6 +897,20 @@
    "type": "practice"
   },
   {
+   "area": null,
+   "id": "X.1",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 2205,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
    "area": "agents",
    "id": "S3.1",
    "level": "core",
@@ -950,20 +950,6 @@
    "session": 3,
    "shelf": "agents",
    "type": "lesson"
-  },
-  {
-   "area": null,
-   "id": "X.3",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 3025,
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "type": "community"
   },
   {
    "area": "agents",
@@ -1261,6 +1247,20 @@
    "type": "practice"
   },
   {
+   "area": null,
+   "id": "X.3",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 3155,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
+  },
+  {
    "area": "cost",
    "id": "S4.1",
    "level": "deep-dive",
@@ -1393,20 +1393,6 @@
    "type": "lesson"
   },
   {
-   "area": null,
-   "id": "X.4",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 4065,
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "type": "community"
-  },
-  {
    "area": "git",
    "id": "S4.7",
    "level": "bonus",
@@ -1429,6 +1415,20 @@
    "session": 4,
    "shelf": "remote-isolation",
    "type": "lesson"
+  },
+  {
+   "area": null,
+   "id": "X.4",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 4075,
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "type": "community"
   },
   {
    "area": null,

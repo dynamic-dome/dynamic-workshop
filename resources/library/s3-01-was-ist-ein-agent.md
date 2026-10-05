@@ -20,7 +20,7 @@ aliases: ["3.1"]
 <!-- meta:start -->
 > **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kern · **~12 Min** · **Voraussetzungen:** [S1.2 Coding-Agent statt Chat: das Denkmodell](s1-02-agent-statt-chat.md)
 >
-> ← [S2.20 Praxis-Station Session 2: eine Übung wählen](s2-20-praxis-station-2.md) · [Bibliothek](README.md) · [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md) →
+> ← [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) · [Bibliothek](README.md) · [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

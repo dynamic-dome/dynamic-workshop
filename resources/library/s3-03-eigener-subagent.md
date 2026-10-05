@@ -20,7 +20,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Agenten & Orchestrierung](README.md#agents) · **Stufe:** Kern · **~18 Min** · **Voraussetzungen:** [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md)
 >
-> ← [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) · [Bibliothek](README.md) · [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) →
+> ← [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md) · [Bibliothek](README.md) · [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

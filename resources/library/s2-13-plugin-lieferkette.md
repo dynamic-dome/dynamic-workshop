@@ -21,7 +21,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Plugins](README.md#plugins) · **Stufe:** Vertiefung · **~10 Min** · **Voraussetzungen:** [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](s2-12-plugin-lebenszyklus.md) · 🛡 **Sicherheitsboden**
 >
-> ← [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](s2-12-plugin-lebenszyklus.md) · [Bibliothek](README.md) · [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) →
+> ← [S2.12 Plugin-Lebenszyklus, Scopes und Marketplaces](s2-12-plugin-lebenszyklus.md) · [Bibliothek](README.md) · [S2.14 MCP: der Integrationsstecker](s2-14-mcp-stecker.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

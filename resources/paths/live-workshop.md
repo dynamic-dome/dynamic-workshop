@@ -6,27 +6,27 @@ Die Reihenfolge des moderierten Workshops. Ablauf, Zeiten, Pausen und Live-Anker
 
 ## Vorbereitung
 
-Kern 20 Min
+Kern 25 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
-| [S0.1 Werkstatt einrichten](../library/s0-01-werkstatt-einrichten.md) | Kern | 20 |  |  |
+| [S0.1 Werkstatt einrichten](../library/s0-01-werkstatt-einrichten.md) | Kern | 25 |  |  |
 
 ## Session 1 — Erste Schritte
 
-Kern 213 Min · Vertiefung 72 Min
+Kern 233 Min · Vertiefung 72 Min
 
 | Kapitel | Stufe | Min | | Vorführen |
 |---|---|---:|---|---|
-| [S1.1 Erster Kontakt: sofort eine Datei bauen](../library/s1-01-erster-kontakt.md) | Kern | 12 |  | [Demo](../moderation/vorfuehren/s1-01-erster-kontakt.md) |
-| [S1.2 Coding-Agent statt Chat: das Denkmodell](../library/s1-02-agent-statt-chat.md) | Kern | 12 |  | [Demo](../moderation/vorfuehren/s1-02-agent-statt-chat.md) |
-| [S1.3 Die Oberflächen: CLI, Desktop, IDE, Web, iOS](../library/s1-03-oberflaechen.md) | Kern | 12 |  |  |
-| [S1.4 Eingebaute Werkzeuge und ihre Namen](../library/s1-04-werkzeuge.md) | Kern | 12 |  |  |
-| [S1.5 Rechte im Alltag: default und acceptEdits](../library/s1-05-rechte-im-alltag.md) | Kern | 15 | 🛡 |  |
+| [S1.1 Erster Kontakt: sofort eine Datei bauen](../library/s1-01-erster-kontakt.md) | Kern | 25 |  | [Demo](../moderation/vorfuehren/s1-01-erster-kontakt.md) |
+| [S1.2 Coding-Agent statt Chat: das Denkmodell](../library/s1-02-agent-statt-chat.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s1-02-agent-statt-chat.md) |
+| [S1.3 Die Oberflächen: CLI, Desktop, IDE, Web, iOS](../library/s1-03-oberflaechen.md) | Kern | 10 |  |  |
+| [S1.4 Eingebaute Werkzeuge und ihre Namen](../library/s1-04-werkzeuge.md) | Kern | 10 |  |  |
+| [S1.5 Rechte im Alltag: default und acceptEdits](../library/s1-05-rechte-im-alltag.md) | Kern | 20 | 🛡 |  |
 | [S1.6 Alle Rechte-Modi im Überblick](../library/s1-06-rechte-modi.md) | Kern | 15 | 🛡 |  |
 | [S1.7 Modellwahl und Effort](../library/s1-07-modellwahl-und-effort.md) | Kern | 15 |  |  |
 | [S1.8 Das Kontextfenster verstehen](../library/s1-08-kontextfenster.md) | Kern | 15 |  |  |
-| [S1.9 Kontext steuern mit /compact und /rewind](../library/s1-09-kontext-steuern.md) | Kern | 12 |  |  |
+| [S1.9 Kontext steuern mit /compact und /rewind](../library/s1-09-kontext-steuern.md) | Kern | 15 |  |  |
 | [S1.10 CLAUDE.md: die Hausordnung des Projekts](../library/s1-10-claude-md.md) | Kern | 15 |  | [Demo](../moderation/vorfuehren/s1-10-claude-md.md) |
 | [S1.11 Alle Gedächtnis-Ebenen im Überblick](../library/s1-11-gedaechtnis-ebenen.md) | Vertiefung | 18 |  | [Demo](../moderation/vorfuehren/s1-11-gedaechtnis-ebenen.md) |
 | [S1.12 Imports, --add-dir und AGENTS.md](../library/s1-12-imports-und-agents-md.md) | Vertiefung | 12 |  |  |
@@ -109,7 +109,7 @@ Kern 33 Min · Vertiefung 66 Min · Kür 67 Min
 
 | Kapitel | Stufe | Min |
 |---|---|---:|
-| [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) | Kür | 12 |
+| [X.2 Mit Claude Code lernen](../library/x-02-lernen-mit-claude-code.md) | Kür | 35 |
 | [X.1 Community-Skills: wer baut was, das wirklich hilft](../library/x-01-community-skills.md) | Kür | 15 |
 | [X.3 Der minimale Agent: Pi als Spiegel](../library/x-03-pi-als-spiegel.md) | Kür | 15 |
 | [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](../library/x-04-agenten-im-dauerbetrieb.md) | Kür | 15 |

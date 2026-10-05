@@ -5,33 +5,37 @@
     "setup"
    ],
    "analogy": "",
-   "answers": null,
+   "answers": [
+    "`claude --version` zeigt, dass Claude Code installiert ist und welche Version läuft. `claude --print \"Say hello\"` zeigt, dass die Anmeldung funktioniert: Es kommt eine Antwort ohne Fehlermeldung.",
+    "Ein neues Terminal öffnen. Hilft das nicht, liegt der Installationsordner (`~/.local/bin` bzw. `%USERPROFILE%\\.local\\bin`) nicht im `PATH`, und du trägst ihn dort ein.",
+    "Auf der Karte „Werkstatt erweitern“. Du installierst sie erst, wenn ein Kapitel sie verlangt: die GitHub CLI ab S1.16, das Workshop-Repo für den Tutor (X.2) und den Playground (S2.8), `jq` ab S2.8, Node.js ab S2.14."
+   ],
    "area": "basics",
-   "checkpoint": "Du kannst Claude Code installieren und anmelden und mit `claude --version`, `claude --print` und den Playground-Tests nachweisen, dass deine Werkstatt steht.",
+   "checkpoint": "Du kannst Claude Code installieren und anmelden und mit `claude --version` und `claude --print` nachweisen, dass deine Werkstatt steht.",
    "demo": null,
-   "example": "# Verify feature surface after update\nclaude --version\nclaude --print \"Say ready\"",
+   "example": "claude --print \"Say hello\"\n# Should return a response without errors",
    "example_lang": "bash",
    "file": "s0-01-werkstatt-einrichten.md",
-   "glance": "Bevor du mit S1.1 loslegst, richtest du einmal deine Werkstatt ein: Claude Code über den nativen Installer, eine Anmeldung mit Abo oder API-Key, dazu Git, Python 3, Node.js und den geklonten `workshop-playground`. Fertig bist du, wenn `claude --version` eine Version zeigt, `claude --print` antwortet und die Playground-Tests grün sind.",
+   "glance": "Bevor du mit S1.1 loslegst, richtest du einmal deine Werkstatt ein: Claude Code über den nativen Installer, eine Anmeldung mit Abo oder API-Key, dazu Git und Python 3. Fertig bist du, wenn `claude --version` eine Version zeigt und `claude --print \"Say hello\"` antwortet.",
    "id": "S0.1",
    "level": "core",
-   "minutes": 20,
+   "minutes": 25,
    "offers": [],
    "order": 10,
-   "outcome": "Ich kann Claude Code installieren und anmelden, Git, Python 3 und Node.js prüfen und mit `claude --print` und den Playground-Tests nachweisen, dass meine Werkstatt bereit ist.",
+   "outcome": "Ich kann Claude Code installieren und anmelden, Git und Python 3 prüfen und mit `claude --version` und `claude --print` nachweisen, dass meine Werkstatt bereit ist.",
    "quiz": {
-    "correct": "Den API-Key; `/status` zeigt dir, welche Methode gerade aktiv ist.",
-    "q": "Du hast ein Max-Abo und zusätzlich `ANTHROPIC_API_KEY` in deiner Shell gesetzt. Welche Anmeldung nutzt Claude Code, nachdem du den Key beim Start einmal bestätigt hast?",
+    "correct": "Die Installation steht, die Anmeldung nicht: Abo oder API-Key prüfen und in einer Sitzung `/login` neu starten.",
+    "q": "`claude --version` zeigt eine Version, aber `claude --print \"Say hello\"` endet mit einem Anmeldefehler. Was sagt dir das, und was tust du zuerst?",
     "wrong": [
-     "Das Abo, weil eine `/login`-Anmeldung immer vor Umgebungsvariablen kommt.",
-     "Beide abwechselnd, je nachdem, welches Kontingent gerade noch frei ist.",
-     "Keine, bis du eine der beiden Anmeldungen wieder entfernt hast."
+     "Der Installationsordner fehlt im `PATH`: ein neues Terminal öffnen und den Ordner `~/.local/bin` dort eintragen.",
+     "Python fehlt noch: Ohne Python kann `claude --print` keine Antwort ausgeben, also zuerst Python installieren.",
+     "Die Installation ist beschädigt: Claude Code entfernen, den Installer neu ausführen und den Rechner neu starten."
     ]
    },
    "recall": [
-    "Wofür brauchst du Node.js, wenn Claude Code selbst über den nativen Installer kommt?",
-    "Wo liegt der `workshop-playground` nach dem Klonen?",
-    "Was tust du, wenn die Shell nach der Installation `claude` nicht kennt?"
+    "Welche zwei Befehle weisen nach, dass Installation und Anmeldung funktionieren?",
+    "Was tust du, wenn die Shell nach der Installation `claude` nicht kennt?",
+    "Wo findest du die Installationsbefehle für `jq`, Node.js, die GitHub CLI und das Workshop-Repo, und wann brauchst du sie?"
    ],
    "requires": [],
    "requires_all": [],
@@ -40,7 +44,7 @@
    "shelf": "start",
    "skip_check": [
     "Hast du auf diesem Rechner schon `claude --version` und `claude --print \"Say hello\"` ohne Fehler laufen lassen?",
-    "Hast du den `workshop-playground` schon geklont und seine Tests mit `pytest` grün durchlaufen sehen?"
+    "Zeigen `git --version` und `python3 --version` (Windows: `python --version`) bei dir je eine Version?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/setup",
@@ -52,78 +56,41 @@
    "type": "setup"
   },
   {
-   "aliases": [],
-   "analogy": "Denk an deine Einarbeitung in einer Sicherheitszentrale. Am Anfang steht der Einsatzauftrag: welches Objekt, welche Aufgaben, was ausdrücklich nicht dazugehört. Das ist die Mission. Ins Ausbildungsnachweisheft kommt eine Station erst, wenn du sie am echten Pult vorgeführt hast; die Unterschrift unter der Dienstanweisung zählt nicht. Das sind die Lernprotokolle. Und ob das Wissen hält, zeigt nicht die Wiederholung am selben Nachmittag, sondern die unangekündigte Übung einige Wochen später.",
-   "answers": null,
-   "area": null,
-   "checkpoint": "Du kannst erklären, warum ein Lernprotokoll erst nach einem Nachweis entsteht und warum Abruf mit Abstand mehr festigt als Wiederlesen, und du prüfst bei einer Antwort des Tutors, aus welcher Quelle sie stammt.",
-   "demo": null,
-   "example": "# Mission: Claude Code\n\n## Warum\nEin bis drei Sätze: das konkrete Ziel. Was ändert sich in der Arbeit, wenn es klappt?\nNicht „Claude Code verstehen\", sondern z. B. „Unsere Code-Reviews mit Claude beschleunigen, ohne Secrets zu riskieren\".\n\n## Daran merke ich es\n- eine konkrete, beobachtbare Sache, die ich danach kann\n- noch eine\n\n## Rahmen\n- Zeit, Rechte im Job, erlaubte Werkzeuge, Vorlieben\n\n## Bewusst nicht\n- Themen, die ich gerade nicht verfolge (schützt vor Überforderung)",
-   "example_lang": "md",
-   "file": "x-02-lernen-mit-claude-code.md",
-   "glance": "Claude Code kann dich beim Lernen begleiten, wenn dein Lernstand in Dateien steht statt im Chat. Matt Pococks Skill `teach` zeigt, wie das geht: eine Mission als Kompass, Lernprotokolle nur für Nachgewiesenes, kurze Lektionen, die dich gerade genug fordern, Abruf mit Abstand statt Wiederlesen und für jede Aussage eine Quelle. Der Workshop-Tutor dieser Bibliothek (`/workshop`) übernimmt diese Bausteine für Claude Code.",
-   "id": "X.2",
-   "level": "bonus",
-   "minutes": 12,
-   "offers": [],
-   "order": 15,
-   "outcome": "Ich kann einen Lernordner mit MISSION.md anlegen, mit dem Workshop-Tutor über start, next, learn, review und guide lernen und prüfen, aus welcher Quelle eine Antwort des Tutors stammt.",
-   "quiz": null,
-   "recall": [
-    "Welche vier Anlässe rechtfertigen ein Lernprotokoll, und welcher häufige Anlass gerade nicht?",
-    "Was unterscheidet Abrufflüssigkeit von Speicherstärke, und welche der beiden täuscht?",
-    "Was soll der Tutor tun, wenn ein Kapitel in seiner Installation fehlt?"
-   ],
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "skip_check": [],
-   "sources": [
-    "https://github.com/mattpocock/skills/tree/main/skills/productivity/teach",
-    "https://code.claude.com/docs/en/skills"
-   ],
-   "title": "Mit Claude Code lernen",
-   "transferable": true,
-   "type": "community"
-  },
-  {
    "aliases": [
     "1.1"
    ],
-   "analogy": "Die CLI ist ein Berater mit Ausweis: Er darf ins Gebäude, Türen öffnen und selbst Hand anlegen. Dieses Kapitel ist sein erster Gang durchs Haus. Du sagst ihm, was du willst, er erledigt es vor deinen Augen, und du prüfst, was dabei herauskommt.",
+   "analogy": "Claude Code ist ein Berater mit Ausweis: Er darf ins Gebäude, Türen öffnen und selbst Hand anlegen. Dieses Kapitel ist sein erster Gang durchs Haus. Du sagst ihm, was du willst, er zeigt dir, was er vorhat, du nickst, und er erledigt es vor deinen Augen.",
    "answers": [
-    "Claude schlägt die Datei vor, fragt je nach Rechte-Modus um Freigabe, schreibt sie, führt sie aus und zeigt dir die Ausgabe im Terminal.",
-    "Seit v2.1.283 startet eine interaktive Sitzung im Terminal standardmäßig im Modus `auto`: Ein Klassifikator prüft die Aktionen an deiner Stelle, und die Abfrage kann ausbleiben. Mit `claude --permission-mode default` fragt Claude vor den meisten Dateiänderungen und Shell-Befehlen.",
-    "Zum Beispiel: Codebasen lesen, Dateien schreiben und ändern, Befehle ausführen. Die Liste nennt außerdem Git bedienen, im Web suchen, Agenten koordinieren, über MCP andocken und sich über Sitzungen hinweg erinnern."
+    "Claude schlägt die Datei vor und fragt um Freigabe, schreibt sie nach deinem „Yes“, fragt ein zweites Mal vor dem Ausführen und meldet dann das Ergebnis.",
+    "Im Modus `default` fragt Claude vor Dateiänderungen und vor den meisten Shell-Befehlen. Ohne das Flag startet eine Sitzung im Terminal ab Version 2.1.283 im Modus `auto`: Ein zweites Modell prüft an deiner Stelle, und die Rückfragen bleiben meist aus.",
+    "Davor ist alles Vorschlag, danach ist es geschehen: Claude schreibt und führt selbst aus, in deinem Ordner und mit deinen Rechten."
    ],
    "area": "basics",
-   "checkpoint": "Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine kleine Datei bauen und ausführen lassen und die Schleife beschreiben, handeln, Ergebnis sehen an deinem eigenen Beispiel erklären.",
+   "checkpoint": "Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine kleine Datei bauen und ausführen lassen und die Schleife Vorschlag, Freigabe, Schreiben, Ausführen an deinem eigenen Beispiel erklären.",
    "demo": "../moderation/vorfuehren/s1-01-erster-kontakt.md",
    "example": "Create a file hello.py that prints \"Hello from Claude Code\" and run it.",
    "example_lang": "",
    "file": "s1-01-erster-kontakt.md",
-   "glance": "Vor jeder Theorie steht ein Erfolg: Du startest Claude Code in einem leeren Ordner und bittest in normaler Sprache um eine kleine Datei. Claude schlägt die Datei vor, schreibt sie, führt sie aus und zeigt dir die Ausgabe. Diese Schleife ist das ganze Spiel: Du beschreibst, der Agent handelt, du siehst das Ergebnis.",
+   "glance": "Du startest Claude Code in einem leeren Ordner und bittest in normaler Sprache um eine kleine Datei. Claude schlägt die Datei vor, fragt um Freigabe, schreibt sie, führt sie aus und zeigt dir das Ergebnis. Diese Schleife ist das ganze Spiel: Du beschreibst, der Agent handelt, du prüfst.",
    "id": "S1.1",
    "level": "core",
-   "minutes": 12,
+   "minutes": 25,
    "offers": [],
    "order": 1010,
    "outcome": "Ich kann Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine kleine Datei erzeugen und ausführen lassen und dabei den Ablauf Vorschlag, Freigabe, Schreiben, Ausführen benennen.",
    "quiz": {
-    "correct": "Claude legt die Datei in deinem Ordner an, führt sie über die Shell aus und zeigt die Ausgabe, statt dir nur Code zu schicken.",
-    "q": "Du tippst in einer frischen Sitzung `Create a file hello.py that prints \"Hello from Claude Code\" and run it.` Was passiert, und was unterscheidet das von einem Chat-Assistenten?",
+    "correct": "Die Sitzung läuft im Modus `auto`; mit `claude --permission-mode default` fragt Claude vor dem Schreiben und Ausführen.",
+    "q": "Du startest in einem neuen Ordner nur mit `claude`, bestätigst den Vertrauensdialog und gibst den Auftrag `Create a file hello.py … and run it.` Die Datei entsteht und läuft, aber es kam keine einzige Rückfrage. Was ist die wahrscheinlichste Erklärung?",
     "wrong": [
-     "Claude kompiliert den Code zuerst zu einer Binärdatei, prüft sie auf Schadcode und startet erst danach das Programm.",
-     "Claude schickt den Code an einen Interpreter in der Cloud und zeigt das Ergebnis; auf deinem Rechner bleibt dabei nichts liegen.",
-     "Claude speichert die Datei im Auto-Memory, damit sie beim nächsten Start der Sitzung automatisch wieder bereitsteht."
+     "Der Vertrauensdialog hat alle Rückfragen für diesen Ordner abgeschaltet; sie kommen erst in einem neuen Ordner wieder.",
+     "Rückfragen gibt es nur bei Shell-Befehlen mit Risiko; das Anlegen und Ausführen einer Datei gilt als harmlos.",
+     "Claude hat die Datei nur vorgeschlagen und simuliert; geschrieben wird sie erst, wenn du `/exit` eingibst."
     ]
    },
    "recall": [
-    "Welche Schritte laufen nach einem Auftrag wie `Create a file hello.py … and run it.` ab?",
-    "Warum siehst du in einer neuen Sitzung womöglich keine Freigabe-Abfrage, und wie startest du so, dass Claude fragt?",
-    "Nenne drei Dinge, die Claude Code laut „Was Claude Code kann\" für dich erledigt."
+    "Welche Schritte laufen nach einem Auftrag wie `Create a file hello.py … and run it.` im Modus `default` ab?",
+    "Warum hast du mit `claude --permission-mode default` gestartet, und was wäre ohne das Flag anders?",
+    "Was ist an der Freigabe der entscheidende Moment?"
    ],
    "requires": [
     "S0.1"
@@ -136,11 +103,12 @@
    "shelf": "start",
    "skip_check": [
     "Hast du Claude Code schon einmal in einem leeren Ordner gestartet und eine Datei erzeugen und ausführen lassen?",
-    "Kannst du ohne Nachschlagen die drei Schritte nennen, die du dabei beobachtest: beschreiben, handeln, Ergebnis sehen?"
+    "Kannst du ohne Nachschlagen die vier Schritte nennen, die dabei ablaufen: Vorschlag, Freigabe, Schreiben, Ausführen?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/overview",
-    "https://code.claude.com/docs/en/quickstart"
+    "https://code.claude.com/docs/en/quickstart",
+    "https://code.claude.com/docs/en/permission-modes"
    ],
    "title": "Erster Kontakt: sofort eine Datei bauen",
    "transferable": false,
@@ -148,34 +116,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Der Chat auf claude.ai ist ein Sicherheitsberater am Telefon: Er hört zu, analysiert und rät, fasst aber nichts an. Claude Code ist derselbe Berater mit Besucherausweis: Er legt selbst Hand an, in deiner Umgebung, unter deiner Aufsicht, mit echter Wirkung.",
-   "answers": null,
+   "analogy": "Der Chat auf claude.ai ist ein Sicherheitsberater am Telefon: Er hört zu, analysiert und rät, fasst aber nichts an. Claude Code ist derselbe Berater mit Hausausweis: Er steht im Gebäude und legt selbst Hand an, unter deiner Aufsicht, mit echter Wirkung.",
+   "answers": [
+    "Er ruft Werkzeuge auf: Er liest und schreibt Dateien, führt Befehle aus, liest deren Ausgabe und entscheidet danach über den nächsten Schritt. Ein Chat-Assistent schickt nur Text, umsetzen musst du.",
+    "Alles, was du von der Kommandozeile aus tun kannst, also alles, was dein Benutzerkonto erreicht. Die Grenze setzt du: mit deiner Antwort auf die Rückfrage, mit Rechte-Regeln, einer Sandbox oder einem Rechner ohne Zugang zu kritischen Systemen.",
+    "Was ein Shell-Befehl gelöscht hat und was ein entferntes System verändert hat: eine Datenbank, ein Deployment, ein Push. Zurückdrehen kannst du, was Claude über seine Datei-Werkzeuge geändert hat."
+   ],
    "area": "basics",
    "checkpoint": "Du kannst in einem Satz erklären, warum Claude Code kein Chat-Tool ist, und benennen, welche Folge das für jede Freigabe hat.",
    "demo": "../moderation/vorfuehren/s1-02-agent-statt-chat.md",
-   "example": "Describe yourself in exactly 3 bullet points. Focus on what makes you different from a chat interface.",
-   "example_lang": "",
+   "example": "cd ~/cc-workshop/hello\nclaude --permission-mode default",
+   "example_lang": "bash",
    "file": "s1-02-agent-statt-chat.md",
-   "glance": "Ein Chat-Assistent beantwortet deine Frage und überlässt dir das Umsetzen. Ein Coding-Agent wie Claude Code handelt selbst: Er liest und schreibt Dateien, führt Befehle aus und prüft die Ergebnisse, in deiner Entwicklungsumgebung und innerhalb eines Rechte-Systems, das du steuerst. Jede Aktion hat deshalb echte Wirkung, und jede Freigabe ist eine Entscheidung mit Folgen.",
+   "glance": "Ein Chat-Assistent beantwortet deine Frage und überlässt dir das Umsetzen. Ein Coding-Agent wie Claude Code handelt selbst: Er liest und schreibt Dateien, führt Befehle aus und prüft die Ergebnisse, auf deinem Rechner und mit deinen Rechten. Jede Aktion hat deshalb echte Wirkung, und jede Freigabe ist eine Entscheidung mit Folgen.",
    "id": "S1.2",
    "level": "core",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1020,
    "outcome": "Ich kann den Unterschied zwischen Chat-Assistent (berät) und Coding-Agent (handelt in meiner Umgebung) an einem Beispiel erklären und die Sicherheitsfolge realer Tool-Aktionen benennen.",
    "quiz": {
-    "correct": "Der Chat berät, umsetzen musst du. Claude Code liest, schreibt und führt selbst aus, im Rahmen deiner Rechte.",
-    "q": "Was ist der entscheidende Unterschied zwischen dem Chat auf claude.ai und Claude Code in der CLI?",
+    "correct": "Nach dem „Yes“ läuft der Befehl sofort auf deinem Rechner, mit deinen Rechten; im Chat läuft nichts, bis du es selbst tust.",
+    "q": "Im Chat kopierst du einen vorgeschlagenen Befehl selbst ins Terminal. In Claude Code beantwortest du eine Rückfrage mit „Yes“. Warum ist das eine andere Entscheidung?",
     "wrong": [
-     "Claude Code kennt mehr Programmiersprachen und Frameworks als der Chat und löst deshalb mehr Coding-Aufgaben.",
-     "Der Chat kann keine Codebeispiele anzeigen, die CLI dagegen bietet Syntax-Hervorhebung und eine Diff-Ansicht.",
-     "Die CLI arbeitet mit einem größeren Kontextfenster als der Chat und verarbeitet deshalb auch größere Codebasen."
+     "Claude Code legt vor jedem Befehl eine Sicherung des Ordners an, die der Chat nicht hat; ein „Yes“ ist deshalb gefahrlos.",
+     "Der Befehl läuft zuerst in einer abgeschotteten Kopie; dein Rechner ändert sich erst, wenn du auch das Ergebnis bestätigst.",
+     "Das „Yes“ gibt nur den Text frei; ausführen musst du den Befehl danach weiterhin selbst im eigenen Terminal."
     ]
    },
    "recall": [
     "Was tut ein Coding-Agent selbst, das ein Chat-Assistent dir überlässt?",
-    "Nenne drei Dinge, die Claude Code nicht kann oder nicht von sich aus tut.",
-    "Wer sorgt dafür, dass Claude Code deine laufenden Panels nicht anfasst?"
+    "Was kann Claude Code auf deinem Rechner erreichen, und wer setzt die Grenze?",
+    "Welche Änderungen lassen sich aus der Sitzung nicht zurückdrehen?"
    ],
    "requires": [
     "S1.1"
@@ -189,7 +161,7 @@
    "shelf": "start",
    "skip_check": [
     "Kannst du ohne Nachschlagen erklären, warum ein Coding-Agent etwas anderes ist als ein Chatfenster, in das du Code kopierst?",
-    "Hast du schon einmal bewusst entschieden, ob du einem Agenten eine Aktion erlaubst (Datei schreiben, Shell-Befehl), und weißt du, was im schlimmsten Fall passieren kann?"
+    "Hast du schon einmal eine Rückfrage eines Agenten bewusst abgelehnt, weil du gelesen hattest, welcher Befehl gleich laufen würde?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/how-claude-code-works",
@@ -201,34 +173,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Es bleibt derselbe Berater mit Ausweis wie in S1.2, nur sein Arbeitsplatz ändert sich. In der CLI steht er am Terminal, in der Desktop-App sitzt er an einem richtigen Schreibtisch mit Monitor, in der IDE sitzt er direkt neben dir, und über Web und Handy erreichst du ihn von unterwegs.",
-   "answers": null,
+   "analogy": "Es bleibt derselbe Berater wie in S1.2, nur sein Arbeitsplatz ändert sich. In der CLI steht er an deinem Terminal, in der Desktop-App sitzt er an einem Schreibtisch in deinem Büro, in der IDE am Nachbartisch mit Blick auf deinen Editor. In allen drei Fällen ist er in deinem Gebäude und arbeitet an deinen Sachen.",
+   "answers": [
+    "Lokal arbeiten CLI, Desktop-App und IDE-Erweiterung. Web (claude.ai/code) und die Claude-App auf dem Handy arbeiten in der Cloud mit einem GitHub-Repository.",
+    "`/mobile` zeigt einen QR-Code, über den du die Claude-App aufs Handy holst; die Sitzung wandert nicht mit. `/chrome` richtet die Browser-Steuerung in Chrome ein und hat mit claude.ai/code nichts zu tun.",
+    "`/desktop`. Der Befehl erscheint nur unter macOS und x64-Windows und nur, wenn du mit einem Claude-Abo angemeldet bist."
+   ],
    "area": "basics",
-   "checkpoint": "Du kannst für eine Arbeitssituation die passende Oberfläche wählen, sagen, welche lokal und welche in der Cloud arbeitet, und eine Terminal-Sitzung mit `/desktop` an die Desktop-App übergeben.",
+   "checkpoint": "Du kannst für eine Arbeitssituation die passende Oberfläche wählen, sagen, welche lokal und welche in der Cloud arbeitet, und den Befehl nennen, der eine Terminal-Sitzung an die Desktop-App übergibt.",
    "demo": null,
    "example": "claude\n# inside the running session:\n/desktop   # continue this session in the Desktop app (macOS or x64 Windows, Claude subscription)\n/mobile    # show a QR code to install the Claude app on your phone",
    "example_lang": "",
    "file": "s1-03-oberflaechen.md",
-   "glance": "Claude Code läuft überall mit derselben Engine, nur die Oberfläche wechselt. CLI, Desktop-App und IDE-Erweiterung arbeiten lokal mit deinen Dateien; Web (claude.ai/code) und die Claude-App auf dem Handy arbeiten mit Sitzungen in der Cloud, die an einem GitHub-Repository hängen statt an deinem Dateisystem. Der Chat auf claude.ai gehört nicht dazu: Er berät nur.",
+   "glance": "Claude Code läuft überall mit derselben Engine, nur die Oberfläche wechselt. CLI, Desktop-App und IDE-Erweiterung arbeiten lokal mit deinen Dateien. Web (claude.ai/code) und die Claude-App auf dem Handy arbeiten mit Sitzungen in der Cloud, die an einem GitHub-Repository hängen statt an deinem Dateisystem.",
    "id": "S1.3",
    "level": "core",
-   "minutes": 12,
+   "minutes": 10,
    "offers": [],
    "order": 1030,
-   "outcome": "Ich kann die Oberflächen CLI, Desktop, IDE, Web und iOS unterscheiden, für eine Arbeitssituation die passende wählen und eine laufende Terminal-Sitzung mit /desktop an die Desktop-App übergeben.",
+   "outcome": "Ich kann die Oberflächen CLI, Desktop, IDE, Web und Handy-App danach unterscheiden, ob sie lokal oder in der Cloud arbeiten, für eine Arbeitssituation die passende wählen und sagen, welcher Befehl eine Terminal-Sitzung an die Desktop-App übergibt.",
    "quiz": {
     "correct": "`/desktop`: Er übergibt die laufende Sitzung an die Desktop-App, unter macOS oder x64-Windows mit Claude-Abo.",
     "q": "Du hast in der CLI ein langes Refactoring begonnen und willst die Diffs lieber grafisch prüfen. Welcher Befehl bringt dich am direktesten dorthin?",
     "wrong": [
+     "`/teleport`: Er schiebt die laufende Terminal-Sitzung in die Desktop-App und öffnet dort die Diff-Ansicht.",
      "`/mobile`: Er schiebt die laufende Sitzung auf dein Handy, sofern dort die Claude-App angemeldet ist.",
-     "`/chrome`: Er öffnet die Sitzung mit grafischem Diff auf claude.ai/code, sofern Chrome dein Standardbrowser ist.",
-     "`/permissions`: Er schaltet die Ansicht um und zeigt alle Änderungen der Sitzung als grafischen Diff im Terminal."
+     "`/chrome`: Er öffnet die laufende Sitzung mit grafischem Diff im Browser auf claude.ai/code."
     ]
    },
    "recall": [
     "Welche Oberflächen arbeiten mit deinem lokalen Dateisystem, welche mit einem GitHub-Repository in der Cloud?",
     "Was tun `/mobile` und `/chrome` wirklich?",
-    "Warum zählt der Chat auf claude.ai nicht zu den Oberflächen von Claude Code?"
+    "Welcher Befehl übergibt eine laufende Terminal-Sitzung an die Desktop-App, und unter welchen Voraussetzungen gibt es ihn?"
    ],
    "requires": [
     "S1.2"
@@ -255,34 +231,38 @@
   },
   {
    "aliases": [],
-   "analogy": "Jedes Tool ist eine eigene Zutrittszone. `Read` ist die Lobby: Da kommt jeder rein. `Bash` ist der Serverraum: Dafür brauchst du eine ausdrückliche Berechtigung. Wenn du Rechte (allow/deny-Regeln) oder Hook-Matcher einrichtest, sprichst du die Zonen mit genau diesen Namen an.",
-   "answers": null,
+   "analogy": "Jedes Tool ist eine eigene Zutrittszone. `Read` ist die Lobby: Da kommt jeder rein. `Bash` ist der Serverraum: Dafür brauchst du eine ausdrückliche Berechtigung. Und wie an jeder Tür ein Schild hängt, hat jede Zone einen festen Namen, mit dem du sie später in Regeln ansprichst.",
+   "answers": [
+    "`Read`, `Glob` und `Grep` lesen nur. `Edit` und `Write` ändern Dateien, `Bash` und unter Windows `PowerShell` führen Befehle aus.",
+    "Lesende Werkzeuge fragen, wenn sie außerhalb des Arbeitsordners lesen sollen. `Bash` führt reine Lesebefehle wie `ls` ohne Rückfrage aus. Und in anderen Rechte-Modi als `default` verschiebt sich, wer entscheidet.",
+    "Auf macOS, Linux und WSL fehlen `Glob` und `Grep` standardmäßig. Claude sucht dort mit `find` und `grep` über das `Bash`-Tool, die Suche erscheint also als `Bash`-Aufruf."
+   ],
    "area": "basics",
-   "checkpoint": "Du kannst die sechs Alltags-Werkzeuge mit exaktem Namen nennen, sagen, welche eine Freigabe brauchen, und erklären, wo du diese Namen später einsetzt.",
+   "checkpoint": "Du kannst die Alltags-Werkzeuge mit exaktem Namen nennen, im Transkript ablesen, welches Claude nutzt, und sagen, welche eine Freigabe brauchen.",
    "demo": null,
-   "example": "What tools do you have access to?",
+   "example": "Create notes.txt with three short lines. Then read it back and count its lines with a shell command.",
    "example_lang": "text",
    "file": "s1-04-werkzeuge.md",
-   "glance": "Claude Code arbeitet über Werkzeuge (Tools), und jedes hat einen festen Namen wie `Read`, `Edit` oder `Bash`. Genau diese Namen schreibst du später in Rechte-Regeln, Hook-Matcher und die Konfiguration von Agenten. Lesende Tools (`Read`, `Glob`, `Grep`) laufen in deinem Arbeitsordner ohne Rückfrage; ändernde und ausführende (`Edit`, `Write`, `Bash`) brauchen im Modus `default` deine Freigabe.",
+   "glance": "Claude Code arbeitet über Werkzeuge (Tools), und jedes hat einen festen Namen wie `Read`, `Edit` oder `Bash`. Lesende Tools (`Read`, `Glob`, `Grep`) laufen in deinem Arbeitsordner ohne Rückfrage; ändernde und ausführende (`Edit`, `Write`, `Bash`) brauchen im Modus `default` deine Freigabe.",
    "id": "S1.4",
    "level": "core",
-   "minutes": 12,
+   "minutes": 10,
    "offers": [],
    "order": 1040,
-   "outcome": "Ich kann die sechs Alltags-Werkzeuge Read, Glob, Grep, Edit, Write und Bash mit exaktem Namen benennen und sagen, welche eine Freigabe brauchen.",
+   "outcome": "Ich kann die Alltags-Werkzeuge Read, Glob, Grep, Edit, Write und Bash mit exaktem Namen benennen, im Transkript ablesen, welches Claude gerade nutzt, und sagen, welche eine Freigabe brauchen.",
    "quiz": {
-    "correct": "Rechte-Regeln, Hook-Matcher und Werkzeuglisten von Subagenten arbeiten mit genau diesen Namen, nicht mit Kategorien.",
-    "q": "Warum schreibst du in Rechte-Regeln die exakten Werkzeugnamen wie `Bash`, `Write` oder `Edit` statt Beschreibungen wie „Dateisystem\" oder „Ausführung\"?",
+    "correct": "Das Lesen läuft ohne Rückfrage, vor der Änderung fragt Claude: `Read` braucht keine Freigabe, `Edit` schon.",
+    "q": "Eine Sitzung läuft im Modus `default`. Claude will erst eine Datei in deinem Arbeitsordner lesen und danach eine Zeile darin ändern. Was passiert?",
     "wrong": [
-     "Nur MCP-Tools brauchen exakte Namen; eingebaute Werkzeuge erkennt Claude Code auch über Kategorien wie „Dateisystem\".",
-     "Die Namen folgen einem externen Standard für Funktionsaufrufe, ein abweichender Name führt deshalb zu einem API-Fehler.",
-     "Beschreibungen wie „Dateisystem\" funktionieren nur in `CLAUDE.local.md`; in `settings.json` gehen nur die Werkzeugnamen."
+     "Beides fragt nach, weil im Modus `default` ausnahmslos jeder Aufruf eines Werkzeugs deine Freigabe braucht.",
+     "Beides läuft ohne Rückfrage, weil du den Ordner beim Start im Vertrauensdialog als vertraut bestätigt hast.",
+     "Das Lesen fragt nach, die Änderung nicht, weil `Edit` nur eine Stelle ersetzt und nichts überschreibt."
     ]
    },
    "recall": [
-    "Welche drei Alltags-Werkzeuge lesen nur, welche drei ändern oder führen aus?",
-    "In welchen zwei Fällen weicht das Verhalten von der Spalte „Freigabe nötig?\" ab?",
-    "Warum sieht ein Hook auf `Grep` unter macOS keine Suchaufrufe?"
+    "Welche drei Alltags-Werkzeuge lesen nur, und welche ändern oder führen aus?",
+    "In welchen drei Fällen weicht das Verhalten von der Spalte „Freigabe nötig?“ ab?",
+    "Warum taucht unter macOS in deinem Transkript kein `Grep`-Aufruf auf, obwohl Claude Dateien durchsucht?"
    ],
    "requires": [
     "S1.1"
@@ -296,10 +276,11 @@
    "shelf": "start",
    "skip_check": [
     "Kannst du ohne Nachschlagen sagen, welche der Tools `Read`, `Glob`, `Grep`, `Edit`, `Write` und `Bash` eine Freigabe verlangen?",
-    "Hast du in einer Sitzung schon einmal gesehen, welches Tool Claude gerade aufruft, und den Namen einer Rechte-Regel zuordnen können?"
+    "Hast du in einer Sitzung schon einmal das ausführliche Transkript geöffnet und abgelesen, welches Tool Claude gerade aufgerufen hat?"
    ],
    "sources": [
-    "https://code.claude.com/docs/en/tools-reference"
+    "https://code.claude.com/docs/en/tools-reference",
+    "https://code.claude.com/docs/en/interactive-mode"
    ],
    "title": "Eingebaute Werkzeuge und ihre Namen",
    "transferable": false,
@@ -308,23 +289,27 @@
   {
    "aliases": [],
    "analogy": "Rechte-Modi sind Ausweisstufen an der Zutrittskontrolle. Der Besucherausweis (`default`) bringt dich durch die Lobby, aber nicht in den Serverraum: Lesen ist frei, für alles andere fragt der Empfang nach. Der Wartungsausweis (`acceptEdits`) öffnet zusätzlich die Technikräume, und dort darfst du auch Kabel abklemmen, ohne zu fragen: Dateisystem-Befehle wie `rm` laufen mit. Der Modus legt die Grundstufe fest; Allow- und Deny-Regeln schalten einzelne Türen frei oder sperren sie.",
-   "answers": null,
+   "answers": [
+    "`acceptEdits` nimmt Dateiänderungen im Arbeitsordner und Dateisystem-Befehle wie `mkdir`, `touch`, `rm` und `mv` ohne Rückfrage an. In beiden Modi fragen andere Shell-Befehle wie `npm test`, Pfade außerhalb des Arbeitsordners und geschützte Pfade wie `.git`.",
+    "Mit `claude --permission-mode default`. Die Statusleiste zeigt dann `⏸ manual mode on`.",
+    "Claude Code prüft Deny-Regeln zuerst, und eine Deny-Regel gilt in jedem Modus. Die Regel prüft aber nur den Befehlstext: `/bin/rm …` oder `bash -c 'rm …'` trifft sie nicht, und unter Windows braucht das PowerShell-Tool eine eigene Regel wie `PowerShell(Remove-Item *)`."
+   ],
    "area": "permissions",
    "checkpoint": "Du kannst sagen, was `default` und `acceptEdits` ohne Rückfrage erlauben, eine Sitzung gezielt in einem der beiden Modi starten und eine Deny-Regel schreiben, die auch in `acceptEdits` hält.",
    "demo": null,
    "example": "# Runde 1: jede Änderung selbst freigeben (Manual)\nclaude --permission-mode default\n\n# Runde 2: Dateiänderungen und Dateisystem-Befehle laufen ohne Rückfrage\nclaude --permission-mode acceptEdits",
    "example_lang": "bash",
    "file": "s1-05-rechte-im-alltag.md",
-   "glance": "Der Rechte-Modus legt fest, was Claude ohne Rückfrage tun darf, und jede Freigabe hat echte Folgen. In `default` (in der CLI „Manual\" genannt) läuft nur Lesen ohne Rückfrage; `acceptEdits` nimmt zusätzlich Dateiänderungen und Dateisystem-Befehle im Arbeitsordner an, auch zerstörerische wie `rm` und `mv`. Gib Claude die kleinste Stufe, die für die Aufgabe reicht.",
+   "glance": "Der Rechte-Modus legt fest, was Claude ohne Rückfrage tun darf. In `default` (in der Oberfläche „Manual“) läuft nur Lesen ohne Rückfrage; `acceptEdits` nimmt zusätzlich Dateiänderungen und Dateisystem-Befehle im Arbeitsordner an, auch zerstörerische wie `rm` und `mv`. Gib Claude die kleinste Stufe, die für die Aufgabe reicht.",
    "id": "S1.5",
    "level": "core",
-   "minutes": 15,
+   "minutes": 20,
    "offers": [],
    "order": 1050,
    "outcome": "Ich kann sagen, was default (Manual) und acceptEdits ohne Rückfrage erlauben, eine Sitzung gezielt in einem der beiden Modi starten und eine Allow- und eine Deny-Regel in settings.json schreiben.",
    "quiz": {
     "correct": "Keine Rückfrage: `acceptEdits` nimmt Dateisystem-Befehle wie `rm` und `mv` im Arbeitsordner automatisch an, auch zerstörerische.",
-    "q": "Du startest mit `claude --permission-mode acceptEdits` und bittest Claude, im Projektordner `rm -rf build/` auszuführen. Du erwartest eine Rückfrage, weil „Bash ja noch fragt\". Was passiert?",
+    "q": "Du startest mit `claude --permission-mode acceptEdits` und bittest Claude, im Projektordner `rm -rf build/` auszuführen. Du erwartest eine Rückfrage, weil „Bash ja noch fragt“. Was passiert?",
     "wrong": [
      "Eine Rückfrage: `rm` gilt intern als Aufruf des Write-Werkzeugs, und Write fragt in `acceptEdits` jedes Mal einzeln nach.",
      "Keine Rückfrage, weil `acceptEdits` ausnahmslos jeden Shell-Befehl ohne Nachfrage ausführt, auch `npm test` und `curl`.",
@@ -333,7 +318,7 @@
    },
    "recall": [
     "Was läuft in `acceptEdits` ohne Rückfrage, das in `default` nachfragen würde, und was fragt in beiden Modi weiter?",
-    "In welchem Modus startet eine neue interaktive Sitzung ohne Flag, und wie startest du gezielt in Manual?",
+    "Wie startest du eine Sitzung gezielt in Manual, und woran erkennst du den Modus?",
     "Warum hält `\"deny\": [\"Bash(rm *)\"]` auch in `acceptEdits`, und welche Formen des Löschens trifft die Regel nicht?"
    ],
    "requires": [
@@ -348,7 +333,7 @@
    "session": 1,
    "shelf": "permissions",
    "skip_check": [
-    "Hast du schon einmal eine Rückfrage von Claude Code bewusst abgelehnt oder eine Allow-Regel in `settings.json` angelegt?",
+    "Hast du schon einmal eine Deny-Regel in einer `settings.json` angelegt und geprüft, dass sie greift?",
     "Kannst du ohne Nachschlagen sagen, was in `acceptEdits` ohne Rückfrage läuft und was weiter nachfragt?"
    ],
    "sources": [
@@ -361,15 +346,19 @@
   },
   {
    "aliases": [],
-   "analogy": "Die sechs Modi sind die Freigabestufen einer Zutrittskontrolle, vom Besucherausweis bis zum Generalschlüssel. `default` ist der Besucherausweis (nur die Lobby), `acceptEdits` der Wartungsausweis (auch die Technikräume), `plan` die Einsatzbesprechung (erst der Plan, dann die Freigabe). `auto` ist der Smart Badge: Das System entscheidet an jeder Tür selbst. `dontAsk` ist der Automat ohne Wachmann, der nur Karten auf seiner Liste durchlässt. `bypassPermissions` ist der Generalschlüssel ohne Schlösser; den gibst du keinem Handwerker im laufenden Gebäude, nur in der abgeschlossenen Testhalle.",
-   "answers": null,
+   "analogy": "Die sechs Modi sind die Freigabestufen einer Zutrittskontrolle. `default` ist der Besucherausweis (nur die Lobby), `acceptEdits` der Wartungsausweis (auch die Technikräume), `plan` die Begehung mit Klemmbrett: erst ansehen und aufschreiben, dann entscheiden. `auto` ist der Smart Badge: Das System entscheidet an jeder Tür selbst. `dontAsk` ist der Automat ohne Wachmann, der nur Karten auf seiner Liste durchlässt und alle anderen abweist. `bypassPermissions` ist der Generalschlüssel; den gibst du keinem Handwerker im laufenden Gebäude, nur in der abgeschlossenen Testhalle.",
+   "answers": [
+    "`default` oder `plan`: Claude liest, ändert aber nichts ohne deine Freigabe. Das ist das Prinzip der geringsten Rechte: die kleinste Stufe, die für die Aufgabe reicht.",
+    "An der Statusleiste, etwa `⏸ manual mode on` oder `⏵⏵ auto mode on`. Ohne Flag und ohne `defaultMode` in den Settings startet eine Terminal-Sitzung in `auto`, sofern er verfügbar ist.",
+    "Der Modus nimmt fast alles ohne Prüfung an, auch Schreibzugriffe auf geschützte Pfade wie `.git`. Nur Deny-Regeln und wenige Schutzfragen greifen noch. Vertretbar ist das nur dort, wo Claude Code deinem Rechner nicht schaden kann."
+   ],
    "area": "permissions",
    "checkpoint": "Du kannst die sechs Rechte-Modi danach ordnen, wer statt dir prüft, den Startmodus deiner Sitzung ablesen und begründen, warum `bypassPermissions` nur in einen isolierten Container gehört.",
    "demo": null,
    "example": "{\n  \"permissions\": {\n    \"defaultMode\": \"default\"\n  }\n}",
    "example_lang": "json",
    "file": "s1-06-rechte-modi.md",
-   "glance": "Die sechs Rechte-Modi verschieben die Prüfung schrittweise weg von dir: In `default`, `acceptEdits` und `plan` fragt Claude Code dich, in `auto` prüft ein zweites Modell (der Klassifikator), in `dontAsk` gelten nur deine vorab geschriebenen Regeln, in `bypassPermissions` prüft niemand. `bypassPermissions` gehört deshalb ausschließlich in einen isolierten Container oder eine VM.",
+   "glance": "Die sechs Rechte-Modi unterscheiden sich darin, wer eine Aktion prüft, bevor sie läuft. In `default`, `acceptEdits` und `plan` fragt Claude Code dich. In `auto` prüft ein zweites Modell, der Klassifikator. In `dontAsk` gelten nur deine vorab geschriebenen Regeln, alles andere wird abgelehnt. In `bypassPermissions` prüft fast nichts mehr; der Modus gehört deshalb ausschließlich in einen isolierten Container oder eine VM.",
    "id": "S1.6",
    "level": "core",
    "minutes": 15,
@@ -377,18 +366,18 @@
    "order": 1060,
    "outcome": "Ich kann alle sechs Rechte-Modi danach einordnen, wer statt mir prüft, für eine Situation den passenden wählen und sagen, in welchem Modus meine Sitzung startet und welche Modi Cloud-Sitzungen anbieten.",
    "quiz": {
-    "correct": "Im Container passt `bypassPermissions`; in der Cloud-Sitzung gibt es ihn nicht, dort wählst du Accept edits, Plan oder Auto.",
-    "q": "Ein Auftrag soll in einem isolierten Wegwerf-Container ganz ohne Rückfragen laufen. Später willst du denselben Auftrag in einer Cloud-Sitzung auf claude.ai/code starten. Was gilt?",
+    "correct": "In `auto` entscheidet ein Klassifikator-Modell über den Befehl; in `dontAsk` lehnt Claude Code ihn ab.",
+    "q": "Claude will einen Befehl ausführen, der im Modus `default` eine Rückfrage auslösen würde. Was passiert mit ihm in `auto`, und was in `dontAsk`?",
     "wrong": [
-     "In beiden Umgebungen passt `bypassPermissions`, weil die Cloud-Sitzung selbst schon ein isolierter Container von Anthropic ist.",
-     "Im Container passt nur `auto`, weil Claude Code `bypassPermissions` in nicht interaktiven `-p`-Läufen grundsätzlich ablehnt.",
-     "Die Cloud-Sitzung übernimmt den `defaultMode` `bypassPermissions`, wenn er in der eingecheckten settings.json steht."
+     "In `auto` lehnt Claude Code ihn ab; in `dontAsk` läuft er, weil dieser Modus nie nachfragt.",
+     "In beiden Modi läuft er ungeprüft; sie unterscheiden sich nur in der Anzeige der Statusleiste.",
+     "In beiden Modi sammelt Claude Code die Rückfrage und stellt sie dir am Ende der Aufgabe."
     ]
    },
    "recall": [
-    "Kurzcheck (60 Sekunden, unbenotet): Welche Freigabestufe gibst du Claude für ein Repository, das du noch nie gesehen hast? Gute Antworten wählen `default` oder `plan` und nennen das Prinzip der geringsten Rechte.",
-    "Was passiert mit einer Aktion, die eigentlich eine Rückfrage bräuchte, in `auto` und was in `dontAsk`?",
-    "Welche Modi bietet eine Cloud-Sitzung auf claude.ai/code an, und welcher fehlt immer?"
+    "Welchen Modus gibst du Claude für ein Repository, das du noch nie gesehen hast, und nach welchem Prinzip?",
+    "Woran erkennst du den Modus deiner Sitzung, und in welchem startet sie im Terminal ohne Flag?",
+    "Warum gehört `bypassPermissions` nur in einen isolierten Container oder eine VM?"
    ],
    "requires": [
     "S1.5"
@@ -416,15 +405,19 @@
   },
   {
    "aliases": [],
-   "analogy": "Denk an einen Wachdienst, der ein Objekt mit gemischtem Personal betreut: eine erfahrene Streifenkraft, ein Auszubildender und eine Fachkraft für technische Alarme, jeder mit eigenem Stundensatz. Stellst du die Fachkraft die ganze Nacht an den Empfang, verbrennst du Budget. Setzt du den Auszubildenden bei einem Vorfall an die Alarmzentrale, fehlt die Kompetenz vor Ort. Die Kunst ist, die richtige Person in die richtige Schicht zu stellen. Bei Claude Code ist Opus die Fachkraft, Sonnet die erfahrene Streifenkraft, Haiku der Auszubildende.",
-   "answers": null,
+   "analogy": "Ein Wachdienst betreut ein Objekt mit gemischtem Personal, jede Kraft mit eigenem Stundensatz. Der Auszubildende (`haiku`) ist schnell zur Stelle, hat aber nur einen kleinen Notizblock. Die erfahrene Streifenkraft (`sonnet`) erledigt den Alltag. Die Fachkraft für technische Alarme (`opus`) holst du für die schwierigen Fälle, den Sachverständigen (`fable`) für den großen Schadensfall, der Tage dauert. Stellst du die Fachkraft die ganze Nacht an den Empfang, verbrennst du Budget.",
+   "answers": [
+    "Opus oder Fable. Haikus Kontextfenster ist deutlich kleiner als das der anderen Tiers; bei vielen Dateien passt nicht alles hinein.",
+    "Das Modell denkt gründlicher nach und verbraucht dafür mehr Tokens: Qualität und Kosten steigen zusammen. Haiku kennt keinen Effort.",
+    "Beim Start mit `claude --model … --effort …`, oder in der Auswahl von `/model` mit `s`. `/model <alias>`, Enter in der Auswahl und eine Stufe hinter `/effort` speichern die Wahl dagegen."
+   ],
    "area": "cost",
    "checkpoint": "Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur für eine Sitzung oder dauerhaft umstellen und erklären, warum Haiku an einer großen Codebasis scheitern kann.",
    "demo": null,
-   "example": "# Alltag: Sonnet, Effort für diese Sitzung auf medium\nclaude --model sonnet --effort medium\n\n# Architektur: Opus mit tiefem Reasoning, nur für diese Sitzung\nclaude --model opus --effort xhigh\n\n# In der Sitzung: Modell und Effort in der Auswahl prüfen\n/model",
+   "example": "# Alltag: Sonnet, Effort für diese Sitzung auf medium\nclaude --model sonnet --effort medium\n\n# Hartnäckiger Fehler: Opus mit tieferem Reasoning, nur für diese Sitzung\nclaude --model opus --effort xhigh\n\n# In der Sitzung: Modell und Effort in der Auswahl prüfen\n/model",
    "example_lang": "text",
    "file": "s1-07-modellwahl-und-effort.md",
-   "glance": "Claude Code bietet vier Modell-Tiers, die du über Aliase wählst: `haiku` für schnelle, kleine Aufgaben, `sonnet` für den Coding-Alltag, `opus` für tiefes Reasoning und Architektur (der Standard in Claude Code) und `fable` für die härtesten, langen Aufgaben. Die Effort-Stufe von `low` bis `max` regelt, wie viel das Modell nachdenkt, und ist damit Qualitäts- und Kostenhebel zugleich; Haiku kennt keinen Effort.",
+   "glance": "Claude Code bietet vier Modell-Tiers, die du über Aliase wählst: `haiku` für schnelle, kleine Aufgaben, `sonnet` für den Coding-Alltag, `opus` für tiefes Reasoning und Architektur und `fable` für die härtesten, langen Aufgaben. Die Effort-Stufe von `low` bis `max` regelt, wie gründlich das Modell nachdenkt, und ist damit Qualitäts- und Kostenhebel zugleich.",
    "id": "S1.7",
    "level": "core",
    "minutes": 15,
@@ -432,12 +425,12 @@
    "order": 1070,
    "outcome": "Ich kann für eine Aufgabe Modell-Tier und Effort-Stufe begründet wählen und beides mit /model und /effort oder schon beim Start per Flag umstellen.",
    "quiz": {
-    "correct": "Haikus Kontextfenster ist deutlich kleiner als das der anderen Tiers, bei so vielen Dateien fallen frühe Inhalte heraus.",
-    "q": "Jemand analysiert eine Firmware-Codebasis mit 800 Dateien mit `haiku`, weil es das günstigste Tier ist. Warum kann das scheitern, obwohl Haiku für einfache Aufgaben empfohlen wird?",
+    "correct": "Mit `claude --model sonnet --effort high` starten; die Start-Flags gelten nur für diese eine Sitzung.",
+    "q": "Du willst für genau eine Sitzung Sonnet mit der Stufe `high` nutzen. Dein Standard soll danach unverändert sein. Was tust du?",
     "wrong": [
-     "Haiku kennt keinen Plan-Modus und kann deshalb bei Analysen über viele Dateien grundsätzlich keine strukturierte Antwort liefern.",
-     "Haiku wird ab 500 Dateien pro Sitzung gedrosselt und liefert danach nur noch Antworten aus dem Cache.",
-     "Haiku läuft fest auf `low`, und höhere Effort-Stufen lassen sich für große Analysen nicht freischalten."
+     "In der Sitzung `/model sonnet` und `/effort high` eingeben; beides gilt nur, bis du `/exit` eingibst.",
+     "In der Auswahl von `/model` Sonnet wählen und mit Enter bestätigen; gespeichert wird erst mit `s`.",
+     "`/effort high` eingeben; eine Effort-Stufe gilt grundsätzlich nur für die Sitzung, in der du sie setzt."
     ]
    },
    "recall": [
@@ -457,7 +450,7 @@
    "shelf": "cost",
    "skip_check": [
     "Hast du schon einmal mit `/model` oder `/effort` das Modell oder die Denktiefe für eine Aufgabe bewusst umgestellt?",
-    "Kannst du ohne Nachschlagen sagen, wann du `haiku`, `sonnet`, `opus` oder `fable` nimmst und warum die Effort-Stufe die Kosten beeinflusst?"
+    "Kannst du ohne Nachschlagen sagen, wofür du `haiku`, `sonnet`, `opus` und `fable` jeweils nimmst?"
    ],
    "sources": [
     "https://code.claude.com/docs/en/model-config",
@@ -471,15 +464,19 @@
    "aliases": [
     "1.2"
    ],
-   "analogy": "Deine Leitstelle hat eine Monitorwand: 200 Kameras, aber nur 20 Monitorplätze. Meldet Tür 47 einen Alarm, schaltest du ihren Feed auf. Dafür muss ein älterer Feed ins Archiv. Der Operator kann ihn zurückholen, aber das kostet Zeit und Mühe.",
-   "answers": null,
+   "analogy": "Deine Leitstelle hat eine Monitorwand: 200 Kameras, aber nur 20 Monitorplätze. Meldet Tür 47 einen Alarm, schaltest du ihren Feed auf. Was nicht auf einem Monitor läuft, existiert für die Entscheidung des Operators nicht.",
+   "answers": [
+    "Deine Nachrichten, Claudes Antworten, gelesene Dateien (auch die mit `@` geholten), Befehlsausgaben und die `CLAUDE.md`. Dazu kommen von Anfang an Claude Codes eigene Anweisungen und die Beschreibungen der Werkzeuge.",
+    "Es verdichtet automatisch: Zuerst räumt es ältere Tool-Ausgaben ab, dann fasst es das Gespräch zusammen. Ausführliche Anweisungen vom Anfang können verloren gehen, weil die Zusammenfassung den wörtlichen Verlauf ersetzt.",
+    "An der Meldung „Conversation compacted“ und daran, dass Claude frühe Entscheidungen danach ungenauer wiedergibt oder eine frühe Vorgabe nicht mehr parat hat."
+   ],
    "area": "context",
-   "checkpoint": "Du kannst erklären, was mit frühen Gesprächsinhalten passiert, wenn das Kontextfenster voll wird, und warum wichtige Absprachen deshalb in die CLAUDE.md gehören.",
+   "checkpoint": "Du kannst erklären, was im Kontextfenster liegt, was mit frühen Gesprächsinhalten passiert, wenn es voll wird, und woran du die Verdichtung erkennst.",
    "demo": null,
-   "example": "@access_control.py Which vulnerabilities are in here, with line numbers?",
+   "example": "@notes.txt What is the gate code for DOOR-03?",
    "example_lang": "text",
    "file": "s1-08-kontextfenster.md",
-   "glance": "Das Kontextfenster ist Claudes Arbeitsgedächtnis für eine Session: Deine Nachrichten, Claudes Antworten, gelesene Dateien, Befehlsausgaben und die CLAUDE.md liegen alle darin. Es ist begrenzt. Wird es voll, verdichtet Claude Code den Verlauf automatisch, und Details vom Anfang können dabei verloren gehen.",
+   "glance": "Das Kontextfenster ist Claudes Arbeitsgedächtnis für eine Session: Deine Nachrichten, Claudes Antworten, gelesene Dateien und Befehlsausgaben liegen alle darin. Was nicht im Fenster liegt, weiß Claude nicht; es muss es erst lesen. Das Fenster ist begrenzt. Wird es voll, verdichtet Claude Code den Verlauf automatisch zu einer Zusammenfassung, und Details vom Anfang können dabei verloren gehen.",
    "id": "S1.8",
    "level": "core",
    "minutes": 15,
@@ -487,18 +484,18 @@
    "order": 1080,
    "outcome": "Ich kann erklären, was im Kontextfenster liegt, warum die automatische Verdichtung frühe Details verliert und woran ich merke, dass Claude Frühes vergisst.",
    "quiz": {
-    "correct": "Das Fenster lief voll, Claude Code hat verdichtet, und die Anforderung steckt nur noch ungenau in der Zusammenfassung.",
-    "q": "Claude „vergisst\" plötzlich eine Anforderung, die du zu Beginn der Session ausdrücklich genannt hast. Was ist die wahrscheinlichste technische Ursache?",
+    "correct": "Das Fenster lief voll, Claude Code hat verdichtet, und die Vorgabe steckt nur noch ungenau in der Zusammenfassung.",
+    "q": "Nach drei Stunden in derselben Session hält sich Claude nicht mehr an eine Vorgabe, die du ganz am Anfang im Gespräch gemacht hast. Was ist die wahrscheinlichste Ursache?",
     "wrong": [
-     "Ein Rechte-Fehler hat den Read-Aufruf nachträglich geblockt, mit dem die Anforderung ursprünglich in den Kontext kam.",
-     "Das Auto-Memory hat die Anforderung in eine Memory-Datei ausgelagert und sie dafür aus dem Kontext entfernt.",
-     "Ein Modellwechsel mitten in der Session hat den Kontext geleert, weil zwei Modelle keine gemeinsame Session haben können."
+     "Claude gewichtet neuere Nachrichten grundsätzlich höher und überschreibt ältere Vorgaben, sobald sie sich widersprechen.",
+     "Vorgaben aus dem Gespräch gelten nur für die nächste Antwort; für mehr hättest du sie jedes Mal wiederholen müssen.",
+     "Die `CLAUDE.md` wurde nach einer Verdichtung neu geladen und hat dabei alle Vorgaben aus dem Gespräch ersetzt."
     ]
    },
    "recall": [
     "Was liegt alles im Kontextfenster einer Session? Nenne mindestens vier Dinge.",
     "Was macht Claude Code, wenn das Fenster voll wird, und was kann dabei verloren gehen?",
-    "Woran merkst du, dass die Verdichtung gerade zuschlägt?"
+    "Woran erkennst du, dass verdichtet wurde?"
    ],
    "requires": [
     "S1.2"
@@ -526,10 +523,14 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein guter Operator wartet nicht, bis die Monitorwand von selbst alte Feeds ins Archiv schiebt. Er schaut nach, wie voll die Wand ist, und räumt selbst auf: Er legt fest, welche Feeds bleiben, und fasst den Rest in einem kurzen Lagebericht zusammen. War eine Umschaltung falsch, springt er auf einen gespeicherten Stand zurück, statt jeden Schritt einzeln rückgängig zu machen. Beginnt ein ganz neuer Einsatz, macht er die Wand frei.",
-   "answers": null,
+   "analogy": "Ein guter Operator wartet nicht, bis die Monitorwand von selbst alte Feeds abschaltet. Er schaut nach, wie voll die Wand ist, und räumt selbst auf: Er legt fest, welche Feeds bleiben, und fasst den Rest in einem Lagebericht zusammen, in dem steht, was ihm wichtig ist. War eine Umschaltung falsch, springt er auf einen gespeicherten Stand zurück, statt jeden Schritt einzeln rückgängig zu machen. Beginnt ein ganz neuer Einsatz, macht er die Wand frei.",
+   "answers": [
+    "Die Zusammenfassung behält, was du nennst, statt was die Automatik für wichtig hält.",
+    "Den Stand vor dem gewählten Prompt, je nach Wahl Code, Gespräch oder beides. Nicht zurückholen kann es Dateien, die Claude per Shell-Befehl geändert oder gelöscht hat, etwa mit `rm` oder `mv`.",
+    "Bei einem Themenwechsel und wenn du Claude mehr als zweimal zum selben Problem korrigiert hast: Dann stört der alte Verlauf mehr, als er nützt."
+   ],
    "area": "context",
-   "checkpoint": "Du kannst in einem Satz sagen, wann du `/compact` und wann `/rewind` nimmst, und was keins von beiden leistet: Wissen über Sessions hinweg sichern.",
+   "checkpoint": "Du kannst sagen, wann du `/compact`, `/rewind` oder `/clear` nimmst, und was keiner der drei leistet: Wissen über Sessions hinweg sichern.",
    "demo": null,
    "example": "# Kontext proaktiv verdichten, Fokus auf den OSDP-Parser-Refactor:\n/compact focus on the OSDP parser refactor and relay timing changes\n\n# Mehrere Schritte auf einmal zurückdrehen:\n/rewind\n# Das Menü listet deine bisherigen Prompts: Punkt wählen, dann z. B. \"Restore code and conversation\"",
    "example_lang": "text",
@@ -537,22 +538,22 @@
    "glance": "Kontext steuerst du selbst, statt auf die automatische Verdichtung zu warten. `/context` zeigt, wie voll das Fenster ist, und `/compact` verdichtet den Verlauf, auf Wunsch mit einem Fokus, der bestimmt, was die Zusammenfassung behält. `/rewind` springt zu einem früheren Prompt zurück und stellt Code, Gespräch oder beides wieder her. Für ein ganz neues Thema beginnt `/clear` mit leerem Kontext.",
    "id": "S1.9",
    "level": "core",
-   "minutes": 12,
+   "minutes": 15,
    "offers": [],
    "order": 1090,
    "outcome": "Ich kann mit /context die Auslastung prüfen, mit /compact und Fokus-Hinweis gezielt verdichten, mit /rewind mehrere Schritte zurückdrehen und entscheiden, wann /clear oder eine neue Session besser passt.",
    "quiz": {
-    "correct": "`/rewind` springt zu einem Checkpoint und stellt den Code wieder her; `/compact` fasst nur den Verlauf zusammen, Dateien bleiben.",
-    "q": "Du willst die letzten fünf Dateiänderungen zurücknehmen, die Claude in einer Refactor-Session gemacht hat. Welcher Befehl ist richtig, und was würde `/compact` hier bewirken?",
+    "correct": "`/rewind`: den Prompt wählen, mit dem die Änderungen begannen, und den Code wiederherstellen lassen.",
+    "q": "Claude hat in einer Refactor-Session fünf Dateien über seine Datei-Werkzeuge geändert, und du willst alle fünf Änderungen zurücknehmen. Welcher Befehl ist richtig?",
     "wrong": [
-     "`/export` schreibt die geänderten Dateien als Patch, den du danach mit `/revert` zurückspielst; `/compact` spielt dabei keine Rolle.",
-     "`/context --undo` nimmt mehrstufige Änderungen zurück; `/compact` würde dabei nur den Tokenverbrauch neu zählen.",
-     "Beide wirken gleich, wenn du `/compact reset` aufrufst, weil das den Kontext und alle Dateien auf den Start zurücksetzt."
+     "`/compact`: Es verdichtet den Verlauf und setzt dabei die geänderten Dateien auf ihren alten Stand.",
+     "`/clear`: Es leert den Kontext und verwirft damit auch alle Änderungen der laufenden Session.",
+     "`/context`: Es zeigt die geänderten Dateien an und bietet für jede das Zurücksetzen an."
     ]
    },
    "recall": [
     "Was bewirkt ein Fokus-Hinweis bei `/compact`?",
-    "Welche Änderungen kann `/rewind` nicht zurückholen?",
+    "Welchen Stand stellt `/rewind` wieder her, und welche Änderungen kann es nicht zurückholen?",
     "Wann ist `/clear` besser als `/compact`?"
    ],
    "requires": [
@@ -1181,6 +1182,47 @@
    "title": "Praxis-Station Session 1: eine Übung wählen",
    "transferable": false,
    "type": "practice"
+  },
+  {
+   "aliases": [],
+   "analogy": "Denk an deine Einarbeitung in einer Sicherheitszentrale. Am Anfang steht der Einsatzauftrag: welches Objekt, welche Aufgaben, was ausdrücklich nicht dazugehört. Das ist die Mission. Ins Ausbildungsnachweisheft kommt eine Station erst, wenn du sie am echten Pult vorgeführt hast; die Unterschrift unter der Dienstanweisung zählt nicht. Das sind die Lernprotokolle. Und ob das Wissen hält, zeigt nicht die Wiederholung am selben Nachmittag, sondern die unangekündigte Übung einige Wochen später.",
+   "answers": [
+    "Du wendest etwas Nicht-Triviales nachweislich richtig an, du nennst Vorwissen samt Tiefe, eine Fehlvorstellung wurde ausgeräumt, oder die Mission hat sich durch das Lernen verschoben. Kein Anlass ist bloß durchgenommener Stoff.",
+    "Abrufflüssigkeit ist, was dir im Moment leicht einfällt; Speicherstärke ist, was du langfristig behältst. Die Abrufflüssigkeit täuscht: Sie kann Können vorspiegeln.",
+    "Er meldet es als Fehler und unterrichtet nicht aus dem Gedächtnis weiter."
+   ],
+   "area": null,
+   "checkpoint": "Du kannst erklären, warum ein Lernprotokoll erst nach einem Nachweis entsteht und warum Abruf mit Abstand mehr festigt als Wiederlesen, und du prüfst bei einer Antwort des Tutors, aus welcher Quelle sie stammt.",
+   "demo": null,
+   "example": "# Mission: Claude Code\n\n## Warum\nEin bis drei Sätze: das konkrete Ziel. Was ändert sich in der Arbeit, wenn es klappt?\nNicht „Claude Code verstehen\", sondern z. B. „Unsere Code-Reviews mit Claude beschleunigen, ohne Secrets zu riskieren\".\n\n## Daran merke ich es\n- eine konkrete, beobachtbare Sache, die ich danach kann\n- noch eine\n\n## Rahmen\n- Zeit, Rechte im Job, erlaubte Werkzeuge, Vorlieben\n\n## Bewusst nicht\n- Themen, die ich gerade nicht verfolge (schützt vor Überforderung)",
+   "example_lang": "md",
+   "file": "x-02-lernen-mit-claude-code.md",
+   "glance": "Claude Code kann dich beim Lernen begleiten, wenn dein Lernstand in Dateien steht statt im Chat. Matt Pococks Skill `teach` zeigt, wie das geht: eine Mission als Kompass, Lernprotokolle nur für Nachgewiesenes, kurze Lektionen, die dich gerade genug fordern, Abruf mit Abstand statt Wiederlesen und für jede Aussage eine Quelle. Der Workshop-Tutor dieser Bibliothek (`/workshop`) übernimmt diese Bausteine für Claude Code.",
+   "id": "X.2",
+   "level": "bonus",
+   "minutes": 35,
+   "offers": [],
+   "order": 1205,
+   "outcome": "Ich kann einen Lernordner mit MISSION.md anlegen, mit dem Workshop-Tutor über start, next, learn und review lernen und prüfen, aus welcher Quelle eine Antwort des Tutors stammt.",
+   "quiz": null,
+   "recall": [
+    "Welche vier Anlässe rechtfertigen ein Lernprotokoll, und welcher häufige Anlass gerade nicht?",
+    "Was unterscheidet Abrufflüssigkeit von Speicherstärke, und welche der beiden täuscht?",
+    "Was soll der Tutor tun, wenn ein Kapitel in seiner Installation fehlt?"
+   ],
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "skip_check": [],
+   "sources": [
+    "https://github.com/mattpocock/skills/tree/main/skills/productivity/teach",
+    "https://code.claude.com/docs/en/skills"
+   ],
+   "title": "Mit Claude Code lernen",
+   "transferable": true,
+   "type": "community"
   },
   {
    "aliases": [
@@ -1934,50 +1976,6 @@
    "type": "lesson"
   },
   {
-   "aliases": [],
-   "analogy": "Ein anderer Wachdienst bietet dir seine bewährten Dienstanweisungen an: Alarmverfolgung, Schlüsselübergabe, Revierfahrt. Eine gute Vorlage spart dir Wochen. Trotzdem kommt keine fremde Dienstanweisung ungelesen in den Ordner der Leitstelle. Du prüfst, wer sie geschrieben hat, ob du sie verwenden darfst, welche Befugnisse sie verlangt und wen sie im Ernstfall anruft. Ein Skill ist so eine Dienstanweisung.",
-   "answers": null,
-   "area": null,
-   "checkpoint": "Du kannst für jede der vier Quellen sagen, wer sie baut, unter welcher Lizenz sie steht und wie du sie installierst, und einen fremden Skill mit der Prüfliste bewerten, bevor du ihn installierst.",
-   "demo": null,
-   "example": "# Clone without installing, then read what would run\ngit clone --depth 1 https://github.com/obra/superpowers.git\nhead -3 superpowers/LICENSE\ncat superpowers/.claude-plugin/plugin.json\ncat superpowers/hooks/hooks.json\ngrep -rn \"allowed-tools\" superpowers/skills/\nclaude --plugin-dir ./superpowers plugin details superpowers",
-   "example_lang": "bash",
-   "file": "x-01-community-skills.md",
-   "glance": "Vier Quellen für fremde Skills sind hier belegt: Matt Pocock (`mattpocock/skills`), Jesse Vincent (`obra/superpowers`), Anthropic (`anthropics/skills` und der offizielle Marketplace `anthropics/claude-plugins-official`) und Garry Tan (`garrytan/gstack`). Jede Sammlung bringt eine eigene Arbeitsweise mit, und die Lizenzen sind verschieden. Ein fremder Skill ist fremder Text in Claudes Kontext, ein fremdes Plugin ist fremder Code mit deinen Rechten: Lies beides, bevor du es installierst.",
-   "id": "X.1",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 2135,
-   "outcome": "Ich kann vier belegte Skill-Quellen mit Lizenz und Installationsweg einordnen und einen fremden Skill vor der Installation mit einer Prüfliste bewerten.",
-   "quiz": null,
-   "recall": [
-    "Warum reicht die Lizenzangabe im README nicht? Nenn das Beispiel aus diesem Kapitel.",
-    "Was läuft bei `superpowers` zu Beginn jeder Sitzung, und woran hast du das vor der Installation erkannt?",
-    "Was bewirkt `allowed-tools` in einem fremden Skill, und warum schaust du dort zuerst hin?"
-   ],
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "skip_check": [],
-   "sources": [
-    "https://code.claude.com/docs/en/plugins/anthropic-marketplaces",
-    "https://code.claude.com/docs/en/plugins/security",
-    "https://code.claude.com/docs/en/plugins/install",
-    "https://code.claude.com/docs/en/skills",
-    "https://github.com/mattpocock/skills",
-    "https://github.com/obra/superpowers",
-    "https://github.com/anthropics/skills",
-    "https://github.com/anthropics/claude-plugins-official",
-    "https://github.com/garrytan/gstack"
-   ],
-   "title": "Community-Skills: wer baut was, das wirklich hilft",
-   "transferable": true,
-   "type": "community"
-  },
-  {
    "aliases": [
     "2.4"
    ],
@@ -2365,6 +2363,50 @@
    "type": "practice"
   },
   {
+   "aliases": [],
+   "analogy": "Ein anderer Wachdienst bietet dir seine bewährten Dienstanweisungen an: Alarmverfolgung, Schlüsselübergabe, Revierfahrt. Eine gute Vorlage spart dir Wochen. Trotzdem kommt keine fremde Dienstanweisung ungelesen in den Ordner der Leitstelle. Du prüfst, wer sie geschrieben hat, ob du sie verwenden darfst, welche Befugnisse sie verlangt und wen sie im Ernstfall anruft. Ein Skill ist so eine Dienstanweisung.",
+   "answers": null,
+   "area": null,
+   "checkpoint": "Du kannst für jede der vier Quellen sagen, wer sie baut, unter welcher Lizenz sie steht und wie du sie installierst, und einen fremden Skill mit der Prüfliste bewerten, bevor du ihn installierst.",
+   "demo": null,
+   "example": "# Clone without installing, then read what would run\ngit clone --depth 1 https://github.com/obra/superpowers.git\nhead -3 superpowers/LICENSE\ncat superpowers/.claude-plugin/plugin.json\ncat superpowers/hooks/hooks.json\ngrep -rn \"allowed-tools\" superpowers/skills/\nclaude --plugin-dir ./superpowers plugin details superpowers",
+   "example_lang": "bash",
+   "file": "x-01-community-skills.md",
+   "glance": "Vier Quellen für fremde Skills sind hier belegt: Matt Pocock (`mattpocock/skills`), Jesse Vincent (`obra/superpowers`), Anthropic (`anthropics/skills` und der offizielle Marketplace `anthropics/claude-plugins-official`) und Garry Tan (`garrytan/gstack`). Jede Sammlung bringt eine eigene Arbeitsweise mit, und die Lizenzen sind verschieden. Ein fremder Skill ist fremder Text in Claudes Kontext, ein fremdes Plugin ist fremder Code mit deinen Rechten: Lies beides, bevor du es installierst.",
+   "id": "X.1",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 2205,
+   "outcome": "Ich kann vier belegte Skill-Quellen mit Lizenz und Installationsweg einordnen und einen fremden Skill vor der Installation mit einer Prüfliste bewerten.",
+   "quiz": null,
+   "recall": [
+    "Warum reicht die Lizenzangabe im README nicht? Nenn das Beispiel aus diesem Kapitel.",
+    "Was läuft bei `superpowers` zu Beginn jeder Sitzung, und woran hast du das vor der Installation erkannt?",
+    "Was bewirkt `allowed-tools` in einem fremden Skill, und warum schaust du dort zuerst hin?"
+   ],
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "skip_check": [],
+   "sources": [
+    "https://code.claude.com/docs/en/plugins/anthropic-marketplaces",
+    "https://code.claude.com/docs/en/plugins/security",
+    "https://code.claude.com/docs/en/plugins/install",
+    "https://code.claude.com/docs/en/skills",
+    "https://github.com/mattpocock/skills",
+    "https://github.com/obra/superpowers",
+    "https://github.com/anthropics/skills",
+    "https://github.com/anthropics/claude-plugins-official",
+    "https://github.com/garrytan/gstack"
+   ],
+   "title": "Community-Skills: wer baut was, das wirklich hilft",
+   "transferable": true,
+   "type": "community"
+  },
+  {
    "aliases": [
     "3.1"
    ],
@@ -2473,56 +2515,6 @@
    "title": "Eingebaute Subagenten nutzen",
    "transferable": false,
    "type": "lesson"
-  },
-  {
-   "aliases": [],
-   "analogy": "Stell dir zwei Gebäude mit denselben Türen vor. Das erste ist vorbereitet, aber nicht ausgestattet: Die Türen haben Schlösser, und wer den Schlüssel hat, kommt überall hin, wo er passt. Leerrohre für Kartenleser, Sensoren und Zonen liegen schon in der Wand; was hineinkommt, entscheidest du. Im zweiten Gebäude ist die Zutrittsanlage eingebaut: Kartenleser mit Berechtigungsstufen, Sensoren an der Alarmmatrix, die Hausordnung am Eingang, Streifen für Sonderaufträge. Pi gleicht dem ersten Gebäude, Claude Code dem zweiten.",
-   "answers": null,
-   "area": null,
-   "checkpoint": "",
-   "demo": null,
-   "example": "/permissions\n/hooks\n/mcp\n/context",
-   "example_lang": "text",
-   "file": "x-03-pi-als-spiegel.md",
-   "glance": "Pi ist ein quelloffener Coding-Agent-Harness, den Earendil Inc. mit Mitwirkenden unter MIT-Lizenz herausgibt, und er ist mit Absicht minimal: ein Modell, eine Schleife, vier Standard-Werkzeuge und ein kurzer System-Prompt. Subagenten, Plan-Modus und Freigabe-Dialoge sind nicht eingebaut; wer sie braucht, baut sie als Extension oder installiert ein Paket. Genau das macht Pi zum Spiegel: Du siehst, wie wenig ein Agent im Kern braucht, und erkennst, welche Schichten Claude Code darüberlegt.",
-   "id": "X.3",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 3025,
-   "outcome": "Ich kann an Pi zeigen, welche Schichten Claude Code um die Agenten-Schleife legt, welche davon übertragbare Denkmodelle sind, und begründen, warum ich bei einem Harness ohne erzwungene Freigaben den Schutz selbst mitbringen muss.",
-   "quiz": null,
-   "recall": [],
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "skip_check": [],
-   "sources": [
-    "https://pi.dev/",
-    "https://pi.dev/docs/latest",
-    "https://pi.dev/docs/latest/how-pi-works",
-    "https://pi.dev/docs/latest/cli",
-    "https://pi.dev/docs/latest/security",
-    "https://pi.dev/docs/latest/containerization",
-    "https://pi.dev/docs/latest/extensions",
-    "https://pi.dev/docs/latest/skills",
-    "https://pi.dev/docs/latest/mcp",
-    "https://pi.dev/docs/latest/configuration",
-    "https://pi.dev/docs/latest/sessions",
-    "https://pi.dev/docs/latest/packages",
-    "https://pi.dev/docs/latest/quickstart",
-    "https://pi.dev/docs/latest/settings",
-    "https://github.com/earendil-works/pi",
-    "https://code.claude.com/docs/en/headless",
-    "https://code.claude.com/docs/en/cli-reference",
-    "https://code.claude.com/docs/en/skills",
-    "https://code.claude.com/docs/en/memory"
-   ],
-   "title": "Der minimale Agent: Pi als Spiegel",
-   "transferable": true,
-   "type": "community"
   },
   {
    "aliases": [],
@@ -3267,6 +3259,56 @@
    "type": "practice"
   },
   {
+   "aliases": [],
+   "analogy": "Stell dir zwei Gebäude mit denselben Türen vor. Das erste ist vorbereitet, aber nicht ausgestattet: Die Türen haben Schlösser, und wer den Schlüssel hat, kommt überall hin, wo er passt. Leerrohre für Kartenleser, Sensoren und Zonen liegen schon in der Wand; was hineinkommt, entscheidest du. Im zweiten Gebäude ist die Zutrittsanlage eingebaut: Kartenleser mit Berechtigungsstufen, Sensoren an der Alarmmatrix, die Hausordnung am Eingang, Streifen für Sonderaufträge. Pi gleicht dem ersten Gebäude, Claude Code dem zweiten.",
+   "answers": null,
+   "area": null,
+   "checkpoint": "",
+   "demo": null,
+   "example": "/permissions\n/hooks\n/mcp\n/context",
+   "example_lang": "text",
+   "file": "x-03-pi-als-spiegel.md",
+   "glance": "Pi ist ein quelloffener Coding-Agent-Harness, den Earendil Inc. mit Mitwirkenden unter MIT-Lizenz herausgibt, und er ist mit Absicht minimal: ein Modell, eine Schleife, vier Standard-Werkzeuge und ein kurzer System-Prompt. Subagenten, Plan-Modus und Freigabe-Dialoge sind nicht eingebaut; wer sie braucht, baut sie als Extension oder installiert ein Paket. Genau das macht Pi zum Spiegel: Du siehst, wie wenig ein Agent im Kern braucht, und erkennst, welche Schichten Claude Code darüberlegt.",
+   "id": "X.3",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 3155,
+   "outcome": "Ich kann an Pi zeigen, welche Schichten Claude Code um die Agenten-Schleife legt, welche davon übertragbare Denkmodelle sind, und begründen, warum ich bei einem Harness ohne erzwungene Freigaben den Schutz selbst mitbringen muss.",
+   "quiz": null,
+   "recall": [],
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "skip_check": [],
+   "sources": [
+    "https://pi.dev/",
+    "https://pi.dev/docs/latest",
+    "https://pi.dev/docs/latest/how-pi-works",
+    "https://pi.dev/docs/latest/cli",
+    "https://pi.dev/docs/latest/security",
+    "https://pi.dev/docs/latest/containerization",
+    "https://pi.dev/docs/latest/extensions",
+    "https://pi.dev/docs/latest/skills",
+    "https://pi.dev/docs/latest/mcp",
+    "https://pi.dev/docs/latest/configuration",
+    "https://pi.dev/docs/latest/sessions",
+    "https://pi.dev/docs/latest/packages",
+    "https://pi.dev/docs/latest/quickstart",
+    "https://pi.dev/docs/latest/settings",
+    "https://github.com/earendil-works/pi",
+    "https://code.claude.com/docs/en/headless",
+    "https://code.claude.com/docs/en/cli-reference",
+    "https://code.claude.com/docs/en/skills",
+    "https://code.claude.com/docs/en/memory"
+   ],
+   "title": "Der minimale Agent: Pi als Spiegel",
+   "transferable": true,
+   "type": "community"
+  },
+  {
    "aliases": [
     "3.2"
    ],
@@ -3619,78 +3661,6 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein headless-Lauf ist die nächtliche Wachrunde nach Checkliste: Sie beginnt, arbeitet ihre Punkte ab und endet. Ein Dauer-Agent ist der Wachmann, der rund um die Uhr in der Pforte sitzt, einen Schlüsselbund trägt und Aufträge per Funk annimmt. Die entscheidende Frage ist nicht, ob er fleißig ist, sondern wer auf seiner Frequenz funken kann, und dass jeder Zettel, den er auf dem Rundgang aufhebt, eine neue Anweisung enthalten kann.",
-   "answers": null,
-   "area": null,
-   "checkpoint": "Du kannst für einen Dauer-Agenten zeigen, an welchen Stellen Text von außen zur Aktion wird, für jede Stelle ein Gegenmittel und seine Entsprechung in Claude Code nennen und den Agenten stoppen, ohne ihn darum zu bitten.",
-   "demo": null,
-   "example": "# Bevor ein Agent bei mir dauerhaft läuft\nAutomation: ______________   Geprüft am: ______________\n\n## Eingang\n- [ ] Alle Wege, auf denen Text den Agenten erreicht, stehen auf einer Liste:\n      Kanäle, Webhooks, gelesene Webseiten, Mails, Anhänge.\n      Beleg:\n- [ ] Nur Absender auf einer Allowlist lösen etwas aus; Unbekannte werden\n      verworfen oder müssen erst gekoppelt werden.\n      Beleg:\n- [ ] In Gruppen reagiert der Agent nur, wo ich es freigegeben habe,\n      und nur, wenn er erwähnt wird.\n      Beleg:\n- [ ] Der Steuerzugang (Gateway, Dashboard, API) ist nicht aus dem Netz\n      erreichbar oder verlangt einen langen, zufälligen Schlüssel.\n      Beleg:\n\n## Reichweite\n- [ ] Für jedes erlaubte Werkzeug steht ein Grund da; alles andere ist\n      ausdrücklich verboten, nicht nur „nicht erwähnt\".\n      Beleg:\n- [ ] Befehle mit Schreib- oder Netzwerkwirkung laufen in Sandbox,\n      Container oder Worktree, nicht direkt auf meinem Arbeitsrechner.\n      Beleg:\n- [ ] Geheimnisse stehen weder im Prompt noch im Gedächtnis noch in\n      Dateien, die der Agent lesen kann.\n      Beleg:\n- [ ] Jeder fremde Skill, jedes Plugin und jeder MCP-Server ist gelesen\n      und auf eine Version festgelegt.\n      Beleg:\n- [ ] Ich habe das Langzeit-Gedächtnis einmal gelesen und weiß, welche\n      Quellen dort hineinschreiben dürfen.\n      Beleg:\n\n## Betrieb\n- [ ] Takt, Kontext pro Lauf und eine harte Kostengrenze stehen fest\n      (bei claude -p: --max-budget-usd und --max-turns).\n      Beleg:\n- [ ] Ich habe den Notaus einmal ausgeführt: Lauf abbrechen, Dienst\n      stoppen, Zeitplan abschalten.\n      Beleg:\n- [ ] Ich weiß, welche Schlüssel ich wo widerrufe, und habe eine\n      Sicherung, von der ich zurückkann.\n      Beleg:",
-   "example_lang": "markdown",
-   "file": "x-04-agenten-im-dauerbetrieb.md",
-   "glance": "OpenClaw ist ein quelloffener persönlicher Agent, den du selbst betreibst: Ein Gateway-Prozess läuft dauerhaft auf deinem Rechner oder Server, verbindet Chat-Apps wie Telegram, Discord oder WhatsApp mit einem Agenten und weckt ihn auch nach Zeitplan. Daraus folgt die eine Lehre dieses Kapitels, und sie gilt für jede Automation, auch für deine mit Claude Code: Jede Nachricht aus einem Kanal und jeder Inhalt, den der Agent liest, ist nicht vertrauenswürdige Eingabe an einen Agenten mit Werkzeugen und Rechten.",
-   "id": "X.4",
-   "level": "bonus",
-   "minutes": 15,
-   "offers": [],
-   "order": 4065,
-   "outcome": "Ich kann für einen Agenten im Dauerbetrieb die Stellen zeigen, an denen Text von außen zur Aktion wird, je Risiko ein belegtes Gegenmittel und seine Entsprechung in Claude Code nennen und den Agenten im Ernstfall stoppen.",
-   "quiz": null,
-   "recall": [
-    "Warum reicht es nicht, dass nur du dem Bot schreiben darfst?",
-    "Welche Standardwerte halten bei OpenClaw den Eingang zu, und welche zwei lassen die Werkzeuge offen?",
-    "Was unterscheidet `openclaw channels logout` vom Widerruf eines Tokens beim Anbieter?"
-   ],
-   "requires": [],
-   "requires_all": [],
-   "safety_floor": false,
-   "session": null,
-   "shelf": "community",
-   "skip_check": [],
-   "sources": [
-    "https://docs.openclaw.ai/",
-    "https://github.com/openclaw/openclaw/blob/main/README.md",
-    "https://github.com/openclaw/openclaw/blob/main/SECURITY.md",
-    "https://github.com/openclaw/openclaw/blob/main/LICENSE",
-    "https://docs.openclaw.ai/concepts/architecture",
-    "https://docs.openclaw.ai/gateway/security",
-    "https://docs.openclaw.ai/gateway/security/trust-model",
-    "https://docs.openclaw.ai/gateway/security/prompt-injection",
-    "https://docs.openclaw.ai/gateway/security/access-control",
-    "https://docs.openclaw.ai/gateway/security/tool-permissions",
-    "https://docs.openclaw.ai/gateway/security/network-exposure",
-    "https://docs.openclaw.ai/gateway/security/hardened-baseline",
-    "https://docs.openclaw.ai/gateway/security/running-the-audit",
-    "https://docs.openclaw.ai/gateway/security/exposure-runbook",
-    "https://docs.openclaw.ai/gateway/security/operator-incident-response",
-    "https://docs.openclaw.ai/gateway/sandboxing",
-    "https://docs.openclaw.ai/tools/exec-approvals",
-    "https://docs.openclaw.ai/channels",
-    "https://docs.openclaw.ai/channels/pairing",
-    "https://docs.openclaw.ai/channels/groups",
-    "https://docs.openclaw.ai/automation",
-    "https://docs.openclaw.ai/automation/cron-jobs",
-    "https://docs.openclaw.ai/automation/cron-jobs/managing-jobs",
-    "https://docs.openclaw.ai/gateway/heartbeat",
-    "https://docs.openclaw.ai/concepts/usage-tracking",
-    "https://docs.openclaw.ai/tools/skills",
-    "https://docs.openclaw.ai/clawhub",
-    "https://docs.openclaw.ai/clawhub/security-audits",
-    "https://docs.openclaw.ai/concepts/memory",
-    "https://docs.openclaw.ai/concepts/memory-provenance",
-    "https://docs.openclaw.ai/gateway",
-    "https://docs.openclaw.ai/cli/gateway/service",
-    "https://docs.openclaw.ai/cli/channels",
-    "https://docs.openclaw.ai/cli/uninstall",
-    "https://docs.openclaw.ai/help/faq/chat-commands-and-stopping",
-    "https://code.claude.com/docs/en/channels",
-    "https://code.claude.com/docs/en/remote-control"
-   ],
-   "title": "Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann",
-   "transferable": true,
-   "type": "community"
-  },
-  {
-   "aliases": [],
    "analogy": "Ein Worktree ist die Testbank aus S1.18: ein Nachbau der Anlage in einem eigenen Raum, mit derselben Ausstattung und getrennt vom Live-System. Mehrere Techniker arbeiten an mehreren Testbänken gleichzeitig, ohne sich in die Quere zu kommen. Alle Testbänke stehen aber im selben Gebäude.",
    "answers": null,
    "area": "git",
@@ -3747,6 +3717,78 @@
    "title": "Isolation mit Docker und Worktrees",
    "transferable": true,
    "type": "lesson"
+  },
+  {
+   "aliases": [],
+   "analogy": "Ein headless-Lauf ist die nächtliche Wachrunde nach Checkliste: Sie beginnt, arbeitet ihre Punkte ab und endet. Ein Dauer-Agent ist der Wachmann, der rund um die Uhr in der Pforte sitzt, einen Schlüsselbund trägt und Aufträge per Funk annimmt. Die entscheidende Frage ist nicht, ob er fleißig ist, sondern wer auf seiner Frequenz funken kann, und dass jeder Zettel, den er auf dem Rundgang aufhebt, eine neue Anweisung enthalten kann.",
+   "answers": null,
+   "area": null,
+   "checkpoint": "Du kannst für einen Dauer-Agenten zeigen, an welchen Stellen Text von außen zur Aktion wird, für jede Stelle ein Gegenmittel und seine Entsprechung in Claude Code nennen und den Agenten stoppen, ohne ihn darum zu bitten.",
+   "demo": null,
+   "example": "# Bevor ein Agent bei mir dauerhaft läuft\nAutomation: ______________   Geprüft am: ______________\n\n## Eingang\n- [ ] Alle Wege, auf denen Text den Agenten erreicht, stehen auf einer Liste:\n      Kanäle, Webhooks, gelesene Webseiten, Mails, Anhänge.\n      Beleg:\n- [ ] Nur Absender auf einer Allowlist lösen etwas aus; Unbekannte werden\n      verworfen oder müssen erst gekoppelt werden.\n      Beleg:\n- [ ] In Gruppen reagiert der Agent nur, wo ich es freigegeben habe,\n      und nur, wenn er erwähnt wird.\n      Beleg:\n- [ ] Der Steuerzugang (Gateway, Dashboard, API) ist nicht aus dem Netz\n      erreichbar oder verlangt einen langen, zufälligen Schlüssel.\n      Beleg:\n\n## Reichweite\n- [ ] Für jedes erlaubte Werkzeug steht ein Grund da; alles andere ist\n      ausdrücklich verboten, nicht nur „nicht erwähnt\".\n      Beleg:\n- [ ] Befehle mit Schreib- oder Netzwerkwirkung laufen in Sandbox,\n      Container oder Worktree, nicht direkt auf meinem Arbeitsrechner.\n      Beleg:\n- [ ] Geheimnisse stehen weder im Prompt noch im Gedächtnis noch in\n      Dateien, die der Agent lesen kann.\n      Beleg:\n- [ ] Jeder fremde Skill, jedes Plugin und jeder MCP-Server ist gelesen\n      und auf eine Version festgelegt.\n      Beleg:\n- [ ] Ich habe das Langzeit-Gedächtnis einmal gelesen und weiß, welche\n      Quellen dort hineinschreiben dürfen.\n      Beleg:\n\n## Betrieb\n- [ ] Takt, Kontext pro Lauf und eine harte Kostengrenze stehen fest\n      (bei claude -p: --max-budget-usd und --max-turns).\n      Beleg:\n- [ ] Ich habe den Notaus einmal ausgeführt: Lauf abbrechen, Dienst\n      stoppen, Zeitplan abschalten.\n      Beleg:\n- [ ] Ich weiß, welche Schlüssel ich wo widerrufe, und habe eine\n      Sicherung, von der ich zurückkann.\n      Beleg:",
+   "example_lang": "markdown",
+   "file": "x-04-agenten-im-dauerbetrieb.md",
+   "glance": "OpenClaw ist ein quelloffener persönlicher Agent, den du selbst betreibst: Ein Gateway-Prozess läuft dauerhaft auf deinem Rechner oder Server, verbindet Chat-Apps wie Telegram, Discord oder WhatsApp mit einem Agenten und weckt ihn auch nach Zeitplan. Daraus folgt die eine Lehre dieses Kapitels, und sie gilt für jede Automation, auch für deine mit Claude Code: Jede Nachricht aus einem Kanal und jeder Inhalt, den der Agent liest, ist nicht vertrauenswürdige Eingabe an einen Agenten mit Werkzeugen und Rechten.",
+   "id": "X.4",
+   "level": "bonus",
+   "minutes": 15,
+   "offers": [],
+   "order": 4075,
+   "outcome": "Ich kann für einen Agenten im Dauerbetrieb die Stellen zeigen, an denen Text von außen zur Aktion wird, je Risiko ein belegtes Gegenmittel und seine Entsprechung in Claude Code nennen und den Agenten im Ernstfall stoppen.",
+   "quiz": null,
+   "recall": [
+    "Warum reicht es nicht, dass nur du dem Bot schreiben darfst?",
+    "Welche Standardwerte halten bei OpenClaw den Eingang zu, und welche zwei lassen die Werkzeuge offen?",
+    "Was unterscheidet `openclaw channels logout` vom Widerruf eines Tokens beim Anbieter?"
+   ],
+   "requires": [],
+   "requires_all": [],
+   "safety_floor": false,
+   "session": null,
+   "shelf": "community",
+   "skip_check": [],
+   "sources": [
+    "https://docs.openclaw.ai/",
+    "https://github.com/openclaw/openclaw/blob/main/README.md",
+    "https://github.com/openclaw/openclaw/blob/main/SECURITY.md",
+    "https://github.com/openclaw/openclaw/blob/main/LICENSE",
+    "https://docs.openclaw.ai/concepts/architecture",
+    "https://docs.openclaw.ai/gateway/security",
+    "https://docs.openclaw.ai/gateway/security/trust-model",
+    "https://docs.openclaw.ai/gateway/security/prompt-injection",
+    "https://docs.openclaw.ai/gateway/security/access-control",
+    "https://docs.openclaw.ai/gateway/security/tool-permissions",
+    "https://docs.openclaw.ai/gateway/security/network-exposure",
+    "https://docs.openclaw.ai/gateway/security/hardened-baseline",
+    "https://docs.openclaw.ai/gateway/security/running-the-audit",
+    "https://docs.openclaw.ai/gateway/security/exposure-runbook",
+    "https://docs.openclaw.ai/gateway/security/operator-incident-response",
+    "https://docs.openclaw.ai/gateway/sandboxing",
+    "https://docs.openclaw.ai/tools/exec-approvals",
+    "https://docs.openclaw.ai/channels",
+    "https://docs.openclaw.ai/channels/pairing",
+    "https://docs.openclaw.ai/channels/groups",
+    "https://docs.openclaw.ai/automation",
+    "https://docs.openclaw.ai/automation/cron-jobs",
+    "https://docs.openclaw.ai/automation/cron-jobs/managing-jobs",
+    "https://docs.openclaw.ai/gateway/heartbeat",
+    "https://docs.openclaw.ai/concepts/usage-tracking",
+    "https://docs.openclaw.ai/tools/skills",
+    "https://docs.openclaw.ai/clawhub",
+    "https://docs.openclaw.ai/clawhub/security-audits",
+    "https://docs.openclaw.ai/concepts/memory",
+    "https://docs.openclaw.ai/concepts/memory-provenance",
+    "https://docs.openclaw.ai/gateway",
+    "https://docs.openclaw.ai/cli/gateway/service",
+    "https://docs.openclaw.ai/cli/channels",
+    "https://docs.openclaw.ai/cli/uninstall",
+    "https://docs.openclaw.ai/help/faq/chat-commands-and-stopping",
+    "https://code.claude.com/docs/en/channels",
+    "https://code.claude.com/docs/en/remote-control"
+   ],
+   "title": "Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann",
+   "transferable": true,
+   "type": "community"
   },
   {
    "aliases": [],

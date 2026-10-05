@@ -19,7 +19,7 @@ offers: [S1.1, S1.10, S1.13, S1.16, S1.18]
 <!-- meta:start -->
 > **Regal:** [Praxis-Stationen](README.md#practice) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** keine
 >
-> ← [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](s1-19-kosten-im-blick.md) · [Bibliothek](README.md) · [S2.1 Skills sind Dienstanweisungen, Commands sind Knöpfe](s2-01-skills-und-commands.md) →
+> ← [S1.19 Kosten im Blick: /cost, /usage und Budgetgrenzen](s1-19-kosten-im-blick.md) · [Bibliothek](README.md) · [X.2 Mit Claude Code lernen](x-02-lernen-mit-claude-code.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick

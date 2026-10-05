@@ -2,7 +2,7 @@
 
 <!-- GENERIERT von tools/build_library.py — nicht von Hand ändern, Quelle: Kapitel und _*.yaml -->
 
-70 Kapitel in 19 Regalen, zusammen etwa 17 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
+70 Kapitel in 19 Regalen, zusammen etwa 18 Stunden. Du musst nicht alles lesen: Die Einstufung empfiehlt dir die Kapitel, die zu deinem Stand und Ziel passen.
 
 ## So findest du deinen Weg
 
@@ -65,11 +65,11 @@ Hier baust du zuerst etwas und erklärst es danach. Du richtest die Werkstatt ei
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S0.1 Werkstatt einrichten](s0-01-werkstatt-einrichten.md) | Kern | 20 |  |
-| [S1.1 Erster Kontakt: sofort eine Datei bauen](s1-01-erster-kontakt.md) | Kern | 12 |  |
-| [S1.2 Coding-Agent statt Chat: das Denkmodell](s1-02-agent-statt-chat.md) | Kern | 12 |  |
-| [S1.3 Die Oberflächen: CLI, Desktop, IDE, Web, iOS](s1-03-oberflaechen.md) | Kern | 12 |  |
-| [S1.4 Eingebaute Werkzeuge und ihre Namen](s1-04-werkzeuge.md) | Kern | 12 |  |
+| [S0.1 Werkstatt einrichten](s0-01-werkstatt-einrichten.md) | Kern | 25 |  |
+| [S1.1 Erster Kontakt: sofort eine Datei bauen](s1-01-erster-kontakt.md) | Kern | 25 |  |
+| [S1.2 Coding-Agent statt Chat: das Denkmodell](s1-02-agent-statt-chat.md) | Kern | 15 |  |
+| [S1.3 Die Oberflächen: CLI, Desktop, IDE, Web, iOS](s1-03-oberflaechen.md) | Kern | 10 |  |
+| [S1.4 Eingebaute Werkzeuge und ihre Namen](s1-04-werkzeuge.md) | Kern | 10 |  |
 
 <a id="permissions"></a>
 
@@ -81,7 +81,7 @@ Rechte-Modi sind die Freigabestufen deines Agenten, wie Zutrittsebenen in einem 
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [S1.5 Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md) | Kern | 15 | 🛡 |
+| [S1.5 Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md) | Kern | 20 | 🛡 |
 | [S1.6 Alle Rechte-Modi im Überblick](s1-06-rechte-modi.md) | Kern | 15 | 🛡 |
 | [S3.8 Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md) | Kern | 15 | 🛡 |
 | [S3.9 Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md) | Kern | 15 | 🛡 |
@@ -97,7 +97,7 @@ Das Kontextfenster ist der Arbeitsspeicher des Agenten, CLAUDE.md seine Hausordn
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
 | [S1.8 Das Kontextfenster verstehen](s1-08-kontextfenster.md) | Kern | 15 |  |
-| [S1.9 Kontext steuern mit /compact und /rewind](s1-09-kontext-steuern.md) | Kern | 12 |  |
+| [S1.9 Kontext steuern mit /compact und /rewind](s1-09-kontext-steuern.md) | Kern | 15 |  |
 | [S1.10 CLAUDE.md: die Hausordnung des Projekts](s1-10-claude-md.md) | Kern | 15 |  |
 | [S1.11 Alle Gedächtnis-Ebenen im Überblick](s1-11-gedaechtnis-ebenen.md) | Vertiefung | 18 |  |
 | [S1.12 Imports, --add-dir und AGENTS.md](s1-12-imports-und-agents-md.md) | Vertiefung | 12 |  |
@@ -329,7 +329,7 @@ Nicht alles muss man selbst bauen. Dieses Regal stellt belegte Skill-Sammlungen 
 
 | Kapitel | Stufe | Min | |
 |---|---|---:|---|
-| [X.2 Mit Claude Code lernen](x-02-lernen-mit-claude-code.md) | Kür | 12 |  |
+| [X.2 Mit Claude Code lernen](x-02-lernen-mit-claude-code.md) | Kür | 35 |  |
 | [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) | Kür | 15 |  |
 | [X.3 Der minimale Agent: Pi als Spiegel](x-03-pi-als-spiegel.md) | Kür | 15 |  |
 | [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) | Kür | 15 |  |

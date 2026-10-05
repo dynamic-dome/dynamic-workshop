@@ -19,7 +19,7 @@ aliases: ["2.4"]
 <!-- meta:start -->
 > **Regal:** [MCP & Wissensquellen](README.md#mcp-knowledge) · **Stufe:** Kern · **~15 Min** · **Voraussetzungen:** [S1.5 Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md)
 >
-> ← [X.1 Community-Skills: wer baut was, das wirklich hilft](x-01-community-skills.md) · [Bibliothek](README.md) · [S2.15 MCP einrichten: Transporte, Scopes, CLI](s2-15-mcp-einrichten.md) →
+> ← [S2.13 Lieferkettenrisiken bei Plugins](s2-13-plugin-lieferkette.md) · [Bibliothek](README.md) · [S2.15 MCP einrichten: Transporte, Scopes, CLI](s2-15-mcp-einrichten.md) →
 <!-- meta:end -->
 
 ## Schnellcheck
@@ -103,7 +103,7 @@ npx --version
 npx @playwright/mcp@latest --help
 ```
 
-Fehlt `npx`, installier zuerst Node.js ([S0.1](s0-01-werkstatt-einrichten.md)).
+Fehlt `npx`, installier zuerst Node.js ([Werkstatt erweitern](../reference/werkstatt-erweitern.md#nodejs)).
 
 **Schritt 2: den MCP-Server eintragen**
 

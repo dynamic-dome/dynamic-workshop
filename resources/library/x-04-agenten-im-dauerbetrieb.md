@@ -5,7 +5,7 @@ title: 'Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann'
 shelf: community
 level: bonus
 minutes: 15
-after: S4.6
+after: S4.7
 requires: []
 safety_floor: false
 transferable: true
@@ -56,7 +56,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Community & Lernen](README.md#community) · **Stufe:** Kür · **~15 Min** · **Voraussetzungen:** keine
 >
-> ← [S4.6 Unterwegs: Remote Control und /teleport](s4-06-remote-und-teleport.md) · [Bibliothek](README.md) · [S4.7 Isolation mit Docker und Worktrees](s4-07-isolation-docker-worktrees.md) →
+> ← [S4.7 Isolation mit Docker und Worktrees](s4-07-isolation-docker-worktrees.md) · [Bibliothek](README.md) · [S4.8 Abschlussprojekt mit Bewertung](s4-08-abschlussprojekt.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick

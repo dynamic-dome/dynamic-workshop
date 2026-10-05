@@ -53,10 +53,18 @@ echo "hallo"
 
 ## Selbst machen
 
+### Übung: den Hook eintragen (etwa 15 Minuten)
+
+Trag in einem Wegwerf-Ordner diesen Hook ein:
+
 <!-- cockpit:example -->
 ```json
 {"hooks": {"PreToolUse": []}}
 ```
+
+**Geschafft, wenn:**
+
+- [ ] der Aufruf mit `exit 2` geblockt wird
 
 ## Check
 

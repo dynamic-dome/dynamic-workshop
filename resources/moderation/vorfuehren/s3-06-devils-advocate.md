@@ -8,7 +8,7 @@
 
 **Vorbereitung**
 
-- Den `workshop-playground/` hast du beim Einrichten geklont ([S0.1](../../library/s0-01-werkstatt-einrichten.md)). Er wird so verwendet, wie er ist; du legst keine Dateien an.
+- Den `workshop-playground/` hast du mit dem Workshop-Repo geklont ([Werkstatt erweitern](../../reference/werkstatt-erweitern.md#workshop-repo-und-playground)). Er wird so verwendet, wie er ist; du legst keine Dateien an.
 - 🔧 Das Workshop-Plugin `devil-advocate-swarms` ist installiert (`claude plugin list`).
 
 **Schritt 1: in den Playground wechseln**

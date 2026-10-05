@@ -19,7 +19,7 @@ aliases: ["2.1"]
 <!-- meta:start -->
 > **Regal:** [Skills & Commands](README.md#skills) · **Stufe:** Kern · **~12 Min** · **Voraussetzungen:** [S1.10 CLAUDE.md: die Hausordnung des Projekts](s1-10-claude-md.md)
 >
-> ← [S1.20 Praxis-Station Session 1: eine Übung wählen](s1-20-praxis-station-1.md) · [Bibliothek](README.md) · [S2.2 Eine SKILL.md schreiben](s2-02-skill-schreiben.md) →
+> ← [X.2 Mit Claude Code lernen](x-02-lernen-mit-claude-code.md) · [Bibliothek](README.md) · [S2.2 Eine SKILL.md schreiben](s2-02-skill-schreiben.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

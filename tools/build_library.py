@@ -33,7 +33,8 @@ DEFAULT_LIBRARY = ROOT / "resources" / "library"
 CHAPTER_META = ROOT / "docs" / "migration" / "chapter-meta.yaml"
 # Chapters whose recall questions must carry answers. The list grows shelf by shelf (design 2026-10-05, packages
 # P5 and P7) and is replaced by the rule "every lesson" once all shelves are done.
-ANSWERS_REQUIRED = TOOLS / "fixtures" / "answers-required.txt"
+STANDARD_LIST = TOOLS / "fixtures" / "standard-chapters.txt"
+MINUTES_TOLERANCE = 5  # declared minutes may differ this much from reading time plus exercises
 CONTRACT_FIELDS = ("id", "type", "title", "shelf", "level", "minutes", "requires", "safety_floor", "transferable",
                    "aliases", "offers", "after")
 
@@ -151,7 +152,7 @@ def anchors_of(path: Path) -> set:
     return found
 
 
-def _check_body(ch, add, planned=frozenset(), goal_targets=(), answers_required=frozenset()):
+def _check_body(ch, add, planned=frozenset(), goal_targets=(), standard=frozenset()):
     t = ch.type if ch.type in ALLOWED else "lesson"
     for title in ch.section_order:
         if title not in ALLOWED[t]:
@@ -195,9 +196,11 @@ def _check_body(ch, add, planned=frozenset(), goal_targets=(), answers_required=
         if not ch.recall or len(ch.answers) != len(ch.recall) or not all(a.strip() for a in ch.answers):
             add("answers-count", f"{len(ch.answers)} Auflösungen zu {len(ch.recall)} Abruffragen "
                 "(je Frage genau eine, gleiche Nummer, Block mit </details> geschlossen)")
-    elif ch.recall and ch.id in answers_required:
+    elif ch.recall and ch.id in standard:
         add("answers-required", f"{len(ch.recall)} Abruffragen ohne Block 'Auflösung' "
             "(<details><summary>Auflösung</summary> nach den Fragen)")
+    if ch.id in standard:
+        _check_standard(ch, add)
     if t == "lesson" and len(ch.skip_check) != 2:
         add("skip-check-count", f"Schnellcheck braucht genau 2 Fragen, hat {len(ch.skip_check)}")
     elif "Schnellcheck" in ch.sections and len(ch.skip_check) != 2:
@@ -360,8 +363,26 @@ def _check_placement(lib, by_id, report, planned_ids=frozenset()):
             add("placement-refs", f"Szenario {sc.get('id')}: Kapitel {sc.get('chapter')} gibt es nicht")
 
 
-def load_answers_required(path=ANSWERS_REQUIRED) -> frozenset:
-    """Chapter IDs, one per line; '#' starts a comment."""
+def _check_standard(ch, add):
+    """Rules for chapters written for one person learning alone (docs/plans/2026-10-05-selbstlern-zuerst-massstab.md)."""
+    exercise = ch.sections.get("Selbst machen")
+    if exercise is None:
+        if ch.type == "lesson" and ch.level == "core":
+            add("exercise-required", "Kern-Lektion ohne Abschnitt '## Selbst machen'")
+    else:
+        if not lm.timed_exercises(exercise):
+            add("exercise-shape", "keine Übung mit Zeitangabe: Überschrift '### … (etwa N Minuten)'")
+        if lm.DONE_LIST not in exercise:
+            add("exercise-shape", f"der Übung fehlt die Liste '{lm.DONE_LIST}'")
+    honest = lm.honest_minutes(ch)
+    if ch.minutes % 5 or abs(ch.minutes - honest) > MINUTES_TOLERANCE:
+        add("minutes-honest", f"minutes: {ch.minutes}, gerechnet {honest:.0f} ({lm.reading_words(ch)} Wörter bei "
+            f"{lm.READING_WORDS_PER_MINUTE} je Minute + Übungen {lm.exercise_minutes(ch)}); erlaubt ist ein Vielfaches "
+            f"von 5 mit höchstens {MINUTES_TOLERANCE} Abstand")
+
+
+def load_standard(path=STANDARD_LIST) -> frozenset:
+    """IDs of the chapters that meet the standard for self-learners, one per line; '#' starts a comment."""
     if not Path(path).exists():
         return frozenset()
     lines = (line.split("#", 1)[0].strip() for line in Path(path).read_text(encoding="utf-8").splitlines())
@@ -395,9 +416,9 @@ def _check_contract(ch, entry, add):
             add("meta-contract", f"{key}: Metadaten {want!r}, Kapitel {have!r}")
 
 
-def validate(lib, *, complete: bool, meta=None, answers_required=frozenset()) -> list:
+def validate(lib, *, complete: bool, meta=None, standard=frozenset()) -> list:
     """meta: binding chapter metadata (list of dicts) or None to skip the contract rule.
-    answers_required: IDs of chapters whose recall questions must have answers."""
+    standard: IDs of chapters that must meet the standard for self-learners (answers, exercise, honest minutes)."""
     problems = []
     meta_by_id = {e["id"]: e for e in meta} if meta else None
     planned = frozenset() if complete or not meta else frozenset(e["file"] for e in meta)
@@ -435,9 +456,11 @@ def validate(lib, *, complete: bool, meta=None, answers_required=frozenset()) ->
             add("filename", f"Dateiname {ch.path.name} passt nicht zu {ch.id} (erwartet {expected}<slug>.md)")
         if ch.shelf not in shelves:
             add("shelf-exists", f"Regal {ch.shelf!r} fehlt in _shelves.yaml")
-        _check_body(ch, add, planned, goal_targets, answers_required)
+        _check_body(ch, add, planned, goal_targets, standard)
         if meta_by_id is not None:
             _check_contract(ch, meta_by_id.get(ch.id), add)
+    for cid in sorted(standard - {ch.id for ch in lib.chapters}):
+        problems.append(Problem(_rel(STANDARD_LIST), "standard-list", f"{cid} steht auf der Liste, das Kapitel gibt es nicht"))
     orders = {}
     for ch in lib.chapters:
         try:
@@ -484,7 +507,7 @@ def build(root, *, write: bool, complete: bool = False) -> int:
     is_default = root == DEFAULT_LIBRARY.resolve()
     meta = load_meta() if is_default else None
     problems = validate(lib, complete=complete, meta=meta,
-                        answers_required=load_answers_required() if is_default else frozenset())
+                        standard=load_standard() if is_default else frozenset())
     if problems:
         print("Build abgebrochen, der Validator meldet Befunde:")
         return _print(problems)
@@ -535,8 +558,8 @@ def main(argv=None) -> int:
             rel = _rel(chapter)
             is_default = chapter.parent == DEFAULT_LIBRARY.resolve()
             meta = load_meta() if is_default else None
-            required = load_answers_required() if is_default else frozenset()
-            found = [p for p in validate(lib, complete=False, meta=meta, answers_required=required) if p.path == rel]
+            standard = load_standard() if is_default else frozenset()
+            found = [p for p in validate(lib, complete=False, meta=meta, standard=standard) if p.path == rel]
             if not found and chapter not in {c.path.resolve() for c in lib.chapters}:
                 found = [Problem(rel, "parse", "Datei wurde nicht als Kapitel geladen (Dateiname oder Pfad prüfen)")]
             return _print(found)
@@ -544,7 +567,7 @@ def main(argv=None) -> int:
         meta = load_meta() if is_default else None
         lib = lm.load_library(args.root)
         code = _print(validate(lib, complete=args.complete, meta=meta,
-                               answers_required=load_answers_required() if is_default else frozenset()))
+                               standard=load_standard() if is_default else frozenset()))
         print(coverage(lib))
         return code
     return 2

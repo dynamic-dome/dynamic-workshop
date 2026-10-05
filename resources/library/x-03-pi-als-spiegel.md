@@ -5,7 +5,7 @@ title: "Der minimale Agent: Pi als Spiegel"
 shelf: community
 level: bonus
 minutes: 15
-after: S3.2
+after: S3.15
 requires: []
 safety_floor: false
 transferable: true
@@ -38,7 +38,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Community & Lernen](README.md#community) · **Stufe:** Kür · **~15 Min** · **Voraussetzungen:** keine
 >
-> ← [S3.2 Eingebaute Subagenten nutzen](s3-02-eingebaute-subagenten.md) · [Bibliothek](README.md) · [S3.3 Einen eigenen Subagenten definieren](s3-03-eigener-subagent.md) →
+> ← [S3.15 Praxis-Station Session 3: eine Übung wählen](s3-15-praxis-station-3.md) · [Bibliothek](README.md) · [S4.1 Das richtige Modell pro Phase](s4-01-modell-pro-phase.md) →
 <!-- meta:end -->
 
 ## Auf einen Blick

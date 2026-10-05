@@ -22,7 +22,7 @@ aliases: []
 <!-- meta:start -->
 > **Regal:** [Abschlussprojekt](README.md#capstone) · **Stufe:** Kür · **~25 Min** · **Voraussetzungen:** [S3.4 Orchestrierungsmuster: Fan-out, Pipeline, Hierarchie](s3-04-orchestrierungsmuster.md) · [S3.8 Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md) · [S3.13 Autonome Loops absichern: Budget und Worktree](s3-13-autonome-loops-absichern.md)
 >
-> ← [S4.7 Isolation mit Docker und Worktrees](s4-07-isolation-docker-worktrees.md) · [Bibliothek](README.md) · [S4.9 Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md) →
+> ← [X.4 Agenten im Dauerbetrieb: OpenClaw und was dabei schiefgehen kann](x-04-agenten-im-dauerbetrieb.md) · [Bibliothek](README.md) · [S4.9 Fehlersuche: /debug, --verbose, /doctor](s4-09-fehlersuche-werkzeuge.md) →
 <!-- meta:end -->
 
 ## Schnellcheck

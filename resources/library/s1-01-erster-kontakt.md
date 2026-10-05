@@ -4,7 +4,7 @@ type: lesson
 title: "Erster Kontakt: sofort eine Datei bauen"
 shelf: start
 level: core
-minutes: 12
+minutes: 25
 requires: [S0.1]
 safety_floor: false
 transferable: false
@@ -12,138 +12,124 @@ outcome: "Ich kann Claude Code in einem leeren Ordner starten, per Klartext-Auft
 sources:
   - https://code.claude.com/docs/en/overview
   - https://code.claude.com/docs/en/quickstart
+  - https://code.claude.com/docs/en/permission-modes
 aliases: ["1.1"]
 ---
 
 # S1.1 · Erster Kontakt: sofort eine Datei bauen
 
 <!-- meta:start -->
-> **Regal:** [Erste Schritte & Denkmodell](README.md#start) · **Stufe:** Kern · **~12 Min** · **Voraussetzungen:** [S0.1 Werkstatt einrichten](s0-01-werkstatt-einrichten.md)
+> **Regal:** [Erste Schritte & Denkmodell](README.md#start) · **Stufe:** Kern · **~25 Min** · **Voraussetzungen:** [S0.1 Werkstatt einrichten](s0-01-werkstatt-einrichten.md)
 >
-> ← [X.2 Mit Claude Code lernen](x-02-lernen-mit-claude-code.md) · [Bibliothek](README.md) · [S1.2 Coding-Agent statt Chat: das Denkmodell](s1-02-agent-statt-chat.md) →
+> ← [S0.1 Werkstatt einrichten](s0-01-werkstatt-einrichten.md) · [Bibliothek](README.md) · [S1.2 Coding-Agent statt Chat: das Denkmodell](s1-02-agent-statt-chat.md) →
 <!-- meta:end -->
 
 ## Schnellcheck
 
 - Hast du Claude Code schon einmal in einem leeren Ordner gestartet und eine Datei erzeugen und ausführen lassen?
-- Kannst du ohne Nachschlagen die drei Schritte nennen, die du dabei beobachtest: beschreiben, handeln, Ergebnis sehen?
+- Kannst du ohne Nachschlagen die vier Schritte nennen, die dabei ablaufen: Vorschlag, Freigabe, Schreiben, Ausführen?
 
 ## Auf einen Blick
 
-Vor jeder Theorie steht ein Erfolg: Du startest Claude Code in einem leeren Ordner und bittest in normaler Sprache um eine kleine Datei. Claude schlägt die Datei vor, schreibt sie, führt sie aus und zeigt dir die Ausgabe. Diese Schleife ist das ganze Spiel: Du beschreibst, der Agent handelt, du siehst das Ergebnis.
+Du startest Claude Code in einem leeren Ordner und bittest in normaler Sprache um eine kleine Datei. Claude schlägt die Datei vor, fragt um Freigabe, schreibt sie, führt sie aus und zeigt dir das Ergebnis. Diese Schleife ist das ganze Spiel: Du beschreibst, der Agent handelt, du prüfst.
+
+Das Kapitel beginnt mit dieser Schleife an deinem eigenen Rechner. Die Erklärung kommt danach.
 
 ## Bild im Kopf
 
-Die CLI ist ein Berater mit Ausweis: Er darf ins Gebäude, Türen öffnen und selbst Hand anlegen. Dieses Kapitel ist sein erster Gang durchs Haus. Du sagst ihm, was du willst, er erledigt es vor deinen Augen, und du prüfst, was dabei herauskommt.
+Claude Code ist ein Berater mit Ausweis: Er darf ins Gebäude, Türen öffnen und selbst Hand anlegen. Dieses Kapitel ist sein erster Gang durchs Haus. Du sagst ihm, was du willst, er zeigt dir, was er vorhat, du nickst, und er erledigt es vor deinen Augen.
 
 ```mermaid
 flowchart LR
   A["Du beschreibst<br/>in Klartext"] --> B["Claude schlägt<br/>die Datei vor"]
-  B --> C{"Freigabe<br/>je nach Rechte-Modus"}
+  B --> C{"Freigabe<br/>durch dich"}
   C -- "ja" --> D["Datei wird geschrieben"]
   C -- "nein" --> A
   D --> E["Claude führt sie aus"]
-  E --> F["Ausgabe im Terminal"]
+  E --> F["Ergebnis im Terminal"]
   F -- "nächster Auftrag" --> A
 ```
 
 ## Im Detail
 
-### Die Schleife: beschreiben, handeln, Ergebnis sehen
+### Zuerst: Hallo, Claude Code (etwa 5 Minuten)
 
-Schau genau hin, was nach deinem ersten Auftrag passiert (unten in „Selbst machen"): Claude schlägt die Datei vor, fragt, ob es sie schreiben darf, legt sie an, führt sie aus und zeigt dir die Ausgabe. **Diese Schleife ist das ganze Spiel.** Alles Weitere erklärt nur die Mechanik dahinter.
-
-Das Entscheidende für alle, die neu bei Agenten sind: Claude hat dir nicht *erklärt*, wie du die Datei schreibst. Es hat sie *selbst geschrieben und ausgeführt*. Das ist der Unterschied zwischen einem Chat-Assistenten und einem Coding-Agenten; [S1.2](s1-02-agent-statt-chat.md) packt ihn aus.
-
-### Ob du eine Freigabe-Abfrage siehst
-
-Ob Claude vor dem Schreiben fragt, hängt vom Rechte-Modus ab. Im Modus `default` (in der Oberfläche „Manual") fragt Claude vor den meisten Dateiänderungen, Shell-Befehlen und Netzzugriffen. Seit v2.1.283 startet eine interaktive Sitzung im Terminal aber standardmäßig im Modus `auto`: Dann prüft ein Klassifikator die Aktionen an deiner Stelle, und die Abfrage kann ausbleiben. Willst du die Abfrage bewusst sehen, starte mit `claude --permission-mode default`. Die Modi im Einzelnen stehen in [S1.5](s1-05-rechte-im-alltag.md) und [S1.6](s1-06-rechte-modi.md).
-
-### Was Claude Code kann
-
-- **Codebasen lesen:** Verzeichnisse durchgehen, Dateien lesen, ganze Projekte auf einmal erfassen
-- **Dateien schreiben und ändern:** neue Dateien anlegen, bestehende ändern, über mehrere Dateien hinweg umbauen
-- **Befehle ausführen:** Shell-Befehle, Testsuiten, Builds, Dienste starten
-- **Git bedienen:** stagen, committen, Branches anlegen, mergen, pushen, Pull Requests erstellen, alles aus dem Gespräch heraus ([S1.16](s1-16-git-in-einem-fluss.md))
-- **Im Web suchen:** Dokumentation recherchieren, Pakete finden, Fehlermeldungen nachschlagen
-- **Agenten koordinieren:** parallele Subagenten für unabhängige Teilaufgaben starten ([S3.1](s3-01-was-ist-ein-agent.md))
-- **Über MCP andocken:** externe Werkzeuge einbinden, etwa Datenbanken, APIs, Monitoring, GitHub, Slack ([S2.14](s2-14-mcp-stecker.md))
-- **Sich über Sitzungen hinweg erinnern:** Kontext mit CLAUDE.md und dem Gedächtnis-System festhalten ([S1.10](s1-10-claude-md.md))
-
-Die letzten drei Punkte kommen erst in späteren Regalen. Für den ersten Kontakt reicht es zu wissen, dass es sie gibt. Was Claude Code nicht kann, steht in [S1.2](s1-02-agent-statt-chat.md).
-
-### Wie es weitergeht
-
-- In [S1.6](s1-06-rechte-modi.md) ordnest du alle sechs Rechte-Modi ein (`default`, `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions`) und die Grenzen in Cloud-Sitzungen.
-- In [S1.7](s1-07-modellwahl-und-effort.md) wählst du Modell (`fable`, `opus`, `sonnet`, `haiku`) und Effort passend zu Kosten und nötiger Denktiefe.
-
-## Selbst machen
-
-### Deine erste Aufgabe: Hallo, Claude Code (etwa 5 Minuten)
-
-Drei Befehle, ein sichtbares Ergebnis. Leg einen leeren Ordner an und starte Claude Code darin:
+Leg einen leeren Ordner an und starte Claude Code darin:
 
 ```bash
 # macOS / Linux / Git Bash
 mkdir -p ~/cc-workshop/hello && cd ~/cc-workshop/hello
-claude
+claude --permission-mode default
 ```
 
 ```powershell
 # Windows PowerShell
 New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\hello" | Out-Null
 Set-Location "$HOME\cc-workshop\hello"
-claude
+claude --permission-mode default
 ```
 
-Sobald Claude Code läuft, tipp einen Auftrag in normaler Sprache und drück Enter:
+In einem neuen Ordner fragt Claude Code zuerst, ob du dem Ordner vertraust. Es ist dein eigener, leerer Ordner: Wähl mit den Pfeiltasten „Yes, I trust this folder“ und drück Enter.
+
+Jetzt wartet die Eingabezeile. Gib diesen Auftrag ein und drück Enter:
 
 <!-- cockpit:example -->
 ```
 Create a file hello.py that prints "Hello from Claude Code" and run it.
 ```
 
-Beobachte die Schleife aus „Im Detail": Vorschlag, Freigabe (falls dein Rechte-Modus fragt), Schreiben, Ausführen, Ausgabe.
+Schau zu, was passiert:
 
-### Varianten
+1. **Vorschlag.** Claude zeigt den Inhalt der Datei und fragt „Do you want to create hello.py?“
+2. **Freigabe.** Wähl „Yes“. Die Datei entsteht erst jetzt.
+3. **Zweite Freigabe.** Claude will die Datei ausführen und zeigt den Befehl, etwa `python3 hello.py`. Wähl wieder „Yes“.
+4. **Ergebnis.** Claude meldet, was das Skript ausgegeben hat: `Hello from Claude Code`.
 
-**Noch kleiner (Übung 1.0, etwa 3 Minuten, freiwillig).** Dieselbe Schleife mit einer Textdatei, diesmal ganz allein: Öffne Claude Code in einem eigenen leeren Ordner, etwa `~/cc-workshop/exercises/exercise-1.0`, und gib einen einzigen Auftrag:
+Nimm beide Male das schlichte „Yes“. Die anderen Antworten („don't ask again“, „switch to …“) ändern, wie oft Claude künftig fragt; was sie bedeuten, lernst du in [S1.5](s1-05-rechte-im-alltag.md). `/exit` beendet die Sitzung.
 
-```
-Create a file hello.txt containing the line "Hallo".
-```
+### Die Schleife: Vorschlag, Freigabe, Schreiben, Ausführen
 
-Bestätige das Schreiben, wenn Claude fragt. Geschafft, wenn:
+Was du gerade gesehen hast, wiederholt sich bei jeder Aufgabe, ob sie eine Zeile ändert oder zwanzig Dateien. Claude hat dir nicht *erklärt*, wie du die Datei schreibst. Es hat sie *selbst geschrieben und ausgeführt*, in deinem Ordner, mit deinen Rechten. Das unterscheidet einen Coding-Agenten von einem Chat-Assistenten; [S1.2](s1-02-agent-statt-chat.md) packt den Unterschied aus.
 
-- [ ] `hello.txt` existiert und `Hallo` enthält
-- [ ] du die Freigabe-Abfrage gesehen und bestätigt hast: Das ist der Agent, der für dich handelt, unter deiner Kontrolle. Kommt keine Abfrage, läuft die Sitzung vermutlich im Modus `auto` (siehe „Im Detail").
+Die Freigabe ist der Moment, in dem du entscheidest. Davor ist alles Vorschlag, danach ist es geschehen.
 
-**Nur reden (W1, 60–90 Sekunden).** Null Code, null Hürde: Starte `claude` in einem leeren Ordner und gib ihm `Introduce yourself in one sentence and tell me which directory we're in.` Daumen hoch: Du hast mit dem Agenten gesprochen, mehr braucht es für den Anfang nicht.
+### Warum du mit `--permission-mode default` gestartet hast
 
-### Übung: dein erstes kleines Werkzeug (Übung 1.1, 12–15 Minuten)
+Ob Claude vor einer Aktion fragt, hängt vom Rechte-Modus der Sitzung ab. Im Modus `default` (in der Oberfläche „Manual“) fragt Claude vor Dateiänderungen und vor den meisten Shell-Befehlen; die Statusleiste unten zeigt dann `⏸ manual mode on`.
 
-**Ziel:** Die Kernschleife von Claude Code einüben: beschreiben, umsetzen, ausführen, erweitern, erklären. Du baust ein kleines Werkzeug von Grund auf, ohne selbst Code zu schreiben.
+Startest du nur mit `claude`, läuft eine Sitzung im Terminal ab Version 2.1.283 im Modus `auto`: Ein zweites Modell prüft die Aktionen an deiner Stelle, und die Rückfragen bleiben meist aus. Für die ersten Kapitel startest du deshalb mit dem Flag, damit du jede Aktion siehst, bevor sie passiert. Die Modi im Einzelnen stehen in [S1.5](s1-05-rechte-im-alltag.md) und [S1.6](s1-06-rechte-modi.md).
 
-**1. Claude Code in einem sauberen Ordner öffnen**
+### Was Claude Code für dich tun kann
 
-Im Terminal:
+- **Lesen:** Verzeichnisse durchgehen, Dateien lesen, ein Projekt als Ganzes erfassen
+- **Schreiben:** neue Dateien anlegen, bestehende ändern, über mehrere Dateien hinweg umbauen
+- **Ausführen:** Shell-Befehle, Tests, Builds
+- **Git bedienen:** committen, Branches anlegen, Pull Requests erstellen ([S1.16](s1-16-git-in-einem-fluss.md))
+
+Später kommen Websuche, parallele Helfer, Anschlüsse an andere Systeme und ein Gedächtnis über Sitzungen hinweg dazu. Für den Anfang reichen diese vier.
+
+## Selbst machen
+
+### Übung: dein erstes kleines Werkzeug (etwa 15 Minuten)
+
+**Ziel:** Die Schleife an einer echten Aufgabe üben: beschreiben, umsetzen, ausführen, erweitern, erklären lassen. Du baust ein kleines Werkzeug, ohne selbst Code zu schreiben.
+
+**Startzustand:** ein neuer, leerer Ordner, Claude Code im Modus `default`:
 
 ```bash
 # macOS / Linux / Git Bash
-mkdir -p ~/cc-workshop/exercises/exercise-1.1 && cd ~/cc-workshop/exercises/exercise-1.1
-claude
+mkdir -p ~/cc-workshop/werkzeug && cd ~/cc-workshop/werkzeug
+claude --permission-mode default
 ```
 
 ```powershell
 # Windows PowerShell
-New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\exercises\exercise-1.1" | Out-Null
-Set-Location "$HOME\cc-workshop\exercises\exercise-1.1"
-claude
+New-Item -ItemType Directory -Force -Path "$HOME\cc-workshop\werkzeug" | Out-Null
+Set-Location "$HOME\cc-workshop\werkzeug"
+claude --permission-mode default
 ```
 
-**2. Claude ein kleines Werkzeug bauen lassen**
-
-Gib Claude diesen Auftrag. Übernimm ihn nicht wörtlich, sondern pass ihn leicht an etwas an, das zu deinem Fachgebiet passt:
+**1. Das Werkzeug bauen lassen.** Das Beispiel stammt aus der Zutrittstechnik: ein Protokoll mit Türen, Karten und Ereignissen. Nimm es, wie es ist, oder ersetz Format und Auswertung durch etwas aus deiner eigenen Arbeit.
 
 ```
 Create a Python script called event_log_parser.py.
@@ -162,28 +148,22 @@ Create a sample input file called sample_events.txt with 10 test lines covering
 at least 3 different doors and both event types.
 ```
 
-**3. Beobachten, was Claude tut**
+**2. Beobachten.** Lies jeden Vorschlag, bevor du ihn freigibst: Legt Claude beide Dateien an? Sieht der Code für dich vernünftig aus?
 
-Achte darauf: Wiederholt es die Anforderungen? Legt es beide Dateien an? Sieht der Code für dich vernünftig aus?
-
-**4. Das Werkzeug ausführen**
-
-Bitte Claude:
+**3. Ausführen lassen.**
 
 ```
 Run event_log_parser.py on sample_events.txt and show me the output
 ```
 
-**5. Eine Funktion ergänzen lassen**
-
-Sobald es läuft, ergänzt du eine Funktion:
+**4. Eine Funktion ergänzen lassen.**
 
 ```
 Add a --door flag that filters the output to show only events for a specific door.
 Example: python event_log_parser.py sample_events.txt --door DOOR-03
 ```
 
-**6. Claude erklären lassen, was es getan hat**
+**5. Erklären lassen, was sich geändert hat.**
 
 ```
 Explain in plain language what changes you made to support the --door flag.
@@ -192,55 +172,47 @@ Then show me the diff.
 
 **Geschafft, wenn:**
 
-- [ ] `event_log_parser.py` im Ordner liegt
-- [ ] `sample_events.txt` mit mindestens 10 Zeilen existiert
-- [ ] das Skript eine Übersichtstabelle ausgibt (ohne Absturz)
-- [ ] das Flag `--door` funktioniert und richtig filtert
-- [ ] du aus der Erklärung verstehst, was Claude geändert hat
+- [ ] `event_log_parser.py` und `sample_events.txt` (mindestens 10 Zeilen) im Ordner liegen
+- [ ] das Skript eine Übersicht je Tür ausgibt, ohne abzustürzen
+- [ ] `--door DOOR-03` nur noch diese eine Tür zeigt
+- [ ] du jede Änderung gesehen hast, bevor sie passiert ist, und mit eigenen Worten sagen kannst, was Claude für `--door` geändert hat
 
-**Tipp:** Wenn du statt des Log-Parsers lieber ein eigenes Werkzeug aus deinem Fachgebiet baust: nur zu. Es geht um die Schleife, nicht um das Werkzeug. Was tun, wenn etwas hakt: siehe „Typische Fallen".
+### Extra: Befehle entdecken (etwa 5 Minuten)
 
-### Extra: Tab-Complete-Bingo (Gruppe, etwa 5 Minuten, leicht)
-
-**Ziel:** Entdecken, dass es Slash-Commands gibt und dass du gefahrlos daran herumprobieren kannst. Das nimmt die Scheu vor dem leeren Prompt.
-
-**Analogie:** Ein neuer Operator lernt das Pult der Leitstelle kennen, bevor der erste Alarm kommt.
-
-1. Jede Person bekommt eine Karte mit 6 Feldern: `/help`, `/cost`, `/hooks`, `/clear`, „ein Slash-Command, den keiner von euch kennt" und „ein Befehl, der eine Zahl ausgibt".
-2. 5-Minuten-Timer: Hak jedes Feld ab, indem du den Befehl wirklich eintippst und in einem Satz notierst, was er tut.
-3. Für das unbekannte Feld: Lies `/help`, such dir einen Befehl, den du noch nie gesehen hast, und probier ihn aus.
-4. Wer zuerst alle 6 hat, ruft „Bingo" und erklärt den ausgefallensten Befehl. Nachbesprechung in einem Satz: „Welcher Befehl rettet mir am häufigsten den Tag?"
+Befehle, die mit `/` beginnen, steuern Claude Code selbst. Gib in einer Sitzung nur `/` ein: Es erscheint die Liste. Probier vier Befehle aus und notier zu jedem einen Satz, was er zeigt: `/help`, `/context`, `/cost` und einen, den du noch nie gesehen hast. Die drei genannten zeigen nur etwas an und ändern nichts.
 
 ## Typische Fallen
 
+- **Es kommt keine Freigabe-Abfrage.** Die Sitzung läuft nicht im Modus `default`, meist weil das Flag fehlt. Beende sie mit `/exit` und starte mit `claude --permission-mode default`.
+- **Claude Code beendet sich gleich nach dem Start.** Im Vertrauensdialog war „No, exit“ markiert, und du hast Enter gedrückt. Starte neu und wähl mit der Pfeiltaste „Yes, I trust this folder“. Den Dialog bestätigst du nur für Ordner, deren Inhalt du kennst.
+- **`python3` wird nicht gefunden.** Unter Windows heißt der Befehl `python`. Sag es Claude: `Use python instead of python3.`
 - **Claude hat eine Datei angelegt, aber du siehst sie nicht.** Frag nach: `What files did you create? List them.`
-- **Das Skript stürzt beim Einlesen der Beispieldatei ab.** Gib Claude den Fehler zurück: `The script crashes on line X with this error: [paste error]. Fix it without changing the sample file format.`
-- **Es kommt keine Freigabe-Abfrage.** Das ist kein Fehler, sondern meist der Modus `auto`; siehe „Ob du eine Freigabe-Abfrage siehst".
+- **Das Skript stürzt beim Einlesen der Beispieldatei ab.** Gib Claude den Fehler zurück: `The script crashes with this error: [paste error]. Fix it without changing the sample file format.`
 
 ## Check
 
-Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine kleine Datei bauen und ausführen lassen und die Schleife beschreiben, handeln, Ergebnis sehen an deinem eigenen Beispiel erklären.
+Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine kleine Datei bauen und ausführen lassen und die Schleife Vorschlag, Freigabe, Schreiben, Ausführen an deinem eigenen Beispiel erklären.
 
-1. Welche Schritte laufen nach einem Auftrag wie `Create a file hello.py … and run it.` ab?
-2. Warum siehst du in einer neuen Sitzung womöglich keine Freigabe-Abfrage, und wie startest du so, dass Claude fragt?
-3. Nenne drei Dinge, die Claude Code laut „Was Claude Code kann" für dich erledigt.
+1. Welche Schritte laufen nach einem Auftrag wie `Create a file hello.py … and run it.` im Modus `default` ab?
+2. Warum hast du mit `claude --permission-mode default` gestartet, und was wäre ohne das Flag anders?
+3. Was ist an der Freigabe der entscheidende Moment?
 
 <details><summary>Auflösung</summary>
 
-1. Claude schlägt die Datei vor, fragt je nach Rechte-Modus um Freigabe, schreibt sie, führt sie aus und zeigt dir die Ausgabe im Terminal.
-2. Seit v2.1.283 startet eine interaktive Sitzung im Terminal standardmäßig im Modus `auto`: Ein Klassifikator prüft die Aktionen an deiner Stelle, und die Abfrage kann ausbleiben. Mit `claude --permission-mode default` fragt Claude vor den meisten Dateiänderungen und Shell-Befehlen.
-3. Zum Beispiel: Codebasen lesen, Dateien schreiben und ändern, Befehle ausführen. Die Liste nennt außerdem Git bedienen, im Web suchen, Agenten koordinieren, über MCP andocken und sich über Sitzungen hinweg erinnern.
+1. Claude schlägt die Datei vor und fragt um Freigabe, schreibt sie nach deinem „Yes“, fragt ein zweites Mal vor dem Ausführen und meldet dann das Ergebnis.
+2. Im Modus `default` fragt Claude vor Dateiänderungen und vor den meisten Shell-Befehlen. Ohne das Flag startet eine Sitzung im Terminal ab Version 2.1.283 im Modus `auto`: Ein zweites Modell prüft an deiner Stelle, und die Rückfragen bleiben meist aus.
+3. Davor ist alles Vorschlag, danach ist es geschehen: Claude schreibt und führt selbst aus, in deinem Ordner und mit deinen Rechten.
 
 </details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Du tippst in einer frischen Sitzung `Create a file hello.py that prints "Hello from Claude Code" and run it.` Was passiert, und was unterscheidet das von einem Chat-Assistenten?
+**Frage:** Du startest in einem neuen Ordner nur mit `claude`, bestätigst den Vertrauensdialog und gibst den Auftrag `Create a file hello.py … and run it.` Die Datei entsteht und läuft, aber es kam keine einzige Rückfrage. Was ist die wahrscheinlichste Erklärung?
 
-- **Richtig:** Claude legt die Datei in deinem Ordner an, führt sie über die Shell aus und zeigt die Ausgabe, statt dir nur Code zu schicken.
-- Falsch: Claude kompiliert den Code zuerst zu einer Binärdatei, prüft sie auf Schadcode und startet erst danach das Programm.
-- Falsch: Claude schickt den Code an einen Interpreter in der Cloud und zeigt das Ergebnis; auf deinem Rechner bleibt dabei nichts liegen.
-- Falsch: Claude speichert die Datei im Auto-Memory, damit sie beim nächsten Start der Sitzung automatisch wieder bereitsteht.
+- **Richtig:** Die Sitzung läuft im Modus `auto`; mit `claude --permission-mode default` fragt Claude vor dem Schreiben und Ausführen.
+- Falsch: Der Vertrauensdialog hat alle Rückfragen für diesen Ordner abgeschaltet; sie kommen erst in einem neuen Ordner wieder.
+- Falsch: Rückfragen gibt es nur bei Shell-Befehlen mit Risiko; das Anlegen und Ausführen einer Datei gilt als harmlos.
+- Falsch: Claude hat die Datei nur vorgeschlagen und simuliert; geschrieben wird sie erst, wenn du `/exit` eingibst.
 
 </details>
 
@@ -253,4 +225,3 @@ Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine 
 - [S1.4 · Eingebaute Werkzeuge und ihre Namen](s1-04-werkzeuge.md)
 - [S1.5 · Rechte im Alltag: default und acceptEdits](s1-05-rechte-im-alltag.md)
 - [S1.6 · Alle Rechte-Modi im Überblick](s1-06-rechte-modi.md)
-- [S1.20 · Praxis-Station Session 1: eine Übung wählen](s1-20-praxis-station-1.md)
