@@ -10,7 +10,7 @@
 
 #### Einstieg in Session 3: ein garantierter Live-Moment
 
-Die meisten Vorführungen dieser Session hängen von etwas Externem ab: eigenen Plugins, der Codex CLI, dem Internet, der Telegram-Brücke. Scheitert eine davon gleich zu Beginn vor Publikum, wirkt der ganze Block wackelig. Beginne Session 3 deshalb mit einer Vorführung, die nur das lokal installierte `claude` braucht: Wechsle in einen beliebigen Projektordner mit ein paar Dateien (der Übungsordner `agent-kontext` ist dafür noch zu leer) und tipp am Prompt, sodass alle zusehen:
+Die meisten Vorführungen dieser Session hängen von etwas Externem ab: eigenen Plugins, der Codex CLI, dem Internet. Scheitert eine davon gleich zu Beginn vor Publikum, wirkt der ganze Block wackelig. Beginne Session 3 deshalb mit einer Vorführung, die nur das lokal installierte `claude` braucht: Wechsle in einen beliebigen Projektordner mit ein paar Dateien (der Übungsordner `agent-kontext` ist dafür noch zu leer) und tipp am Prompt, sodass alle zusehen:
 
 ```bash
 claude -p "Summarize what this repo does in one sentence."
