@@ -344,6 +344,14 @@ def test_redact_output_also_cleans_stderr(script):
     assert replaced["stdout"] == "profile: dev\n"
 
 
+@pytest.mark.parametrize("script", REDACT)
+def test_redact_output_starts_at_twenty_characters_after_the_prefix(script):
+    short, shortest_match = "sk-" + "e" * 19, "sk-" + "f" * 20
+
+    assert run(script, post_bash("cat a", f"id={short}\n")).stdout.strip() == ""
+    assert updated_output(run(script, post_bash("cat a", f"key={shortest_match}\n")))["stdout"] == "key=[REDACTED]\n"
+
+
 POST_OUTPUT_HOOKS = REDACT + [
     pytest.param(HOOKS / "token-firewall.sh", marks=needs_bash_jq),
     pytest.param(HOOKS / "token-firewall.py"),

@@ -20,7 +20,7 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quell
 | Wie du startest | Eingebauter Startmodus |
 |---|---|
 | Interaktiv im Terminal oder in VS Code | `auto` (ab CLI 2.1.283); ist `auto` nicht verfügbar, Manual |
-| `claude -p` oder Agent SDK | `default`; bei einem Drittanbieter oder mit abgeschalteter Telemetrie `auto` (ab CLI 2.1.285). In Skripten immer selbst setzen |
+| `claude -p` oder Agent SDK | `default`; bei einem Drittanbieter oder mit abgeschalteter Telemetrie `auto` (ab CLI 2.1.285), außer die Richtlinie der Organisation hält diese Vorgabe zurück. In Skripten immer selbst setzen |
 | Eine Settings-Datei setzt `disableAutoMode` auf `"disable"` | `default` |
 
 Vorrang: `--permission-mode` (oder `--dangerously-skip-permissions`) vor `permissions.defaultMode` in einer Settings-Datei vor dem eingebauten Start. `auto` und `bypassPermissions` wirken aus `.claude/settings.json` und `.claude/settings.local.json` nicht. Prüf nach jedem Update, womit deine Sitzung startet. `Shift+Tab` wechselt `default` → `acceptEdits` → `plan` → (falls freigeschaltet `bypassPermissions`, dann `auto`) → `default`; `dontAsk` steht nie im Zyklus.
