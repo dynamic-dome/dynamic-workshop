@@ -5,7 +5,7 @@
 
 # Canonical Registry — Dynamic Workshop
 
-Geprüft: 2026-09-29 · CLI 2.1.284
+Geprüft: 2026-10-06 · CLI 2.1.289
 
 Das Prüfdatum setzt nur eine Session, die diesen Kanon gegen einen Bericht von `tools/currency_check.py` oder direkt
 gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach mehr als 45 Tagen und wird nach mehr als 90 Tagen rot.
@@ -48,7 +48,7 @@ Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon B
 | Amazon Bedrock, Google Cloud | Opus 5.5 | Sonnet 4.5 |
 | Microsoft Foundry | Opus 4.6 | Sonnet 4.5 |
 
-Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, Sonnet 4.5, Opus 4.6). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (nachgesehen am 2026-10-05). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen.
+Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, Sonnet 4.5, Opus 4.6). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (nachgesehen am 2026-10-06). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen.
 
 - `fable` löst auf Fable 5.1 auf (u. a. überschreibbar per `ANTHROPIC_DEFAULT_FABLE_MODEL`), im Claude-apps-Gateway auf Fable 5; `best` = `fable`, wo Fable verfügbar ist, sonst `opus`.
 - Weitere Werte: `opusplan` (Opus im Plan-Modus, dann Sonnet), `sonnet[1m]`, `opus[1m]`.
@@ -102,6 +102,7 @@ Der Monatslauf (`tools/currency_check.py`) liest genau diese Liste.
 - Doku: https://code.claude.com/docs/en/model-config.md
 - Doku: https://code.claude.com/docs/en/mcp.md
 - Doku: https://code.claude.com/docs/en/skills.md
+- Doku: https://code.claude.com/docs/en/sub-agents.md
 - Doku: https://code.claude.com/docs/en/plugins/cli-reference.md
 - Doku: https://code.claude.com/docs/en/settings.md
 - Doku: https://platform.claude.com/docs/en/models/overview.md

@@ -891,7 +891,9 @@ Suite, `python tools/lint_currency.py`.
 **Was danach ansteht (in dieser Reihenfolge sinnvoll):**
 1. **Aktualitätslauf** (`python tools/currency_check.py --state-dir .currency/manual`): Das Prüfdatum des Kanons
    steht auf dem 2026-09-29; die Deprecations-Seite hat sich seitdem geändert (Sonnet 4.5), nur die zwei geprüften
-   Stellen sind nachgezogen.
+   Stellen sind nachgezogen. **Erledigt 2026-10-06:** Kanon auf CLI 2.1.289 geprüft, `sub-agents.md` als Quelle
+   (für `model: inherit`), vier Fremd-Flags als Ausnahmen, die `--bare`-Grenzen seit 2.1.286 in S4.4; rot bleibt nur
+   die Haiku-Frist (frühestens 15.10.2026), die der Kanon schon als Risiko führt.
 2. **Website-Export des Cockpits** (DCO #9528) lohnt jetzt, weil die Ansicht für Lernende trägt. Dabei entscheiden,
    ob die Optik an die Website angeglichen wird (Antwort 6 hat das vertagt).
 3. **B8 als Inhaltspaket:** eine Begründung je Quiz-Antwort (61 Kapitel, Formatfeld im Quizblock, Validator,

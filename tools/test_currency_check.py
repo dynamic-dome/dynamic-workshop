@@ -120,6 +120,15 @@ def test_exception_only_covers_its_own_files():
     assert finding.key == "missing:flag:--door" and finding.where == ("y.md:1",)
 
 
+def test_alias_documented_in_code_form_by_another_source_passes():
+    """`model: inherit` is not in model-config's alias table; sub-agents.md documents it in code form."""
+    course = {"a.md": "```yaml\nmodel: inherit\n```\n", "b.md": "```yaml\nmodel: nonsense\n```\n"}
+    page = "| `model` | `sonnet`, `opus`, `haiku`, or `inherit` |" + PAD
+    result = run(course=course, canon_text=canon(docs=DOCS + ["sub-agents.md"]),
+                 available=pages(**{BASE + "sub-agents.md": page}))
+    assert [f.key for f in levels(result, "rot")] == ["missing:alias:nonsense"]
+
+
 def test_foreign_source_outage_keeps_its_last_hash():
     text = canon(foreign=[(PI, "X.3")])
     first = run(canon_text=text, available=pages(**{PI: PI_PAGE}))
@@ -346,14 +355,17 @@ def test_real_canon_is_machine_readable():
         assert model.model_id.startswith("claude-") and model.alias in {"fable", "opus", "sonnet", "haiku"}
         assert re.fullmatch(r"(Not sooner than )?[A-Z][a-z]+ \d{1,2}, \d{4}", model.retirement), model.retirement
     sources = cx.parse_canon_sources(text)
-    assert len(sources["Doku"]) == 14
+    assert len(sources["Doku"]) == 15
     assert all(url.startswith("https://") for urls in sources.values() for url in urls)
     names = {url.rsplit("/", 1)[-1] for url in sources["Doku"]}
     assert {"model-deprecations.md", "model-config.md", "permission-modes.md"} <= names
 
 
 # First live run 2026-09-29: the identifiers recorded in Step 2. The set may only shrink; a swap is caught too.
-FROZEN_EXCEPTIONS = frozenset({"--decompose", "--door", "--headless", "--orphan", "--enable-auto-mode"})
+# Run 2026-10-06 (after the self-learner rebuild): `--orphan` left with S1.18's rewrite; four foreign flags joined
+# (git in S4.5 and S4.7, OpenClaw in X.4), each justified in that commit.
+FROZEN_EXCEPTIONS = frozenset({"--decompose", "--door", "--headless", "--enable-auto-mode",
+                               "--deep", "--disable", "--git-dir", "--no-verify"})
 
 
 def test_exception_list_only_shrinks():

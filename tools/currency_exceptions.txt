@@ -1,8 +1,12 @@
 # Bezeichner, die der Kurs lehrt, die aber keine Claude-Code-Bezeichner sind (Fremd-Flags, Übungsparameter).
 # Format: bezeichner | datei[, datei] | grund. Eine Ausnahme gilt nur in den genannten Dateien; derselbe
-# Bezeichner anderswo wird geprüft wie jeder andere. Die Liste darf nur schrumpfen (tools/test_currency_check.py).
---decompose | resources/library/s4-02-codex-schwarm.md, resources/library/catalog.json, resources/claude-code-workshop-ui.html | Argument des Plugin-Commands /multi-model-orchestrator:codex-swarm (resources/library/s4-02-codex-schwarm.md), kein Claude-Code-Flag
---door | resources/library/s1-01-erster-kontakt.md | Kommandozeilenparameter des Übungsskripts event_log_parser.py in resources/library/s1-01-erster-kontakt.md, kein Claude-Code-Flag
---headless | resources/library/s2-14-mcp-stecker.md | Playwright-MCP-Flag im Hinweis zu Headless vs. headed in resources/library/s2-14-mcp-stecker.md (Verweis auf die @playwright/mcp-Doku), kein Claude-Code-Flag
---orphan | resources/library/s1-18-worktrees.md | git-Flag (git worktree add --orphan) in resources/library/s1-18-worktrees.md, kein Claude-Code-Flag
+# Bezeichner anderswo wird geprüft wie jeder andere. Die Menge ist eingefroren (tools/test_currency_check.py):
+# ein neuer Eintrag braucht einen Grund hier, im Commit und im Test.
+--decompose | resources/library/s4-02-codex-schwarm.md, resources/moderation/vorfuehren/s4-02-codex-schwarm.md, resources/library/catalog.json, resources/claude-code-workshop-ui.html | Argument des Plugin-Commands /multi-model-orchestrator:codex-swarm (resources/library/s4-02-codex-schwarm.md), kein Claude-Code-Flag
+--door | resources/library/s1-01-erster-kontakt.md, resources/library/s1-09-kontext-steuern.md | Kommandozeilenparameter der Übungsskripte event_log_parser.py (S1.1) und summary.py (S1.9), kein Claude-Code-Flag
+--headless | resources/library/s2-14-mcp-stecker.md, resources/moderation/vorfuehren/s2-14-mcp-stecker.md | Playwright-MCP-Flag im Hinweis zu Headless vs. headed (Verweis auf die @playwright/mcp-Doku), kein Claude-Code-Flag
+--no-verify | resources/library/s4-05-ci-pipelines.md, resources/claude-code-workshop-ui.html | git-Flag (git commit --no-verify) in der Pre-commit-Übung von S4.5, kein Claude-Code-Flag
+--git-dir | resources/library/s4-07-isolation-docker-worktrees.md | git-Flag in der Liste der Git-Umleitungen (git --git-dir, GIT_DIR) in S4.7, kein Claude-Code-Flag
+--deep | resources/library/x-04-agenten-im-dauerbetrieb.md | OpenClaw-Flag (openclaw security audit --deep) in X.4, kein Claude-Code-Flag
+--disable | resources/library/x-04-agenten-im-dauerbetrieb.md | OpenClaw-Flag (openclaw gateway stop --disable unter macOS) in X.4, kein Claude-Code-Flag
 --enable-auto-mode | resources/reference/karte-alte-namen.md | Kurs nennt das Flag ausdrücklich als entfernt (resources/reference/karte-alte-namen.md; Doku: Removed in v2.1.111)

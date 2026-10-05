@@ -275,7 +275,8 @@ def doc_identifiers(union):
 
 def exists_in_docs(kind, value, union, aliases, modes):
     if kind == "alias":
-        return value in aliases
+        # the alias table in model-config.md, or a value another source documents in code form (`inherit` in sub-agents.md)
+        return value in aliases or re.search(r"`" + re.escape(value) + r"`", union) is not None
     if kind == "permission_mode":
         return value in modes
     return re.search(r"(?<![\w-])" + re.escape(value) + r"(?![\w-])", union) is not None
