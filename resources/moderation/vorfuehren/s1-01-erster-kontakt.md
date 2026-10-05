@@ -10,13 +10,13 @@ Die Demo gehört zu diesem Kapitel und stützt [S1.2](s1-02-agent-statt-chat.md)
 
 **Schritt 1: Claude Code starten**
 
-Tipp im Terminal:
+Tipp im Terminal, in einem frischen, leeren Ordner (zum Beispiel `~/cc-workshop/hello`, wie in S1.1):
 
 ```
-claude
+claude --permission-mode default
 ```
 
-Erwartet: Claude Code startet und zeigt eine Begrüßung. Du bist jetzt in der interaktiven Sitzung.
+Erwartet: Claude Code startet und zeigt eine Begrüßung. Du bist jetzt in der interaktiven Sitzung. Ohne das Flag läuft eine Sitzung ab Version 2.1.283 im Modus `auto` und die Rückfragen bleiben meist aus; mit dem Flag fragt Claude vor dem Schreiben und vor dem Ausführen, und du antwortest jedes Mal mit „Yes“.
 
 **Schritt 2: Claude sich selbst beschreiben lassen**
 
@@ -75,6 +75,6 @@ Erwartet: Claude führt den Befehl in einer Schleife oder fünfmal hintereinande
 
 - **`claude` startet nicht:** `claude --version` und `claude doctor` ausführen. Fehlt die Anmeldung, zeig einen vorbereiteten Screenshot oder eine Aufzeichnung und mach mit dem Denkmodell weiter.
 - **Der Python-Befehl heißt anders:** Unter Windows `python password_gen.py 20` sagen, unter macOS/Linux/Git Bash `python3 password_gen.py 20`.
-- **Die Datei landet im falschen Ordner:** Lass Claude `pwd` und `ls` ausführen. Dann wechselst du entweder mit `cd` in den gedachten Übungsordner oder startest die Demo in einem frischen Ordner `~/cc-workshop/demos/demo-1.1` neu.
+- **Die Datei landet im falschen Ordner:** Lass Claude `pwd` und `ls` ausführen. Dann wechselst du entweder mit `cd` in den gedachten Übungsordner oder startest die Demo in einem frischen Ordner (zum Beispiel `~/cc-workshop/hello`) neu.
 
 </details>
