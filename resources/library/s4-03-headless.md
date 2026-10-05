@@ -206,6 +206,7 @@ python -c "open('issue.txt','w').write('Login button does nothing on Firefox. Co
 ## Typische Fallen
 
 - **Die Abfrage `.category` liefert `null`.** Mit `--output-format json` ist die Ausgabe ein Umschlag mit Metadaten. Das Schema-Ergebnis steht in `.structured_output`, der reine Text ohne Schema in `.result`.
+- **Statt eines Objekts kommt eine Liste.** Mit `--verbose` gibt `--output-format json` alle Nachrichten des Laufs als Array aus, und der Umschlag ist das letzte Element (so im Probelauf; dasselbe geschah mit `"verbose": true` in den eigenen Einstellungen). Lass `--verbose` in Skripten weg, die das Ergebnis lesen, oder lies das letzte Element.
 - **Exit 0 gilt als „alles in Ordnung“.** Der Code sagt nur, dass der Lauf durchkam. Das Urteil steht in der Ausgabe, und dein Skript muss es von dort lesen.
 - **Der Job im fremden Repo tut mehr als erwartet.** Ohne `--bare` laufen auch bei `-p` die Hooks und MCP-Server aus dem ausgecheckten Projekt, ohne Rückfrage. Für CI: `--bare` mit API-Key, siehe [S4.4](s4-04-ci-zugang-und-kosten.md).
 - **Der Lauf darf mehr, als du dachtest.** Setzt du keinen Rechte-Modus, gilt der Startmodus, und der kann `auto` sein. Gib für Läufe ohne Aufsicht den Modus und die erlaubten Werkzeuge selbst an.

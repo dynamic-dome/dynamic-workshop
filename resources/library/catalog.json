@@ -3454,7 +3454,7 @@
    "answers": [
     "Anfrage an das Modell, Antwort mit Tool-Aufrufen, Ausführen, Ergebnis zurück, nächster Turn. Claude Code legt darum Rechte-Modi und Freigaben, Subagenten und den Plan-Modus, dazu Hooks als eingebaute Ereignisse; bei Pi baust du das als Extension oder Paket oder startest zusätzliche Prozesse selbst.",
     "Übertragbar sind zum Beispiel die Agenten-Schleife, „Kontext ist ein Budget“, Skills im Standardformat oder die Entscheidung über die Fehlerrichtung eines Wächters. Produktfunktion ist zum Beispiel, welche Rechte-Modi es gibt, wie der Plan-Modus sperrt oder welche Subagenten mitkommen.",
-    "Nur eine äußere Grenze: Container oder VM, Wegwerf-Ordner, eigene Schlüssel mit Limit, ein begrenztes Netzwerk. Zuschauen und das Projekt-Vertrauen sind laut Pi-Doku keine Sicherheitsgrenze; Pi läuft mit den Rechten des Benutzers, der es gestartet hat."
+    "Nur eine äußere Grenze: Container oder VM, eigene Schlüssel mit Limit, ein begrenztes Netzwerk. Ein Wegwerf-Ordner ist keine Grenze; er sorgt nur dafür, dass im Arbeitsordner nichts Wertvolles liegt. Zuschauen und das Projekt-Vertrauen sind laut Pi-Doku keine Sicherheitsgrenze; Pi läuft mit den Rechten des Benutzers, der es gestartet hat."
    ],
    "area": null,
    "checkpoint": "Du kannst an Pi zeigen, welche Schichten Claude Code um die Schleife legt, nennen, welche davon übertragbar sind, und begründen, warum du bei einem Harness ohne erzwungene Freigaben den Schutz selbst mitbringst.",

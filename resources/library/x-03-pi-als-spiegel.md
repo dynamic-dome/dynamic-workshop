@@ -45,13 +45,13 @@ aliases: []
 
 Pi ist ein quelloffener Coding-Agent-Harness, den Earendil Inc. mit Mitwirkenden unter MIT-Lizenz herausgibt. Ein Harness ist die Software um das Modell herum: Sie schickt Anfragen an das Modell, führt die Werkzeuge aus, die es aufruft, und verwaltet den Verlauf. Pi ist mit Absicht minimal: ein Modell, eine Schleife, vier Standard-Werkzeuge und ein kurzer System-Prompt. Subagenten, Plan-Modus und Freigabe-Dialoge sind nicht eingebaut; wer sie braucht, baut sie als Extension oder installiert ein Paket. Genau das macht Pi zum Spiegel: Du siehst, wie wenig ein Agent im Kern braucht, und erkennst, welche Schichten Claude Code darüberlegt.
 
-Die wichtigste Lehre betrifft die Sicherheit: Pi fragt laut Doku nicht vor jedem Tool-Aufruf und läuft mit den Rechten des Benutzers, der ihn startet, also bringst du den Schutz selbst mit (Container, Wegwerf-Ordner, knappe Schlüssel). Stand aller Angaben zu Pi: 30.09.2026.
+Die wichtigste Lehre betrifft die Sicherheit: Pi fragt laut Doku nicht vor jedem Tool-Aufruf und läuft mit den Rechten des Benutzers, der ihn startet, also bringst du den Schutz selbst mit: einen Container oder eine VM, knappe Schlüssel und einen Arbeitsordner, in dem nichts Wertvolles liegt. Stand aller Angaben zu Pi: 30.09.2026.
 
 ## Bild im Kopf
 
 Stell dir zwei Gebäude mit denselben Türen vor. Das erste ist vorbereitet, aber nicht ausgestattet: Die Türen haben Schlösser, und wer den Schlüssel hat, kommt überall hin, wo er passt. Leerrohre für Kartenleser, Sensoren und Zonen liegen schon in der Wand; was hineinkommt, entscheidest du. Im zweiten Gebäude ist die Zutrittsanlage eingebaut: Kartenleser mit Berechtigungsstufen, Sensoren an der Alarmmatrix, die Hausordnung am Eingang, Streifen für Sonderaufträge. Pi gleicht dem ersten Gebäude, Claude Code dem zweiten.
 
-Der Schlüssel ist in beiden Gebäuden gleich mächtig, denn der Agent arbeitet mit deinen Benutzerrechten. Im vorbereiteten Gebäude hält ihn nur auf, was du selbst einbaust oder drumherum stellst. Wer dort Wertvolles lagert, sichert das Gelände: einen Zaun, eine abgeschlossene Halle für Versuche, nur die Schlüssel, die der Auftrag braucht. Beim Agenten heißt das: Container oder VM, ein Wegwerf-Ordner oder Worktree, eigene Schlüssel mit Limit.
+Der Schlüssel ist in beiden Gebäuden gleich mächtig, denn der Agent arbeitet mit deinen Benutzerrechten. Im vorbereiteten Gebäude hält ihn nur auf, was du selbst einbaust oder drumherum stellst. Wer dort Wertvolles lagert, sichert das Gelände: einen Zaun, eine abgeschlossene Halle für Versuche, nur die Schlüssel, die der Auftrag braucht. Beim Agenten heißt das: Container oder VM und eigene Schlüssel mit Limit. Ein Wegwerf-Ordner oder Worktree kommt dazu, damit im Arbeitsordner nichts Wertvolles liegt; eine Grenze ist er nicht.
 
 ```mermaid
 flowchart TB
@@ -66,7 +66,7 @@ flowchart TB
     CT -- "Ergebnis" --> CM
     CL["CLAUDE.md, Skills, Subagenten,<br/>MCP, Plan-Modus, Auto-Memory"] -.-> CM
   end
-  G["Deine äußere Grenze:<br/>Container, VM, Wegwerf-Ordner"] -.-> PI
+  G["Deine äußere Grenze:<br/>Container oder VM,<br/>Schlüssel mit Limit"] -.-> PI
   G -.-> CC
 ```
 
@@ -245,7 +245,7 @@ Du kannst an Pi zeigen, welche Schichten Claude Code um die Schleife legt, nenne
 
 1. Anfrage an das Modell, Antwort mit Tool-Aufrufen, Ausführen, Ergebnis zurück, nächster Turn. Claude Code legt darum Rechte-Modi und Freigaben, Subagenten und den Plan-Modus, dazu Hooks als eingebaute Ereignisse; bei Pi baust du das als Extension oder Paket oder startest zusätzliche Prozesse selbst.
 2. Übertragbar sind zum Beispiel die Agenten-Schleife, „Kontext ist ein Budget“, Skills im Standardformat oder die Entscheidung über die Fehlerrichtung eines Wächters. Produktfunktion ist zum Beispiel, welche Rechte-Modi es gibt, wie der Plan-Modus sperrt oder welche Subagenten mitkommen.
-3. Nur eine äußere Grenze: Container oder VM, Wegwerf-Ordner, eigene Schlüssel mit Limit, ein begrenztes Netzwerk. Zuschauen und das Projekt-Vertrauen sind laut Pi-Doku keine Sicherheitsgrenze; Pi läuft mit den Rechten des Benutzers, der es gestartet hat.
+3. Nur eine äußere Grenze: Container oder VM, eigene Schlüssel mit Limit, ein begrenztes Netzwerk. Ein Wegwerf-Ordner ist keine Grenze; er sorgt nur dafür, dass im Arbeitsordner nichts Wertvolles liegt. Zuschauen und das Projekt-Vertrauen sind laut Pi-Doku keine Sicherheitsgrenze; Pi läuft mit den Rechten des Benutzers, der es gestartet hat.
 
 </details>
 
