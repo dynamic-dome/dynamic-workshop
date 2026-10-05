@@ -4,11 +4,11 @@ type: lesson
 title: "Self-Improve-Loop: was geht und wo es endet"
 shelf: automation
 level: bonus
-minutes: 15
+minutes: 20
 requires: [S3.13]
 safety_floor: false
 transferable: true
-outcome: "Ich kann die sechs Schritte eines Self-Improve-Loops mit Quality Gate erklären und seine Grenzen benennen: Kostenlauf, Schein-Fixes durch entfernte Assertions, Memory-Drift und regulierte Hardware."
+outcome: "Ich kann das Muster „Fehler beobachten, Regel festhalten, neu laufen und vergleichen“ mit Bordmitteln durchspielen (eine Zeile in CLAUDE.md und ein zweiter Lauf) und seine Grenzen benennen: keine Garantie, falsche Regeln, Schein-Fixes, ein Mensch prüft."
 sources:
   - https://code.claude.com/docs/en/cli-reference
   - https://code.claude.com/docs/en/hooks-guide
@@ -25,118 +25,169 @@ aliases: []
 
 ## Schnellcheck
 
-- Hast du schon einmal einen autonomen Verbesserungs-Loop mit Quality Gate und Iterationsgrenze laufen lassen und danach die Commits selbst geprüft?
+- Hast du schon einmal aus einem Fehler von Claude eine Regel in `CLAUDE.md` gemacht und danach geprüft, ob sie beim nächsten Lauf greift?
 - Kannst du ohne Nachschlagen sagen, woran du einen Schein-Fix erkennst, bei dem ein Test nur grün wird, weil die Assertion fehlt?
 
 ## Auf einen Blick
 
-Ein Self-Improve-Loop sucht die größte Schwäche eines Projekts, plant einen gezielten Fix, schreibt zuerst einen fehlschlagenden Test, setzt um und committet nur, wenn ein Quality Gate grün ist; dann beginnt die nächste Runde. Gezeigt wird das Muster am 🔧 Custom-Plugin `agentic-os`, nicht an einer Funktion von Claude Code. Es ist ein Experiment, das nur mit Budget-Grenze, Quality Gate und Iterationslimit taugt, denn ein grünes Gate beweist nicht, dass ein Fix echt ist.
+Ein Self-Improve-Loop ist ein Muster: eine Schwäche beobachten, eine Gegenmaßnahme festhalten, mit ihr noch einmal laufen und das Ergebnis vergleichen. Mit Bordmitteln heißt das: ein Fehler, eine Zeile in `CLAUDE.md`, ein zweiter Lauf. Claude Code behandelt `CLAUDE.md` laut Doku als Kontext, nicht als erzwungene Konfiguration: Eine Regel macht ein Verhalten wahrscheinlicher, nicht sicher. Je automatischer ein solcher Kreislauf wird (Claude schreibt Regeln, Tests und Commits selbst), desto wichtiger werden Grenzen: ein Budget, ein Rundenlimit, ein Mensch, der den Diff liest. Ein grünes Testergebnis beweist nicht, dass ein Fix echt ist.
 
 ## Bild im Kopf
 
-Stell dir ein Intrusion-Detection-System vor, das seine Signaturen selbst aktualisiert. Es erkennt ein neues Angriffsmuster (Analyse), plant eine Gegenregel (Planung), testet sie im Sandbox-Modus ohne Wirkung auf den Betrieb (TDD), prüft, dass keine Fehlalarme entstehen (Quality Gate), und schreibt die Signatur in die Live-Datenbank (Commit). Gefährlich wird es, wenn das System lernt, Fehlalarme zu unterdrücken, statt seine Signaturen zu verbessern: Das ist der Schein-Fix in Reinform.
+Stell dir ein Intrusion-Detection-System vor, das seine Signaturen selbst aktualisiert. Es erkennt ein neues Angriffsmuster, plant eine Gegenregel, prüft sie zuerst an aufgezeichnetem Verkehr und schreibt sie erst danach in die Live-Datenbank. Gefährlich wird es, wenn das System lernt, Fehlalarme zu unterdrücken, statt seine Signaturen zu verbessern: Das ist der Schein-Fix in Reinform. Und eine Signatur, die ein Mensch nie gelesen hat, kann falsch sein.
 
 ```mermaid
 flowchart LR
-  A["Analyse"] --> P["Planung"]
-  P --> T["TDD: erst der<br/>fehlschlagende Test"]
-  T --> Q{"Quality Gate<br/>grün?"}
-  Q -- "ja" --> C["Commit mit<br/>Iterationsprotokoll"]
-  Q -- "nein" --> V["Iteration verwerfen"]
-  C --> N["nächste Runde"]
-  N --> A
-  G["Grenzen: Budget,<br/>Max-Iterationen, Review-Gate"] -.-> N
+  F["Fehler beobachten"] --> R["Regel festhalten<br/>z. B. in CLAUDE.md"]
+  R --> N["neu laufen"]
+  N --> V{"besser als vorher?"}
+  V -- "ja" --> M["Mensch liest Regel<br/>und Diff"]
+  V -- "nein" --> R
+  M --> K["behalten"]
+  G["Grenzen: Budget,<br/>Rundenlimit, Review"] -.-> N
 ```
 
 ## Im Detail
 
-### Der Zyklus
+### Das Muster in vier Schritten
 
-> 🔧 **Custom-Komponente:** `agentic-os` ist ein eigenes Plugin, kein Teil von Claude Code. Stand 2026-09-30 gibt es den Befehl `/agentic-os:run-loop` in der installierten Fassung des Plugins (5.1.4) nicht mehr: Er wurde mit v4.0.0 entfernt, der Self-Improve-Skill mit v5.0.0 archiviert. Das Muster bleibt lehrreich; vorführen lässt es sich damit nur noch als Aufzeichnung.
+1. **Beobachten:** Ein Lauf macht etwas, das du nicht willst, und du kannst es an einer Stelle ablesen: einem Dateinamen, einem Diff, einem Testergebnis.
+2. **Festhalten:** Du schreibst die Gegenmaßnahme so auf, dass sie sich prüfen lässt. Die Doku sagt: Je konkreter und kürzer deine Anweisungen sind, desto zuverlässiger folgt Claude ihnen.
+3. **Neu laufen:** Derselbe Auftrag, in einer neuen Sitzung, denn `CLAUDE.md` wird beim Start der Sitzung geladen ([S1.10](s1-10-claude-md.md)).
+4. **Vergleichen:** Du liest dasselbe Merkmal noch einmal ab. Nur was du messen kannst, kannst du verbessert nennen.
 
-Der Skill `/agentic-os:run-loop` setzte **autonome Verbesserungszyklen** um. Jede Iteration:
+### Wer die Regel schreibt
 
-1. **Analyse:** liest Qualitätsmetriken, Testfehler, Review-Befunde und die bisherigen Iterationen
-2. **Planung:** entwirft einen gezielten Fix für die Schwäche mit der größten Wirkung
-3. **TDD-Umsetzung:** schreibt zuerst einen fehlschlagenden Test, dann den Code, der ihn bestehen lässt
-4. **Quality Gate:** Tests grün? Qualität über der Schwelle? Keine Regressionen?
-5. **Commit (nur wenn das Gate grün ist):** Git-Commit mit ausführlichem Iterationsprotokoll
-6. **Wiederholen:** Die nächste Iteration startet mit dem aktualisierten Stand.
-
-### Sicherheitsmechanismen
-
-| Mechanismus | Was er tut |
-|---|---|
-| Quality Gates | verweigern den Commit, wenn Tests scheitern oder die Qualität sinkt |
-| Git-Historie | Jede Iteration ist ein Commit, den du zurücknehmen kannst. |
-| Hooks | blocken bestimmte gefährliche Operationen ([S2.8](s2-08-hook-einrichten.md)) |
-| Menschliche Review-Gates | halten an und warten auf Freigabe, bevor committet wird |
-| Max-Iterationen | begrenzen autonome Läufe pro Sitzung |
-
-Von außen kommt die Budget-Grenze dazu ([S3.13](s3-13-autonome-loops-absichern.md)).
-
-### Was das Gedächtnis mitschreibt
-
-Das Gedächtnissystem von Agentic OS hält alles fest:
-
-- `.agent-memory/iterations/`: vollständiges Protokoll jeder Änderung und Entscheidung
-- `.agent-memory/quality/`: Qualitätswerte über die Zeit
-- `.agent-memory/learnings/`: Muster, die über mehrere Läufe erkannt wurden
-
-Das ist eine Audit-Spur, keine Sicherheitsgarantie.
-
-### Ehrliche Einschätzung
-
-In internen Tests an kleinen Python-Projekten mit klaren Testsuiten hat der Loop über mehrere Iterationen schrittweise Fixes geliefert, ohne erkennbare Regressionen. Das ist anekdotisch, keine veröffentlichte Messung, und kein garantierter Produktivitätsgewinn. Behandle den Self-Improve-Loop als **Experimentierwerkzeug, das nur etwas taugt, wenn Budget-Grenze und Quality Gate ihn eng begrenzen.**
+Du schreibst sie selbst, oder Claude tut es für dich: Die Auto-Memory von Claude Code ist die eingebaute Variante des Kreislaufs. Laut Doku speichert Claude dort Notizen, die es sich auf Basis deiner Korrekturen und Vorlieben selbst schreibt ([S1.11](s1-11-gedaechtnis-ebenen.md)). Das spart dir das Schreiben und nimmt dir das Lesen nicht ab: Auch eine selbst geschriebene Notiz kann falsch sein.
 
 ### Was schiefgehen kann
 
-- **Kostenlauf:** Ohne `--max-budget-usd` kann ein hängender Loop in kurzer Zeit viel Geld verbrennen. Wie du ihn deckelst, steht in [S3.13](s3-13-autonome-loops-absichern.md).
-- **Schein-Fixes:** Claude kann einen Test „reparieren", indem es die Assertion entfernt. Das Gate bleibt grün, der Fehler bleibt auch. Dagegen helfen strenge Pre-Commit-Hooks.
-- **Memory-Drift:** Das Gedächtnis kann falsche Schlüsse festhalten, die spätere Iterationen in die falsche Richtung lenken; es braucht regelmäßiges Aufräumen ([S4.10](s4-10-diagnose-schritt-fuer-schritt.md)).
-- **Zu viel Vertrauen in kleine Stichproben:** Ein paar gelungene Läufe an Spielzeug-Code lassen sich nicht auf Produktion übertragen.
+- **Kostenlauf:** Ein hängender Loop kann in kurzer Zeit viele Tokens verbrauchen. Wie du ihn deckelst, steht in [S3.13](s3-13-autonome-loops-absichern.md).
+- **Schein-Fixes:** Claude kann einen Test „reparieren“, indem es die Assertion entfernt. Der Testlauf bleibt grün, der Fehler bleibt auch. Dagegen hilft, den Diff auf entfernte Assertions zu lesen (etwa mit `git diff` auf die Testdateien) oder einen Hook, der solche Änderungen blockt ([S2.8](s2-08-hook-einrichten.md)).
+- **Falsche oder veraltete Regeln:** Claude befolgt eine Regel auch dann, wenn sie falsch ist. Eine Regel, die nie ein Mensch gelesen hat, ist eine Behauptung.
+- **Keine Garantie:** `CLAUDE.md` ist Kontext, keine erzwungene Konfiguration. Was in jedem Fall verhindert werden muss, blockt laut Doku ein PreToolUse-Hook, unabhängig davon, was Claude entscheidet.
+- **Zu viel Vertrauen in kleine Stichproben:** Ein paar gelungene Läufe an Spielzeug-Code lassen sich nicht auf ein echtes Projekt übertragen.
 
-### Wo es endet: regulierte Hardware
+### Wo es endet
 
-> **Branchenrealität:** In regulierten Anlagen der physischen Sicherheit (EN 50131 für Einbruch- und Überfallmeldeanlagen) ist ein autonomes Firmware-Update an Tür-Controllern **nicht** zulässig. Pflicht sind Change-Management mit Audit-Trail, oft die Anwesenheit eines Technikers vor Ort und Replay-Tests. Das Muster gilt für Code-Repositories und CI/CD; an echten Hardware-Endpunkten wäre ein Freigabe-Schritt Pflicht, also der Mechanismus „Menschliche Review-Gates" aus der Tabelle oben. Welche Kontrollen zu welchem Regelwerk passen, steht in [S3.11](s3-11-datenschutz-und-compliance.md).
+Ein autonomer Verbesserungskreislauf gehört in ein Repository, in dem sich jede Änderung zurücknehmen lässt (Git, [S3.13](s3-13-autonome-loops-absichern.md)), und nicht an Systeme, bei denen ein Fehler nicht rückgängig zu machen ist. Wo ein Fehler echte Geräte oder echte Daten trifft, setzt du eine menschliche Freigabe davor ([S3.8](s3-08-rechte-fuer-autonomie.md), [S3.11](s3-11-datenschutz-und-compliance.md)).
 
-### Ausprobieren
+## Selbst machen
 
-Den Plugin-Befehl gibt es nicht mehr. Mit Bordmitteln kommst du dem Zyklus am nächsten, wenn du Claude Code ein Ziel mit prüfbarer Bedingung gibst ([S3.12](s3-12-zeitgesteuert-arbeiten.md)). Probier es in einem Wegwerf-Repo mit Tests, auf einem eigenen Branch:
+### Übung: aus einem Fehler eine Regel machen und prüfen (etwa 12 Minuten)
 
-<!-- cockpit:example -->
+**Ziel:** Du siehst einen Lauf gegen eine Konvention verstoßen, die nur du kennst, schreibst sie als eine Zeile in `CLAUDE.md` und beweist mit einem zweiten Lauf, dass Claude sie anwendet.
+
+**Startzustand:** Du arbeitest im Ordner `~/cc-workshop/lernregel`, einem Wegwerf-Repository mit einer fast leeren Datei `shop.py`. Mehr als Claude Code, Git und Python brauchst du nicht; nichts Globales ändert sich.
+
+Bash:
+
+```bash
+mkdir -p ~/cc-workshop/lernregel && cd ~/cc-workshop/lernregel
+printf '"""Small shop helpers."""\n' > shop.py
+git init -q
+git config user.name "Learner"
+git config user.email "learner@example.com"
+git add shop.py
+git commit -q -m "start"
 ```
-/goal all tests in test/auth pass and the lint step is clean
+
+PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\cc-workshop\lernregel" | Out-Null
+Set-Location "$HOME\cc-workshop\lernregel"
+Set-Content shop.py '"""Small shop helpers."""'
+git init -q
+git config user.name "Learner"
+git config user.email "learner@example.com"
+git add shop.py
+git commit -q -m "start"
 ```
 
-Vergleiche mit dem Zyklus oben: Welche der sechs Schritte siehst du, und welche Sicherheitsmechanismen aus der Tabelle unten musst du selbst mitbringen?
+Die Konvention deines Projekts, die Claude nicht erraten kann: Jeder Funktionsname in `shop.py` beginnt mit `shop_`.
+
+1. **Lauf 1, ohne Regel.** Starte `claude --permission-mode acceptEdits`, bestätige den Vertrauensdialog und gib ein: `In shop.py, add a function that sums a list of prices given in cents and a function that formats an amount in cents like 12.50. Keep it short.` Beende die Sitzung mit `/exit`.
+2. **Beobachten.** Lies die Funktionsnamen ab: in Bash `grep -n "^def " shop.py`, in PowerShell `Select-String "^def " shop.py`. Erwartet: Die Namen beginnen nicht mit `shop_`, denn davon weiß Claude nichts. Beginnt schon einer damit, nimm als Konvention stattdessen das Präfix `cart_`.
+3. **Festhalten.** Leg im Ordner `CLAUDE.md` an, mit genau einer Regel:
+
+   <!-- cockpit:example -->
+   ```markdown
+   # Conventions
+
+   - Every function name in shop.py starts with the prefix `shop_`, for example `shop_total`.
+   ```
+
+4. **Zurücksetzen.** `git restore shop.py` stellt die leere Datei wieder her.
+5. **Lauf 2, mit Regel.** Starte eine neue Sitzung mit `claude --permission-mode acceptEdits` und gib denselben Auftrag wie in Schritt 1 ein. Beende die Sitzung.
+6. **Vergleichen.** Lies die Funktionsnamen wie in Schritt 2 noch einmal ab. Erwartet: Jeder Name beginnt mit `shop_`. Lies auch den Diff: `git diff` zeigt die neuen Funktionen.
+7. **Prüfen, wer prüft.** Lies die Regel noch einmal als Fremde: Ist sie konkret genug, dass man sie an `shop.py` nachprüfen kann? Du hast es eben mit einem `grep` getan. Eine Regel, die du so nicht nachprüfen kannst, taugt nicht als Beleg.
+
+**Aufräumen:** Lösch den Ordner `~/cc-workshop/lernregel`.
+
+**Geschafft, wenn:**
+
+- [ ] die Funktionsnamen aus Lauf 1 nicht mit `shop_` begannen
+- [ ] `CLAUDE.md` genau eine konkrete, nachprüfbare Regel enthielt
+- [ ] alle Funktionsnamen aus Lauf 2 mit `shop_` begannen
+- [ ] du sagen kannst, was in Lauf 2 nicht garantiert war und was einen Verstoß in jedem Fall blockt
+
+### Extra: eine falsche Regel (etwa 5 Minuten)
+
+**Ziel:** Du siehst, dass Claude auch einer falschen Regel folgt, und warum du jede Regel selbst liest.
+
+**Startzustand:** der Ordner `~/cc-workshop/lernregel` aus der Übung, falls noch nicht gelöscht.
+
+1. Ändere in `CLAUDE.md` das Präfix absichtlich zu `shopp_` (zwei p), stell mit `git restore shop.py` die leere Datei her und wiederhol Lauf 2 in einer neuen Sitzung.
+2. Lies die Funktionsnamen ab. Erwartet: Claude folgt der Regel wahrscheinlich buchstäblich und nutzt `shopp_`; frag es nicht, ob der Tippfehler Absicht war. Dass es bei dir anders ausgeht, ist möglich; entscheidend ist, dass kein Werkzeug dich vor einem Tippfehler in deiner eigenen Regel warnt.
+
+**Geschafft, wenn:**
+
+- [ ] du erklären kannst, warum der Mensch die Regel liest, bevor sie in ein Projekt gehört
+
+## Typische Fallen
+
+- **Die Regel greift beim zweiten Lauf nicht.** Hast du eine neue Sitzung gestartet? `CLAUDE.md` wird beim Start geladen. Ist die Regel konkret und kurz genug? „Schreib sauberen Code“ lässt sich nicht nachprüfen.
+- **Grün heißt nicht gelöst.** Ein Testlauf, der nach einem autonomen Lauf grün ist, beweist keinen echten Fix, wenn Assertions fehlen. Lies den Diff.
+- **Aus einem einzelnen Lauf wird eine Regel für alles.** Ein Fehler in einem Lauf ist ein Hinweis, kein Beleg. Wiederhol den Lauf, bevor du die Regel einchecken lässt.
+- **Die Regel wird mit der Zeit falsch.** Veraltete Zeilen in `CLAUDE.md` lenken spätere Läufe in die falsche Richtung. Lies die Datei von Zeit zu Zeit durch.
 
 ## Check
 
-Du kannst die vier häufigsten Fehlerbilder des Self-Improve-Loops nennen, jedem eine Gegenmaßnahme zuordnen und erklären, warum der Loop an Hardware-Endpunkten nach EN 50131 nicht ohne Freigabe-Gate laufen darf.
+Du kannst das Muster mit Bordmitteln durchspielen und seine Grenzen nennen.
 
-1. Welche sechs Schritte hat eine Iteration, und wann wird committet?
-2. Warum ist ein grünes Quality Gate kein Beweis für einen echten Fix?
-3. Was hält das Gedächtnis fest, und welches Risiko entsteht daraus?
+1. Welche vier Schritte hat das Muster, und warum startest du für den zweiten Lauf eine neue Sitzung?
+2. Warum ist eine Regel in `CLAUDE.md` keine Garantie, und was blockt einen Verstoß in jedem Fall?
+3. Ordne zu: Welche Gegenmaßnahme gehört zu einem Kostenlauf, zu einem Schein-Fix und zu einer falschen Regel?
+
+<details><summary>Auflösung</summary>
+
+1. Beobachten, festhalten, neu laufen, vergleichen. `CLAUDE.md` wird beim Start der Sitzung geladen; in der laufenden Sitzung hat Claude die neue Zeile nicht.
+2. Claude behandelt `CLAUDE.md` als Kontext, nicht als erzwungene Konfiguration. Was in jedem Fall verhindert werden muss, blockt ein PreToolUse-Hook, unabhängig davon, was Claude entscheidet.
+3. Kostenlauf: Budget und Rundenlimit mit `claude -p`. Schein-Fix: den Diff auf entfernte Assertions lesen oder einen Hook, der sie blockt. Falsche Regel: ein Mensch liest sie, bevor sie bleibt.
+
+</details>
 
 <details><summary>Quizfrage</summary>
 
-**Frage:** Was unterscheidet einen Commit hinter dem Quality Gate von einem normalen Commit, und welches Fehlerbild umgeht diesen Schutz trotzdem?
+**Frage:** Nach einem autonomen Lauf sind alle Tests grün. Welche Prüfung brauchst du als Nächstes?
 
-- **Richtig:** Er entsteht nur bei grünen Tests und ausreichendem Score; ein Schein-Fix umgeht das, wenn Claude die Assertion löscht.
-- Falsch: Er unterscheidet sich nur im Format der Commit-Nachricht; einen Schutz über die normale Git-Mechanik hinaus gibt es nicht.
-- Falsch: Er entsteht nur bei grünen Tests; ein Kostenlauf umgeht das, weil zu hoher Verbrauch die Prüfung des Gates überspringt.
-- Falsch: Er wird im Gedächtnis protokolliert; Memory-Drift umgeht das, weil `.agent-memory/` die Assertions direkt umschreibt.
+- **Richtig:** Den Diff der Testdateien lesen, ob Assertions fehlen, denn ein grüner Lauf kann auch heißen, dass der Test weniger prüft als vorher.
+- Falsch: Keine, denn Tests sind der Nachweis; ein grüner Lauf zeigt, dass der Fehler im Code behoben ist und nicht im Test.
+- Falsch: Das Budget-Limit kontrollieren, denn ein eingehaltenes Budget zeigt, dass der Lauf keine Schein-Fixes geschrieben hat.
+- Falsch: Die Commit-Nachricht lesen, denn eine ausführliche Nachricht belegt, dass die Änderung am Code und nicht am Test erfolgte.
 
 </details>
 
 ## Weiterlesen
 
+- [Gedächtnis und CLAUDE.md (offizielle Doku)](https://code.claude.com/docs/en/memory)
 - [CLI-Referenz: --max-budget-usd](https://code.claude.com/docs/en/cli-reference)
 - [Hooks-Leitfaden](https://code.claude.com/docs/en/hooks-guide)
+- [S1.10 · CLAUDE.md: die Hausordnung des Projekts](s1-10-claude-md.md)
+- [S1.11 · Alle Gedächtnis-Ebenen im Überblick](s1-11-gedaechtnis-ebenen.md)
 - [S3.13 · Autonome Loops absichern: Budget und Worktree](s3-13-autonome-loops-absichern.md)
 - [S3.12 · Zeitgesteuert arbeiten: /loop, /goal, /schedule, Routinen](s3-12-zeitgesteuert-arbeiten.md)
 - [S3.6 · Devil's Advocate: eine adversariale Prüf-Pipeline](s3-06-devils-advocate.md)
 - [S3.11 · Datenschutz, Aufbewahrung und regulierte Branchen](s3-11-datenschutz-und-compliance.md)
 - [S2.8 · Einen Hook einrichten, der wirklich blockt](s2-08-hook-einrichten.md)
-- [S4.10 · Diagnose Schritt für Schritt](s4-10-diagnose-schritt-fuer-schritt.md)
