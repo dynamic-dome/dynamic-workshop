@@ -4,90 +4,31 @@
 
 ### Demo: Hooks, die Alarmanlage
 
-**Ziel:** Zeigen, dass Hooks automatisch auf Claudes Aktionen reagieren, gefährliche Operationen blocken können und nach dem Einrichten ohne dein Zutun laufen.
+**Ziel:** Zeigen, dass ein PreToolUse-Hook eine gefährliche Shell-Aktion blockt, bevor sie läuft, harmlose Befehle durchlässt und nach dem Einrichten ohne dein Zutun arbeitet.
 
-**Vorbereitung**
+Zeig die Übung aus dem Kapitel live: die Übung „einen Wächter einrichten und blocken sehen“ in [S2.8](../../library/s2-08-hook-einrichten.md). Startzustand wie dort: der Ordner `~/cc-workshop/waechter` mit dem Skript `.claude/hooks/safety-check.sh` (mit Git Bash und `jq`) oder `.claude/hooks/safety-check.ps1` (Windows ohne Git Bash), das du vorher aus den getesteten Vorlagen in `resources/demos/assets/hooks/` kopierst, und der `.claude/settings.json` aus Schritt 4. Der Vertrauensdialog des Ordners ist einmal bestätigt, und der Ordner `build` mit `old.txt` (Schritt 5) liegt bereit.
 
-- `~/.claude/settings.json` mit mindestens einem Hook
-- Ideal: Der innerHTML-Sicherheits-Hook ist aktiv (warnt bei `innerHTML` in JS-Dateien). Das ist ein PostToolUse-Hook auf Datei-Änderungen, nicht der Bash-Hook aus Schritt 1.
-- Alternativ: ein einfacher `echo`-Hook, der Tool-Aufrufe loggt
-
-**Schritt 1: die Hook-Konfiguration zeigen**
-
-```bash
-cat ~/.claude/settings.json | jq '.hooks'
-# If jq not available:
-cat ~/.claude/settings.json
-```
-
-Die Struktur durchgehen:
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash|PowerShell",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/security-check.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-**Schritt 2: den innerHTML-Hook auslösen**
-
-In Claude Code:
-
-```
-Add a div to the page and set its content to the user's name using innerHTML
-```
-
-Was passiert:
-
-- Claude schreibt den Code mit `innerHTML`.
-- Der PostToolUse-Hook feuert.
-- Eine Warnung erscheint, etwa *„Security: innerHTML usage detected. Prefer textContent for user-controlled data."*
-
-**Schritt 3: das Hook-Skript zeigen**
-
-```bash
-cat ~/.claude/hooks/security-check.sh
-# Or wherever the hook is
-```
-
-Zeig, dass es nur ein Bash-Skript ist. Es liest JSON von stdin (die Daten des Tool-Aufrufs), prüft auf Muster und endet entweder mit 0 (erlauben) oder mit 2 (blocken, der Grund steht auf stderr).
-
-**Schritt 4: das Blocken ansprechen**
-
-Ein PreToolUse-Hook kann eine Aktion ganz stoppen, über den Exit-Code aber nur mit exit 2. PostToolUse-Hooks reagieren nur: Sie loggen oder melden hinterher, machen die Aktion aber nicht rückgängig.
+**Ablauf:** Schritte 3, 5, 6 und 7 der Übung: den Handtest des Skripts mit den drei Eingaben, `/hooks`, der geblockte Auftrag `rm -rf build`, dann `echo hello`. Schritt 4 zeigst du als Konfiguration; sie hat drei Ebenen: welches Ereignis (`PreToolUse`), welches Tool (`matcher`), was läuft (`type` und `command`).
 
 <details><summary>Für Moderierende</summary>
 
-**Dauer:** etwa 7 Minuten (Schritt 1: 2 Min., Schritt 2: 3 Min., Schritt 3: 1 Min., Schritt 4: 1 Min.).
+**Dauer:** etwa 8 bis 10 Minuten.
 
 **Sagen:**
 
-- Schritt 1: „Drei Teile: welches Ereignis (PreToolUse), welches Tool (Bash), was läuft (ein Shell-Skript). Mehr ist es nicht."
-- Schritt 2: „Ich habe Claude nicht gebeten, auf Sicherheitsprobleme zu achten. Der Hook hat automatisch gefeuert, als Claude den Code geschrieben hat. Er ist ein Sensor an der Edit-Aktion, keine Erinnerung, die ich jede Sitzung wiederholen muss."
-- Schritt 3: „Das ist ein Bewegungsmelder. Er ist immer an. Du richtest ihn einmal ein, und er beobachtet jede Aktion von Claude."
-- Schritt 4: „PreToolUse-Hooks können auch BLOCKEN. Endet dieser Hook mit Code 2, stoppt Claude Code die Aktion ganz, wie eine Tür, die nicht aufgeht. Mit Code 1 läuft sie trotzdem weiter. PostToolUse-Hooks reagieren nur, sie loggen oder melden hinterher, können die Aktion aber nicht rückgängig machen."
+- Handtest (Schritt 3): „Bevor Claude das Skript benutzt, teste ich es von Hand. Es liest JSON von stdin, prüft den Befehl auf Muster und endet mit 0 (kein Einwand) oder mit 2 (blocken, der Grund steht auf stderr). Und bei einer Eingabe, die es nicht lesen kann, blockt es lieber: Ein kaputter Wächter soll die Tür schließen, nicht öffnen."
+- Konfiguration (Schritt 4): „Drei Teile: welches Ereignis, welches Tool, was läuft. Der Matcher heißt `Bash|PowerShell`, weil unter Windows Shell-Befehle meist über das PowerShell-Tool laufen. Ein Hook nur mit `Bash` feuert dort nie."
+- Schritt 6: „Ich habe Claude nicht gebeten, auf Gefahren zu achten. Der Hook hat vor der Rechte-Prüfung gefeuert und geblockt, es kam nicht einmal eine Löschen-Rückfrage. Der Ordner `build` ist noch da." Zeig `build/old.txt`. Den Hook-Block erkennst du am Text `SAFETY HOOK: potentially destructive command blocked` aus deinem Skript.
+- Schritt 7: „Harmloses läuft normal durch, ohne Meldung."
+- Blocken: „Ein PreToolUse-Hook kann eine Aktion ganz stoppen, über den Exit-Code aber nur mit `exit 2`. Mit Code 1 läuft sie trotzdem weiter." Ein PostToolUse-Hook kommt erst nach einem erfolgreichen Aufruf und macht ihn nicht rückgängig ([S2.6](s2-06-hooks-als-sensoren.md)).
+- Grenze: „Hooks arbeiten nach bestem Bemühen: Ein falscher Pfad in der `settings.json` oder ein Absturz mit einem anderen Code als 2 lässt die Aktion durch. Ein Muster-Wächter erkennt nur die Schreibweisen, die er kennt. Für echte Isolation kommen Rechte-Regeln und eine Sandbox dazu."
 
 Die Sprechpunkte zu den drei Eckpfeilern stehen in [S2.6](s2-06-hooks-als-sensoren.md).
 
-**Wenn der innerHTML-Hook fehlt:** Lass Schritt 2 weg und zeig das Blocken in Schritt 4 live mit `safety-check.sh` aus „Selbst machen" (Schritt 4 dort).
+**Wenn der Befehl trotzdem lief:** Prüf zuerst den Matcher (`Bash|PowerShell`) und den Pfad zum Skript in der `settings.json`, dann, ob der Vertrauensdialog bestätigt wurde. `/hooks` zeigt, ob der Eintrag geladen ist.
 
-**Wenn gar keine Hooks eingerichtet sind:** Richte live einen ein:
+**Wenn Claude sich von selbst weigert:** Dann stammt die Ablehnung nicht vom Hook. Der Text `SAFETY HOOK: …` aus deinem Skript fehlt; formuliere den Auftrag mit dem genauen Befehl neu.
 
-```bash
-# Add a simple logging hook to settings.json
-```
-
-Oder zeig die Struktur nur als Konzept und sag: „Das richtet ihr gleich in der Übung selbst ein, ihr baut euch einen Safety-Hook."
+**Wenn unter Windows das Skript nicht startet:** In der Exec-Form der PowerShell-Variante gehören `-NoProfile` und `-ExecutionPolicy Bypass` dazu; sonst bricht Windows PowerShell mit der Standard-Richtlinie ab, und der Hook fällt still offen.
 
 </details>
