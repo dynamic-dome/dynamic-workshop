@@ -787,6 +787,40 @@ Bilder: `~/AI/analysis-artifacts/workshop-review-2026-10-05/cockpit-2026-10-05/`
 - Sechs Ansichten (`renderStart`, `renderPlacement`, `renderPath`, `renderLibrary`, `renderChapter`,
   `renderReview`), eine erzeugte Datei von 2,9 MB, 14 Browser-Tests.
 
+### Fragerunde 1 (gestellt am 2026-10-05, offen; DCO #9657)
+
+Vorab zwei Entscheidungen zu P8:
+
+- **E1 · Aufbau (P8e).** Empfehlung: nichts teilen und nichts umnummerieren; R24 und R30 damit schließen. Gründe:
+  Nach P7 liegt kein Kapitel mehr über 35 Minuten außer S4.8; S3.9 und S4.4 haben 30 Minuten wie sechs andere; die
+  Reihenfolge folgt den IDs, ein Tausch (S3.7 vor S3.6, S4.9/S4.10 vor S4.8) oder ein neues Kapitel mitten in einer
+  Session hieße Dateien, Verweise, Vertrag und Golden umnummerieren; die Sicherheitskapitel stehen bis auf S3.11,
+  S4.2 und X.4 schon im Sicherheitsboden.
+- **E2 · Moderationsschicht (P8c, `dbed0c3`).** Empfehlung: behalten. Wer eine der entfallenen Demos für das
+  Live-Format zurückhaben will (IPv4-Validator, Plugin-Cache-Tour, `/tdd`, `run-loop`, Telegram-Brücke), nennt sie.
+
+Fragen zu P9, je mit Empfehlung:
+
+1. **Umfang.** (a) nur die Befundliste B1 bis B12 und die vier Beobachtungen, (b) dazu Einstiege und Kapitelansicht
+   für Selbstlernende neu ordnen, Optik bleibt, (c) zusätzlich ein neues Erscheinungsbild. Empfehlung: (b).
+2. **Kapitelansicht.** Eine Ansicht statt Kurzansicht plus eingeklapptem Volltext: Kopf (Outcome, Schnellcheck mit
+   „überspringen“), dann Lehrtext, Übung, Check, mit Sprungmarken; die Kurzansicht bleibt nur für Kapitel, die der
+   Pfad auf „überfliegen“ setzt. „Als erledigt markieren“ wandert ans Ende. Empfehlung: ja.
+3. **Ohne Einstufung.** Die Bibliothek ist ohne Einstufung voll benutzbar: kein Status „später“, Kapitel öffnen im
+   Volltext; die Einstufung bleibt ein Angebot. Empfehlung: ja.
+4. **Startseite.** Der Live-Workshop-Pfad geht vom Start in einen Bereich „Für Moderierende“; nach gespeicherter
+   Einstufung ist der Hauptknopf „Weiter mit <nächstes Kapitel>“ (B10). Empfehlung: ja.
+5. **Bibliothek.** Türen zeigen ID und Titel (eine Zeile je Kapitel), die Regale bleiben als Gliederung.
+   Empfehlung: ja.
+6. **Ort und Optik.** Bleibt das Cockpit eine Datei im Repo, oder soll es auch auf die Website (DCO #9528)? Davon
+   hängt ab, ob die Optik an die Website angeglichen wird. Empfehlung: erst die Funktion im Repo fertig, Optik
+   unverändert; der Website-Export ist danach ein eigener Schritt.
+7. **Handy.** Muss das Cockpit auf dem Handy bedienbar sein oder nur lesbar? Empfehlung: lesbar und in den
+   Grundzügen bedienbar (Navigation, Markieren), keine eigene Gestaltung; die Übungen brauchen ohnehin ein Terminal.
+8. **Fortschritt.** Bleibt im Browser; dazu Export und Import als Datei, kein Konto. Empfehlung: ja.
+9. **Abnahme.** Je Befund ein Browser-Test, am Ende ein Durchgang mit dir im Browser wie am 2026-10-02 (ab
+   „Fortsetzung“). Empfehlung: ja.
+
 ---
 
 ## Plan-Prüfung 2026-10-05 (Modus: Scope halten)
