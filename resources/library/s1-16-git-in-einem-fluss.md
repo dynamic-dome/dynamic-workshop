@@ -157,9 +157,13 @@ Du kannst einen Ablauf von Branch über Tests und Diff bis zum Commit in einer C
 **Frage:** Claude hat eine neue Datei `log_formatter.py` angelegt. Du fragst nach `git diff`, die Ausgabe ist leer. Was bedeutet das?
 
 - **Richtig:** Git zeigt neue, ungetrackte Dateien in `git diff` nicht; erst nach dem Stagen zeigt `git diff --staged` sie.
+  - Warum: `git diff` zeigt neue Dateien nicht, die Git noch nicht kennt. Erst nach dem Stagen listet `git diff --staged` sie, also das, was im Commit landet.
 - Falsch: Claude hat die Datei nicht geschrieben, sonst würde `git diff` jede Änderung im Ordner sofort anzeigen.
+  - Warum: Die Datei ist da, Git kennt sie nur noch nicht. `git diff` zeigt neue, ungetrackte Dateien nicht, auch wenn Claude sie angelegt hat.
 - Falsch: Claude Code unterdrückt den Diff, bis die Tests laufen und dir einen grünen Lauf melden.
+  - Warum: Der Grund liegt bei Git, nicht bei den Tests: `git diff` zeigt neue, ungetrackte Dateien nicht, egal ob die Tests schon liefen.
 - Falsch: Das Repository ist beschädigt, weil `git diff` auch neue Dateien zeigen müsste, und du musst es neu anlegen.
+  - Warum: Das Repository ist in Ordnung: `git diff` zeigt neue Dateien nicht, solange Git sie nicht kennt. Stage sie und sieh dir `git diff --staged` an.
 
 </details>
 
