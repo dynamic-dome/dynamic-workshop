@@ -180,9 +180,13 @@ Du kannst `/diff`, `/review` und `/rewind` in einem Git-Ablauf einsetzen und wei
 **Frage:** Dein Branch hat zwei Commits, die dem Upstream voraus sind, und eine Änderung, die du noch nicht committet hast. Du gibst `/review` ohne Ziel ein. Was prüft Claude?
 
 - **Richtig:** Die zwei Commits, die dem Upstream voraus sind, und deine noch nicht committete Änderung.
+  - Warum: Ohne Ziel prüft `/review` den aktuellen Diff: die Commits deines Branchs, die dem Upstream voraus sind, plus alle noch nicht committeten Änderungen.
 - Falsch: Nur die noch nicht committete Änderung, denn bereits committeter Code gilt als geprüft und bleibt außen vor.
+  - Warum: `/review` prüft nicht nur Uncommittetes: Zum Diff gehören auch die Commits deines Branchs, die dem Upstream voraus sind, hier also beide.
 - Falsch: Nur den letzten Commit, weil `/review` immer genau einen Commit vom Branch-Ende aus betrachtet.
+  - Warum: `/review` nimmt alle Commits deines Branchs, die dem Upstream voraus sind, plus Uncommittetes mit, nicht nur den letzten. Hier sind das zwei Commits und eine Änderung.
 - Falsch: Die gesamte Historie des Repositorys seit dem ersten Commit, weil `/review` ohne Ziel alles durchsieht.
+  - Warum: Ohne Ziel prüft `/review` nur den aktuellen Diff, nicht die Historie. Etwas anderes prüft es erst, wenn du eine PR-Nummer, einen Branch oder einen Pfad angibst.
 
 </details>
 
