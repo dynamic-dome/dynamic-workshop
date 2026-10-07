@@ -397,6 +397,10 @@ def _check_quiz_why(q, add):
             add("quiz-why", f"Begründung mit {len(r)} Zeichen (erlaubt 1–{QUIZ_WHY_MAX})")
 
 
+def _quiz_has_all_why(q) -> bool:
+    return bool(q.why_correct) and len(q.why_wrong) == 3 and all(q.why_wrong)
+
+
 def load_standard(lib) -> frozenset:
     """IDs of the chapters that must meet the standard for self-learners: since package P7 every chapter."""
     return frozenset(ch.id for ch in lib.chapters)
@@ -407,8 +411,7 @@ def coverage(lib) -> str:
     lessons = [c for c in lib.chapters if c.type == "lesson"]
     with_exercise = sum(1 for c in lessons if "Selbst machen" in c.sections)
     with_answers = sum(1 for c in lessons if c.answers and len(c.answers) == len(c.recall))
-    with_why = sum(1 for c in lessons if c.quiz and c.quiz.why_correct and len(c.quiz.why_wrong) == 3
-                   and all(c.quiz.why_wrong))
+    with_why = sum(1 for c in lessons if c.quiz and _quiz_has_all_why(c.quiz))
     return (f"Lektionen mit Übung: {with_exercise} von {len(lessons)} · "
             f"mit Auflösung: {with_answers} von {len(lessons)} · "
             f"mit Begründung: {with_why} von {len(lessons)}")
@@ -499,6 +502,11 @@ def validate(lib, *, complete: bool, meta=None, standard=frozenset()) -> list:
     _check_placement(lib, by_id, report, planned_ids)
     _check_demos(lib, report)
     if complete:
+        # P10f: every lesson quiz carries a reason under each answer (capstones and setup chapters are not gated).
+        for ch in lib.chapters:
+            if ch.type == "lesson" and ch.quiz and ch.quiz.closed and not _quiz_has_all_why(ch.quiz):
+                report(ch.path)("quiz-why-required", "Quiz ohne Begründung je Antwort "
+                                "(eingerückt '- Warum: …' unter jeder Antwort, Spec §4.3)")
         quizzes = [c.quiz for c in lib.chapters if c.quiz and c.quiz.closed and len(c.quiz.wrong) == 3]
         longest = sum(1 for q in quizzes if len(q.correct) > max(len(w) for w in q.wrong))
         if quizzes and longest / len(quizzes) > QUIZ_LONGEST_SHARE:

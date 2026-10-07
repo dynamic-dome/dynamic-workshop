@@ -193,6 +193,8 @@ Bibliothek, wenn die Begründung es in Klammern nennt, etwa „(S1.9)“; was in
 Längenregeln oben gelten nur für die Antworten. Der Katalog trägt sie als `quiz.why`
 (`{"correct": …, "wrong": [… in der Reihenfolge der Antworten]}`), nur wenn alle vier da sind; `validate` zählt
 „mit Begründung: n von 61“. Das Cockpit zeigt nach der Antwort nur die Begründung der gewählten Antwort.
+Seit P10f (alle 61 Lektionen haben Begründungen) meldet `validate --complete` jede Lektion ohne vier Begründungen als
+`quiz-why-required`; Abschlusskapitel und S0.1 haben ihre Begründungen, zählen aber nicht ins Gate.
 
 ### 4.4 Stilregeln für Kapitel
 

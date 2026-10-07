@@ -332,6 +332,13 @@ def test_quiz_without_reasons_and_with_four_is_fine(lib_dir):
     assert "quiz-why" not in rules(lib_dir, complete=True)
 
 
+def test_complete_mode_requires_reasons_in_every_lesson_quiz(lib_dir):
+    """P10f: once all content packages are in, --complete fails for a lesson whose quiz lacks its reasons."""
+    found = [p for p in bl.validate(lm.load_library(lib_dir), complete=True) if p.rule == "quiz-why-required"]
+    assert [p.path.split("/")[-1] for p in found] == ["s2-07-demo-events.md"]  # S2.8 has its four reasons
+    assert "quiz-why-required" not in rules(lib_dir)  # without --complete intermediate states stay buildable
+
+
 def test_validate_reports_how_many_lessons_have_reasons(lib_dir, capsys):
     assert bl.main(["validate", "--root", str(lib_dir)]) == 0
     assert "mit Begründung: 1 von 2" in capsys.readouterr().out
