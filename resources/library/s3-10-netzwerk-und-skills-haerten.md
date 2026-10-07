@@ -181,9 +181,13 @@ Du kannst für jeden der drei Schalter sagen, was er sperrt und in welcher Setti
 **Frage:** Ein Pentest-Team zeigt: Ein bösartiges Skill-Update mit einer `` !`…` ``-Zeile, die eine Domain des Angreifers aufruft und das Ergebnis in eine Shell leitet, führt beim Laden des Skills Shell-Code aus. Welche Einstellung verhindert genau das?
 
 - **Richtig:** `disableSkillShellExecution: true`, denn dann setzt Claude Code statt des Befehls nur einen Platzhaltertext ein.
+  - Warum: Claude Code führt eingebettete Shell-Befehle eines Skills aus, bevor der Inhalt an Claude geht. Der Schalter ersetzt jeden durch `[shell command execution disabled by policy]`, also läuft er nicht.
 - Falsch: `sandbox.network.deniedDomains` mit der Domain des Angreifers, denn schon die Domain im Befehlstext lässt Claude Code das Laden des Skills abbrechen.
+  - Warum: `deniedDomains` sperrt nur die Verbindung zu einer Domain, und nur für Befehle in der Sandbox. Es greift nicht beim Laden des Skills ein; dafür gibt es `disableSkillShellExecution`.
 - Falsch: `autoMode.hard_deny` mit einem Muster wie `Bash(curl *)`, denn dort stehen Tool-Muster wie in `permissions.deny`, und der Befehl läuft vor dem Klassifikator.
+  - Warum: `hard_deny` nimmt Sätze in natürlicher Sprache, keine Tool-Muster: Der Klassifikator liest sie als Regeln. Ein Muster wie `Bash(curl *)` gehört in `permissions.deny`.
 - Falsch: Geschützte Pfade für `.claude/skills`, denn geschützte Pfade sperren auch das Ausführen der Skills darin.
+  - Warum: Geschützte Pfade betreffen Schreibzugriffe: Claude Code beschreibt sie nie ohne Prüfung (S3.9). Eine Sperre für Skill-Shell-Zeilen sind sie nicht, die setzt `disableSkillShellExecution`.
 
 </details>
 
