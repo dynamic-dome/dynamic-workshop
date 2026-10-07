@@ -180,9 +180,13 @@ Du kannst zu einer Aufgabe das passende Hook-Ereignis nennen und erklären, waru
 **Frage:** Ein Team will verhindern, dass API-Keys aus dem Prompt beim Modell ankommen. Welches Hook-Ereignis passt, und warum ist ein naheliegendes anderes falsch?
 
 - **Richtig:** `UserPromptSubmit`: Es feuert, bevor Claude den Prompt sieht, und kann ihn abweisen. `PreToolUse` käme zu spät, Claude hätte ihn schon gelesen.
+  - Warum: Das Secret steht schon im Prompt, bevor ein Tool-Aufruf entsteht. `UserPromptSubmit` feuert, bevor Claude den Prompt sieht; ein Hook dort kann ihn abweisen, aber nicht umschreiben oder schwärzen.
 - Falsch: `PreToolUse` mit Bash-Matcher, weil Keys fast immer in Shell-Befehlen stehen; `UserPromptSubmit` wäre zu früh und zu ungenau.
+  - Warum: Die Keys stehen im Prompt, nicht im Befehl. `PreToolUse` feuert erst bei einem Tool-Aufruf, da hat Claude den Prompt längst gelesen. `UserPromptSubmit` ist hier nicht zu früh, sondern rechtzeitig.
 - Falsch: `SessionStart`, weil es einmal pro Sitzung feuert und dort alle späteren Prompts nach Keys durchsuchen kann.
+  - Warum: `SessionStart` feuert beim Start einer Sitzung, nicht bei jedem Prompt. Geprüft werden muss jeder abgeschickte Prompt, und das leistet das Ereignis, das je Prompt feuert: `UserPromptSubmit`.
 - Falsch: `Stop`, weil es nach der Antwort feuert und den Prompt nachträglich aus der Unterhaltung löschen kann.
+  - Warum: `Stop` feuert erst, wenn Claude eine Antwort beendet hat; der Key ist dann längst beim Modell. Das Ereignis dient Zusammenfassungen, Aufräumarbeiten und Statusmeldungen, nicht dem Abfangen.
 
 </details>
 

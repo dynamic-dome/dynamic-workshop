@@ -221,9 +221,13 @@ Du kannst erklären, warum Skill und Command technisch dasselbe sind, begründen
 **Frage:** Ein Skill für das Produktions-Deployment lässt `disable-model-invocation` auf dem Standardwert. Was ist das Risiko?
 
 - **Richtig:** Claude darf den Skill selbst laden, wenn eine Anfrage zur Beschreibung passt, etwa „Was bräuchte es, um das live zu bringen?".
+  - Warum: Der Standardwert ist `false`: Claude darf den Skill laden, sobald eine Anfrage zur Beschreibung passt, auch ohne dein `/deploy`. Kritische Aktionen wie Deploy gehören deshalb auf `true`.
 - Falsch: Keines: Das Feld bestimmt nur, ob der Skill in der `/skills`-Liste erscheint; selbst laden kann Claude einen Skill ohnehin nie.
+  - Warum: Das Feld regelt, wer den Skill auslösen darf, nicht, wo er angezeigt wird. Mit dem Standardwert darf Claude ihn selbst laden, sobald die Beschreibung zur Anfrage passt.
 - Falsch: Der Standardwert schaltet den Handbefehl ab, sodass nur noch Claude den Skill starten darf und du nicht mehr.
+  - Warum: Du verlierst nichts: Du tippst weiter `/name`, und Claude darf zusätzlich selbst laden. Nur `user-invocable: false` verbietet dir das Tippen und lässt allein Claude zu.
 - Falsch: Keines: Mit einem `allowed-tools`-Feld darf der Skill nur die dort genannten Tools nutzen, also kann ein Deploy nie mehr tun als vorgesehen.
+  - Warum: `allowed-tools` gibt Tools nur ohne Rückfrage frei und schränkt nichts ein; alle anderen bleiben verfügbar. Ein Skill kann sich damit sogar selbst weitreichende Rechte geben.
 
 </details>
 

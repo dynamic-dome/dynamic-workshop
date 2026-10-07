@@ -178,9 +178,13 @@ Du kannst erklären, wann ein `prompt`-Hook besser passt als ein `command`-Hook,
 **Frage:** Eine Vorab-Prüfung soll nur dann scharf werden, wenn jemand `/deploy` aufruft, und nicht in jeder Sitzung. Wohin gehört der Hook?
 
 - **Richtig:** In das Frontmatter des Deploy-Skills: Dort wird er erst beim Aufruf registriert und bleibt dann bis zum Sitzungsende.
+  - Warum: Skill-Hooks werden erst registriert, wenn der Skill aufgerufen wird, und bleiben dann bis zum Sitzungsende. Einen globalen Hook in `settings.json` brauchst du dafür nicht: Der Skill bringt ihn mit.
 - Falsch: In `~/.claude/settings.json` mit dem Matcher `/deploy`, denn der Matcher vergleicht den Namen des Skills, der gerade läuft.
+  - Warum: Der `matcher` wählt Tools wie `Bash` oder `Edit` (S2.8), keine Skills. Außerdem gilt `~/.claude/settings.json` in all deinen Projekten und hängt nicht am Aufruf von `/deploy`.
 - Falsch: In das Frontmatter eines Subagenten, denn nur dort leben Hooks genau so lange, wie der Skill aktiv ist.
+  - Warum: Ein Subagent-Hook hängt am Subagenten, nicht am Skill: Er läuft nur, solange der Subagent läuft, und wird danach entfernt. Ein Skill-Hook entsteht erst beim Aufruf von `/deploy`.
 - Falsch: In `.claude/settings.local.json`, denn diese Datei liest Claude Code erst, wenn du einen Slash-Befehl aufrufst.
+  - Warum: Hooks aus Settings-Dateien laufen nach dem Vertrauensdialog (S2.6), ohne Slash-Befehl. Dort wäre die Prüfung in jeder Sitzung des Projekts scharf, nicht erst nach `/deploy`.
 
 </details>
 

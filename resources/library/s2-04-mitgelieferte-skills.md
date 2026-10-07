@@ -179,9 +179,13 @@ Du kannst nachsehen, welche Skills in deiner Sitzung verfügbar sind, für eine 
 **Frage:** Was unterscheidet `/verify` von einem normalen Testlauf wie `pytest` oder `npm test`?
 
 - **Richtig:** Er baut und startet die App und beobachtet ihr Verhalten, statt sich auf Tests oder Typprüfungen zu verlassen.
+  - Warum: `/verify` baut die App wirklich und führt sie aus, statt sich auf Tests zu verlassen. Tests prüfen einzelne Einheiten, er beobachtet, was die App tut: genau darin liegt sein Wert.
 - Falsch: Er ist ein Kürzel für den erkannten Test-Runner und wählt nur selbst zwischen `pytest`, `npm test` und `cargo test`.
+  - Warum: Ein Kürzel wäre feste Logik. Mitgelieferte Skills geben Claude stattdessen Anweisungen, hier: die App bauen, ausführen und beobachten, statt sich auf Tests zu verlassen.
 - Falsch: Er führt statische Analyse aus, also ESLint, mypy oder tsc, und ergänzt so den Testlauf um Lint- und Typfehler.
+  - Warum: Statische Prüfungen wie ESLint, `mypy` oder `tsc` sind nicht sein Kern. `/verify` startet die App und beobachtet, was sie tut, statt sich auf Tests oder Typprüfungen zu verlassen.
 - Falsch: Er startet die App nur, wenn du vorher `/run-skill-generator` ausgeführt hast; ohne Startrezept bricht er sofort ab.
+  - Warum: `/run` und `/verify` brauchen keine Einrichtung: Sie leiten aus Projekttyp und README, `package.json` oder `Makefile` ab, wie die App startet. `/run-skill-generator` lohnt erst bei mehr als einem Standardstart.
 
 </details>
 

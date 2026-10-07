@@ -492,9 +492,13 @@ Du kannst einen PreToolUse-Hook mit passendem `matcher` eintragen, der mit `exit
 **Frage:** Dein Wächter-Skript stürzt ab, weil `jq` fehlt, und endet mit Exit-Code 127. Was passiert mit dem gefährlichen Befehl, und wie änderst du das?
 
 - **Richtig:** Er läuft, denn 127 blockt nicht. Das Skript muss seine Eingabe selbst prüfen und bei einem Lesefehler mit `exit 2` enden.
+  - Warum: Nur `exit 2` blockt; jeder andere Code (1, 127, ein Absturz) und ein Timeout lassen die Aktion laufen. Ein kaputter Wächter soll die Tür schließen: Das Skript endet bei unlesbarer Eingabe selbst mit 2.
 - Falsch: Er wird geblockt, denn ein Hook, der nicht sauber läuft, gilt für Claude Code als Ablehnung und stoppt den Aufruf.
+  - Warum: Das wäre fail-secure wie bei einem Türschloss. Claude Code macht es umgekehrt: Stürzt der Hook ab, läuft die Aktion. Die sichere Richtung musst du im Skript selbst wählen.
 - Falsch: Er läuft nur beim ersten Mal; danach blockt Claude Code ihn von selbst, bis der Hook wieder funktioniert.
+  - Warum: Einen Automatismus gibt es nicht: Jeder Absturz lässt die Aktion durch, auch beim zweiten Mal. Erst dein Skript macht den Wächter sicher, wenn es bei unlesbarer Eingabe mit `exit 2` endet.
 - Falsch: Er wird geblockt, sobald das Skript einen Fehlertext auf stderr schreibt, auch ohne den Exit-Code 2.
+  - Warum: Der Text auf stderr ist nur die Begründung. Ein Skript mit Fehlertext auf stderr und `exit 1` blockt nichts; erst `exit 2` stoppt den Aufruf, und dann geht der Text an Claude.
 
 </details>
 

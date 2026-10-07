@@ -275,9 +275,13 @@ Du kannst eine SKILL.md mit gültigem Frontmatter und klarem Body in einem Proje
 **Frage:** `/commit-check` funktioniert, aber Claude lädt den Skill bei „Check my staged changes" nie von selbst. Wo suchst du zuerst?
 
 - **Richtig:** In `description` und `when_to_use`: Claude vergleicht deine Anfrage mit diesem Text, `/name` funktioniert davon unabhängig.
+  - Warum: Claude entscheidet anhand der `description` (ergänzt durch `when_to_use`), wann er einen Skill lädt. `/name` braucht diesen Text nicht. Fehlt dein Satz dort, schreib ihn in `when_to_use`.
 - Falsch: Im Body: Claude liest ihn schon vor dem Aufruf in jeder Sitzung und entscheidet anhand der ersten Zeile, ob der Skill zur Anfrage passt.
+  - Warum: Vor dem Aufruf liegt nur die Beschreibung im Kontext (S2.1), nicht der Body. Der Body ist der Ablauf, dem Claude nach dem Laden folgt; ob der Skill passt, entscheidet die `description`.
 - Falsch: Im Feld `name`: Claude lädt nur Skills, deren Name wörtlich in deiner Anfrage vorkommt, und `commit-check` fehlt in ihr.
+  - Warum: Der Name ist der Befehl, den du tippst. Ausgewählt wird nach der Beschreibung: Claude vergleicht deine Anfrage mit ihr, der Skillname muss in der Anfrage gar nicht vorkommen.
 - Falsch: In `.claude/settings.json`: Dort muss jeder Skill zuerst freigeschaltet werden, bevor Claude ihn selbst laden darf.
+  - Warum: Ob Claude einen Skill selbst laden darf, regelt `disable-model-invocation` im Frontmatter (S2.3). Ohne den Schalter darf er es, eine Freischaltung braucht es nicht; hier hängt es an der `description`.
 
 </details>
 

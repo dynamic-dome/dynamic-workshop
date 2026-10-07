@@ -250,9 +250,13 @@ Du kannst erklären, wann genau `` !`git diff HEAD` `` in einer SKILL.md ausgef�
 **Frage:** Wann läuft ein `` !`git diff HEAD` ``-Block in einer SKILL.md, und was folgt daraus für die Angriffsfläche?
 
 - **Richtig:** Beim Aufruf, bevor der Text das Modell erreicht; Claude sieht nur die Ausgabe und kann den Befehl nicht ablehnen.
+  - Warum: Claude Code ersetzt die `!`-Zeilen beim Aufruf durch die Ausgabe, bevor Claude den Text liest. Der Befehl läuft mit deinen Rechten, und Claude kann ihn nicht ablehnen: eine Angriffsfläche.
 - Falsch: Erst wenn Claude den Text liest; Claude entscheidet dann selbst, ob der Befehl wirklich läuft, und lehnt gefährliche ab.
+  - Warum: Dann ist der Befehl längst gelaufen: Claude sieht die Daten, nicht den Befehl, und kann nichts mehr ablehnen. Darum prüfst du fremde Skills vor dem ersten Aufruf.
 - Falsch: Nur bei einem Aufruf von Hand mit `/name`; lädt Claude den Skill selbst, überspringt Claude Code alle Befehle.
+  - Warum: Die Befehle laufen beim Laden des Skills (S3.10), nicht erst bei deinem `/name`. Lädt Claude einen Skill selbst, läuft der Befehl genauso; Claude Code überspringt keinen.
 - Falsch: Beim Start der Sitzung, für alle Skills auf einmal; deshalb ist `disableSkillShellExecution` überflüssig.
+  - Warum: Beim Start liegt von einem Skill nur die Beschreibung im Kontext (S2.1); die Befehle laufen erst beim Aufruf. Weil sie mit deinen Rechten laufen, ist `disableSkillShellExecution` als Härtung sinnvoll.
 
 </details>
 
