@@ -166,9 +166,13 @@ Du kannst die drei Eckpfeiler-Hooks benennen, erklären, welcher blockieren kann
 **Frage:** Dein PreToolUse-Wächter erkennt einen gefährlichen Befehl und endet mit `exit 1`. Was passiert mit dem Befehl?
 
 - **Richtig:** Er läuft: `exit 1` meldet nur einen Hook-Fehler, über den Exit-Code allein blockt nur `exit 2`.
+  - Warum: Über den Exit-Code allein blockt nur `exit 2`. Jeder andere Code, ein Absturz oder ein Timeout gilt als Hook-Fehler, und die Aktion läuft: für einen Wächter die gefährliche Fehlerrichtung.
 - Falsch: Er wird geblockt, denn Claude Code behandelt jeden Exit-Code ungleich 0 als Ablehnung des Tool-Aufrufs.
+  - Warum: Ungleich 0 genügt nicht: Beim Exit-Code zählt allein die 2. `exit 1` meldet lediglich einen Hook-Fehler, die Aktion läuft weiter. Wer so blocken will, braucht `exit 2`.
 - Falsch: Er wird geblockt, sobald der Hook zusätzlich eine Begründung auf stderr schreibt, wie im Skript davor.
+  - Warum: Die Meldung auf stderr ist nur Begleittext: Im Beispielskript steht sie direkt vor `exit 2`, und erst dieser Code blockt. Mit `exit 1` bleibt es bei einem Hook-Fehler.
 - Falsch: Er läuft nicht, weil ein Hook-Fehler den ganzen Tool-Aufruf abbricht, genau wie ein Timeout des Hooks.
+  - Warum: Das Gegenteil trifft zu: Ein Hook-Fehler bricht den Aufruf nicht ab. `exit 1`, ein Absturz und auch ein Timeout lassen die Aktion laufen; über den Exit-Code stoppt sie nur `exit 2`.
 
 </details>
 
