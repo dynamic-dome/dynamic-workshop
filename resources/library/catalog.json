@@ -26,6 +26,14 @@
    "quiz": {
     "correct": "Die Installation steht, die Anmeldung nicht: Abo oder API-Key prüfen und in einer Sitzung `/login` neu starten.",
     "q": "`claude --version` zeigt eine Version, aber `claude --print \"Say hello\"` endet mit einem Anmeldefehler. Was sagt dir das, und was tust du zuerst?",
+    "why": {
+     "correct": "`claude --version` zeigt nur, dass Claude Code installiert ist. Ob die Anmeldung klappt, zeigt erst `claude --print \"Say hello\"`; scheitert es, prüfst du Abo oder API-Key und gibst `/login` ein.",
+     "wrong": [
+      "Fehlt der Ordner im `PATH`, scheitert schon `claude --version` mit „command not found“. Hier läuft der Befehl, also ist die Installation in Ordnung und die Anmeldung das Problem.",
+      "Python brauchst du erst für die Übung in S1.1, in der Claude ein Skript schreibt und ausführt. Die Untergrenze für Python ist eine Vorgabe der Bibliothek, nicht von Claude Code.",
+      "Eine angezeigte Version belegt, dass Claude Code installiert ist. Das Problem liegt bei der Anmeldung: Dort prüfst du Abo oder API-Key und gibst in einer Sitzung `/login` ein."
+     ]
+    },
     "wrong": [
      "Der Installationsordner fehlt im `PATH`: ein neues Terminal öffnen und den Ordner `~/.local/bin` dort eintragen.",
      "Python fehlt noch: Ohne Python kann `claude --print` keine Antwort ausgeben, also zuerst Python installieren.",
@@ -81,6 +89,14 @@
    "quiz": {
     "correct": "Die Sitzung läuft im Modus `auto`; mit `claude --permission-mode default` fragt Claude vor dem Schreiben und Ausführen.",
     "q": "Du startest in einem neuen Ordner nur mit `claude`, bestätigst den Vertrauensdialog und gibst den Auftrag `Create a file hello.py … and run it.` Die Datei entsteht und läuft, aber es kam keine einzige Rückfrage. Was ist die wahrscheinlichste Erklärung?",
+    "why": {
+     "correct": "Ohne Flag startet eine Terminal-Sitzung ab Version 2.1.283 in `auto`: Ein zweites Modell prüft die Aktionen an deiner Stelle, und die Rückfragen bleiben meist aus.",
+     "wrong": [
+      "Der Vertrauensdialog fragt nur, ob du dem Ordner vertraust. Ob Claude vor einer Aktion fragt, hängt vom Rechte-Modus der Sitzung ab.",
+      "Im Modus `default` fragt Claude vor Dateiänderungen und vor den meisten Shell-Befehlen, nicht erst bei riskanten. In der Übung gibst du das Anlegen und das Ausführen je einzeln frei.",
+      "Claude simuliert nichts: Nach deinem „Yes“ schreibt es die Datei wirklich und führt sie in deinem Ordner aus. `/exit` beendet nur die Sitzung."
+     ]
+    },
     "wrong": [
      "Der Vertrauensdialog hat alle Rückfragen für diesen Ordner abgeschaltet; sie kommen erst in einem neuen Ordner wieder.",
      "Rückfragen gibt es nur bei Shell-Befehlen mit Risiko; das Anlegen und Ausführen einer Datei gilt als harmlos.",
@@ -138,6 +154,14 @@
    "quiz": {
     "correct": "Nach dem „Yes“ läuft der Befehl sofort auf deinem Rechner, mit deinen Rechten; im Chat läuft nichts, bis du es selbst tust.",
     "q": "Im Chat kopierst du einen vorgeschlagenen Befehl selbst ins Terminal. In Claude Code beantwortest du eine Rückfrage mit „Yes“. Warum ist das eine andere Entscheidung?",
+    "why": {
+     "correct": "Ein Agent ruft Werkzeuge auf und handelt selbst, mit allem, was dein Benutzerkonto erreicht. Ein Chat schickt nur Text. Deshalb hat jede Freigabe echte Wirkung.",
+     "wrong": [
+      "Ein „Yes“ bleibt eine Entscheidung mit Folgen: Was ein Shell-Befehl gelöscht hat, holst du aus der Sitzung nicht zurück. Mildern kann es ein Commit oder Backup davor.",
+      "Ein freigegebener Befehl läuft sofort und wirklich. Es gibt keine Probe und keine Kopie, auf der er erst einmal arbeitet.",
+      "Das „Yes“ gibt die Aktion frei, nicht nur Text: Ein Agent ruft das Werkzeug selbst auf. In S1.1 hat Claude `hello.py` nicht beschrieben, sondern geschrieben und ausgeführt."
+     ]
+    },
     "wrong": [
      "Claude Code legt vor jedem Befehl eine Sicherung des Ordners an, die der Chat nicht hat; ein „Yes“ ist deshalb gefahrlos.",
      "Der Befehl läuft zuerst in einer abgeschotteten Kopie; dein Rechner ändert sich erst, wenn du auch das Ergebnis bestätigst.",
@@ -195,6 +219,14 @@
    "quiz": {
     "correct": "`/desktop`: Er übergibt die laufende Sitzung an die Desktop-App, unter macOS oder x64-Windows mit Claude-Abo.",
     "q": "Du hast in der CLI ein langes Refactoring begonnen und willst die Diffs lieber grafisch prüfen. Welcher Befehl bringt dich am direktesten dorthin?",
+    "why": {
+     "correct": "`/desktop` übergibt das Gespräch aus der Terminal-Sitzung an die Desktop-App. Sie ist dieselbe Engine mit grafischer Oberfläche, praktisch, wenn du Änderungen lieber in einer Diff-Ansicht prüfst.",
+     "wrong": [
+      "`/teleport` geht in die andere Richtung: Es holt eine Cloud-Sitzung ins Terminal. Für den Wechsel aus dem Terminal in die Desktop-App ist `/desktop` da.",
+      "`/mobile` zeigt nur einen QR-Code, über den du die Claude-App aufs Handy holst. Die Sitzung wandert dabei nicht mit.",
+      "`/chrome` richtet Claude in Chrome ein, die Browser-Steuerung für Web-Tests. Mit claude.ai/code hat der Befehl nichts zu tun."
+     ]
+    },
     "wrong": [
      "`/teleport`: Er schiebt die laufende Terminal-Sitzung in die Desktop-App und öffnet dort die Diff-Ansicht.",
      "`/mobile`: Er schiebt die laufende Sitzung auf dein Handy, sofern dort die Claude-App angemeldet ist.",
@@ -253,6 +285,14 @@
    "quiz": {
     "correct": "Das Lesen läuft ohne Rückfrage, vor der Änderung fragt Claude: `Read` braucht keine Freigabe, `Edit` schon.",
     "q": "Eine Sitzung läuft im Modus `default`. Claude will erst eine Datei in deinem Arbeitsordner lesen und danach eine Zeile darin ändern. Was passiert?",
+    "why": {
+     "correct": "Die Tabelle gilt für den Modus `default` und Pfade im Arbeitsordner: Lesende Tools laufen frei, ändernde und ausführende (`Edit`, `Write`, `Bash`) brauchen deine Freigabe.",
+     "wrong": [
+      "Lesende Tools wie `Read` laufen im Arbeitsordner ohne Rückfrage, und selbst `Bash` führt reine Lesebefehle wie `ls` ohne Frage aus. `default` fragt nicht bei jedem Aufruf.",
+      "Ob ein Tool fragt, steht in der Tabelle für den Modus `default`: `Edit` braucht auch in deinem Arbeitsordner eine Freigabe. Abweichungen gibt es nur in den drei genannten Fällen.",
+      "Das ist umgekehrt: `Read` braucht im Arbeitsordner keine Freigabe, `Edit` schon. Dass `Edit` nur eine Stelle ersetzt, ändert daran nichts: Es ändert die Datei, so wie `Write`."
+     ]
+    },
     "wrong": [
      "Beides fragt nach, weil im Modus `default` ausnahmslos jeder Aufruf eines Werkzeugs deine Freigabe braucht.",
      "Beides läuft ohne Rückfrage, weil du den Ordner beim Start im Vertrauensdialog als vertraut bestätigt hast.",
@@ -376,6 +416,14 @@
    "quiz": {
     "correct": "In `auto` entscheidet ein Klassifikator-Modell über den Befehl; in `dontAsk` lehnt Claude Code ihn ab.",
     "q": "Claude will einen Befehl ausführen, der im Modus `default` eine Rückfrage auslösen würde. Was passiert mit ihm in `auto`, und was in `dontAsk`?",
+    "why": {
+     "correct": "Die Modi unterscheiden sich darin, wer prüft: In `auto` ein zweites Modell, der Klassifikator. In `dontAsk` gelten nur deine vorab geschriebenen Regeln, alles andere wird abgelehnt.",
+     "wrong": [
+      "Du hast die Modi vertauscht. `dontAsk` fragt nie, weil er ablehnt, was fragen würde; er ist strenger als `default`. Die Entscheidung per Modell ist `auto`.",
+      "Beide Modi prüfen, nur anders: `auto` mit einem Klassifikator, der blockt, was über deinen Auftrag hinausgeht, `dontAsk` mit deinen Regeln. Fast keine Prüfung gibt es erst in `bypassPermissions`.",
+      "`auto` und `dontAsk` sind Modi ohne Rückfrage an dich, auch ohne spätere Sammelfrage: In `auto` entscheidet der Klassifikator, in `dontAsk` wird abgelehnt, was fragen würde."
+     ]
+    },
     "wrong": [
      "In `auto` lehnt Claude Code ihn ab; in `dontAsk` läuft er, weil dieser Modus nie nachfragt.",
      "In beiden Modi läuft er ungeprüft; sie unterscheiden sich nur in der Anzeige der Statusleiste.",
@@ -435,6 +483,14 @@
    "quiz": {
     "correct": "Mit `claude --model sonnet --effort high` starten; die Start-Flags gelten nur für diese eine Sitzung.",
     "q": "Du willst für genau eine Sitzung Sonnet mit der Stufe `high` nutzen. Dein Standard soll danach unverändert sein. Was tust du?",
+    "why": {
+     "correct": "Start-Flags wirken nur für diese Sitzung und speichern nichts. `/model <alias>` und eine Stufe hinter `/effort` dagegen werden gespeichert und gelten später weiter.",
+     "wrong": [
+      "`/model <alias>` speichert das Modell als Standard für neue Sitzungen, eine Stufe hinter `/effort` ebenfalls. Mit `/exit` endet das nicht; für eine Sitzung nimmst du die Start-Flags.",
+      "Das ist vertauscht: Enter in der Auswahl speichert das Modell als Standard für neue Sitzungen. Mit `s` übernimmst du die Wahl nur für diese Sitzung.",
+      "Nur `max` gilt allein für die laufende Sitzung. Jede andere Stufe hinter `/effort`, auch `high`, wird als Standard für dieses Modell gespeichert."
+     ]
+    },
     "wrong": [
      "In der Sitzung `/model sonnet` und `/effort high` eingeben; beides gilt nur, bis du `/exit` eingibst.",
      "In der Auswahl von `/model` Sonnet wählen und mit Enter bestätigen; gespeichert wird erst mit `s`.",
@@ -494,6 +550,14 @@
    "quiz": {
     "correct": "Das Fenster lief voll, Claude Code hat verdichtet, und die Vorgabe steckt nur noch ungenau in der Zusammenfassung.",
     "q": "Nach drei Stunden in derselben Session hält sich Claude nicht mehr an eine Vorgabe, die du ganz am Anfang im Gespräch gemacht hast. Was ist die wahrscheinlichste Ursache?",
+    "why": {
+     "correct": "Bei der Verdichtung ersetzt eine Zusammenfassung den wörtlichen Verlauf. Ausführliche Anweisungen vom Anfang können dabei verloren gehen, und der Wortlaut lässt sich nicht zurückholen.",
+     "wrong": [
+      "Hier geht es um Verdichtung, nicht um Widersprüche: Die Vorgabe stand nur im Gespräch und ist in der Zusammenfassung untergegangen. Dauerhaft gilt, was in der `CLAUDE.md` steht.",
+      "Deine Nachrichten liegen im Kontextfenster und bleiben dort bei jeder weiteren Nachricht. Frühes geht erst verloren, wenn das Fenster voll ist und Claude Code verdichtet.",
+      "Die `CLAUDE.md` ist die Gegenmaßnahme, nicht die Ursache: Claude Code lädt sie nach einer Verdichtung neu von der Platte, sie überlebt die Zusammenfassung also."
+     ]
+    },
     "wrong": [
      "Claude gewichtet neuere Nachrichten grundsätzlich höher und überschreibt ältere Vorgaben, sobald sie sich widersprechen.",
      "Vorgaben aus dem Gespräch gelten nur für die nächste Antwort; für mehr hättest du sie jedes Mal wiederholen müssen.",
@@ -553,6 +617,14 @@
    "quiz": {
     "correct": "`/rewind`: den Prompt wählen, mit dem die Änderungen begannen, und den Code wiederherstellen lassen.",
     "q": "Claude hat in einer Refactor-Session fünf Dateien über seine Datei-Werkzeuge geändert, und du willst alle fünf Änderungen zurücknehmen. Welcher Befehl ist richtig?",
+    "why": {
+     "correct": "Jeder Prompt legt einen Checkpoint an; `/rewind` stellt den Stand vor dem gewählten Prompt wieder her. So drehst du mehrere Schritte auf einmal zurück, sofern sie über Claudes Datei-Werkzeuge liefen.",
+     "wrong": [
+      "`/compact` fasst nur den Verlauf zusammen; die Dateien auf der Platte bleiben, wie sie sind. Zum Zurückdrehen nimmst du `/rewind`.",
+      "`/clear` beginnt nur ein neues Gespräch mit leerem Kontext. Das ist ein Themenwechsel, kein Zurückdrehen; Dateiänderungen nimmst du mit `/rewind` zurück.",
+      "`/context` zeigt nur, wie voll das Fenster ist und wofür. Die Liste der Prompts samt geänderten Dateien öffnet `/rewind`."
+     ]
+    },
     "wrong": [
      "`/compact`: Es verdichtet den Verlauf und setzt dabei die geänderten Dateien auf ihren alten Stand.",
      "`/clear`: Es leert den Kontext und verwirft damit auch alle Änderungen der laufenden Session.",
@@ -613,6 +685,14 @@
    "quiz": {
     "correct": "Die Datei auf das Wesentliche kürzen und die Regel konkret und prüfbar formulieren, denn lange Dateien werden schlechter befolgt.",
     "q": "Dein Team-Repo hat eine CLAUDE.md mit 600 Zeilen. Claude ignoriert regelmäßig die Regel in Zeile 480. Was hilft zuerst?",
+    "why": {
+     "correct": "Die Doku empfiehlt unter 200 Zeilen je CLAUDE.md. Längere Dateien belegen mehr Kontext und werden schlechter befolgt, darin geht die Regel unter.",
+     "wrong": [
+      "Die CLAUDE.md steht ohnehin zu Beginn jeder Session im Kontext. Nicht das Laden fehlt, sondern die Regel geht in der langen Datei unter.",
+      "Auch die Nutzerebene ist nur Kontext: Claude liest beide CLAUDE.md-Dateien und fügt sie zusammen. Durchgesetzt wird nichts, das leisten Deny-Regel oder Hook.",
+      "Bei einer vorhandenen CLAUDE.md schlägt `/init` nur Verbesserungen vor, statt sie zu überschreiben. Was du übernimmst, entscheidest du."
+     ]
+    },
     "wrong": [
      "`/clear` eingeben, weil die CLAUDE.md erst nach einem Leeren des Kontexts mit voller Gewichtung geladen wird.",
      "Die Datei nach `~/.claude/CLAUDE.md` verschieben, weil Regeln der Nutzerebene wie Rechte-Regeln durchgesetzt werden.",
@@ -671,6 +751,14 @@
    "quiz": {
     "correct": "Eine Notiz im Auto-Memory: Du öffnest sie über `/memory` und bearbeitest oder löschst sie.",
     "q": "Nach einem Neustart „weiß“ Claude etwas Falsches über dein Projekt, das du nie in eine CLAUDE.md geschrieben hast. Was ist die wahrscheinlichste Quelle, und was tust du?",
+    "why": {
+     "correct": "Auto-Memory ist standardmäßig an: Claude schreibt dort selbst mit, und die nächste Session startet damit. Über `/memory` bearbeitest oder löschst du jede Notiz.",
+     "wrong": [
+      "Das Auto-Memory besteht aus Dateien unter `~/.claude/projects/<project>/memory/`, die jede neue Session wieder lädt. Eine falsche Notiz entfernst du dort selbst, etwa über `/memory`.",
+      "`--bare` ist ein Minimalmodus für Skripte und lässt neben dem Auto-Memory auch Hooks, Skills, Plugins, MCP-Server und die CLAUDE.md weg. Zum Abschalten dienen `/memory` oder `autoMemoryEnabled`.",
+      "Auto-Memory ist standardmäßig an: Claude füllt es ohne dein Zutun. „Remember that …“ legt zwar gezielt eine Notiz ab, ist aber nicht die einzige Quelle."
+     ]
+    },
     "wrong": [
      "Eine Notiz im Auto-Memory: Ein `/clear` leert neben dem Gespräch auch dieses Gedächtnis des Projekts.",
      "Eine Notiz im Auto-Memory: Du startest künftig mit `claude --bare`, dem vorgesehenen Schalter dafür.",
@@ -731,6 +819,14 @@
    "quiz": {
     "correct": "Der Pfad gilt relativ zur importierenden Datei, Claude sucht also in `.claude/docs/`; richtig wäre `@../docs/style.md`.",
     "q": "Deine `.claude/CLAUDE.md` enthält `@./docs/style.md`, die Datei liegt aber im Projektordner unter `docs/style.md`. Claude kennt ihre Regeln nicht. Woran liegt es?",
+    "why": {
+     "correct": "Relative Pfade gelten relativ zur Datei, die importiert, nicht zum Arbeitsordner. Die Datei liegt in `.claude/`, also zeigt `./docs/` auf `.claude/docs/`.",
+     "wrong": [
+      "Es ist umgekehrt: Ein Pfad in Anführungszeichen wird nicht importiert. `@./docs/style.md` ist richtig geschrieben, nur der Bezugsordner stimmt nicht.",
+      "Imports dürfen bis zu vier Ebenen tief gehen, und `style.md` wird direkt aus der CLAUDE.md eingebunden, ist also erste Ebene. Die Tiefe ist nicht das Problem.",
+      "`@path`-Imports gehören in die CLAUDE.md deines eigenen Projekts, etwa `@./docs/architecture.md`. `--add-dir` gibt dagegen nur Dateizugriff auf ein zweites Repo."
+     ]
+    },
     "wrong": [
      "Der Pfad muss in Anführungszeichen stehen, sonst erkennt Claude Code den Import nicht als Import.",
      "Claude Code folgt nur einer Importebene, und diese Datei liegt schon eine Ebene zu tief.",
@@ -792,6 +888,14 @@
    "quiz": {
     "correct": "Eine Scope-Grenze: Er sagte nicht, welche Funktionen und Dateien unangetastet bleiben, also war „Clean up“ eine Erlaubnis.",
     "q": "Du hast „Clean up prices.py and make the tests pass.“ eingegeben. Die Tests sind grün, aber das Diff zeigt Änderungen an drei Funktionen. Was fehlte im Auftrag vor allem?",
+    "why": {
+     "correct": "Ohne Scope-Grenze darf Claude „nebenbei“ aufräumen: Was nicht ausdrücklich bleiben soll, ist erlaubt. Genau das zeigt das Diff mit drei geänderten Funktionen.",
+     "wrong": [
+      "Die Ursache sagt, warum der Fehler auftritt, begrenzt aber nichts. Was unangetastet bleibt, legt allein die Scope-Grenze fest.",
+      "Ein Erfolgskriterium war da: Die Tests sollten grün werden, und sie sind es. Es sagt, woran du „stimmt“ erkennst, nicht, was unangetastet bleibt.",
+      "Länge ist nicht Präzision: Ein langer Prompt ohne Scope-Grenze lässt Claude weiter „nebenbei“ aufräumen. Zähl die vier Bausteine, nicht die Zeilen."
+     ]
+    },
     "wrong": [
      "Die Ursache: Hätte der Auftrag den Fehler erklärt, dürfte Claude außerhalb der betroffenen Zeile nichts mehr ändern.",
      "Das Erfolgskriterium: Mit grünen Tests als Ziel hätte Claude weiter aufgeräumt, nur ohne Rückfrage zu stellen.",
@@ -848,6 +952,14 @@
    "quiz": {
     "correct": "Die Antwort zum Nachschärfen wählen und die Grenze nennen („Do not change the config file“), dann den neuen Plan prüfen.",
     "q": "Der Plan sieht gut aus, aber ein Schritt fasst die Konfigurationsdatei an, die du nicht anfassen willst. Was antwortest du?",
+    "why": {
+     "correct": "Das ist Refine: Du bleibst im Plan-Modus, sagst, was sich ändern soll, und Claude legt einen neuen Plan vor. Erst nach deiner ausdrücklichen Freigabe wird umgesetzt.",
+     "wrong": [
+      "„Sieht gut aus“ ist eine vage Freigabe und kann Claude zu einem Schritt bewegen, den du nicht wolltest. Nenne die Grenze ausdrücklich und prüfe den neuen Plan.",
+      "Der Plan setzt die Grenze vor der Umsetzung: Du korrigierst, bevor etwas entsteht. Freigeben und hinterher zurückdrehen lässt die Änderung erst zu.",
+      "`Shift+Tab` schaltet reihum durch die Rechte-Modi und verlässt den Plan-Modus, ohne den Plan freizugeben. Nachschärfen geht mit „No, keep planning“."
+     ]
+    },
     "wrong": [
      "„Sieht gut aus“ antworten, denn Claude lässt den Schritt dann von selbst weg und fragt vor der Änderung nach.",
      "Den Plan freigeben und die Änderung hinterher mit `/rewind` zurücknehmen, weil ein Checkpoint auch Shell-Befehle erfasst.",
@@ -909,6 +1021,14 @@
    "quiz": {
     "correct": "Claude Code hat die Wahl in `.claude/settings.local.json` des Projekts gespeichert; sie gilt, bis du `/output-style default` eingibst.",
     "q": "Du hast gestern in einem Projekt `/output-style concise` gewählt. Heute antwortet Claude dort wieder knapp, obwohl du nichts eingestellt hast. Woran liegt das?",
+    "why": {
+     "correct": "`/output-style` speichert deine Wahl in `.claude/settings.local.json`. Sie gilt darum auch in späteren Sitzungen in diesem Projekt, bis du `/output-style default` eingibst.",
+     "wrong": [
+      "Die System-Prompt-Flags gelten nur für genau diesen Start; im nächsten ist ihre Wirkung weg. Gespeichert wird die Wahl von `/output-style`, nicht ein Flag.",
+      "Die Wahl landet im Projekt, in `.claude/settings.local.json`, nicht in deiner globalen Konfiguration. Sie wirkt also in diesem Projekt, nicht in allen.",
+      "Dafür schreibt Claude nichts in die `CLAUDE.md`: Die Wahl liegt in `.claude/settings.local.json`. Die `CLAUDE.md` ist für Projektkonventionen da, die immer gelten sollen."
+     ]
+    },
     "wrong": [
      "Das Flag `--append-system-prompt` vom Vortag bleibt in der Projektkonfiguration erhalten und wirkt in jeder späteren Sitzung.",
      "Ein Output Style gilt immer für alle deine Projekte, denn Claude Code legt ihn in der globalen `~/.claude/settings.json` ab.",
@@ -970,6 +1090,14 @@
    "quiz": {
     "correct": "Git zeigt neue, ungetrackte Dateien in `git diff` nicht; erst nach dem Stagen zeigt `git diff --staged` sie.",
     "q": "Claude hat eine neue Datei `log_formatter.py` angelegt. Du fragst nach `git diff`, die Ausgabe ist leer. Was bedeutet das?",
+    "why": {
+     "correct": "`git diff` zeigt neue Dateien nicht, die Git noch nicht kennt. Erst nach dem Stagen listet `git diff --staged` sie, also das, was im Commit landet.",
+     "wrong": [
+      "Die Datei ist da, Git kennt sie nur noch nicht. `git diff` zeigt neue, ungetrackte Dateien nicht, auch wenn Claude sie angelegt hat.",
+      "Der Grund liegt bei Git, nicht bei den Tests: `git diff` zeigt neue, ungetrackte Dateien nicht, egal ob die Tests schon liefen.",
+      "Das Repository ist in Ordnung: `git diff` zeigt neue Dateien nicht, solange Git sie nicht kennt. Stage sie und sieh dir `git diff --staged` an."
+     ]
+    },
     "wrong": [
      "Claude hat die Datei nicht geschrieben, sonst würde `git diff` jede Änderung im Ordner sofort anzeigen.",
      "Claude Code unterdrückt den Diff, bis die Tests laufen und dir einen grünen Lauf melden.",
@@ -1030,6 +1158,14 @@
    "quiz": {
     "correct": "Die zwei Commits, die dem Upstream voraus sind, und deine noch nicht committete Änderung.",
     "q": "Dein Branch hat zwei Commits, die dem Upstream voraus sind, und eine Änderung, die du noch nicht committet hast. Du gibst `/review` ohne Ziel ein. Was prüft Claude?",
+    "why": {
+     "correct": "Ohne Ziel prüft `/review` den aktuellen Diff: die Commits deines Branchs, die dem Upstream voraus sind, plus alle noch nicht committeten Änderungen.",
+     "wrong": [
+      "`/review` prüft nicht nur Uncommittetes: Zum Diff gehören auch die Commits deines Branchs, die dem Upstream voraus sind, hier also beide.",
+      "`/review` nimmt alle Commits deines Branchs, die dem Upstream voraus sind, plus Uncommittetes mit, nicht nur den letzten. Hier sind das zwei Commits und eine Änderung.",
+      "Ohne Ziel prüft `/review` nur den aktuellen Diff, nicht die Historie. Etwas anderes prüft es erst, wenn du eine PR-Nummer, einen Branch oder einen Pfad angibst."
+     ]
+    },
     "wrong": [
      "Nur die noch nicht committete Änderung, denn bereits committeter Code gilt als geprüft und bleibt außen vor.",
      "Nur den letzten Commit, weil `/review` immer genau einen Commit vom Branch-Ende aus betrachtet.",
@@ -1094,6 +1230,14 @@
    "quiz": {
     "correct": "Nur Dateien und Branch: Der Server ist derselbe wie für den Hauptordner, das Skript kann die Datenbank also verändern.",
     "q": "Du lässt Claude in einem Worktree ein Migrationsskript ausprobieren, das sich mit dem Datenbankserver auf deinem Rechner verbindet. Was schützt der Worktree?",
+    "why": {
+     "correct": "Ein Worktree trennt Dateiänderungen und Branches. Prozesse, Datenbanken, Ports und deine Rechte trennt er nicht, also erreicht das Skript denselben Datenbankserver.",
+     "wrong": [
+      "Ein Worktree ist nur ein zweites Arbeitsverzeichnis mit eigenem Branch. Datenbanken, Ports und Prozesse trennt er nicht, eine eigene Datenbankkopie gibt es also nicht.",
+      "Ein Worktree ist keine Sandbox: Er trennt Dateiänderungen und Branches, keine Prozesse und keine Rechte. Den Schutz für deinen Rechner baust du anders.",
+      "Gerade Dateiänderungen trennt er: Eine neue Datei liegt nur im Worktree, nicht im Hauptordner. Nicht getrennt sind Prozesse, Datenbanken, Ports und Rechte."
+     ]
+    },
     "wrong": [
      "Alles, denn ein Worktree ist eine abgetrennte Testumgebung mit eigener Kopie der Datenbank und der Dienste.",
      "Die Datenbank, denn Claude Code startet Befehle in einem Worktree automatisch in einer Sandbox ohne Zugriff.",
@@ -1158,6 +1302,14 @@
    "quiz": {
     "correct": "Eine Schätzung aus den Tokens zum Listenpreis; für die Abrechnung im Abo ist sie nicht relevant, zum Vergleich von Läufen taugt sie.",
     "q": "Du hast ein privates Max-Abo ohne Vorgaben einer Organisation, und `/cost` zeigt am Ende einer Sitzung `Total cost` von 0,42 Dollar. Was bedeutet der Betrag?",
+    "why": {
+     "correct": "Claude Code rechnet den Betrag lokal aus den Tokens zum Listenpreis aus, er ist eine Schätzung. Im Abo ist er für die Abrechnung nicht relevant, zum Vergleich taugt er.",
+     "wrong": [
+      "`/cost` zeigt keine Rechnung: Der Betrag ist eine lokale Schätzung. Mit Pro- oder Max-Abo ist er für die Abrechnung nicht relevant.",
+      "Der lokal berechnete Betrag ist eine Schätzung. Verbindlich ist die Usage-Seite der Claude Console, nicht `/cost`.",
+      "Der Betrag ist kein Platzhalter: Claude Code rechnet ihn aus deinen Tokens zum Listenpreis aus. Darum taugt er auch im Abo zum Vergleich von Modellen und Stufen."
+     ]
+    },
     "wrong": [
      "Den Betrag, den dir Anthropic zusätzlich zur Abo-Gebühr in Rechnung stellt, weil `/cost` die Abrechnung anzeigt.",
      "Den verbindlichen Betrag, der immer genau mit der Usage-Seite der Claude Console übereinstimmt und dort auftaucht.",
