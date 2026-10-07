@@ -147,9 +147,13 @@ Du kannst in einem Satz erklären, warum Claude Code kein Chat-Tool ist, und ben
 **Frage:** Im Chat kopierst du einen vorgeschlagenen Befehl selbst ins Terminal. In Claude Code beantwortest du eine Rückfrage mit „Yes“. Warum ist das eine andere Entscheidung?
 
 - **Richtig:** Nach dem „Yes“ läuft der Befehl sofort auf deinem Rechner, mit deinen Rechten; im Chat läuft nichts, bis du es selbst tust.
+  - Warum: Ein Agent ruft Werkzeuge auf und handelt selbst, mit allem, was dein Benutzerkonto erreicht. Ein Chat schickt nur Text. Deshalb hat jede Freigabe echte Wirkung.
 - Falsch: Claude Code legt vor jedem Befehl eine Sicherung des Ordners an, die der Chat nicht hat; ein „Yes“ ist deshalb gefahrlos.
+  - Warum: Ein „Yes“ bleibt eine Entscheidung mit Folgen: Was ein Shell-Befehl gelöscht hat, holst du aus der Sitzung nicht zurück. Mildern kann es ein Commit oder Backup davor.
 - Falsch: Der Befehl läuft zuerst in einer abgeschotteten Kopie; dein Rechner ändert sich erst, wenn du auch das Ergebnis bestätigst.
+  - Warum: Ein freigegebener Befehl läuft sofort und wirklich. Es gibt keine Probe und keine Kopie, auf der er erst einmal arbeitet.
 - Falsch: Das „Yes“ gibt nur den Text frei; ausführen musst du den Befehl danach weiterhin selbst im eigenen Terminal.
+  - Warum: Das „Yes“ gibt die Aktion frei, nicht nur Text: Ein Agent ruft das Werkzeug selbst auf. In S1.1 hat Claude `hello.py` nicht beschrieben, sondern geschrieben und ausgeführt.
 
 </details>
 
