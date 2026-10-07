@@ -3146,7 +3146,7 @@
      "wrong": [
       "Unabhängig sind sie nur vom Terminal, nicht vom Rechner: Die Sitzung läuft auf deinem Rechner, nicht in der Cloud. Fährt er herunter, stoppt sie.",
       "Das Terminal zu schließen beendet sie nicht: Eine Hintergrund-Sitzung läuft ohne angehängtes Terminal weiter, du kannst Terminal und Agent view schließen. Gestoppt hat sie erst das Herunterfahren.",
-      "Gestoppt heißt nicht gelöscht: Nach `claude stop` bleibt die Sitzung als `stopped` in der Liste, bis `claude rm <id>` sie entfernt. `claude respawn <id>` setzt das gespeicherte Gespräch fort."
+      "Gestoppt heißt nicht gelöscht: Nach dem Herunterfahren steht die Sitzung weiter in der Liste, und `claude attach <id>` setzt sie fort. Entfernen würde sie erst `claude rm <id>`."
      ]
     },
     "wrong": [
@@ -3567,7 +3567,7 @@
     "correct": "Dafür braucht es ZDR, das Anthropic je Organisation freischaltet. Der Team-Plan trainiert standardmäßig nicht, bewahrt aber 30 Tage auf.",
     "q": "Ein Team auf dem Team-Plan soll laut seiner Datenschutzabteilung „nichts mehr bei Anthropic speichern“. Was sagst du?",
     "why": {
-     "correct": "Der Team-Plan bewahrt 30 Tage auf; erst ZDR heißt keine Speicherung nach der Antwort. Anthropic prüft die Berechtigung und schaltet ZDR je Organisation frei.",
+     "correct": "Der Team-Plan bewahrt 30 Tage auf; erst mit ZDR speichert Anthropic nach der Antwort grundsätzlich nichts. Anthropic prüft die Berechtigung und schaltet ZDR je Organisation frei.",
      "wrong": [
       "`DISABLE_TELEMETRY` stoppt nur Nutzungsmetriken, und die enthalten laut Doku nie deine Prompts. Wie lange Prompts und Antworten bleiben, hängt vom Plan ab.",
       "ZDR lässt sich nicht in den Admin-Einstellungen einschalten: Anthropic prüft und schaltet es frei. Es gilt nur für Anmeldungen in der ZDR-Organisation, einige Funktionen entfallen.",
@@ -3974,7 +3974,7 @@
      "correct": "„Haiku findet nichts“ beweist nichts: Der günstige Erstdurchgang ist die erste Runde, nicht die Abnahme. Bei sicherheitskritischem Code liest `opus` selbst.",
      "wrong": [
       "Wie viele Befunde `haiku` allein findet, hängt von der Aufgabe ab; eine feste Quote belegt dieser Kurs nicht. Als einziger Prüfer ist `haiku` eine Falle; sein Schweigen ist kein Beleg.",
-      "Auch „keine eindeutigen Befunde“ ist ein gültiges Ergebnis. Du entscheidest dann, ob dir das genügt, statt den Lauf zu wiederholen, bis eine Liste entsteht.",
+      "Ein Review braucht keinen Mindestbefund: Auch „keine eindeutigen Befunde“ ist ein Ergebnis. Bei sicherheitskritischem Code wie hier liest danach `opus` selbst, statt `haiku` neu zu starten.",
       "Bei sicherheitskritischem Code liest `opus` ohnehin den gesamten Code; eine Zusammenfassung ersetzt das nicht. Der Haiku-Lauf spart nur, wenn `opus` danach weniger liest als ohne ihn."
      ]
     },
@@ -4255,14 +4255,14 @@
    "order": 4050,
    "outcome": "Ich kann Claude Code mit JSON-Ausgabe und Budgetgrenze als Stufe in einen Git-Pre-Commit-Hook einbauen, dabei Exit-Code und Urteil trennen, und die Bausteine einer GitHub-Actions- oder GitLab-CI-Stufe lesen und ihre typischen Fehlerbilder (Anmeldung, Prosa statt JSON, hängender Runner) deuten.",
    "quiz": {
-    "correct": "Ein scheiternder Deploy braucht menschliches Urteil über Zustand und Rollback; ein Auto-Fix kann den Schaden vergrößern.",
+    "correct": "Bei einem fehlgeschlagenen Produktions-Deploy soll ein Mensch entscheiden, kein Fix, den eine Cloud-Sitzung selbst pusht.",
     "q": "Warum ist `/autofix-pr` für einen fehlgeschlagenen Produktions-Deploy in der CI ungeeignet?",
     "why": {
      "correct": "`/autofix-pr` passt zu Test-, Lint- und Formatierungsfehlern. Bei einem fehlgeschlagenen Produktions-Deploy entscheidet nach der Empfehlung der Bibliothek ein Mensch (S1.17), kein gepushter Auto-Fix.",
      "wrong": [
       "Das Gegenteil trifft zu: Die Cloud-Sitzung analysiert den Fehler und pusht einen Fix-Commit, geschrieben wird also. Ungeeignet ist es, weil bei Produktions-Deploys ein Mensch entscheiden soll (S1.17).",
       "Der Grund ist keine Zeitfolge, sondern eine Empfehlung der Bibliothek: Bei Produktions-Deploys entscheidet ein Mensch, auch in Repos, deren Haupt-Branch automatisch in Produktion geht (S1.17).",
-      "Am Lesen liegt es nicht: Die Sitzung beobachtet die CI und analysiert deren Fehler. Der Ausschluss ist eine Empfehlung der Bibliothek, weil bei Produktions-Deploys ein Mensch entscheidet (S1.17)."
+      "Nicht die Reichweite entscheidet: `/autofix-pr` passt zu Test-, Lint- und Formatierungsfehlern, nie zu Produktions-Deploys. Dort entscheidet nach Empfehlung der Bibliothek ein Mensch (S1.17)."
      ]
     },
     "wrong": [
@@ -4554,9 +4554,9 @@
     "why": {
      "correct": "Ein Worktree trennt Dateiänderungen: Was ein Agent schreibt, landet in seinem eigenen Dateistand auf seinem Branch. Ein falsches Ergebnis wirfst du mit Worktree und Branch weg (S4.7), ohne Rückbau.",
      "wrong": [
-      "Das Kontextfenster hängt nicht am Ordner: Jeder Subagent startet mit einem frischen, isolierten Kontextfenster (S3.1). Der Worktree trennt Dateiänderungen und Branches (S1.18).",
-      "Ein Worktree trennt Dateiänderungen und Branches, nicht Prozesse, Ports oder Datenbanken (S1.18). Seinen Nutzen hat er bei den Dateien: Parallele Schreiber kommen sich nicht in die Quere.",
-      "Die Rechte eines Subagenten legt das Feld `tools` fest (S3.3); das Modell wählst du nach der Aufgabe. Der Zweck eines Worktrees ist, Dateiänderungen paralleler Sitzungen zu trennen (S1.18)."
+      "Das Kontextfenster hängt nicht am Ordner: Ein Subagent startet mit frischem Kontext, ein Fork erbt das Gespräch (S3.1). Der Worktree trennt Dateiänderungen und Branches (S1.18).",
+      "Einen eigenen MCP-Namensraum gibt ein Worktree nicht: Er trennt Dateiänderungen und Branches, nicht Prozesse, Ports oder Datenbanken (S1.18). Sein Nutzen liegt bei den Dateien.",
+      "Das Modell regelt keine Schreibrechte: Werkzeuge begrenzt das Feld `tools`, den Rechte-Modus ein eigenes Feld (S3.3). Ein Worktree trennt Dateiänderungen paralleler Sitzungen (S1.18)."
      ]
     },
     "wrong": [

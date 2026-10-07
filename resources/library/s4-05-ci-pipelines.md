@@ -319,14 +319,14 @@ Du kannst eine CI-Stufe aus den Bausteinen zusammensetzen (`claude -p`, JSON-Aus
 
 **Frage:** Warum ist `/autofix-pr` für einen fehlgeschlagenen Produktions-Deploy in der CI ungeeignet?
 
-- **Richtig:** Ein scheiternder Deploy braucht menschliches Urteil über Zustand und Rollback; ein Auto-Fix kann den Schaden vergrößern.
+- **Richtig:** Bei einem fehlgeschlagenen Produktions-Deploy soll ein Mensch entscheiden, kein Fix, den eine Cloud-Sitzung selbst pusht.
   - Warum: `/autofix-pr` passt zu Test-, Lint- und Formatierungsfehlern. Bei einem fehlgeschlagenen Produktions-Deploy entscheidet nach der Empfehlung der Bibliothek ein Mensch (S1.17), kein gepushter Auto-Fix.
 - Falsch: `/autofix-pr` lädt immer den ganzen Plugin-Stack, und geschützte Pfade blocken dann jedes Schreiben in Produktions-Repos.
   - Warum: Das Gegenteil trifft zu: Die Cloud-Sitzung analysiert den Fehler und pusht einen Fix-Commit, geschrieben wird also. Ungeeignet ist es, weil bei Produktions-Deploys ein Mensch entscheiden soll (S1.17).
 - Falsch: `/autofix-pr` arbeitet nur auf Branches vor dem Merge, und Deploy-Fehler treten erst nach dem Merge in `main` auf.
   - Warum: Der Grund ist keine Zeitfolge, sondern eine Empfehlung der Bibliothek: Bei Produktions-Deploys entscheidet ein Mensch, auch in Repos, deren Haupt-Branch automatisch in Produktion geht (S1.17).
 - Falsch: `/autofix-pr` erreicht keine externen Deploy-Dienste und kann die eigentliche Fehlerursache deshalb gar nicht lesen.
-  - Warum: Am Lesen liegt es nicht: Die Sitzung beobachtet die CI und analysiert deren Fehler. Der Ausschluss ist eine Empfehlung der Bibliothek, weil bei Produktions-Deploys ein Mensch entscheidet (S1.17).
+  - Warum: Nicht die Reichweite entscheidet: `/autofix-pr` passt zu Test-, Lint- und Formatierungsfehlern, nie zu Produktions-Deploys. Dort entscheidet nach Empfehlung der Bibliothek ein Mensch (S1.17).
 
 </details>
 

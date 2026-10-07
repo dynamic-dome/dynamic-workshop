@@ -298,11 +298,11 @@ Du kannst eine kleine Playground-Mission eigenständig mit Claude Code treiben: 
 - **Richtig:** Jeder Agent hat einen eigenen Dateistand auf eigenem Branch: Parallele Schreiber stören sich nicht, und ein falsches Ergebnis wirfst du ohne Rückbau weg.
   - Warum: Ein Worktree trennt Dateiänderungen: Was ein Agent schreibt, landet in seinem eigenen Dateistand auf seinem Branch. Ein falsches Ergebnis wirfst du mit Worktree und Branch weg (S4.7), ohne Rückbau.
 - Falsch: Ohne eigenen Worktree hätte ein Subagent kein eigenes Kontextfenster, weil Claude Code das Kontextfenster fest an den Arbeitsordner des jeweiligen Agenten bindet.
-  - Warum: Das Kontextfenster hängt nicht am Ordner: Jeder Subagent startet mit einem frischen, isolierten Kontextfenster (S3.1). Der Worktree trennt Dateiänderungen und Branches (S1.18).
+  - Warum: Das Kontextfenster hängt nicht am Ordner: Ein Subagent startet mit frischem Kontext, ein Fork erbt das Gespräch (S3.1). Der Worktree trennt Dateiänderungen und Branches (S1.18).
 - Falsch: Jeder Worktree bekommt einen eigenen MCP-Namensraum, damit die MCP-Aufrufe paralleler Agenten nicht kollidieren und sich nicht gegenseitig blockieren.
-  - Warum: Ein Worktree trennt Dateiänderungen und Branches, nicht Prozesse, Ports oder Datenbanken (S1.18). Seinen Nutzen hat er bei den Dateien: Parallele Schreiber kommen sich nicht in die Quere.
+  - Warum: Einen eigenen MCP-Namensraum gibt ein Worktree nicht: Er trennt Dateiänderungen und Branches, nicht Prozesse, Ports oder Datenbanken (S1.18). Sein Nutzen liegt bei den Dateien.
 - Falsch: Worktrees umgehen eine Sperre, nach der ein Subagent mit einem kleineren Modell nicht direkt in den Arbeitsordner des Orchestrators schreiben darf.
-  - Warum: Die Rechte eines Subagenten legt das Feld `tools` fest (S3.3); das Modell wählst du nach der Aufgabe. Der Zweck eines Worktrees ist, Dateiänderungen paralleler Sitzungen zu trennen (S1.18).
+  - Warum: Das Modell regelt keine Schreibrechte: Werkzeuge begrenzt das Feld `tools`, den Rechte-Modus ein eigenes Feld (S3.3). Ein Worktree trennt Dateiänderungen paralleler Sitzungen (S1.18).
 
 </details>
 

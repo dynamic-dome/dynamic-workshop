@@ -35,7 +35,7 @@
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [x] cc1052a |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [x] siehe „Abschluss P8“ |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [x] siehe „Stand P9“; vom Owner am 2026-10-06 angesehen |
-| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | P10a bis P10d [x]; P10e bis P10g offen, siehe „P10“ |
+| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | P10a bis P10f [x]; P10g (Abnahme) offen, siehe „P10“ |
 
 DCO-Todos unter #9632: P1 #9636 · P2 #9637 · P3 #9638 · P4 #9639 · P5 #9640 · P6 #9641 · P7 #9642 · P8 #9643 · P9 #9644 · P10 #9665.
 
@@ -922,8 +922,8 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
 | P10b | **Cockpit und Tutor.** Nach der Antwort die Begründung der gewählten Option (Kapitel und Wiederholen); ohne Begründung der heutige Verweis. Browser-Tests: richtig mit Warum, falsch mit Warum und Verweis, Kapitel ohne Warum unverändert, Wiederholen gleich. Tutor-Skill nennt die Begründung aus dem Katalog. | Frage 3, B8 | [x] 2026-10-07 (Commit „P10b“) |
 | P10c | **Inhalte Session 1** (S1.1 bis S1.19, dazu S0.1): Sonnet-Schreiber im Worktree, je Quiz vier Begründungen aus dem Kapiteltext, `validate`; lesende Codex-Gegenprüfung (Sachfehler, neue Fakten, Widerspruch zum Kapitel); Befunde an der Quelle, Owner-Stichprobe drei Kapitel; Merge. | Frage 4 |[x] 2026-10-07, gemergt; Owner-Stichprobe S1.6, S1.11, S1.14 am 2026-10-07: „passt“ |
 | P10d | **Inhalte Session 2** (S2.1 bis S2.19), Ablauf wie P10c. | Frage 4 |[x] 2026-10-07, gemergt |
-| P10e | **Inhalte Session 3** (S3.1 bis S3.14), Ablauf wie P10c. | Frage 4 | [ ] |
-| P10f | **Inhalte Session 4** (S4.1 bis S4.7, S4.9, S4.10, dazu S4.8 und S4.11), Ablauf wie P10c. Danach wird `--complete` bei unter 61 rot. | Frage 4, Frage 2 | [ ] |
+| P10e | **Inhalte Session 3** (S3.1 bis S3.14), Ablauf wie P10c. | Frage 4 |[x] 2026-10-07, mit P10f in einem Lauf |
+| P10f | **Inhalte Session 4** (S4.1 bis S4.7, S4.9, S4.10, dazu S4.8 und S4.11), Ablauf wie P10c. Danach wird `--complete` bei unter 61 rot. | Frage 4, Frage 2 |[x] 2026-10-07, Gate `quiz-why-required` scharf |
 | P10g | **Abnahme.** Volle Suite, `validate --complete` 61 von 61, Bilder des Quiz nach richtiger und falscher Antwort in beiden Themen (`cockpit_shots.py`), Durchgang mit dem Owner. | — | [ ] |
 
 ### Stand P10a bis P10c (2026-10-07)
@@ -943,6 +943,14 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
   zur Frage passend, abwechselnde Anfänge). Merges `1d7f74a`, `ca83436`; rund 450 000 Sonnet-Tokens. Codex: FAIL mit
   2 NEW-FACT (beide S2.16) und 4 STYLE; behoben: S2.16 zweimal (Transport mit mcp.md belegt), `Write` in S2.10;
   `stderr` und README bleiben ohne Backticks wie im Kapitel. „Mit Begründung: 38 von 61“.
+- **P10e und P10f** (2026-10-07): ein Lauf mit vier Sonnet-Schreibern (S3.1–S3.7, S3.8–S3.14, S4.1–S4.6,
+  S4.7–S4.11), Merges `54efa12`, `ff7290f`, `309f674`, `6ae1ce2`; rund 640 000 Sonnet-Tokens. „Mit Begründung:
+  61 von 61“, danach das Gate scharf (`2be2f3c`). Ein Schreiber fand eine Lücke im Kapitel: S3.5 belegte die richtige
+  Antwort (Fortsetzen nach dem Herunterfahren mit `claude attach`) nicht; mit agent-view.md ergänzt (`7d4b6d7`).
+  Zwei Codex-Läufe parallel: Session 3 FAIL (5 CONTRADICTION, 7 STYLE), Session 4 FAIL (2 FACT-ERROR, 1 NEW-FACT,
+  1 CONTRADICTION, 1 MISSES-THE-ERROR, 1 STYLE, 1 ANSWER-DOUBT). Behoben: S3.5, S3.11, S4.1, S4.5 (auch die richtige
+  Antwort, die Rollback und Schaden behauptete), S4.8 dreimal. Gelassen: S3.8 und S3.10 (Wortlaut des Kapitels) und
+  die STYLE-Befunde zu Namen, die die Kapitel selbst ohne Backticks schreiben.
 - **Lehre für P10d bis P10f:** Der Auftrag hat sich bewährt. Schwach sind Begründungen dort, wo eine falsche Antwort
   einen Fakt aus einem anderen Kapitel benutzt (`/clear`, Checkpoints); dann den Denkfehler aus dem Kapitel benennen,
   nicht ausweichen. Oberflächen-Wortlaut („Tell Claude what to change“ statt des Doku-Namens) im Auftrag nennen.

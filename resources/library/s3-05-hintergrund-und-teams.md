@@ -203,7 +203,7 @@ Du kannst eine Hintergrund-Sitzung mit `claude --bg` starten, sie mit `claude ag
 - Falsch: Das Schließen des Terminals hat die Sitzung beendet; vom Auftrag bleibt nichts außer dem Protokoll, und du musst von vorn beginnen.
   - Warum: Das Terminal zu schließen beendet sie nicht: Eine Hintergrund-Sitzung läuft ohne angehängtes Terminal weiter, du kannst Terminal und Agent view schließen. Gestoppt hat sie erst das Herunterfahren.
 - Falsch: Die Sitzung ist gelöscht worden, weil eine gestoppte Hintergrund-Sitzung sich nicht fortsetzen lässt; nur `claude rm` zeigt noch den Rest.
-  - Warum: Gestoppt heißt nicht gelöscht: Nach `claude stop` bleibt die Sitzung als `stopped` in der Liste, bis `claude rm <id>` sie entfernt. `claude respawn <id>` setzt das gespeicherte Gespräch fort.
+  - Warum: Gestoppt heißt nicht gelöscht: Nach dem Herunterfahren steht die Sitzung weiter in der Liste, und `claude attach <id>` setzt sie fort. Entfernen würde sie erst `claude rm <id>`.
 
 </details>
 
