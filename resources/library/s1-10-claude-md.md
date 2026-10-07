@@ -148,9 +148,13 @@ Du kannst eine knappe CLAUDE.md schreiben, nach einem Neustart prüfen, dass Cla
 **Frage:** Dein Team-Repo hat eine CLAUDE.md mit 600 Zeilen. Claude ignoriert regelmäßig die Regel in Zeile 480. Was hilft zuerst?
 
 - **Richtig:** Die Datei auf das Wesentliche kürzen und die Regel konkret und prüfbar formulieren, denn lange Dateien werden schlechter befolgt.
+  - Warum: Die Doku empfiehlt unter 200 Zeilen je CLAUDE.md. Längere Dateien belegen mehr Kontext und werden schlechter befolgt, darin geht die Regel unter.
 - Falsch: `/clear` eingeben, weil die CLAUDE.md erst nach einem Leeren des Kontexts mit voller Gewichtung geladen wird.
+  - Warum: Die CLAUDE.md steht ohnehin zu Beginn jeder Session im Kontext. Nicht das Laden fehlt, sondern die Regel geht in der langen Datei unter.
 - Falsch: Die Datei nach `~/.claude/CLAUDE.md` verschieben, weil Regeln der Nutzerebene wie Rechte-Regeln durchgesetzt werden.
+  - Warum: Auch die Nutzerebene ist nur Kontext: Claude liest beide CLAUDE.md-Dateien und fügt sie zusammen. Durchgesetzt wird nichts, das leisten Deny-Regel oder Hook.
 - Falsch: `/init` erneut laufen lassen, weil es die vorhandene CLAUDE.md durch eine kürzere Fassung überschreibt.
+  - Warum: Bei einer vorhandenen CLAUDE.md schlägt `/init` nur Verbesserungen vor, statt sie zu überschreiben. Was du übernimmst, entscheidest du.
 
 </details>
 
