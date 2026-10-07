@@ -196,9 +196,13 @@ Du kannst einen unbeaufsichtigten Lauf mit Budget und Rundenlimit in einem Workt
 **Frage:** Du startest eine interaktive Sitzung mit `claude --max-budget-usd 1.00` und setzt darin `/goal alle Tests grün`. Was begrenzt die Kosten dieses Laufs hart?
 
 - **Richtig:** Nichts davon: Das Flag wirkt nur mit `-p`. Hart wird die Grenze erst, wenn der Lauf mit `claude -p` startet.
+  - Warum: Das Flag gilt nur im Print-Modus (`claude -p`), der einen einzelnen Lauf ohne Dialog startet. In einer interaktiven Sitzung greift es auch mit `/goal` nicht.
 - Falsch: Das Budget-Flag, denn es gilt ab dem Start für jede Sitzung, die du mit ihm aufrufst, auch für eine interaktive Sitzung.
+  - Warum: Ohne `-p` begrenzt `claude --max-budget-usd 1.00` nichts: Die CLI-Referenz nennt das Flag „print mode only“. Auch die Kosten dieser Sitzung bleiben ungedeckelt.
 - Falsch: Der Prüfer von `/goal`, denn er bricht den Lauf von selbst ab, sobald ein Dollar Budget in der Sitzung verbraucht ist.
+  - Warum: Der Prüfer beurteilt aus dem Gespräch, ob deine Bedingung oder Klausel erfüllt ist. Er ist kein Kostenzähler; ein harter Deckel für Kosten und Runden entsteht erst mit `claude -p`.
 - Falsch: Der Worktree, denn jeder isolierte Lauf bekommt von Claude Code ein eigenes festes Budget zugeteilt, das er nicht überschreitet.
+  - Warum: Ein Worktree gibt dem Lauf einen eigenen Arbeitsordner, damit der Hauptordner unberührt bleibt. Das Budget ist ein eigenes Flag, `--max-budget-usd`, und gilt nur mit `-p`.
 
 </details>
 
