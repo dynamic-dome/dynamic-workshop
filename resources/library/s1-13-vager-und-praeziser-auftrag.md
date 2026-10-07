@@ -208,9 +208,13 @@ Du kannst einen vagen Prompt aus deiner eigenen Arbeit in einen Arbeitsauftrag u
 **Frage:** Du hast „Clean up prices.py and make the tests pass.“ eingegeben. Die Tests sind grün, aber das Diff zeigt Änderungen an drei Funktionen. Was fehlte im Auftrag vor allem?
 
 - **Richtig:** Eine Scope-Grenze: Er sagte nicht, welche Funktionen und Dateien unangetastet bleiben, also war „Clean up“ eine Erlaubnis.
+  - Warum: Ohne Scope-Grenze darf Claude „nebenbei“ aufräumen: Was nicht ausdrücklich bleiben soll, ist erlaubt. Genau das zeigt das Diff mit drei geänderten Funktionen.
 - Falsch: Die Ursache: Hätte der Auftrag den Fehler erklärt, dürfte Claude außerhalb der betroffenen Zeile nichts mehr ändern.
+  - Warum: Die Ursache sagt, warum der Fehler auftritt, begrenzt aber nichts. Was unangetastet bleibt, legt allein die Scope-Grenze fest.
 - Falsch: Das Erfolgskriterium: Mit grünen Tests als Ziel hätte Claude weiter aufgeräumt, nur ohne Rückfrage zu stellen.
+  - Warum: Ein Erfolgskriterium war da: Die Tests sollten grün werden, und sie sind es. Es sagt, woran du „stimmt“ erkennst, nicht, was unangetastet bleibt.
 - Falsch: Ein längerer Auftrag: Mehr Wörter geben Claude mehr Kontext und verhindern damit Änderungen außerhalb des Fehlers.
+  - Warum: Länge ist nicht Präzision: Ein langer Prompt ohne Scope-Grenze lässt Claude weiter „nebenbei“ aufräumen. Zähl die vier Bausteine, nicht die Zeilen.
 
 </details>
 
