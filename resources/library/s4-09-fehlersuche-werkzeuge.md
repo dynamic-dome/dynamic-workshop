@@ -245,9 +245,13 @@ Du kannst für eine Diagnosefrage das passende Werkzeug nennen und erklären, wa
 **Frage:** Du hast einen PreToolUse-Hook in die `settings.json` eingetragen, aber `/hooks` listet ihn nicht auf. Was ist die wahrscheinlichste Ursache?
 
 - **Richtig:** Der `matcher` ist ein JSON-Array statt eines Strings; Claude Code lädt den Eintrag dann nicht.
+  - Warum: Ein Array als `matcher` ist ungültig, und Claude Code überspringt dann die ganze Datei. `/hooks` listet nur, was geladen ist; der `matcher` gehört als ein String mit `|`.
 - Falsch: Der Hook erscheint erst in `/hooks`, nachdem er zum ersten Mal gefeuert hat; vorher kennt Claude Code ihn noch nicht.
+  - Warum: Registriert reicht: `/hooks` zeigt alle für die Sitzung registrierten Hooks. In der Übung stand der Hook nach der Reparatur unter PreToolUse, noch bevor er einmal gefeuert hatte.
 - Falsch: `/hooks` zeigt nur Hooks aus deiner Benutzerdatei `~/.claude/settings.json`, nicht die aus der Projektdatei.
+  - Warum: Nicht die Datei entscheidet: `/hooks` zeigt alle für die Sitzung registrierten Hooks, nach Ereignis geordnet. In der Übung stand der Hook aus der Projektdatei `.claude/settings.json` in der Liste.
 - Falsch: Hooks gehören in eine eigene Datei `.claude/hooks.json`; in der `settings.json` liest Claude Code sie nicht.
+  - Warum: Es ist umgekehrt: Ein Hook gehört unter `"hooks"` in die `settings.json`. Eine eigene Datei `hooks/hooks.json` laden nur Plugins; steht er sonst in einer eigenen Datei, feuert er nie.
 
 </details>
 
