@@ -162,9 +162,13 @@ Du kannst erklären, was in der SKILL.md steht und was der Befehl dazu tut, und 
 **Frage:** Du kopierst für jedes Release dieselbe Checkliste mit 30 Zeilen in den Chat. Du überlegst, sie fest zu hinterlegen, und willst, dass sie nur dann Platz im Kontext braucht, wenn du ein Release vorbereitest. Was tust du?
 
 - **Richtig:** Du legst sie als Skill ab: Von ihm liegt nur die Beschreibung im Kontext, der Inhalt wird erst geladen, wenn du `/name` tippst oder Claude ihn für passend hält.
+  - Warum: Erst beim Aufruf lädt ein Skill seinen Inhalt; bis dahin liegt nur die Beschreibung im Kontext. So kostet die lange Checkliste fast nichts, bis du ein Release vorbereitest.
 - Falsch: Du schreibst sie in die CLAUDE.md, denn dort liest Claude sie nur beim ersten Prompt der Sitzung und lädt sie danach nicht mehr.
+  - Warum: Die CLAUDE.md gilt bei jedem Start und liegt in jeder Sitzung im Kontext; nach einer Verdichtung lädt Claude Code sie neu (S1.8). Sie kostet also dauerhaft Platz, nicht nur beim Release.
 - Falsch: Du trägst sie in `.claude/settings.json` ein, denn diese Datei nimmt Checklisten als Regel auf und zeigt sie Claude bei jedem Prompt.
+  - Warum: In der `settings.json` stehen Rechte-Regeln, die Werkzeuge und Befehle freigeben oder sperren (S1.5). Eine Checkliste, die du immer wieder in den Chat kopierst, ist eine Prozedur und gehört in einen Skill.
 - Falsch: Du legst sie als `release.md` ins Projekt, denn Claude liest jede Markdown-Datei im Ordner von selbst, sobald sie zur Aufgabe passt.
+  - Warum: Eine lose Markdown-Datei hat keine Beschreibung im Kontext, an der Claude erkennt, dass sie zum Release passt. Dieses Auswählen leistet erst ein Skill: Seine Beschreibung liegt vorab im Kontext.
 
 </details>
 
