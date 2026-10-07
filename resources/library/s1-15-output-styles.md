@@ -139,9 +139,13 @@ Du kannst erklären, wann du einen Output Style und wann ein System-Prompt-Flag 
 **Frage:** Du hast gestern in einem Projekt `/output-style concise` gewählt. Heute antwortet Claude dort wieder knapp, obwohl du nichts eingestellt hast. Woran liegt das?
 
 - **Richtig:** Claude Code hat die Wahl in `.claude/settings.local.json` des Projekts gespeichert; sie gilt, bis du `/output-style default` eingibst.
+  - Warum: `/output-style` speichert deine Wahl in `.claude/settings.local.json`. Sie gilt darum auch in späteren Sitzungen in diesem Projekt, bis du `/output-style default` eingibst.
 - Falsch: Das Flag `--append-system-prompt` vom Vortag bleibt in der Projektkonfiguration erhalten und wirkt in jeder späteren Sitzung.
+  - Warum: Die System-Prompt-Flags gelten nur für genau diesen Start; im nächsten ist ihre Wirkung weg. Gespeichert wird die Wahl von `/output-style`, nicht ein Flag.
 - Falsch: Ein Output Style gilt immer für alle deine Projekte, denn Claude Code legt ihn in der globalen `~/.claude/settings.json` ab.
+  - Warum: Die Wahl landet im Projekt, in `.claude/settings.local.json`, nicht in deiner globalen Konfiguration. Sie wirkt also in diesem Projekt, nicht in allen.
 - Falsch: Claude hat den Style in der `CLAUDE.md` des Projekts eingetragen und liest ihn dort bei jedem Start neu.
+  - Warum: Dafür schreibt Claude nichts in die `CLAUDE.md`: Die Wahl liegt in `.claude/settings.local.json`. Die `CLAUDE.md` ist für Projektkonventionen da, die immer gelten sollen.
 
 </details>
 
