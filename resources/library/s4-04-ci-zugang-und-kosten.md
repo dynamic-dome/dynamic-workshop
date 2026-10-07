@@ -225,9 +225,13 @@ Du kannst für eine CI-Stufe den passenden Zugang wählen und begründen, sagen,
 **Frage:** Eine Pipeline prüft Pull Requests von Beitragenden. Sie nutzt bisher das Abo-Token deines Projekts (`CLAUDE_CODE_OAUTH_TOKEN`), ohne `--bare`. Du willst fremde Hooks aussperren. Was ist richtig?
 
 - **Richtig:** Auf einen API-Key aus der Console wechseln und `--bare` hinzufügen. Das Abo-Token liest `--bare` nie, ein Job mit `--bare` und nur dem Token wäre nicht angemeldet.
+  - Warum: Ohne `--bare` führt `-p` die Hooks des ausgecheckten Repos ohne Vertrauensdialog aus. `--bare` hält sie fern, liest für die Anthropic-API aber nur einen API-Key, nie das Abo-Token.
 - Falsch: `--bare` zum bestehenden Aufruf hinzufügen und das Abo-Token behalten, denn `--bare` übernimmt die Anmeldung aus der Umgebung.
+  - Warum: `--bare` übernimmt nicht jede Anmeldung: Für die Anthropic-API liest es `ANTHROPIC_API_KEY` oder einen `apiKeyHelper`, nie `CLAUDE_CODE_OAUTH_TOKEN`. Der Job wäre nicht angemeldet.
 - Falsch: Nichts ändern, denn Hooks eines Repos laufen in `-p` erst, nachdem jemand den Vertrauensdialog für den Ordner bestätigt hat.
+  - Warum: Im `-p`-Lauf erscheint kein Vertrauensdialog. Ohne `--bare` laufen die Hooks aus der `.claude/settings.json` des ausgecheckten Repos auch in einem Ordner, dem du nie vertraut hast.
 - Falsch: Zusätzlich einen API-Key setzen und das Token behalten, denn bei zwei Zugängen gilt das Abo und der Key bleibt ungenutzt.
+  - Warum: Bei zwei Zugängen gewinnt der API-Key: Er steht in der Rangfolge vor dem Abo-Token, und `-p` nutzt ihn ohne Rückfrage. Ohne `--bare` laufen fremde Hooks außerdem weiter.
 
 </details>
 
