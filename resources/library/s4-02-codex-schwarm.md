@@ -158,9 +158,13 @@ Du kannst die Datenfluss-Grenze im Codex-Schwarm erklären, Dateien eines Projek
 **Frage:** Ein zweiter Anbieter soll in `api.py` einen neuen Endpunkt bauen. `api.py` ruft Funktionen aus `access_rules.py` auf, die vertrauliche Zugriffslogik enthält. Was gibst du ihm von `access_rules.py`?
 
 - **Richtig:** Nur die Signaturen der Funktionen, die `api.py` aufruft: Namen, Parameter, Rückgabetypen, ohne Funktionskörper.
+  - Warum: Für den Endpunkt zählt die Form der Aufrufe, nicht der Inhalt: Namen, Parameter, Rückgabetypen. Die vertrauliche Logik steckt in den Funktionskörpern, und die bleiben bei dir.
 - Falsch: Die ganze Datei, denn der Vertrag mit Anthropic deckt auch den Code ab, den ein zweiter Anbieter im Auftrag von Claude bekommt.
+  - Warum: Code für einen zweiten Anbieter verlässt den Anthropic-Vertrag: Dessen Datenregeln gelten nur für die Claude-Seite. Beim Codex-Schwarm greifen die Regeln deines OpenAI-Vertrags.
 - Falsch: Nichts außer der Aufgabenbeschreibung, denn der Anbieter errät die Schnittstelle der Funktionen zuverlässig aus ihren Namen.
+  - Warum: Namen allein reichen nicht: Der Anbieter braucht die Form, also auch Parameter und Rückgabetypen. Das Gerüst liefert sie, ohne Funktionskörper zu zeigen.
 - Falsch: Die ganze Datei mit umbenannten Variablen, denn Umbenennen macht die Zugriffslogik für Außenstehende unkenntlich und damit unbedenklich.
+  - Warum: Umbenennen gilt nicht als Anonymisieren: Neutrale Namen entschärfen nur Bezeichner. Schon ein Gerüst mit vielen Details verrät die Struktur der Logik, eine ganze Datei erst recht.
 
 </details>
 
