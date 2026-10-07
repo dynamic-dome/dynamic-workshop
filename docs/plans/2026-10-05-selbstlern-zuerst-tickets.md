@@ -35,7 +35,7 @@
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [x] cc1052a |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [x] siehe „Abschluss P8“ |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [x] siehe „Stand P9“; vom Owner am 2026-10-06 angesehen |
-| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | P10a bis P10c [x]; P10d bis P10g offen, siehe „P10“ |
+| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | P10a bis P10d [x]; P10e bis P10g offen, siehe „P10“ |
 
 DCO-Todos unter #9632: P1 #9636 · P2 #9637 · P3 #9638 · P4 #9639 · P5 #9640 · P6 #9641 · P7 #9642 · P8 #9643 · P9 #9644 · P10 #9665.
 
@@ -921,7 +921,7 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
 | P10a | **Format, Parser, Validator, Katalog.** `- Warum: …` je Antwort wird geparst (`quiz.why`); `validate` meldet 1 bis 3 Begründungen je Quiz, leere oder über 220 Zeichen lange als Befund `quiz-why`; `--complete` zählt „Lektionen mit Begründung: n von 61“. Durchstich an S1.5 (vier Begründungen), Fixture-Kapitel mit und ohne, Spec §4.3 ergänzt. Test zuerst. | Fragen 1, 2 | [x] 2026-10-07 (Commit „P10a“) |
 | P10b | **Cockpit und Tutor.** Nach der Antwort die Begründung der gewählten Option (Kapitel und Wiederholen); ohne Begründung der heutige Verweis. Browser-Tests: richtig mit Warum, falsch mit Warum und Verweis, Kapitel ohne Warum unverändert, Wiederholen gleich. Tutor-Skill nennt die Begründung aus dem Katalog. | Frage 3, B8 | [x] 2026-10-07 (Commit „P10b“) |
 | P10c | **Inhalte Session 1** (S1.1 bis S1.19, dazu S0.1): Sonnet-Schreiber im Worktree, je Quiz vier Begründungen aus dem Kapiteltext, `validate`; lesende Codex-Gegenprüfung (Sachfehler, neue Fakten, Widerspruch zum Kapitel); Befunde an der Quelle, Owner-Stichprobe drei Kapitel; Merge. | Frage 4 |[x] 2026-10-07, gemergt; Owner-Stichprobe S1.6, S1.11, S1.14 am 2026-10-07: „passt“ |
-| P10d | **Inhalte Session 2** (S2.1 bis S2.19), Ablauf wie P10c. | Frage 4 | [ ] |
+| P10d | **Inhalte Session 2** (S2.1 bis S2.19), Ablauf wie P10c. | Frage 4 |[x] 2026-10-07, gemergt |
 | P10e | **Inhalte Session 3** (S3.1 bis S3.14), Ablauf wie P10c. | Frage 4 | [ ] |
 | P10f | **Inhalte Session 4** (S4.1 bis S4.7, S4.9, S4.10, dazu S4.8 und S4.11), Ablauf wie P10c. Danach wird `--complete` bei unter 61 rot. | Frage 4, Frage 2 | [ ] |
 | P10g | **Abnahme.** Volle Suite, `validate --complete` 61 von 61, Bilder des Quiz nach richtiger und falscher Antwort in beiden Themen (`cockpit_shots.py`), Durchgang mit dem Owner. | — | [ ] |
@@ -939,6 +939,10 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
   Begründung darf einen Fakt aus einem anderen Kapitel nennen, mit dem Kapitel in Klammern („(S1.9)“); Spec §4.3
   ergänzt. Danach S1.14 (Checkpoint und Shell-Befehle) und S1.11 (`/clear`, gleicher Anfang zweier Begründungen,
   lange Aufzählung bei `--bare`) überarbeitet.
+- **P10d** (2026-10-07): wie P10c, Auftrag um die Lehren ergänzt (Verweis auf andere Kapitel, Wortlaut der Oberfläche,
+  zur Frage passend, abwechselnde Anfänge). Merges `1d7f74a`, `ca83436`; rund 450 000 Sonnet-Tokens. Codex: FAIL mit
+  2 NEW-FACT (beide S2.16) und 4 STYLE; behoben: S2.16 zweimal (Transport mit mcp.md belegt), `Write` in S2.10;
+  `stderr` und README bleiben ohne Backticks wie im Kapitel. „Mit Begründung: 38 von 61“.
 - **Lehre für P10d bis P10f:** Der Auftrag hat sich bewährt. Schwach sind Begründungen dort, wo eine falsche Antwort
   einen Fakt aus einem anderen Kapitel benutzt (`/clear`, Checkpoints); dann den Denkfehler aus dem Kapitel benennen,
   nicht ausweichen. Oberflächen-Wortlaut („Tell Claude what to change“ statt des Doku-Namens) im Auftrag nennen.

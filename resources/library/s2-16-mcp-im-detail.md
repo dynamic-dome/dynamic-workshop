@@ -223,9 +223,9 @@ Du kannst erklären, was mit einer zu großen MCP-Ausgabe passiert, wann eine OA
 - Falsch: Claude Code schneidet bei 25.000 Token ab, und Claude sieht nur den Anfang der Antwort aus der Datenbank.
   - Warum: 25.000 Token sind eine Schwelle, kein Schnitt. Ein größeres Ergebnis ersetzt Claude Code im Gespräch durch einen Hinweis mit dem Pfad; es liegt in einer Datei, und Claude liest sie, wenn es den Inhalt braucht.
 - Falsch: Claude Code bricht den Tool-Aufruf mit einem Fehler ab, und der Server muss seine Antwort erst aufteilen.
-  - Warum: Der Aufruf geht auch ohne Aufteilen durch: Ein Ergebnis über dem Limit wird als Datei gespeichert und im Gespräch durch den Pfad ersetzt. Antworten in Teilen sind nur ein Weg, wenn du die Daten direkt brauchst.
+  - Warum: Der Aufruf bricht wegen der Größe nicht ab, und der Server muss nichts aufteilen: Claude Code speichert das Ergebnis als Datei und ersetzt es im Gespräch durch einen Hinweis mit dem Pfad.
 - Falsch: Nichts: Das Limit gilt nur für stdio-Server, entfernte HTTP-Server dürfen beliebig viel zurückgeben.
-  - Warum: Die Schwellen gelten für große Ausgaben von MCP-Tools und knüpfen an keinen Transport an. Mit 40.000 Token liegt die Antwort über dem Maximum von 25.000, ob der Server per stdio oder HTTP antwortet.
+  - Warum: Die Grenze gilt für jede große Ausgabe eines MCP-Tools, gleich über welchen Transport. 40.000 Token liegen über dem Standard-Maximum von 25.000, also landet das Ergebnis als Datei.
 
 </details>
 
