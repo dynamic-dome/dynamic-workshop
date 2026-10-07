@@ -333,9 +333,13 @@ Du kannst das Secure Diff Gate mit seiner Grenze beschreiben, erklären, wie `up
 **Frage:** Du hast das Secure Diff Gate eingerichtet. Claude legt `.env` trotzdem an, mit `echo X > .env`. Was ist die richtige Erklärung?
 
 - **Richtig:** Das Gate hängt nur an Write und Edit; der Shell-Befehl läuft an seinem Matcher vorbei. Eine Deny-Regel `Edit(./.env)` schließt die Lücke.
+  - Warum: Das Gate ist so eng wie sein Matcher `Write|Edit` und sieht keine Shell-Befehle. Eine Deny-Regel wie `Edit(./.env)` gilt laut Doku auch für das Ziel einer Umleitung (`> file`) und schließt die Lücke.
 - Falsch: Das Gate ist defekt, denn `exit 2` blockt nach der Doku nur Aufrufe des Bash-Tools, nicht die von Write.
+  - Warum: `exit 2` blockt einen PreToolUse-Aufruf, egal für welches Tool, und das Gate arbeitet richtig. Die Lücke liegt im Matcher, der nur Write und Edit sieht, nicht im Exit-Code.
 - Falsch: Das Gate kennt `.env` nicht, es ist für `.pem` und `secrets/` gebaut und braucht eine eigene Zeile für jede weitere Datei.
+  - Warum: `.env` steht auf der Liste des Gates, neben `.pem`, `secrets/` und `credentials`; ein Write darauf wird geblockt. Nur was die Shell schreibt, prüft das Gate nie.
 - Falsch: Ein PreToolUse-Hook feuert erst, wenn der Aufruf erfolgreich war, deshalb kommt er bei einem Schreibzugriff zu spät.
+  - Warum: PreToolUse feuert vor dem Tool-Aufruf und kann ihn blocken. Erst PostToolUse kommt danach, nur nach einem erfolgreichen Aufruf. Zeitlich ist das Gate richtig, nur sein Matcher ist zu eng.
 
 </details>
 
