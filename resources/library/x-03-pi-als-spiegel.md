@@ -266,3 +266,4 @@ Stand: 30.09.2026. Fremdprojekte ändern sich schnell; prüf die verlinkte Doku,
 - [S2.13 · Lieferkettenrisiken bei Plugins](s2-13-plugin-lieferkette.md)
 - [S1.18 · Worktrees als Testlabor](s1-18-worktrees.md)
 - [S4.3 · Headless: claude -p als Pipeline-Stufe](s4-03-headless.md)
+- Stand der Pi-Doku: CLI-Seite geprüft am 2026-10-07 (geändert; Standard-Werkzeuge `read`, `bash`, `edit`, `write`, die zuschaltbaren `grep`, `find`, `ls`, `powershell` und das Beispiel mit `--tools` und `--print` unverändert belegt).

@@ -112,6 +112,7 @@ Die Doku sagt klar, wofür OpenClaw gebaut ist: eine Vertrauensgrenze pro Gatewa
 | `groupPolicy` | `allowlist`, Antwort nur bei Erwähnung | Gruppen-Absender sind gesperrt, bis du sie freigibst. |
 | Sandbox (`agents.defaults.sandbox`) | aus | Werkzeuge der Hauptsitzung laufen direkt auf dem Host. |
 | Shell auf dem Gateway-Host (`exec`) | `security: "full"`, `ask: "off"` | Befehle laufen ohne Rückfrage; die Doku nennt das gewolltes Verhalten für einen vertrauenswürdigen Einzelbetreiber. |
+| Sitzungs-Werkzeuge (`tools.sessions.visibility`, `tools.agentToAgent.enabled`) | `all` und `true` | Ein Agent mit Werkzeugen und ohne Sandbox kann die Sitzungen aller Agenten im Gateway auflisten, lesen, durchsuchen und anschreiben, auch die Verläufe anderer Nutzer. |
 | `contextVisibility` | `all` | Zitate und Weitergeleitetes erreichen das Modell, wie sie ankommen: Die Allowlist regelt, wer etwas auslöst, nicht, was das Modell mitliest. |
 
 Das Muster (Schlussfolgerung aus dieser Tabelle): Die Standardwerte halten den Eingang zu. Was ein zugelassener Absender oder ein eingeschleuster Text anstößt, läuft aber mit offenen Werkzeugen. Ob du abgewichen bist, zeigt laut Doku `openclaw security audit`; `--deep` versucht zusätzlich eine Live-Probe des Gateways.
@@ -301,4 +302,4 @@ Du kannst für einen Dauer-Agenten zeigen, an welchen Stellen Text von außen zu
 - [S2.17 · MCP-Sicherheit und ein eigener Server](s2-17-mcp-sicherheit.md)
 - [S3.8 · Rechte für autonome Läufe](s3-08-rechte-fuer-autonomie.md)
 - [S3.9 · Geschützte Pfade und Sandbox-Stufen](s3-09-geschuetzte-pfade-und-sandbox.md)
-- Stand der OpenClaw-Doku: geprüft am 2026-10-06 (Heartbeat-Seite geändert; Takt-Standard, `0m`, `isolatedSession`, `lightContext`, Kosten-Hinweis und `system heartbeat disable` unverändert belegt).
+- Stand der OpenClaw-Doku: geprüft am 2026-10-06 (Heartbeat-Seite geändert; Takt-Standard, `0m`, `isolatedSession`, `lightContext`, Kosten-Hinweis und `system heartbeat disable` unverändert belegt) und am 2026-10-07 (Vertrauensmodell und `openclaw channels` geändert; eine Grenze pro Gateway, Reihenfolge Identität, Reichweite, Modell, `exec`-Standard, `channels remove --delete` und `channels logout` unverändert belegt; Sitzungs-Werkzeuge neu in der Tabelle).
