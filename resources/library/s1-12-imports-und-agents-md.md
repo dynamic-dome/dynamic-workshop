@@ -166,9 +166,13 @@ Du kannst sagen, was `--add-dir` lädt und was nicht, wie du die CLAUDE.md des z
 **Frage:** Deine `.claude/CLAUDE.md` enthält `@./docs/style.md`, die Datei liegt aber im Projektordner unter `docs/style.md`. Claude kennt ihre Regeln nicht. Woran liegt es?
 
 - **Richtig:** Der Pfad gilt relativ zur importierenden Datei, Claude sucht also in `.claude/docs/`; richtig wäre `@../docs/style.md`.
+  - Warum: Relative Pfade gelten relativ zur Datei, die importiert, nicht zum Arbeitsordner. Die Datei liegt in `.claude/`, also zeigt `./docs/` auf `.claude/docs/`.
 - Falsch: Der Pfad muss in Anführungszeichen stehen, sonst erkennt Claude Code den Import nicht als Import.
+  - Warum: Es ist umgekehrt: Ein Pfad in Anführungszeichen wird nicht importiert. `@./docs/style.md` ist richtig geschrieben, nur der Bezugsordner stimmt nicht.
 - Falsch: Claude Code folgt nur einer Importebene, und diese Datei liegt schon eine Ebene zu tief.
+  - Warum: Imports dürfen bis zu vier Ebenen tief gehen, und `style.md` wird direkt aus der CLAUDE.md eingebunden, ist also erste Ebene. Die Tiefe ist nicht das Problem.
 - Falsch: Imports wirken nur für Ordner aus `--add-dir`; im eigenen Projekt brauchst du dafür Regeldateien.
+  - Warum: `@path`-Imports gehören in die CLAUDE.md deines eigenen Projekts, etwa `@./docs/architecture.md`. `--add-dir` gibt dagegen nur Dateizugriff auf ein zweites Repo.
 
 </details>
 
