@@ -213,9 +213,13 @@ Du kannst an einem Versuch zeigen, was Claude Code in geschützten Pfaden je Mod
 **Frage:** Du hast `/sandbox` eingeschaltet und arbeitest in `acceptEdits`. Claude soll die Datei `.claude/settings.json` deines Projekts per Edit ändern. Was passiert?
 
 - **Richtig:** Claude Code fragt nach, denn `.claude` ist ein geschützter Pfad und die Sandbox gilt nur für Shell-Befehle, nicht für das Edit-Werkzeug.
+  - Warum: In `acceptEdits` fragt Claude Code bei geschützten Pfaden wie `.claude` nach. Die Sandbox greift bei Edit nicht: Dafür sind Rechte-Regeln und Modus zuständig.
 - Falsch: Die Änderung läuft ohne Rückfrage, denn mit eingeschalteter Sandbox sind Schreibzugriffe im Projektordner für alle Werkzeuge abgesichert.
+  - Warum: Die Sandbox begrenzt nur Bash-, PowerShell- und Monitor-Befehle. Read, Edit und Write laufen außerhalb; für sie gelten Rechte-Regeln und Modus, und `acceptEdits` fragt bei `.claude` nach.
 - Falsch: Claude Code lehnt ab, weil die Sandbox `.claude` für alle Werkzeuge schreibgeschützt hält, auch wenn du es freigeben würdest.
+  - Warum: Abgelehnt wird so ein Zugriff in `dontAsk`. In `acceptEdits` fragt Claude Code, und die Rückfrage kann anbieten, `.claude` für die Sitzung freizugeben. Edit steht nicht unter der Sandbox.
 - Falsch: Claude Code fragt nur, weil keine Allow-Regel vorhanden ist; mit `Edit(.claude/**)` in den Settings liefe die Änderung ohne Rückfrage.
+  - Warum: Die Prüfung der geschützten Pfade läuft, bevor Claude Code Allow-Regeln auswertet. Ein Eintrag wie `Edit(.claude/**)` ändert deshalb nichts, die Rückfrage kommt trotzdem.
 
 </details>
 
