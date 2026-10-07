@@ -153,9 +153,13 @@ Du kannst für eine Aufgabe die drei Phasen den passenden Modellen zuordnen, die
 **Frage:** `haiku` hat den Diff der Zutrittslogik einer Firmware geprüft und meldet keine Befunde. Was machst du?
 
 - **Richtig:** Ich lasse `opus` die sicherheitsrelevanten Teile selbst lesen, denn „kein Befund“ eines günstigen Durchgangs beweist nicht, dass nichts da ist.
+  - Warum: „Haiku findet nichts“ beweist nichts: Der günstige Erstdurchgang ist die erste Runde, nicht die Abnahme. Bei sicherheitskritischem Code liest `opus` selbst.
 - Falsch: Ich betrachte den Diff als geprüft, denn ein Modell, das nichts meldet, hat nach allem, was es gesehen hat, nichts Auffälliges gefunden.
+  - Warum: Wie viele Befunde `haiku` allein findet, hängt von der Aufgabe ab; eine feste Quote belegt dieser Kurs nicht. Als einziger Prüfer ist `haiku` eine Falle; sein Schweigen ist kein Beleg.
 - Falsch: Ich starte `haiku` so lange neu, bis es einen Befund meldet, denn ein Review ist erst fertig, wenn mindestens ein Punkt auf der Liste steht.
+  - Warum: Auch „keine eindeutigen Befunde“ ist ein gültiges Ergebnis. Du entscheidest dann, ob dir das genügt, statt den Lauf zu wiederholen, bis eine Liste entsteht.
 - Falsch: Ich lasse `opus` nur die Commit-Nachricht lesen, denn die fasst die Änderung vollständig zusammen und erspart das Lesen des Codes.
+  - Warum: Bei sicherheitskritischem Code liest `opus` ohnehin den gesamten Code; eine Zusammenfassung ersetzt das nicht. Der Haiku-Lauf spart nur, wenn `opus` danach weniger liest als ohne ihn.
 
 </details>
 

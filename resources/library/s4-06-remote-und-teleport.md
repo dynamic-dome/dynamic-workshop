@@ -167,9 +167,13 @@ Du kannst erklären, in welche Richtung Remote Control und `/teleport` arbeiten,
 **Frage:** Du arbeitest im Terminal mit einem API-Key aus der Console und willst die laufende Sitzung vom Handy aus steuern. Was gilt?
 
 - **Richtig:** Es geht nicht: Remote Control unterstützt keine API-Keys. Du meldest dich mit `/login` über claude.ai an, mit Pro, Max, Team oder Enterprise.
+  - Warum: Remote Control setzt ein Abo und die Anmeldung über claude.ai voraus; die Sitzung erscheint in den Claude-Apps deines Kontos. API-Keys werden nicht unterstützt, du meldest dich mit `/login` an.
 - Falsch: Es geht, wenn du die Sitzung mit `/remote-control` aus dem laufenden Terminal startest; nur der Unterbefehl `claude remote-control` prüft die Anmeldung.
+  - Warum: Die Voraussetzung hängt nicht am Weg hinein: Auch `/remote-control` aus dem laufenden Terminal setzt die Anmeldung über claude.ai voraus. Mit einem API-Key startet es nicht.
 - Falsch: Es geht über Amazon Bedrock, weil die Sitzung lokal läuft und nur das Modell aus der Cloud kommt.
+  - Warum: Dass die Sitzung lokal läuft, genügt nicht: Remote Control verlangt den Endpunkt `api.anthropic.com`. Mit Amazon Bedrock, Vertex oder Foundry geht es nicht.
 - Falsch: Es geht, wenn du `ANTHROPIC_BASE_URL` auf ein Gateway setzt, das die Anfragen an claude.ai weiterreicht.
+  - Warum: Ein eigener `ANTHROPIC_BASE_URL` ist laut Doku ausgeschlossen. Nötig sind der Endpunkt `api.anthropic.com` und die Anmeldung über claude.ai; ein Gateway dazwischen erfüllt das nicht.
 
 </details>
 

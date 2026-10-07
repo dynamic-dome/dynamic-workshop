@@ -234,9 +234,13 @@ Du kannst erklären, was `claude -p` in einer Pipeline anders macht als interakt
 **Frage:** Dein Skript ruft `claude -p … --output-format json --json-schema '<gültiges Schema>'` auf und liest mit `jq -r '.category'`. Der Lauf endet mit Exit-Code 0, aber `jq` gibt `null` aus. Woran liegt es?
 
 - **Richtig:** Das Ergebnis steht eine Ebene tiefer im Umschlag: Das Skript muss `.structured_output.category` lesen.
+  - Warum: Mit `--output-format json` ist die Ausgabe ein Umschlag mit Metadaten. Das Ergebnis nach Schema liegt darin in `structured_output`, also eine Ebene tiefer, als `.category` sucht.
 - Falsch: Das Schema ist ungültig, und Claude hat still Prosa geliefert, in der es kein Feld `category` gibt.
+  - Warum: Ein ungültiges Schema liefert keine stille Prosa: `claude` bricht mit `Error: --json-schema …` und einem Exit-Code ungleich 0 ab. Bei dir endete der Lauf mit 0.
 - Falsch: Mit Schema steht das Ergebnis im Feld `.result`; `jq -r '.result.category'` wäre die richtige Abfrage.
+  - Warum: Hier sind die Felder vertauscht: Die reine Textantwort steht in `result`, das Ergebnis nach Schema in `structured_output`. Erst dort liegen die Felder deines Schemas.
 - Falsch: Claude hat die Kategorie nicht erkannt und liefert `null` für unklare Fälle; ein strengerer Prompt behebt es.
+  - Warum: Das `null` kommt von der Ebene, nicht vom Inhalt: Auf oberster Ebene des Umschlags gibt es kein `category`. Ein strengerer Prompt ändert daran nichts.
 
 </details>
 
