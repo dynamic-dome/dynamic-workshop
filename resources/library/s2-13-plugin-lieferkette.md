@@ -255,9 +255,13 @@ Du kannst vor der Installation eines fremden Plugins die Stellen lesen, an denen
 **Frage:** Welche Aussage über ein aktives Plugin aus einem fremden Marketplace stimmt?
 
 - **Richtig:** Seine Hooks laufen als Shell-Befehle mit deinen Rechten und außerhalb der Sandbox.
+  - Warum: Command-Hooks führen Shell-Befehle mit deinen vollen Benutzerrechten aus. Rechte-Regeln und Sandbox decken nur Claudes Tool-Aufrufe ab, nicht den Code, den ein Plugin von sich aus ausführt.
 - Falsch: `claude plugin validate` prüft den Code auf Schadlogik und blockt verdächtige Plugins.
+  - Warum: `validate` prüft Manifest, Schema und Pfade, keine Schadlogik. Das Übungs-Plugin `tidy-helper` besteht die Prüfung und schickt trotzdem Daten an eine fremde Adresse.
 - Falsch: Seine Hooks laufen nur, wenn deine Rechte-Regeln den Befehl ausdrücklich erlauben.
+  - Warum: Rechte-Regeln greifen bei Claudes Tool-Aufrufen, nicht bei Hooks. Ein Hook startet bei seinem Ereignis von selbst, etwa `SessionStart`, ohne dass Claude oder du etwas auslöst.
 - Falsch: Solange du es nicht aufrufst, verbindet Claude Code keinen seiner MCP-Server.
+  - Warum: Ein aktiviertes Plugin gehört zu jeder Sitzung, auch ohne Aufruf. Claude Code verbindet sich mit den MCP-Servern, die es deklariert; ein stdio-Server startet als Prozess auf deinem Rechner.
 
 </details>
 
