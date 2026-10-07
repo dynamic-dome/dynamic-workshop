@@ -139,9 +139,13 @@ Du kannst die Alltags-Werkzeuge mit exaktem Namen nennen, im Transkript ablesen,
 **Frage:** Eine Sitzung läuft im Modus `default`. Claude will erst eine Datei in deinem Arbeitsordner lesen und danach eine Zeile darin ändern. Was passiert?
 
 - **Richtig:** Das Lesen läuft ohne Rückfrage, vor der Änderung fragt Claude: `Read` braucht keine Freigabe, `Edit` schon.
+  - Warum: Die Tabelle gilt für den Modus `default` und Pfade im Arbeitsordner: Lesende Tools laufen frei, ändernde und ausführende (`Edit`, `Write`, `Bash`) brauchen deine Freigabe.
 - Falsch: Beides fragt nach, weil im Modus `default` ausnahmslos jeder Aufruf eines Werkzeugs deine Freigabe braucht.
+  - Warum: Lesende Tools wie `Read` laufen im Arbeitsordner ohne Rückfrage, und selbst `Bash` führt reine Lesebefehle wie `ls` ohne Frage aus. `default` fragt nicht bei jedem Aufruf.
 - Falsch: Beides läuft ohne Rückfrage, weil du den Ordner beim Start im Vertrauensdialog als vertraut bestätigt hast.
+  - Warum: Ob ein Tool fragt, steht in der Tabelle für den Modus `default`: `Edit` braucht auch in deinem Arbeitsordner eine Freigabe. Abweichungen gibt es nur in den drei genannten Fällen.
 - Falsch: Das Lesen fragt nach, die Änderung nicht, weil `Edit` nur eine Stelle ersetzt und nichts überschreibt.
+  - Warum: Das ist umgekehrt: `Read` braucht im Arbeitsordner keine Freigabe, `Edit` schon. Dass `Edit` nur eine Stelle ersetzt, ändert daran nichts: Es ändert die Datei, so wie `Write`.
 
 </details>
 
