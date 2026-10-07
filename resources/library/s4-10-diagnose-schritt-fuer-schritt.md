@@ -243,9 +243,13 @@ Du kannst die Diagnose-Checkliste in der richtigen Reihenfolge durchgehen, für 
 **Frage:** Dein Wächter steht in `/hooks`, im Transkript erscheint kein `hook error`, aber ein Befehl, den er blocken soll, läuft durch. Von Hand liefert das Skript mit echter Eingabe `exit=0` ohne Ausgabe. Was ist der nächste Diagnoseschritt?
 
 - **Richtig:** Im Skript einen abgefangenen Fehler suchen, ihn sichtbar machen und den Handler geschlossen fallen lassen (`exit 2`).
+  - Warum: Läuft das Skript von Hand durch und liefert 0, obwohl es blocken soll, liegt der Fehler im Skript. Ein verschluckter Fehler endet mit 0, und Claude Code wertet das als Zustimmung; nur Exit 2 blockt.
 - Falsch: Den Matcher auf `".*"` erweitern, damit der Hook bei jedem Tool feuert und so keinen einzigen Aufruf mehr verpasst.
+  - Warum: Der Fehler liegt im Skript, nicht in der Registrierung: Es liefert von Hand selbst 0. Ein Matcher wie `".*"` lässt den Hook nur bei jedem Aufruf feuern, an diesem 0 ändert er nichts.
 - Falsch: Den `timeout` des Hooks verlängern, weil ein zu kurzer Timeout das Urteil des Skripts abschneidet und sonst alles durchläuft.
+  - Warum: Hängt ein `command`-Hook, greift sein Timeout (Standard 600 Sekunden), und der Aufruf läuft trotzdem weiter. Dein Skript liefert von Hand aber `exit=0`; ein längerer Timeout ändert dieses Urteil nicht.
 - Falsch: Den Hook löschen und neu anlegen, weil ein Hook, der in `/hooks` steht und doch nichts blockt, auf eine beschädigte Installation hindeutet.
+  - Warum: Steht ein Hook in `/hooks`, ist seine Registrierung in Ordnung. Das `exit=0` kommt aus dem Skript, und ein neuer Eintrag bringt dasselbe Skript mit. Such zuerst den Fehler im Skript.
 
 </details>
 
