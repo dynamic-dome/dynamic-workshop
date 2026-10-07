@@ -193,7 +193,7 @@ def test_generated_files_in_library_are_not_chapters(lib_dir):
 
 
 def test_unclosed_quiz_is_reported(lib_dir):
-    edit(lib_dir, HOOK, "- Falsch: Nur ein Timeout blockt den Aufruf\n\n</details>", "- Falsch: Nur ein Timeout blockt den Aufruf\n")
+    edit(lib_dir, HOOK, "nur mit Exit-Code 2.\n\n</details>", "nur mit Exit-Code 2.\n")
     assert "quiz-shape" in rules(lib_dir)
 
 
@@ -309,6 +309,32 @@ def test_validate_reports_how_many_lessons_have_an_exercise_and_answers(lib_dir,
     out = capsys.readouterr().out
     assert "Lektionen mit Übung: 2 von 2" in out and "mit Auflösung: 1 von 2" in out
 
+
+
+# --- P10: reasons per quiz answer. A quiz has none or four; each 1 to 220 characters. -----------------------
+
+WHY_RIGHT = "  - Warum: Nur Exit-Code 2 "
+
+
+@pytest.mark.parametrize("old, new", [
+    (WHY_RIGHT + "gilt als blockierender Fehler; Claude Code bricht den Aufruf dann ab.", "  - Warum:"),  # empty
+    ("  - Warum: Exit-Code 1 ", "  - Warum: " + "x" * 221 + " "),  # too long
+    ("  - Warum: Exit-Code 1 ", "  - Keinwarum: "),             # only three reasons
+    (WHY_RIGHT, "- Warum: Nur Exit-Code 2 "),                   # not indented: belongs to no answer
+    (WHY_RIGHT, "  - Warum: doppelt" + chr(10) + WHY_RIGHT),    # two reasons for one answer
+])
+def test_quiz_reasons_are_checked(lib_dir, old, new):
+    edit(lib_dir, HOOK, old, new)
+    assert "quiz-why" in rules(lib_dir)
+
+
+def test_quiz_without_reasons_and_with_four_is_fine(lib_dir):
+    assert "quiz-why" not in rules(lib_dir, complete=True)
+
+
+def test_validate_reports_how_many_lessons_have_reasons(lib_dir, capsys):
+    assert bl.main(["validate", "--root", str(lib_dir)]) == 0
+    assert "mit Begründung: 1 von 2" in capsys.readouterr().out
 
 # --- the standard for self-learners (design 2026-10-05, package P5) ---------------------------------------
 # Every chapter of the library carries answers, an exercise with a time and a list "Geschafft, wenn", and

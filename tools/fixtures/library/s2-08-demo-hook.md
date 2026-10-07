@@ -85,9 +85,13 @@ Du kannst einen Hook eintragen und seinen Exit-Code begründen.
 **Frage:** Welcher Exit-Code blockt einen PreToolUse-Aufruf?
 
 - **Richtig:** Exit-Code 2 blockt den Aufruf
+  - Warum: Nur Exit-Code 2 gilt als blockierender Fehler; Claude Code bricht den Aufruf dann ab.
 - Falsch: Jeder Code ungleich null blockt
+  - Warum: Ein anderer Code ungleich null meldet nur einen Hook-Fehler, der Aufruf läuft weiter.
 - Falsch: Exit-Code 1 blockt den Aufruf
+  - Warum: Exit-Code 1 ist ein Fehler, der nicht blockt; Claude Code zeigt ihn und macht weiter.
 - Falsch: Nur ein Timeout blockt den Aufruf
+  - Warum: Ein Timeout blockt nicht; geblockt wird nur mit Exit-Code 2.
 
 </details>
 

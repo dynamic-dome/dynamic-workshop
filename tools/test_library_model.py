@@ -67,6 +67,34 @@ def test_parse_lesson_fixture():
     assert "https://code.claude.com/docs/en/hooks" in ch.links
 
 
+
+# --- P10: one reason per quiz answer ("- Warum: ..." indented under the answer) ---------------------------
+
+def test_quiz_reasons_belong_to_their_answers():
+    q = lm.parse_chapter(FIXTURES / "s2-08-demo-hook.md").quiz
+    assert q.why_correct.startswith("Nur Exit-Code 2 ")
+    assert len(q.why_wrong) == 3 and all(q.why_wrong)
+    assert q.why_wrong[1].startswith("Exit-Code 1 ")  # same order as the wrong answers
+    assert q.why_stray == 0
+
+
+def test_quiz_without_reasons_has_none():
+    q = lm.parse_chapter(FIXTURES / "s2-07-demo-events.md").quiz
+    assert q.why_correct is None and q.why_wrong == [None, None, None] and q.why_stray == 0
+    assert not q.has_why
+
+
+def test_quiz_reason_without_indent_or_twice_is_stray(tmp_path):
+    text = (FIXTURES / "s2-08-demo-hook.md").read_text(encoding="utf-8")
+    first = "  - Warum: Nur Exit-Code 2 "
+    assert first in text
+    path = tmp_path / "s2-08-demo-hook.md"
+    path.write_text(text.replace(first, "- Warum: Nur Exit-Code 2 "), encoding="utf-8")
+    q = lm.parse_chapter(path).quiz
+    assert q.why_correct is None and q.why_stray == 1
+    path.write_text(text.replace(first, "  - Warum: doppelt" + chr(10) + first), encoding="utf-8")
+    assert lm.parse_chapter(path).quiz.why_stray == 1
+
 def test_h2_inside_code_fence_is_not_a_section():
     ch = lm.parse_chapter(FIXTURES / "s2-08-demo-hook.md")
     assert "Das ist kein Abschnitt" not in ch.sections

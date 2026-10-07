@@ -64,6 +64,7 @@ SOURCES_REQUIRED = {"lesson", "setup"}
 QUIZ_TELL_MAX = 1.35   # correct answer at most 1.35 x mean length of the wrong ones
 QUIZ_TELL_MIN = 0.6    # every wrong answer at least 0.6 x the correct one
 QUIZ_LONGEST_SHARE = 0.4  # library-wide: correct answer strictly longest in at most 40 % of quizzes
+QUIZ_WHY_MAX = 220  # characters per reason (package P10)
 FILENAME = re.compile(r"^(?:s([0-4])-(\d{2})|x-(\d{2}))-[a-z0-9]+(?:-[a-z0-9]+)*\.md$")
 QUIZ_SUMMARY = re.compile(r"<details><summary>Quizfrage</summary>")
 
@@ -191,6 +192,8 @@ def _check_body(ch, add, planned=frozenset(), goal_targets=(), standard=frozense
             if len(q.correct) > QUIZ_TELL_MAX * mean or min(len(w) for w in q.wrong) < QUIZ_TELL_MIN * len(q.correct):
                 add("quiz-length-tell", f"Antwortlängen verraten die Lösung (richtig {len(q.correct)} Zeichen, "
                     f"falsch Ø {mean:.0f}); angleichen auf ≤ {QUIZ_TELL_MAX} × Mittel")
+    if q is not None and q.closed:
+        _check_quiz_why(q, add)
     if ch.answers is not None:
         if not ch.recall or len(ch.answers) != len(ch.recall) or not all(a.strip() for a in ch.answers):
             add("answers-count", f"{len(ch.answers)} Auflösungen zu {len(ch.recall)} Abruffragen "
@@ -380,6 +383,20 @@ def _check_standard(ch, add):
             f"von 5 mit höchstens {MINUTES_TOLERANCE} Abstand")
 
 
+def _check_quiz_why(q, add):
+    """A quiz has no reasons or one under each of its four answers, each 1 to QUIZ_WHY_MAX characters."""
+    if q.why_stray:
+        add("quiz-why", f"{q.why_stray} Warum-Zeile(n) ohne eigene Antwort (eingerückt direkt unter die Antwort, "
+            "höchstens eine je Antwort)")
+    reasons = [q.why_correct, *q.why_wrong]
+    given = [r for r in reasons if r is not None]
+    if given and len(given) != len(reasons):
+        add("quiz-why", f"{len(given)} von {len(reasons)} Antworten mit Begründung (keine oder alle)")
+    for r in given:
+        if not r or len(r) > QUIZ_WHY_MAX:
+            add("quiz-why", f"Begründung mit {len(r)} Zeichen (erlaubt 1–{QUIZ_WHY_MAX})")
+
+
 def load_standard(lib) -> frozenset:
     """IDs of the chapters that must meet the standard for self-learners: since package P7 every chapter."""
     return frozenset(ch.id for ch in lib.chapters)
@@ -390,8 +407,11 @@ def coverage(lib) -> str:
     lessons = [c for c in lib.chapters if c.type == "lesson"]
     with_exercise = sum(1 for c in lessons if "Selbst machen" in c.sections)
     with_answers = sum(1 for c in lessons if c.answers and len(c.answers) == len(c.recall))
+    with_why = sum(1 for c in lessons if c.quiz and c.quiz.why_correct and len(c.quiz.why_wrong) == 3
+                   and all(c.quiz.why_wrong))
     return (f"Lektionen mit Übung: {with_exercise} von {len(lessons)} · "
-            f"mit Auflösung: {with_answers} von {len(lessons)}")
+            f"mit Auflösung: {with_answers} von {len(lessons)} · "
+            f"mit Begründung: {with_why} von {len(lessons)}")
 
 
 def load_meta(path=CHAPTER_META):

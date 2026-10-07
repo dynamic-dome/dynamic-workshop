@@ -45,6 +45,9 @@ QUIZ_BLOCK = re.compile(r"<details><summary>Quizfrage</summary>(.*?)</details>",
 QUIZ_QUESTION = re.compile(r"^\*\*Frage:\*\*\s*(.+?)\s*$", re.M)
 QUIZ_RIGHT = re.compile(r"^- \*\*Richtig:\*\*\s*(.+?)\s*$", re.M)
 QUIZ_WRONG = re.compile(r"^- Falsch:\s*(.+?)\s*$", re.M)
+# A reason per answer: "- Warum: ..." indented on the line below its answer (package P10).
+QUIZ_ANSWER_LINE = re.compile(r"^- (?:\*\*Richtig:\*\*|Falsch:)")
+QUIZ_WHY = re.compile(r"^(\s*)- Warum:(.*)$")
 ANSWER_SUMMARY = "<details><summary>Auflösung</summary>"
 ANSWER_BLOCK = re.compile(re.escape(ANSWER_SUMMARY) + r"(.*?)</details>", re.S)
 DETAILS_BLOCK = re.compile(r"<details>.*?</details>", re.S)
@@ -73,6 +76,13 @@ class Quiz:
     wrong: list
     n_correct: int = 1
     closed: bool = True
+    why_correct: str | None = None
+    why_wrong: list = field(default_factory=list)  # one entry per wrong answer, None where the reason is missing
+    why_stray: int = 0  # reasons that belong to no answer: not indented, before the first answer, or a second one
+
+    @property
+    def has_why(self) -> bool:
+        return self.why_correct is not None or any(w is not None for w in self.why_wrong)
 
 
 @dataclass
@@ -285,7 +295,28 @@ def _quiz(check_text: str):
     question = QUIZ_QUESTION.search(inner)
     rights = QUIZ_RIGHT.findall(inner)
     wrong = QUIZ_WRONG.findall(inner)
-    return Quiz(question.group(1) if question else "", rights[0] if rights else "", wrong, len(rights))
+    why_correct, why_wrong, stray = _quiz_why(inner)
+    return Quiz(question.group(1) if question else "", rights[0] if rights else "", wrong, len(rights),
+                why_correct=why_correct, why_wrong=why_wrong, why_stray=stray)
+
+
+def _quiz_why(inner: str):
+    """(reason of the correct answer, reasons of the wrong answers in order, stray reasons)."""
+    reasons, kinds, stray = [], [], 0  # per answer line: its reason (or None) and whether it is the correct one
+    for line in inner.splitlines():
+        if QUIZ_ANSWER_LINE.match(line):
+            reasons.append(None)
+            kinds.append(line.startswith("- **Richtig:**"))
+            continue
+        why = QUIZ_WHY.match(line)
+        if not why:
+            continue
+        if not why.group(1) or not reasons or reasons[-1] is not None:
+            stray += 1
+        else:
+            reasons[-1] = why.group(2).strip()
+    correct = next((r for r, k in zip(reasons, kinds) if k), None)
+    return correct, [r for r, k in zip(reasons, kinds) if not k], stray
 
 
 def _recall(check_text: str):

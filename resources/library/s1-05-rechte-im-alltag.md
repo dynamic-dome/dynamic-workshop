@@ -185,9 +185,13 @@ Du kannst sagen, was `default` und `acceptEdits` ohne Rückfrage erlauben, eine 
 **Frage:** Du startest mit `claude --permission-mode acceptEdits` und bittest Claude, im Projektordner `rm -rf build/` auszuführen. Du erwartest eine Rückfrage, weil „Bash ja noch fragt“. Was passiert?
 
 - **Richtig:** Keine Rückfrage: `acceptEdits` nimmt Dateisystem-Befehle wie `rm` und `mv` im Arbeitsordner automatisch an, auch zerstörerische.
+  - Warum: `acceptEdits` nimmt neben Dateiänderungen auch gängige Dateisystem-Befehle im Arbeitsordner ohne Rückfrage an. Abgelehnt würde das Löschen erst mit einer Deny-Regel wie `Bash(rm *)`.
 - Falsch: Eine Rückfrage: `rm` gilt intern als Aufruf des Write-Werkzeugs, und Write fragt in `acceptEdits` jedes Mal einzeln nach.
+  - Warum: `rm` läuft über Bash, nicht über Write; deshalb greift eine Regel wie `Bash(rm *)`. Und Dateien schreiben fragt in `acceptEdits` gerade nicht nach.
 - Falsch: Keine Rückfrage, weil `acceptEdits` ausnahmslos jeden Shell-Befehl ohne Nachfrage ausführt, auch `npm test` und `curl`.
+  - Warum: Die Ausnahme gilt nur für Dateisystem-Befehle wie `mkdir`, `rm` und `mv`. Andere Shell-Befehle wie `npm test` fragen auch in `acceptEdits` weiter nach.
 - Falsch: Eine Rückfrage, weil du den Modus per Flag gesetzt hast; nur mit `Shift+Tab` gewählt gilt die Ausnahme für die Dateisystem-Befehle.
+  - Warum: Der Weg in den Modus ändert nichts: `Shift+Tab` und `--permission-mode acceptEdits` führen in denselben Modus mit denselben Regeln.
 
 </details>
 

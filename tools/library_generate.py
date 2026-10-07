@@ -52,8 +52,7 @@ def catalog(lib):
             "sources": list(ch.sources), "skip_check": list(ch.skip_check), "glance": ch.glance,
             "analogy": ch.analogy, "example": ch.example, "example_lang": ch.example_lang,
             "checkpoint": ch.checkpoint, "transferable": ch.transferable,
-            "quiz": ({"q": ch.quiz.question, "correct": ch.quiz.correct, "wrong": list(ch.quiz.wrong)}
-                     if ch.quiz else None),
+            "quiz": _quiz_entry(ch.quiz),
             # moderation layer: demo and moderator notes, relative to the library folder (or None)
             "demo": _demo_link(ch),
             # recall questions of the Check section and their answers (None: the chapter has no answer block yet)
@@ -72,6 +71,16 @@ def dump_json(data):
 
 def _link(ch, prefix=""):
     return f"[{ch.id} {ch.title}]({prefix}{ch.path.name})"
+
+
+def _quiz_entry(quiz):
+    """Quiz of a chapter; 'why' only when every answer has its reason, in the order of the answers."""
+    if not quiz:
+        return None
+    entry = {"q": quiz.question, "correct": quiz.correct, "wrong": list(quiz.wrong)}
+    if quiz.why_correct and len(quiz.why_wrong) == len(quiz.wrong) and all(quiz.why_wrong):
+        entry["why"] = {"correct": quiz.why_correct, "wrong": list(quiz.why_wrong)}
+    return entry
 
 
 def _demo_link(ch):

@@ -87,6 +87,9 @@ def test_catalog_fields(lib_dir):
     hook = by_id["S2.8"]
     assert hook["requires_all"] == ["S2.7"] and hook["area"] == "hooks" and hook["safety_floor"] is True
     assert hook["quiz"]["correct"] == "Exit-Code 2 blockt den Aufruf"
+    assert hook["quiz"]["why"]["correct"].startswith("Nur Exit-Code 2 ")
+    assert len(hook["quiz"]["why"]["wrong"]) == 3 and hook["quiz"]["why"]["wrong"][1].startswith("Exit-Code 1 ")
+    assert "why" not in by_id["S2.7"]["quiz"]  # no reasons in the chapter, no field
     assert hook["example"] == '{"hooks": {"PreToolUse": []}}' and hook["file"] == "s2-08-demo-hook.md"
     assert by_id["S2.20"]["offers"] == ["S2.8"]
     assert cat["placement"]["version"] == 1 and cat["shelves"][0]["zone"] == "Erweitern"
