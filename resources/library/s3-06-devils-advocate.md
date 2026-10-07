@@ -229,9 +229,13 @@ Du kannst ein Ankläger-Verteidiger-Paar selbst bauen und einsetzen, erklären, 
 **Frage:** Ein Scan meldet zwei Funde in einem Zugangssystem. (1) Eine SQL-Abfrage per Textverkettung steckt in einer Funktion, die nur ein Testskript aufruft. (2) Eine Prüfung gibt den Zutritt frei, wenn der Rechtedienst nicht antwortet. Welchen behebst du zuerst?
 
 - **Richtig:** Fund 2: Er greift im Betrieb bei jedem Ausfall, und der Schaden ist groß; Fund 1 hat keinen Angriffsweg, solange nur der Test die Funktion aufruft.
+  - Warum: Entscheidend ist, ob ein Angreifer die Stelle erreicht und wie groß der Schaden dort ist. Fund 2 ist ein Fail-open: Bei einem Fehler wird erlaubt statt verweigert. Bei Fund 1 fehlt der Angriffsweg.
 - Falsch: Fund 1: Eine SQL-Injection steht auf jeder Liste der schwersten Lücken, also zählt das Muster, auch wenn niemand die Funktion aufruft.
+  - Warum: Nicht das Muster zählt, sondern ob ein Angreifer die Stelle erreicht. Eine Injection in Code, den nur ein Test aufruft, sieht gefährlich aus, doch ihr Angriffsweg fehlt.
 - Falsch: Beide gleichzeitig, denn derselbe Scan hat beide gemeldet, und was ein Scan nennt, hat dieselbe Schwere wie sein Nachbar.
+  - Warum: Dass derselbe Scan beide meldet, macht sie nicht gleich schwer: Die Schwere hängt je Fund an Erreichbarkeit und Schaden. Beides prüfst du am Code, nicht am Bericht.
 - Falsch: Keinen: Ein Ausfall ist kein Angriff, und die Funktion ist nur ein Test, also sind beide Funde Fehlalarme ohne Handlungsbedarf.
+  - Warum: Ein Ausfall ist kein Angriff, aber erreichbar: Gibt die Prüfung dann den Zutritt frei, ist das ein Fail-open. Eine Zutrittsanlage muss bei einem Fehler sicher schließen (fail-secure).
 
 </details>
 
