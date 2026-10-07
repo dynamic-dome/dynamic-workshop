@@ -158,9 +158,13 @@ Du kannst eine Mehrdatei-Aufgabe im Plan-Modus planen lassen, den Plan mit einer
 **Frage:** Der Plan sieht gut aus, aber ein Schritt fasst die Konfigurationsdatei an, die du nicht anfassen willst. Was antwortest du?
 
 - **Richtig:** Die Antwort zum Nachschärfen wählen und die Grenze nennen („Do not change the config file“), dann den neuen Plan prüfen.
+  - Warum: Das ist Refine: Du bleibst im Plan-Modus, sagst, was sich ändern soll, und Claude legt einen neuen Plan vor. Erst nach deiner ausdrücklichen Freigabe wird umgesetzt.
 - Falsch: „Sieht gut aus“ antworten, denn Claude lässt den Schritt dann von selbst weg und fragt vor der Änderung nach.
+  - Warum: „Sieht gut aus“ ist eine vage Freigabe und kann Claude zu einem Schritt bewegen, den du nicht wolltest. Nenne die Grenze ausdrücklich und prüfe den neuen Plan.
 - Falsch: Den Plan freigeben und die Änderung hinterher mit `/rewind` zurücknehmen, weil ein Checkpoint auch Shell-Befehle erfasst.
+  - Warum: Der Plan setzt die Grenze vor der Umsetzung: Du korrigierst, bevor etwas entsteht. Freigeben und hinterher zurückdrehen lässt die Änderung erst zu.
 - Falsch: `Shift+Tab` drücken, weil das den Plan mit der Grenze neu schreibt und ihn zugleich zur Umsetzung freigibt.
+  - Warum: `Shift+Tab` schaltet reihum durch die Rechte-Modi und verlässt den Plan-Modus, ohne den Plan freizugeben. Nachschärfen geht mit „No, keep planning“.
 
 </details>
 
