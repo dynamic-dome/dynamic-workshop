@@ -1455,6 +1455,14 @@
    "quiz": {
     "correct": "Du legst sie als Skill ab: Von ihm liegt nur die Beschreibung im Kontext, der Inhalt wird erst geladen, wenn du `/name` tippst oder Claude ihn für passend hält.",
     "q": "Du kopierst für jedes Release dieselbe Checkliste mit 30 Zeilen in den Chat. Du überlegst, sie fest zu hinterlegen, und willst, dass sie nur dann Platz im Kontext braucht, wenn du ein Release vorbereitest. Was tust du?",
+    "why": {
+     "correct": "Erst beim Aufruf lädt ein Skill seinen Inhalt; bis dahin liegt nur die Beschreibung im Kontext. So kostet die lange Checkliste fast nichts, bis du ein Release vorbereitest.",
+     "wrong": [
+      "Die CLAUDE.md gilt bei jedem Start und liegt in jeder Sitzung im Kontext; nach einer Verdichtung lädt Claude Code sie neu (S1.8). Sie kostet also dauerhaft Platz, nicht nur beim Release.",
+      "In der `settings.json` stehen Rechte-Regeln, die Werkzeuge und Befehle freigeben oder sperren (S1.5). Eine Checkliste, die du immer wieder in den Chat kopierst, ist eine Prozedur und gehört in einen Skill.",
+      "Eine lose Markdown-Datei hat keine Beschreibung im Kontext, an der Claude erkennt, dass sie zum Release passt. Dieses Auswählen leistet erst ein Skill: Seine Beschreibung liegt vorab im Kontext."
+     ]
+    },
     "wrong": [
      "Du schreibst sie in die CLAUDE.md, denn dort liest Claude sie nur beim ersten Prompt der Sitzung und lädt sie danach nicht mehr.",
      "Du trägst sie in `.claude/settings.json` ein, denn diese Datei nimmt Checklisten als Regel auf und zeigt sie Claude bei jedem Prompt.",
@@ -1513,6 +1521,14 @@
    "quiz": {
     "correct": "In `description` und `when_to_use`: Claude vergleicht deine Anfrage mit diesem Text, `/name` funktioniert davon unabhängig.",
     "q": "`/commit-check` funktioniert, aber Claude lädt den Skill bei „Check my staged changes\" nie von selbst. Wo suchst du zuerst?",
+    "why": {
+     "correct": "Claude entscheidet anhand der `description` (ergänzt durch `when_to_use`), wann er einen Skill lädt. `/name` braucht diesen Text nicht. Fehlt dein Satz dort, schreib ihn in `when_to_use`.",
+     "wrong": [
+      "Vor dem Aufruf liegt nur die Beschreibung im Kontext (S2.1), nicht der Body. Der Body ist der Ablauf, dem Claude nach dem Laden folgt; ob der Skill passt, entscheidet die `description`.",
+      "Der Name ist der Befehl, den du tippst. Ausgewählt wird nach der Beschreibung: Claude vergleicht deine Anfrage mit ihr, der Skillname muss in der Anfrage gar nicht vorkommen.",
+      "Ob Claude einen Skill selbst laden darf, regelt `disable-model-invocation` im Frontmatter (S2.3). Ohne den Schalter darf er es, eine Freischaltung braucht es nicht; hier hängt es an der `description`."
+     ]
+    },
     "wrong": [
      "Im Body: Claude liest ihn schon vor dem Aufruf in jeder Sitzung und entscheidet anhand der ersten Zeile, ob der Skill zur Anfrage passt.",
      "Im Feld `name`: Claude lädt nur Skills, deren Name wörtlich in deiner Anfrage vorkommt, und `commit-check` fehlt in ihr.",
@@ -1572,6 +1588,14 @@
    "quiz": {
     "correct": "Claude darf den Skill selbst laden, wenn eine Anfrage zur Beschreibung passt, etwa „Was bräuchte es, um das live zu bringen?\".",
     "q": "Ein Skill für das Produktions-Deployment lässt `disable-model-invocation` auf dem Standardwert. Was ist das Risiko?",
+    "why": {
+     "correct": "Der Standardwert ist `false`: Claude darf den Skill laden, sobald eine Anfrage zur Beschreibung passt, auch ohne dein `/deploy`. Kritische Aktionen wie Deploy gehören deshalb auf `true`.",
+     "wrong": [
+      "Das Feld regelt, wer den Skill auslösen darf, nicht, wo er angezeigt wird. Mit dem Standardwert darf Claude ihn selbst laden, sobald die Beschreibung zur Anfrage passt.",
+      "Du verlierst nichts: Du tippst weiter `/name`, und Claude darf zusätzlich selbst laden. Nur `user-invocable: false` verbietet dir das Tippen und lässt allein Claude zu.",
+      "`allowed-tools` gibt Tools nur ohne Rückfrage frei und schränkt nichts ein; alle anderen bleiben verfügbar. Ein Skill kann sich damit sogar selbst weitreichende Rechte geben."
+     ]
+    },
     "wrong": [
      "Keines: Das Feld bestimmt nur, ob der Skill in der `/skills`-Liste erscheint; selbst laden kann Claude einen Skill ohnehin nie.",
      "Der Standardwert schaltet den Handbefehl ab, sodass nur noch Claude den Skill starten darf und du nicht mehr.",
@@ -1632,6 +1656,14 @@
    "quiz": {
     "correct": "Er baut und startet die App und beobachtet ihr Verhalten, statt sich auf Tests oder Typprüfungen zu verlassen.",
     "q": "Was unterscheidet `/verify` von einem normalen Testlauf wie `pytest` oder `npm test`?",
+    "why": {
+     "correct": "`/verify` baut die App wirklich und führt sie aus, statt sich auf Tests zu verlassen. Tests prüfen einzelne Einheiten, er beobachtet, was die App tut: genau darin liegt sein Wert.",
+     "wrong": [
+      "Ein Kürzel wäre feste Logik. Mitgelieferte Skills geben Claude stattdessen Anweisungen, hier: die App bauen, ausführen und beobachten, statt sich auf Tests zu verlassen.",
+      "Statische Prüfungen wie ESLint, `mypy` oder `tsc` sind nicht sein Kern. `/verify` startet die App und beobachtet, was sie tut, statt sich auf Tests oder Typprüfungen zu verlassen.",
+      "`/run` und `/verify` brauchen keine Einrichtung: Sie leiten aus Projekttyp und README, `package.json` oder `Makefile` ab, wie die App startet. `/run-skill-generator` lohnt erst bei mehr als einem Standardstart."
+     ]
+    },
     "wrong": [
      "Er ist ein Kürzel für den erkannten Test-Runner und wählt nur selbst zwischen `pytest`, `npm test` und `cargo test`.",
      "Er führt statische Analyse aus, also ESLint, mypy oder tsc, und ergänzt so den Testlauf um Lint- und Typfehler.",
@@ -1692,6 +1724,14 @@
    "quiz": {
     "correct": "Beim Aufruf, bevor der Text das Modell erreicht; Claude sieht nur die Ausgabe und kann den Befehl nicht ablehnen.",
     "q": "Wann läuft ein `` !`git diff HEAD` ``-Block in einer SKILL.md, und was folgt daraus für die Angriffsfläche?",
+    "why": {
+     "correct": "Claude Code ersetzt die `!`-Zeilen beim Aufruf durch die Ausgabe, bevor Claude den Text liest. Der Befehl läuft mit deinen Rechten, und Claude kann ihn nicht ablehnen: eine Angriffsfläche.",
+     "wrong": [
+      "Dann ist der Befehl längst gelaufen: Claude sieht die Daten, nicht den Befehl, und kann nichts mehr ablehnen. Darum prüfst du fremde Skills vor dem ersten Aufruf.",
+      "Die Befehle laufen beim Laden des Skills (S3.10), nicht erst bei deinem `/name`. Lädt Claude einen Skill selbst, läuft der Befehl genauso; Claude Code überspringt keinen.",
+      "Beim Start liegt von einem Skill nur die Beschreibung im Kontext (S2.1); die Befehle laufen erst beim Aufruf. Weil sie mit deinen Rechten laufen, ist `disableSkillShellExecution` als Härtung sinnvoll."
+     ]
+    },
     "wrong": [
      "Erst wenn Claude den Text liest; Claude entscheidet dann selbst, ob der Befehl wirklich läuft, und lehnt gefährliche ab.",
      "Nur bei einem Aufruf von Hand mit `/name`; lädt Claude den Skill selbst, überspringt Claude Code alle Befehle.",
@@ -1754,6 +1794,14 @@
    "quiz": {
     "correct": "Er läuft: `exit 1` meldet nur einen Hook-Fehler, über den Exit-Code allein blockt nur `exit 2`.",
     "q": "Dein PreToolUse-Wächter erkennt einen gefährlichen Befehl und endet mit `exit 1`. Was passiert mit dem Befehl?",
+    "why": {
+     "correct": "Über den Exit-Code allein blockt nur `exit 2`. Jeder andere Code, ein Absturz oder ein Timeout gilt als Hook-Fehler, und die Aktion läuft: für einen Wächter die gefährliche Fehlerrichtung.",
+     "wrong": [
+      "Ungleich 0 genügt nicht: Beim Exit-Code zählt allein die 2. `exit 1` meldet lediglich einen Hook-Fehler, die Aktion läuft weiter. Wer so blocken will, braucht `exit 2`.",
+      "Die Meldung auf stderr ist nur Begleittext: Im Beispielskript steht sie direkt vor `exit 2`, und erst dieser Code blockt. Mit `exit 1` bleibt es bei einem Hook-Fehler.",
+      "Das Gegenteil trifft zu: Ein Hook-Fehler bricht den Aufruf nicht ab. `exit 1`, ein Absturz und auch ein Timeout lassen die Aktion laufen; über den Exit-Code stoppt sie nur `exit 2`."
+     ]
+    },
     "wrong": [
      "Er wird geblockt, denn Claude Code behandelt jeden Exit-Code ungleich 0 als Ablehnung des Tool-Aufrufs.",
      "Er wird geblockt, sobald der Hook zusätzlich eine Begründung auf stderr schreibt, wie im Skript davor.",
@@ -1813,6 +1861,14 @@
    "quiz": {
     "correct": "`UserPromptSubmit`: Es feuert, bevor Claude den Prompt sieht, und kann ihn abweisen. `PreToolUse` käme zu spät, Claude hätte ihn schon gelesen.",
     "q": "Ein Team will verhindern, dass API-Keys aus dem Prompt beim Modell ankommen. Welches Hook-Ereignis passt, und warum ist ein naheliegendes anderes falsch?",
+    "why": {
+     "correct": "Das Secret steht schon im Prompt, bevor ein Tool-Aufruf entsteht. `UserPromptSubmit` feuert, bevor Claude den Prompt sieht; ein Hook dort kann ihn abweisen, aber nicht umschreiben oder schwärzen.",
+     "wrong": [
+      "Die Keys stehen im Prompt, nicht im Befehl. `PreToolUse` feuert erst bei einem Tool-Aufruf, da hat Claude den Prompt längst gelesen. `UserPromptSubmit` ist hier nicht zu früh, sondern rechtzeitig.",
+      "`SessionStart` feuert beim Start einer Sitzung, nicht bei jedem Prompt. Geprüft werden muss jeder abgeschickte Prompt, und das leistet das Ereignis, das je Prompt feuert: `UserPromptSubmit`.",
+      "`Stop` feuert erst, wenn Claude eine Antwort beendet hat; der Key ist dann längst beim Modell. Das Ereignis dient Zusammenfassungen, Aufräumarbeiten und Statusmeldungen, nicht dem Abfangen."
+     ]
+    },
     "wrong": [
      "`PreToolUse` mit Bash-Matcher, weil Keys fast immer in Shell-Befehlen stehen; `UserPromptSubmit` wäre zu früh und zu ungenau.",
      "`SessionStart`, weil es einmal pro Sitzung feuert und dort alle späteren Prompts nach Keys durchsuchen kann.",
@@ -1872,6 +1928,14 @@
    "quiz": {
     "correct": "Er läuft, denn 127 blockt nicht. Das Skript muss seine Eingabe selbst prüfen und bei einem Lesefehler mit `exit 2` enden.",
     "q": "Dein Wächter-Skript stürzt ab, weil `jq` fehlt, und endet mit Exit-Code 127. Was passiert mit dem gefährlichen Befehl, und wie änderst du das?",
+    "why": {
+     "correct": "Nur `exit 2` blockt; jeder andere Code (1, 127, ein Absturz) und ein Timeout lassen die Aktion laufen. Ein kaputter Wächter soll die Tür schließen: Das Skript endet bei unlesbarer Eingabe selbst mit 2.",
+     "wrong": [
+      "Das wäre fail-secure wie bei einem Türschloss. Claude Code macht es umgekehrt: Stürzt der Hook ab, läuft die Aktion. Die sichere Richtung musst du im Skript selbst wählen.",
+      "Einen Automatismus gibt es nicht: Jeder Absturz lässt die Aktion durch, auch beim zweiten Mal. Erst dein Skript macht den Wächter sicher, wenn es bei unlesbarer Eingabe mit `exit 2` endet.",
+      "Der Text auf stderr ist nur die Begründung. Ein Skript mit Fehlertext auf stderr und `exit 1` blockt nichts; erst `exit 2` stoppt den Aufruf, und dann geht der Text an Claude."
+     ]
+    },
     "wrong": [
      "Er wird geblockt, denn ein Hook, der nicht sauber läuft, gilt für Claude Code als Ablehnung und stoppt den Aufruf.",
      "Er läuft nur beim ersten Mal; danach blockt Claude Code ihn von selbst, bis der Hook wieder funktioniert.",
@@ -1933,6 +1997,14 @@
    "quiz": {
     "correct": "In das Frontmatter des Deploy-Skills: Dort wird er erst beim Aufruf registriert und bleibt dann bis zum Sitzungsende.",
     "q": "Eine Vorab-Prüfung soll nur dann scharf werden, wenn jemand `/deploy` aufruft, und nicht in jeder Sitzung. Wohin gehört der Hook?",
+    "why": {
+     "correct": "Skill-Hooks werden erst registriert, wenn der Skill aufgerufen wird, und bleiben dann bis zum Sitzungsende. Einen globalen Hook in `settings.json` brauchst du dafür nicht: Der Skill bringt ihn mit.",
+     "wrong": [
+      "Der `matcher` wählt Tools wie `Bash` oder `Edit` (S2.8), keine Skills. Außerdem gilt `~/.claude/settings.json` in all deinen Projekten und hängt nicht am Aufruf von `/deploy`.",
+      "Ein Subagent-Hook hängt am Subagenten, nicht am Skill: Er läuft nur, solange der Subagent läuft, und wird danach entfernt. Ein Skill-Hook entsteht erst beim Aufruf von `/deploy`.",
+      "Hooks aus Settings-Dateien laufen nach dem Vertrauensdialog (S2.6), ohne Slash-Befehl. Dort wäre die Prüfung in jeder Sitzung des Projekts scharf, nicht erst nach `/deploy`."
+     ]
+    },
     "wrong": [
      "In `~/.claude/settings.json` mit dem Matcher `/deploy`, denn der Matcher vergleicht den Namen des Skills, der gerade läuft.",
      "In das Frontmatter eines Subagenten, denn nur dort leben Hooks genau so lange, wie der Skill aktiv ist.",
@@ -1996,6 +2068,14 @@
    "quiz": {
     "correct": "Das Gate hängt nur an Write und Edit; der Shell-Befehl läuft an seinem Matcher vorbei. Eine Deny-Regel `Edit(./.env)` schließt die Lücke.",
     "q": "Du hast das Secure Diff Gate eingerichtet. Claude legt `.env` trotzdem an, mit `echo X > .env`. Was ist die richtige Erklärung?",
+    "why": {
+     "correct": "Das Gate ist so eng wie sein Matcher `Write|Edit` und sieht keine Shell-Befehle. Eine Deny-Regel wie `Edit(./.env)` gilt laut Doku auch für das Ziel einer Umleitung (`> file`) und schließt die Lücke.",
+     "wrong": [
+      "`exit 2` blockt einen PreToolUse-Aufruf, egal für welches Tool, und das Gate arbeitet richtig. Die Lücke liegt im Matcher, der nur Write und Edit sieht, nicht im Exit-Code.",
+      "`.env` steht auf der Liste des Gates, neben `.pem`, `secrets/` und `credentials`; ein Write darauf wird geblockt. Nur was die Shell schreibt, prüft das Gate nie.",
+      "PreToolUse feuert vor dem Tool-Aufruf und kann ihn blocken. Erst PostToolUse kommt danach, nur nach einem erfolgreichen Aufruf. Zeitlich ist das Gate richtig, nur sein Matcher ist zu eng."
+     ]
+    },
     "wrong": [
      "Das Gate ist defekt, denn `exit 2` blockt nach der Doku nur Aufrufe des Bash-Tools, nicht die von Write.",
      "Das Gate kennt `.env` nicht, es ist für `.pem` und `secrets/` gebaut und braucht eine eigene Zeile für jede weitere Datei.",
@@ -2059,6 +2139,14 @@
    "quiz": {
     "correct": "Das Plugin lädt ohne Manifest: Es heißt wie der Ordner, Name und Version aus deiner Datei fehlen.",
     "q": "Du legst `plugin.json` direkt in den Plugin-Root statt nach `.claude-plugin/` und startest `claude --plugin-dir ./mein-ordner`. Was passiert?",
+    "why": {
+     "correct": "Das Manifest ist optional. Liegt `plugin.json` im Root statt unter `.claude-plugin/`, lädt Claude Code die Komponenten trotzdem und nimmt bei `--plugin-dir` den Ordnernamen als Plugin-Namen.",
+     "wrong": [
+      "Ein fehlendes Manifest verhindert das Laden nicht: Es ist optional, und Claude Code lädt die Komponenten trotzdem. Nur der Plugin-Name kommt dann vom Ordner statt aus der Datei.",
+      "Das Manifest wird unter `.claude-plugin/` erwartet, nicht im Root. Läse Claude Code die Datei im Root, trüge das Plugin ihren `name`; es nimmt aber den Ordnernamen.",
+      "Die Komponenten findet Claude Code über die Ordner (Auto-Discovery), nicht über das Manifest. `skills/` und `agents/` sind also da; nur das Präfix ändert sich, weil der Name vom Ordner kommt."
+     ]
+    },
     "wrong": [
      "Das Plugin lädt gar nicht, und Claude Code bricht den Start mit einem Manifest-Fehler ab.",
      "Claude Code liest die Datei trotzdem, weil der Loader beide Orte durchsucht und den Root bevorzugt.",
@@ -2124,6 +2212,14 @@
    "quiz": {
     "correct": "Es ist für sie aktiviert, doch sie installiert es einmal selbst mit `--scope project`.",
     "q": "Du installierst ein Plugin im project-Scope und committest `.claude/settings.json`. Eine Kollegin klont das Repo. Was gilt für sie?",
+    "why": {
+     "correct": "Der eingecheckte Eintrag schaltet das Plugin für alle im Repo ein, lädt es aber nicht auf ihren Rechner. Eingecheckt heißt aktiviert, nicht installiert; die Installation holt jede Person selbst nach.",
+     "wrong": [
+      "Ins Repo wandert nur der Eintrag in `.claude/settings.json`. Die installierte Kopie des Plugins liegt unter `~/.claude/plugins/cache/` (S2.11), nicht im Repo, und Git bringt sie nicht mit.",
+      "Aktivieren muss sie nichts: Der Eintrag im Repo schaltet es für alle dort ein. `--scope user` wäre ein eigener Eintrag in `~/.claude/settings.json`, für alle ihre Projekte statt fürs Team.",
+      "`.claude/settings.local.json` gehört zum Scope `local`: persönlich und nicht geteilt. Das Team-Plugin steht in der eingecheckten `settings.json` und gilt dort schon; ein Umbenennen ist unnötig."
+     ]
+    },
     "wrong": [
      "Das Plugin läuft bei ihr sofort, weil Git den Plugin-Code beim Klonen gleich mit herunterlädt.",
      "Für sie ist es nicht aktiviert, doch sie kann es sich mit `--scope user` selbst einschalten.",
@@ -2190,6 +2286,14 @@
    "quiz": {
     "correct": "Seine Hooks laufen als Shell-Befehle mit deinen Rechten und außerhalb der Sandbox.",
     "q": "Welche Aussage über ein aktives Plugin aus einem fremden Marketplace stimmt?",
+    "why": {
+     "correct": "Command-Hooks führen Shell-Befehle mit deinen vollen Benutzerrechten aus. Rechte-Regeln und Sandbox decken nur Claudes Tool-Aufrufe ab, nicht den Code, den ein Plugin von sich aus ausführt.",
+     "wrong": [
+      "`validate` prüft Manifest, Schema und Pfade, keine Schadlogik. Das Übungs-Plugin `tidy-helper` besteht die Prüfung und schickt trotzdem Daten an eine fremde Adresse.",
+      "Rechte-Regeln greifen bei Claudes Tool-Aufrufen, nicht bei Hooks. Ein Hook startet bei seinem Ereignis von selbst, etwa `SessionStart`, ohne dass Claude oder du etwas auslöst.",
+      "Ein aktiviertes Plugin gehört zu jeder Sitzung, auch ohne Aufruf. Claude Code verbindet sich mit den MCP-Servern, die es deklariert; ein stdio-Server startet als Prozess auf deinem Rechner."
+     ]
+    },
     "wrong": [
      "`claude plugin validate` prüft den Code auf Schadlogik und blockt verdächtige Plugins.",
      "Seine Hooks laufen nur, wenn deine Rechte-Regeln den Befehl ausdrücklich erlauben.",
@@ -2258,6 +2362,14 @@
    "quiz": {
     "correct": "Die Freigabe: Server aus einer `.mcp.json` nutzt Claude Code erst, nachdem du sie in einer interaktiven Sitzung bestätigt hast.",
     "q": "Du hast den Server in die `.mcp.json` des Projekts eingetragen. `claude mcp list` zeigt ihn mit dem Status `Pending approval`, und in der Sitzung fehlen seine Tools. Was fehlt?",
+    "why": {
+     "correct": "Server aus einer `.mcp.json` nutzt Claude Code erst nach deiner Bestätigung, damit ein geklontes Repo sich keine Server unterschieben kann. Genau das meldet `Pending approval`.",
+     "wrong": [
+      "Dass der Server in `claude mcp list` steht, zeigt, dass Claude Code die `.mcp.json` liest. Er wartet nur auf deine Bestätigung; ein Neueintragen mit `--scope user` ist unnötig.",
+      "`/reload-plugins` lädt geänderte Plugin-Dateien neu (S2.11). Dein Server steht in der `.mcp.json`, nicht in einem Plugin, und ihm fehlt nur die Bestätigung.",
+      "`reset-project-choices` setzt deine Entscheidung zu den Projekt-Servern nur zurück; zugelassen wird dadurch nichts. Freigeben musst du den Server selbst, in einer interaktiven Sitzung."
+     ]
+    },
     "wrong": [
      "Der Server muss mit `claude mcp add --scope user` neu eingetragen werden, weil Claude Code eine `.mcp.json` im Projekt grundsätzlich nicht liest.",
      "Ein `/reload-plugins` lädt den Server nach, weil es alle Erweiterungen der laufenden Sitzung neu einliest.",
@@ -2316,6 +2428,14 @@
    "quiz": {
     "correct": "`project`: Der Eintrag steht in der `.mcp.json` im Projektordner und wird mit dem Repo eingecheckt.",
     "q": "Ein MCP-Server soll für alle bereitstehen, die das Repo klonen, ohne dass jemand `claude mcp add` aufruft. Welcher Scope passt?",
+    "why": {
+     "correct": "Der Scope `project` legt den Eintrag in die `.mcp.json` im Projektordner, und die geht über die Versionskontrolle ans Team. Bestätigen muss jede Person den Server beim ersten Start trotzdem.",
+     "wrong": [
+      "`user` gilt zwar in allen deinen Projekten, steht aber in `~/.claude.json` in deinem Home-Verzeichnis und wird nicht mit dem Team geteilt. Beim Klonen kommt davon nichts mit.",
+      "`local` bei MCP ist nicht die `.claude/settings.local.json`: Der Eintrag steht in `~/.claude.json` in deinem Home-Verzeichnis, unter dem Eintrag des Projekts, und wird nicht mit dem Team geteilt.",
+      "Das Gegenteil stimmt: Claude Code liest die Server aus der `.mcp.json` des Repos. Nutzen darf es sie erst, nachdem du sie in einer interaktiven Sitzung bestätigt hast; anlegen musst du nichts."
+     ]
+    },
     "wrong": [
      "`user`: Der Eintrag gilt in allen Projekten und reist deshalb beim Klonen automatisch mit.",
      "`local`: Der Standard-Scope schreibt in die `.claude/settings.local.json` des Projekts, die das Team automatisch mit auscheckt.",
@@ -2375,6 +2495,14 @@
    "quiz": {
     "correct": "Claude Code legt das Ergebnis als Datei ab und ersetzt es im Gespräch durch einen Hinweis mit dem Pfad.",
     "q": "Ein Postgres-MCP-Server liefert auf eine Abfrage ein Ergebnis von etwa 40.000 Token. Was passiert ohne weitere Einstellung?",
+    "why": {
+     "correct": "Über dem Standard-Maximum von 25.000 Token speichert Claude Code ein Ergebnis als Datei, damit es das Kontextfenster nicht flutet. Im Gespräch steht der Pfad; Claude liest die Datei bei Bedarf.",
+     "wrong": [
+      "25.000 Token sind eine Schwelle, kein Schnitt. Ein größeres Ergebnis ersetzt Claude Code im Gespräch durch einen Hinweis mit dem Pfad; es liegt in einer Datei, und Claude liest sie, wenn es den Inhalt braucht.",
+      "Der Aufruf geht auch ohne Aufteilen durch: Ein Ergebnis über dem Limit wird als Datei gespeichert und im Gespräch durch den Pfad ersetzt. Antworten in Teilen sind nur ein Weg, wenn du die Daten direkt brauchst.",
+      "Die Schwellen gelten für große Ausgaben von MCP-Tools und knüpfen an keinen Transport an. Mit 40.000 Token liegt die Antwort über dem Maximum von 25.000, ob der Server per stdio oder HTTP antwortet."
+     ]
+    },
     "wrong": [
      "Claude Code schneidet bei 25.000 Token ab, und Claude sieht nur den Anfang der Antwort aus der Datenbank.",
      "Claude Code bricht den Tool-Aufruf mit einem Fehler ab, und der Server muss seine Antwort erst aufteilen.",
@@ -2435,6 +2563,14 @@
    "quiz": {
     "correct": "Die Sandbox begrenzt Claudes Shell-Befehle; der Server-Prozess läuft außerhalb, und nur Claudes Aufrufe seiner Tools begrenzt du mit Regeln.",
     "q": "Du hast die Sandbox eingeschaltet und einen stdio-MCP-Server angebunden. Was ist richtig?",
+    "why": {
+     "correct": "Hooks und MCP-Server laufen außerhalb der Sandbox; sie begrenzt nur die Shell-Befehle, die Claude startet. An den Tools des Servers setzen deine Rechte-Regeln an, etwa `mcp__rooms__door_code`.",
+     "wrong": [
+      "Ein stdio-Server ist ein Prozess auf deinem Rechner, und Server-Prozesse laufen außerhalb der Sandbox. Du begrenzt Claudes Aufrufe, nicht das, was der Server intern tut; das hängt an seinem Code.",
+      "Auch MCP-Tools haben Rechte-Regeln, etwa `mcp__rooms__door_code`, und die Übung zeigt, dass sie halten. Die Sandbox ergänzt das nicht, denn der Server-Prozess läuft außerhalb von ihr.",
+      "Ob Claude ein Tool des Servers aufrufen darf, entscheiden deine Rechte-Regeln, etwa eine Deny-Regel `mcp__<server>__<tool>`. Die Sandbox begrenzt nur die Shell-Befehle, die Claude startet."
+     ]
+    },
     "wrong": [
      "Der Server läuft in der Sandbox und kann deshalb nur Dateien im Projektordner lesen, egal welchen Code er selbst enthält.",
      "Rechte-Regeln wirken nur auf die eingebauten Werkzeuge; für MCP-Tools brauchst du deshalb zusätzlich die Sandbox.",
@@ -2500,6 +2636,14 @@
    "quiz": {
     "correct": "Claude bekommt nur die Dateiliste von `kb`; die Inhalte muss es erst mit seinen Lese- und Suchwerkzeugen holen.",
     "q": "Du tippst `@kb` und stellst eine Frage zu einem Fehlercode, der nur in einer der Dateien in `kb/` steht. Was passiert mit dem Ordner?",
+    "why": {
+     "correct": "Ein Ordner-Verweis zeigt die Dateiliste, nicht die Inhalte. Welche Datei den Fehlercode enthält, findet Claude erst, wenn es mit seinen Such- und Lese-Werkzeugen in die Dateien schaut.",
+     "wrong": [
+      "Die ganze Datei lädt `@datei`, und zwar für eine einzelne Datei. Bei `@ordner` landet nur die Dateiliste im Gespräch; der Fehlercode steht dann noch nicht im Kontext.",
+      "Index und Suche pro Frage gehören zum gehosteten Weg: NotebookLM indexiert hochgeladene Quellen. Beim Ordner durchsucht und liest Claude die Dateien selbst, und `@kb` liefert nur die Liste.",
+      "`@` mit einem Ordner ist erlaubt und liefert die Dateiliste. Nur die Inhalte lädt es nicht; die holt Claude mit seinen Werkzeugen, oder du lädst eine einzelne Datei mit `@datei` ganz."
+     ]
+    },
     "wrong": [
      "Alle Dateien aus `kb` werden vollständig in das Gespräch geladen, sodass Claude den Fehlercode sofort im Kontext hat.",
      "Claude Code baut daraus einen Suchindex und lädt nur die Absätze, die zur Frage passen, genau wie NotebookLM.",
@@ -2564,6 +2708,14 @@
    "quiz": {
     "correct": "Ob eure Firma das Teilen dieses Codes mit Google Workspace erlaubt, denn jede Quelle liegt danach auf Google-Servern.",
     "q": "Ein Team will NotebookLM nutzen, damit Claude die interne Firmware eurer Produkte besser versteht. Was entscheidet, ob der Firmware-Code als Quelle hinein darf?",
+    "why": {
+     "correct": "Jede Quelle, die du einem Notebook hinzufügst, wird auf Google-Server hochgeladen und dort indexiert. Für proprietären Code heißt das: nur mit Erlaubnis deiner Firma zum Teilen mit Google Workspace, sonst lokal.",
+     "wrong": [
+      "Alles, was du lädst, liegt auf Google-Servern und wird erst dort indexiert; die Quelle selbst verlässt also deinen Rechner. Wie der Index sie danach speichert, ändert daran nichts.",
+      "NotebookLM wird von Google betrieben. Die Quelle verlässt deinen Rechner, sobald du sie einem Notebook hinzufügst, ob du das Notebook teilst oder nicht.",
+      "Die Kommandozeile `notebooklm` automatisiert nur Google NotebookLM (S2.18). Jede Quelle, die du einem Notebook hinzufügst, geht auf Google-Server, egal auf welchem Weg."
+     ]
+    },
     "wrong": [
      "Ob der Index Embeddings oder Originaltext speichert, denn Embeddings lassen sich nicht zurücklesen, also ist der Code nicht lesbar.",
      "Ob du das Notebook privat lässt, denn ein nicht geteiltes Notebook bleibt auf deinem Rechner und verlässt das Firmennetz nicht.",
