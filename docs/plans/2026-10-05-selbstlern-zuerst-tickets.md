@@ -35,7 +35,7 @@
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [x] cc1052a |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [x] siehe „Abschluss P8“ |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [x] siehe „Stand P9“; vom Owner am 2026-10-06 angesehen |
-| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | P10a bis P10f [x]; P10g (Abnahme) offen, siehe „P10“ |
+| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | P10a bis P10f [x]; P10g: Bilder fertig, Owner-Durchgang offen, siehe „P10“ |
 
 DCO-Todos unter #9632: P1 #9636 · P2 #9637 · P3 #9638 · P4 #9639 · P5 #9640 · P6 #9641 · P7 #9642 · P8 #9643 · P9 #9644 · P10 #9665.
 
@@ -924,7 +924,7 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
 | P10d | **Inhalte Session 2** (S2.1 bis S2.19), Ablauf wie P10c. | Frage 4 |[x] 2026-10-07, gemergt |
 | P10e | **Inhalte Session 3** (S3.1 bis S3.14), Ablauf wie P10c. | Frage 4 |[x] 2026-10-07, mit P10f in einem Lauf |
 | P10f | **Inhalte Session 4** (S4.1 bis S4.7, S4.9, S4.10, dazu S4.8 und S4.11), Ablauf wie P10c. Danach wird `--complete` bei unter 61 rot. | Frage 4, Frage 2 |[x] 2026-10-07, Gate `quiz-why-required` scharf |
-| P10g | **Abnahme.** Volle Suite, `validate --complete` 61 von 61, Bilder des Quiz nach richtiger und falscher Antwort in beiden Themen (`cockpit_shots.py`), Durchgang mit dem Owner. | — | [ ] |
+| P10g | **Abnahme.** Volle Suite, `validate --complete` 61 von 61, Bilder des Quiz nach richtiger und falscher Antwort in beiden Themen (`cockpit_shots.py`), Durchgang mit dem Owner. | — |Bilder und Prüfung [x] 2026-10-07; Durchgang mit dem Owner offen |
 
 ### Stand P10a bis P10c (2026-10-07)
 
@@ -951,6 +951,11 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
   1 CONTRADICTION, 1 MISSES-THE-ERROR, 1 STYLE, 1 ANSWER-DOUBT). Behoben: S3.5, S3.11, S4.1, S4.5 (auch die richtige
   Antwort, die Rollback und Schaden behauptete), S4.8 dreimal. Gelassen: S3.8 und S3.10 (Wortlaut des Kapitels) und
   die STYLE-Befunde zu Namen, die die Kapitel selbst ohne Backticks schreiben.
+- **P10g** (2026-10-07): Abnahme-Skript im echten Cockpit klickt in allen 64 Quizzen jede Antwort und prüft, dass
+  genau ihre Begründung erscheint: 256 Antworten, 0 Befunde, keine Skriptfehler, kein waagerechter Überlauf.
+  33 Bilder (S1.5, S2.16, S3.5, S4.5 richtig und falsch, Hell und Dunkel, 1280 und 390 px, dazu „Wiederholen“) samt
+  Skript unter `~/AI/analysis-artifacts/workshop-review-2026-10-05/cockpit-2026-10-05/p10g/`. Offen: der Durchgang
+  mit dem Owner, danach DCO #9665 schließen. Push steht aus (GitHub-Störung am 2026-10-07).
 - **Lehre für P10d bis P10f:** Der Auftrag hat sich bewährt. Schwach sind Begründungen dort, wo eine falsche Antwort
   einen Fakt aus einem anderen Kapitel benutzt (`/clear`, Checkpoints); dann den Denkfehler aus dem Kapitel benennen,
   nicht ausweichen. Oberflächen-Wortlaut („Tell Claude what to change“ statt des Doku-Namens) im Auftrag nennen.
