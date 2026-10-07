@@ -317,7 +317,7 @@ WHY_RIGHT = "  - Warum: Nur Exit-Code 2 "
 
 
 @pytest.mark.parametrize("old, new", [
-    (WHY_RIGHT + "gilt als blockierender Fehler; Claude Code bricht den Aufruf dann ab.", "  - Warum:"),  # empty
+    (WHY_RIGHT + "gilt als blockierender Fehler; mit `exit 2` bricht Claude Code den Aufruf ab.", "  - Warum:"),  # empty
     ("  - Warum: Exit-Code 1 ", "  - Warum: " + "x" * 221 + " "),  # too long
     ("  - Warum: Exit-Code 1 ", "  - Keinwarum: "),             # only three reasons
     (WHY_RIGHT, "- Warum: Nur Exit-Code 2 "),                   # not indented: belongs to no answer

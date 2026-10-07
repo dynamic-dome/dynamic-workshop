@@ -270,6 +270,9 @@ def cockpit_data(lib, catalog, diagrams=None):
             q = entry["quiz"]
             entry["quiz_html"] = {"q": inline_html(q["q"], ids_by_file), "correct": inline_html(q["correct"], ids_by_file),
                                   "wrong": [inline_html(w, ids_by_file) for w in q["wrong"]]}
+            if q.get("why"):  # reasons per answer (P10), in the order of the answers
+                entry["quiz_html"]["why"] = {"correct": inline_html(q["why"]["correct"], ids_by_file),
+                                             "wrong": [inline_html(w, ids_by_file) for w in q["why"]["wrong"]]}
         entry["full_url"] = REPO_URL + "resources/library/" + ch.path.name
     data["diagrams"], data["diagram_css"] = share_diagram_styles(diagrams)
     return data

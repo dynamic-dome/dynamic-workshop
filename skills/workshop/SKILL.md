@@ -141,7 +141,9 @@ Lies das Kapitel ganz, dann gehe nach **Typ** vor (Abschnitte, die das Kapitel n
 5. **Check**: die Abruffragen aus dem Kapitel (Katalogfeld `recall`) **ohne** Spickzettel stellen, eine nach der
    anderen, dann das Quiz (Optionen gemischt). Rückmeldung anhand der Auflösung des Kapitels (Katalogfeld `answers`,
    im Kapitel der Block „Auflösung"); zeig sie erst, nachdem die Person geantwortet hat. Fehlt die Auflösung,
-   begründe aus dem Kapiteltext.
+   begründe aus dem Kapiteltext. Beim Quiz nennst du nach der Antwort die Begründung **der gewählten Option** aus
+   `quiz.why` (`correct` oder der passende Eintrag in `wrong`, gleiche Reihenfolge wie `quiz.wrong`); die übrigen
+   Begründungen behältst du für einen zweiten Versuch. Fehlt `quiz.why`, begründe aus dem Kapiteltext.
 6. **Abschluss**: Hauptquelle nennen (`sources[0]`), Pfad zur Kapiteldatei für die Vertiefung, nächstes Kapitel.
    Erledigt wird ein Kapitel erst, wenn die Person es sagt oder die Übung gelaufen ist. War es das erste erledigte
    Kapitel, folgt die Mission-Frage (Einstufung, Schritt 7).
@@ -152,7 +154,8 @@ echter Evidenz (siehe Format).
 ## Abruf mit Abstand (`review`)
 
 Wähle bis zu fünf erledigte Kapitel, **am längsten nicht gesehene zuerst**, und mische die Themen. Stell je Kapitel
-eine Abruffrage oder das Quiz, ohne vorher zu erklären. Sitzt eine Antwort nicht, erkläre kurz, notiere das Kapitel
+eine Abruffrage oder das Quiz, ohne vorher zu erklären. Sitzt eine Antwort nicht, erkläre kurz (beim Quiz mit der
+Begründung der gewählten Option aus `quiz.why`), notiere das Kapitel
 in `NOTIZEN.md` unter „wiederholen" und schlag vor, es beim nächsten `next` zu überfliegen. Schwierigkeit ist hier
 gewollt: Abrufen baut Speicherstärke auf, flüssiges Wiedererkennen täuscht.
 

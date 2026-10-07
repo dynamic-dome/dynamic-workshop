@@ -34,6 +34,12 @@ def test_skill_frontmatter_and_modes():
     assert "aus dem Gedächtnis" in body  # no silent fallback to model knowledge
 
 
+
+def test_quiz_feedback_uses_the_reason_from_the_catalog():
+    """P10b: the tutor names the reason of the chosen answer (quiz.why) and keeps no copy of it."""
+    _, body = front(SKILL)
+    assert "`quiz.why`" in body
+
 def test_skill_and_mentor_reference_existing_or_generated_files():
     for path in (SKILL, MENTOR):
         for rel in plugin_paths(path.read_text(encoding="utf-8")):

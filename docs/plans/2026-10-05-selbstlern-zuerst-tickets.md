@@ -35,7 +35,7 @@
 | P7 | Ausrollen je Regal-Paket nach dem Maßstab (sechs Teilpakete, Sonnet-Schreiber, Codex-Gegenprüfung) | P5 | P7a [x] `bacbf60` · P7b [x] `2c9f792`, `dc7e02e` · P7c [x] `b72b648`, `bdb9082` · P7d [x] `8e75575`, `3a0f513` · P7e [x] `7b75b5e` · P7f [x] cc1052a |
 | P8 | Restliche Inhaltsbefunde R3 bis R13, R23, R24, R25, R29, R30 | P7 | [x] siehe „Abschluss P8“ |
 | P9 | UI-Überarbeitung des Cockpits (B1 bis B12 und was P2 offen lässt); eigene Fragerunde vorab | P8 | [x] siehe „Stand P9“; vom Owner am 2026-10-06 angesehen |
-| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | P10a [x]; P10b bis P10g offen, siehe „P10“ |
+| P10 | Begründung je Quiz-Antwort (B8): Format, Validator, Katalog, Cockpit, Tutor, Inhalte in vier Paketen; Fragerunde 2 am 2026-10-06 | P9 | P10a, P10b [x]; P10c bis P10g offen, siehe „P10“ |
 
 DCO-Todos unter #9632: P1 #9636 · P2 #9637 · P3 #9638 · P4 #9639 · P5 #9640 · P6 #9641 · P7 #9642 · P8 #9643 · P9 #9644 · P10 #9665.
 
@@ -919,7 +919,7 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
 | Teil | Verhalten, das gebaut wird | Herkunft | Stand |
 |---|---|---|---|
 | P10a | **Format, Parser, Validator, Katalog.** `- Warum: …` je Antwort wird geparst (`quiz.why`); `validate` meldet 1 bis 3 Begründungen je Quiz, leere oder über 220 Zeichen lange als Befund `quiz-why`; `--complete` zählt „Lektionen mit Begründung: n von 61“. Durchstich an S1.5 (vier Begründungen), Fixture-Kapitel mit und ohne, Spec §4.3 ergänzt. Test zuerst. | Fragen 1, 2 | [x] 2026-10-07 (Commit „P10a“) |
-| P10b | **Cockpit und Tutor.** Nach der Antwort die Begründung der gewählten Option (Kapitel und Wiederholen); ohne Begründung der heutige Verweis. Browser-Tests: richtig mit Warum, falsch mit Warum und Verweis, Kapitel ohne Warum unverändert, Wiederholen gleich. Tutor-Skill nennt die Begründung aus dem Katalog. | Frage 3, B8 | [ ] |
+| P10b | **Cockpit und Tutor.** Nach der Antwort die Begründung der gewählten Option (Kapitel und Wiederholen); ohne Begründung der heutige Verweis. Browser-Tests: richtig mit Warum, falsch mit Warum und Verweis, Kapitel ohne Warum unverändert, Wiederholen gleich. Tutor-Skill nennt die Begründung aus dem Katalog. | Frage 3, B8 | [x] 2026-10-07 (Commit „P10b“) |
 | P10c | **Inhalte Session 1** (S1.1 bis S1.19, dazu S0.1): Sonnet-Schreiber im Worktree, je Quiz vier Begründungen aus dem Kapiteltext, `validate`; lesende Codex-Gegenprüfung (Sachfehler, neue Fakten, Widerspruch zum Kapitel); Befunde an der Quelle, Owner-Stichprobe drei Kapitel; Merge. | Frage 4 | [ ] |
 | P10d | **Inhalte Session 2** (S2.1 bis S2.19), Ablauf wie P10c. | Frage 4 | [ ] |
 | P10e | **Inhalte Session 3** (S3.1 bis S3.14), Ablauf wie P10c. | Frage 4 | [ ] |

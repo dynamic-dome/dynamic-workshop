@@ -497,13 +497,56 @@ def test_copy_button_does_not_cover_the_code(browser, real_site):
 
 
 def test_a_wrong_quiz_answer_says_where_to_look(browser, site):
-    """B8, as far as the chapter format allows: there is no reason per option, so the feedback points to the text."""
+    """B8: a wrong answer always points to where the chapter explains it (with or without a reason per option)."""
     page, _ = open_page(browser, site + "?run=S2.8")
     page.locator(".quiz [data-action=quiz][data-correct='0']").first.click()
     feedback = page.locator(".quiz .feedback").inner_text()
     assert feedback.startswith("Nicht ganz") and "Auflösung" in feedback and "Im Detail" in feedback
     page.close()
 
+
+
+# --- P10b: after an answer the cockpit shows the reason of the chosen option, and only that one -------------
+
+WHY_RIGHT = "Nur Exit-Code 2 gilt als blockierender Fehler"
+WHY_ONE = "Exit-Code 1 ist ein Fehler, der nicht blockt"
+WHY_OTHERS = ("Ein anderer Code ungleich null", "Ein Timeout blockt nicht")
+
+
+def _answer(page, text):
+    page.locator(".quiz [data-action=quiz]", has_text=text).first.click()
+    return page.locator(".quiz .feedback").inner_text()
+
+
+def test_a_right_answer_says_why(browser, site):
+    page, errors = open_page(browser, site + "?run=S2.8")
+    feedback = _answer(page, "Exit-Code 2 blockt den Aufruf")
+    assert feedback.startswith("Richtig.") and WHY_RIGHT in feedback
+    assert page.locator(".quiz .feedback code", has_text="exit 2").count() == 1  # code span, not escaped markup
+    assert errors == []
+    page.close()
+
+
+def test_a_wrong_answer_says_why_this_one_and_where_to_look(browser, site):
+    page, errors = open_page(browser, site + "?run=S2.8")
+    feedback = _answer(page, "Exit-Code 1 blockt den Aufruf")
+    assert feedback.startswith("Nicht ganz.") and WHY_ONE in feedback
+    assert "Auflösung" in feedback and "versuch es noch einmal" in feedback
+    assert WHY_RIGHT not in feedback and not any(w in feedback for w in WHY_OTHERS)  # the others stay hidden
+    assert page.locator(".quiz [data-action=quiz]", has_text="Exit-Code 2 blockt").get_attribute("class") in (None, "")
+    feedback = _answer(page, "Exit-Code 2 blockt den Aufruf")  # trying again still works
+    assert feedback.startswith("Richtig.") and WHY_ONE not in feedback
+    assert errors == []
+    page.close()
+
+
+def test_a_quiz_without_reasons_answers_as_before(browser, site):
+    page, errors = open_page(browser, site + "?run=S2.7")
+    assert _answer(page, "Bevor ein Werkzeug ausgeführt wird") == "Richtig."
+    feedback = _answer(page, "Nachdem ein Werkzeug gelaufen ist")
+    assert feedback.startswith("Nicht ganz. Lies") and feedback.endswith("dann versuch es noch einmal.")
+    assert errors == []
+    page.close()
 
 def _done_script(days_ago):
     return ("localStorage.setItem('ccWorkshopUiState', JSON.stringify({done: {'S2.8': true}, doneAt: {'S2.8': "
@@ -515,6 +558,14 @@ def test_review_waits_a_day_before_it_asks(browser, site):
     page, errors = open_page(browser, site + "?screen=wiederholen", init_script=_done_script(0))
     assert page.locator(".review-q").count() == 0
     assert "Noch nichts fällig" in page.locator("main").inner_text()
+    assert errors == []
+    page.close()
+
+
+def test_review_shows_the_reason_too(browser, site):
+    page, errors = open_page(browser, site + "?screen=wiederholen", init_script=_done_script(2))
+    feedback = _answer(page, "Exit-Code 1 blockt den Aufruf")
+    assert feedback.startswith("Nicht ganz.") and WHY_ONE in feedback and "verlinkt" in feedback
     assert errors == []
     page.close()
 

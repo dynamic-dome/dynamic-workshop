@@ -131,6 +131,15 @@ def test_oversized_artefact_drops_diagrams_before_the_full_text(monkeypatch):
     assert all(c["html"] is None and c["full_url"].startswith("https://") for c in tiny["chapters"])
 
 
+
+def test_quiz_reasons_reach_the_cockpit_as_html_in_answer_order(monkeypatch):
+    data = _fixture_render(monkeypatch, 10_000_000, 10)
+    by_id = {c["id"]: c for c in data["chapters"]}
+    why = by_id["S2.8"]["quiz_html"]["why"]
+    assert "<code>exit 2</code>" in why["correct"]
+    assert len(why["wrong"]) == 3 and why["wrong"][1].startswith("Exit-Code 1 ")
+    assert "why" not in by_id["S2.7"]["quiz_html"]  # no reasons in the chapter, no field
+
 def test_script_safe_json_cannot_close_the_script():
     text = bc.script_safe_json({"x": "</script><script>alert(1)</script>", "y": "a b"})
     assert "</script" not in text and " " not in text

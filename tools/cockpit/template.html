@@ -833,10 +833,22 @@
     function quizBlock(c, idPrefix) {
       if (!c.quiz) return "";
       const qh = c.quiz_html || { q: esc(c.quiz.q), correct: esc(c.quiz.correct), wrong: c.quiz.wrong.map(esc) };
-      const options = shuffle([{ html: qh.correct, right: true }].concat(qh.wrong.map(w => ({ html: w, right: false }))));
+      // Each option keeps its place in the chapter ("c" or the index of the wrong answer): the reason travels with it.
+      const options = shuffle([{ html: qh.correct, right: true, opt: "c" }]
+        .concat(qh.wrong.map((w, i) => ({ html: w, right: false, opt: String(i) }))));
       return `<div class="quiz" data-quiz="${esc(c.id)}"><strong>${qh.q}</strong><div class="opts">` +
-        options.map(o => `<button type="button" data-action="quiz" data-id="${esc(c.id)}" data-correct="${o.right ? "1" : "0"}">${o.html}</button>`).join("") +
+        options.map(o => `<button type="button" data-action="quiz" data-id="${esc(c.id)}" data-correct="${o.right ? "1" : "0"}" data-opt="${o.opt}">${o.html}</button>`).join("") +
         `</div><p class="feedback" id="${idPrefix}-fb-${esc(c.id)}" aria-live="polite"></p></div>`;
+    }
+    // Reason of one quiz option as HTML (P10), or "" when the chapter has none. Built HTML comes from the generator
+    // (code spans); the plain catalog text only goes through esc().
+    function quizWhy(c, opt) {
+      const why = c && ((c.quiz_html && c.quiz_html.why) || (c.quiz && c.quiz.why));
+      if (!why) return "";
+      const html = !!(c.quiz_html && c.quiz_html.why);
+      const text = opt === "c" ? why.correct : (why.wrong || [])[Number(opt)];
+      if (typeof text !== "string" || !text) return "";
+      return html ? text : esc(text);
     }
     function renderChapter(id) {
       const c = CH[id];
@@ -1058,11 +1070,14 @@
         target.classList.add(right ? "right" : "wrong");
         target.setAttribute("aria-pressed", "true");
         const fb = box.querySelector(".feedback");
-        // The chapter format has no reason per option, so a wrong answer points to where the reason stands (B8).
+        // Only the reason of the chosen option shows (P10); the others stay hidden for the next try. A wrong answer
+        // also points to where the chapter explains it (B8); without reasons that pointer is all there is.
+        const why = quizWhy(CH[id], target.dataset.opt);
         const hasDetail = !!(CH[id] && (CH[id].html || "").includes("<h2>Im Detail</h2>"));
         const where = target.closest(".review-q") ? "Das Kapitel ist über der Frage verlinkt: Lies dort nach"
           : (hasDetail ? "Lies in „Im Detail“ nach" : "Lies im Kapitel nach") + " oder sieh dir die Auflösung im Check an";
-        fb.textContent = right ? "Richtig." : "Nicht ganz. " + where + ", dann versuch es noch einmal.";
+        fb.innerHTML = (right ? "Richtig." : "Nicht ganz.") + (why ? " " + why : "") +
+          (right ? "" : " " + esc(where) + ", dann versuch es noch einmal.");
       } else if (action === "toggle-done") {
         if (progress.done[id]) { delete progress.done[id]; delete progress.doneAt[id]; }
         else { progress.done[id] = true; progress.doneAt[id] = new Date().toISOString(); }
