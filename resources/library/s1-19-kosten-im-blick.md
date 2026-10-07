@@ -145,9 +145,13 @@ Du kannst mit `/cost` den Verbrauch deiner Sitzung ablesen, einen fairen Modellv
 **Frage:** Du hast ein privates Max-Abo ohne Vorgaben einer Organisation, und `/cost` zeigt am Ende einer Sitzung `Total cost` von 0,42 Dollar. Was bedeutet der Betrag?
 
 - **Richtig:** Eine Schätzung aus den Tokens zum Listenpreis; für die Abrechnung im Abo ist sie nicht relevant, zum Vergleich von Läufen taugt sie.
+  - Warum: Claude Code rechnet den Betrag lokal aus den Tokens zum Listenpreis aus, er ist eine Schätzung. Im Abo ist er für die Abrechnung nicht relevant, zum Vergleich taugt er.
 - Falsch: Den Betrag, den dir Anthropic zusätzlich zur Abo-Gebühr in Rechnung stellt, weil `/cost` die Abrechnung anzeigt.
+  - Warum: `/cost` zeigt keine Rechnung: Der Betrag ist eine lokale Schätzung. Mit Pro- oder Max-Abo ist er für die Abrechnung nicht relevant.
 - Falsch: Den verbindlichen Betrag, der immer genau mit der Usage-Seite der Claude Console übereinstimmt und dort auftaucht.
+  - Warum: Der lokal berechnete Betrag ist eine Schätzung. Verbindlich ist die Usage-Seite der Claude Console, nicht `/cost`.
 - Falsch: Einen festen Platzhalter ohne Bezug zu deinen Tokens, den Claude Code für Abos nur zur Anzeige einblendet.
+  - Warum: Der Betrag ist kein Platzhalter: Claude Code rechnet ihn aus deinen Tokens zum Listenpreis aus. Darum taugt er auch im Abo zum Vergleich von Modellen und Stufen.
 
 </details>
 

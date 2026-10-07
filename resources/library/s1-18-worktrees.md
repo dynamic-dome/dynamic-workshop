@@ -182,9 +182,13 @@ Du kannst für ein Experiment einen Worktree anlegen, begründen, wann er sich l
 **Frage:** Du lässt Claude in einem Worktree ein Migrationsskript ausprobieren, das sich mit dem Datenbankserver auf deinem Rechner verbindet. Was schützt der Worktree?
 
 - **Richtig:** Nur Dateien und Branch: Der Server ist derselbe wie für den Hauptordner, das Skript kann die Datenbank also verändern.
+  - Warum: Ein Worktree trennt Dateiänderungen und Branches. Prozesse, Datenbanken, Ports und deine Rechte trennt er nicht, also erreicht das Skript denselben Datenbankserver.
 - Falsch: Alles, denn ein Worktree ist eine abgetrennte Testumgebung mit eigener Kopie der Datenbank und der Dienste.
+  - Warum: Ein Worktree ist nur ein zweites Arbeitsverzeichnis mit eigenem Branch. Datenbanken, Ports und Prozesse trennt er nicht, eine eigene Datenbankkopie gibt es also nicht.
 - Falsch: Die Datenbank, denn Claude Code startet Befehle in einem Worktree automatisch in einer Sandbox ohne Zugriff.
+  - Warum: Ein Worktree ist keine Sandbox: Er trennt Dateiänderungen und Branches, keine Prozesse und keine Rechte. Den Schutz für deinen Rechner baust du anders.
 - Falsch: Nichts, denn ein Worktree schützt nur lesende Zugriffe, schreibende Dateiänderungen landen im Hauptordner.
+  - Warum: Gerade Dateiänderungen trennt er: Eine neue Datei liegt nur im Worktree, nicht im Hauptordner. Nicht getrennt sind Prozesse, Datenbanken, Ports und Rechte.
 
 </details>
 
