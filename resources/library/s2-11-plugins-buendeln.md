@@ -286,9 +286,13 @@ Du kannst die Verzeichnisstruktur eines Plugins aufzeichnen, es prüfen, ohne es
 **Frage:** Du legst `plugin.json` direkt in den Plugin-Root statt nach `.claude-plugin/` und startest `claude --plugin-dir ./mein-ordner`. Was passiert?
 
 - **Richtig:** Das Plugin lädt ohne Manifest: Es heißt wie der Ordner, Name und Version aus deiner Datei fehlen.
+  - Warum: Das Manifest ist optional. Liegt `plugin.json` im Root statt unter `.claude-plugin/`, lädt Claude Code die Komponenten trotzdem und nimmt bei `--plugin-dir` den Ordnernamen als Plugin-Namen.
 - Falsch: Das Plugin lädt gar nicht, und Claude Code bricht den Start mit einem Manifest-Fehler ab.
+  - Warum: Ein fehlendes Manifest verhindert das Laden nicht: Es ist optional, und Claude Code lädt die Komponenten trotzdem. Nur der Plugin-Name kommt dann vom Ordner statt aus der Datei.
 - Falsch: Claude Code liest die Datei trotzdem, weil der Loader beide Orte durchsucht und den Root bevorzugt.
+  - Warum: Das Manifest wird unter `.claude-plugin/` erwartet, nicht im Root. Läse Claude Code die Datei im Root, trüge das Plugin ihren `name`; es nimmt aber den Ordnernamen.
 - Falsch: Das Plugin lädt nur das Manifest; die Ordner `skills/` und `agents/` bleiben dabei unbeachtet.
+  - Warum: Die Komponenten findet Claude Code über die Ordner (Auto-Discovery), nicht über das Manifest. `skills/` und `agents/` sind also da; nur das Präfix ändert sich, weil der Name vom Ordner kommt.
 
 </details>
 

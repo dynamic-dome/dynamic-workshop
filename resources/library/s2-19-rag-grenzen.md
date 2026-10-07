@@ -183,9 +183,13 @@ Du kannst für eine Quelle begründen, ob sie in ein gehostetes RAG wie Notebook
 **Frage:** Ein Team will NotebookLM nutzen, damit Claude die interne Firmware eurer Produkte besser versteht. Was entscheidet, ob der Firmware-Code als Quelle hinein darf?
 
 - **Richtig:** Ob eure Firma das Teilen dieses Codes mit Google Workspace erlaubt, denn jede Quelle liegt danach auf Google-Servern.
+  - Warum: Jede Quelle, die du einem Notebook hinzufügst, wird auf Google-Server hochgeladen und dort indexiert. Für proprietären Code heißt das: nur mit Erlaubnis deiner Firma zum Teilen mit Google Workspace, sonst lokal.
 - Falsch: Ob der Index Embeddings oder Originaltext speichert, denn Embeddings lassen sich nicht zurücklesen, also ist der Code nicht lesbar.
+  - Warum: Alles, was du lädst, liegt auf Google-Servern und wird erst dort indexiert; die Quelle selbst verlässt also deinen Rechner. Wie der Index sie danach speichert, ändert daran nichts.
 - Falsch: Ob du das Notebook privat lässt, denn ein nicht geteiltes Notebook bleibt auf deinem Rechner und verlässt das Firmennetz nicht.
+  - Warum: NotebookLM wird von Google betrieben. Die Quelle verlässt deinen Rechner, sobald du sie einem Notebook hinzufügst, ob du das Notebook teilst oder nicht.
 - Falsch: Ob du die Quellen über die Kommandozeile statt über die Web-Oberfläche hochlädst, denn dann bleibt der Upload im Terminal.
+  - Warum: Die Kommandozeile `notebooklm` automatisiert nur Google NotebookLM (S2.18). Jede Quelle, die du einem Notebook hinzufügst, geht auf Google-Server, egal auf welchem Weg.
 
 </details>
 

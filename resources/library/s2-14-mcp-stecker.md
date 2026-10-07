@@ -286,9 +286,13 @@ Du kannst erklären, was ein MCP-Server gegenüber Copy-Paste bringt, und hast e
 **Frage:** Du hast den Server in die `.mcp.json` des Projekts eingetragen. `claude mcp list` zeigt ihn mit dem Status `Pending approval`, und in der Sitzung fehlen seine Tools. Was fehlt?
 
 - **Richtig:** Die Freigabe: Server aus einer `.mcp.json` nutzt Claude Code erst, nachdem du sie in einer interaktiven Sitzung bestätigt hast.
+  - Warum: Server aus einer `.mcp.json` nutzt Claude Code erst nach deiner Bestätigung, damit ein geklontes Repo sich keine Server unterschieben kann. Genau das meldet `Pending approval`.
 - Falsch: Der Server muss mit `claude mcp add --scope user` neu eingetragen werden, weil Claude Code eine `.mcp.json` im Projekt grundsätzlich nicht liest.
+  - Warum: Dass der Server in `claude mcp list` steht, zeigt, dass Claude Code die `.mcp.json` liest. Er wartet nur auf deine Bestätigung; ein Neueintragen mit `--scope user` ist unnötig.
 - Falsch: Ein `/reload-plugins` lädt den Server nach, weil es alle Erweiterungen der laufenden Sitzung neu einliest.
+  - Warum: `/reload-plugins` lädt geänderte Plugin-Dateien neu (S2.11). Dein Server steht in der `.mcp.json`, nicht in einem Plugin, und ihm fehlt nur die Bestätigung.
 - Falsch: Ein `claude mcp reset-project-choices` schaltet den Server frei, weil es alle Projekt-Server auf „zugelassen“ setzt.
+  - Warum: `reset-project-choices` setzt deine Entscheidung zu den Projekt-Servern nur zurück; zugelassen wird dadurch nichts. Freigeben musst du den Server selbst, in einer interaktiven Sitzung.
 
 </details>
 

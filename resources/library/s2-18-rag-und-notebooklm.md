@@ -248,9 +248,13 @@ Du kannst Claude Code Quellen geben, mit Quellenangabe antworten lassen und die 
 **Frage:** Du tippst `@kb` und stellst eine Frage zu einem Fehlercode, der nur in einer der Dateien in `kb/` steht. Was passiert mit dem Ordner?
 
 - **Richtig:** Claude bekommt nur die Dateiliste von `kb`; die Inhalte muss es erst mit seinen Lese- und Suchwerkzeugen holen.
+  - Warum: Ein Ordner-Verweis zeigt die Dateiliste, nicht die Inhalte. Welche Datei den Fehlercode enthält, findet Claude erst, wenn es mit seinen Such- und Lese-Werkzeugen in die Dateien schaut.
 - Falsch: Alle Dateien aus `kb` werden vollständig in das Gespräch geladen, sodass Claude den Fehlercode sofort im Kontext hat.
+  - Warum: Die ganze Datei lädt `@datei`, und zwar für eine einzelne Datei. Bei `@ordner` landet nur die Dateiliste im Gespräch; der Fehlercode steht dann noch nicht im Kontext.
 - Falsch: Claude Code baut daraus einen Suchindex und lädt nur die Absätze, die zur Frage passen, genau wie NotebookLM.
+  - Warum: Index und Suche pro Frage gehören zum gehosteten Weg: NotebookLM indexiert hochgeladene Quellen. Beim Ordner durchsucht und liest Claude die Dateien selbst, und `@kb` liefert nur die Liste.
 - Falsch: Claude Code verweigert den Verweis, weil `@` nur für einzelne Dateien erlaubt ist und nicht für ganze Ordner.
+  - Warum: `@` mit einem Ordner ist erlaubt und liefert die Dateiliste. Nur die Inhalte lädt es nicht; die holt Claude mit seinen Werkzeugen, oder du lädst eine einzelne Datei mit `@datei` ganz.
 
 </details>
 

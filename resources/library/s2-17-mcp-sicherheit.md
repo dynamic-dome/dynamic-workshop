@@ -229,9 +229,13 @@ Du kannst drei Risiken fremder MCP-Server mit je einer Gegenmaßnahme nennen, ei
 **Frage:** Du hast die Sandbox eingeschaltet und einen stdio-MCP-Server angebunden. Was ist richtig?
 
 - **Richtig:** Die Sandbox begrenzt Claudes Shell-Befehle; der Server-Prozess läuft außerhalb, und nur Claudes Aufrufe seiner Tools begrenzt du mit Regeln.
+  - Warum: Hooks und MCP-Server laufen außerhalb der Sandbox; sie begrenzt nur die Shell-Befehle, die Claude startet. An den Tools des Servers setzen deine Rechte-Regeln an, etwa `mcp__rooms__door_code`.
 - Falsch: Der Server läuft in der Sandbox und kann deshalb nur Dateien im Projektordner lesen, egal welchen Code er selbst enthält.
+  - Warum: Ein stdio-Server ist ein Prozess auf deinem Rechner, und Server-Prozesse laufen außerhalb der Sandbox. Du begrenzt Claudes Aufrufe, nicht das, was der Server intern tut; das hängt an seinem Code.
 - Falsch: Rechte-Regeln wirken nur auf die eingebauten Werkzeuge; für MCP-Tools brauchst du deshalb zusätzlich die Sandbox.
+  - Warum: Auch MCP-Tools haben Rechte-Regeln, etwa `mcp__rooms__door_code`, und die Übung zeigt, dass sie halten. Die Sandbox ergänzt das nicht, denn der Server-Prozess läuft außerhalb von ihr.
 - Falsch: Die Sandbox sperrt jeden Tool-Aufruf an den Server, sobald sie den Netzwerkzugriff einschränkt, und ersetzt so die Regeln.
+  - Warum: Ob Claude ein Tool des Servers aufrufen darf, entscheiden deine Rechte-Regeln, etwa eine Deny-Regel `mcp__<server>__<tool>`. Die Sandbox begrenzt nur die Shell-Befehle, die Claude startet.
 
 </details>
 

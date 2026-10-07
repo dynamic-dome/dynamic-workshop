@@ -233,9 +233,13 @@ Du kannst für eine Integration Transport und Scope begründen, einen Server im 
 **Frage:** Ein MCP-Server soll für alle bereitstehen, die das Repo klonen, ohne dass jemand `claude mcp add` aufruft. Welcher Scope passt?
 
 - **Richtig:** `project`: Der Eintrag steht in der `.mcp.json` im Projektordner und wird mit dem Repo eingecheckt.
+  - Warum: Der Scope `project` legt den Eintrag in die `.mcp.json` im Projektordner, und die geht über die Versionskontrolle ans Team. Bestätigen muss jede Person den Server beim ersten Start trotzdem.
 - Falsch: `user`: Der Eintrag gilt in allen Projekten und reist deshalb beim Klonen automatisch mit.
+  - Warum: `user` gilt zwar in allen deinen Projekten, steht aber in `~/.claude.json` in deinem Home-Verzeichnis und wird nicht mit dem Team geteilt. Beim Klonen kommt davon nichts mit.
 - Falsch: `local`: Der Standard-Scope schreibt in die `.claude/settings.local.json` des Projekts, die das Team automatisch mit auscheckt.
+  - Warum: `local` bei MCP ist nicht die `.claude/settings.local.json`: Der Eintrag steht in `~/.claude.json` in deinem Home-Verzeichnis, unter dem Eintrag des Projekts, und wird nicht mit dem Team geteilt.
 - Falsch: Keiner: Claude Code übernimmt nie Server aus einem Repo, jeder muss sie selbst anlegen.
+  - Warum: Das Gegenteil stimmt: Claude Code liest die Server aus der `.mcp.json` des Repos. Nutzen darf es sie erst, nachdem du sie in einer interaktiven Sitzung bestätigt hast; anlegen musst du nichts.
 
 </details>
 
