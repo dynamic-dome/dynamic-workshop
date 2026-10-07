@@ -188,9 +188,13 @@ Du kannst an einem Versuch zeigen, dass ein Subagent nur den Auftrag kennt, erkl
 **Frage:** Du änderst in einer Datei zwei zusammengehörige Funktionen: erst Plan, dann Umsetzung, dann Test, mit Rückfragen zwischendurch. Wie gehst du vor?
 
 - **Richtig:** Im Hauptgespräch bleiben: Die Phasen teilen viel Kontext, du willst eingreifen, und ein Subagent müsste jedes Mal neu einsteigen.
+  - Warum: Planen, Umsetzen und Testen teilen viel Kontext, und Rückfragen bedeuten Hin und Her. Beides spricht fürs Hauptgespräch: Ein Subagent startet frisch und braucht Zeit, um sich einzulesen.
 - Falsch: Je Phase einen Subagenten starten, damit jede Phase mit frischem, unbelastetem Kontext beginnt und sauber arbeitet.
+  - Warum: Hier wird der frische Kontext zum Nachteil: Ein Subagent sieht weder dein Gespräch noch die Dateien, die Claude schon gelesen hat. Phasen mit viel gemeinsamem Kontext erledigst du im Hauptgespräch.
 - Falsch: Die Funktionen parallel von zwei Subagenten bearbeiten lassen, weil parallele Arbeit die Zeit auf die Dauer des langsamsten verkürzt.
+  - Warum: Parallele Arbeit passt zu unabhängigen Aufgaben (S3.4); Plan, Umsetzung und Test bauen aufeinander auf. Jeder Subagent braucht außerdem Zeit zum Einlesen und zählt auf deine Nutzungsgrenzen.
 - Falsch: Einen Subagenten mit allen Tools starten, der alles in Ruhe selbst erledigt und dir nur das fertige Ergebnis zurückmeldet.
+  - Warum: Ein Subagent lohnt sich bei in sich abgeschlossener Arbeit, bei der eine Zusammenfassung genügt. Du willst aber zwischendurch eingreifen und verfeinern, und dafür bleibst du im Hauptgespräch.
 
 </details>
 

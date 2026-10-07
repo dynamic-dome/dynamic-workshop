@@ -223,9 +223,13 @@ Du kannst zu einer beschriebenen Aufgabe mit mehreren Agenten das passende Muste
 **Frage:** Du willst `reader.py` verbessern lassen: Agent 1 listet alle Funktionen ohne Prüfung der Eingabe, Agent 2 schreibt Tests für genau diese Funktionen. Welches Muster passt?
 
 - **Richtig:** Pipeline: Agent 2 braucht die Liste von Agent 1, und liefe er parallel, müsste er die Funktionen raten.
+  - Warum: Die Liste der Funktionen kann Claude erst in den Auftrag für Agent 2 schreiben, nachdem Agent 1 geantwortet hat. Diese Abhängigkeit macht es zur Pipeline: Jeder Schritt braucht das Ergebnis des vorigen.
 - Falsch: Fan-out/Fan-in: Beide Agenten lesen dieselbe Datei, also sind ihre Teilaufgaben unabhängig und laufen gleichzeitig.
+  - Warum: Nicht die gemeinsame Datei entscheidet, sondern ob ein Auftrag das Ergebnis eines anderen braucht. Agent 2 braucht die Liste von Agent 1: Das ist eine Pipeline, kein Fan-out.
 - Falsch: Hierarchie: Zwei zusammenarbeitende Agenten brauchen einen Unter-Orchestrator, der ihre Ergebnisse laufend abgleicht.
+  - Warum: Eine Hierarchie passt, wenn sich ein Problem auf mehreren Ebenen zerlegen lässt, etwa in großen Codebasen. Zwei Schritte, von denen einer den anderen braucht, sind eine Pipeline ohne Unter-Orchestrator.
 - Falsch: Fan-out/Fan-in: Parallel ist schneller, also starten beide gleichzeitig und Claude gleicht die Ergebnisse nachher ab.
+  - Warum: Tempo allein entscheidet das Muster nicht: Fan-out passt, wenn die Aufgaben unabhängig sind, und das prüfst du zuerst. Gleichzeitig gestartet, müsste Agent 2 die Funktionen raten, die Agent 1 erst findet.
 
 </details>
 

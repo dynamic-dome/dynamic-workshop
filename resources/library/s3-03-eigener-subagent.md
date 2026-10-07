@@ -242,9 +242,13 @@ Du kannst einen eigenen Subagenten mit YAML-Frontmatter definieren, seine Tools 
 **Frage:** Dein Subagent `reviewer` setzt `permissionMode: default`. Du arbeitest im Hauptgespräch im Modus `acceptEdits` und lässt ihn Änderungen prüfen. In welchem Modus läuft er?
 
 - **Richtig:** In `acceptEdits`: Das Hauptgespräch bestimmt den Modus, dein Feld wird ignoriert. Begrenzen kannst du ihn zuverlässig nur über `tools`.
+  - Warum: Das Hauptgespräch gibt hier den Modus vor: Läuft es in `bypassPermissions`, `acceptEdits` oder `auto`, übernimmt der Subagent ihn und `permissionMode` wird ignoriert. Begrenze ihn deshalb vor allem über `tools`.
 - Falsch: In `default`, denn das Feld im Subagenten hat Vorrang vor dem Modus des Hauptgesprächs, solange es in der Datei steht.
+  - Warum: „Steht in der Datei“ reicht nicht, denn `permissionMode` greift nicht immer. Bei `acceptEdits` im Hauptgespräch läuft der Subagent im selben Modus, und dein `default` wird ignoriert.
 - Falsch: Claude Code meldet einen Konflikt und lässt den Subagenten erst laufen, wenn du den Moduswechsel ausdrücklich bestätigt hast.
+  - Warum: Es gibt nichts zu bestätigen: Das Hauptgespräch gibt den Modus vor, und das Feld des Subagenten wird ignoriert. Der Subagent läuft im selben Modus wie du.
 - Falsch: Er startet nur, wenn beide Modi übereinstimmen; sonst bricht Claude Code den Aufruf des Subagenten mit einer Fehlermeldung ab.
+  - Warum: Eine Abweichung, an der der Aufruf scheitern könnte, entsteht gar nicht: Der Subagent übernimmt den Modus des Hauptgesprächs, und sein eigenes Feld wird ignoriert.
 
 </details>
 

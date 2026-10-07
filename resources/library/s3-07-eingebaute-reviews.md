@@ -201,9 +201,13 @@ Du kannst `/security-review`, `/code-review` und `/code-review ultra` voneinande
 **Frage:** Du hast auf einem Branch eine Funktion geändert, die Nutzereingaben in eine Shell-Zeile setzt. Die Änderung ist committet, und vor dem Merge willst du nur wissen, ob du eine Sicherheitslücke eingebaut hast. Was nimmst du?
 
 - **Richtig:** `/security-review`: Es prüft den Diff deines Branches gegen den Standard-Branch von `origin` auf Lücken wie Injection.
+  - Warum: Die Änderungen deines Branches prüft `/security-review` gezielt auf Risiken wie Injection, Auth-Probleme und offengelegte Daten. Nutzereingabe in einer Shell-Zeile ist eine Einschleusung, also sein Fall.
 - Falsch: `/code-review ultra`: Die Cloud-Flotte prüft am gründlichsten, also nimmst du sie für jede Änderung, auch für kleine.
+  - Warum: Gründlich heißt hier teuer: `ultra` rechnet über Usage Credits ab statt über das Kontingent deines Plans. Für die reine Frage nach Sicherheitslücken in deinen Änderungen ist `/security-review` vorgesehen.
 - Falsch: `/simplify`: Der Befehl prüft die geänderten Dateien und behebt dabei auch Sicherheitslücken, die er findet.
+  - Warum: `/simplify` räumt Code auf (S2.4): Er prüft nur auf Aufräumpotenzial, wendet Korrekturen an und sucht nicht nach Fehlern. Sicherheitslücken in deinem Branch prüft `/security-review`.
 - Falsch: `/code-review`: Es ist die Standardprüfung für Sicherheitslücken, und `/security-review` ist nur ihr Alias.
+  - Warum: Als Alias von `/code-review` gilt `/review`, nicht `/security-review`. `/code-review` sucht Korrektheitsfehler im Diff, `/security-review` dagegen gezielt Sicherheitsrisiken.
 
 </details>
 
