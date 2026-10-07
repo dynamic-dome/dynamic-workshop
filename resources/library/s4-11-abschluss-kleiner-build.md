@@ -179,9 +179,13 @@ Du kannst eine kleine Änderung mit Claude Code allein liefern und an fünf Krit
 **Frage:** Du hast Mission A umgesetzt. Alle 18 alten Tests sind grün, einen neuen Test hast du nicht geschrieben. Was kannst du über deine Änderung sagen?
 
 - **Richtig:** Nur, dass nichts anderes kaputtging; ob leere Namen jetzt abgelehnt werden, hat kein Test geprüft.
+  - Warum: Eine grüne Suite zeigt nur, dass nichts anderes kaputtging. Dass `add_user` leere Namen jetzt abweist, belegt erst ein Test, der genau dieses Verhalten trifft; hier gibt es keinen.
 - Falsch: Dass sie stimmt; die Suite deckt `add_user` ab, also prüft sie auch das neue Verhalten mit.
+  - Warum: Die 18 Tests liefen schon vor deiner Änderung grün (`18 passed`). Ein Test, der vorher und nachher grün ist, belegt das neue Verhalten nicht.
 - Falsch: Nichts; grüne Tests sagen bei einer von Claude geschriebenen Änderung grundsätzlich nichts aus.
+  - Warum: Etwas sagen sie sehr wohl: Die 18 alten Tests zeigen, dass nichts anderes kaputtging. Nur das neue Verhalten ist damit nicht belegt; dafür fehlt der Test.
 - Falsch: Dass sie stimmt, sobald Claude im Gespräch bestätigt, den Fall mit leeren Namen bedacht zu haben.
+  - Warum: Zusagen im Gespräch sind kein Beleg: Auch ein Guardrail zählt erst, wenn du gesehen hast, dass er ablehnt. Beim neuen Verhalten ist das der Lauf eines Tests, der es trifft.
 
 </details>
 
