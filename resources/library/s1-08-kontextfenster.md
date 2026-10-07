@@ -157,9 +157,13 @@ Du kannst erklären, was im Kontextfenster liegt, was mit frühen Gesprächsinha
 **Frage:** Nach drei Stunden in derselben Session hält sich Claude nicht mehr an eine Vorgabe, die du ganz am Anfang im Gespräch gemacht hast. Was ist die wahrscheinlichste Ursache?
 
 - **Richtig:** Das Fenster lief voll, Claude Code hat verdichtet, und die Vorgabe steckt nur noch ungenau in der Zusammenfassung.
+  - Warum: Bei der Verdichtung ersetzt eine Zusammenfassung den wörtlichen Verlauf. Ausführliche Anweisungen vom Anfang können dabei verloren gehen, und der Wortlaut lässt sich nicht zurückholen.
 - Falsch: Claude gewichtet neuere Nachrichten grundsätzlich höher und überschreibt ältere Vorgaben, sobald sie sich widersprechen.
+  - Warum: Hier geht es um Verdichtung, nicht um Widersprüche: Die Vorgabe stand nur im Gespräch und ist in der Zusammenfassung untergegangen. Dauerhaft gilt, was in der `CLAUDE.md` steht.
 - Falsch: Vorgaben aus dem Gespräch gelten nur für die nächste Antwort; für mehr hättest du sie jedes Mal wiederholen müssen.
+  - Warum: Deine Nachrichten liegen im Kontextfenster und bleiben dort bei jeder weiteren Nachricht. Frühes geht erst verloren, wenn das Fenster voll ist und Claude Code verdichtet.
 - Falsch: Die `CLAUDE.md` wurde nach einer Verdichtung neu geladen und hat dabei alle Vorgaben aus dem Gespräch ersetzt.
+  - Warum: Die `CLAUDE.md` ist die Gegenmaßnahme, nicht die Ursache: Claude Code lädt sie nach einer Verdichtung neu von der Platte, sie überlebt die Zusammenfassung also.
 
 </details>
 

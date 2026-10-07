@@ -162,9 +162,13 @@ Du kannst für eine Arbeitssituation die passende Oberfläche wählen, sagen, we
 **Frage:** Du hast in der CLI ein langes Refactoring begonnen und willst die Diffs lieber grafisch prüfen. Welcher Befehl bringt dich am direktesten dorthin?
 
 - **Richtig:** `/desktop`: Er übergibt die laufende Sitzung an die Desktop-App, unter macOS oder x64-Windows mit Claude-Abo.
+  - Warum: `/desktop` übergibt das Gespräch aus der Terminal-Sitzung an die Desktop-App. Sie ist dieselbe Engine mit grafischer Oberfläche, praktisch, wenn du Änderungen lieber in einer Diff-Ansicht prüfst.
 - Falsch: `/teleport`: Er schiebt die laufende Terminal-Sitzung in die Desktop-App und öffnet dort die Diff-Ansicht.
+  - Warum: `/teleport` geht in die andere Richtung: Es holt eine Cloud-Sitzung ins Terminal. Für den Wechsel aus dem Terminal in die Desktop-App ist `/desktop` da.
 - Falsch: `/mobile`: Er schiebt die laufende Sitzung auf dein Handy, sofern dort die Claude-App angemeldet ist.
+  - Warum: `/mobile` zeigt nur einen QR-Code, über den du die Claude-App aufs Handy holst. Die Sitzung wandert dabei nicht mit.
 - Falsch: `/chrome`: Er öffnet die laufende Sitzung mit grafischem Diff im Browser auf claude.ai/code.
+  - Warum: `/chrome` richtet Claude in Chrome ein, die Browser-Steuerung für Web-Tests. Mit claude.ai/code hat der Befehl nichts zu tun.
 
 </details>
 

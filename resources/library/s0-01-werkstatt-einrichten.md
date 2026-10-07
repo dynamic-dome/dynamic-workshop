@@ -222,9 +222,13 @@ Du kannst Claude Code installieren und anmelden und mit `claude --version` und `
 **Frage:** `claude --version` zeigt eine Version, aber `claude --print "Say hello"` endet mit einem Anmeldefehler. Was sagt dir das, und was tust du zuerst?
 
 - **Richtig:** Die Installation steht, die Anmeldung nicht: Abo oder API-Key prüfen und in einer Sitzung `/login` neu starten.
+  - Warum: `claude --version` zeigt nur, dass Claude Code installiert ist. Ob die Anmeldung klappt, zeigt erst `claude --print "Say hello"`; scheitert es, prüfst du Abo oder API-Key und gibst `/login` ein.
 - Falsch: Der Installationsordner fehlt im `PATH`: ein neues Terminal öffnen und den Ordner `~/.local/bin` dort eintragen.
+  - Warum: Fehlt der Ordner im `PATH`, scheitert schon `claude --version` mit „command not found“. Hier läuft der Befehl, also ist die Installation in Ordnung und die Anmeldung das Problem.
 - Falsch: Python fehlt noch: Ohne Python kann `claude --print` keine Antwort ausgeben, also zuerst Python installieren.
+  - Warum: Python brauchst du erst für die Übung in S1.1, in der Claude ein Skript schreibt und ausführt. Die Untergrenze für Python ist eine Vorgabe der Bibliothek, nicht von Claude Code.
 - Falsch: Die Installation ist beschädigt: Claude Code entfernen, den Installer neu ausführen und den Rechner neu starten.
+  - Warum: Eine angezeigte Version belegt, dass Claude Code installiert ist. Das Problem liegt bei der Anmeldung: Dort prüfst du Abo oder API-Key und gibst in einer Sitzung `/login` ein.
 
 </details>
 

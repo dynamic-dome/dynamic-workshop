@@ -152,9 +152,13 @@ Du kannst sagen, wann du `/compact`, `/rewind` oder `/clear` nimmst, und was kei
 **Frage:** Claude hat in einer Refactor-Session fünf Dateien über seine Datei-Werkzeuge geändert, und du willst alle fünf Änderungen zurücknehmen. Welcher Befehl ist richtig?
 
 - **Richtig:** `/rewind`: den Prompt wählen, mit dem die Änderungen begannen, und den Code wiederherstellen lassen.
+  - Warum: Jeder Prompt legt einen Checkpoint an; `/rewind` stellt den Stand vor dem gewählten Prompt wieder her. So drehst du mehrere Schritte auf einmal zurück, sofern sie über Claudes Datei-Werkzeuge liefen.
 - Falsch: `/compact`: Es verdichtet den Verlauf und setzt dabei die geänderten Dateien auf ihren alten Stand.
+  - Warum: `/compact` fasst nur den Verlauf zusammen; die Dateien auf der Platte bleiben, wie sie sind. Zum Zurückdrehen nimmst du `/rewind`.
 - Falsch: `/clear`: Es leert den Kontext und verwirft damit auch alle Änderungen der laufenden Session.
+  - Warum: `/clear` beginnt nur ein neues Gespräch mit leerem Kontext. Das ist ein Themenwechsel, kein Zurückdrehen; Dateiänderungen nimmst du mit `/rewind` zurück.
 - Falsch: `/context`: Es zeigt die geänderten Dateien an und bietet für jede das Zurücksetzen an.
+  - Warum: `/context` zeigt nur, wie voll das Fenster ist und wofür. Die Liste der Prompts samt geänderten Dateien öffnet `/rewind`.
 
 </details>
 

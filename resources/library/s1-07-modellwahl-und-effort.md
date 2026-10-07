@@ -166,9 +166,13 @@ Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur
 **Frage:** Du willst für genau eine Sitzung Sonnet mit der Stufe `high` nutzen. Dein Standard soll danach unverändert sein. Was tust du?
 
 - **Richtig:** Mit `claude --model sonnet --effort high` starten; die Start-Flags gelten nur für diese eine Sitzung.
+  - Warum: Start-Flags wirken nur für diese Sitzung und speichern nichts. `/model <alias>` und eine Stufe hinter `/effort` dagegen werden gespeichert und gelten später weiter.
 - Falsch: In der Sitzung `/model sonnet` und `/effort high` eingeben; beides gilt nur, bis du `/exit` eingibst.
+  - Warum: `/model <alias>` speichert das Modell als Standard für neue Sitzungen, eine Stufe hinter `/effort` ebenfalls. Mit `/exit` endet das nicht; für eine Sitzung nimmst du die Start-Flags.
 - Falsch: In der Auswahl von `/model` Sonnet wählen und mit Enter bestätigen; gespeichert wird erst mit `s`.
+  - Warum: Das ist vertauscht: Enter in der Auswahl speichert das Modell als Standard für neue Sitzungen. Mit `s` übernimmst du die Wahl nur für diese Sitzung.
 - Falsch: `/effort high` eingeben; eine Effort-Stufe gilt grundsätzlich nur für die Sitzung, in der du sie setzt.
+  - Warum: Nur `max` gilt allein für die laufende Sitzung. Jede andere Stufe hinter `/effort`, auch `high`, wird als Standard für dieses Modell gespeichert.
 
 </details>
 

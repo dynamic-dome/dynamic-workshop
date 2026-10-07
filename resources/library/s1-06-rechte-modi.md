@@ -177,9 +177,13 @@ Du kannst die sechs Rechte-Modi danach ordnen, wer statt dir prüft, den Startmo
 **Frage:** Claude will einen Befehl ausführen, der im Modus `default` eine Rückfrage auslösen würde. Was passiert mit ihm in `auto`, und was in `dontAsk`?
 
 - **Richtig:** In `auto` entscheidet ein Klassifikator-Modell über den Befehl; in `dontAsk` lehnt Claude Code ihn ab.
+  - Warum: Die Modi unterscheiden sich darin, wer prüft: In `auto` ein zweites Modell, der Klassifikator. In `dontAsk` gelten nur deine vorab geschriebenen Regeln, alles andere wird abgelehnt.
 - Falsch: In `auto` lehnt Claude Code ihn ab; in `dontAsk` läuft er, weil dieser Modus nie nachfragt.
+  - Warum: Du hast die Modi vertauscht. `dontAsk` fragt nie, weil er ablehnt, was fragen würde; er ist strenger als `default`. Die Entscheidung per Modell ist `auto`.
 - Falsch: In beiden Modi läuft er ungeprüft; sie unterscheiden sich nur in der Anzeige der Statusleiste.
+  - Warum: Beide Modi prüfen, nur anders: `auto` mit einem Klassifikator, der blockt, was über deinen Auftrag hinausgeht, `dontAsk` mit deinen Regeln. Fast keine Prüfung gibt es erst in `bypassPermissions`.
 - Falsch: In beiden Modi sammelt Claude Code die Rückfrage und stellt sie dir am Ende der Aufgabe.
+  - Warum: `auto` und `dontAsk` sind Modi ohne Rückfrage an dich, auch ohne spätere Sammelfrage: In `auto` entscheidet der Klassifikator, in `dontAsk` wird abgelehnt, was fragen würde.
 
 </details>
 

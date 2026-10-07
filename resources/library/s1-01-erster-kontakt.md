@@ -210,9 +210,13 @@ Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine 
 **Frage:** Du startest in einem neuen Ordner nur mit `claude`, bestätigst den Vertrauensdialog und gibst den Auftrag `Create a file hello.py … and run it.` Die Datei entsteht und läuft, aber es kam keine einzige Rückfrage. Was ist die wahrscheinlichste Erklärung?
 
 - **Richtig:** Die Sitzung läuft im Modus `auto`; mit `claude --permission-mode default` fragt Claude vor dem Schreiben und Ausführen.
+  - Warum: Ohne Flag startet eine Terminal-Sitzung ab Version 2.1.283 in `auto`: Ein zweites Modell prüft die Aktionen an deiner Stelle, und die Rückfragen bleiben meist aus.
 - Falsch: Der Vertrauensdialog hat alle Rückfragen für diesen Ordner abgeschaltet; sie kommen erst in einem neuen Ordner wieder.
+  - Warum: Der Vertrauensdialog fragt nur, ob du dem Ordner vertraust. Ob Claude vor einer Aktion fragt, hängt vom Rechte-Modus der Sitzung ab.
 - Falsch: Rückfragen gibt es nur bei Shell-Befehlen mit Risiko; das Anlegen und Ausführen einer Datei gilt als harmlos.
+  - Warum: Im Modus `default` fragt Claude vor Dateiänderungen und vor den meisten Shell-Befehlen, nicht erst bei riskanten. In der Übung gibst du das Anlegen und das Ausführen je einzeln frei.
 - Falsch: Claude hat die Datei nur vorgeschlagen und simuliert; geschrieben wird sie erst, wenn du `/exit` eingibst.
+  - Warum: Claude simuliert nichts: Nach deinem „Yes“ schreibt es die Datei wirklich und führt sie in deinem Ordner aus. `/exit` beendet nur die Sitzung.
 
 </details>
 
