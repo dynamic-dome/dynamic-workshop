@@ -173,9 +173,13 @@ Du kannst das Muster mit Bordmitteln durchspielen und seine Grenzen nennen.
 **Frage:** Nach einem autonomen Lauf sind alle Tests grün. Welche Prüfung brauchst du als Nächstes?
 
 - **Richtig:** Den Diff der Testdateien lesen, ob Assertions fehlen, denn ein grüner Lauf kann auch heißen, dass der Test weniger prüft als vorher.
+  - Warum: Claude kann einen Test „reparieren“, indem es die Assertion entfernt: Der Lauf bleibt grün, der Fehler auch. Darum liest du den Diff der Testdateien auf entfernte Assertions.
 - Falsch: Keine, denn Tests sind der Nachweis; ein grüner Lauf zeigt, dass der Fehler im Code behoben ist und nicht im Test.
+  - Warum: Grün heißt nicht gelöst: Ein Test ohne Assertion bleibt grün, ohne den Fehler zu prüfen. Ein grünes Ergebnis beweist deshalb nicht, dass ein Fix echt ist.
 - Falsch: Das Budget-Limit kontrollieren, denn ein eingehaltenes Budget zeigt, dass der Lauf keine Schein-Fixes geschrieben hat.
+  - Warum: Ein Budget gehört zum Kostenlauf: Es deckelt Ausgaben, sagt aber nichts über den Inhalt der Änderungen. Gegen Schein-Fixes liest du den Diff auf entfernte Assertions oder setzt einen Hook ein.
 - Falsch: Die Commit-Nachricht lesen, denn eine ausführliche Nachricht belegt, dass die Änderung am Code und nicht am Test erfolgte.
+  - Warum: Ob Code oder Test geändert wurde, liest du im Diff ab, nicht an einer Commit-Nachricht. Entfernte Assertions zeigt `git diff` auf die Testdateien.
 
 </details>
 
