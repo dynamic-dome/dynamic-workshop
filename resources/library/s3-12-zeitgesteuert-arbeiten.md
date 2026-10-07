@@ -221,9 +221,13 @@ Du kannst für eine wiederkehrende Aufgabe das passende Werkzeug wählen und sag
 **Frage:** Du gibst `/loop check whether CI passed` ein, ohne Intervall. Was stimmt?
 
 - **Richtig:** Claude wählt nach jedem Durchgang den Abstand selbst, zwischen einer Minute und einer Stunde. Der Loop endet mit der Sitzung oder nach sieben Tagen.
+  - Warum: Gibst du nur den Prompt an, wählt Claude den Abstand nach jedem Durchgang selbst. Ein Loop lebt in deinem Terminal, endet mit der Sitzung und läuft nach sieben Tagen von selbst ab.
 - Falsch: Der Loop läuft nur einmal, denn ohne Intervall gibt es keinen Takt, und danach wartet Claude auf deinen nächsten Prompt, bis du ihn erneut startest.
+  - Warum: Das Intervall ist optional. Auch mit nur einem Prompt wiederholt sich der Loop: Claude wählt nach jedem Durchgang den Abstand selbst, zwischen einer Minute und einer Stunde.
 - Falsch: Der Loop läuft im festen Takt von fünf Minuten, denn das ist der Standard, wenn du kein Intervall angibst, und er bleibt dabei, bis du ihn stoppst.
+  - Warum: Fünf Minuten stehen nur im Beispiel `/loop 5m check the deploy`, weil du dort das Intervall selbst angibst. Ohne Intervall legt Claude den Abstand selbst fest.
 - Falsch: Der Loop läuft als Routine in der Cloud weiter, auch wenn du die Sitzung schließt, solange du angemeldet bleibst und das Abo aktiv ist.
+  - Warum: Loops leben in deinem Terminal und hören auf, wenn du die Sitzung schließt. In der Cloud läuft nur eine Routine, und die legst du mit `/schedule` an.
 
 </details>
 

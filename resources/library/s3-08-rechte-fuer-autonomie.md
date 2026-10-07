@@ -229,9 +229,13 @@ Du kannst für einen autonomen Lauf den passenden Modus wählen, Allow-, Ask- un
 **Frage:** Ein nächtlicher Lauf in `dontAsk` hat nur `Bash(npm test)` in der Allow-Liste. Im Protokoll steht, dass Claude `npm install` nicht ausführen konnte. Was ist passiert und was tust du?
 
 - **Richtig:** `npm install` braucht eine Freigabe und trifft keine Allow-Regel, deshalb lehnt `dontAsk` ihn ab. Erlauben kannst du ihn mit `Bash(npm install)` in der Allow-Liste.
+  - Warum: Nur was ohne Freigabe läuft oder eine Allow-Regel trifft, läuft in `dontAsk`. `npm install` ist keins von beiden und wird abgelehnt, nicht erfragt.
 - Falsch: Claude hat bei `npm install` nachgefragt, im nächtlichen Lauf antwortet niemand, und der Lauf wartet deshalb weiter auf eine Antwort von dir.
+  - Warum: `dontAsk` fragt nie: Was sonst eine Rückfrage auslösen würde, lehnt er ab. Der Lauf wartet also nicht auf dich, sondern der Aufruf fehlt einfach.
 - Falsch: `dontAsk` sperrt alles, was das Netz berührt, und eine Allow-Regel kann an dieser Sperre nichts ändern, auch nicht für diesen einen Befehl.
+  - Warum: Hier entscheiden deine Regeln: Es läuft alles, was eine Allow-Regel trifft. Mit `Bash(npm install)` in der Allow-Liste liefe auch dieser Befehl.
 - Falsch: Der Lauf braucht `bypassPermissions`, denn Allow-Regeln wirken nur dort, und `dontAsk` lässt ausschließlich Lesebefehle zu, sonst nichts.
+  - Warum: Das ist umgekehrt: In `bypassPermissions` haben Allow-Regeln keine Wirkung. In `dontAsk` läuft neben Lesebefehlen alles, was eine Allow-Regel trifft.
 
 </details>
 

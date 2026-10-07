@@ -297,9 +297,13 @@ Du kannst die Aufbewahrungsstufen nennen, Anliegen einer Kontrolle zuordnen und 
 **Frage:** Ein Team auf dem Team-Plan soll laut seiner Datenschutzabteilung „nichts mehr bei Anthropic speichern“. Was sagst du?
 
 - **Richtig:** Dafür braucht es ZDR, das Anthropic je Organisation freischaltet. Der Team-Plan trainiert standardmäßig nicht, bewahrt aber 30 Tage auf.
+  - Warum: Der Team-Plan bewahrt 30 Tage auf; erst ZDR heißt keine Speicherung nach der Antwort. Anthropic prüft die Berechtigung und schaltet ZDR je Organisation frei.
 - Falsch: `DISABLE_TELEMETRY=1` in den Umgebungsvariablen aller Rechner genügt, denn damit speichert Claude Code nichts mehr bei Anthropic.
+  - Warum: `DISABLE_TELEMETRY` stoppt nur Nutzungsmetriken, und die enthalten laut Doku nie deine Prompts. Wie lange Prompts und Antworten bleiben, hängt vom Plan ab.
 - Falsch: Ein Admin schaltet ZDR in den Einstellungen der Organisation ein, danach gilt es für alle Anmeldungen und für alle Funktionen.
+  - Warum: ZDR lässt sich nicht in den Admin-Einstellungen einschalten: Anthropic prüft und schaltet es frei. Es gilt nur für Anmeldungen in der ZDR-Organisation, einige Funktionen entfallen.
 - Falsch: Jeder Enterprise-Plan enthält ZDR bereits, deshalb ist der Wechsel vom Team-Plan auf Enterprise die einzige nötige Änderung.
+  - Warum: Der normale Enterprise-Plan enthält kein ZDR. Ohne Freischaltung durch Anthropic bleibt es auch dort bei 30 Tagen Aufbewahrung.
 
 </details>
 
