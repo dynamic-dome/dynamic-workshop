@@ -752,10 +752,10 @@
     "correct": "Eine Notiz im Auto-Memory: Du öffnest sie über `/memory` und bearbeitest oder löschst sie.",
     "q": "Nach einem Neustart „weiß“ Claude etwas Falsches über dein Projekt, das du nie in eine CLAUDE.md geschrieben hast. Was ist die wahrscheinlichste Quelle, und was tust du?",
     "why": {
-     "correct": "Auto-Memory ist standardmäßig an: Claude schreibt dort selbst mit, und die nächste Session startet damit. Über `/memory` bearbeitest oder löschst du jede Notiz.",
+     "correct": "Ins Auto-Memory schreibt Claude selbst mit, und die nächste Session startet damit. Über `/memory` siehst du jede Notiz und kannst sie bearbeiten oder löschen.",
      "wrong": [
-      "Das Auto-Memory liegt in Dateien unter `~/.claude/projects/<project>/memory/`, nicht im Gespräch; den Anfang der `MEMORY.md` lädt jede neue Session. Die Notiz löschst du selbst über `/memory`.",
-      "`--bare` ist ein Minimalmodus für Skripte und lässt neben dem Auto-Memory auch Hooks, Skills, Plugins, MCP-Server und die CLAUDE.md weg. Zum Abschalten dienen `/memory` oder `autoMemoryEnabled`.",
+      "`/clear` leert nur das Gespräch (S1.9). Das Auto-Memory liegt in Dateien außerhalb davon, und jede neue Session lädt den Anfang der `MEMORY.md`. Die Notiz löschst du über `/memory`.",
+      "`--bare` ist kein Gedächtnis-Schalter, sondern ein Minimalmodus für Skripte, der fast alles weglässt, auch die CLAUDE.md. Das Auto-Memory schaltest du über `/memory` oder `autoMemoryEnabled` ab.",
       "Auto-Memory ist standardmäßig an: Claude füllt es ohne dein Zutun. „Remember that …“ legt zwar gezielt eine Notiz ab, ist aber nicht die einzige Quelle."
      ]
     },
@@ -956,7 +956,7 @@
      "correct": "Das ist Refine: Du bleibst im Plan-Modus, sagst, was sich ändern soll, und Claude legt einen neuen Plan vor. Erst nach deiner ausdrücklichen Freigabe wird umgesetzt.",
      "wrong": [
       "„Sieht gut aus“ ist eine vage Freigabe und kann Claude zu einem Schritt bewegen, den du nicht wolltest. Nenne die Grenze ausdrücklich und prüfe den neuen Plan.",
-      "Verlass dich nicht auf ein Zurückdrehen per `/rewind`: Der Plan setzt die Grenze, bevor etwas entsteht. Wähl die Antwort zum Nachschärfen, nenne die Grenze und prüf den neuen Plan.",
+      "Ein Checkpoint erfasst keine Änderungen per Shell-Befehl (S1.9), und Zurückdrehen lässt die Änderung erst zu. Wähl die Antwort zum Nachschärfen und nenne die Grenze, bevor etwas entsteht.",
       "`Shift+Tab` schaltet reihum durch die Rechte-Modi und verlässt den Plan-Modus, ohne den Plan freizugeben. Zum Nachschärfen wählst du die Antwort dafür und bleibst im Plan-Modus."
      ]
     },

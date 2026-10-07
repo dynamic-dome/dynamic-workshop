@@ -199,11 +199,11 @@ Du kannst die Gedächtnis-Ebenen neben der CLAUDE.md benennen, sagen, wer sie sc
 **Frage:** Nach einem Neustart „weiß“ Claude etwas Falsches über dein Projekt, das du nie in eine CLAUDE.md geschrieben hast. Was ist die wahrscheinlichste Quelle, und was tust du?
 
 - **Richtig:** Eine Notiz im Auto-Memory: Du öffnest sie über `/memory` und bearbeitest oder löschst sie.
-  - Warum: Auto-Memory ist standardmäßig an: Claude schreibt dort selbst mit, und die nächste Session startet damit. Über `/memory` bearbeitest oder löschst du jede Notiz.
+  - Warum: Ins Auto-Memory schreibt Claude selbst mit, und die nächste Session startet damit. Über `/memory` siehst du jede Notiz und kannst sie bearbeiten oder löschen.
 - Falsch: Eine Notiz im Auto-Memory: Ein `/clear` leert neben dem Gespräch auch dieses Gedächtnis des Projekts.
-  - Warum: Das Auto-Memory liegt in Dateien unter `~/.claude/projects/<project>/memory/`, nicht im Gespräch; den Anfang der `MEMORY.md` lädt jede neue Session. Die Notiz löschst du selbst über `/memory`.
+  - Warum: `/clear` leert nur das Gespräch (S1.9). Das Auto-Memory liegt in Dateien außerhalb davon, und jede neue Session lädt den Anfang der `MEMORY.md`. Die Notiz löschst du über `/memory`.
 - Falsch: Eine Notiz im Auto-Memory: Du startest künftig mit `claude --bare`, dem vorgesehenen Schalter dafür.
-  - Warum: `--bare` ist ein Minimalmodus für Skripte und lässt neben dem Auto-Memory auch Hooks, Skills, Plugins, MCP-Server und die CLAUDE.md weg. Zum Abschalten dienen `/memory` oder `autoMemoryEnabled`.
+  - Warum: `--bare` ist kein Gedächtnis-Schalter, sondern ein Minimalmodus für Skripte, der fast alles weglässt, auch die CLAUDE.md. Das Auto-Memory schaltest du über `/memory` oder `autoMemoryEnabled` ab.
 - Falsch: Keine Notiz: Das Auto-Memory entsteht nur nach „Remember that …“, die Quelle ist also ein Irrtum.
   - Warum: Auto-Memory ist standardmäßig an: Claude füllt es ohne dein Zutun. „Remember that …“ legt zwar gezielt eine Notiz ab, ist aber nicht die einzige Quelle.
 

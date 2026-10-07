@@ -162,7 +162,7 @@ Du kannst eine Mehrdatei-Aufgabe im Plan-Modus planen lassen, den Plan mit einer
 - Falsch: „Sieht gut aus“ antworten, denn Claude lässt den Schritt dann von selbst weg und fragt vor der Änderung nach.
   - Warum: „Sieht gut aus“ ist eine vage Freigabe und kann Claude zu einem Schritt bewegen, den du nicht wolltest. Nenne die Grenze ausdrücklich und prüfe den neuen Plan.
 - Falsch: Den Plan freigeben und die Änderung hinterher mit `/rewind` zurücknehmen, weil ein Checkpoint auch Shell-Befehle erfasst.
-  - Warum: Verlass dich nicht auf ein Zurückdrehen per `/rewind`: Der Plan setzt die Grenze, bevor etwas entsteht. Wähl die Antwort zum Nachschärfen, nenne die Grenze und prüf den neuen Plan.
+  - Warum: Ein Checkpoint erfasst keine Änderungen per Shell-Befehl (S1.9), und Zurückdrehen lässt die Änderung erst zu. Wähl die Antwort zum Nachschärfen und nenne die Grenze, bevor etwas entsteht.
 - Falsch: `Shift+Tab` drücken, weil das den Plan mit der Grenze neu schreibt und ihn zugleich zur Umsetzung freigibt.
   - Warum: `Shift+Tab` schaltet reihum durch die Rechte-Modi und verlässt den Plan-Modus, ohne den Plan freizugeben. Zum Nachschärfen wählst du die Antwort dafür und bleibst im Plan-Modus.
 

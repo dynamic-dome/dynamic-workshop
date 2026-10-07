@@ -188,7 +188,8 @@ Quiz-Regel aus `/teach`: Antworten etwa gleich lang (Validator warnt, wenn die r
 
 Begründungen (Paket P10, Fragerunde 2 am 2026-10-06): Unter jeder Antwort steht eingerückt eine Zeile `- Warum: …`
 mit 1 bis 220 Zeichen. Sie nennt den Grund aus dem Kapitel, bei einer falschen Antwort den Denkfehler, und bringt
-keinen Fakt, der nicht im Kapitel steht. Ein Quiz hat keine oder vier Begründungen (Befund `quiz-why`); die
+keinen Fakt, der nicht im Kapitel steht. Ausnahme (Owner, 2026-10-07): ein Fakt aus einem anderen Kapitel der
+Bibliothek, wenn die Begründung es in Klammern nennt, etwa „(S1.9)“; was in keinem Kapitel steht, bleibt draußen. Ein Quiz hat keine oder vier Begründungen (Befund `quiz-why`); die
 Längenregeln oben gelten nur für die Antworten. Der Katalog trägt sie als `quiz.why`
 (`{"correct": …, "wrong": [… in der Reihenfolge der Antworten]}`), nur wenn alle vier da sind; `validate` zählt
 „mit Begründung: n von 61“. Das Cockpit zeigt nach der Antwort nur die Begründung der gewählten Antwort.
