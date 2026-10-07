@@ -257,9 +257,13 @@ Du kannst einem Plugin den passenden Scope zuordnen und die Befehle für den Res
 **Frage:** Du installierst ein Plugin im project-Scope und committest `.claude/settings.json`. Eine Kollegin klont das Repo. Was gilt für sie?
 
 - **Richtig:** Es ist für sie aktiviert, doch sie installiert es einmal selbst mit `--scope project`.
+  - Warum: Der eingecheckte Eintrag schaltet das Plugin für alle im Repo ein, lädt es aber nicht auf ihren Rechner. Eingecheckt heißt aktiviert, nicht installiert; die Installation holt jede Person selbst nach.
 - Falsch: Das Plugin läuft bei ihr sofort, weil Git den Plugin-Code beim Klonen gleich mit herunterlädt.
+  - Warum: Ins Repo wandert nur der Eintrag in `.claude/settings.json`. Die installierte Kopie des Plugins liegt unter `~/.claude/plugins/cache/` (S2.11), nicht im Repo, und Git bringt sie nicht mit.
 - Falsch: Für sie ist es nicht aktiviert, doch sie kann es sich mit `--scope user` selbst einschalten.
+  - Warum: Aktivieren muss sie nichts: Der Eintrag im Repo schaltet es für alle dort ein. `--scope user` wäre ein eigener Eintrag in `~/.claude/settings.json`, für alle ihre Projekte statt fürs Team.
 - Falsch: Sie muss die Datei erst in `settings.local.json` umbenennen, sonst greift das Plugin nicht.
+  - Warum: `.claude/settings.local.json` gehört zum Scope `local`: persönlich und nicht geteilt. Das Team-Plugin steht in der eingecheckten `settings.json` und gilt dort schon; ein Umbenennen ist unnötig.
 
 </details>
 
