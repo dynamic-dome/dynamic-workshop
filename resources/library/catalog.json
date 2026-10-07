@@ -2874,6 +2874,14 @@
    "quiz": {
     "correct": "Im Hauptgespräch bleiben: Die Phasen teilen viel Kontext, du willst eingreifen, und ein Subagent müsste jedes Mal neu einsteigen.",
     "q": "Du änderst in einer Datei zwei zusammengehörige Funktionen: erst Plan, dann Umsetzung, dann Test, mit Rückfragen zwischendurch. Wie gehst du vor?",
+    "why": {
+     "correct": "Planen, Umsetzen und Testen teilen viel Kontext, und Rückfragen bedeuten Hin und Her. Beides spricht fürs Hauptgespräch: Ein Subagent startet frisch und braucht Zeit, um sich einzulesen.",
+     "wrong": [
+      "Hier wird der frische Kontext zum Nachteil: Ein Subagent sieht weder dein Gespräch noch die Dateien, die Claude schon gelesen hat. Phasen mit viel gemeinsamem Kontext erledigst du im Hauptgespräch.",
+      "Parallele Arbeit passt zu unabhängigen Aufgaben (S3.4); Plan, Umsetzung und Test bauen aufeinander auf. Jeder Subagent braucht außerdem Zeit zum Einlesen und zählt auf deine Nutzungsgrenzen.",
+      "Ein Subagent lohnt sich bei in sich abgeschlossener Arbeit, bei der eine Zusammenfassung genügt. Du willst aber zwischendurch eingreifen und verfeinern, und dafür bleibst du im Hauptgespräch."
+     ]
+    },
     "wrong": [
      "Je Phase einen Subagenten starten, damit jede Phase mit frischem, unbelastetem Kontext beginnt und sauber arbeitet.",
      "Die Funktionen parallel von zwei Subagenten bearbeiten lassen, weil parallele Arbeit die Zeit auf die Dauer des langsamsten verkürzt.",
@@ -2932,6 +2940,14 @@
    "quiz": {
     "correct": "Explore: Er liest nur, Write und Edit sind gesperrt, und seine Suche bleibt in seinem eigenen Kontext.",
     "q": "Vor einem Umbau willst du wissen, wo in `firmware/` alle OSDP-Dateien liegen. Nichts soll geändert werden, und die Suchergebnisse sollen nicht dein Hauptgespräch füllen. Welcher eingebaute Subagent passt?",
+    "why": {
+     "correct": "Explore ist der schnelle, nur lesende Späher für Dateisuche und Codebasis: Write und Edit sind gesperrt. Ins Hauptgespräch kommt nur seine Zusammenfassung.",
+     "wrong": [
+      "Plan ist kein Planschreiber: Er sammelt nur lesend Kontext und schreibt keinen Code. Den Plan legt dir das Hauptgespräch vor. Er dient dem Plan-Modus, für die Dateisuche gibt es Explore.",
+      "Du willst nichts ändern, general-purpose darf aber ändern: Er hat alle Tools, die Subagenten zur Verfügung stehen. Bei Explore sind Write und Edit gesperrt, er bleibt beim Lesen.",
+      "Die drei eingebauten Subagenten musst du nicht erst definieren: Claude Code liefert sie mit. Claude delegiert sogar von selbst, wenn dein Auftrag passt, etwa „erkunde die Projektstruktur“ an Explore."
+     ]
+    },
     "wrong": [
      "Plan: Er schreibt dir den fertigen Umbauplan und legt die dafür nötigen Dateien gleich im Repo an.",
      "general-purpose: Er findet dieselben Dateien, und dass er auch ändern darf, schadet nicht, solange du nichts verlangst.",
@@ -2990,6 +3006,14 @@
    "quiz": {
     "correct": "In `acceptEdits`: Das Hauptgespräch bestimmt den Modus, dein Feld wird ignoriert. Begrenzen kannst du ihn zuverlässig nur über `tools`.",
     "q": "Dein Subagent `reviewer` setzt `permissionMode: default`. Du arbeitest im Hauptgespräch im Modus `acceptEdits` und lässt ihn Änderungen prüfen. In welchem Modus läuft er?",
+    "why": {
+     "correct": "Das Hauptgespräch gibt hier den Modus vor: Läuft es in `bypassPermissions`, `acceptEdits` oder `auto`, übernimmt der Subagent ihn und `permissionMode` wird ignoriert. Begrenze ihn deshalb vor allem über `tools`.",
+     "wrong": [
+      "„Steht in der Datei“ reicht nicht, denn `permissionMode` greift nicht immer. Bei `acceptEdits` im Hauptgespräch läuft der Subagent im selben Modus, und dein `default` wird ignoriert.",
+      "Es gibt nichts zu bestätigen: Das Hauptgespräch gibt den Modus vor, und das Feld des Subagenten wird ignoriert. Der Subagent läuft im selben Modus wie du.",
+      "Eine Abweichung, an der der Aufruf scheitern könnte, entsteht gar nicht: Der Subagent übernimmt den Modus des Hauptgesprächs, und sein eigenes Feld wird ignoriert."
+     ]
+    },
     "wrong": [
      "In `default`, denn das Feld im Subagenten hat Vorrang vor dem Modus des Hauptgesprächs, solange es in der Datei steht.",
      "Claude Code meldet einen Konflikt und lässt den Subagenten erst laufen, wenn du den Moduswechsel ausdrücklich bestätigt hast.",
@@ -3050,6 +3074,14 @@
    "quiz": {
     "correct": "Pipeline: Agent 2 braucht die Liste von Agent 1, und liefe er parallel, müsste er die Funktionen raten.",
     "q": "Du willst `reader.py` verbessern lassen: Agent 1 listet alle Funktionen ohne Prüfung der Eingabe, Agent 2 schreibt Tests für genau diese Funktionen. Welches Muster passt?",
+    "why": {
+     "correct": "Die Liste der Funktionen kann Claude erst in den Auftrag für Agent 2 schreiben, nachdem Agent 1 geantwortet hat. Diese Abhängigkeit macht es zur Pipeline: Jeder Schritt braucht das Ergebnis des vorigen.",
+     "wrong": [
+      "Nicht die gemeinsame Datei entscheidet, sondern ob ein Auftrag das Ergebnis eines anderen braucht. Agent 2 braucht die Liste von Agent 1: Das ist eine Pipeline, kein Fan-out.",
+      "Eine Hierarchie passt, wenn sich ein Problem auf mehreren Ebenen zerlegen lässt, etwa in großen Codebasen. Zwei Schritte, von denen einer den anderen braucht, sind eine Pipeline ohne Unter-Orchestrator.",
+      "Tempo allein entscheidet das Muster nicht: Fan-out passt, wenn die Aufgaben unabhängig sind, und das prüfst du zuerst. Gleichzeitig gestartet, müsste Agent 2 die Funktionen raten, die Agent 1 erst findet."
+     ]
+    },
     "wrong": [
      "Fan-out/Fan-in: Beide Agenten lesen dieselbe Datei, also sind ihre Teilaufgaben unabhängig und laufen gleichzeitig.",
      "Hierarchie: Zwei zusammenarbeitende Agenten brauchen einen Unter-Orchestrator, der ihre Ergebnisse laufend abgleicht.",
@@ -3109,6 +3141,14 @@
    "quiz": {
     "correct": "Das Herunterfahren hat die Sitzung gestoppt; sie steht noch in der Liste, und `claude attach <id>` setzt sie dort fort, wo sie war.",
     "q": "Du startest `claude --bg` mit einem langen Auftrag, schließt das Terminal und fährst abends den Rechner herunter. Am nächsten Morgen willst du das Ergebnis lesen. Was ist passiert?",
+    "why": {
+     "correct": "Hintergrund-Sitzungen laufen auf deinem Rechner, nicht in der Cloud: Das Herunterfahren stoppt sie. Sie bleibt aber in der Liste, und `claude attach <id>` setzt sie fort, wo sie aufgehört hat.",
+     "wrong": [
+      "Unabhängig sind sie nur vom Terminal, nicht vom Rechner: Die Sitzung läuft auf deinem Rechner, nicht in der Cloud. Fährt er herunter, stoppt sie.",
+      "Das Terminal zu schließen beendet sie nicht: Eine Hintergrund-Sitzung läuft ohne angehängtes Terminal weiter, du kannst Terminal und Agent view schließen. Gestoppt hat sie erst das Herunterfahren.",
+      "Gestoppt heißt nicht gelöscht: Nach `claude stop` bleibt die Sitzung als `stopped` in der Liste, bis `claude rm <id>` sie entfernt. `claude respawn <id>` setzt das gespeicherte Gespräch fort."
+     ]
+    },
     "wrong": [
      "Die Sitzung lief über Nacht weiter und hat den Auftrag erledigt, denn Hintergrund-Sitzungen laufen unabhängig von deinem Rechner.",
      "Das Schließen des Terminals hat die Sitzung beendet; vom Auftrag bleibt nichts außer dem Protokoll, und du musst von vorn beginnen.",
@@ -3173,6 +3213,14 @@
    "quiz": {
     "correct": "Fund 2: Er greift im Betrieb bei jedem Ausfall, und der Schaden ist groß; Fund 1 hat keinen Angriffsweg, solange nur der Test die Funktion aufruft.",
     "q": "Ein Scan meldet zwei Funde in einem Zugangssystem. (1) Eine SQL-Abfrage per Textverkettung steckt in einer Funktion, die nur ein Testskript aufruft. (2) Eine Prüfung gibt den Zutritt frei, wenn der Rechtedienst nicht antwortet. Welchen behebst du zuerst?",
+    "why": {
+     "correct": "Entscheidend ist, ob ein Angreifer die Stelle erreicht und wie groß der Schaden dort ist. Fund 2 ist ein Fail-open: Bei einem Fehler wird erlaubt statt verweigert. Bei Fund 1 fehlt der Angriffsweg.",
+     "wrong": [
+      "Nicht das Muster zählt, sondern ob ein Angreifer die Stelle erreicht. Eine Injection in Code, den nur ein Test aufruft, sieht gefährlich aus, doch ihr Angriffsweg fehlt.",
+      "Dass derselbe Scan beide meldet, macht sie nicht gleich schwer: Die Schwere hängt je Fund an Erreichbarkeit und Schaden. Beides prüfst du am Code, nicht am Bericht.",
+      "Ein Ausfall ist kein Angriff, aber erreichbar: Gibt die Prüfung dann den Zutritt frei, ist das ein Fail-open. Eine Zutrittsanlage muss bei einem Fehler sicher schließen (fail-secure)."
+     ]
+    },
     "wrong": [
      "Fund 1: Eine SQL-Injection steht auf jeder Liste der schwersten Lücken, also zählt das Muster, auch wenn niemand die Funktion aufruft.",
      "Beide gleichzeitig, denn derselbe Scan hat beide gemeldet, und was ein Scan nennt, hat dieselbe Schwere wie sein Nachbar.",
@@ -3236,6 +3284,14 @@
    "quiz": {
     "correct": "`/security-review`: Es prüft den Diff deines Branches gegen den Standard-Branch von `origin` auf Lücken wie Injection.",
     "q": "Du hast auf einem Branch eine Funktion geändert, die Nutzereingaben in eine Shell-Zeile setzt. Die Änderung ist committet, und vor dem Merge willst du nur wissen, ob du eine Sicherheitslücke eingebaut hast. Was nimmst du?",
+    "why": {
+     "correct": "Die Änderungen deines Branches prüft `/security-review` gezielt auf Risiken wie Injection, Auth-Probleme und offengelegte Daten. Nutzereingabe in einer Shell-Zeile ist eine Einschleusung, also sein Fall.",
+     "wrong": [
+      "Gründlich heißt hier teuer: `ultra` rechnet über Usage Credits ab statt über das Kontingent deines Plans. Für die reine Frage nach Sicherheitslücken in deinen Änderungen ist `/security-review` vorgesehen.",
+      "`/simplify` räumt Code auf (S2.4): Er prüft nur auf Aufräumpotenzial, wendet Korrekturen an und sucht nicht nach Fehlern. Sicherheitslücken in deinem Branch prüft `/security-review`.",
+      "Als Alias von `/code-review` gilt `/review`, nicht `/security-review`. `/code-review` sucht Korrektheitsfehler im Diff, `/security-review` dagegen gezielt Sicherheitsrisiken."
+     ]
+    },
     "wrong": [
      "`/code-review ultra`: Die Cloud-Flotte prüft am gründlichsten, also nimmst du sie für jede Änderung, auch für kleine.",
      "`/simplify`: Der Befehl prüft die geänderten Dateien und behebt dabei auch Sicherheitslücken, die er findet.",
@@ -3301,6 +3357,14 @@
    "quiz": {
     "correct": "`npm install` braucht eine Freigabe und trifft keine Allow-Regel, deshalb lehnt `dontAsk` ihn ab. Erlauben kannst du ihn mit `Bash(npm install)` in der Allow-Liste.",
     "q": "Ein nächtlicher Lauf in `dontAsk` hat nur `Bash(npm test)` in der Allow-Liste. Im Protokoll steht, dass Claude `npm install` nicht ausführen konnte. Was ist passiert und was tust du?",
+    "why": {
+     "correct": "Nur was ohne Freigabe läuft oder eine Allow-Regel trifft, läuft in `dontAsk`. `npm install` ist keins von beiden und wird abgelehnt, nicht erfragt.",
+     "wrong": [
+      "`dontAsk` fragt nie: Was sonst eine Rückfrage auslösen würde, lehnt er ab. Der Lauf wartet also nicht auf dich, sondern der Aufruf fehlt einfach.",
+      "Hier entscheiden deine Regeln: Es läuft alles, was eine Allow-Regel trifft. Mit `Bash(npm install)` in der Allow-Liste liefe auch dieser Befehl.",
+      "Das ist umgekehrt: In `bypassPermissions` haben Allow-Regeln keine Wirkung. In `dontAsk` läuft neben Lesebefehlen alles, was eine Allow-Regel trifft."
+     ]
+    },
     "wrong": [
      "Claude hat bei `npm install` nachgefragt, im nächtlichen Lauf antwortet niemand, und der Lauf wartet deshalb weiter auf eine Antwort von dir.",
      "`dontAsk` sperrt alles, was das Netz berührt, und eine Allow-Regel kann an dieser Sperre nichts ändern, auch nicht für diesen einen Befehl.",
@@ -3361,6 +3425,14 @@
    "quiz": {
     "correct": "Claude Code fragt nach, denn `.claude` ist ein geschützter Pfad und die Sandbox gilt nur für Shell-Befehle, nicht für das Edit-Werkzeug.",
     "q": "Du hast `/sandbox` eingeschaltet und arbeitest in `acceptEdits`. Claude soll die Datei `.claude/settings.json` deines Projekts per Edit ändern. Was passiert?",
+    "why": {
+     "correct": "In `acceptEdits` fragt Claude Code bei geschützten Pfaden wie `.claude` nach. Die Sandbox greift bei Edit nicht: Dafür sind Rechte-Regeln und Modus zuständig.",
+     "wrong": [
+      "Die Sandbox begrenzt nur Bash-, PowerShell- und Monitor-Befehle. Read, Edit und Write laufen außerhalb; für sie gelten Rechte-Regeln und Modus, und `acceptEdits` fragt bei `.claude` nach.",
+      "Abgelehnt wird so ein Zugriff in `dontAsk`. In `acceptEdits` fragt Claude Code, und die Rückfrage kann anbieten, `.claude` für die Sitzung freizugeben. Edit steht nicht unter der Sandbox.",
+      "Die Prüfung der geschützten Pfade läuft, bevor Claude Code Allow-Regeln auswertet. Ein Eintrag wie `Edit(.claude/**)` ändert deshalb nichts, die Rückfrage kommt trotzdem."
+     ]
+    },
     "wrong": [
      "Die Änderung läuft ohne Rückfrage, denn mit eingeschalteter Sandbox sind Schreibzugriffe im Projektordner für alle Werkzeuge abgesichert.",
      "Claude Code lehnt ab, weil die Sandbox `.claude` für alle Werkzeuge schreibgeschützt hält, auch wenn du es freigeben würdest.",
@@ -3422,6 +3494,14 @@
    "quiz": {
     "correct": "`disableSkillShellExecution: true`, denn dann setzt Claude Code statt des Befehls nur einen Platzhaltertext ein.",
     "q": "Ein Pentest-Team zeigt: Ein bösartiges Skill-Update mit einer `` !`…` ``-Zeile, die eine Domain des Angreifers aufruft und das Ergebnis in eine Shell leitet, führt beim Laden des Skills Shell-Code aus. Welche Einstellung verhindert genau das?",
+    "why": {
+     "correct": "Claude Code führt eingebettete Shell-Befehle eines Skills aus, bevor der Inhalt an Claude geht. Der Schalter ersetzt jeden durch `[shell command execution disabled by policy]`, also läuft er nicht.",
+     "wrong": [
+      "`deniedDomains` sperrt nur die Verbindung zu einer Domain, und nur für Befehle in der Sandbox. Es greift nicht beim Laden des Skills ein; dafür gibt es `disableSkillShellExecution`.",
+      "`hard_deny` nimmt Sätze in natürlicher Sprache, keine Tool-Muster: Der Klassifikator liest sie als Regeln. Ein Muster wie `Bash(curl *)` gehört in `permissions.deny`.",
+      "Geschützte Pfade betreffen Schreibzugriffe: Claude Code beschreibt sie nie ohne Prüfung (S3.9). Eine Sperre für Skill-Shell-Zeilen sind sie nicht, die setzt `disableSkillShellExecution`."
+     ]
+    },
     "wrong": [
      "`sandbox.network.deniedDomains` mit der Domain des Angreifers, denn schon die Domain im Befehlstext lässt Claude Code das Laden des Skills abbrechen.",
      "`autoMode.hard_deny` mit einem Muster wie `Bash(curl *)`, denn dort stehen Tool-Muster wie in `permissions.deny`, und der Befehl läuft vor dem Klassifikator.",
@@ -3486,6 +3566,14 @@
    "quiz": {
     "correct": "Dafür braucht es ZDR, das Anthropic je Organisation freischaltet. Der Team-Plan trainiert standardmäßig nicht, bewahrt aber 30 Tage auf.",
     "q": "Ein Team auf dem Team-Plan soll laut seiner Datenschutzabteilung „nichts mehr bei Anthropic speichern“. Was sagst du?",
+    "why": {
+     "correct": "Der Team-Plan bewahrt 30 Tage auf; erst ZDR heißt keine Speicherung nach der Antwort. Anthropic prüft die Berechtigung und schaltet ZDR je Organisation frei.",
+     "wrong": [
+      "`DISABLE_TELEMETRY` stoppt nur Nutzungsmetriken, und die enthalten laut Doku nie deine Prompts. Wie lange Prompts und Antworten bleiben, hängt vom Plan ab.",
+      "ZDR lässt sich nicht in den Admin-Einstellungen einschalten: Anthropic prüft und schaltet es frei. Es gilt nur für Anmeldungen in der ZDR-Organisation, einige Funktionen entfallen.",
+      "Der normale Enterprise-Plan enthält kein ZDR. Ohne Freischaltung durch Anthropic bleibt es auch dort bei 30 Tagen Aufbewahrung."
+     ]
+    },
     "wrong": [
      "`DISABLE_TELEMETRY=1` in den Umgebungsvariablen aller Rechner genügt, denn damit speichert Claude Code nichts mehr bei Anthropic.",
      "Ein Admin schaltet ZDR in den Einstellungen der Organisation ein, danach gilt es für alle Anmeldungen und für alle Funktionen.",
@@ -3556,6 +3644,14 @@
    "quiz": {
     "correct": "Claude wählt nach jedem Durchgang den Abstand selbst, zwischen einer Minute und einer Stunde. Der Loop endet mit der Sitzung oder nach sieben Tagen.",
     "q": "Du gibst `/loop check whether CI passed` ein, ohne Intervall. Was stimmt?",
+    "why": {
+     "correct": "Gibst du nur den Prompt an, wählt Claude den Abstand nach jedem Durchgang selbst. Ein Loop lebt in deinem Terminal, endet mit der Sitzung und läuft nach sieben Tagen von selbst ab.",
+     "wrong": [
+      "Das Intervall ist optional. Auch mit nur einem Prompt wiederholt sich der Loop: Claude wählt nach jedem Durchgang den Abstand selbst, zwischen einer Minute und einer Stunde.",
+      "Fünf Minuten stehen nur im Beispiel `/loop 5m check the deploy`, weil du dort das Intervall selbst angibst. Ohne Intervall legt Claude den Abstand selbst fest.",
+      "Loops leben in deinem Terminal und hören auf, wenn du die Sitzung schließt. In der Cloud läuft nur eine Routine, und die legst du mit `/schedule` an."
+     ]
+    },
     "wrong": [
      "Der Loop läuft nur einmal, denn ohne Intervall gibt es keinen Takt, und danach wartet Claude auf deinen nächsten Prompt, bis du ihn erneut startest.",
      "Der Loop läuft im festen Takt von fünf Minuten, denn das ist der Standard, wenn du kein Intervall angibst, und er bleibt dabei, bis du ihn stoppst.",
@@ -3619,6 +3715,14 @@
    "quiz": {
     "correct": "Nichts davon: Das Flag wirkt nur mit `-p`. Hart wird die Grenze erst, wenn der Lauf mit `claude -p` startet.",
     "q": "Du startest eine interaktive Sitzung mit `claude --max-budget-usd 1.00` und setzt darin `/goal alle Tests grün`. Was begrenzt die Kosten dieses Laufs hart?",
+    "why": {
+     "correct": "Das Flag gilt nur im Print-Modus (`claude -p`), der einen einzelnen Lauf ohne Dialog startet. In einer interaktiven Sitzung greift es auch mit `/goal` nicht.",
+     "wrong": [
+      "Ohne `-p` begrenzt `claude --max-budget-usd 1.00` nichts: Die CLI-Referenz nennt das Flag „print mode only“. Auch die Kosten dieser Sitzung bleiben ungedeckelt.",
+      "Der Prüfer beurteilt aus dem Gespräch, ob deine Bedingung oder Klausel erfüllt ist. Er ist kein Kostenzähler; ein harter Deckel für Kosten und Runden entsteht erst mit `claude -p`.",
+      "Ein Worktree gibt dem Lauf einen eigenen Arbeitsordner, damit der Hauptordner unberührt bleibt. Das Budget ist ein eigenes Flag, `--max-budget-usd`, und gilt nur mit `-p`."
+     ]
+    },
     "wrong": [
      "Das Budget-Flag, denn es gilt ab dem Start für jede Sitzung, die du mit ihm aufrufst, auch für eine interaktive Sitzung.",
      "Der Prüfer von `/goal`, denn er bricht den Lauf von selbst ab, sobald ein Dollar Budget in der Sitzung verbraucht ist.",
@@ -3690,6 +3794,14 @@
    "quiz": {
     "correct": "Den Diff der Testdateien lesen, ob Assertions fehlen, denn ein grüner Lauf kann auch heißen, dass der Test weniger prüft als vorher.",
     "q": "Nach einem autonomen Lauf sind alle Tests grün. Welche Prüfung brauchst du als Nächstes?",
+    "why": {
+     "correct": "Claude kann einen Test „reparieren“, indem es die Assertion entfernt: Der Lauf bleibt grün, der Fehler auch. Darum liest du den Diff der Testdateien auf entfernte Assertions.",
+     "wrong": [
+      "Grün heißt nicht gelöst: Ein Test ohne Assertion bleibt grün, ohne den Fehler zu prüfen. Ein grünes Ergebnis beweist deshalb nicht, dass ein Fix echt ist.",
+      "Ein Budget gehört zum Kostenlauf: Es deckelt Ausgaben, sagt aber nichts über den Inhalt der Änderungen. Gegen Schein-Fixes liest du den Diff auf entfernte Assertions oder setzt einen Hook ein.",
+      "Ob Code oder Test geändert wurde, liest du im Diff ab, nicht an einer Commit-Nachricht. Entfernte Assertions zeigt `git diff` auf die Testdateien."
+     ]
+    },
     "wrong": [
      "Keine, denn Tests sind der Nachweis; ein grüner Lauf zeigt, dass der Fehler im Code behoben ist und nicht im Test.",
      "Das Budget-Limit kontrollieren, denn ein eingehaltenes Budget zeigt, dass der Lauf keine Schein-Fixes geschrieben hat.",
@@ -3858,6 +3970,14 @@
    "quiz": {
     "correct": "Ich lasse `opus` die sicherheitsrelevanten Teile selbst lesen, denn „kein Befund“ eines günstigen Durchgangs beweist nicht, dass nichts da ist.",
     "q": "`haiku` hat den Diff der Zutrittslogik einer Firmware geprüft und meldet keine Befunde. Was machst du?",
+    "why": {
+     "correct": "„Haiku findet nichts“ beweist nichts: Der günstige Erstdurchgang ist die erste Runde, nicht die Abnahme. Bei sicherheitskritischem Code liest `opus` selbst.",
+     "wrong": [
+      "Wie viele Befunde `haiku` allein findet, hängt von der Aufgabe ab; eine feste Quote belegt dieser Kurs nicht. Als einziger Prüfer ist `haiku` eine Falle; sein Schweigen ist kein Beleg.",
+      "Auch „keine eindeutigen Befunde“ ist ein gültiges Ergebnis. Du entscheidest dann, ob dir das genügt, statt den Lauf zu wiederholen, bis eine Liste entsteht.",
+      "Bei sicherheitskritischem Code liest `opus` ohnehin den gesamten Code; eine Zusammenfassung ersetzt das nicht. Der Haiku-Lauf spart nur, wenn `opus` danach weniger liest als ohne ihn."
+     ]
+    },
     "wrong": [
      "Ich betrachte den Diff als geprüft, denn ein Modell, das nichts meldet, hat nach allem, was es gesehen hat, nichts Auffälliges gefunden.",
      "Ich starte `haiku` so lange neu, bis es einen Befund meldet, denn ein Review ist erst fertig, wenn mindestens ein Punkt auf der Liste steht.",
@@ -3920,6 +4040,14 @@
    "quiz": {
     "correct": "Nur die Signaturen der Funktionen, die `api.py` aufruft: Namen, Parameter, Rückgabetypen, ohne Funktionskörper.",
     "q": "Ein zweiter Anbieter soll in `api.py` einen neuen Endpunkt bauen. `api.py` ruft Funktionen aus `access_rules.py` auf, die vertrauliche Zugriffslogik enthält. Was gibst du ihm von `access_rules.py`?",
+    "why": {
+     "correct": "Für den Endpunkt zählt die Form der Aufrufe, nicht der Inhalt: Namen, Parameter, Rückgabetypen. Die vertrauliche Logik steckt in den Funktionskörpern, und die bleiben bei dir.",
+     "wrong": [
+      "Code für einen zweiten Anbieter verlässt den Anthropic-Vertrag: Dessen Datenregeln gelten nur für die Claude-Seite. Beim Codex-Schwarm greifen die Regeln deines OpenAI-Vertrags.",
+      "Namen allein reichen nicht: Der Anbieter braucht die Form, also auch Parameter und Rückgabetypen. Das Gerüst liefert sie, ohne Funktionskörper zu zeigen.",
+      "Umbenennen gilt nicht als Anonymisieren: Neutrale Namen entschärfen nur Bezeichner. Schon ein Gerüst mit vielen Details verrät die Struktur der Logik, eine ganze Datei erst recht."
+     ]
+    },
     "wrong": [
      "Die ganze Datei, denn der Vertrag mit Anthropic deckt auch den Code ab, den ein zweiter Anbieter im Auftrag von Claude bekommt.",
      "Nichts außer der Aufgabenbeschreibung, denn der Anbieter errät die Schnittstelle der Funktionen zuverlässig aus ihren Namen.",
@@ -3993,6 +4121,14 @@
    "quiz": {
     "correct": "Das Ergebnis steht eine Ebene tiefer im Umschlag: Das Skript muss `.structured_output.category` lesen.",
     "q": "Dein Skript ruft `claude -p … --output-format json --json-schema '<gültiges Schema>'` auf und liest mit `jq -r '.category'`. Der Lauf endet mit Exit-Code 0, aber `jq` gibt `null` aus. Woran liegt es?",
+    "why": {
+     "correct": "Mit `--output-format json` ist die Ausgabe ein Umschlag mit Metadaten. Das Ergebnis nach Schema liegt darin in `structured_output`, also eine Ebene tiefer, als `.category` sucht.",
+     "wrong": [
+      "Ein ungültiges Schema liefert keine stille Prosa: `claude` bricht mit `Error: --json-schema …` und einem Exit-Code ungleich 0 ab. Bei dir endete der Lauf mit 0.",
+      "Hier sind die Felder vertauscht: Die reine Textantwort steht in `result`, das Ergebnis nach Schema in `structured_output`. Erst dort liegen die Felder deines Schemas.",
+      "Das `null` kommt von der Ebene, nicht vom Inhalt: Auf oberster Ebene des Umschlags gibt es kein `category`. Ein strengerer Prompt ändert daran nichts."
+     ]
+    },
     "wrong": [
      "Das Schema ist ungültig, und Claude hat still Prosa geliefert, in der es kein Feld `category` gibt.",
      "Mit Schema steht das Ergebnis im Feld `.result`; `jq -r '.result.category'` wäre die richtige Abfrage.",
@@ -4051,6 +4187,14 @@
    "quiz": {
     "correct": "Auf einen API-Key aus der Console wechseln und `--bare` hinzufügen. Das Abo-Token liest `--bare` nie, ein Job mit `--bare` und nur dem Token wäre nicht angemeldet.",
     "q": "Eine Pipeline prüft Pull Requests von Beitragenden. Sie nutzt bisher das Abo-Token deines Projekts (`CLAUDE_CODE_OAUTH_TOKEN`), ohne `--bare`. Du willst fremde Hooks aussperren. Was ist richtig?",
+    "why": {
+     "correct": "Ohne `--bare` führt `-p` die Hooks des ausgecheckten Repos ohne Vertrauensdialog aus. `--bare` hält sie fern, liest für die Anthropic-API aber nur einen API-Key, nie das Abo-Token.",
+     "wrong": [
+      "`--bare` übernimmt nicht jede Anmeldung: Für die Anthropic-API liest es `ANTHROPIC_API_KEY` oder einen `apiKeyHelper`, nie `CLAUDE_CODE_OAUTH_TOKEN`. Der Job wäre nicht angemeldet.",
+      "Im `-p`-Lauf erscheint kein Vertrauensdialog. Ohne `--bare` laufen die Hooks aus der `.claude/settings.json` des ausgecheckten Repos auch in einem Ordner, dem du nie vertraut hast.",
+      "Bei zwei Zugängen gewinnt der API-Key: Er steht in der Rangfolge vor dem Abo-Token, und `-p` nutzt ihn ohne Rückfrage. Ohne `--bare` laufen fremde Hooks außerdem weiter."
+     ]
+    },
     "wrong": [
      "`--bare` zum bestehenden Aufruf hinzufügen und das Abo-Token behalten, denn `--bare` übernimmt die Anmeldung aus der Umgebung.",
      "Nichts ändern, denn Hooks eines Repos laufen in `-p` erst, nachdem jemand den Vertrauensdialog für den Ordner bestätigt hat.",
@@ -4113,6 +4257,14 @@
    "quiz": {
     "correct": "Ein scheiternder Deploy braucht menschliches Urteil über Zustand und Rollback; ein Auto-Fix kann den Schaden vergrößern.",
     "q": "Warum ist `/autofix-pr` für einen fehlgeschlagenen Produktions-Deploy in der CI ungeeignet?",
+    "why": {
+     "correct": "`/autofix-pr` passt zu Test-, Lint- und Formatierungsfehlern. Bei einem fehlgeschlagenen Produktions-Deploy entscheidet nach der Empfehlung der Bibliothek ein Mensch (S1.17), kein gepushter Auto-Fix.",
+     "wrong": [
+      "Das Gegenteil trifft zu: Die Cloud-Sitzung analysiert den Fehler und pusht einen Fix-Commit, geschrieben wird also. Ungeeignet ist es, weil bei Produktions-Deploys ein Mensch entscheiden soll (S1.17).",
+      "Der Grund ist keine Zeitfolge, sondern eine Empfehlung der Bibliothek: Bei Produktions-Deploys entscheidet ein Mensch, auch in Repos, deren Haupt-Branch automatisch in Produktion geht (S1.17).",
+      "Am Lesen liegt es nicht: Die Sitzung beobachtet die CI und analysiert deren Fehler. Der Ausschluss ist eine Empfehlung der Bibliothek, weil bei Produktions-Deploys ein Mensch entscheidet (S1.17)."
+     ]
+    },
     "wrong": [
      "`/autofix-pr` lädt immer den ganzen Plugin-Stack, und geschützte Pfade blocken dann jedes Schreiben in Produktions-Repos.",
      "`/autofix-pr` arbeitet nur auf Branches vor dem Merge, und Deploy-Fehler treten erst nach dem Merge in `main` auf.",
@@ -4179,6 +4331,14 @@
    "quiz": {
     "correct": "Es geht nicht: Remote Control unterstützt keine API-Keys. Du meldest dich mit `/login` über claude.ai an, mit Pro, Max, Team oder Enterprise.",
     "q": "Du arbeitest im Terminal mit einem API-Key aus der Console und willst die laufende Sitzung vom Handy aus steuern. Was gilt?",
+    "why": {
+     "correct": "Remote Control setzt ein Abo und die Anmeldung über claude.ai voraus; die Sitzung erscheint in den Claude-Apps deines Kontos. API-Keys werden nicht unterstützt, du meldest dich mit `/login` an.",
+     "wrong": [
+      "Die Voraussetzung hängt nicht am Weg hinein: Auch `/remote-control` aus dem laufenden Terminal setzt die Anmeldung über claude.ai voraus. Mit einem API-Key startet es nicht.",
+      "Dass die Sitzung lokal läuft, genügt nicht: Remote Control verlangt den Endpunkt `api.anthropic.com`. Mit Amazon Bedrock, Vertex oder Foundry geht es nicht.",
+      "Ein eigener `ANTHROPIC_BASE_URL` ist laut Doku ausgeschlossen. Nötig sind der Endpunkt `api.anthropic.com` und die Anmeldung über claude.ai; ein Gateway dazwischen erfüllt das nicht."
+     ]
+    },
     "wrong": [
      "Es geht, wenn du die Sitzung mit `/remote-control` aus dem laufenden Terminal startest; nur der Unterbefehl `claude remote-control` prüft die Anmeldung.",
      "Es geht über Amazon Bedrock, weil die Sitzung lokal läuft und nur das Modell aus der Cloud kommt.",
@@ -4241,6 +4401,14 @@
    "quiz": {
     "correct": "Claude Code lehnt die Bearbeitung ab, weil der Pfad im Hauptordner liegt; Claude sieht einen Tool-Fehler.",
     "q": "Du arbeitest in einer `claude --worktree`-Sitzung und bittest Claude, mit dem Edit-Werkzeug eine Datei im Hauptordner zu ändern. Was passiert?",
+    "why": {
+     "correct": "Eine der vier Prüfungen gilt der Dateibearbeitung: `Edit`, `Write` oder `NotebookEdit` auf einen Pfad im Hauptordner blockt Claude Code, solange die Sitzung im Worktree isoliert ist.",
+     "wrong": [
+      "Das gemeinsame Repository macht die Dateien nicht gemeinsam: Der Worktree hat eigene Dateien und einen eigenen Branch, geteilt wird das `.git`-Verzeichnis.",
+      "Ein Commit im Worktree gelingt und liegt sofort im gemeinsamen Repository. Geblockt wird, was in den Hauptordner zielt, etwa `git -C`, `GIT_DIR` oder ein `cd` dorthin.",
+      "Die Prüfung hängt am Pfad im Hauptordner, nicht daran, ob Git die Datei verfolgt. Eine Rückfrage gibt es höchstens fürs Lesen; das Bearbeiten lehnt Claude Code ab."
+     ]
+    },
     "wrong": [
      "Die Änderung gelingt, denn Worktree und Hauptordner teilen dasselbe Repository und damit dieselben Dateien.",
      "Claude Code blockt alles, auch `git commit` im Worktree, weil das gemeinsame `.git`-Verzeichnis im Hauptordner liegt.",
@@ -4383,6 +4551,14 @@
    "quiz": {
     "correct": "Jeder Agent hat einen eigenen Dateistand auf eigenem Branch: Parallele Schreiber stören sich nicht, und ein falsches Ergebnis wirfst du ohne Rückbau weg.",
     "q": "In der Architektur arbeitet jeder Subagent in einem eigenen Worktree statt im Arbeitsordner des Orchestrators. Was ist der entscheidende Grund dafür?",
+    "why": {
+     "correct": "Ein Worktree trennt Dateiänderungen: Was ein Agent schreibt, landet in seinem eigenen Dateistand auf seinem Branch. Ein falsches Ergebnis wirfst du mit Worktree und Branch weg (S4.7), ohne Rückbau.",
+     "wrong": [
+      "Das Kontextfenster hängt nicht am Ordner: Jeder Subagent startet mit einem frischen, isolierten Kontextfenster (S3.1). Der Worktree trennt Dateiänderungen und Branches (S1.18).",
+      "Ein Worktree trennt Dateiänderungen und Branches, nicht Prozesse, Ports oder Datenbanken (S1.18). Seinen Nutzen hat er bei den Dateien: Parallele Schreiber kommen sich nicht in die Quere.",
+      "Die Rechte eines Subagenten legt das Feld `tools` fest (S3.3); das Modell wählst du nach der Aufgabe. Der Zweck eines Worktrees ist, Dateiänderungen paralleler Sitzungen zu trennen (S1.18)."
+     ]
+    },
     "wrong": [
      "Ohne eigenen Worktree hätte ein Subagent kein eigenes Kontextfenster, weil Claude Code das Kontextfenster fest an den Arbeitsordner des jeweiligen Agenten bindet.",
      "Jeder Worktree bekommt einen eigenen MCP-Namensraum, damit die MCP-Aufrufe paralleler Agenten nicht kollidieren und sich nicht gegenseitig blockieren.",
@@ -4458,6 +4634,14 @@
    "quiz": {
     "correct": "Der `matcher` ist ein JSON-Array statt eines Strings; Claude Code lädt den Eintrag dann nicht.",
     "q": "Du hast einen PreToolUse-Hook in die `settings.json` eingetragen, aber `/hooks` listet ihn nicht auf. Was ist die wahrscheinlichste Ursache?",
+    "why": {
+     "correct": "Ein Array als `matcher` ist ungültig, und Claude Code überspringt dann die ganze Datei. `/hooks` listet nur, was geladen ist; der `matcher` gehört als ein String mit `|`.",
+     "wrong": [
+      "Registriert reicht: `/hooks` zeigt alle für die Sitzung registrierten Hooks. In der Übung stand der Hook nach der Reparatur unter PreToolUse, noch bevor er einmal gefeuert hatte.",
+      "Nicht die Datei entscheidet: `/hooks` zeigt alle für die Sitzung registrierten Hooks, nach Ereignis geordnet. In der Übung stand der Hook aus der Projektdatei `.claude/settings.json` in der Liste.",
+      "Es ist umgekehrt: Ein Hook gehört unter `\"hooks\"` in die `settings.json`. Eine eigene Datei `hooks/hooks.json` laden nur Plugins; steht er sonst in einer eigenen Datei, feuert er nie."
+     ]
+    },
     "wrong": [
      "Der Hook erscheint erst in `/hooks`, nachdem er zum ersten Mal gefeuert hat; vorher kennt Claude Code ihn noch nicht.",
      "`/hooks` zeigt nur Hooks aus deiner Benutzerdatei `~/.claude/settings.json`, nicht die aus der Projektdatei.",
@@ -4517,6 +4701,14 @@
    "quiz": {
     "correct": "Im Skript einen abgefangenen Fehler suchen, ihn sichtbar machen und den Handler geschlossen fallen lassen (`exit 2`).",
     "q": "Dein Wächter steht in `/hooks`, im Transkript erscheint kein `hook error`, aber ein Befehl, den er blocken soll, läuft durch. Von Hand liefert das Skript mit echter Eingabe `exit=0` ohne Ausgabe. Was ist der nächste Diagnoseschritt?",
+    "why": {
+     "correct": "Läuft das Skript von Hand durch und liefert 0, obwohl es blocken soll, liegt der Fehler im Skript. Ein verschluckter Fehler endet mit 0, und Claude Code wertet das als Zustimmung; nur Exit 2 blockt.",
+     "wrong": [
+      "Der Fehler liegt im Skript, nicht in der Registrierung: Es liefert von Hand selbst 0. Ein Matcher wie `\".*\"` lässt den Hook nur bei jedem Aufruf feuern, an diesem 0 ändert er nichts.",
+      "Hängt ein `command`-Hook, greift sein Timeout (Standard 600 Sekunden), und der Aufruf läuft trotzdem weiter. Dein Skript liefert von Hand aber `exit=0`; ein längerer Timeout ändert dieses Urteil nicht.",
+      "Steht ein Hook in `/hooks`, ist seine Registrierung in Ordnung. Das `exit=0` kommt aus dem Skript, und ein neuer Eintrag bringt dasselbe Skript mit. Such zuerst den Fehler im Skript."
+     ]
+    },
     "wrong": [
      "Den Matcher auf `\".*\"` erweitern, damit der Hook bei jedem Tool feuert und so keinen einzigen Aufruf mehr verpasst.",
      "Den `timeout` des Hooks verlängern, weil ein zu kurzer Timeout das Urteil des Skripts abschneidet und sonst alles durchläuft.",
@@ -4584,6 +4776,14 @@
    "quiz": {
     "correct": "Nur, dass nichts anderes kaputtging; ob leere Namen jetzt abgelehnt werden, hat kein Test geprüft.",
     "q": "Du hast Mission A umgesetzt. Alle 18 alten Tests sind grün, einen neuen Test hast du nicht geschrieben. Was kannst du über deine Änderung sagen?",
+    "why": {
+     "correct": "Eine grüne Suite zeigt nur, dass nichts anderes kaputtging. Dass `add_user` leere Namen jetzt abweist, belegt erst ein Test, der genau dieses Verhalten trifft; hier gibt es keinen.",
+     "wrong": [
+      "Die 18 Tests liefen schon vor deiner Änderung grün (`18 passed`). Ein Test, der vorher und nachher grün ist, belegt das neue Verhalten nicht.",
+      "Etwas sagen sie sehr wohl: Die 18 alten Tests zeigen, dass nichts anderes kaputtging. Nur das neue Verhalten ist damit nicht belegt; dafür fehlt der Test.",
+      "Zusagen im Gespräch sind kein Beleg: Auch ein Guardrail zählt erst, wenn du gesehen hast, dass er ablehnt. Beim neuen Verhalten ist das der Lauf eines Tests, der es trifft."
+     ]
+    },
     "wrong": [
      "Dass sie stimmt; die Suite deckt `add_user` ab, also prüft sie auch das neue Verhalten mit.",
      "Nichts; grüne Tests sagen bei einer von Claude geschriebenen Änderung grundsätzlich nichts aus.",

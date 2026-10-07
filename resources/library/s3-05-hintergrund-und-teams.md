@@ -80,7 +80,7 @@ Manche Aufträge schickst du los und schaust nicht zu: Doku erzeugen, einem wack
 
 Dazu kommt `claude daemon status` für einen schnellen Blick auf den Supervisor, den Hintergrunddienst, der die Sitzungen trägt. Das hilft, wenn Sitzungen zu hängen scheinen.
 
-**Wo die Sitzungen laufen:** auf deinem Rechner. Du kannst Terminal und Agent view schließen, die Sitzung arbeitet weiter. Den Ruhezustand übersteht sie, beim Herunterfahren stoppt sie. Bevor eine Hintergrund-Sitzung in einem Git-Repository Dateien ändert, wechselt Claude in einen eigenen Git-Worktree unter `.claude/worktrees/`, damit sich parallele Sitzungen nicht in die Quere kommen ([S1.18](s1-18-worktrees.md)). Wer schreibende Aufträge abgibt, committet vorher, was er behalten will: `claude rm` nimmt den Worktree mit.
+**Wo die Sitzungen laufen:** auf deinem Rechner. Du kannst Terminal und Agent view schließen, die Sitzung arbeitet weiter. Den Ruhezustand übersteht sie, beim Herunterfahren stoppt sie. Danach steht sie weiter in der Liste, als fehlgeschlagen oder nach mehr als 48 Stunden als gestoppt; `claude attach <id>` setzt sie dort fort, wo sie aufgehört hat. Bevor eine Hintergrund-Sitzung in einem Git-Repository Dateien ändert, wechselt Claude in einen eigenen Git-Worktree unter `.claude/worktrees/`, damit sich parallele Sitzungen nicht in die Quere kommen ([S1.18](s1-18-worktrees.md)). Wer schreibende Aufträge abgibt, committet vorher, was er behalten will: `claude rm` nimmt den Worktree mit.
 
 **Kosten:** Hintergrund-Sitzungen verbrauchen dein Kontingent wie interaktive. Die Übung unten nutzt deshalb einen kleinen, lesenden Auftrag.
 
@@ -197,7 +197,7 @@ Du kannst eine Hintergrund-Sitzung mit `claude --bg` starten, sie mit `claude ag
 **Frage:** Du startest `claude --bg` mit einem langen Auftrag, schließt das Terminal und fährst abends den Rechner herunter. Am nächsten Morgen willst du das Ergebnis lesen. Was ist passiert?
 
 - **Richtig:** Das Herunterfahren hat die Sitzung gestoppt; sie steht noch in der Liste, und `claude attach <id>` setzt sie dort fort, wo sie war.
-  - Warum: Hintergrund-Sitzungen laufen auf deinem Rechner, nicht in der Cloud. Das Terminal zu schließen stört sie nicht, den Ruhezustand übersteht sie, aber beim Herunterfahren stoppt sie.
+  - Warum: Hintergrund-Sitzungen laufen auf deinem Rechner, nicht in der Cloud: Das Herunterfahren stoppt sie. Sie bleibt aber in der Liste, und `claude attach <id>` setzt sie fort, wo sie aufgehört hat.
 - Falsch: Die Sitzung lief über Nacht weiter und hat den Auftrag erledigt, denn Hintergrund-Sitzungen laufen unabhängig von deinem Rechner.
   - Warum: Unabhängig sind sie nur vom Terminal, nicht vom Rechner: Die Sitzung läuft auf deinem Rechner, nicht in der Cloud. Fährt er herunter, stoppt sie.
 - Falsch: Das Schließen des Terminals hat die Sitzung beendet; vom Auftrag bleibt nichts außer dem Protokoll, und du musst von vorn beginnen.
