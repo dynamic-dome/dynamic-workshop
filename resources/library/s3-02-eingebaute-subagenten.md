@@ -138,9 +138,13 @@ Du kannst die drei eingebauten Subagenten nennen, sagen, welche nur lesen, Explo
 **Frage:** Vor einem Umbau willst du wissen, wo in `firmware/` alle OSDP-Dateien liegen. Nichts soll geändert werden, und die Suchergebnisse sollen nicht dein Hauptgespräch füllen. Welcher eingebaute Subagent passt?
 
 - **Richtig:** Explore: Er liest nur, Write und Edit sind gesperrt, und seine Suche bleibt in seinem eigenen Kontext.
+  - Warum: Explore ist der schnelle, nur lesende Späher für Dateisuche und Codebasis: Write und Edit sind gesperrt. Ins Hauptgespräch kommt nur seine Zusammenfassung.
 - Falsch: Plan: Er schreibt dir den fertigen Umbauplan und legt die dafür nötigen Dateien gleich im Repo an.
+  - Warum: Plan ist kein Planschreiber: Er sammelt nur lesend Kontext und schreibt keinen Code. Den Plan legt dir das Hauptgespräch vor. Er dient dem Plan-Modus, für die Dateisuche gibt es Explore.
 - Falsch: general-purpose: Er findet dieselben Dateien, und dass er auch ändern darf, schadet nicht, solange du nichts verlangst.
+  - Warum: Du willst nichts ändern, general-purpose darf aber ändern: Er hat alle Tools, die Subagenten zur Verfügung stehen. Bei Explore sind Write und Edit gesperrt, er bleibt beim Lesen.
 - Falsch: Keiner: Eingebaute Subagenten laufen erst, wenn du sie vorher in `.claude/agents/` angelegt hast.
+  - Warum: Die drei eingebauten Subagenten musst du nicht erst definieren: Claude Code liefert sie mit. Claude delegiert sogar von selbst, wenn dein Auftrag passt, etwa „erkunde die Projektstruktur“ an Explore.
 
 </details>
 
