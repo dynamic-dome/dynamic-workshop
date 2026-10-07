@@ -161,7 +161,7 @@ Du kannst erklären, was im Kontextfenster liegt, was mit frühen Gesprächsinha
 - Falsch: Claude gewichtet neuere Nachrichten grundsätzlich höher und überschreibt ältere Vorgaben, sobald sie sich widersprechen.
   - Warum: Hier geht es um Verdichtung, nicht um Widersprüche: Die Vorgabe stand nur im Gespräch und ist in der Zusammenfassung untergegangen. Dauerhaft gilt, was in der `CLAUDE.md` steht.
 - Falsch: Vorgaben aus dem Gespräch gelten nur für die nächste Antwort; für mehr hättest du sie jedes Mal wiederholen müssen.
-  - Warum: Deine Nachrichten liegen im Kontextfenster und bleiben dort bei jeder weiteren Nachricht. Frühes geht erst verloren, wenn das Fenster voll ist und Claude Code verdichtet.
+  - Warum: Deine Nachrichten liegen im Kontextfenster und bleiben dort, nicht nur für die nächste Antwort. Frühes kann erst verloren gehen, wenn sich das Fenster seiner Grenze nähert und Claude Code verdichtet.
 - Falsch: Die `CLAUDE.md` wurde nach einer Verdichtung neu geladen und hat dabei alle Vorgaben aus dem Gespräch ersetzt.
   - Warum: Die `CLAUDE.md` ist die Gegenmaßnahme, nicht die Ursache: Claude Code lädt sie nach einer Verdichtung neu von der Platte, sie überlebt die Zusammenfassung also.
 

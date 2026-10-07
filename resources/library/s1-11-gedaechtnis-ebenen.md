@@ -201,7 +201,7 @@ Du kannst die Gedächtnis-Ebenen neben der CLAUDE.md benennen, sagen, wer sie sc
 - **Richtig:** Eine Notiz im Auto-Memory: Du öffnest sie über `/memory` und bearbeitest oder löschst sie.
   - Warum: Auto-Memory ist standardmäßig an: Claude schreibt dort selbst mit, und die nächste Session startet damit. Über `/memory` bearbeitest oder löschst du jede Notiz.
 - Falsch: Eine Notiz im Auto-Memory: Ein `/clear` leert neben dem Gespräch auch dieses Gedächtnis des Projekts.
-  - Warum: Das Auto-Memory besteht aus Dateien unter `~/.claude/projects/<project>/memory/`, die jede neue Session wieder lädt. Eine falsche Notiz entfernst du dort selbst, etwa über `/memory`.
+  - Warum: Das Auto-Memory liegt in Dateien unter `~/.claude/projects/<project>/memory/`, nicht im Gespräch; den Anfang der `MEMORY.md` lädt jede neue Session. Die Notiz löschst du selbst über `/memory`.
 - Falsch: Eine Notiz im Auto-Memory: Du startest künftig mit `claude --bare`, dem vorgesehenen Schalter dafür.
   - Warum: `--bare` ist ein Minimalmodus für Skripte und lässt neben dem Auto-Memory auch Hooks, Skills, Plugins, MCP-Server und die CLAUDE.md weg. Zum Abschalten dienen `/memory` oder `autoMemoryEnabled`.
 - Falsch: Keine Notiz: Das Auto-Memory entsteht nur nach „Remember that …“, die Quelle ist also ein Irrtum.

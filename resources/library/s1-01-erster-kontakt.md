@@ -216,7 +216,7 @@ Du kannst Claude Code in einem leeren Ordner starten, per Klartext-Auftrag eine 
 - Falsch: Rückfragen gibt es nur bei Shell-Befehlen mit Risiko; das Anlegen und Ausführen einer Datei gilt als harmlos.
   - Warum: Im Modus `default` fragt Claude vor Dateiänderungen und vor den meisten Shell-Befehlen, nicht erst bei riskanten. In der Übung gibst du das Anlegen und das Ausführen je einzeln frei.
 - Falsch: Claude hat die Datei nur vorgeschlagen und simuliert; geschrieben wird sie erst, wenn du `/exit` eingibst.
-  - Warum: Claude simuliert nichts: Nach deinem „Yes“ schreibt es die Datei wirklich und führt sie in deinem Ordner aus. `/exit` beendet nur die Sitzung.
+  - Warum: Claude simuliert nichts: Die Datei entsteht wirklich in deinem Ordner und läuft dort, hier ohne Rückfrage, weil die Sitzung in `auto` läuft. `/exit` beendet nur die Sitzung.
 
 </details>
 
