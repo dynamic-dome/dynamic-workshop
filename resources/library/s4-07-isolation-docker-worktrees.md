@@ -194,9 +194,13 @@ Du kannst an einer Worktree-Sitzung zeigen, was sie vom Hauptordner trennt und w
 **Frage:** Du arbeitest in einer `claude --worktree`-Sitzung und bittest Claude, mit dem Edit-Werkzeug eine Datei im Hauptordner zu ändern. Was passiert?
 
 - **Richtig:** Claude Code lehnt die Bearbeitung ab, weil der Pfad im Hauptordner liegt; Claude sieht einen Tool-Fehler.
+  - Warum: Eine der vier Prüfungen gilt der Dateibearbeitung: `Edit`, `Write` oder `NotebookEdit` auf einen Pfad im Hauptordner blockt Claude Code, solange die Sitzung im Worktree isoliert ist.
 - Falsch: Die Änderung gelingt, denn Worktree und Hauptordner teilen dasselbe Repository und damit dieselben Dateien.
+  - Warum: Das gemeinsame Repository macht die Dateien nicht gemeinsam: Der Worktree hat eigene Dateien und einen eigenen Branch, geteilt wird das `.git`-Verzeichnis.
 - Falsch: Claude Code blockt alles, auch `git commit` im Worktree, weil das gemeinsame `.git`-Verzeichnis im Hauptordner liegt.
+  - Warum: Ein Commit im Worktree gelingt und liegt sofort im gemeinsamen Repository. Geblockt wird, was in den Hauptordner zielt, etwa `git -C`, `GIT_DIR` oder ein `cd` dorthin.
 - Falsch: Die Änderung gelingt nach einer Rückfrage; die Prüfung gilt nur für Dateien, die Git verfolgt, nicht für die im Hauptordner.
+  - Warum: Die Prüfung hängt am Pfad im Hauptordner, nicht daran, ob Git die Datei verfolgt. Eine Rückfrage gibt es höchstens fürs Lesen; das Bearbeiten lehnt Claude Code ab.
 
 </details>
 
