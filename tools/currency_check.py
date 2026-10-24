@@ -36,6 +36,10 @@ RETIREMENT_WARN_DAYS = 60
 CANON_INFO_DAYS, CANON_RED_DAYS = 45, 90
 REQUIRED_DOCS = ("cli-reference.md", "model-deprecations.md", "model-config.md", "permission-modes.md")
 KEYWORDS = re.compile(r"\b(removed|deprecated|renamed|no longer|default)\b", re.I)
+# A bug-fix line, optionally behind "[VSCode]" tags or a "Windows:" label. Owner decision F9 (2026-10-22, todo #9518):
+# such lines name course identifiers all the time (~60% of the monthly yellow findings) but rarely change what the
+# course teaches, so they count as info, not yellow. Removed/Changed/Added/Deprecated lines stay yellow.
+FIXED_LINE = re.compile(r"^(?:\[[^\]]{1,30}\]\s*|[\w .+/-]{1,30}:\s+)*fixed\b", re.I)
 SPECIFIC_KINDS = ("flag", "env", "hook_event", "model_id")
 KIND_LABEL = {
     "flag": "Flag", "env": "Env-Variable", "hook_event": "Hook-Event",
@@ -189,7 +193,10 @@ def _check_changelog(entries, by_value):
     for version, line in entries:
         named = [v for v in specific if re.search(r"(?<![\w-])" + re.escape(v) + r"(?![\w-])", line)]
         named += [v for v in words if "`" + v + "`" in line]
-        if named:
+        if named and FIXED_LINE.match(line):
+            findings.append(Finding("info", f"changelog-fixed:{version}:{_short(line)}", f"{version}: {line}",
+                                    tuple(f"nennt {v}" for v in named)))
+        elif named:
             findings.append(Finding("gelb", f"changelog:{version}:{_short(line)}", f"{version}: {line}",
                                     tuple(f"nennt {v}" for v in named)))
         elif KEYWORDS.search(line):

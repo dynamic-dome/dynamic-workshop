@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-24 — Aktualitätslauf: „Fixed“ zählt als Info
+
+- **Aktualität:** Gelbe Changelog-Befunde vom Typ „Fixed“ (Zeile beginnt mit „Fixed“, auch hinter „[VSCode]“ oder
+  „Windows:“) sind im Monatslauf jetzt Info (Schlüssel `changelog-fixed:…`), nicht gelb; sie zählen nicht mehr für den
+  Exit-Code und `finding_keys`. Anlass: Abschluss-Review, rund 82 Gelb-Befunde je Monat, davon etwa 60 % „Fixed“-Zeilen
+  (Todo-Müdigkeit). Owner-Entscheid F9 vom 22.10.2026, gilt vor dem ersten Monatslauf am 01.11. Offen bleibt der
+  Nachprüf-Hook für version-pinned-Zeilen.
+
 ## 2026-10-05 — Selbstlernende zuerst (Branch `selbstlern-zuerst`, läuft)
 
 Anlass: Durchsicht vom 2026-10-05 (`docs/reviews/2026-10-05-lernbogen-und-fakten.md`, Befunde R1 bis R31). Entwurf und

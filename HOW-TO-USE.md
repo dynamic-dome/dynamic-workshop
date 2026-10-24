@@ -100,6 +100,8 @@ python tools/cockpit_shots.py <url> <ordner>        # Bilder aller Cockpit-Ansic
   offiziellen Doku (Bericht unter `.currency/manual/reports/`). Danach `Geprüft:` im Kanon setzen. Fremdprojekte der
   Community-Kapitel stehen im Kanon als `- Fremdprojekt: <url> (<Kapitel>)`; ändert sich eine dieser Seiten, meldet der
   Lauf das gelb mit Kapitel — dann das Kapitel gegen die Quelle prüfen und sein „Stand:"-Datum erneuern.
+  Changelog-Zeilen, die mit „Fixed“ beginnen (auch hinter „[VSCode]“ oder „Windows:“), zählen als Info, nicht als gelb
+  (Owner-Entscheid 22.10.2026); „Removed“, „Changed“, „Added“ und „Deprecated“ mit Kurs-Bezeichner bleiben gelb.
 - **Deck:** `python tools/build_deck.py` baut den Foliensatz aus dem Katalog.
 - **Diagramme fürs Cockpit** (optional): `python tools/render_diagrams.py`; ohne SVG zeigt das Cockpit den
   Mermaid-Quelltext.

@@ -203,11 +203,46 @@ def test_canon_age(checked, level):
 
 
 def test_changelog_naming_a_course_identifier_is_yellow_keyword_only_is_info():
-    available = pages(**{BASE + "changelog.md": changelog(["Fixed --max-turns off by one", "Changed the default theme", "Added foo"])})
+    available = pages(**{BASE + "changelog.md": changelog(["Changed --max-turns default", "Changed the default theme", "Added foo"])})
     result = run(available=available)
-    assert [f.text for f in levels(result, "gelb")] == ["2.1.285: Fixed --max-turns off by one"]
+    assert [f.text for f in levels(result, "gelb")] == ["2.1.285: Changed --max-turns default"]
     assert [f.text for f in levels(result, "info") if f.key.startswith("changelog-kw")] == ["2.1.285: Changed the default theme"]
     assert result.exit_code == 1
+
+
+@pytest.mark.parametrize("line", [
+    "Fixed --max-turns off by one",
+    "fixed --max-turns off by one",
+    "[VSCode] Fixed --max-turns off by one",
+    "Windows: Fixed --max-turns off by one",
+    "Fixed `opus` resolving to the wrong model",
+])
+def test_fixed_changelog_entries_naming_a_course_identifier_count_as_info_not_yellow(line):
+    # Owner decision F9 (2026-10-22, todo #9518): before the monthly run, "Fixed" lines are info, not yellow.
+    result = run(available=pages(**{BASE + "changelog.md": changelog([line])}))
+    assert levels(result, "gelb") == []
+    assert [f.text for f in levels(result, "info") if f.key.startswith("changelog-fixed")] == [f"2.1.285: {line}"]
+    assert result.exit_code == 0
+
+
+def test_fixed_changelog_info_keeps_the_named_identifiers_and_stays_out_of_the_state_keys():
+    result = run(available=pages(**{BASE + "changelog.md": changelog(["Fixed --max-turns off by one"])}))
+    [finding] = [f for f in levels(result, "info") if f.key.startswith("changelog-fixed")]
+    assert finding.where == ("nennt --max-turns",)
+    assert result.state["finding_keys"] == []
+    assert cc.summary(result, None, Path("r.md"))["yellow"] == 0
+
+
+def test_only_leading_fixed_downgrades_other_changelog_verbs_stay_yellow():
+    lines = ["Changed --max-turns so it no longer fixes the count", "Removed --max-turns", "Added --max-turns, fixed docs"]
+    result = run(available=pages(**{BASE + "changelog.md": changelog(lines)}))
+    assert [f.text for f in levels(result, "gelb")] == [f"2.1.285: {line}" for line in lines]
+
+
+def test_fixed_changelog_entry_without_a_course_identifier_stays_a_plain_keyword_info():
+    result = run(available=pages(**{BASE + "changelog.md": changelog(["Fixed the default theme not saving"])}))
+    assert levels(result, "gelb") == []
+    assert [f.key.split(":")[0] for f in levels(result, "info") if f.key.startswith("changelog")] == ["changelog-kw"]
 
 
 def test_documented_mode_alias_from_the_cli_reference_is_accepted():
@@ -403,7 +438,7 @@ def test_canon_model_missing_from_the_deprecations_table_is_red():
 
 
 def test_yellow_findings_are_new_once_then_known():
-    available = pages(**{BASE + "changelog.md": changelog(["Fixed --max-turns off by one"])})
+    available = pages(**{BASE + "changelog.md": changelog(["Removed --max-turns"])})
     first = run(available=available)
     key = levels(first, "gelb")[0].key
     assert key in first.state["finding_keys"]
