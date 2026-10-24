@@ -214,6 +214,9 @@ def test_changelog_naming_a_course_identifier_is_yellow_keyword_only_is_info():
     "Fixed --max-turns off by one",
     "fixed --max-turns off by one",
     "[VSCode] Fixed --max-turns off by one",
+    "\[VSCode] Fixed --max-turns off by one",  # the official changelog escapes the tag bracket
+    "\[Claude Tag] Fixed --max-turns off by one",
+    "**Security:** Fixed --max-turns off by one",
     "Windows: Fixed --max-turns off by one",
     "Fixed `opus` resolving to the wrong model",
 ])
@@ -235,6 +238,12 @@ def test_fixed_changelog_info_keeps_the_named_identifiers_and_stays_out_of_the_s
 
 def test_only_leading_fixed_downgrades_other_changelog_verbs_stay_yellow():
     lines = ["Changed --max-turns so it no longer fixes the count", "Removed --max-turns", "Added --max-turns, fixed docs"]
+    result = run(available=pages(**{BASE + "changelog.md": changelog(lines)}))
+    assert [f.text for f in levels(result, "gelb")] == [f"2.1.285: {line}" for line in lines]
+
+
+def test_verb_labels_before_a_colon_do_not_turn_a_changed_or_removed_line_into_fixed_info():
+    lines = ["Changed --max-turns: fixed bug", "Removed --max-turns flag: fixed docs"]
     result = run(available=pages(**{BASE + "changelog.md": changelog(lines)}))
     assert [f.text for f in levels(result, "gelb")] == [f"2.1.285: {line}" for line in lines]
 

@@ -39,7 +39,11 @@ KEYWORDS = re.compile(r"\b(removed|deprecated|renamed|no longer|default)\b", re.
 # A bug-fix line, optionally behind "[VSCode]" tags or a "Windows:" label. Owner decision F9 (2026-10-22, todo #9518):
 # such lines name course identifiers all the time (~60% of the monthly yellow findings) but rarely change what the
 # course teaches, so they count as info, not yellow. Removed/Changed/Added/Deprecated lines stay yellow.
-FIXED_LINE = re.compile(r"^(?:\[[^\]]{1,30}\]\s*|[\w .+/-]{1,30}:\s+)*fixed\b", re.I)
+# The official changelog escapes tag brackets ("\[VSCode] Fixed ...") and bolds labels ("**Security:** Fixed ...");
+# a plain "Label: " prefix must not be a change verb, or "Changed --foo: fixed docs" would count as a fix.
+FIXED_LINE = re.compile(
+    r"^(?:\\?\[[^\]]{1,30}\]\s*|\*\*[^*]{1,30}:\*\*\s*"
+    r"|(?!(?:added|changed|removed|deprecated)\b)[\w .+/-]{1,30}:\s+)*fixed\b", re.I)
 SPECIFIC_KINDS = ("flag", "env", "hook_event", "model_id")
 KIND_LABEL = {
     "flag": "Flag", "env": "Env-Variable", "hook_event": "Hook-Event",
