@@ -10,7 +10,7 @@ Zeig die Übung aus dem Kapitel live: die Übung „dieselbe Aufgabe, drei Model
 
 **Startzustand:** der leere Ordner `~/cc-workshop/kosten`, Claude Code angemeldet, `/cost` vor dem Workshop einmal ausprobiert. Du stellst Modell und Effort nur mit Start-Flags ein und tippst in diesen Sitzungen weder `/model` noch `/effort`: Beide würden deine Wahl als Standard speichern.
 
-**Ablauf:** Schritte 1 bis 4 der Übung. Jeder Lauf ist eine neue Sitzung (`claude --model opus --effort xhigh …`, dann `sonnet` mit `medium`, dann `haiku` ohne `--effort`), derselbe Auftrag mit je eigenem Dateinamen, danach `/cost`, den Betrag notieren, `Esc`, `/exit`. Schritt 5 (Standard unverändert) zeigst du zum Schluss.
+**Ablauf:** Schritte 1 bis 4 der Übung. Jeder Lauf ist eine neue Sitzung (`claude --model opus --effort xhigh …`, dann `sonnet` mit `medium`, dann `haiku` ohne `--effort`, es startet mit seiner Standardstufe), derselbe Auftrag mit je eigenem Dateinamen, danach `/cost`, den Betrag notieren, `Esc`, `/exit`. Schritt 5 (Standard unverändert) zeigst du zum Schluss.
 
 Danach frag die Runde:
 
@@ -28,7 +28,7 @@ Danach frag die Runde:
 
 - Lauf 1: „Das ist eine teure Kombination, das Opus-Tier auf einer tiefen Effort-Stufe. Schaut in die Ansicht Usage auf `Total cost`. Jetzt sehen wir, was wir für weniger bekommen."
 - Lauf 2: „Sonnet auf mittlerer Stufe. Gleiche Aufgabe. Seht ihr, was das im Vergleich zum ersten Lauf kostet?" Pro Token kostet das Sonnet-Tier etwa die Hälfte des Opus-Tiers ([Kanon](../../_canonical.md)).
-- Lauf 3: „Haiku, das günstigste Tier, ohne Effort-Stufen: Die Modellwahl allein ist der Hebel." Pro Token kostet es etwa ein Viertel des Opus-Tiers ([Kanon](../../_canonical.md)). Einzelne Läufe können trotzdem abweichen, etwa wegen unterschiedlich langer Antworten; sag das, wenn die Zahlen nicht sauber sinken.
+- Lauf 3: „Haiku, das günstigste Tier, hier ohne `--effort`: Die Modellwahl allein ist der Hebel." Pro Token kostet es auf der Anthropic API etwa ein Vierzigstel des Opus-Tiers, bei einem Anbieter mit älterer Haiku-Generation etwa ein Viertel ([Kanon](../../_canonical.md)); bei so kleinen Beträgen zählt die Größenordnung, nicht die Nachkommastelle. Einzelne Läufe können trotzdem abweichen, etwa wegen unterschiedlich langer Antworten; sag das, wenn die Zahlen nicht sauber sinken.
 - Vergleich: „Die eigentliche Frage stellt ihr *vor* der Sitzung: Wie wichtig ist hier die Qualität? Für ein einmaliges Hilfsskript reicht vermutlich das günstige Tier. Kostenregler und Effort-Regler gehören zu eurem Job."
 - Abschluss: „Kosten sind kein Aufkleber am Monatsende, sondern ein Regler, den ihr in jeder Sitzung dreht. `/usage` zeigt, wo ihr in dieser Sitzung steht; `/cost` ist ein anderer Name dafür. Im Abo zeigt er darunter, was den Verbrauch getrieben hat. Schaut nach, bevor ihr einen Ablauf hochskaliert."
 - Merksatz: „Die Budgetgrenze ist für unbeaufsichtigte `-p`-Läufe Pflicht, nicht Kür." Die Extra-Übung des Kapitels zeigt `--max-budget-usd` und `--max-turns`; beide wirken nur mit `-p`.

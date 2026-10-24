@@ -102,7 +102,7 @@ Jeder Lauf ist eine neue Sitzung: So fängt `/cost` bei null an.
 
    Erwartet: Claude legt die Datei an. Gib dann `/cost` ein: Es öffnet sich die Ansicht „Usage“, ganz oben steht der Block „Session“ mit der Zeile `Total cost`. Notier den Betrag; es zählt die Größenordnung. Schließ die Ansicht mit `Esc` und beende die Sitzung mit `/exit`.
 2. Zweiter Lauf: `claude --model sonnet --effort medium --permission-mode acceptEdits`. Gleicher Auftrag, Datei `palindrome_sonnet.py`. Dann `/cost`, notieren, `/exit`.
-3. Dritter Lauf: `claude --model haiku --permission-mode acceptEdits`, ohne `--effort`, weil `haiku` keine Effort-Stufen kennt. Datei `palindrome_haiku.py`. Dann `/cost`, notieren, `/exit`.
+3. Dritter Lauf: `claude --model haiku --permission-mode acceptEdits`, ohne `--effort`: `haiku` startet mit seiner Standardstufe, und bei einem Anbieter mit älterer Haiku-Generation gibt es gar keinen Effort ([S1.7](s1-07-modellwahl-und-effort.md)). Datei `palindrome_haiku.py`. Dann `/cost`, notieren, `/exit`.
 4. Vergleiche die drei Beträge. Erwartet: Meist sinken sie von Lauf 1 zu Lauf 3, weil `sonnet` und `haiku` pro Token weniger kosten als `opus` ([Kanon](../_canonical.md)). Einzelne Läufe können abweichen, etwa wegen unterschiedlich langer Antworten. Öffne die drei Dateien und sieh nach, ob sich der Aufpreis bei dieser Aufgabe in der Qualität zeigt.
 5. Prüf, dass dein Standard unverändert ist: Starte `claude` ohne Flags und lies die Kopfzeile. Sie nennt dein gewohntes Modell, nicht `haiku`.
 

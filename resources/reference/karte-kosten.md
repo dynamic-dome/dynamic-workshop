@@ -2,7 +2,7 @@
 
 Wofür: Modell und Effort passend zur Aufgabe wählen, den Verbrauch lesen und unbeaufsichtigte Läufe begrenzen.
 
-Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quelle: https://code.claude.com/docs/en/costs
+Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285); die Angaben zu `haiku` am 2026-10-24 neu geprüft (CLI 2.1.310, model-config). Offizielle Quelle: https://code.claude.com/docs/en/costs
 
 > Zahlen stehen nicht auf dieser Karte. Modellgenerationen, Preise, Kontextgrößen und den Start-Effort je Modell führt nur der [Kanon](../_canonical.md). Worauf ein Alias bei dir gerade auflöst, zeigt `/model`.
 
@@ -13,7 +13,7 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quell
 | Architektur, Planung, Root-Cause-Analyse | `opus` | Default in Claude Code, tiefes Reasoning |
 | Die härtesten, lang laufenden Aufgaben | `fable` | Premium-Tier über `opus`, nie Account-Default |
 | Standard-Coding, Refactors | `sonnet` | erledigt die meisten Coding-Aufgaben gut und kostet weniger als `opus` |
-| Bulk-Reads, einfache Suchen, Routine-Reviews | `haiku` | kleinstes Tier; für einfache Subagenten `model: haiku` im Frontmatter |
+| Bulk-Reads, einfache Suchen, Routine-Reviews | `haiku` | günstigstes Tier; für einfache Subagenten `model: haiku` im Frontmatter |
 
 Muster „Modell pro Phase": planen mit `opus`, umsetzen mit `sonnet`, Routine-Prüfung mit `haiku` ([S4.1](../library/s4-01-modell-pro-phase.md)). Der Alias `opusplan` nimmt Opus im Plan-Modus und danach Sonnet. Wechseln mit `/model`, für eine Sitzung mit `--model <alias>`.
 
@@ -26,7 +26,7 @@ Muster „Modell pro Phase": planen mit `opus`, umsetzen mit `sonnet`, Routine-P
 | `high` | Refactors, schwierigere Bugs |
 | `xhigh`, `max` | Architektur-Entscheidungen, komplexe Root-Cause-Analyse |
 
-Mehr Effort heißt mehr Tiefe, aber auch mehr Latenz und Kosten. Setzen mit `/effort <stufe>` (dazu `auto` und `status`), mit den Pfeiltasten im `/model`-Picker oder mit `--effort <stufe>` für eine Sitzung. Welche Stufen ein Modell kennt und womit es startet, steht im Kanon; das Haiku-Tier kennt keinen Effort, und eine Stufe, die das Modell nicht kann, fällt auf die nächstniedrigere unterstützte zurück.
+Mehr Effort heißt mehr Tiefe, aber auch mehr Latenz und Kosten. Setzen mit `/effort <stufe>` (dazu `auto` und `status`), mit den Pfeiltasten im `/model`-Picker oder mit `--effort <stufe>` für eine Sitzung. Welche Stufen ein Modell kennt und womit es startet, steht im Kanon; ein `haiku`, das dein Anbieter auf die ältere Generation auflöst, kennt keinen Effort (auf der Anthropic API schon), und eine Stufe, die das Modell nicht kann, fällt auf die nächstniedrigere unterstützte zurück.
 
 ## Verbrauch lesen
 
@@ -62,7 +62,7 @@ Kostentreiber sind `opus` statt `sonnet`, `xhigh` oder `max`, viele parallele Su
 - `/model` und `/effort` speichern deine Wahl als Standard für neue Sitzungen. Nur für diese Sitzung: im Picker oder Regler `s` drücken. `max` gilt ohnehin nur für die laufende Sitzung.
 - Ein Modellwechsel mitten in der Aufgabe kostet einen Turn ohne Cache, langsamer und teurer. Wähle das Modell möglichst zu Beginn.
 - `--bare` liest kein Abo-Token (`CLAUDE_CODE_OAUTH_TOKEN`); nimm `ANTHROPIC_API_KEY` oder einen `apiKeyHelper` ([S4.4](../library/s4-04-ci-zugang-und-kosten.md)).
-- Aliase lösen je Anbieter verschieden auf, und für das Haiku-Modell nennt der Kanon ein frühes Retirement-Datum: Prüfe vor großen Bulk-Läufen mit `/model`, was dahintersteht.
+- Aliase lösen je Anbieter verschieden auf, und `haiku` ist auf der Anthropic API ein anderes Modell als bei Claude Platform on AWS, Amazon Bedrock, Google Cloud und Microsoft Foundry (Preis, Kontextfenster und Effort laut Kanon): Prüfe vor großen Bulk-Läufen mit `/model`, was dahintersteht.
 - `/fast` (Research Preview) macht nur das Opus-Tier schneller, bei höherem Preis pro Token; im Abo läuft es nur über Usage Credits.
 
 ## Mehr dazu

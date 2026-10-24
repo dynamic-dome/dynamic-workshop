@@ -127,7 +127,7 @@ claude --model opus
 ## Typische Fallen
 
 - **Haiku als einziger Prüfer.** Haiku macht die erste, günstige Runde, nicht die Abnahme. Grenzfälle, Architektur-Kompromisse und Sicherheitsfragen gehören zu `opus`.
-- **Haiku bekommt zu viel auf einmal.** Das Kontextfenster ist je Modell verschieden ([S1.7](s1-07-modellwahl-und-effort.md)). Gib ihm gezielte Diffs oder Dateien, nicht die ganze Codebasis.
+- **Haiku bekommt zu viel auf einmal.** Das Kontextfenster hängt vom Anbieter ab: Auf der Anthropic API ist es groß (über 100K Tokens Prompt kostet Haiku mehr je Token), bei einem Anbieter mit älterer Haiku-Generation deutlich kleiner ([S1.7](s1-07-modellwahl-und-effort.md)). Gib ihm gezielte Diffs oder Dateien, nicht die ganze Codebasis.
 - **Der Plan-Modus mit `opusplan` ist ein Modellwechsel.** Jeder Wechsel zwischen Plan-Modus und Umsetzung schaltet zwischen `opus` und `sonnet` um, und jedes Modell hat seinen eigenen Cache. Plane in einem Zug und wechsle nicht bei jeder Kleinigkeit hin und her.
 - **`/model <name>` verstellt deinen Standard.** Zum Ausprobieren starte mit `--model`; das gilt nur für die Sitzung.
 - **Sensibler Code an einen zweiten Anbieter.** Bevor ein Schritt an einen anderen Anbieter geht, prüf, welche Daten ihn verlassen ([S4.2](s4-02-codex-schwarm.md)).

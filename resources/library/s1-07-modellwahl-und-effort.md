@@ -36,18 +36,18 @@ Beides stellst du beim Start per Flag ein oder in der Sitzung mit `/model` und `
 
 ## Bild im Kopf
 
-Ein Wachdienst betreut ein Objekt mit gemischtem Personal, jede Kraft mit eigenem Stundensatz. Der Auszubildende (`haiku`) ist schnell zur Stelle, hat aber nur einen kleinen Notizblock. Die erfahrene Streifenkraft (`sonnet`) erledigt den Alltag. Die Fachkraft für technische Alarme (`opus`) holst du für die schwierigen Fälle, den Sachverständigen (`fable`) für den großen Schadensfall, der Tage dauert. Stellst du die Fachkraft die ganze Nacht an den Empfang, verbrennst du Budget.
+Ein Wachdienst betreut ein Objekt mit gemischtem Personal, jede Kraft mit eigenem Stundensatz. Der Auszubildende (`haiku`) ist schnell zur Stelle und der Günstigste im Haus. Wie groß sein Notizblock ist, hängt vom Haus ab: Direkt bei Anthropic fasst er viel, bei manchen Cloud-Anbietern ist er noch klein. Die erfahrene Streifenkraft (`sonnet`) erledigt den Alltag. Die Fachkraft für technische Alarme (`opus`) holst du für die schwierigen Fälle, den Sachverständigen (`fable`) für den großen Schadensfall, der Tage dauert. Stellst du die Fachkraft die ganze Nacht an den Empfang, verbrennst du Budget.
 
 Die Effort-Stufe ist die Zeit, die sich die gerufene Kraft für den Auftrag nimmt: ein kurzer Blick oder eine gründliche Begehung mit Protokoll. Gründlicher kostet mehr.
 
 ```mermaid
 flowchart LR
   T["Aufgabe"] --> M{"Wie viel Urteil<br/>braucht sie?"}
-  M -- "wenig: lesen, suchen, Masse" --> H["haiku<br/>kein Effort"]
+  M -- "wenig: lesen, suchen, Masse" --> H["haiku"]
   M -- "Alltag: Feature, Refactor" --> S["sonnet"]
   M -- "viel: Architektur, Root Cause" --> O["opus"]
   M -- "härteste, lange Agentenarbeit" --> F["fable"]
-  S & O & F --> E["Effort nach Denklast:<br/>low · medium · high · xhigh · max"]
+  H & S & O & F --> E["Effort nach Denklast:<br/>low · medium · high · xhigh · max"]
 ```
 
 ## Im Detail
@@ -59,9 +59,11 @@ flowchart LR
 | **Fable** (`fable`) | Das stärkste Tier: härtestes Reasoning, lange Agentenarbeit. Nie der Standard eines Kontos. | etwa 2,5-mal so teuer |
 | **Opus** (`opus`) | Tiefes Reasoning, Architektur, komplexe Aufgaben. | Bezugsgröße |
 | **Sonnet** (`sonnet`) | Schnell und fähig, der Coding-Alltag. | etwa die Hälfte |
-| **Haiku** (`haiku`) | Schnelle Aufgaben, Massenarbeit. Kleineres Kontextfenster, kein Effort. | etwa ein Viertel |
+| **Haiku** (`haiku`) | Schnelle Aufgaben, Massenarbeit. Das günstigste Tier; Fenster und Effort hängen vom Anbieter ab (siehe unten). | auf der Anthropic API etwa ein Vierzigstel, bei Prompts über 100K Tokens etwa ein Achtel; bei Anbietern mit älterer Haiku-Generation etwa ein Viertel |
 
-Die relativen Kosten sind aus den Preisen im [Kanon](../_canonical.md) gerechnet; ändern sich die Preise, rechnest du dort neu. Abgerechnet wird nach Tokens, der Einheit, in der Modelle Text zählen. Das Kontextfenster ist das Arbeitsgedächtnis einer Sitzung ([S1.8](s1-08-kontextfenster.md)); bei Haiku ist es deutlich kleiner als bei den anderen Tiers.
+Die relativen Kosten sind aus den Preisen im [Kanon](../_canonical.md) gerechnet; ändern sich die Preise, rechnest du dort neu. Abgerechnet wird nach Tokens, der Einheit, in der Modelle Text zählen. Das Kontextfenster ist das Arbeitsgedächtnis einer Sitzung ([S1.8](s1-08-kontextfenster.md)); auf der Anthropic API ist es bei allen vier Tiers groß.
+
+**Der Alias `haiku` löst je Anbieter verschieden auf.** Auf der Anthropic API steht er auf der aktuellen Haiku-Generation: großes Kontextfenster, Effort-Stufen, ein Bruchteil des Opus-Preises. Bei Claude Platform on AWS, Amazon Bedrock, Google Cloud und Microsoft Foundry löst er noch auf die ältere Generation auf, mit deutlich kleinerem Fenster, ohne Effort und zu einem höheren Preis. Die Anbieter-Tabelle und die Zahlen stehen im [Kanon](../_canonical.md); was bei dir dahintersteht, zeigt `/model`.
 
 Welches Modell dein Konto ohne Angabe nimmt, zeigt die Zeile „Default“ in `/model`. Modellnamen ändern sich schnell, deshalb arbeitet diese Bibliothek mit Aliasen und Rollen.
 
@@ -77,7 +79,7 @@ Jede Stufe tauscht Token-Verbrauch gegen Gründlichkeit. Feste Faktoren je Stufe
 | `xhigh` | tieferes Reasoning bei höherem Verbrauch |
 | `max` | harte Probleme, die Claude ohne dich durcharbeiten soll, etwa die Suche nach Sicherheitslücken; neigt zum Übergrübeln, also sparsam einsetzen |
 
-Haiku kennt keinen Effort. `xhigh` und `max` gibt es auf den aktuellen Generationen der Tiers Fable, Opus und Sonnet; ältere Generationen und manche Anbieter kennen sie nicht. Mit welcher Stufe ein Modell startet, steht im [Kanon](../_canonical.md).
+Auf der Anthropic API kennen alle vier Tiers die Stufen bis `xhigh` und `max`, auch `haiku`. Wo ein Alias auf eine ältere Generation auflöst (Anbieter-Tabelle im [Kanon](../_canonical.md)), fehlen `xhigh` oder der ganze Effort: Ein Haiku auf Cloud-Anbietern kennt keinen. Mit welcher Stufe ein Modell startet, steht ebenfalls im Kanon.
 
 Schalte bei wirklich einfachen Aufgaben herunter; das ist genauso wichtig wie das Hochschalten bei schweren. `xhigh` für einen einzeiligen Tippfehler ist ein kleines, aber wiederkehrendes Leck.
 
@@ -117,7 +119,7 @@ Nimm Opus für Planung und Architektur, Sonnet für die Umsetzung und Haiku für
 1. Starte mit `claude --model sonnet --effort high --permission-mode default`. Lies die Kopfzeile: Sie nennt Modell und Effort.
 2. Gib `/effort status` ein. Die Antwort nennt die Stufe `high`.
 3. Gib `/model` ein. Such die Zeile „Default“: Das ist das Modell, das dein Konto ohne Angabe nimmt. Lies die Hinweise am unteren Rand: Enter speichert die Wahl als Standard, `s` gilt nur für diese Sitzung. Schließ die Auswahl mit `Esc`, ohne etwas zu wählen.
-4. Beende mit `/exit` und starte mit `claude --model haiku --permission-mode default`. Die Kopfzeile nennt Haiku, eine Effort-Anzeige fehlt. Frag: `In one sentence: what does git status do?` Beende wieder.
+4. Beende mit `/exit` und starte mit `claude --model haiku --permission-mode default`. Die Kopfzeile nennt Haiku. Eine Effort-Anzeige steht nur da, wenn dein `haiku` Effort kennt (Anthropic API); bei einem Anbieter mit älterer Haiku-Generation fehlt sie. Frag: `In one sentence: what does git status do?` Beende wieder.
 5. Starte nur mit `claude`. Die Kopfzeile nennt wieder dein übliches Modell: Die Flags haben nichts gespeichert.
 6. Wähl für jede Aufgabe Tier und Effort und begründe in einem Satz:
    - a) einen Tippfehler in der README korrigieren
@@ -141,22 +143,22 @@ Nimm Opus für Planung und Architektur, Sonnet für die Umsetzung und Haiku für
 
 ## Typische Fallen
 
-- **Haiku „vergisst“ den Anfang einer großen Datei.** Haikus Kontextfenster ist deutlich kleiner als das der anderen Tiers (Größen im [Kanon](../_canonical.md)). Nimm Haiku für kleine, gezielte Lesezugriffe und Opus oder Fable für die Analyse einer ganzen Codebasis.
+- **Haiku „vergisst“ den Anfang einer großen Datei.** Das trifft ein Haiku, das dein Anbieter noch auf die ältere Generation auflöst: Sein Kontextfenster ist deutlich kleiner als das der anderen Tiers (Größen und Anbieter-Tabelle im [Kanon](../_canonical.md)). Auf der Anthropic API fasst Haiku das große Fenster, kostet aber über 100K Tokens Prompt mehr je Token. Prüf mit `/model`, worauf `haiku` bei dir steht. Nimm es für kleine, gezielte Lesezugriffe und Opus oder Fable für die Analyse einer ganzen Codebasis, die Urteil braucht.
 - **Die Wahl bleibt länger als gedacht.** `/model <alias>` und eine Stufe hinter `/effort` gelten nicht nur für die laufende Sitzung, sondern werden gespeichert. Für eine einzige Sitzung nimmst du die Start-Flags oder `s` in der Auswahl.
 - **Modellwechsel mitten in der Aufgabe.** Nach einem Wechsel muss das neue Modell den ganzen bisherigen Verlauf neu einlesen; das kostet in einer langen Sitzung spürbar. Wähl Modell und Effort am Anfang.
 
 ## Check
 
-Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur für eine Sitzung oder dauerhaft umstellen und erklären, warum Haiku an einer großen Codebasis scheitern kann.
+Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur für eine Sitzung oder dauerhaft umstellen und erklären, wann Haiku an einer großen Codebasis scheitern kann und warum das vom Anbieter abhängt.
 
-1. Welches Tier nimmst du für die Analyse einer ganzen Codebasis, und warum nicht Haiku?
-2. Was ändert eine höhere Effort-Stufe, und welches Tier kennt gar keinen Effort?
+1. Welches Tier nimmst du für die Analyse einer ganzen Codebasis, und was prüfst du, bevor du dafür Haiku erwägst?
+2. Was ändert eine höhere Effort-Stufe, und wo kennt `haiku` gar keinen Effort?
 3. Wie stellst du Modell und Effort für eine einzige Sitzung ein, ohne deinen Standard zu ändern?
 
 <details><summary>Auflösung</summary>
 
-1. Opus oder Fable. Haikus Kontextfenster ist deutlich kleiner als das der anderen Tiers; bei vielen Dateien passt nicht alles hinein.
-2. Das Modell denkt gründlicher nach und verbraucht dafür mehr Tokens: Qualität und Kosten steigen zusammen. Haiku kennt keinen Effort.
+1. Opus oder Fable, weil über viele Dateien hinweg Urteil zählt. Bei Haiku prüfst du mit `/model`, worauf der Alias bei dir steht: Auf der älteren Generation (Cloud-Anbieter) ist das Fenster deutlich kleiner, bei vielen Dateien passt nicht alles hinein.
+2. Das Modell denkt gründlicher nach und verbraucht dafür mehr Tokens: Qualität und Kosten steigen zusammen. Auf der Anthropic API kennt auch `haiku` Effort; ein Haiku, das ein Anbieter auf die ältere Generation auflöst, kennt keinen.
 3. Beim Start mit `claude --model … --effort …`. In der Sitzung geht es über die Auswahl von `/model`: Modell wählen, Effort mit den Pfeiltasten einstellen und mit `s` übernehmen. `/model <alias>`, Enter in der Auswahl und eine Stufe hinter `/effort` speichern die Wahl dagegen.
 
 </details>
