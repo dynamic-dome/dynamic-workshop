@@ -47,7 +47,7 @@ flowchart LR
   M -- "Alltag: Feature, Refactor" --> S["sonnet"]
   M -- "viel: Architektur, Root Cause" --> O["opus"]
   M -- "härteste, lange Agentenarbeit" --> F["fable"]
-  H & S & O & F --> E["Effort nach Denklast:<br/>low · medium · high · xhigh · max"]
+  H & S & O & F -- "auf der Anthropic API" --> E["Effort nach Denklast:<br/>low · medium · high · xhigh · max"]
 ```
 
 ## Im Detail

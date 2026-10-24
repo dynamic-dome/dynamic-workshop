@@ -412,7 +412,7 @@ richtige, Quizfragen würfeln bei jedem Render neu, kein „weiter, wo ich war",
   bereinigt (keine `<script>`, keine `on*`-Attribute; der Generator prüft, dass im Artefakt genau ein `<script>` steht).
 - **Barrierefreiheit:** Status nie nur per Farbe, `aria-pressed`/`aria-current`/`aria-live`, Labels an allen
   Eingaben, Tastatur ohne Modifier-Kollision, Schrift ≥ 13 px, Kontrast ≥ 4,5:1 für Text.
-- **Größenregel (v3.3, gemessen 2026-09-30):** Grenze 3 MB für die Einzeldatei. Mit Volltext aller 70 Kapitel und
+- **Größenregel (v3.3, gemessen 2026-09-30):** Grenze 4 MB (bis 24.10.: 3 MB, siehe Nachtrag) für die Einzeldatei. Mit Volltext aller 70 Kapitel und
   61 Diagrammen sind es 2,6 MB (gzip rund 0,5 MB); ohne Diagramme wären es schon 1,55 MB, die frühere Grenze von
   1,5 MB hätte also stets den Volltext gekostet. Diagramme werden beim Einbetten verschlankt (die id-gebundenen
   Mermaid-Stilblöcke als zwei gemeinsame Blöcke statt 61, Geometrie auf zwei Nachkommastellen) und behalten ihre

@@ -90,7 +90,8 @@ python tools/lint_currency.py                       # Modellgenerationen nur im 
 python tools/cockpit_shots.py <url> <ordner>        # Bilder aller Cockpit-Ansichten (Server vorher: python -m http.server 8765 --bind 127.0.0.1)
 ```
 
-`python tools/build_library.py check` prüft ohne zu schreiben, ob alle generierten Dateien aktuell sind.
+`python tools/build_library.py check` prüft ohne zu schreiben, ob alle generierten Dateien aktuell sind und ob zu jedem Mermaid-Block
+ein Diagramm-SVG existiert (und keins verwaist ist); fehlende SVGs rendert `python tools/render_diagrams.py`.
 
 - **Einstufung ändern** (`_placement.yaml` oder Metadaten eines Kapitels): `python tools/catalog_core.py --from-meta`
   erzeugt den Vertragskatalog neu; danach die Personas in `tools/fixtures/placement-vectors.json` prüfen und die

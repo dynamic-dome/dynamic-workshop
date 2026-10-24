@@ -46,6 +46,16 @@ def diagrams(lib):
     return found
 
 
+def diagram_status(lib, folder=None):
+    """(wanted, missing, orphans) for the library: wanted {key: (chapter id, source)}, missing = keys without SVG,
+    orphans = SVG keys no Mermaid block asks for. The key hashes the source, so a changed block shows up as
+    one missing plus one orphaned SVG (todo #9991). Shared by --check and build_library.py check."""
+    wanted = diagrams(lib)
+    folder = Path(folder) if folder is not None else lib.root / "diagrams"
+    have = {p.stem for p in folder.glob("*.svg")} if folder.exists() else set()
+    return wanted, {k: v for k, v in wanted.items() if k not in have}, have - set(wanted)
+
+
 def clean_svg(svg: str) -> str:
     svg = re.sub(r"<script\b.*?</script>", "", svg, flags=re.S | re.I)
     svg = re.sub(r"\son[a-z]+\s*=\s*\"[^\"]*\"", "", svg, flags=re.I)
@@ -101,11 +111,10 @@ def main(argv=None):
     parser.add_argument("--root", type=Path, default=LIBRARY)
     args = parser.parse_args(argv)
     lib = lm.load_library(args.root)
-    wanted = diagrams(lib)
     folder = args.root / "diagrams"
-    have = {p.stem for p in folder.glob("*.svg")} if folder.exists() else set()
-    missing = {k: v for k, v in wanted.items() if args.force or k not in have}
-    orphans = have - set(wanted)
+    wanted, missing, orphans = diagram_status(lib, folder)
+    if args.force:
+        missing = dict(wanted)
     if args.check:
         for k, (cid, _) in sorted(missing.items()):
             print(f"fehlt: {k}.svg ({cid})")

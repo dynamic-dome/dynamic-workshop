@@ -157,3 +157,51 @@ def test_catalog_carries_recall_questions_and_answers(lib_dir):
     assert by_id["S2.8"]["recall"] == ["Welcher Exit-Code blockt einen Aufruf?", "Was passiert bei `exit 1`?"]
     assert len(by_id["S2.8"]["answers"]) == 2
     assert by_id["S2.7"]["recall"] == [] and by_id["S2.7"]["answers"] is None
+
+
+def _diagram_keys(folder):
+    return sorted(p.stem for p in (folder / "diagrams").glob("*.svg"))
+
+
+def test_check_reports_a_missing_diagram_svg(lib_dir, capsys):
+    # todo #9991: in October 33 of 62 SVGs were stale unnoticed (a changed Mermaid source has a new key)
+    bl.build(lib_dir, write=True)
+    assert bl.build(lib_dir, write=False) == 0
+    (key,) = _diagram_keys(lib_dir)
+    (lib_dir / "diagrams" / f"{key}.svg").unlink()
+    capsys.readouterr()
+    assert bl.build(lib_dir, write=False) == 1
+    out = capsys.readouterr().out
+    assert f"fehlt: diagrams/{key}.svg (S2.8)" in out
+    assert "render_diagrams.py" in out
+
+
+def test_check_reports_an_orphaned_diagram_svg(lib_dir, capsys):
+    bl.build(lib_dir, write=True)
+    (lib_dir / "diagrams" / "deadbeef.svg").write_text("<svg/>\n", encoding="utf-8")
+    capsys.readouterr()
+    assert bl.build(lib_dir, write=False) == 1
+    assert "verwaist: diagrams/deadbeef.svg" in capsys.readouterr().out
+
+
+def test_check_reports_a_stale_diagram_after_the_mermaid_source_changed(lib_dir, capsys):
+    bl.build(lib_dir, write=True)
+    path = lib_dir / "s2-08-demo-hook.md"
+    text = path.read_text(encoding="utf-8")
+    assert "C[blockt]" in text
+    path.write_text(text.replace("C[blockt]", "C[blockt hart]", 1), encoding="utf-8")
+    capsys.readouterr()
+    assert bl.build(lib_dir, write=False) == 1
+    out = capsys.readouterr().out
+    assert "fehlt: diagrams/" in out and "verwaist: diagrams/" in out
+
+
+def test_build_warns_about_diagram_problems_but_still_writes(lib_dir, capsys):
+    # the SVGs need Chromium (render_diagrams.py), so build only points at them and does not fail
+    (lib_dir / "diagrams").mkdir(exist_ok=True)
+    for svg in (lib_dir / "diagrams").glob("*.svg"):
+        svg.unlink()
+    capsys.readouterr()
+    assert bl.build(lib_dir, write=True) == 0
+    assert "fehlt: diagrams/" in capsys.readouterr().out
+    assert (lib_dir / "catalog.json").exists()

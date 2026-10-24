@@ -4,7 +4,7 @@
   python tools/build_library.py validate [--root resources/library] [--complete]
   python tools/build_library.py validate --chapter resources/library/s2-08-hook-konfigurieren.md
   python tools/build_library.py build    # writes generated files (see build_outputs)
-  python tools/build_library.py check    # exit 1 if a generated file is stale
+  python tools/build_library.py check    # exit 1 if a generated file or a diagram SVG is stale
 
 Spec: docs/plans/2026-09-30-praxisbibliothek-design.md (sections 4, 6, 7).
 """
@@ -522,6 +522,16 @@ def _norm(text: str) -> str:
     return text.replace("\r\n", "\n")
 
 
+def _diagram_problems(lib) -> list[str]:
+    """Missing or orphaned diagram SVGs (same logic as render_diagrams --check; todo #9991). Rendering needs
+    Chromium, so build only reports them and check fails."""
+    import render_diagrams as rd
+
+    _, missing, orphans = rd.diagram_status(lib)
+    return ([f"fehlt: diagrams/{k}.svg ({cid})" for k, (cid, _) in sorted(missing.items())]
+            + [f"verwaist: diagrams/{k}.svg" for k in sorted(orphans)])
+
+
 def build(root, *, write: bool, complete: bool = False) -> int:
     """Validate, then write (build) or compare (check) all generated files."""
     import library_generate as gen
@@ -546,12 +556,19 @@ def build(root, *, write: bool, complete: bool = False) -> int:
                 path.write_text(text, encoding="utf-8", newline="\n")
     for path in stale:
         print(("geschrieben: " if write else "veraltet: ") + _rel(path))
+    svg_problems = _diagram_problems(lib)
+    for line in svg_problems:
+        print(line)
+    if svg_problems:
+        print(f"{len(svg_problems)} Diagramm-SVG(s) fehlen oder sind verwaist — python tools/render_diagrams.py")
     if write:
         print(f"{len(stale)} von {len(outputs)} Dateien aktualisiert.")
         return 0
-    print("OK — alle generierten Dateien aktuell." if not stale else
-          f"{len(stale)} Datei(en) veraltet — python tools/build_library.py build")
-    return 1 if stale else 0
+    if stale:
+        print(f"{len(stale)} Datei(en) veraltet — python tools/build_library.py build")
+    elif not svg_problems:
+        print("OK — alle generierten Dateien und Diagramm-SVGs aktuell.")
+    return 1 if stale or svg_problems else 0
 
 
 def _print(problems) -> int:
