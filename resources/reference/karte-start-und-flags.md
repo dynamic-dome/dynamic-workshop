@@ -2,7 +2,7 @@
 
 Wofür: die Befehle zum Starten, Anmelden und Fortsetzen, der Print-Modus mit seinen Grenzen und die Slash-Befehle für jeden Tag.
 
-Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quelle: https://code.claude.com/docs/en/cli-reference
+Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285); die Angaben zum Start von `claude -p` am 2026-10-24 neu geprüft (CLI 2.1.310). Offizielle Quelle: https://code.claude.com/docs/en/cli-reference
 
 ## Starten, anmelden, fortsetzen
 

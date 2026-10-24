@@ -10,6 +10,7 @@
   model-deprecations.md, about-claude/pricing.md, code.claude.com model-config.md und permission-modes.md, Changelog 2.1.293 und 2.1.302. Todo #9946.
 - **Kapitel und Karten:** S1.6, S3.8, Karte „Rechte" und Karte „Start und Flags" folgen dem Kanon (Startmodus bei `-p`;
   `auto` ist mit Haiku 5.5 verfügbar, nicht mehr „nie Haiku").
+- **Nachtrag (Prüfung):** Auch S4.3 (Startmodus bei `-p`, Abschnitt und Fallen) folgt jetzt dem Kanon. S1.6 formuliert die Ablehnung im Lauf ohne Mensch genauer (Aufrufe, die eine Freigabe bräuchten; Allow-Regel oder Hook). Die Karten „Rechte“ und „Start und Flags“ vermerken, dass nur die `claude -p`-Angaben am 2026-10-24 neu geprüft wurden.
 - **Offen:** Die Aussagen „Haiku hat ein kleines Kontextfenster, kennt keinen Effort, kostet ein Viertel von Opus" (S1.7 samt Quiz und
   Diagramm, S1.19 Schritt 3, Moderation S1.19, Glossar, Karte „Kosten") stimmen für `haiku` auf der Anthropic API nicht mehr; Folge-Todo.
 

@@ -2,7 +2,7 @@
 
 Wofür: was jeder der sechs Rechte-Modi ohne Rückfrage erlaubt, womit eine Sitzung startet und wie allow-, ask- und deny-Regeln greifen.
 
-Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quelle: https://code.claude.com/docs/en/permission-modes (Regeln: https://code.claude.com/docs/en/permissions)
+Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285); die Angaben zum Start von `claude -p` am 2026-10-24 neu geprüft (CLI 2.1.310). Offizielle Quelle: https://code.claude.com/docs/en/permission-modes (Regeln: https://code.claude.com/docs/en/permissions)
 
 ## Die sechs Modi
 
