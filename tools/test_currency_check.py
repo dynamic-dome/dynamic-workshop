@@ -178,12 +178,16 @@ def test_canon_cli_version_missing_in_changelog_is_a_source_error():
         run(canon_text=canon(cli="2.1.100"))
 
 
-def test_retiring_canon_model_is_red():
+def test_active_model_inside_the_warning_window_is_only_info():
+    """Review finding on #9957: "Not sooner than" 30 days away with status Active is the same false alarm as a lapsed
+    date (Opus 4.6 on 2027-02-05 would turn the monthly run red in Jan and Feb 2027 with no real event)."""
     haiku = ("Claude Haiku 4.5", "claude-haiku-4-5-20251001", "haiku", "Haiku", "Active", "Not sooner than October 15, 2026")
     available = pages(**{BASE + "model-deprecations.md": dep_table([("claude-haiku-4-5-20251001", "Active", "N/A",
                                                                         "Not sooner than October 15, 2026")])})
     result = run(canon_text=canon(rows=(OPUS, haiku)), available=available)
-    assert [f.key for f in levels(result, "rot")] == ["retiring:claude-haiku-4-5-20251001:2026-10-15"]
+    assert result.exit_code == 0 and levels(result, "rot") == [] and levels(result, "gelb") == []
+    assert [f.key for f in levels(result, "info") if f.key.startswith("retiring")] == [
+        "retiring-soon-unannounced:claude-haiku-4-5-20251001:2026-10-15"]
 
 
 def _legacy_haiku(date_text, status="Active"):
@@ -539,17 +543,28 @@ def test_each_parser_floor_alone_is_a_source_error_naming_its_label(label, doc, 
         run(available=pages(**{BASE + doc: body}))
 
 
-def _retiring_in(days):
+def _retiring_in(days, status="Active"):
     date = TODAY + dt.timedelta(days=days)
     text = f"Not sooner than {date.strftime('%B')} {date.day}, {date.year}"
     model = ("Claude Haiku 4.5", "claude-haiku-4-5-20251001", "haiku", "Haiku", "Active", text)
-    table = dep_table([("claude-haiku-4-5-20251001", "Active", "N/A", text)])
+    table = dep_table([("claude-haiku-4-5-20251001", status, "N/A", text)])
     return run(canon_text=canon(rows=(OPUS, model)), available=pages(**{BASE + "model-deprecations.md": table}))
 
 
-def test_retirement_warning_boundary_is_59_days_red_60_days_not():
-    assert any(f.key.startswith("retiring:") for f in levels(_retiring_in(59), "rot"))
-    assert not any(f.key.startswith("retiring:") for f in _retiring_in(60).findings)
+def test_active_model_30_days_before_the_earliest_date_is_info_not_red():
+    result = _retiring_in(30)
+    assert levels(result, "rot") == [] and result.exit_code == 0
+    [info] = [f for f in levels(result, "info") if f.key.startswith("retiring")]
+    assert info.key.startswith("retiring-soon-unannounced:") and "keine Abschaltung angekündigt" in info.text
+
+
+def test_active_model_beyond_the_warning_window_has_no_retiring_finding():
+    assert not any(f.key.startswith("retiring") for f in _retiring_in(60).findings)
+
+
+def test_retirement_warning_boundary_for_a_deprecated_model_is_59_days_red_60_days_not():
+    assert any(f.key.startswith("retiring:") for f in levels(_retiring_in(59, "Deprecated"), "rot"))
+    assert not any(f.key.startswith("retiring:") for f in _retiring_in(60, "Deprecated").findings)
 
 
 def test_live_changelog_format_is_read_and_the_group_decides_fixed_vs_yellow():
@@ -649,3 +664,12 @@ def test_pinned_finding_keys_survive_a_line_shift():
     first = _pinned(line, row)
     shifted = _pinned("neue Zeile davor\n" + line, row)
     assert [f.key for f in levels(first, "gelb")] == [f.key for f in levels(shifted, "gelb")]
+
+
+def test_dated_id_of_a_single_number_generation_resolves_to_its_family_and_not_to_the_date():
+    """Review finding: `claude-sonnet-4-20250514` was read as version (4, 20250514) and landed in pinned-unknown."""
+    sonnet_4 = "claude-sonnet-4-20250514"
+    line = f"`{sonnet_4}` ist der Beispiel-Pin. <!-- version-pinned: Migrationsbeispiel -->\n"
+    result = _pinned(line, [(sonnet_4, "Active", "N/A", "Not sooner than June 15, 2027")])
+    assert "pinned-unknown" not in _keys(result, "gelb")
+    assert _keys(result, "info").count("pinned-active") == 1

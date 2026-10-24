@@ -10,6 +10,10 @@
 - **Aktualität (Todo #9518, Rest):** Neuer Nachprüf-Hook: Jede Kurszeile mit `version-pinned: <Grund>` wird im Monatslauf gegen die
   Deprecations-Tabelle gelesen. Modell nicht mehr `Active` oder unbekannt = gelb (`pinned-status:`/`pinned-unknown:`), aktives Modell = Info
   (`pinned-active:`, Liste zum Nachlesen), Grund „histor…“ = Info (`pinned-historical:`). Der Kurs enthält zurzeit keine solche Zeile.
+- **Nachtrag (Prüfung):** Auch das Fenster von weniger als 60 Tagen vor dem Frühestdatum ist bei Status `Active` nur Info
+  (`retiring-soon-unannounced:…`), sonst wären Opus 4.6 (5.2.2027) und Sonnet 4.6 (17.2.2027) im Januar und Februar 2027 ohne Ereignis rot
+  geworden. Rot `retiring:` gilt nur noch bei Status außer `Active`. Der Nachprüf-Hook liest datierte IDs einstelliger Generationen
+  (`claude-sonnet-4-20250514`) als Familie plus Version, nicht als Version (4, 20250514).
 
 ## 2026-10-24 — Kanon auf CLI 2.1.310: Haiku 5.5, `claude -p` startet in `default`
 

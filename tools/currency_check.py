@@ -47,7 +47,7 @@ FIXED_LINE = re.compile(
 # A model generation named in prose or as an ID ("Haiku 4.5", "claude-haiku-4-5-20251001", "claude-3-5-haiku"); used only to
 # re-read lines that carry a `version-pinned: <Grund>` marker against the Deprecations table (todo #9518).
 PINNED_MODEL = re.compile(
-    r"\b(?:claude-)?(?P<family>opus|sonnet|haiku|fable|mythos)[ -]?\(?(?P<version>\d+(?:[.-]\d+)?)\b"
+    r"\b(?:claude-)?(?P<family>opus|sonnet|haiku|fable|mythos)[ -]?\(?(?P<version>\d{1,2}(?:[.-]\d{1,2})?)(?!\d)"
     r"|\bclaude-(?P<old_major>\d)(?:-(?P<old_minor>\d))?-(?P<old_family>opus|sonnet|haiku)\b", re.I)
 SPECIFIC_KINDS = ("flag", "env", "hook_event", "model_id")
 KIND_LABEL = {
@@ -175,13 +175,19 @@ def _check_canon_models(canon_models, deprecations, today):
                                     f"Retirement von `{model.model_id}`: Kanon „{model.retirement}“, Doku „{row.retirement}“"))
         earliest = cx.parse_date(row.retirement)
         days = (earliest - today).days if earliest else None
-        if earliest and row.status == "Active" and days <= 0:
+        if earliest and row.status == "Active" and days < RETIREMENT_WARN_DAYS:
             # "Not sooner than" is a floor, not an announcement (todo #9957, Haiku 4.5 on 2026-10-24). An announced
             # shutdown flips the status and a notice of at least 60 days applies, which canon-status reports red.
-            findings.append(Finding("info", f"retiring-unannounced:{model.model_id}:{earliest}",
-                                    f"`{model.model_id}`: frühestes Abschaltdatum {earliest} verstrichen, Status Active, "
-                                    "keine Abschaltung angekündigt (Deprecations-Seite weiter beobachten)"))
-        elif earliest and days < RETIREMENT_WARN_DAYS:
+            # That holds before the date as well as after it, so neither case is more than info (review of #9957).
+            if days <= 0:
+                findings.append(Finding("info", f"retiring-unannounced:{model.model_id}:{earliest}",
+                                        f"`{model.model_id}`: frühestes Abschaltdatum {earliest} verstrichen, Status Active, "
+                                        "keine Abschaltung angekündigt (Deprecations-Seite weiter beobachten)"))
+            else:
+                findings.append(Finding("info", f"retiring-soon-unannounced:{model.model_id}:{earliest}",
+                                        f"`{model.model_id}`: frühestes Abschaltdatum {earliest} in {days} Tagen, Status Active, "
+                                        "keine Abschaltung angekündigt (Deprecations-Seite weiter beobachten)"))
+        elif earliest and row.status != "Active" and days < RETIREMENT_WARN_DAYS:
             findings.append(Finding("rot", f"retiring:{model.model_id}:{earliest}",
                                     f"`{model.model_id}` kann ab {earliest} abgeschaltet werden ({days} Tage)"))
     unknown = set()

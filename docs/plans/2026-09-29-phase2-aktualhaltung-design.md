@@ -93,7 +93,7 @@ code.claude.com/docs/en/changelog.md.
 | Stufe | Befund |
 |---|---|
 | Rot | Kurs-Bezeichner fehlt in der Doku-Vereinigung und nicht in der Ausnahmeliste. |
-| Rot | Kanon-Modell nicht mehr `Active`, oder frühestes Retirement in weniger als 60 Tagen. Ausnahme (Todo #9957): Status `Active` und ein Frühestdatum, das heute erreicht oder verstrichen ist, ist nur Info (`retiring-unannounced:`), weil „Not sooner than“ eine Untergrenze und keine Ankündigung ist. |
+| Rot | Kanon-Modell nicht mehr `Active` (`canon-status:`), bei einem solchen Status zusätzlich frühestes Retirement in weniger als 60 Tagen (`retiring:`). Bei Status `Active` ist jedes Frühestdatum unter 60 Tagen, auch ein verstrichenes, nur Info (Todo #9957: `retiring-unannounced:` ab heute erreicht, `retiring-soon-unannounced:` davor), weil „Not sooner than“ eine Untergrenze und keine Ankündigung ist; eine Ankündigung ändert den Status und kommt mit mindestens 60 Tagen Vorlauf. |
 | Rot | Neuestes aktives Modell eines Tiers fehlt im Kanon; Kanon-Retirement weicht von der Tabelle ab. Tiers sind die Familien der Kanon-Tabelle; „neuestes" nach Versionstupel aus der ID (Datumssuffix ignoriert). Familien der Deprecations-Tabelle, die der Kanon nicht führt (z. B. Mythos), sind Info. |
 | Rot | Kanon älter als 90 Tage. |
 | Rot | Cockpit der Website (live abgerufen, Redirects gefolgt) weicht vom Kurs-Cockpit ab (sha256 nach Normalisierung: LF, Provenienz-Zeile entfernt). |
