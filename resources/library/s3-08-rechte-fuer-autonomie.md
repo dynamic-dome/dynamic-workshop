@@ -81,7 +81,7 @@ Tipps für CI: Kombiniere `--permission-mode dontAsk` mit `--max-budget-usd` als
 
 ### auto: weniger Rückfragen, keine Garantie
 
-In `auto` prüft ein Klassifikator-Modell Aktionen, bevor sie laufen, und blockt, was über deinen Auftrag hinausgeht. Die Doku nennt das selbst keine Garantie: „Auto mode reduces permission prompts but does not guarantee safety.“ Es ist an Bedingungen geknüpft: ein unterstütztes Modell (Haiku nie), ein unterstützter Anbieter, und auf Team und Enterprise können Admins ihn abschalten. Admins sind hier die Personen, die Einstellungen zentral für eine Organisation verteilen (Managed Settings); diese Einstellungen kannst du als Nutzerin nicht überschreiben. Die genauen Grenzen stehen in der Doku zu den Rechte-Modi, die Aliase im [Kanon](../_canonical.md). Enger oder weiter fasst du `auto` mit den `autoMode`-Einstellungen ([S3.10](s3-10-netzwerk-und-skills-haerten.md)).
+In `auto` prüft ein Klassifikator-Modell Aktionen, bevor sie laufen, und blockt, was über deinen Auftrag hinausgeht. Die Doku nennt das selbst keine Garantie: „Auto mode reduces permission prompts but does not guarantee safety.“ Es ist an Bedingungen geknüpft: ein unterstütztes Modell (die Liste steht im [Kanon](../_canonical.md#rechte-startmodus-quelle-permission-modesmd-which-mode-a-session-starts-in)), ein unterstützter Anbieter, und auf Team und Enterprise können Admins ihn abschalten. Admins sind hier die Personen, die Einstellungen zentral für eine Organisation verteilen (Managed Settings); diese Einstellungen kannst du als Nutzerin nicht überschreiben. Die genauen Grenzen stehen in der Doku zu den Rechte-Modi, die Aliase im [Kanon](../_canonical.md). Enger oder weiter fasst du `auto` mit den `autoMode`-Einstellungen ([S3.10](s3-10-netzwerk-und-skills-haerten.md)).
 
 ### acceptEdits in langen Läufen
 
@@ -202,7 +202,7 @@ Eine Deny-Regel erkennt nur, was Claude Code als Dateizugriff versteht, etwa `se
 
 ## Typische Fallen
 
-- **`auto` ist nicht verfügbar.** Prüf die Voraussetzungen oben: unterstütztes Modell (nie Haiku), Anbieter, Version, und ob eine Settings-Datei `disableAutoMode` setzt. Anthropic kann `auto` auch serverseitig vorübergehend abschalten; dann hilft eine neue Sitzung später.
+- **`auto` ist nicht verfügbar.** Prüf die Voraussetzungen oben: unterstütztes Modell (Liste im [Kanon](../_canonical.md#rechte-startmodus-quelle-permission-modesmd-which-mode-a-session-starts-in)), Anbieter, Version, und ob eine Settings-Datei `disableAutoMode` setzt. Anthropic kann `auto` auch serverseitig vorübergehend abschalten; dann hilft eine neue Sitzung später.
 - **Der Lauf fragt nicht, sondern der Aufruf fehlt.** In `dontAsk` wird ein Aufruf, der keine Allow-Regel trifft, abgelehnt statt gefragt, und ebenso ein Aufruf, der eine Ask-Regel trifft. Soll er laufen, braucht er eine Allow-Regel und darf keine Ask-Regel treffen.
 - **Die Sitzung startet in `auto`, obwohl du Regeln für `dontAsk` gebaut hast.** Ohne `--permission-mode` startet eine interaktive Terminal-Sitzung ab Version 2.1.283 in `auto`. Setz den Modus beim Start ausdrücklich.
 - **`--dangerously-skip-permissions` als Abkürzung im Alltag.** Nur in isolierten VMs oder Containern, nie auf deinem Arbeitsrechner. Brauchst du weniger Rückfragen, nimm `auto` oder `dontAsk` mit Allow- und Deny-Regeln.

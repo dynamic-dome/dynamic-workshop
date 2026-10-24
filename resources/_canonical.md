@@ -5,7 +5,7 @@
 
 # Canonical Registry — Dynamic Workshop
 
-Geprüft: 2026-10-07 · CLI 2.1.292
+Geprüft: 2026-10-24 · CLI 2.1.310
 
 Das Prüfdatum setzt nur eine Session, die diesen Kanon gegen einen Bericht von `tools/currency_check.py` oder direkt
 gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach mehr als 45 Tagen und wird nach mehr als 90 Tagen rot.
@@ -25,30 +25,35 @@ gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach meh
 | Claude Fable 5.1 | `claude-fable-5-1` | `fable` | Fable | Active | Not sooner than September 1, 2027 | 1M | 10 | 50 | Härtestes, langlaufendes Reasoning; nie Account-Default |
 | Claude Opus 5.5 | `claude-opus-5-5` | `opus` | Opus | Active | Not sooner than September 22, 2027 | 1M | 4 | 20 | Default in Claude Code (außer Microsoft Foundry); Architektur, tiefes Reasoning |
 | Claude Sonnet 5.5 | `claude-sonnet-5-5` | `sonnet` | Sonnet | Active | Not sooner than September 28, 2027 | 1M | 2 | 10 | Schnelles Standard-Coding, Alltag |
-| Claude Haiku 4.5 | `claude-haiku-4-5-20251001` | `haiku` | Haiku | Active | Not sooner than October 15, 2026 | 200K | 1 | 5 | Bulk-Reads, einfache Suchen, Routine-Reviews |
+| Claude Haiku 5.5 | `claude-haiku-5-5` | `haiku` | Haiku | Active | Not sooner than October 7, 2027 | 1M | 0.10 | 0.50 | Bulk-Reads, einfache Suchen, Routine-Reviews |
 
 Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon Bedrock und Google Cloud veröffentlichen eigene (Quellen: model-deprecations.md, models/overview.md).
 
-- **Haiku-Risiko:** Haiku 4.5 kann frühestens am 15.10.2026 abgeschaltet werden. Wer `haiku` für Massenarbeit nutzt,
-  prüft vor dem Einsatz mit `/model`, worauf der Alias auflöst.
-- API-Alias von Haiku 4.5: `claude-haiku-4-5`.
+- **Haiku 5.5, Preis:** Der Preis in der Tabelle gilt für Prompts bis 100K Tokens. Über 100K Tokens Prompt kostet Haiku 5.5
+  0.50 $ Input und 2.50 $ Output je 1M Tokens (Quelle: pricing.md). Alle anderen Modelle der Tabelle haben keinen Aufschlag für das 1M-Fenster.
+- **Haiku 4.5 (Legacy):** `claude-haiku-4-5-20251001` (200K Kontext, 1 $ / 5 $ je 1M Tokens, kein Effort, API-Alias
+  `claude-haiku-4-5`) steht in der Modellübersicht unter „Legacy models (still available)". Die Deprecations-Seite führt es
+  weiter als Active mit „Not sooner than October 15, 2026", also ohne angekündigte Abschaltung. Es steht nicht mehr in der
+  überwachten Tabelle, weil der Monatslauf jedes Datum in der Vergangenheit als Abschaltrisiko meldet. Wo der Alias `haiku` noch
+  darauf auflöst (Tabelle unten), prüfst du vor Bulk-Läufen mit `/model`, worauf er steht. Wird eine Abschaltung angekündigt,
+  steht sie auf der Deprecations-Seite (Vorlauf mindestens 60 Tage; nachgesehen am 2026-10-24).
 - **Mindest-CLI je Generation** (Changelog: „Added Claude … now the default … model"): Fable 5.1 ab 2.1.257,
-  Opus 5.5 ab 2.1.280, Sonnet 5.5 ab 2.1.284. Ältere CLIs lösen die Aliase auf ältere Generationen auf.
+  Opus 5.5 ab 2.1.280, Sonnet 5.5 ab 2.1.284, Haiku 5.5 ab 2.1.293. Ältere CLIs lösen die Aliase auf ältere Generationen auf.
 
 ## Aliase und ihre Auflösung (Quelle: model-config.md)
 
 - `default` löst je Kontotyp auf: Opus 5.5 auf Pro, Max, Team, Enterprise und der Anthropic API sowie auf Claude
   Platform on AWS, Amazon Bedrock und Google Cloud; Sonnet 4.5 auf Microsoft Foundry. Eine Organisations-Vorgabe geht vor; außerdem lässt sich `default` u. a. über `ANTHROPIC_DEFAULT_MODEL` oder das im Konto hinterlegte Modell überschreiben.
-- `opus` und `sonnet` lösen **je Anbieter** unterschiedlich auf:
+- `opus`, `sonnet` und `haiku` lösen **je Anbieter** unterschiedlich auf:
 
-| Anbieter | `opus` | `sonnet` |
-|---|---|---|
-| Anthropic API | Opus 5.5 | Sonnet 5.5 |
-| Claude Platform on AWS | Opus 5.5 | Sonnet 4.6 |
-| Amazon Bedrock, Google Cloud | Opus 5.5 | Sonnet 4.5 |
-| Microsoft Foundry | Opus 4.6 | Sonnet 4.5 |
+| Anbieter | `opus` | `sonnet` | `haiku` |
+|---|---|---|---|
+| Anthropic API | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
+| Claude Platform on AWS | Opus 5.5 | Sonnet 4.6 | Haiku 4.5 |
+| Amazon Bedrock, Google Cloud | Opus 5.5 | Sonnet 4.5 | Haiku 4.5 |
+| Microsoft Foundry | Opus 4.6 | Sonnet 4.5 | Haiku 4.5 |
 
-Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, Sonnet 4.5, Opus 4.6). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (nachgesehen am 2026-10-06). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen.
+Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, Sonnet 4.5, Opus 4.6, Haiku 4.5). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (nachgesehen am 2026-10-06). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen.
 
 - `fable` löst auf Fable 5.1 auf (u. a. überschreibbar per `ANTHROPIC_DEFAULT_FABLE_MODEL`), im Claude-apps-Gateway auf Fable 5; `best` = `fable`, wo Fable verfügbar ist, sonst `opus`.
 - Weitere Werte: `opusplan` (Opus im Plan-Modus, dann Sonnet), `sonnet[1m]`, `opus[1m]`.
@@ -58,8 +63,8 @@ Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, So
 | Modelle | Stufen | Start-Effort in Claude Code |
 |---|---|---|
 | Fable 5.1 | `low` `medium` `high` `xhigh` `max` | `high` |
-| Opus 5.5, Sonnet 5.5 | `low` `medium` `high` `xhigh` `max` | `medium` |
-| Haiku 4.5 | kein Effort | — |
+| Opus 5.5, Sonnet 5.5, Haiku 5.5 | `low` `medium` `high` `xhigh` `max` | `medium` |
+| Haiku 4.5 (Legacy) | kein Effort | — |
 
 - Die Modellübersicht der API nennt für Sonnet 5.5 `high` als Default-Effort; Claude Code startet laut model-config
   mit `medium`. Im Kurs gilt das Claude-Code-Verhalten.
@@ -70,13 +75,19 @@ Diese Tabelle nennt Modelle, die der Monatslauf nicht überwacht (Sonnet 4.6, So
 | Wie du Claude Code startest | Eingebauter Startmodus |
 |---|---|
 | Eine Settings-Datei setzt `disableAutoMode` auf `"disable"` | `default` (Manual) |
-| `claude -p` oder Agent SDK | `default` (Manual) in Sitzungen, die Feature-Flags abrufen; ohne Abruf, etwa bei einem Drittanbieter oder mit abgeschalteter Telemetrie, `auto` ab CLI 2.1.285, davor `default`. Hält die Richtlinie einer Organisation die `auto`-Vorgabe zurück, `default` |
+| `claude -p` oder Agent SDK | `default` (Manual) ab CLI 2.1.302 in allen Fällen. Davor `default` in Sitzungen mit Feature-Flag-Abruf, sonst (Drittanbieter, abgeschaltete Telemetrie, frische Installation) `auto` ab 2.1.285. Mit `--permission-mode auto` startet der Lauf in `auto` |
 | Terminal oder VS Code-Erweiterung | `auto` ab CLI 2.1.283; davor `auto` nur auf Pro, Max, Team, sonst `default` |
 
 - Ist `auto` für die Session nicht verfügbar (Modell, Einstellung, serverseitig aus), startet sie in Manual.
 - Die erste Session nach Installation oder Upgrade kann abweichen; die nächste folgt der Tabelle.
-- Die Zeile zu `claude -p` steht seit dem Doku-Stand vom 2026-10-05 so in der Tabelle (vorher nur im Changelog
-  2.1.285). Für Läufe ohne Aufsicht heißt das: den Modus immer selbst setzen (`--permission-mode`).
+- Die Zeile zu `claude -p` folgt seit dem Doku-Stand vom 2026-10-24 der Tabelle („`default`") und dem Abschnitt „Tool calls
+  denied in `claude -p` and Agent SDK runs" (Changelog 2.1.302). In `default` lehnt ein Lauf ohne Mensch jeden Aufruf ab,
+  den keine Allow-Regel, kein Hook, kein `canUseTool`-Callback und kein `--permission-prompt-tool` freigibt. Für Läufe ohne
+  Aufsicht heißt das weiter: den Modus immer selbst setzen (`--permission-mode`).
+- **Auto-Modus und Modell** (Quelle: permission-modes.md, „Eliminate prompts with auto mode"): Auf der Anthropic API und
+  Claude Platform on AWS unterstützen Opus 4.6 oder neuer, Sonnet 4.6 oder neuer, Haiku 5.5 und die Fable-Modelle `auto`;
+  auf Amazon Bedrock, Google Cloud, Microsoft Foundry und im Claude-apps-Gateway nur Sonnet 5 oder neuer, Opus 4.7 oder
+  neuer, Haiku 5.5 und die Fable-Modelle (Haiku 5.5 dort ab CLI 2.1.293). Ältere Modelle, darunter Haiku 4.5, sind auf keinem Anbieter unterstützt.
 - Kapitel S1.6, die Karte „Rechte“ und der Mentor verweisen hierher, statt den Startmodus selbst zu nennen.
 
 ## Struktur

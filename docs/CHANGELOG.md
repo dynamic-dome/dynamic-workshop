@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-24 — Kanon auf CLI 2.1.310: Haiku 5.5, `claude -p` startet in `default`
+
+- **Kanon:** Haiku 5.5 (`claude-haiku-5-5`, Active, frühestens 7.10.2027, 1M Kontext, 0.10 $ / 0.50 $, über 100K Prompt 0.50 $ / 2.50 $,
+  Effort `low` bis `max`, Start `medium`, ab CLI 2.1.293) ersetzt Haiku 4.5 in der überwachten Tabelle. Haiku 4.5 ist Legacy:
+  Die Deprecations-Seite führt es als Active mit „Not sooner than October 15, 2026", eine Abschaltung ist nicht angekündigt (der
+  Monatslauf meldete das Datum zu Recht als Frist, es ist aber keine Abschaltung). Alias-Tabelle um die Spalte `haiku` erweitert, Effort-Tabelle,
+  Auto-Modus-Modellliste und die Zeile zu `claude -p` (ab 2.1.302 immer `default`) nachgezogen. Quellen: models/overview.md,
+  model-deprecations.md, about-claude/pricing.md, code.claude.com model-config.md und permission-modes.md, Changelog 2.1.293 und 2.1.302. Todo #9946.
+- **Kapitel und Karten:** S1.6, S3.8, Karte „Rechte" und Karte „Start und Flags" folgen dem Kanon (Startmodus bei `-p`;
+  `auto` ist mit Haiku 5.5 verfügbar, nicht mehr „nie Haiku").
+- **Offen:** Die Aussagen „Haiku hat ein kleines Kontextfenster, kennt keinen Effort, kostet ein Viertel von Opus" (S1.7 samt Quiz und
+  Diagramm, S1.19 Schritt 3, Moderation S1.19, Glossar, Karte „Kosten") stimmen für `haiku` auf der Anthropic API nicht mehr; Folge-Todo.
+
 ## 2026-10-24 — Aktualitätslauf: „Fixed“ zählt als Info
 
 - **Aktualität:** Gelbe Changelog-Befunde vom Typ „Fixed“ (Zeile beginnt mit „Fixed“, auch hinter „[VSCode]“, dem in der Quelle maskierten „\[VSCode]“,

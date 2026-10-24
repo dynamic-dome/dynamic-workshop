@@ -11,7 +11,7 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quell
 | `default` (in der CLI „Manual", Alias `manual`) | Nur Lesen | Heikle Arbeit, fremder Code |
 | `acceptEdits` | Lesen, Dateiänderungen sowie `mkdir`, `touch`, `rm`, `rmdir`, `mv`, `cp`, `sed`, jeweils nur im Arbeitsordner | Code iterieren, den du danach mit `git diff` prüfst |
 | `plan` | Lesen (plus vom Klassifikator freigegebene Befehle, wenn `auto` verfügbar ist); ändern erst nach Freigabe des Plans | Erkunden vor dem Ändern |
-| `auto` | Alles; ein zweites Modell, der Klassifikator, prüft Aktionen, bevor sie laufen | Lange Aufgaben; nicht mit dem Haiku-Tier, Admins können `auto` sperren |
+| `auto` | Alles; ein zweites Modell, der Klassifikator, prüft Aktionen, bevor sie laufen | Lange Aufgaben; nicht mit jedem Modell (Liste im [Kanon](../_canonical.md#rechte-startmodus-quelle-permission-modesmd-which-mode-a-session-starts-in)), Admins können `auto` sperren |
 | `dontAsk` | Lesen und vorab Erlaubtes; alles, was fragen würde, wird abgelehnt | CI und Skripte |
 | `bypassPermissions` (= `--dangerously-skip-permissions`) | Alles | Nur isolierte Container oder VMs |
 
@@ -20,7 +20,7 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quell
 | Wie du startest | Eingebauter Startmodus |
 |---|---|
 | Interaktiv im Terminal oder in VS Code | `auto` (ab CLI 2.1.283); ist `auto` nicht verfügbar, Manual |
-| `claude -p` oder Agent SDK | `default`; bei einem Drittanbieter oder mit abgeschalteter Telemetrie `auto` (ab CLI 2.1.285), außer die Richtlinie der Organisation hält diese Vorgabe zurück. In Skripten immer selbst setzen |
+| `claude -p` oder Agent SDK | `default` (ab CLI 2.1.302 immer; ältere Versionen starteten bei einem Drittanbieter oder mit abgeschalteter Telemetrie in `auto`). Aufrufe, die eine Freigabe bräuchten, lehnt der Lauf ab. In Skripten immer selbst setzen |
 | Eine Settings-Datei setzt `disableAutoMode` auf `"disable"` | `default` |
 
 Vorrang: `--permission-mode` (oder `--dangerously-skip-permissions`) vor `permissions.defaultMode` in einer Settings-Datei vor dem eingebauten Start. `auto` und `bypassPermissions` wirken aus `.claude/settings.json` und `.claude/settings.local.json` nicht. Prüf nach jedem Update, womit deine Sitzung startet. `Shift+Tab` wechselt `default` → `acceptEdits` → `plan` → (falls freigeschaltet `bypassPermissions`, dann `auto`) → `default`; `dontAsk` steht nie im Zyklus.
@@ -67,7 +67,7 @@ Eine allow-Regel wie `Edit(.claude/**)` ändert daran nichts. Weil geschützte P
 ## Typische Fallen
 
 - **`auto` in `.claude/settings.json`:** Die Sitzung startet ohne Fehlermeldung in Manual. `auto` als Start gehört nach `~/.claude/settings.json`.
-- **`auto` nicht verfügbar:** Modell prüfen (nicht das Haiku-Tier), `disableAutoMode` in einer Settings-Datei, oder Anthropic hat `auto` serverseitig abgeschaltet; dann später eine neue Sitzung.
+- **`auto` nicht verfügbar:** Modell prüfen (Liste im [Kanon](../_canonical.md#rechte-startmodus-quelle-permission-modesmd-which-mode-a-session-starts-in)), `disableAutoMode` in einer Settings-Datei, oder Anthropic hat `auto` serverseitig abgeschaltet; dann später eine neue Sitzung.
 
 ## Mehr dazu
 
