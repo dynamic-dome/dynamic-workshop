@@ -5,7 +5,7 @@
 
 # Canonical Registry — Dynamic Workshop
 
-Geprüft: 2026-10-24 · CLI 2.1.310
+Geprüft: 2026-10-25 · CLI 2.1.310
 
 Das Prüfdatum setzt nur eine Session, die diesen Kanon gegen einen Bericht von `tools/currency_check.py` oder direkt
 gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach mehr als 45 Tagen und wird nach mehr als 90 Tagen rot.
@@ -59,7 +59,7 @@ Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon B
 | Amazon Bedrock, Google Cloud | Opus 5.5 | Sonnet 4.5 | Haiku 4.5 |
 | Microsoft Foundry | Opus 4.6 | Sonnet 4.5 | Haiku 4.5 |
 
-Diese Tabelle nennt Legacy-Modelle: Haiku 4.5, Sonnet 4.5, Sonnet 4.6 und Opus 4.6 überwacht der Monatslauf (Zeilen oben). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (Quelle: model-deprecations.md, Modellseite sonnet-4-5, nachgesehen am 2026-10-24). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen.
+Diese Tabelle nennt Legacy-Modelle: Haiku 4.5, Sonnet 4.5, Sonnet 4.6 und Opus 4.6 überwacht der Monatslauf (Zeilen oben). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (Quelle: model-deprecations.md, Modellseite sonnet-4-5, nachgesehen am 2026-10-24). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen. Kurs-Durchsicht 2026-10-25 (todo #10073): Kein Kapitel, keine Übung, Demo, Vorlage und keine Folie nennt `claude-sonnet-4-5-20250929` oder „Sonnet 4.5“ (nur Aliase), es gibt nichts umzustellen; die Zeile samt Alias-Hinweisen wird nach dem 30.11.2026 gestrichen.
 
 - `fable` löst auf Fable 5.1 auf (u. a. überschreibbar per `ANTHROPIC_DEFAULT_FABLE_MODEL`), im Claude-apps-Gateway auf Fable 5; `best` = `fable`, wo Fable verfügbar ist, sonst `opus`.
 - Weitere Werte: `opusplan` (Opus im Plan-Modus, dann Sonnet), `sonnet[1m]`, `opus[1m]`.
