@@ -461,14 +461,14 @@
   },
   {
    "aliases": [],
-   "analogy": "Ein Wachdienst betreut ein Objekt mit gemischtem Personal, jede Kraft mit eigenem Stundensatz. Der Auszubildende (`haiku`) ist schnell zur Stelle, hat aber nur einen kleinen Notizblock. Die erfahrene Streifenkraft (`sonnet`) erledigt den Alltag. Die Fachkraft für technische Alarme (`opus`) holst du für die schwierigen Fälle, den Sachverständigen (`fable`) für den großen Schadensfall, der Tage dauert. Stellst du die Fachkraft die ganze Nacht an den Empfang, verbrennst du Budget.",
+   "analogy": "Ein Wachdienst betreut ein Objekt mit gemischtem Personal, jede Kraft mit eigenem Stundensatz. Der Auszubildende (`haiku`) ist schnell zur Stelle und der Günstigste im Haus. Wie groß sein Notizblock ist, hängt vom Haus ab: Direkt bei Anthropic fasst er viel, bei manchen Cloud-Anbietern ist er noch klein. Die erfahrene Streifenkraft (`sonnet`) erledigt den Alltag. Die Fachkraft für technische Alarme (`opus`) holst du für die schwierigen Fälle, den Sachverständigen (`fable`) für den großen Schadensfall, der Tage dauert. Stellst du die Fachkraft die ganze Nacht an den Empfang, verbrennst du Budget.",
    "answers": [
-    "Opus oder Fable. Haikus Kontextfenster ist deutlich kleiner als das der anderen Tiers; bei vielen Dateien passt nicht alles hinein.",
-    "Das Modell denkt gründlicher nach und verbraucht dafür mehr Tokens: Qualität und Kosten steigen zusammen. Haiku kennt keinen Effort.",
+    "Opus oder Fable, weil über viele Dateien hinweg Urteil zählt. Bei Haiku prüfst du mit `/model`, worauf der Alias bei dir steht: Auf der älteren Generation (Cloud-Anbieter) ist das Fenster deutlich kleiner, bei vielen Dateien passt nicht alles hinein.",
+    "Das Modell denkt gründlicher nach und verbraucht dafür mehr Tokens: Qualität und Kosten steigen zusammen. Auf der Anthropic API kennt auch `haiku` Effort; ein Haiku, das ein Anbieter auf die ältere Generation auflöst, kennt keinen.",
     "Beim Start mit `claude --model … --effort …`. In der Sitzung geht es über die Auswahl von `/model`: Modell wählen, Effort mit den Pfeiltasten einstellen und mit `s` übernehmen. `/model <alias>`, Enter in der Auswahl und eine Stufe hinter `/effort` speichern die Wahl dagegen."
    ],
    "area": "cost",
-   "checkpoint": "Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur für eine Sitzung oder dauerhaft umstellen und erklären, warum Haiku an einer großen Codebasis scheitern kann.",
+   "checkpoint": "Du kannst für eine Aufgabe Tier und Effort-Stufe begründet wählen, beides nur für eine Sitzung oder dauerhaft umstellen und erklären, wann Haiku an einer großen Codebasis scheitern kann und warum das vom Anbieter abhängt.",
    "demo": null,
    "example": "# Alltag: Sonnet, Effort für diese Sitzung auf medium\nclaude --model sonnet --effort medium\n\n# Hartnäckiger Fehler: Opus mit tieferem Reasoning, nur für diese Sitzung\nclaude --model opus --effort xhigh\n\n# In der Sitzung: Modell und Effort in der Auswahl prüfen\n/model",
    "example_lang": "text",
@@ -498,8 +498,8 @@
     ]
    },
    "recall": [
-    "Welches Tier nimmst du für die Analyse einer ganzen Codebasis, und warum nicht Haiku?",
-    "Was ändert eine höhere Effort-Stufe, und welches Tier kennt gar keinen Effort?",
+    "Welches Tier nimmst du für die Analyse einer ganzen Codebasis, und was prüfst du, bevor du dafür Haiku erwägst?",
+    "Was ändert eine höhere Effort-Stufe, und wo kennt `haiku` gar keinen Effort?",
     "Wie stellst du Modell und Effort für eine einzige Sitzung ein, ohne deinen Standard zu ändern?"
    ],
    "requires": [
