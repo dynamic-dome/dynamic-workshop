@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-10-24 — Aktualitätslauf: Haiku 4.5 wieder überwacht, Nachprüf-Hook für `version-pinned`
+
+- **Aktualität (Todo #9957):** Die Regel „retiring“ meldet bei Status `Active` und verstrichenem „Not sooner than“-Datum nicht mehr rot,
+  sondern nur Info (`retiring-unannounced:…`): Das Datum ist eine Untergrenze, keine Abschaltankündigung. Eine angekündigte Abschaltung
+  ändert den Status auf der Deprecations-Seite und bleibt über `canon-status` rot (Vorlauf mindestens 60 Tage). Haiku 4.5 steht als Legacy-Zeile
+  wieder in der überwachten Kanon-Tabelle, dazu Sonnet 4.6 und Opus 4.6 (die Anbieter-Aliase lösen noch darauf auf). Sonnet 4.5 bleibt draußen:
+  Es ist seit 30.09.2026 `Deprecated` und würde den Lauf bis zur Abschaltung am 30.11.2026 rot halten.
+- **Aktualität (Todo #9518, Rest):** Neuer Nachprüf-Hook: Jede Kurszeile mit `version-pinned: <Grund>` wird im Monatslauf gegen die
+  Deprecations-Tabelle gelesen. Modell nicht mehr `Active` oder unbekannt = gelb (`pinned-status:`/`pinned-unknown:`), aktives Modell = Info
+  (`pinned-active:`, Liste zum Nachlesen), Grund „histor…“ = Info (`pinned-historical:`). Der Kurs enthält zurzeit keine solche Zeile.
+
 ## 2026-10-24 — Kanon auf CLI 2.1.310: Haiku 5.5, `claude -p` startet in `default`
 
 - **Kanon:** Haiku 5.5 (`claude-haiku-5-5`, Active, frühestens 7.10.2027, 1M Kontext, 0.10 $ / 0.50 $, über 100K Prompt 0.50 $ / 2.50 $,

@@ -186,6 +186,38 @@ def test_retiring_canon_model_is_red():
     assert [f.key for f in levels(result, "rot")] == ["retiring:claude-haiku-4-5-20251001:2026-10-15"]
 
 
+def _legacy_haiku(date_text, status="Active"):
+    """Haiku 4.5 as a monitored Legacy row; the Deprecations table says `status` with `date_text` (todo #9957)."""
+    model = ("Claude Haiku 4.5 (Legacy)", "claude-haiku-4-5-20251001", "haiku", "Haiku", "Active", date_text)
+    table = dep_table([("claude-haiku-4-5-20251001", status, "N/A", date_text)])
+    return run(canon_text=canon(rows=(OPUS, model)), available=pages(**{BASE + "model-deprecations.md": table}))
+
+
+def test_active_model_whose_earliest_retirement_date_has_passed_is_only_info():
+    """Todo #9957: "Not sooner than" is a floor, not an announcement. Status Active plus a lapsed date (Haiku 4.5 on
+    2026-10-24) was a permanent false red; only a status change on the Deprecations page may turn it red."""
+    result = _legacy_haiku("Not sooner than September 1, 2026")
+    assert result.exit_code == 0 and levels(result, "rot") == [] and levels(result, "gelb") == []
+    [info] = [f for f in levels(result, "info") if f.key.startswith("retiring-unannounced:")]
+    assert info.key == "retiring-unannounced:claude-haiku-4-5-20251001:2026-09-01"
+    assert "keine Abschaltung angekündigt" in info.text and "Active" in info.text
+
+
+def test_a_retirement_date_equal_to_today_counts_as_passed():
+    result = _legacy_haiku("Not sooner than September 29, 2026")
+    assert result.exit_code == 0
+    assert [f.key for f in levels(result, "info") if f.key.startswith("retiring")] == [
+        "retiring-unannounced:claude-haiku-4-5-20251001:2026-09-29"]
+
+
+@pytest.mark.parametrize("status", ["Deprecated", "Retired"])
+def test_lapsed_date_with_a_status_change_is_still_red(status):
+    result = _legacy_haiku("Not sooner than September 1, 2026", status=status)
+    keys = [f.key for f in levels(result, "rot")]
+    assert f"canon-status:claude-haiku-4-5-20251001:{status}" in keys
+    assert not any(f.key.startswith("retiring-unannounced") for f in result.findings)
+
+
 def test_newer_active_model_in_a_canon_family_is_red():
     available = pages(**{BASE + "model-deprecations.md": dep_table([("claude-opus-6", "Active", "N/A", "Not sooner than May 1, 2028")])})
     assert [f.key for f in levels(run(available=available), "rot")] == ["new-model:claude-opus-6"]
@@ -403,6 +435,8 @@ def test_real_canon_is_machine_readable():
     cx.parse_canon_header(text)
     models = cx.parse_canon_models(text)
     assert {m.tier for m in models} == {"Fable", "Opus", "Sonnet", "Haiku"}
+    # Todo #9957: the Legacy models behind the provider aliases stay in the monitored table (status from the Deprecations page).
+    assert {"claude-haiku-4-5-20251001", "claude-sonnet-4-6", "claude-opus-4-6"} <= {m.model_id for m in models}
     for model in models:
         assert model.model_id.startswith("claude-") and model.alias in {"fable", "opus", "sonnet", "haiku"}
         assert re.fullmatch(r"(Not sooner than )?[A-Z][a-z]+ \d{1,2}, \d{4}", model.retirement), model.retirement
@@ -542,3 +576,76 @@ def test_real_live_changelog_excerpt_runs_through_the_check():
                  available=pages(**{BASE + "changelog.md": excerpt + "z" * 100_000, "https://npm.test/latest": npm}))
     assert result.exit_code == 0 and levels(result, "gelb") == []
     assert {f.key.split(":")[1] for f in result.findings if f.key.startswith("changelog")} == {"2.1.293"}
+
+
+# --- Nachprüf-Hook für version-pinned-Zeilen (todo #9518) ---
+# `version-pinned: <Grund>` lets a course line name a model generation against the alias rule. Nothing ever looked at
+# those lines again, so a pinned claim could outlive its model. The monthly run now re-reads every pinned line against
+# the Deprecations table: Active = info (list to re-read), Deprecated/Retired/unknown = yellow (the claim needs a look).
+
+HAIKU_45 = "claude-haiku-4-5-20251001"
+
+
+def _pinned(course_text, rows=(), course_path="m.md"):
+    table = dep_table(list(rows))
+    return run(course={course_path: course_text}, available=pages(**{BASE + "model-deprecations.md": table}))
+
+
+def _keys(result, level):
+    return [f.key.split(":")[0] for f in levels(result, level)]
+
+
+def test_pinned_line_with_an_active_model_is_listed_as_info_and_does_not_change_the_exit():
+    line = "Haiku 4.5 hat 200K Kontext. <!-- version-pinned: Quiz zu Kontextgrenzen -->\n"
+    result = _pinned(line, [(HAIKU_45, "Active", "N/A", "Not sooner than October 15, 2027")])
+    assert result.exit_code == 0 and levels(result, "gelb") == [] and levels(result, "rot") == []
+    [info] = [f for f in levels(result, "info") if f.key.startswith("pinned-active:")]
+    assert info.where == ("m.md:1",) and "Haiku 4.5" in info.text and "Quiz zu Kontextgrenzen" in info.text
+
+
+@pytest.mark.parametrize("status", ["Deprecated", "Retired"])
+def test_pinned_line_whose_model_left_active_is_yellow(status):
+    line = "Intro.\nHaiku 4.5 hat 200K Kontext. <!-- version-pinned: Quiz zu Kontextgrenzen -->\n"
+    result = _pinned(line, [(HAIKU_45, status, "September 1, 2026", "November 30, 2026")])
+    [finding] = levels(result, "gelb")
+    assert finding.key.startswith(f"pinned-status:{HAIKU_45}:{status}:")
+    assert finding.where == ("m.md:2",) and "Quiz zu Kontextgrenzen" in finding.text
+    assert result.exit_code == 1
+
+
+def test_pinned_line_with_a_model_missing_from_the_deprecations_table_is_yellow():
+    result = _pinned("Opus 3.7 war langsam. <!-- version-pinned: Vergleich mit heute -->\n")
+    [finding] = levels(result, "gelb")
+    assert finding.key.startswith("pinned-unknown:") and "Opus 3.7" in finding.text
+
+
+def test_historical_pin_may_name_a_retired_model():
+    line = "Bis Juli 2026 war Haiku 4.5 der Standard. <!-- version-pinned: historischer Vergleich -->\n"
+    result = _pinned(line, [(HAIKU_45, "Retired", "May 1, 2026", "June 1, 2026")])
+    assert result.exit_code == 0 and levels(result, "gelb") == []
+    assert [f.key.split(":")[0] for f in levels(result, "info") if f.key.startswith("pinned")] == ["pinned-historical"]
+
+
+def test_every_model_on_a_pinned_line_is_checked_and_id_and_prose_forms_both_resolve():
+    line = f"`{HAIKU_45}` statt Opus 4.1. <!-- version-pinned: Migrationsbeispiel -->\n"
+    result = _pinned(line, [(HAIKU_45, "Deprecated", "September 1, 2026", "November 30, 2026")])
+    assert _keys(result, "gelb") == ["pinned-status"]
+    assert _keys(result, "info").count("pinned-active") == 1  # Opus 4.1 stays Active in dep_table()
+
+
+def test_unpinned_model_mentions_are_not_this_hooks_business():
+    result = _pinned("Haiku 4.5 hat 200K Kontext.\n", [(HAIKU_45, "Retired", "May 1, 2026", "June 1, 2026")])
+    assert not any(f.key.startswith("pinned") for f in result.findings)
+
+
+def test_a_marker_without_a_reason_is_not_a_pin():
+    result = _pinned("Haiku 4.5 hat 200K. <!-- version-pinned: -->\n", [(HAIKU_45, "Retired", "May 1, 2026", "June 1, 2026")])
+    assert not any(f.key.startswith("pinned") for f in result.findings)
+
+
+def test_pinned_finding_keys_survive_a_line_shift():
+    row = [(HAIKU_45, "Deprecated", "September 1, 2026", "November 30, 2026")]
+    line = "Haiku 4.5 hat 200K. <!-- version-pinned: Quiz -->\n"
+    first = _pinned(line, row)
+    shifted = _pinned("neue Zeile davor\n" + line, row)
+    assert [f.key for f in levels(first, "gelb")] == [f.key for f in levels(shifted, "gelb")]

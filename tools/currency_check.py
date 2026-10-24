@@ -44,6 +44,11 @@ KEYWORDS = re.compile(r"\b(removed|deprecated|renamed|no longer|default)\b", re.
 FIXED_LINE = re.compile(
     r"^(?:\\?\[[^\]]{1,30}\]\s*|\*\*[^*]{1,30}:\*\*\s*"
     r"|(?!(?:added|changed|removed|deprecated)\b)[\w .+/-]{1,30}:\s+)*fixed\b", re.I)
+# A model generation named in prose or as an ID ("Haiku 4.5", "claude-haiku-4-5-20251001", "claude-3-5-haiku"); used only to
+# re-read lines that carry a `version-pinned: <Grund>` marker against the Deprecations table (todo #9518).
+PINNED_MODEL = re.compile(
+    r"\b(?:claude-)?(?P<family>opus|sonnet|haiku|fable|mythos)[ -]?\(?(?P<version>\d+(?:[.-]\d+)?)\b"
+    r"|\bclaude-(?P<old_major>\d)(?:-(?P<old_minor>\d))?-(?P<old_family>opus|sonnet|haiku)\b", re.I)
 SPECIFIC_KINDS = ("flag", "env", "hook_event", "model_id")
 KIND_LABEL = {
     "flag": "Flag", "env": "Env-Variable", "hook_event": "Hook-Event",
@@ -169,10 +174,16 @@ def _check_canon_models(canon_models, deprecations, today):
             findings.append(Finding("rot", f"canon-retirement:{model.model_id}:{row.retirement}",
                                     f"Retirement von `{model.model_id}`: Kanon „{model.retirement}“, Doku „{row.retirement}“"))
         earliest = cx.parse_date(row.retirement)
-        if earliest and (earliest - today).days < RETIREMENT_WARN_DAYS:
+        days = (earliest - today).days if earliest else None
+        if earliest and row.status == "Active" and days <= 0:
+            # "Not sooner than" is a floor, not an announcement (todo #9957, Haiku 4.5 on 2026-10-24). An announced
+            # shutdown flips the status and a notice of at least 60 days applies, which canon-status reports red.
+            findings.append(Finding("info", f"retiring-unannounced:{model.model_id}:{earliest}",
+                                    f"`{model.model_id}`: frühestes Abschaltdatum {earliest} verstrichen, Status Active, "
+                                    "keine Abschaltung angekündigt (Deprecations-Seite weiter beobachten)"))
+        elif earliest and days < RETIREMENT_WARN_DAYS:
             findings.append(Finding("rot", f"retiring:{model.model_id}:{earliest}",
-                                    f"`{model.model_id}` kann ab {earliest} abgeschaltet werden "
-                                    f"({(earliest - today).days} Tage)"))
+                                    f"`{model.model_id}` kann ab {earliest} abgeschaltet werden ({days} Tage)"))
     unknown = set()
     for model_id, row in sorted(deprecations.items()):
         if row.status != "Active":
@@ -186,6 +197,61 @@ def _check_canon_models(canon_models, deprecations, today):
     if unknown:
         findings.append(Finding("info", "unknown-families",
                                 "Aktive Modellfamilien, die der Kanon nicht führt: " + ", ".join(sorted(unknown))))
+    return findings
+
+
+def _pinned_models(line):
+    """(token, family, version tuple) for every model generation named in `line`, in order, without repeats."""
+    seen, found = set(), []
+    for match in PINNED_MODEL.finditer(line):
+        if match["family"]:
+            family, version = match["family"].lower(), tuple(int(p) for p in re.split(r"[.-]", match["version"]))
+        else:
+            family = match["old_family"].lower()
+            version = tuple(int(p) for p in (match["old_major"], match["old_minor"]) if p is not None)
+        if (family, version) not in seen:
+            seen.add((family, version))
+            found.append((match.group(0), family, version))
+    return found
+
+
+def _check_pinned(course, deprecations):
+    """Re-read every `version-pinned: <Grund>` course line against the Deprecations table (todo #9518).
+
+    The lint lets such a line name a model generation and never looks at it again. Here a pin whose model is no
+    longer Active (or unknown to the table) is yellow, because the pinned claim may be stale; an Active model is only
+    listed as info so the monthly report carries the list to re-read. A reason containing "histor" is a deliberate
+    look back: it may name a retired model."""
+    by_version = {}
+    for model_id, row in deprecations.items():
+        by_version.setdefault(cx.model_family_version(model_id), []).append(row)
+    findings = []
+    for path in sorted(course):
+        for number, line in enumerate(course[path].splitlines(), 1):
+            marker = lint_currency.PIN.search(line)
+            if not lint_currency.is_pinned(line):
+                continue
+            reason = marker.group(1).strip()
+            digest = _short(path + "|" + line.strip())
+            for token, family, version in _pinned_models(line):
+                rows = by_version.get((family, version), [])
+                row = next((r for r in rows if r.status == "Active"), rows[0] if rows else None)
+                where = (f"{path}:{number}",)
+                if "histor" in reason.lower():
+                    findings.append(Finding("info", f"pinned-historical:{family}-{version}:{digest}",
+                                            f"Rückblick mit `{token}` (version-pinned: {reason})", where))
+                elif row is None:
+                    findings.append(Finding("gelb", f"pinned-unknown:{family}-{version}:{digest}",
+                                            f"version-pinned-Zeile nennt `{token}`, das nicht in der Deprecations-Tabelle steht "
+                                            f"(Grund: {reason}): Aussage prüfen", where))
+                elif row.status != "Active":
+                    findings.append(Finding("gelb", f"pinned-status:{row.model_id}:{row.status}:{digest}",
+                                            f"version-pinned-Zeile nennt `{token}` ({row.model_id}, Status {row.status}, "
+                                            f"Retirement {row.retirement}; Grund: {reason}): Aussage prüfen", where))
+                else:
+                    findings.append(Finding("info", f"pinned-active:{row.model_id}:{digest}",
+                                            f"version-pinned-Zeile mit `{token}` ({row.model_id}, Status Active; Grund: {reason}) "
+                                            "noch einmal lesen", where))
     return findings
 
 
@@ -255,6 +321,7 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
     by_value, unparsed = _collect_course(course)
     findings = _check_course(by_value, exceptions, union, aliases, modes)
     findings += _check_canon_models(canon_models, deprecations, today)
+    findings += _check_pinned(course, deprecations)
     findings += _check_changelog(entries, by_value)
 
     age = (today - checked).days
