@@ -32,7 +32,7 @@ aliases: []
 
 ## Auf einen Blick
 
-Wenn etwas nicht greift, prüfst du zuerst die Einrichtung mit `/doctor`, dann die Schichten in fester Reihenfolge: CLAUDE.md, Skills, Plugins, Hooks, MCP, Rechte, schließlich das Debug-Log. Du fragst die Werkzeuge, was sie sehen, statt zu raten, und reparierst erst, wenn eine Schicht ihren Fehler zeigt. Bei Hooks zählt die Fehlerrichtung: Ein Schutz-Hook, der abstürzt, in einen Timeout läuft oder seinen Fehler verschluckt, blockt nicht, der Befehl läuft weiter. Der gefährlichste Fall ist der, der still bleibt: Nichts meldet einen Fehler, und der Wächter winkt alles durch.
+Wenn etwas nicht greift, prüfst du zuerst die Einrichtung mit `/doctor`, dann die Schichten in fester Reihenfolge: CLAUDE.md, Skills, Plugins, Hooks, MCP, Rechte, schließlich das Debug-Log. Du fragst die Werkzeuge, was sie sehen, statt zu raten, und reparierst erst, wenn eine Schicht ihren Fehler zeigt. Bei Hooks zählt die Fehlerrichtung: Ein Schutz-Hook, der abstürzt, in einen Timeout läuft oder seinen Fehler verschluckt, blockt im Standard nicht, der Befehl läuft weiter. Der gefährlichste Fall ist der, der still bleibt: Nichts meldet einen Fehler, und der Wächter winkt alles durch.
 
 Deshalb testest du einen Hook auch von Hand, mit einer Eingabe im echten Format: Nur Exit 2 blockt.
 
@@ -40,7 +40,7 @@ Deshalb testest du einen Hook auch von Hand, mit einer Eingabe im echten Format:
 
 Eine Tür geht nicht auf. Der Techniker tauscht nicht zuerst den Leser, sondern macht den Selbsttest der Anlage und geht dann seine Liste in fester Reihenfolge durch: Programm der Zentrale, Leser, Zusatzmodule, Controller-Logik, Verbindung zur Leitstelle, Berechtigungsstufe. In Claude Code heißen die Stufen CLAUDE.md, Skills, Plugins, Hooks, MCP und Rechte.
 
-Dazu kommt die Fehlerrichtung. Ein Türcontroller, der den Strom verliert, soll verriegeln (fail-secure). Hooks in Claude Code fallen bei Absturz und Timeout offen; das sichere Verhalten musst du selbst ins Skript einbauen.
+Dazu kommt die Fehlerrichtung. Ein Türcontroller, der den Strom verliert, soll verriegeln (fail-secure). Hooks in Claude Code fallen im Standard bei Absturz und Timeout offen. Das sichere Verhalten wählst du selbst: im Skript (Eingabe prüfen, `exit 2`) und seit v2.1.295 am Hook mit `"onFailure": "block"`, das auch Absturz und Timeout blockt ([S2.8](s2-08-hook-einrichten.md)). Ein verschluckter Fehler mit `exit 0` bleibt auch dann unsichtbar.
 
 ```mermaid
 flowchart TD
@@ -62,8 +62,8 @@ Hooks sind die Schicht, die am schnellsten falsch eingerichtet ist: ein Skript a
 
 1. **Der Hook blockt alles.** Der Matcher ist zu breit, typischerweise `".*"` statt eines bestimmten Tools; dann feuert er bei jedem Aufruf.
 2. **Das Skript läuft gar nicht.** Die Datei ist nicht ausführbar, die Shebang-Zeile fehlt oder der Pfad in `settings.json` stimmt nicht.
-3. **Das Skript bricht ab, und dein Wächter steht offen.** Nur Exit-Code **2** blockt. Ein Syntaxfehler, ein fehlendes Programm (Exit 127) oder ein schlichtes `exit 1` gelten als Hook-Fehler, der *nicht* blockt: Im Transkript steht ein `hook error`, und der Aufruf **läuft weiter**. Die schlimmere Spielart meldet nicht einmal das: Ein Skript, das alle Fehler abfängt und mit `exit 0` endet, sieht für Claude Code aus wie ein Hook, der zugestimmt hat. Bau Wächter so, dass sie geschlossen fallen: Prüf die eigene Eingabe und ende mit `exit 2`, wenn du sie nicht lesen kannst ([S2.8](s2-08-hook-einrichten.md)).
-4. **Das Skript hängt.** Ein `command`-Hook hat standardmäßig **600 Sekunden** Timeout (`timeout` am Handler, in Sekunden). Ein PreToolUse-Hook im Timeout blockt den Aufruf **nicht**.
+3. **Das Skript bricht ab, und dein Wächter steht offen.** Nur Exit-Code **2** blockt. Ein Syntaxfehler, ein fehlendes Programm (Exit 127) oder ein schlichtes `exit 1` gelten im Standard als Hook-Fehler, der *nicht* blockt: Im Transkript steht ein `hook error`, und der Aufruf **läuft weiter**. Die schlimmere Spielart meldet nicht einmal das: Ein Skript, das alle Fehler abfängt und mit `exit 0` endet, sieht für Claude Code aus wie ein Hook, der zugestimmt hat. Bau Wächter so, dass sie geschlossen fallen: Prüf die eigene Eingabe und ende mit `exit 2`, wenn du sie nicht lesen kannst; ab v2.1.295 blockt zusätzlich `"onFailure": "block"` am Hook bei Absturz und Timeout ([S2.8](s2-08-hook-einrichten.md)). Steht `onFailure: "block"` am Hook und der Aufruf wird plötzlich blockiert, lies die Fehlermeldung im Transkript: Sie nennt `blocking because onFailure is "block"`.
+4. **Das Skript hängt.** Ein `command`-Hook hat standardmäßig **600 Sekunden** Timeout (`timeout` am Handler, in Sekunden). Ein PreToolUse-Hook im Timeout blockt den Aufruf im Standard **nicht**; mit `"onFailure": "block"` (ab v2.1.295, `command` und `http`) blockt er ihn, und die Meldung sagt `timed out`.
 
 ### Einen Hook diagnostizieren
 
@@ -218,7 +218,7 @@ except Exception:
 
 ## Typische Fallen
 
-- **Der Wächter ist still offen, und alles sieht ruhig aus.** Ein abgestürzter Schutz-Hook meldet nur einen `hook error`, ein hängender wird nach dem Timeout abgebrochen, ein Skript mit verschlucktem Fehler meldet gar nichts; in allen Fällen läuft der Befehl. Prüf nach jeder Änderung auch den Fall, der blocken soll.
+- **Der Wächter ist still offen, und alles sieht ruhig aus.** Ein abgestürzter Schutz-Hook meldet im Standard nur einen `hook error`, ein hängender wird nach dem Timeout abgebrochen, ein Skript mit verschlucktem Fehler meldet gar nichts; in allen Fällen läuft der Befehl (mit `"onFailure": "block"` blocken die ersten beiden, das dritte läuft weiter). Prüf nach jeder Änderung auch den Fall, der blocken soll.
 - **Den Matcher in Rechte-Regel-Syntax schreiben.** `"matcher": "Bash(rm *)"` wird als Regex gelesen und trifft nie; das gehört ins Feld `if` ([S2.8](s2-08-hook-einrichten.md)).
 - **Im Eingabe-JSON das falsche Feld lesen.** Der Tool-Name steht in `tool_name`, der Shell-Befehl in `tool_input.command`.
 
@@ -243,11 +243,11 @@ Du kannst die Diagnose-Checkliste in der richtigen Reihenfolge durchgehen, für 
 **Frage:** Dein Wächter steht in `/hooks`, im Transkript erscheint kein `hook error`, aber ein Befehl, den er blocken soll, läuft durch. Von Hand liefert das Skript mit echter Eingabe `exit=0` ohne Ausgabe. Was ist der nächste Diagnoseschritt?
 
 - **Richtig:** Im Skript einen abgefangenen Fehler suchen, ihn sichtbar machen und den Handler geschlossen fallen lassen (`exit 2`).
-  - Warum: Läuft das Skript von Hand durch und liefert 0, obwohl es blocken soll, liegt der Fehler im Skript. Ein verschluckter Fehler endet mit 0, und Claude Code wertet das als Zustimmung; nur Exit 2 blockt.
+  - Warum: Läuft das Skript von Hand durch und liefert 0, obwohl es blocken soll, liegt der Fehler im Skript. Ein verschluckter Fehler endet mit 0 und gilt als Zustimmung; auch `onFailure: "block"` ändert daran nichts.
 - Falsch: Den Matcher auf `".*"` erweitern, damit der Hook bei jedem Tool feuert und so keinen einzigen Aufruf mehr verpasst.
   - Warum: Der Fehler liegt im Skript, nicht in der Registrierung: Es liefert von Hand selbst 0. Ein Matcher wie `".*"` lässt den Hook nur bei jedem Aufruf feuern, an diesem 0 ändert er nichts.
 - Falsch: Den `timeout` des Hooks verlängern, weil ein zu kurzer Timeout das Urteil des Skripts abschneidet und sonst alles durchläuft.
-  - Warum: Hängt ein `command`-Hook, greift sein Timeout (Standard 600 Sekunden), und der Aufruf läuft trotzdem weiter. Dein Skript liefert von Hand aber `exit=0`; ein längerer Timeout ändert dieses Urteil nicht.
+  - Warum: Hängt ein `command`-Hook, greift sein Timeout (Standard 600 Sekunden), und der Aufruf läuft im Standard trotzdem weiter. Dein Skript liefert von Hand aber `exit=0`; ein längerer Timeout ändert dieses Urteil nicht.
 - Falsch: Den Hook löschen und neu anlegen, weil ein Hook, der in `/hooks` steht und doch nichts blockt, auf eine beschädigte Installation hindeutet.
   - Warum: Steht ein Hook in `/hooks`, ist seine Registrierung in Ordnung. Das `exit=0` kommt aus dem Skript, und ein neuer Eintrag bringt dasselbe Skript mit. Such zuerst den Fehler im Skript.
 

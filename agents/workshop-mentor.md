@@ -55,7 +55,7 @@ Findest du Katalog oder Kapitel nicht, sag das und antworte **nicht** aus dem Ge
 
 ## Leitplanken, die du nie aufweichst
 
-- **Hooks:** Von den Exit-Codes blockt nur `exit 2` (daneben eine JSON-Entscheidung, S2.10); jeder andere Exit-Code und ein Timeout lassen die Aktion durch (fail-open). Die
+- **Hooks:** Von den Exit-Codes blockt nur `exit 2` (daneben eine JSON-Entscheidung, S2.10); jeder andere Exit-Code und ein Timeout lassen im Standard die Aktion durch (fail-open); ab v2.1.295 blockt `"onFailure": "block"` am command-/http-Hook auch diese Fälle, ausgenommen Stop, SubagentStop, TaskCompleted, TeammateIdle und async-Hooks. Die
   Eingabe steht unter `tool_input` (Bash: `tool_input.command`). Alle passenden Hooks laufen parallel. → S2.8
 - **Headless:** `claude -p` ohne `--bare` führt Hooks und MCP-Server des Repos aus, auch in fremden Ordnern.
   `--max-budget-usd` und `--max-turns` gelten nur mit `-p`. → S4.3, S4.4

@@ -1775,7 +1775,7 @@
    "analogy": "In einer Zutrittskontrolle feuert der Kartenleser, sobald jemand eine Karte vorhält. Bevor die Tür aufgeht, prüft das System: Ist die Karte berechtigt, gilt sie zu dieser Uhrzeit, ist der Bereich gerade zugänglich? Das ist PreToolUse, eine Prüfung, die die Aktion verhindern kann. Der Türkontakt meldet nach dem Öffnen, wer wann durch welche Tür gegangen ist. Das ist PostToolUse, ein Protokoll nach dem Ereignis; ging die Tür gar nicht auf, gibt es nichts zu melden. Die Checkliste zum Schichtende läuft, wenn der Wachmann den Schichtbericht abschließt, nicht weil die Uhr 18:00 zeigt. Das ist Stop: ausgelöst durch ein Ereignis, nicht durch die Uhr.",
    "answers": [
     "Ein Hook läuft von selbst an einem festen Ereignis, etwa vor jedem Tool-Aufruf. Einen Skill lädt Claude nur, wenn du ihn aufrufst oder die Anfrage zur Beschreibung passt, und er gibt Anweisungen, denen Claude folgen kann.",
-    "Über den Exit-Code mit `exit 2` (daneben mit einer JSON-Entscheidung, [S2.10](s2-10-hook-ausgaben.md)). Mit `exit 1` meldet Claude Code nur einen Hook-Fehler, und die Aktion läuft weiter.",
+    "Über den Exit-Code mit `exit 2` (daneben mit einer JSON-Entscheidung, [S2.10](s2-10-hook-ausgaben.md)). Mit `exit 1` meldet Claude Code im Standard nur einen Hook-Fehler, und die Aktion läuft weiter.",
     "Wenn der Tool-Aufruf fehlgeschlagen ist, etwa weil ein Befehl mit einem Fehlercode endet. Dann feuert PostToolUseFailure."
    ],
    "area": "hooks",
@@ -1784,7 +1784,7 @@
    "example": "   {\n     \"hooks\": {\n       \"PreToolUse\": [\n         {\n           \"matcher\": \"Bash|PowerShell\",\n           \"hooks\": [{\"type\": \"command\", \"command\": \"echo pre >> \\\"${CLAUDE_PROJECT_DIR}/hook-log.txt\\\"\"}]\n         }\n       ],\n       \"PostToolUse\": [\n         {\n           \"matcher\": \"Bash|PowerShell\",\n           \"hooks\": [{\"type\": \"command\", \"command\": \"echo post >> \\\"${CLAUDE_PROJECT_DIR}/hook-log.txt\\\"\"}]\n         }\n       ],\n       \"Stop\": [\n         {\n           \"hooks\": [{\"type\": \"command\", \"command\": \"echo stop >> \\\"${CLAUDE_PROJECT_DIR}/hook-log.txt\\\"\"}]\n         }\n       ]\n     }\n   }",
    "example_lang": "json",
    "file": "s2-06-hooks-als-sensoren.md",
-   "glance": "Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken; PostToolUse feuert danach, aber nur nach einem erfolgreichen Aufruf, und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Geblockt wird über den Exit-Code allein nur mit `exit 2`; jeder andere Code, ein Absturz oder ein Timeout lässt die Aktion laufen. Der zweite Weg, eine JSON-Entscheidung, steht in [S2.10](s2-10-hook-ausgaben.md).",
+   "glance": "Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken; PostToolUse feuert danach, aber nur nach einem erfolgreichen Aufruf, und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Geblockt wird über den Exit-Code allein nur mit `exit 2`; jeder andere Code, ein Absturz oder ein Timeout lässt im Standard die Aktion laufen (seit v2.1.295 lässt sich das mit `\"onFailure\": \"block\"` umdrehen, [S2.8](s2-08-hook-einrichten.md)). Der zweite Weg, eine JSON-Entscheidung, steht in [S2.10](s2-10-hook-ausgaben.md).",
    "id": "S2.6",
    "level": "core",
    "minutes": 20,
@@ -1795,11 +1795,11 @@
     "correct": "Er läuft: `exit 1` meldet nur einen Hook-Fehler, über den Exit-Code allein blockt nur `exit 2`.",
     "q": "Dein PreToolUse-Wächter erkennt einen gefährlichen Befehl und endet mit `exit 1`. Was passiert mit dem Befehl?",
     "why": {
-     "correct": "Über den Exit-Code allein blockt nur `exit 2`. Jeder andere Code, ein Absturz oder ein Timeout gilt als Hook-Fehler, und die Aktion läuft: für einen Wächter die gefährliche Fehlerrichtung.",
+     "correct": "Über den Exit-Code allein blockt nur `exit 2`. Jeder andere Code, ein Absturz oder ein Timeout gilt im Standard als Hook-Fehler, und die Aktion läuft: für einen Wächter die gefährliche Fehlerrichtung.",
      "wrong": [
-      "Ungleich 0 genügt nicht: Beim Exit-Code zählt allein die 2. `exit 1` meldet lediglich einen Hook-Fehler, die Aktion läuft weiter. Wer so blocken will, braucht `exit 2`.",
+      "Ungleich 0 genügt nicht: Es zählt allein die 2. `exit 1` meldet im Standard nur einen Hook-Fehler, die Aktion läuft weiter. Wer so blocken will, braucht `exit 2` (oder ab v2.1.295 `\"onFailure\": \"block\"`).",
       "Die Meldung auf stderr ist nur Begleittext: Im Beispielskript steht sie direkt vor `exit 2`, und erst dieser Code blockt. Mit `exit 1` bleibt es bei einem Hook-Fehler.",
-      "Das Gegenteil trifft zu: Ein Hook-Fehler bricht den Aufruf nicht ab. `exit 1`, ein Absturz und auch ein Timeout lassen die Aktion laufen; über den Exit-Code stoppt sie nur `exit 2`."
+      "Das Gegenteil trifft im Standard zu: Ein Hook-Fehler bricht den Aufruf nicht ab. `exit 1`, ein Absturz und auch ein Timeout lassen die Aktion laufen; über den Exit-Code stoppt sie nur `exit 2`."
      ]
     },
     "wrong": [
@@ -1908,7 +1908,7 @@
    "aliases": [],
    "analogy": "Stell dir eine Alarmmatrix mit zwei Filterebenen vor. Die erste Ebene ist der Sensortyp: Wiegand-Leser (Bash) oder Kamera-Bewegung (Edit). Das ist der `matcher`. Die zweite Ebene ist der Bereichsfilter: „nur wenn Berechtigungsstufe unter 3 und Zone = Serverraum\". Das ist das `if`-Feld mit Rechte-Regel-Syntax. Ohne zweite Ebene löst jeder Kartenscan Alarm aus, mit ihr nur die Ereignisse, die zählen.",
    "answers": [
-    "`exit 2`. Jeder andere Code (1, 127, ein Absturz) und ein Timeout melden nur einen Hook-Fehler; die Aktion läuft weiter.",
+    "`exit 2`. Jeder andere Code (1, 127, ein Absturz) und ein Timeout melden im Standard nur einen Hook-Fehler; die Aktion läuft weiter. Nur mit `\"onFailure\": \"block\"` (ab v2.1.295) blocken auch diese Fälle.",
     "In `tool_input.command`. Unter Windows brauchst du `\"Bash|PowerShell\"`, weil Shell-Befehle dort meist über das PowerShell-Tool laufen; beide Tools liefern den Befehl in diesem Feld.",
     "Er endet mit `exit 2` und blockt. Das ist die sichere Richtung: Ein kaputter Wächter soll die Tür schließen, denn bei jedem anderen Code, den Claude Code ohnehin als Hook-Fehler wertet, liefe der Befehl."
    ],
@@ -1918,7 +1918,7 @@
    "example": "   {\n     \"hooks\": {\n       \"PreToolUse\": [\n         {\n           \"matcher\": \"Bash|PowerShell\",\n           \"hooks\": [\n             {\n               \"type\": \"command\",\n               \"command\": \"bash \\\"${CLAUDE_PROJECT_DIR}\\\"/.claude/hooks/safety-check.sh\"\n             }\n           ]\n         }\n       ]\n     }\n   }",
    "example_lang": "json",
    "file": "s2-08-hook-einrichten.md",
-   "glance": "Über den Exit-Code allein blockt bei einem Schutz-Hook nur `exit 2`; jeder andere Exit-Code (1, 127, ein Absturz) und ein Timeout blocken nicht, die Aktion läuft weiter. Daneben kann ein PreToolUse-Hook per JSON blocken (`permissionDecision: \"deny\"`, [S2.10](s2-10-hook-ausgaben.md)). Ein kaputter Schutz-Hook ist deshalb ein offener Schutz-Hook: Ein guter Wächter liest den Befehl aus `tool_input.command` und blockt lieber, wenn er seine Eingabe nicht lesen kann.",
+   "glance": "Über den Exit-Code allein blockt bei einem Schutz-Hook nur `exit 2`; im Standard blocken jeder andere Exit-Code (1, 127, ein Absturz) und ein Timeout nicht, die Aktion läuft weiter (fail-open). Seit v2.1.295 kannst du das pro Hook mit `\"onFailure\": \"block\"` umdrehen (Abschnitt „Absturz und Timeout ebenfalls blocken: `onFailure`\"). Daneben kann ein PreToolUse-Hook per JSON blocken (`permissionDecision: \"deny\"`, [S2.10](s2-10-hook-ausgaben.md)). Ein kaputter Schutz-Hook ist im Standard deshalb ein offener Schutz-Hook: Ein guter Wächter liest den Befehl aus `tool_input.command` und blockt lieber, wenn er seine Eingabe nicht lesen kann.",
    "id": "S2.8",
    "level": "core",
    "minutes": 35,
@@ -1929,10 +1929,10 @@
     "correct": "Er läuft, denn 127 blockt nicht. Das Skript muss seine Eingabe selbst prüfen und bei einem Lesefehler mit `exit 2` enden.",
     "q": "Dein Wächter-Skript stürzt ab, weil `jq` fehlt, und endet mit Exit-Code 127. Was passiert mit dem gefährlichen Befehl, und wie änderst du das?",
     "why": {
-     "correct": "Nur `exit 2` blockt; jeder andere Code (1, 127, ein Absturz) und ein Timeout lassen die Aktion laufen. Ein kaputter Wächter soll die Tür schließen: Das Skript endet bei unlesbarer Eingabe selbst mit 2.",
+     "correct": "Im Standard blockt nur `exit 2`; jeder andere Code (1, 127, ein Absturz) und ein Timeout lassen die Aktion laufen. Ein kaputter Wächter soll die Tür schließen: Das Skript endet bei unlesbarer Eingabe selbst mit 2.",
      "wrong": [
-      "Das wäre fail-secure wie bei einem Türschloss. Claude Code macht es umgekehrt: Stürzt der Hook ab, läuft die Aktion. Die sichere Richtung musst du im Skript selbst wählen.",
-      "Einen Automatismus gibt es nicht: Jeder Absturz lässt die Aktion durch, auch beim zweiten Mal. Erst dein Skript macht den Wächter sicher, wenn es bei unlesbarer Eingabe mit `exit 2` endet.",
+      "Das wäre fail-secure wie beim Türschloss. Claude Code macht es im Standard umgekehrt: Stürzt der Hook ab, läuft die Aktion. Die sichere Richtung wählst du selbst: im Skript oder ab v2.1.295 mit `\"onFailure\": \"block\"`.",
+      "Einen Automatismus gibt es nicht: Ohne deine Einstellung lässt jeder Absturz die Aktion durch, auch beim zweiten Mal. Sicher wird der Wächter durch `exit 2` im Skript oder ab v2.1.295 durch `\"onFailure\": \"block\"`.",
       "Der Text auf stderr ist nur die Begründung. Ein Skript mit Fehlertext auf stderr und `exit 1` blockt nichts; erst `exit 2` stoppt den Aufruf, und dann geht der Text an Claude."
      ]
     },
@@ -4691,7 +4691,7 @@
    "example": "   echo '{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"echo x > release.lock\"}}' | python .claude/hooks/guard.py; echo \"exit=$?\"",
    "example_lang": "bash",
    "file": "s4-10-diagnose-schritt-fuer-schritt.md",
-   "glance": "Wenn etwas nicht greift, prüfst du zuerst die Einrichtung mit `/doctor`, dann die Schichten in fester Reihenfolge: CLAUDE.md, Skills, Plugins, Hooks, MCP, Rechte, schließlich das Debug-Log. Du fragst die Werkzeuge, was sie sehen, statt zu raten, und reparierst erst, wenn eine Schicht ihren Fehler zeigt. Bei Hooks zählt die Fehlerrichtung: Ein Schutz-Hook, der abstürzt, in einen Timeout läuft oder seinen Fehler verschluckt, blockt nicht, der Befehl läuft weiter. Der gefährlichste Fall ist der, der still bleibt: Nichts meldet einen Fehler, und der Wächter winkt alles durch.",
+   "glance": "Wenn etwas nicht greift, prüfst du zuerst die Einrichtung mit `/doctor`, dann die Schichten in fester Reihenfolge: CLAUDE.md, Skills, Plugins, Hooks, MCP, Rechte, schließlich das Debug-Log. Du fragst die Werkzeuge, was sie sehen, statt zu raten, und reparierst erst, wenn eine Schicht ihren Fehler zeigt. Bei Hooks zählt die Fehlerrichtung: Ein Schutz-Hook, der abstürzt, in einen Timeout läuft oder seinen Fehler verschluckt, blockt im Standard nicht, der Befehl läuft weiter. Der gefährlichste Fall ist der, der still bleibt: Nichts meldet einen Fehler, und der Wächter winkt alles durch.",
    "id": "S4.10",
    "level": "core",
    "minutes": 30,
@@ -4702,10 +4702,10 @@
     "correct": "Im Skript einen abgefangenen Fehler suchen, ihn sichtbar machen und den Handler geschlossen fallen lassen (`exit 2`).",
     "q": "Dein Wächter steht in `/hooks`, im Transkript erscheint kein `hook error`, aber ein Befehl, den er blocken soll, läuft durch. Von Hand liefert das Skript mit echter Eingabe `exit=0` ohne Ausgabe. Was ist der nächste Diagnoseschritt?",
     "why": {
-     "correct": "Läuft das Skript von Hand durch und liefert 0, obwohl es blocken soll, liegt der Fehler im Skript. Ein verschluckter Fehler endet mit 0, und Claude Code wertet das als Zustimmung; nur Exit 2 blockt.",
+     "correct": "Läuft das Skript von Hand durch und liefert 0, obwohl es blocken soll, liegt der Fehler im Skript. Ein verschluckter Fehler endet mit 0 und gilt als Zustimmung; auch `onFailure: \"block\"` ändert daran nichts.",
      "wrong": [
       "Der Fehler liegt im Skript, nicht in der Registrierung: Es liefert von Hand selbst 0. Ein Matcher wie `\".*\"` lässt den Hook nur bei jedem Aufruf feuern, an diesem 0 ändert er nichts.",
-      "Hängt ein `command`-Hook, greift sein Timeout (Standard 600 Sekunden), und der Aufruf läuft trotzdem weiter. Dein Skript liefert von Hand aber `exit=0`; ein längerer Timeout ändert dieses Urteil nicht.",
+      "Hängt ein `command`-Hook, greift sein Timeout (Standard 600 Sekunden), und der Aufruf läuft im Standard trotzdem weiter. Dein Skript liefert von Hand aber `exit=0`; ein längerer Timeout ändert dieses Urteil nicht.",
       "Steht ein Hook in `/hooks`, ist seine Registrierung in Ordnung. Das `exit=0` kommt aus dem Skript, und ein neuer Eintrag bringt dasselbe Skript mit. Such zuerst den Fehler im Skript."
      ]
     },

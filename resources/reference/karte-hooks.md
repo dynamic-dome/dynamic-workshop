@@ -11,12 +11,13 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285). Offizielle Quell
 | Was kommt an? | JSON auf stdin mit `tool_name` und `tool_input`. Der Shell-Befehl steht in `tool_input.command`, bei Write in `file_path` und `content`, bei Edit in `file_path`, `old_string`, `new_string`. PostToolUse bringt zusätzlich `tool_response` |
 | Was blockt? | Von den Exit-Codes nur `exit 2`, bei Ereignissen, die blocken können; bei PreToolUse geht stderr als Grund an Claude. Daneben blockt bei PreToolUse die JSON-Entscheidung `permissionDecision: "deny"`. Der Block gilt auch, wenn eine allow-Regel passen würde |
 | Und `exit 0`? | Kein Einwand; danach entscheidet der normale Rechte-Ablauf. stderr eines Hooks mit `exit 0` sieht Claude nie |
-| Jeder andere Code (1, 127 …) | Ohne gültiges JSON auf stdout nur ein Hook-Fehler: Die Aktion läuft weiter |
-| Timeout | Bei `PreToolUse` Standard 600 s (`command`, `http`, `mcp_tool`); ein Timeout blockt dort nicht, der Aufruf läuft weiter. Andere Ereignisse haben eigene Werte, etwa 30 s bei `UserPromptSubmit` |
+| Jeder andere Code (1, 127 …) | Ohne gültiges JSON auf stdout im Standard nur ein Hook-Fehler: Die Aktion läuft weiter. Mit `"onFailure": "block"` am Hook (ab v2.1.295, nur `command` und `http`) zählt er als Fehler und blockt wie `exit 2` |
+| Timeout | Bei `PreToolUse` Standard 600 s (`command`, `http`, `mcp_tool`); ein Timeout blockt dort im Standard nicht, der Aufruf läuft weiter, mit `"onFailure": "block"` blockt er. Andere Ereignisse haben eigene Werte, etwa 30 s bei `UserPromptSubmit` |
+| `onFailure` (ab v2.1.295) | Feld an `command`- und `http`-Hooks: `"continue"` (Standard) oder `"block"`. Fehler = Hook startet nicht, Exit-Code außer 0 und 2, HTTP-Fehler oder Status außer 2xx, Timeout, ungültige JSON-Ausgabe. Ein Fehler wirkt dann wie `exit 2` des Ereignisses (bei `PermissionRequest`: Anfrage abgelehnt). Ohne Wirkung bei `Stop`, `SubagentStop`, `TaskCompleted`, `TeammateIdle` und bei `async`/`asyncRewake`. Ein Skript, das seinen Fehler mit `exit 0` verschluckt, bleibt ein Erfolg |
 | Mehrere passende Hooks | laufen parallel |
 | Dateipfade | immer absolut, unter Windows mit Backslash |
 
-Ein kaputter Schutz-Hook ist also ein offener Schutz-Hook. Ein Wächter, der seine Eingabe nicht lesen kann, endet deshalb selbst mit `exit 2` ([S2.8](../library/s2-08-hook-einrichten.md)).
+Ein kaputter Schutz-Hook ist im Standard also ein offener Schutz-Hook. Ein Wächter, der seine Eingabe nicht lesen kann, endet deshalb selbst mit `exit 2`; ab v2.1.295 schließt zusätzlich `"onFailure": "block"` auch bei Absturz und Timeout ([S2.8](../library/s2-08-hook-einrichten.md)). Fehlerverhalten gegen die Doku geprüft am 2026-10-24 (CLI 2.1.310).
 
 ## Ereignisse für den Alltag
 
@@ -58,7 +59,7 @@ Ein eigener Hook zählt identische Fehlschläge (gleiches Tool, gleiche Argument
 ## Typische Fallen
 
 - **Feuert, blockt aber nicht:** `exit 1` statt `exit 2`, oder das Skript liest ein Feld `command` auf oberster Ebene statt `tool_input.command`.
-- **Tor still offen:** Falscher Pfad oder fehlendes `chmod +x`, die Shell endet mit 127, es erscheint nur ein Hinweis `hook error`, und die Aktion läuft. Achte beim ersten Lauf darauf.
+- **Tor still offen:** Falscher Pfad oder fehlendes `chmod +x`, die Shell endet mit 127, es erscheint im Standard nur ein Hinweis `hook error`, und die Aktion läuft. Achte beim ersten Lauf darauf oder setze ab v2.1.295 `"onFailure": "block"`.
 - **`Stop`-Hook hört nicht auf:** `exit 2` lässt Claude weitermachen. Prüf das Eingabefeld `stop_hook_active`; nach acht Fortsetzungen in Folge beendet Claude Code den Zug selbst.
 - **Fremdes Repo mit `claude -p`:** Dessen Hooks laufen ohne Vertrauensdialog. Nimm `--bare` oder `--settings '{"disableAllHooks": true}'`.
 

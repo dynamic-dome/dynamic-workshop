@@ -30,7 +30,7 @@ aliases: ["2.2"]
 
 ## Auf einen Blick
 
-Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken; PostToolUse feuert danach, aber nur nach einem erfolgreichen Aufruf, und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Geblockt wird über den Exit-Code allein nur mit `exit 2`; jeder andere Code, ein Absturz oder ein Timeout lässt die Aktion laufen. Der zweite Weg, eine JSON-Entscheidung, steht in [S2.10](s2-10-hook-ausgaben.md).
+Hooks sind automatische Aktionen, die bei festen Ereignissen in Claude Code laufen, ohne dass du jedes Mal daran denken musst. Drei Ereignisse tragen fast alles: PreToolUse feuert vor einem Tool-Aufruf und kann ihn blocken; PostToolUse feuert danach, aber nur nach einem erfolgreichen Aufruf, und kann reagieren, loggen, melden; Stop feuert, wenn Claude eine Antwort beendet hat und auf deine nächste Eingabe wartet. Geblockt wird über den Exit-Code allein nur mit `exit 2`; jeder andere Code, ein Absturz oder ein Timeout lässt im Standard die Aktion laufen (seit v2.1.295 lässt sich das mit `"onFailure": "block"` umdrehen, [S2.8](s2-08-hook-einrichten.md)). Der zweite Weg, eine JSON-Entscheidung, steht in [S2.10](s2-10-hook-ausgaben.md).
 
 ## Bild im Kopf
 
@@ -42,7 +42,7 @@ Die Sensoren ersetzen die Wachleute nicht. Sie nehmen ihnen das wiederholte Prü
 flowchart LR
   A["Claude wählt ein Tool"] --> B{"PreToolUse<br/>Kartenleser"}
   B -- "exit 2" --> X["Aufruf geblockt"]
-  B -- "jeder andere Code" --> C["Tool läuft"]
+  B -- "jeder andere Code<br/>(Standard)" --> C["Tool läuft"]
   C -- "Erfolg" --> D["PostToolUse<br/>Türkontakt: loggt, meldet"]
   C -- "Fehlschlag" --> F["PostToolUseFailure"]
   D -- "nächstes Tool" --> A
@@ -62,7 +62,7 @@ Wo ein Hook steht, bestimmt, wofür er gilt: In `.claude/settings.json` nur im P
 
 ### Die drei Eckpfeiler
 
-**PreToolUse: vorher, kann blocken.** Feuert, bevor Claude ein Tool nutzt, also einen Bash-Befehl ausführt, eine Datei bearbeitet oder einen MCP-Server aufruft. Der Hook bekommt mit, was Claude gleich tun will. Er kann die Aktion loggen, dich warnen oder sie **ganz blocken**: mit `exit 2` oder mit einer JSON-Entscheidung. Über den Exit-Code allein blockt nur 2: `exit 1`, ein Absturz oder ein Timeout melden nur einen Hook-Fehler, und die Aktion läuft weiter. Für einen Wächter ist das die gefährliche Fehlerrichtung.
+**PreToolUse: vorher, kann blocken.** Feuert, bevor Claude ein Tool nutzt, also einen Bash-Befehl ausführt, eine Datei bearbeitet oder einen MCP-Server aufruft. Der Hook bekommt mit, was Claude gleich tun will. Er kann die Aktion loggen, dich warnen oder sie **ganz blocken**: mit `exit 2` oder mit einer JSON-Entscheidung. Über den Exit-Code allein blockt nur 2: `exit 1`, ein Absturz oder ein Timeout melden im Standard nur einen Hook-Fehler, und die Aktion läuft weiter. Für einen Wächter ist das die gefährliche Fehlerrichtung. Wer sie umdrehen will, setzt seit v2.1.295 am Hook `"onFailure": "block"`; wie das geht und wo es nicht wirkt, steht in [S2.8](s2-08-hook-einrichten.md).
 
 **PostToolUse: nachher, kann reagieren.** Feuert, nachdem ein Tool-Aufruf erfolgreich war. Er kann festhalten, was passiert ist, Folgeaktionen anstoßen, Benachrichtigungen schicken, in ein Audit-Log schreiben. Rückgängig macht er nichts. Schlägt der Aufruf fehl, etwa weil ein Befehl mit einem Fehlercode endet, feuert stattdessen PostToolUseFailure; ein Protokoll-Hook nur an PostToolUse sieht fehlgeschlagene Aufrufe nicht.
 
@@ -139,7 +139,7 @@ Diese Kurzfassung zeigt nur das Prinzip. Fehlt `jq`, bleibt `COMMAND` leer, und 
 
 ## Typische Fallen
 
-- **Blocken mit `exit 1`.** Das blockt nicht. Über den Exit-Code allein stoppt nur `exit 2` einen PreToolUse-Aufruf; jeder andere Code meldet einen Hook-Fehler, und die Aktion läuft.
+- **Blocken mit `exit 1`.** Das blockt nicht. Über den Exit-Code allein stoppt nur `exit 2` einen PreToolUse-Aufruf; jeder andere Code meldet im Standard einen Hook-Fehler, und die Aktion läuft.
 - **Der Hook feuert nie.** Du hast den Vertrauensdialog für den Ordner nicht bestätigt, oder der Matcher trifft das Tool nicht: Unter Windows laufen Shell-Befehle meist über das PowerShell-Tool, mit `"Bash"` allein feuert nichts. `/hooks` zeigt, was registriert ist.
 - **Protokoll-Hook an PostToolUse und fehlgeschlagene Befehle.** Ein Testlauf mit Fehlschlägen endet mit einem Fehlercode und taucht dort nicht auf. Willst du auch Fehlschläge sehen, brauchst du PostToolUseFailure.
 - **Stop mit dem Sitzungsende verwechseln.** Stop feuert nach jeder abgeschlossenen Antwort, nicht erst am Ende. Für das saubere Ende der Sitzung gibt es SessionEnd ([S2.7](s2-07-hook-ereignisse.md)).
@@ -156,7 +156,7 @@ Du kannst die drei Eckpfeiler-Hooks benennen, erklären, welcher blockieren kann
 <details><summary>Auflösung</summary>
 
 1. Ein Hook läuft von selbst an einem festen Ereignis, etwa vor jedem Tool-Aufruf. Einen Skill lädt Claude nur, wenn du ihn aufrufst oder die Anfrage zur Beschreibung passt, und er gibt Anweisungen, denen Claude folgen kann.
-2. Über den Exit-Code mit `exit 2` (daneben mit einer JSON-Entscheidung, [S2.10](s2-10-hook-ausgaben.md)). Mit `exit 1` meldet Claude Code nur einen Hook-Fehler, und die Aktion läuft weiter.
+2. Über den Exit-Code mit `exit 2` (daneben mit einer JSON-Entscheidung, [S2.10](s2-10-hook-ausgaben.md)). Mit `exit 1` meldet Claude Code im Standard nur einen Hook-Fehler, und die Aktion läuft weiter.
 3. Wenn der Tool-Aufruf fehlgeschlagen ist, etwa weil ein Befehl mit einem Fehlercode endet. Dann feuert PostToolUseFailure.
 
 </details>
@@ -166,13 +166,13 @@ Du kannst die drei Eckpfeiler-Hooks benennen, erklären, welcher blockieren kann
 **Frage:** Dein PreToolUse-Wächter erkennt einen gefährlichen Befehl und endet mit `exit 1`. Was passiert mit dem Befehl?
 
 - **Richtig:** Er läuft: `exit 1` meldet nur einen Hook-Fehler, über den Exit-Code allein blockt nur `exit 2`.
-  - Warum: Über den Exit-Code allein blockt nur `exit 2`. Jeder andere Code, ein Absturz oder ein Timeout gilt als Hook-Fehler, und die Aktion läuft: für einen Wächter die gefährliche Fehlerrichtung.
+  - Warum: Über den Exit-Code allein blockt nur `exit 2`. Jeder andere Code, ein Absturz oder ein Timeout gilt im Standard als Hook-Fehler, und die Aktion läuft: für einen Wächter die gefährliche Fehlerrichtung.
 - Falsch: Er wird geblockt, denn Claude Code behandelt jeden Exit-Code ungleich 0 als Ablehnung des Tool-Aufrufs.
-  - Warum: Ungleich 0 genügt nicht: Beim Exit-Code zählt allein die 2. `exit 1` meldet lediglich einen Hook-Fehler, die Aktion läuft weiter. Wer so blocken will, braucht `exit 2`.
+  - Warum: Ungleich 0 genügt nicht: Es zählt allein die 2. `exit 1` meldet im Standard nur einen Hook-Fehler, die Aktion läuft weiter. Wer so blocken will, braucht `exit 2` (oder ab v2.1.295 `"onFailure": "block"`).
 - Falsch: Er wird geblockt, sobald der Hook zusätzlich eine Begründung auf stderr schreibt, wie im Skript davor.
   - Warum: Die Meldung auf stderr ist nur Begleittext: Im Beispielskript steht sie direkt vor `exit 2`, und erst dieser Code blockt. Mit `exit 1` bleibt es bei einem Hook-Fehler.
 - Falsch: Er läuft nicht, weil ein Hook-Fehler den ganzen Tool-Aufruf abbricht, genau wie ein Timeout des Hooks.
-  - Warum: Das Gegenteil trifft zu: Ein Hook-Fehler bricht den Aufruf nicht ab. `exit 1`, ein Absturz und auch ein Timeout lassen die Aktion laufen; über den Exit-Code stoppt sie nur `exit 2`.
+  - Warum: Das Gegenteil trifft im Standard zu: Ein Hook-Fehler bricht den Aufruf nicht ab. `exit 1`, ein Absturz und auch ein Timeout lassen die Aktion laufen; über den Exit-Code stoppt sie nur `exit 2`.
 
 </details>
 
