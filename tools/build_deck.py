@@ -335,14 +335,14 @@ def diagram_hooks(s, x, y):
     arrow(s, x + Inches(2.35), y + Inches(1.0), x + Inches(2.85), y + Inches(1.0))
     node(s, x + Inches(2.9), y + Inches(0.6), Inches(2.3), Inches(0.8), "Skript", "liest tool_input")
     outs = [("exit 2", "blockt, Grund an Claude", WARN), ("exit 0", "Aktion läuft", DONE),
-            ("1, 127, Timeout", "Standard: läuft trotzdem (fail-open); mit onFailure block: blockt", WORK)]
+            ("1, 127, Timeout", "Standard: läuft (fail-open); mit onFailure block: blockt", WORK)]
     for i, (a, b, col) in enumerate(outs):
         bx = x + i * Inches(1.77)
         arrow(s, x + Inches(4.05), y + Inches(1.45), bx + Inches(0.8), y + Inches(2.15))
-        box(s, bx, y + Inches(2.2), Inches(1.65), Inches(1.3), fill=SURFACE, line=col)
-        text(s, bx + Inches(0.12), y + Inches(2.2), Inches(1.45), Inches(1.3), [[(a, {"bold": True, "size": 15, "color": col})],
-             [(b, {"size": 14 if len(b) < 30 else 11, "color": INK2})]], anchor=MSO_ANCHOR.MIDDLE)
-    text(s, x, y + Inches(3.7), Inches(5.3), Inches(0.8), "Ein kaputter Schutz-Hook ist ein offener Schutz-Hook.",
+        box(s, bx, y + Inches(2.2), Inches(1.65), Inches(2.0), fill=SURFACE, line=col)
+        text(s, bx + Inches(0.12), y + Inches(2.2), Inches(1.45), Inches(2.0), [[(a, {"bold": True, "size": 15, "color": col})],
+             [(b, {"size": 14, "color": INK2})]], anchor=MSO_ANCHOR.MIDDLE)
+    text(s, x, y + Inches(4.25), Inches(5.3), Inches(0.7), "Im Standard ist ein kaputter Schutz-Hook ein offener Schutz-Hook.",
          size=16, color=INK, bold=True)
 
 
