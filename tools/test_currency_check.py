@@ -51,6 +51,13 @@ def changelog(entries=("Added foo",)):
             '<Update label="2.1.284" description="y">\n  * Old\n</Update>\n' + "z" * 100_000)
 
 
+def changelog_live(groups, version="2.1.285", old="2.1.284"):
+    """The format code.claude.com serves since 2026-10: **x.y.z**, a date line, **Group** headings, `* ` bullets."""
+    body = "".join(f"**{name}**\n\n" + "".join(f"* {line}\n" for line in lines) + "\n" for name, lines in groups)
+    return (f"# Claude Code changelog\n\n**{version}**\n\nOctober 23, 2026\n\n{body}"
+            f"**{old}**\n\nOctober 6, 2026\n\n* Old\n" + "z" * 100_000)
+
+
 def pages(**override):
     result = {
         BASE + "cli-reference.md": "# CLI\n" + "\n".join(f"| `--flag-{i}` | x |" for i in range(90))
@@ -509,3 +516,29 @@ def _retiring_in(days):
 def test_retirement_warning_boundary_is_59_days_red_60_days_not():
     assert any(f.key.startswith("retiring:") for f in levels(_retiring_in(59), "rot"))
     assert not any(f.key.startswith("retiring:") for f in _retiring_in(60).findings)
+
+
+def test_live_changelog_format_is_read_and_the_group_decides_fixed_vs_yellow():
+    """Todo #9942: the live changelog has **x.y.z** / **Group** / `* ` bullets; the monthly run must not abort on it, and
+    the heading decides the type: lines under "N bug fixes" are info (F9), under "Changed" they stay yellow."""
+    groups = [("Changed", ["Changed `--max-turns` default", "Removed --max-turns from the picker"]),
+              ("2 bug fixes", ["Windows: the --max-turns limit was ignored", "Fixed --max-turns off by one"])]
+    result = run(available=pages(**{BASE + "changelog.md": changelog_live(groups)}))
+    assert [f.text for f in levels(result, "gelb")] == [
+        "2.1.285: Changed `--max-turns` default", "2.1.285: Removed --max-turns from the picker"]
+    assert [f.text for f in levels(result, "info") if f.key.startswith("changelog-fixed")] == [
+        "2.1.285: Windows: the --max-turns limit was ignored", "2.1.285: Fixed --max-turns off by one"]
+
+
+def test_live_changelog_format_with_only_old_entries_is_clean():
+    text = changelog_live([("Added", ["Added --max-turns"])], version="2.1.284", old="2.1.283")
+    assert run(available=pages(**{BASE + "changelog.md": text})).exit_code == 0
+
+
+def test_real_live_changelog_excerpt_runs_through_the_check():
+    excerpt = (ROOT / "tools" / "fixtures" / "currency" / "changelog-live-2026-10-24.md").read_text(encoding="utf-8")
+    npm = json.dumps({"version": "2.1.310", "pad": "x" * 300})
+    result = run(canon_text=canon(cli="2.1.292"),
+                 available=pages(**{BASE + "changelog.md": excerpt + "z" * 100_000, "https://npm.test/latest": npm}))
+    assert result.exit_code == 0 and levels(result, "gelb") == []
+    assert {f.key.split(":")[1] for f in result.findings if f.key.startswith("changelog")} == {"2.1.293"}

@@ -138,6 +138,10 @@ MODE_ROW = re.compile(r"^\|\s*((?:\[?`[A-Za-z]+`\]?(?:\([^)]*\))?(?:,\s*)?)+)\s*
 MODE_FLAG_ROW = re.compile(r"^\|\s*`--permission-mode`\s*\|(.*)$", re.M)
 MODEL_FIELD_ROW = re.compile(r"^[|] *`model` *[|](.*)$", re.M)  # sub-agents.md, frontmatter table
 UPDATE = re.compile(r'^<Update label="(\d+\.\d+\.\d+)"', re.M)
+# Live format since 2026-10 (code.claude.com/docs/en/changelog.md): "**2.1.310**" on its own line, then a date line,
+# "**Added**"/"**Changed**"/"**N improvements**"/"**N bug fixes**" group headings and "* " bullets.
+BOLD_VERSION = re.compile(r"^\*\*(\d+\.\d+\.\d+)\*\*[ \r]*$", re.M)
+GROUP_HEADING = re.compile(r"^\*\*(?!\d+\.\d+\.\d+\*\*)([^*]+)\*\*[ ]*$")
 PROVENANCE = re.compile(r"^<!-- Quelle: .*claude-code-workshop-ui\.html.*-->\s*$")
 
 
@@ -251,9 +255,21 @@ def version_tuple(version):
     return tuple(int(part) for part in version.split("."))
 
 
-def changelog_since(text, since):
-    """Entries (version, line) of every release newer than `since`; ValueError if no listed release is <= `since`."""
-    marks = [(m.start(), m.group(1)) for m in UPDATE.finditer(text)]
+def changelog_group(heading):
+    """Type of a live-changelog group heading: added, changed, improved, fixed, removed, or the lowercased heading."""
+    words = re.sub(r"^\d+\s+", "", heading.strip().lower())
+    if words in ("bug fixes", "fixed", "fixes"):
+        return "fixed"
+    return {"improvements": "improved"}.get(words, words)
+
+
+def changelog_entries_since(text, since):
+    """(version, group, line) of every release newer than `since`; ValueError if no listed release is <= `since`.
+
+    Understands both formats: <Update label="x.y.z"> blocks (old reports, group "") and the live **x.y.z** layout
+    with **Group** headings (group from changelog_group; bullets before any heading get "")."""
+    marks = sorted([(m.start(), m.group(1)) for m in UPDATE.finditer(text)]
+                   + [(m.start(), m.group(1)) for m in BOLD_VERSION.finditer(text)])
     since_t = version_tuple(since)
     if not any(version_tuple(v) <= since_t for _pos, v in marks):
         raise ValueError(f"Changelog: reicht nicht bis Version {since} zurueck")
@@ -262,11 +278,20 @@ def changelog_since(text, since):
         if version_tuple(version) <= since_t:
             continue
         end = marks[index + 1][0] if index + 1 < len(marks) else len(text)
+        group = ""
         for line in text[pos:end].splitlines()[1:]:
             stripped = line.strip()
-            if stripped.startswith("* "):
-                entries.append((version, stripped[2:]))
+            heading = GROUP_HEADING.match(stripped)
+            if heading:
+                group = changelog_group(heading.group(1))
+            elif stripped.startswith("* "):
+                entries.append((version, group, stripped[2:]))
     return entries
+
+
+def changelog_since(text, since):
+    """Entries (version, line) of every release newer than `since`; ValueError if no listed release is <= `since`."""
+    return [(version, line) for version, _group, line in changelog_entries_since(text, since)]
 
 
 def model_family_version(model_id):

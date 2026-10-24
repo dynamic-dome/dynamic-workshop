@@ -194,10 +194,11 @@ def _check_changelog(entries, by_value):
     # Aliases and modes are ordinary words ("default", "plan"): they count only in code form.
     words = sorted({v for (k, v) in by_value if k not in SPECIFIC_KINDS}, key=len, reverse=True)
     findings = []
-    for version, line in entries:
+    for version, group, line in entries:
         named = [v for v in specific if re.search(r"(?<![\w-])" + re.escape(v) + r"(?![\w-])", line)]
         named += [v for v in words if "`" + v + "`" in line]
-        if named and FIXED_LINE.match(line):
+        # The live changelog types lines by group heading ("N bug fixes"); the old <Update> format only by the line text.
+        if named and (group == "fixed" or FIXED_LINE.match(line)):
             findings.append(Finding("info", f"changelog-fixed:{version}:{_short(line)}", f"{version}: {line}",
                                     tuple(f"nennt {v}" for v in named)))
         elif named:
@@ -247,7 +248,7 @@ def run(*, canon_text, course, exceptions_text, fetcher, today, previous_state, 
             raise SourceError(f"{label}: {got} < Minimum {floor} (Format geändert?)")
     try:
         cli_latest = json.loads(cli.text)["version"]
-        entries = cx.changelog_since(changelog.text, cli_canon)
+        entries = cx.changelog_entries_since(changelog.text, cli_canon)
     except (ValueError, KeyError) as exc:
         raise SourceError(f"CLI-Version/Changelog: {exc}") from exc
 

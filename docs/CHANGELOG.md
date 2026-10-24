@@ -7,6 +7,12 @@
   Exit-Code und `finding_keys`. Anlass: Abschluss-Review, rund 82 Gelb-Befunde je Monat, davon etwa 60 % „Fixed“-Zeilen
   (Todo-Müdigkeit). Owner-Entscheid F9 vom 22.10.2026, gilt vor dem ersten Monatslauf am 01.11. Offen bleibt der
   Nachprüf-Hook für version-pinned-Zeilen.
+- **Aktualität:** `changelog_since` liest zusätzlich das Live-Format von code.claude.com (seit Oktober 2026:
+  `**2.1.310**`, Datumszeile, Gruppen `**Added**`/`**Changed**`/`**N improvements**`/`**N bug fixes**`); das alte
+  `<Update label="x.y.z">` bleibt für Altberichte. Ohne das brach der Monatslauf am 01.11. mit „Changelog: reicht nicht
+  bis Version … zurück“ ab. Die Gruppe „bug fixes“/„Fixed“ zählt als Info (F9), auch ohne „Fixed“ am Zeilenanfang;
+  `changelog_entries_since` liefert dafür (Version, Gruppe, Zeile). Fixture: `tools/fixtures/currency/changelog-live-2026-10-24.md`
+  (gekürzter Auszug). Todo #9942.
 
 ## 2026-10-05 — Selbstlernende zuerst (Branch `selbstlern-zuerst`, läuft)
 

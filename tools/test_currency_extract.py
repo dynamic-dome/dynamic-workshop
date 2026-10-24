@@ -262,3 +262,53 @@ def test_changelog_since_tolerates_version_gaps():
         '<Update label="2.1.284" description="c">\n  * Old entry\n</Update>\n'
     )
     assert cx.changelog_since(text, "2.1.285") == [("2.1.286", "Added --foo")]
+
+
+LIVE_FIXTURE = ROOT / "tools" / "fixtures" / "currency" / "changelog-live-2026-10-24.md"
+
+
+def _live():
+    return LIVE_FIXTURE.read_text(encoding="utf-8")
+
+
+def test_changelog_since_reads_the_live_bold_version_format():
+    """code.claude.com/docs/en/changelog.md (fetched 2026-10-24) uses **2.1.310** and **Added**/**N bug fixes**, not <Update>."""
+    entries = cx.changelog_since(_live(), "2.1.292")
+    versions = sorted({v for v, _line in entries}, key=cx.version_tuple, reverse=True)
+    assert versions == ["2.1.310", "2.1.309", "2.1.308", "2.1.293"]
+    lines = [line for _v, line in entries]
+    assert "Bug fixes and reliability improvements" in lines  # 2.1.308: a bullet without a group heading
+    assert any(line.startswith(r"\[VSCode] Fixed pressing Enter") for line in lines)  # masked tag bracket kept verbatim
+    assert not any(line.startswith(("**", "October")) for line in lines)
+    assert cx.changelog_since(_live(), "2.1.310") == []
+    with pytest.raises(ValueError):
+        cx.changelog_since(_live(), "2.1.200")
+
+
+def test_changelog_since_live_format_stops_at_the_since_version():
+    entries = cx.changelog_since(_live(), "2.1.309")
+    assert {v for v, _line in entries} == {"2.1.310"}
+    assert not any("Haiku 5.5" in line for _v, line in entries)
+
+
+def test_changelog_group_headings_map_to_types():
+    text = (
+        "**2.1.5**\n\nJanuary 1, 2027\n\n**Added**\n\n* Added a\n\n**Changed**\n\n* Changed b\n\n"
+        "**3 improvements**\n\n* Improved c\n\n**Improved**\n\n* Improve d\n\n"
+        "**2 bug fixes**\n\n* Fixed e\n* Windows: Fixed f\n\n**Fixed**\n\n* Fixed: g\n\n"
+        "**Removed**\n\n* Removed h\n\n**2.1.4**\n\n* Old\n"
+    )
+    assert cx.changelog_entries_since(text, "2.1.4") == [
+        ("2.1.5", "added", "Added a"), ("2.1.5", "changed", "Changed b"),
+        ("2.1.5", "improved", "Improved c"), ("2.1.5", "improved", "Improve d"),
+        ("2.1.5", "fixed", "Fixed e"), ("2.1.5", "fixed", "Windows: Fixed f"), ("2.1.5", "fixed", "Fixed: g"),
+        ("2.1.5", "removed", "Removed h"),
+    ]
+
+
+def test_changelog_ungrouped_and_old_format_entries_have_no_group():
+    old = ('<Update label="2.1.286" description="a">\n  * Fixed bar\n</Update>\n'
+           '<Update label="2.1.285" description="b">\n  * x\n</Update>\n')
+    assert cx.changelog_entries_since(old, "2.1.285") == [("2.1.286", "", "Fixed bar")]
+    new = "**2.1.309**\n\n* Bug fixes and reliability improvements\n\n**2.1.308**\n\n* x\n"
+    assert cx.changelog_entries_since(new, "2.1.308") == [("2.1.309", "", "Bug fixes and reliability improvements")]
