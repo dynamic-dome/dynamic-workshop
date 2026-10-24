@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-24 — Haiku-Aussagen auf der Anthropic-API-Generation, Cockpit-Puffer 4 MB, Kursergänzungen 2.1.295–2.1.299
+
+- **Haiku (Todo #9956):** `haiku` löst auf der Anthropic API auf die aktuelle Generation auf (1M Kontext, Effort `low` bis `max`, Start `medium`,
+  etwa 1/40 der Opus-Kosten, über 100K Prompt etwa 1/8), bei Claude Platform on AWS, Amazon Bedrock, Google Cloud und Microsoft Foundry noch auf die
+  ältere (200K, kein Effort, etwa 1/4). Korrigiert: S1.7 (Analogie, Kostentabelle, Diagrammknoten, Effort-Abschnitt, Falle, Check 1/2, Übung Schritt 4),
+  S1.19 Schritt 3 samt Moderation, S4.1 Falle, Glossar, Karte „Kosten“; `analogien.md` und Katalog per Build. Die Quizfrage von S1.7 blieb unverändert
+  (Owner-Durchgang #9665). Quellen: model-config.md, pricing.md, Kanon.
+- **Diagramme:** `render_diagrams.py` neu gelaufen: 34 fehlende SVGs gerendert (die Quellen mehrerer Kapitel waren seit dem 30.09. geändert), 33 verwaiste
+  entfernt; zuvor zeigte das Cockpit für 33 Diagramme nur den Mermaid-Quelltext.
+- **Cockpit-Puffer (Todo #9925):** `MAX_BYTES` von 3 auf 4 MB; Sparoptionen in der Spec („Größenregel“). Artefakt jetzt 2,98 MB.
+- **Kursergänzungen (Todo #9958):** S2.7 (UserPromptSubmit läuft vor der Skill-Expansion), S2.8 und S4.9 (Hook-Dauer im Debug-Log, unbekannte Agent-Felder),
+  S3.3 (`autoCompactWindow`), S2.11 (`validate`-Hinweis zur README, Exit-Code unverändert).
+
 ## 2026-10-24 — Aktualitätslauf: Haiku 4.5 wieder überwacht, Nachprüf-Hook für `version-pinned`
 
 - **Aktualität (Todo #9957):** Die Regel „retiring“ meldet bei Status `Active` und verstrichenem „Not sooner than“-Datum nicht mehr rot,
