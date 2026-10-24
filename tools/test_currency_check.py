@@ -319,6 +319,21 @@ def test_cockpit_comparison_ignores_provenance_but_reports_real_differences():
     assert [f.key.split(":")[0] for f in levels(differs, "rot")] == ["cockpit-differs"]
 
 
+BEACON = ("<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' "
+          "data-cf-beacon='{\"token\": \"t0ken\"}'></script><!-- Cloudflare Pages Analytics -->")
+
+
+def test_cockpit_comparison_ignores_the_injected_cloudflare_analytics_block():
+    course_cockpit = "<!doctype html>\n<script>render();</script>\n</body>\n</html>\n" + "c" * 100_000
+    live = course_cockpit.replace("</script>\n</body>", "</script>\n" + BEACON + "</body>")
+    assert live != course_cockpit
+    url = "https://site.test/cockpit"
+    clean = run(available=pages(**{url: live}), cockpit_text=course_cockpit, cockpit_url=url)
+    assert levels(clean, "rot") == []
+    changed = run(available=pages(**{url: live.replace("render();", "render(1);")}), cockpit_text=course_cockpit, cockpit_url=url)
+    assert [f.key.split(":")[0] for f in levels(changed, "rot")] == ["cockpit-differs"]
+
+
 PI = "https://pi.test/docs"
 PI_PAGE = "<html><body><script>var build = 1;</script><p>Pi has four tools.</p>" + PAD + "</body></html>"
 

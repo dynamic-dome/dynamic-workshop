@@ -143,6 +143,9 @@ UPDATE = re.compile(r'^<Update label="(\d+\.\d+\.\d+)"', re.M)
 BOLD_VERSION = re.compile(r"^\*\*(\d+\.\d+\.\d+)\*\*[ \r]*$", re.M)
 GROUP_HEADING = re.compile(r"^\*\*(?!\d+\.\d+\.\d+\*\*)([^*]+)\*\*[ ]*$")
 PROVENANCE = re.compile(r"^<!-- Quelle: .*claude-code-workshop-ui\.html.*-->\s*$")
+# Cloudflare Pages injects its Web Analytics beacon (comment, script, comment) in front of </body> on the live site.
+ANALYTICS_SCRIPT = re.compile(r"<script\b[^>]*cloudflareinsights[^>]*>\s*</script>", re.I | re.S)
+TAIL_COMMENTS = re.compile(r"(</script>)\s*(?:<!--(?:(?!-->).)*-->\s*)+</body>", re.S)
 
 
 @dataclass(frozen=True)
@@ -323,8 +326,12 @@ def denied_in_docs(value, union):
 
 
 def normalize_cockpit(text):
-    lines = text.replace("\r\n", "\n").split("\n")
-    return "\n".join(line for line in lines if not PROVENANCE.match(line))
+    """Cockpit HTML as the course exports it: no provenance line, CRLF as LF, no hosting-injected analytics block.
+
+    The beacon script is dropped, then the comments left between the last `</script>` and `</body>` (its markers)."""
+    text = ANALYTICS_SCRIPT.sub("", text.replace("\r\n", "\n"))
+    text = TAIL_COMMENTS.sub(r"\1\n</body>", text)
+    return "\n".join(line for line in text.split("\n") if not PROVENANCE.match(line))
 
 
 def normalize_foreign(text):
