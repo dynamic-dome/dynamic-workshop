@@ -440,7 +440,11 @@ def test_real_canon_is_machine_readable():
     models = cx.parse_canon_models(text)
     assert {m.tier for m in models} == {"Fable", "Opus", "Sonnet", "Haiku"}
     # Todo #9957: the Legacy models behind the provider aliases stay in the monitored table (status from the Deprecations page).
-    assert {"claude-haiku-4-5-20251001", "claude-sonnet-4-6", "claude-opus-4-6"} <= {m.model_id for m in models}
+    assert {"claude-haiku-4-5-20251001", "claude-sonnet-4-5-20250929", "claude-sonnet-4-6",
+            "claude-opus-4-6"} <= {m.model_id for m in models}
+    # Sonnet 4.5 is a known deprecation: the canon carries Deprecated plus the fixed date of the Deprecations page.
+    [sonnet45] = [m for m in models if m.model_id == "claude-sonnet-4-5-20250929"]
+    assert (sonnet45.status, sonnet45.retirement) == ("Deprecated", "November 30, 2026")
     for model in models:
         assert model.model_id.startswith("claude-") and model.alias in {"fable", "opus", "sonnet", "haiku"}
         assert re.fullmatch(r"(Not sooner than )?[A-Z][a-z]+ \d{1,2}, \d{4}", model.retirement), model.retirement
@@ -565,6 +569,39 @@ def test_active_model_beyond_the_warning_window_has_no_retiring_finding():
 def test_retirement_warning_boundary_for_a_deprecated_model_is_59_days_red_60_days_not():
     assert any(f.key.startswith("retiring:") for f in levels(_retiring_in(59, "Deprecated"), "rot"))
     assert not any(f.key.startswith("retiring:") for f in _retiring_in(60, "Deprecated").findings)
+
+
+def _known_deprecation(days, page_status="Deprecated"):
+    """Canon lists Sonnet 4.5 as Deprecated with a fixed retirement date `days` from today (todo #9957)."""
+    date = TODAY + dt.timedelta(days=days)
+    text = f"{date.strftime('%B')} {date.day}, {date.year}"
+    model = ("Claude Sonnet 4.5 (Legacy)", "claude-sonnet-4-5-20250929", "sonnet", "Sonnet", "Deprecated", text)
+    table = dep_table([("claude-sonnet-4-5-20250929", page_status, "September 30, 2026", text)])
+    return run(canon_text=canon(rows=(OPUS, model)), available=pages(**{BASE + "model-deprecations.md": table}))
+
+
+def test_known_deprecation_inside_the_warning_window_is_yellow_not_red():
+    result = _known_deprecation(37)
+    assert levels(result, "rot") == []
+    [yellow] = [f for f in levels(result, "gelb") if f.key.startswith("retiring-known:")]
+    assert yellow.key == f"retiring-known:claude-sonnet-4-5-20250929:{TODAY + dt.timedelta(days=37)}"
+    assert "bekannt abgekündigt" in yellow.text and "in 37 Tagen" in yellow.text
+
+
+def test_known_deprecation_beyond_the_warning_window_has_no_finding():
+    result = _known_deprecation(60)
+    assert levels(result, "rot") == [] and not any(f.key.startswith("retiring") for f in result.findings)
+
+
+def test_known_deprecation_turning_retired_is_red_against_the_canon_status():
+    result = _known_deprecation(37, page_status="Retired")
+    assert "canon-status:claude-sonnet-4-5-20250929:Retired" in [f.key for f in levels(result, "rot")]
+    assert not any(f.key.startswith("retiring-known") for f in result.findings)
+
+
+def test_known_deprecation_past_its_date_but_still_listed_is_red():
+    result = _known_deprecation(0)
+    assert any(f.key.startswith("retiring:claude-sonnet-4-5-20250929") for f in levels(result, "rot"))
 
 
 def test_live_changelog_format_is_read_and_the_group_decides_fixed_vs_yellow():

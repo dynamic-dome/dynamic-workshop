@@ -167,9 +167,12 @@ def _check_canon_models(canon_models, deprecations, today):
             findings.append(Finding("rot", f"canon-unknown:{model.model_id}",
                                     f"Kanon-Modell `{model.model_id}` fehlt in der Deprecations-Tabelle"))
             continue
-        if row.status != "Active":
+        if row.status != model.status:
+            # The canon status is the expected one: Active for current models, Deprecated for a known deprecation
+            # (todo #9957, Sonnet 4.5). Any change on the page against it is red.
+            expected = "" if model.status == "Active" else f", der Kanon führt {model.status}"
             findings.append(Finding("rot", f"canon-status:{model.model_id}:{row.status}",
-                                    f"Kanon-Modell `{model.model_id}` hat Status {row.status}"))
+                                    f"Kanon-Modell `{model.model_id}` hat Status {row.status}{expected}"))
         if row.retirement != model.retirement:
             findings.append(Finding("rot", f"canon-retirement:{model.model_id}:{row.retirement}",
                                     f"Retirement von `{model.model_id}`: Kanon „{model.retirement}“, Doku „{row.retirement}“"))
@@ -188,8 +191,14 @@ def _check_canon_models(canon_models, deprecations, today):
                                         f"`{model.model_id}`: frühestes Abschaltdatum {earliest} in {days} Tagen, Status Active, "
                                         "keine Abschaltung angekündigt (Deprecations-Seite weiter beobachten)"))
         elif earliest and row.status != "Active" and days < RETIREMENT_WARN_DAYS:
-            findings.append(Finding("rot", f"retiring:{model.model_id}:{earliest}",
-                                    f"`{model.model_id}` kann ab {earliest} abgeschaltet werden ({days} Tage)"))
+            if row.status == model.status and days > 0:
+                # Known deprecation that the canon already lists with this status and date: a reminder, not an alarm.
+                findings.append(Finding("gelb", f"retiring-known:{model.model_id}:{earliest}",
+                                        f"`{model.model_id}` ist bekannt abgekündigt ({row.status}) und wird am {earliest} "
+                                        f"abgeschaltet (in {days} Tagen): Aliase und Übungen darauf prüfen, Kanon-Zeile danach streichen"))
+            else:
+                findings.append(Finding("rot", f"retiring:{model.model_id}:{earliest}",
+                                        f"`{model.model_id}` kann ab {earliest} abgeschaltet werden ({days} Tage)"))
     unknown = set()
     for model_id, row in sorted(deprecations.items()):
         if row.status != "Active":
