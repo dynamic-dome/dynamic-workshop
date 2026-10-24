@@ -104,7 +104,7 @@ Der typische Fall: „Mein Skill ist installiert, aber Claude nimmt ihn nicht. W
 
 Willst du das Log schon ab dem Start, startest du Claude Code mit `claude --debug`. Einen Filter setzt du in der `=`-Form, etwa `claude --debug=mcp`; mit Leerzeichen statt `=` schaltet Claude Code das Log ohne Filter ein. Das Log erscheint nicht im Terminal, es landet in `~/.claude/debug/<session-id>.txt`. Mit `--debug-file <path>` legst du den Ort selbst fest.
 
-Für Hooks ist das die genaueste Quelle: Das Log hält fest, welche Matcher geprüft wurden, mit welchem Exit-Code der Hook endete und was er ausgegeben hat. Wie du damit Schicht für Schicht vorgehst, zeigt [S4.10](s4-10-diagnose-schritt-fuer-schritt.md).
+Für Hooks ist das die genaueste Quelle: Das Log hält fest, welche Matcher geprüft wurden, mit welchem Exit-Code der Hook endete und was er ausgegeben hat. Seit v2.1.296 hinterlässt jeder Command-Hook bei Tool-Ereignissen, UserPromptSubmit, SessionStart und Stop zudem eine Zeile `Hooks: …` mit Ausgang und Dauer (`finished with status 0 (31ms)`); so erkennst du einen langsamen Hook. Dasselbe Log nennt unbekannte Frontmatter-Felder in Agent-Dateien und gibt bei wahrscheinlichen Tippfehlern einen Hinweis. Wie du damit Schicht für Schicht vorgehst, zeigt [S4.10](s4-10-diagnose-schritt-fuer-schritt.md).
 
 ### `claude --verbose` und `claude --safe-mode`
 

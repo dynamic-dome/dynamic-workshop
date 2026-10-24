@@ -87,7 +87,7 @@ Wo die Datei liegt, bestimmt, für wen der Agent gilt: `.claude/agents/` nur fü
 - **`permissionMode`**: der Rechte-Modus des Subagenten ([S1.6](s1-06-rechte-modi.md)). Er gilt nicht in jedem Fall, siehe „Typische Fallen“.
 - **`color`**: Farbe des Agenten in der Aufgabenliste und im Verlauf. Das hilft, parallele Läufe auseinanderzuhalten.
 
-Weitere Felder wie `disallowedTools`, `skills`, `mcpServers`, `hooks`, `memory`, `background`, `isolation` und `effort` stehen in der [Frontmatter-Referenz](https://code.claude.com/docs/en/sub-agents#supported-frontmatter-fields) der offiziellen Doku. Wichtig ist die Grundregel dort: Claude Code ignoriert ein Feld, das es nicht kennt, ohne Fehlermeldung.
+Weitere Felder wie `disallowedTools`, `skills`, `mcpServers`, `hooks`, `memory`, `background`, `isolation`, `effort` und `autoCompactWindow` stehen in der [Frontmatter-Referenz](https://code.claude.com/docs/en/sub-agents#supported-frontmatter-fields) der offiziellen Doku. Wichtig ist die Grundregel dort: Claude Code ignoriert ein Feld, das es nicht kennt, ohne Fehlermeldung. Mit `autoCompactWindow` (seit v2.1.296) komprimiert ein Subagent früher als das Hauptgespräch; der Wert ist eine Ganzzahl von `100000` bis `1000000`, geschrieben als `200000`, nicht als `200k`, sonst liest Claude Code `200`. Ob ein Wert ignoriert wurde, steht im Debug-Log (`invalid autoCompactWindow`).
 
 ### Plugin-Subagenten: drei Felder zählen nicht
 
@@ -215,7 +215,7 @@ Beide Dateien unterscheiden sich nur in einer Zeile: `tools:` gegen `allowed_too
 
 ## Typische Fallen
 
-- **Ein falscher Feldname fällt nicht auf.** Das hast du in der Übung gesehen. Mehrwortige Felder schreibst du in camelCase (`maxTurns`, `disallowedTools`). Skills verwenden übrigens `allowed-tools` mit Bindestrich ([S2.3](s2-03-wer-skills-ausloest.md)), Subagenten `tools`.
+- **Ein falscher Feldname fällt nicht auf.** Das hast du in der Übung gesehen. Mehrwortige Felder schreibst du in camelCase (`maxTurns`, `disallowedTools`). Skills verwenden übrigens `allowed-tools` mit Bindestrich ([S2.3](s2-03-wer-skills-ausloest.md)), Subagenten `tools`. Im Debug-Log (`claude --debug`) nennt Claude Code seit v2.1.296 unbekannte Feldnamen in Agent-Dateien und gibt bei wahrscheinlichen Tippfehlern einen Hinweis; in der Sitzung selbst bleibt es still.
 - **`permissionMode` greift nicht immer.** Läuft das Hauptgespräch in `bypassPermissions`, `acceptEdits` oder `auto`, läuft der Subagent im selben Modus, und dein Feld wird ignoriert. Ein Subagent mit `bypassPermissions` bekommt diesen Modus nur, wenn das Hauptgespräch ihn auch hat. Begrenze deshalb vor allem über `tools`.
 - **Der neue Agent wird nicht gefunden.** Der erste Agent in einem Ordner, den es beim Start der Sitzung noch nicht gab, wird erst nach einem Neustart geladen. Dasselbe gilt für Dateien unter `--add-dir`.
 - **Die Datei lädt gar nicht.** Fehlt `name` oder `description`, lädt Claude Code die Datei nicht und meldet das nicht in der Sitzung. Bei fehlender `description` steht der Grund im Debug-Log (`claude --debug`).

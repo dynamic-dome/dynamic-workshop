@@ -135,7 +135,7 @@ Plugin-Hooks stehen in `hooks/hooks.json`, mit demselben Aufbau wie der `hooks`-
 
 ### Prüfen und laden
 
-- `claude plugin validate <path>` prüft das Manifest und das Frontmatter der Skills, Agents und Commands. Der Befehl braucht einen **Pfad**, keinen Plugin-Namen. `--strict` behandelt Warnungen als Fehler, das passt für CI.
+- `claude plugin validate <path>` prüft das Manifest und das Frontmatter der Skills, Agents und Commands. Der Befehl braucht einen **Pfad**, keinen Plugin-Namen. `--strict` behandelt Warnungen als Fehler, das passt für CI. Hat die README des Plugins keine Installationszeile, druckt `validate` seit v2.1.295 einen Hinweis mit der Zeile zum Einfügen; den Exit-Code ändert das nie, auch nicht mit `--strict`.
 - `claude --plugin-dir ./my-plugin` lädt das Plugin nur für diese Sitzung („for this session only“, schreibt die Doku); ein `.zip` des Plugins geht auch. Änderst du Dateien, lädst du sie in der laufenden Sitzung mit `/reload-plugins` neu.
 - Skills eines Plugins rufst du mit Präfix auf: `/<plugin>:<skill>`.
 - `claude --plugin-dir ./my-plugin plugin details <name>` zeigt, was das Plugin mitbringt, ohne eine Sitzung zu öffnen: die Komponenten und die Token, die es jeder Sitzung hinzufügt.
@@ -206,7 +206,7 @@ Wie du Plugins installierst, verwaltest und verteilst, steht in [S2.12](s2-12-pl
    claude --plugin-dir ./greeter-src plugin details greeter
    ```
 
-   Erwartet: `validate` schließt mit `✔ Validation passed` ab (so steht es in der Doku). `plugin details` nennt Name, Version und Beschreibung und danach einen Abschnitt `Component inventory` mit deinem Skill `hello` und dem Agent `haiku-writer`. Fehlt etwas, liegt eine Datei am falschen Ort.
+   Erwartet: `validate` schließt mit `✔ Validation passed` ab (so steht es in der Doku). Eine zusätzliche Hinweiszeile zur README ohne Installationszeile ist kein Fehler und ändert den Exit-Code nicht. `plugin details` nennt Name, Version und Beschreibung und danach einen Abschnitt `Component inventory` mit deinem Skill `hello` und dem Agent `haiku-writer`. Fehlt etwas, liegt eine Datei am falschen Ort.
 
 4. Starte eine Sitzung mit dem Plugin und ruf den Skill auf.
 

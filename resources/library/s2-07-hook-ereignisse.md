@@ -80,6 +80,8 @@ Subagenten behandelt [S3.3](s3-03-eigener-subagent.md); hier genügt: Ein Subage
 
 **UserPromptSubmit schreibt nicht um.** Ein Hook an diesem Ereignis kann einen Prompt abweisen oder Kontext daneben legen, aber er kann den Prompt nicht verändern, also auch kein Secret darin schwärzen. Tool-Ausgaben schwärzen kannst du mit PostToolUse ([S2.10](s2-10-hook-ausgaben.md)).
 
+**UserPromptSubmit läuft vor der Expansion von Skills und Slash-Befehlen.** Tippst du `/deploy staging`, bekommt der Hook genau diese Zeile, nicht den ausgefalteten Skill-Inhalt (so seit v2.1.299). Weist er den Prompt ab, läuft der Befehl nicht, und auch die Shell-Befehle, die der Skill mit !`<command>` einfügt, laufen nicht. Willst du nach dem Namen oder den Argumenten eines Befehls filtern, nimm das Ereignis UserPromptExpansion.
+
 **Text aus SessionStart und UserPromptSubmit landet im Kontext.** Gibt ein Hook an diesen Ereignissen schlichten Text aus, legt Claude Code ihn als Kontext neben die Anfrage, und Claude kann darauf eingehen. Für festen Text ist die CLAUDE.md der einfachere Weg ([S1.10](s1-10-claude-md.md)); ein Hook lohnt, wenn ein Skript jedes Mal etwas Frisches holt, etwa `git status`.
 
 ### PreCompact bei langen Sitzungen
