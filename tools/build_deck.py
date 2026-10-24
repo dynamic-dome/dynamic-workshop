@@ -266,7 +266,7 @@ def slide_map(prs, cat):
 def slide_floor(prs, cat):
     floor = [c for c in cat["chapters"] if c.get("safety_floor")]
     s = blank(prs, "Neun Kapitel empfehlen wir allen, auch Fortgeschrittenen, mindestens zum Überfliegen. Das Wichtigste: "
-                   "Von den Exit-Codes blockt nur 2, ein abstürzender Hook lässt die Aktion durch. Und claude -p ohne --bare führt die Hooks "
+                   "Von den Exit-Codes blockt nur 2, ein abstürzender Hook lässt die Aktion im Standard durch (mit onFailure block blockt er). Und claude -p ohne --bare führt die Hooks "
                    "eines fremden Repos aus.")
     title(s, "Sicherheitsboden", f"{len(floor)} Kapitel, die niemand auslässt",
           "Wer ein Feature nutzt, liest dessen Sicherheitskapitel — auch ohne passendes Ziel.")
@@ -335,14 +335,14 @@ def diagram_hooks(s, x, y):
     arrow(s, x + Inches(2.35), y + Inches(1.0), x + Inches(2.85), y + Inches(1.0))
     node(s, x + Inches(2.9), y + Inches(0.6), Inches(2.3), Inches(0.8), "Skript", "liest tool_input")
     outs = [("exit 2", "blockt, Grund an Claude", WARN), ("exit 0", "Aktion läuft", DONE),
-            ("1, 127, Timeout", "läuft trotzdem: fail-open", WORK)]
+            ("1, 127, Timeout", "Standard: läuft trotzdem (fail-open); mit onFailure block: blockt", WORK)]
     for i, (a, b, col) in enumerate(outs):
         bx = x + i * Inches(1.77)
         arrow(s, x + Inches(4.05), y + Inches(1.45), bx + Inches(0.8), y + Inches(2.15))
-        box(s, bx, y + Inches(2.2), Inches(1.65), Inches(1.05), fill=SURFACE, line=col)
-        text(s, bx + Inches(0.12), y + Inches(2.2), Inches(1.45), Inches(1.05), [[(a, {"bold": True, "size": 15, "color": col})],
-             [(b, {"size": 14, "color": INK2})]], anchor=MSO_ANCHOR.MIDDLE)
-    text(s, x, y + Inches(3.55), Inches(5.3), Inches(0.8), "Ein kaputter Schutz-Hook ist ein offener Schutz-Hook.",
+        box(s, bx, y + Inches(2.2), Inches(1.65), Inches(1.3), fill=SURFACE, line=col)
+        text(s, bx + Inches(0.12), y + Inches(2.2), Inches(1.45), Inches(1.3), [[(a, {"bold": True, "size": 15, "color": col})],
+             [(b, {"size": 14 if len(b) < 30 else 11, "color": INK2})]], anchor=MSO_ANCHOR.MIDDLE)
+    text(s, x, y + Inches(3.7), Inches(5.3), Inches(0.8), "Ein kaputter Schutz-Hook ist ein offener Schutz-Hook.",
          size=16, color=INK, bold=True)
 
 
