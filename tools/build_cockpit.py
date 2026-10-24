@@ -7,7 +7,7 @@ attributes, no external references, no confirm().
 """
 from __future__ import annotations
 
-from html import escape
+from html import escape, unescape
 from html.parser import HTMLParser
 from pathlib import Path
 import hashlib
@@ -174,20 +174,76 @@ GEOMETRY = re.compile(r'(\s(?:d|x|y|x1|x2|y1|y2|cx|cy|r|rx|ry|width|height|trans
 LONG_NUMBER = re.compile(r"(\d+\.\d{2})\d+")
 
 
+# The SVGs are rendered once, in the dark palette of render_diagrams.THEME (and the colours Mermaid derives from it).
+# The light theme restyles them by colour (rules under :root[data-theme="light"]) instead of a second set of SVGs.
+# Colours that read well on both (yellow note #fff5ad with its #333 text) are not listed. A new THEME colour needs an
+# entry here (test_render_diagrams).
+LIGHT_DIAGRAM_PALETTE = {
+    "#1b2127": "#ffffff",  # background, cluster, edge label
+    "#222a31": "#eef1f3",  # node, actor
+    "#2a333c": "#e2e7ea",  # activation bar
+    "#4a5663": "#8c97a1",  # border
+    "#8995a1": "#4f5963",  # lines, arrow heads
+    "#e9edf1": "#15191d",  # text
+    "#e4ded8": "#232a30",  # cluster title
+}
+LIGHT_DIAGRAM_COLOR_FUNCTIONS = {
+    "rgba(27, 33, 39, 0.5)": "rgba(255, 255, 255, 0.5)",
+    "hsl(210, 17.6470588235%, 10%)": "#8c97a1",  # activation outline
+}
+LIGHT_SCOPE = ':root[data-theme="light"] '
+HEX_COLOR = re.compile(r"#[0-9a-fA-F]{3,6}\b")
+
+
+def _css_blocks(rules):
+    """Top-level blocks of a flat stylesheet ('sel{...}', '@keyframes x{...{...}}') as strings."""
+    blocks, depth, begin = [], 0, 0
+    for i, ch in enumerate(rules):
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                blocks.append(rules[begin:i + 1])
+                begin = i + 1
+    return blocks
+
+
+def light_diagram_rules(rules):
+    """Dark diagram rules -> only those rules that carry a palette colour, recoloured and scoped to the light theme
+    (the dark rules stay as they are; the later, more specific light rules win). Keyframes and the unused neo look
+    are not restated."""
+    out = []
+    for block in _css_blocks(rules):
+        selector, _, body = block.partition("{")
+        if selector.startswith("@") or "neo" in selector:
+            continue
+        body = body[:-1]
+        light = HEX_COLOR.sub(lambda m: LIGHT_DIAGRAM_PALETTE.get(m.group(0).lower(), m.group(0)), body)
+        for dark, bright in LIGHT_DIAGRAM_COLOR_FUNCTIONS.items():
+            light = light.replace(dark, bright)
+        if light != body:
+            scoped = ",".join(LIGHT_SCOPE + part for part in selector.split(","))
+            out.append(f"{scoped}{{{light}}}")
+    return "".join(out)
+
+
 def share_diagram_styles(diagrams):
     """Mermaid repeats an id-scoped <style> block in every SVG (a fifth of its bytes), though there are only a few
     distinct ones. Rescope each block to a class, ship every distinct block once and round geometry to two decimals
-    (text such as version numbers stays untouched). Returns ({key: svg}, {class: css})."""
+    (text such as version numbers stays untouched). The CSS gets its HTML escapes (&gt;) undone, because the cockpit
+    sets it as text, and a light-theme variant (light_diagram_rules). Returns ({key: svg}, {class: css})."""
     shared, css = {}, {}
     for key, svg in diagrams.items():
         svg = natural_size(svg)
         match = STYLE_BLOCK.search(svg)
         if match:
-            rules = re.sub(rf"#d{key}(?![\w-])", "#MMD", match.group(1))
+            rules = re.sub(rf"#d{key}(?![\w-])", "#MMD", unescape(match.group(1)))
             # ids with a suffix (url(#d<key>-gradient)) only serve the unused "neo" look; neutral name, same rule
             rules = re.sub(rf"#d{key}(?=[\w-])", "#mmd", rules)
             cls = "mmd-" + hashlib.sha256(rules.encode("utf-8")).hexdigest()[:6]
-            css[cls] = rules.replace("#MMD", "." + cls)
+            dark = rules.replace("#MMD", "." + cls)
+            css[cls] = dark + light_diagram_rules(dark)
             svg = svg[:match.start()] + svg[match.end():]
             if re.search(r'<svg\b[^>]*\sclass="', svg):
                 svg = re.sub(r'(<svg\b[^>]*?\sclass=")([^"]*)"', lambda m: f'{m.group(1)}{m.group(2)} {cls}"', svg,

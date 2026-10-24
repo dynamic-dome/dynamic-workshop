@@ -108,6 +108,88 @@ def test_diagram_styles_are_shipped_once_and_numbers_are_rounded():
         assert 'd="M 1.23 2.5"' in svg and 'width="400"' in svg
 
 
+LIGHT = ':root[data-theme="light"] '
+DARK_PALETTE = ("#1b2127", "#222a31", "#2a333c", "#4a5663", "#8995a1", "#e9edf1", "#e4ded8")
+
+
+def test_diagram_styles_ship_a_light_variant_for_the_light_theme():
+    shared, css = bc.share_diagram_styles({"aaaa1111": _svg("aaaa1111")})
+    [(cls, rules)] = css.items()
+    # the dark rules stay as rendered, the light ones follow and only restate what changes colour
+    assert rules.startswith(f".{cls}{{font-size:15px;fill:#e9edf1;}}")
+    assert f"{LIGHT}.{cls}{{font-size:15px;fill:#15191d;}}" in rules
+    assert f"{LIGHT}.{cls} .node rect{{fill:#" in rules
+    light = rules[rules.index(LIGHT):]
+    assert not any(color in light for color in DARK_PALETTE), light
+    assert "neo" not in light  # the unused neo look is not restated (bytes)
+
+
+def test_light_rules_are_selector_scoped_not_wrapped_and_skip_keyframes():
+    rules = ("#MMD{fill:#e9edf1;}@keyframes dash{to{stroke-dashoffset:0;}}#MMD .a,#MMD .b{stroke:#4a5663;}"
+             "#MMD .c{stroke-width:1px;}")
+    light = bc.light_diagram_rules(rules.replace("#MMD", ".mmd-x"))
+    assert light == (f'{LIGHT}.mmd-x{{fill:#15191d;}}{LIGHT}.mmd-x .a,{LIGHT}.mmd-x .b{{stroke:#8c97a1;}}')
+
+
+def test_diagram_styles_are_unescaped_for_the_stylesheet_the_cockpit_builds():
+    # Mermaid writes `>` as &gt; inside the SVG <style>; the cockpit injects the text via textContent, where a
+    # literal &gt; breaks the selector and, in a selector list, drops the whole rule (invisible note and actor text)
+    style = "<style>#dKEY .noteText,#dKEY .noteText&gt;tspan{fill:#333;stroke:none;}#dKEY text.actor&gt;tspan{fill:#e9edf1;}</style>"
+    svg = f'<svg id="dKEY" class="x" viewBox="0 0 10 10">{style}</svg>'
+    _, css = bc.share_diagram_styles({"KEY": svg})
+    [rules] = css.values()
+    assert "&gt;" not in rules and ".noteText>tspan{fill:#333;" in rules and "text.actor>tspan{fill:#e9edf1;" in rules
+    assert f"{LIGHT}" in rules and "text.actor>tspan{fill:#15191d;" in rules
+
+
+def test_committed_diagrams_get_a_complete_light_variant():
+    folder = ROOT / "resources" / "library" / "diagrams"
+    svgs = {p.stem: p.read_text(encoding="utf-8") for p in folder.glob("*.svg")}
+    assert len(svgs) >= 60
+    shared, css = bc.share_diagram_styles(svgs)
+    assert len(css) >= 2
+    for cls, rules in css.items():
+        assert "&gt;" not in rules and "&lt;" not in rules and "&amp;" not in rules
+        light = rules[rules.index(LIGHT):]
+        assert not any(color in light for color in DARK_PALETTE), cls
+        assert "rgba(27, 33, 39" not in light and "hsl(210, 17" not in light, cls
+    sequence = next(r for r in css.values() if ".actor{" in r)
+    assert f"{LIGHT}" in sequence and ".noteText>tspan{fill:#333;" in sequence  # note text stays dark on the yellow note
+    assert ".note{stroke:hsl(52" in sequence  # the yellow note itself is the same in both themes
+
+
+def _css_rule(template, selector):
+    for chunk in template.split("}"):
+        if chunk.split("*/")[-1].strip().startswith(selector + " {"):
+            return chunk.split("{", 1)[1]
+    raise AssertionError(selector + " not in the template")
+
+
+def test_the_template_themes_the_diagram_box_and_the_zoom_dialog():
+    template = bc.TEMPLATE.read_text(encoding="utf-8")
+    dark_root, light_root = template.split(':root[data-theme="light"] {', 1)
+    light_block = light_root.split("}", 1)[0]
+    assert "--diagram-bg: #1b2127" in dark_root and "--diagram-bg: #ffffff" in light_block
+    for var in ("--diagram-line", "--diagram-btn", "--diagram-ink"):
+        assert var + ":" in dark_root and var + ":" in light_block, var
+    for selector in (".diagram", ".diagram .zoom", ".zoom-dialog"):
+        rule = _css_rule(template, selector)
+        assert "#1b2127" not in rule and "#222a31" not in rule and "#e9edf1" not in rule and "#313b45" not in rule, rule
+    assert "background: var(--diagram-bg)" in _css_rule(template, ".diagram")
+    assert "background: var(--diagram-bg)" in _css_rule(template, ".zoom-dialog")
+
+
+def test_the_shipped_artefact_stays_under_its_size_limit_with_the_light_variant():
+    lm = _load("library_model")
+    lg = _load("library_generate")
+    lib = lm.load_library(ROOT / "resources" / "library")
+    art = bc.render(lib, lg.catalog(lib), diagrams=lg.load_diagrams(lib))
+    start = art.index("const LIBRARY = ") + len("const LIBRARY = ")
+    data = json.JSONDecoder().raw_decode(art[start:])[0]
+    assert len(data["diagrams"]) >= 60  # not dropped for size
+    assert len(art.encode("utf-8")) < bc.MAX_BYTES - 5_000, "less than 5 kB of headroom left"
+
+
 def _fixture_render(monkeypatch, max_bytes, diagram_bytes):
     lm = _load("library_model")
     lg = _load("library_generate")

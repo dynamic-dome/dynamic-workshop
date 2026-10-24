@@ -27,6 +27,10 @@
       --done: #2fb344;
       --warn: #ec835a;
       --code-bg: #0f1316;
+      --diagram-bg: #1b2127; /* the SVGs are rendered in this dark palette; the light theme restyles them (build_cockpit) */
+      --diagram-line: #313b45;
+      --diagram-btn: #222a31;
+      --diagram-ink: #e9edf1;
       --shadow: 0 1px 0 rgba(0, 0, 0, .25);
       --radius: 6px;
       --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -52,6 +56,10 @@
       --done: #1d7f2c;
       --warn: #b3502a;
       --code-bg: #f1f2ef;
+      --diagram-bg: #ffffff;
+      --diagram-line: #d5d8d4;
+      --diagram-btn: #f1f3f0;
+      --diagram-ink: #15191d;
       --shadow: 0 1px 0 rgba(0, 0, 0, .06);
     }
     * { box-sizing: border-box; }
@@ -259,13 +267,13 @@
     .prose details { border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 12px; margin: 12px 0; background: var(--surface); }
     .prose details summary { cursor: pointer; color: var(--ink-2); }
     .prose blockquote { margin: 12px 0; padding: 4px 14px; border-left: 3px solid var(--line); color: var(--ink-2); }
-    .diagram { background: #1b2127; border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin: 14px 0; width: fit-content; min-width: min(74ch, 100%); } /* SVGs are rendered dark */
+    .diagram { background: var(--diagram-bg); border: 1px solid var(--diagram-line); border-radius: var(--radius); padding: 12px; margin: 14px 0; width: fit-content; min-width: min(74ch, 100%); } /* dark SVGs; the light theme gets recoloured rules from build_cockpit.share_diagram_styles */
     .diagram-scroll { overflow-x: auto; }
     /* Natural size when it fits; else shrink with the box, but not below 72 percent (labels stay readable), then scroll. */
     .diagram svg, .zoom-body svg { display: block; max-width: none; height: auto; margin: 0 auto; width: clamp(calc(var(--w, 100%) * .72), 100%, var(--w, 100%)); }
-    .diagram .zoom { display: none; margin-top: 8px; font-size: 13px; padding: 3px 10px; border-radius: var(--radius); border: 1px solid #313b45; background: #222a31; color: #e9edf1; }
+    .diagram .zoom { display: none; margin-top: 8px; font-size: 13px; padding: 3px 10px; border-radius: var(--radius); border: 1px solid var(--diagram-line); background: var(--diagram-btn); color: var(--diagram-ink); }
     .diagram.is-wide .zoom { display: inline-flex; } /* only when the diagram does not fit its box */
-    .zoom-dialog { width: 96vw; max-width: 96vw; max-height: 92vh; padding: 12px; background: #1b2127; color: #e9edf1; border: 1px solid #313b45; border-radius: var(--radius); }
+    .zoom-dialog { width: 96vw; max-width: 96vw; max-height: 92vh; padding: 12px; background: var(--diagram-bg); color: var(--diagram-ink); border: 1px solid var(--diagram-line); border-radius: var(--radius); }
     .zoom-dialog::backdrop { background: rgba(0, 0, 0, .6); }
     .zoom-bar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
     .zoom-body { overflow: auto; max-height: calc(92vh - 84px); }

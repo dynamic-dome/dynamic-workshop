@@ -37,3 +37,13 @@ def test_diagram_keys_match_the_cockpit_placeholder():
     html = bc.chapter_html((ROOT / "tools" / "fixtures" / "library" / "s2-08-demo-hook.md").read_text(encoding="utf-8"),
                            {}, diagrams={key: "<svg/>"})
     assert f'data-diagram="{key}"' in html
+
+
+def test_every_colour_of_the_dark_diagram_theme_has_a_light_counterpart():
+    # the cockpit restyles the committed (dark) SVGs for the light theme by colour; a new THEME colour must be mapped
+    import re
+    for name, value in rd.THEME.items():
+        for color in re.findall(r"#[0-9a-fA-F]{6}", value):
+            if name in ("background", "tertiaryColor", "clusterBkg", "edgeLabelBackground", "primaryColor", "secondaryColor",
+                        "primaryTextColor", "primaryBorderColor", "lineColor", "clusterBorder"):
+                assert color.lower() in bc.LIGHT_DIAGRAM_PALETTE, f"{name}={color} has no light counterpart"
