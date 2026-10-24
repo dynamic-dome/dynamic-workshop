@@ -8,7 +8,7 @@ Lernprotokolle liegen in `lernprotokoll/` und sind fortlaufend nummeriert: `0001
 fest, was die Person **nachweislich** kann oder schon mitbrachte — und damit, was als Nächstes dran ist.
 
 ```md
-# S2.8: Blockt nur mit exit 2
+# S2.8: Über den Exit-Code blockt nur exit 2
 
 Die Person hat einen PreToolUse-Hook gebaut, der `git push --force` mit exit 2 blockt, und erklärt, warum ein
 abstürzender Hook die Aktion durchlässt. Hooks-Grundlagen müssen nicht wiederholt werden; weiter mit S2.9.

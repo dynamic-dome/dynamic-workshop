@@ -107,6 +107,69 @@ Branch `selbstlern-zuerst` (ab `e693038`), Owner-Entscheid 2026-10-05: Selbstler
 
 - **Ab hier führt die Paketliste den Stand:** `docs/plans/2026-10-05-selbstlern-zuerst-tickets.md` (P0 bis P9). P1, die Moderationsschicht, ist umgesetzt: kein „Vorführen“ mehr in den Kapiteln, 30 Dateien unter `resources/moderation/vorfuehren/`. Das beantwortet den ersten Teil von R21.
 
+## Stand gegen HEAD a3fceb5 (2026-10-24, WS2-3, DCO #9632)
+
+Jeder Befund wurde gegen den Ist-Stand von `main` abgeglichen (Text gelesen, Skript `measure2.py` neu gelaufen,
+Aussagen gegen die offizielle Doku vom 2026-10-24 geprüft: hooks.md, mcp.md, plugins-reference.md, setup.md,
+permission-modes.md, PyPI). Ergebnis: Alle Faktenbefunde sind erledigt; vom Lernbogen ist nur Entscheidungsstoff
+übrig. Belege sind die Commits des Branches `selbstlern-zuerst` (in `main` enthalten); die Paketliste steht in
+`docs/plans/2026-10-05-selbstlern-zuerst-tickets.md`.
+
+| Nr. | Stand | Beleg im Ist-Stand |
+|---|---|---|
+| R1, R2 | erledigt (P0, nicht Teil von WS2-3) | `fcab910`; der Rest „Blockt nur mit exit 2“ als Beispieltitel in `LEARNING-RECORD-FORMAT.md` ist am 2026-10-24 korrigiert, X.2 trägt ihn nicht mehr |
+| R3 | erledigt | S2.6:67 und :144, S2.7:67, S2.10:113 und :297 (PostToolUse nur nach Erfolg, Fehlschlag geht an PostToolUseFailure, dort nur `additionalContext`; die Eingabe des Handtests ist erklärt, Probelauf mit Pipe); `f55d9a9`, `cf44429`. Doku: hooks.md „PostToolUse: After a tool call succeeds“ |
+| R4 | erledigt | S2.15:34, :136, :189, :212: Default „nicht geheim“, Beispiele mit Adresse und Namen statt Token; Credential-Variablen in `url` und `headers` lesen als leer (mcp.md); `7270acb` (P7c) |
+| R5 | erledigt (nicht Teil von WS2-3) | `f55d9a9` |
+| R6 | erledigt | S2.11:126 und :134 mit Anführungszeichen (plugins-reference.md „Quoting and path separators“; `claude plugin validate` warnt, außer bei `shell: powershell`); der Cache-Pfad steht in S2.2 nicht mehr, S2.11:96 nennt Marketplace-, Plugin- und Versionsebene; `03d3e72` |
+| R7 | erledigt | Demo in der Moderationsschicht neu geschrieben (PreToolUse-Wächter; `safety-check.sh` und `.ps1` liegen unter `resources/demos/assets/hooks/`); `dbed0c3` |
+| R8 | erledigt | S0.1:84, :174, :183: Mindestversion 2.1.283 (permission-modes.md), kein Prüfstand 2.1.200 mehr; Node nur noch auf der Karte „Werkstatt erweitern“ (22 oder neuer, setup.md; `EBADENGINE` ist nur eine Warnung); `359c9db` |
+| R9, R11, R12 | erledigt (nicht Teil von WS2-3) | `f55d9a9` und P5 bis P7; die Currency-Fixes (`d685f11`, `e4c34f2`, `b50786e`) stehen im Kanon |
+| R10 | erledigt | S2.18:198 und :205 `pip install "notebooklm-py[browser]"`; die PyPI-Metadaten (0.8.5) führen das Extra `browser` (Playwright); `46c392e` |
+| R13 | erledigt | `workshop-playground/CLAUDE.md` ist reines Projekt-Gedächtnis ohne Zeilenangaben und ohne „Do NOT fix“; `664d5ca` (P4) |
+| R14 | erledigt, Rest D1 | `measure2.py`: 0 von 61 Lektionen ohne „Selbst machen“ (vorher 34); die genannten Outcomes (S1.5 Deny-Regel, S1.14, S2.3, S3.3, S3.9, S3.13) haben je eine Übung; `359c9db`, `bacbf60` bis `cc1052a` (P7) |
+| R15 | erledigt, Rest D2 | Auflösung in 61 von 61 Lektionen und Begründung je Quiz-Antwort (`validate --complete`: „mit Auflösung 61 von 61, mit Begründung 61 von 61“); `d03ea85` (P3), `2be2f3c` (P10f) |
+| R16 | erledigt, Rest D3 | alle sieben Pfade enden mit S4.11; die Praxis-Stationen S1.20, S2.20, S3.15 sind als Abschluss je Session neu geschrieben; `8a96a4a`, `bacbf60`, `b72b648`, `7b75b5e` |
+| R17 | erledigt, Rest D4 | S0.1 verlangt nur noch `claude` (Node, `jq`, `gh`, Playground kommen später); S1.1 startet mit `--permission-mode default`; X.2 liegt nicht mehr in der Kernlinie; `359c9db` |
+| R18 | erledigt | `grep -ri vulnerab workshop-playground` ist leer; die Lösungen stehen in `resources/reference/playground-loesungen.md`; `664d5ca` |
+| R19 | erledigt, Rest D5 | die Kapitelansicht zeigt bei „durcharbeiten“ Volltext und Übung (`template.html`), der Tutor führt durch „Im Detail“; `4c98ba0` (P2), P9 (`cbab54d` u. a.) |
+| R20 | erledigt | Validator `minutes-honest` (Lesezeit plus Übungszeiten); die Bibliothek nennt jetzt „etwa 28 Stunden“ (Summe `minutes` 1665); `359c9db`, `f65ea5b` |
+| R21 | erledigt | 0 Kapitel mit „Vorführen“ oder „Für Moderierende“; Kürzel („W1“, „Übung 3.9“, „Block 3.3“) kommen in Kapiteln, Karten und Tutor-Skill nicht mehr vor; die Eigenbauten (`multi-model-orchestrator`, Telegram-Brücke, `devil-advocate-swarms`) sind als 🔧 markiert und keine Voraussetzung einer Übung; der veraltete Verweis auf `/agentic-os:run-loop` in `kosten-nachbau.md` ist am 2026-10-24 entfernt (`run-loop` gibt es in agentic-os 5.5.0 nicht); `d6c40d5`, `597f9ce`, `dbed0c3` |
+| R22 | erledigt | keine Fundstelle mehr für „alter Kurs“, „frühere Fassung“, Kursanleitung, Wartungstabelle; absichtlich falsche Beispiele entfallen; `359c9db` und P7 |
+| R23 | erledigt | S2.6:87 (`jq`-Hinweis), S2.8:98 und :136 (Matcher `Bash\|PowerShell`, PowerShell-Fassung, der Schnellcheck fragt den Matcher), S2.10:55 und :113 (Python-Fassungen von Gate, Schwärzung und Token Firewall ohne `jq`, mit Tests); `cf44429` |
+| R24 | entschieden (E1) | Aufbau bleibt, nichts geteilt; Owner „wie empfohlen“ am 2026-10-05, Begründung unter P8e; `b58c76d` |
+| R25 | erledigt | „Besucherausweis“ steht nur noch für `default` (S1.5, S1.6), „Testhalle“ in S3.8 und S3.9 durchgehend für die isolierte Umgebung; S1.8 sagt „lässt sich nicht zurückholen“; P5 bis P7 |
+| R26 | erledigt | das Fachgebiet kommt nur noch als Beispiel („Angenommen, du …“, S1.2:82) und als Bildsprache vor; OSDP, RS-485 und Wiegand stehen in 4 statt mehr als 10 Kapiteln; `359c9db` |
+| R27 | teils, Rest D6 | vier Voraussetzungen ergänzt (S3.6 → S3.3, S3.11 → S2.8, S3.13 → S3.8, S4.2 → S3.11; `b58c76d`). Die übrigen genannten Lücken (S1.5 → S1.4, S1.14 → S1.6, S3.4 → S3.3) sind geprüft: Kapitel und Übungen tragen allein, es sind nur Verweise. S1.20, S2.20 und S3.15 mit leerem `requires` sind laut Spec §4 gewollt (Typ `practice`). Die ID-Ordnung der Pfade bleibt (E1) |
+| R28 | erledigt | `after:` X.1 → S2.20, X.2 → S1.20, X.3 → S3.15, X.4 → S4.7; `8a96a4a`, `359c9db` |
+| R29 | teils, entschieden (E1) | Diagnose-Kasten in S2.8 und frühe Verweise auf `/hooks`, `/doctor` und das Debug-Log aus S2.8 und S2.15 (`f55d9a9`); S4.9 und S4.10 bleiben hinter S4.8 (Umnummerieren abgelehnt) |
+| R30 | entschieden (E1) | die Stufen bleiben; als Frage übrig sind nur S3.11, S4.2 und X.4 für den Sicherheitsboden (nicht gebaut, die Pfade würden länger) |
+| R31 | offen, D6 | Neulingspfade: Einschätzen 33, Alltag 37, Automation 39, Team 45, Agents 46, Security 56 von 71 Kapiteln (vorher 36 bis 53 von 70); unter P7 als „zurückgestellt“ geführt |
+
+### Offene Entscheidungen für den Owner (Design, nicht gebaut), je mit Empfehlung
+
+- **D1 (R14) · Übungen prüfen.** Alle 61 Lektionen haben jetzt eine Übung, aber keine wird automatisch geprüft; die
+  große Übung in S4.8 und die Missionen B und C in S4.11 wurden nie durchgespielt (P6). *Empfehlung:* kein Eingriff in
+  den Kursaufbau; ein eigenes Prüfpaket (Stichprobe je Regal, S4.8 einmal vollständig, Linux-Box) und die Idee
+  „Übungen automatisch prüfen“ erst danach entscheiden.
+- **D2 (R15) · Antwortlängen im Quiz.** Bei 64 Quizfragen ist die richtige Antwort 29-mal die längste (oder gleich
+  lange) Option; bei vier Optionen wären es im Zufall rund 16. Im Mittel sind die richtigen Antworten 120 Zeichen lang,
+  die falschen 115. *Empfehlung:* im Owner-Quizdurchgang #9665 mitnehmen und die Längen dort angleichen, nicht als
+  eigener Lauf.
+- **D3 (R16) · Rolle von S4.8.** Alle Pfade enden mit S4.11; die große Fassung S4.8 steht nur in `agents` und
+  `einschaetzen`. *Empfehlung:* so lassen (Kür für alle, die mehr wollen); S4.8 nicht in weitere Pfade ziehen, weil
+  das jeden um mindestens 55 Minuten verlängert.
+- **D4 (R17) · Erster Erfolg.** S0.1 (rund 1.700 Wörter, Check mit 374) liegt weiter vor der ersten Datei; der
+  Schnellstart-Pfad braucht 205 Minuten (Warnschwelle 240). *Empfehlung:* belassen; zeigen Rückmeldungen Abbrüche
+  vor S1.1, S0.1 in ein Mindest-Setup (Installation, Anmeldung) und einen nachgeladenen Rest teilen.
+- **D5 (R19) · Kurzansicht.** Die Kurzansicht gibt es nur noch für „überfliegen“; der nächste Schritt wäre, sie ganz
+  aufzugeben (P9-Notizen). *Empfehlung:* behalten, bis Rückmeldungen von Lernenden vorliegen; der Owner hat sie am
+  2026-10-06 ausdrücklich bestätigt.
+- **D6 (R27, R30, R31) · Pfadzuschnitt.** Die Ordnung folgt den IDs der vier Sessions (Alltag springt S2.20 → X.1 →
+  S3.8), die Neulingspfade umfassen 33 bis 56 von 71 Kapiteln, S3.11, S4.2 und X.4 stehen nicht im Sicherheitsboden.
+  *Empfehlung:* nichts umbauen; den Zuschnitt der Pfade (nicht der Kapitel) erst nach ersten Rückmeldungen von
+  Selbstlernenden neu bewerten, weil jeder Eingriff Vertrag, Personas und Golden neu schreibt.
+
 ## Noten der Didaktik-Leser (70 Kapitel, Skala 1 bis 5)
 
 | Kriterium | Mittel | Verteilung 1 · 2 · 3 · 4 · 5 |

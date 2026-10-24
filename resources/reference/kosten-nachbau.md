@@ -21,7 +21,7 @@ Geprüft gegen die offizielle Doku am 2026-09-30 (CLI 2.1.285): Flags und Abrech
 
 ## Was die Kosten nach oben treibt
 
-- mehrere Iterationen von `/agentic-os:run-loop` im Self-Improve-Loop ([S3.14](../library/s3-14-self-improve-loop.md), Bonus)
+- mehrere Durchläufe des Self-Improve-Musters, jeder mit einem eigenen Lauf ([S3.14](../library/s3-14-self-improve-loop.md), Bonus)
 - parallele Agenten im Codex-Schwarm ([S4.2](../library/s4-02-codex-schwarm.md), Bonus)
 - Multi-Agent-Orchestrierung in [S3.1](../library/s3-01-was-ist-ein-agent.md) bis [S3.4](../library/s3-04-orchestrierungsmuster.md) und im Abschlussprojekt ([S4.8](../library/s4-08-abschlussprojekt.md))
 
