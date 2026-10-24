@@ -418,6 +418,14 @@ richtige, Quizfragen würfeln bei jedem Render neu, kein „weiter, wo ich war",
   Mermaid-Stilblöcke als zwei gemeinsame Blöcke statt 61, Geometrie auf zwei Nachkommastellen) und behalten ihre
   natürliche Größe; der Diagramm-Kasten scrollt waagerecht. Über der Grenze fallen zuerst die Diagramme weg
   (Mermaid-Quelltext), erst dann der Volltext („ganzes Kapitel lesen" zeigt auf die GitHub-Fassung).
+  **Nachtrag 2026-10-24 (Todo #9925):** Das Artefakt lag bei 2.987.140 von 3.000.000 Bytes; `MAX_BYTES` in
+  `tools/build_cockpit.py` steht jetzt auf 4 MB (4.000.000). Die Grenze hängt nur am Generator und am Test
+  `test_the_shipped_artefact_stays_under_its_size_limit_with_the_light_variant` (warnt unter 5 kB Luft); der Export nach
+  dome-dynamics (`public/workshop-cockpit.html`) prüft keine Größe. **Sparoptionen**, falls auch 4 MB eng werden: (1) die breiten
+  LR-Diagramme nicht größer setzen, sondern Knoten kürzen; (2) Diagramm-Geometrie auf eine Nachkommastelle runden (zurzeit zwei);
+  (3) gemeinsame Mermaid-Stile weiter zusammenfassen (zurzeit zwei Blöcke); (4) Quiz-Begründungen und Lösungen erst beim Aufklappen
+  laden statt vorab einzubetten; (5) Volltext seltener gelesener Kapitel (Regal „Community & Lernen") auf die GitHub-Fassung verweisen;
+  (6) das Lern-Cockpit in einen Kern (Einstufung, Pfad) und eine nachladbare Datei teilen (bricht das Einzeldatei-Prinzip, nur als letzte Option).
 - **Abwerfbar (Plan Task 13 und Volltext):** Fehlen vorgerenderte SVG-Diagramme oder der Volltext, zeigt die
   Kapitelansicht Mermaid-Quelltext bzw. den GitHub-Link; keine andere Funktion hängt davon ab.
 - **Look:** SOC-Anker (dunkel, Amber) bleibt, aber ruhiger; Status-Farben aus der geprüften Status-Palette.
