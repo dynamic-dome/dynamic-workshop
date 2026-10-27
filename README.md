@@ -52,3 +52,7 @@ und `claude --version` auf deinem Rechner.
 | Werkstatt | wie aus einzelnen Werkzeugen ein persönlicher Arbeitsmodus wurde |
 | DCO | ein gebautes agentisches System mit Werkzeuggrenzen, Dashboard und Freigaben |
 | Praxisbibliothek | übersetzt diese Praxis in einen Lernweg für Entwicklerteams |
+
+## Lizenz
+
+MIT, siehe [LICENSE](LICENSE).
