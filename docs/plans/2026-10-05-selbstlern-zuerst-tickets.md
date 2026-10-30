@@ -959,10 +959,7 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
   **Prüfpunkt für Dominics Stichprobe (Entscheid D2, 2026-10-30):** Antwortlängen im Quiz. Bei 64 Fragen ist die
   richtige Antwort 29-mal die längste oder gleich lange Option (im Zufall rund 16); im Mittel 120 Zeichen gegen 115
   bei den falschen. Beim Durchgang die Längen angleichen, wo eine Frage durch bloßes Lesen der längsten Option
-  lösbar ist; kein eigener Lauf. **Benannter Rest (Entscheid D1, 2026-10-30, kein eigenes Todo):** Übungen prüfen
-  als eigenes Prüfpaket (Stichprobe je Regal, S4.8 einmal vollständig, Missionen B und C in S4.11, Linux-Box); erst
-  danach über „Übungen automatisch prüfen“ entscheiden. Einzelheiten: `docs/reviews/2026-10-05-lernbogen-und-fakten.md`,
-  „Entscheide 2026-10-30“.
+  lösbar ist; kein eigener Lauf. **Nicht Teil von P10g:** Entscheid D1 (Übungen prüfen als eigenes Prüfpaket) steht in `docs/follow-ups.md`.
 - **Lehre für P10d bis P10f:** Der Auftrag hat sich bewährt. Schwach sind Begründungen dort, wo eine falsche Antwort
   einen Fakt aus einem anderen Kapitel benutzt (`/clear`, Checkpoints); dann den Denkfehler aus dem Kapitel benennen,
   nicht ausweichen. Oberflächen-Wortlaut („Tell Claude what to change“ statt des Doku-Namens) im Auftrag nennen.
