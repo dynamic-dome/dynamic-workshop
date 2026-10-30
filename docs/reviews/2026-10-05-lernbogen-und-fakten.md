@@ -170,6 +170,26 @@ permission-modes.md, PyPI). Ergebnis: Alle Faktenbefunde sind erledigt; vom Lern
   *Empfehlung:* nichts umbauen; den Zuschnitt der Pfade (nicht der Kapitel) erst nach ersten Rückmeldungen von
   Selbstlernenden neu bewerten, weil jeder Eingriff Vertrag, Personas und Golden neu schreibt.
 
+### Entscheide 2026-10-30 (D1 bis D6)
+
+Alle sechs wie empfohlen entschieden (Annahme „wie Dominic es täte“: kein Umbau ohne Rückmeldung von Lernenden,
+Arbeit nur dort, wo ein Prüfer sie braucht). Widerspruch des Owners dreht jeden Punkt zurück.
+
+- **D1 · Übungen prüfen.** Eigenes Prüfpaket als benannter Rest, kein neues Todo — Der Kursaufbau bleibt, das Paket
+  braucht die Linux-Box und einen eigenen Lauf (Stichprobe je Regal, S4.8 einmal vollständig, Missionen B und C in
+  S4.11 einmal durchspielen); „Übungen automatisch prüfen“ wird erst danach entschieden.
+- **D2 · Antwortlängen im Quiz.** In den Owner-Durchgang P10g (#9665) aufgenommen, Prüfpunkt für Dominics
+  Stichprobe (siehe Tickets, P10g) — Die Längen lassen sich nur beim Lesen der Antworten sinnvoll angleichen, ein
+  eigener Lauf würde dieselben 64 Quizfragen ein zweites Mal öffnen.
+- **D3 · Rolle von S4.8.** Bleibt Kür (nur in `agents` und `einschaetzen`) — Jeder weitere Pfad würde um mindestens
+  55 Minuten länger; wer mehr will, nimmt die große Fassung freiwillig.
+- **D4 · Erster Erfolg.** S0.1 bleibt, wie es ist — Der Schnellstart-Pfad liegt mit 205 Minuten unter der Warnschwelle
+  von 240; ohne Rückmeldungen mit Abbrüchen vor S1.1 wäre das Teilen von S0.1 geraten statt belegt.
+- **D5 · Kurzansicht.** Bleibt (nur für „überfliegen“) — Der Owner hat sie am 2026-10-06 ausdrücklich bestätigt;
+  aufgeben lässt sie sich später, wiederherstellen kaum.
+- **D6 · Pfadzuschnitt.** Erst nach Rückmeldungen von Selbstlernenden neu bewerten, bis dahin nichts umbauen — Jeder
+  Eingriff in die Pfade schreibt Vertrag, Personas und Golden neu; die Frage braucht echte Abbruchdaten.
+
 ## Noten der Didaktik-Leser (70 Kapitel, Skala 1 bis 5)
 
 | Kriterium | Mittel | Verteilung 1 · 2 · 3 · 4 · 5 |

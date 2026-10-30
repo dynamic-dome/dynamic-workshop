@@ -956,6 +956,13 @@ außerhalb der Lektionen (S0.1, S4.8, S4.11) bekommen ihre Begründungen mit, z�
   33 Bilder (S1.5, S2.16, S3.5, S4.5 richtig und falsch, Hell und Dunkel, 1280 und 390 px, dazu „Wiederholen“) samt
   Skript unter `~/AI/analysis-artifacts/workshop-review-2026-10-05/cockpit-2026-10-05/p10g/`. Offen: der Durchgang
   mit dem Owner, danach DCO #9665 schließen. Push steht aus (GitHub-Störung am 2026-10-07).
+  **Prüfpunkt für Dominics Stichprobe (Entscheid D2, 2026-10-30):** Antwortlängen im Quiz. Bei 64 Fragen ist die
+  richtige Antwort 29-mal die längste oder gleich lange Option (im Zufall rund 16); im Mittel 120 Zeichen gegen 115
+  bei den falschen. Beim Durchgang die Längen angleichen, wo eine Frage durch bloßes Lesen der längsten Option
+  lösbar ist; kein eigener Lauf. **Benannter Rest (Entscheid D1, 2026-10-30, kein eigenes Todo):** Übungen prüfen
+  als eigenes Prüfpaket (Stichprobe je Regal, S4.8 einmal vollständig, Missionen B und C in S4.11, Linux-Box); erst
+  danach über „Übungen automatisch prüfen“ entscheiden. Einzelheiten: `docs/reviews/2026-10-05-lernbogen-und-fakten.md`,
+  „Entscheide 2026-10-30“.
 - **Lehre für P10d bis P10f:** Der Auftrag hat sich bewährt. Schwach sind Begründungen dort, wo eine falsche Antwort
   einen Fakt aus einem anderen Kapitel benutzt (`/clear`, Checkpoints); dann den Denkfehler aus dem Kapitel benennen,
   nicht ausweichen. Oberflächen-Wortlaut („Tell Claude what to change“ statt des Doku-Namens) im Auftrag nennen.
