@@ -2,15 +2,17 @@
 """
 Render the persona-review workflow output (JSON) into structured markdown artifacts.
 Provenance: generated from workflow run wf_1603866b-421 on 2026-06-21.
-Run: python resources/review-2026-06-21/_generator.py
+Run: python docs/reviews/2026-06-21/_generator.py [path/to/workflow-output.json]
 """
 import json
 import os
+import sys
 import shutil
 import io
 
-SRC = r"C:\Users\domes\AppData\Local\Temp\claude\C--Users-domes-Desktop-dynamic-workshop\6faae23a-4514-4469-a97b-f86fdb9d0f01\tasks\w1peni9j0.output"
-OUT = r"C:\Users\domes\Desktop\dynamic_workshop\resources\review-2026-06-21"
+OUT = os.path.dirname(os.path.abspath(__file__))
+# Workflow output: first argument, otherwise the copy kept in data/
+SRC = sys.argv[1] if len(sys.argv) > 1 else os.path.join(OUT, "data", "raw-workflow-output.json")
 DATE = "2026-06-21"
 
 PERSONA_IDS = [
@@ -80,8 +82,9 @@ def main():
     master = data.get("master", {}) or {}
 
     # ---- data dumps (provenance) ----
-    shutil.copyfile(SRC, os.path.join(OUT, "data", "raw-workflow-output.json")
-                    if os.path.isdir(os.path.join(OUT, "data")) else _ensure_data())
+    raw_copy = _ensure_data()
+    if os.path.abspath(SRC) != os.path.abspath(raw_copy):
+        shutil.copyfile(SRC, raw_copy)
     writef("data/findings.json", json.dumps(all_findings, ensure_ascii=False, indent=2))
     writef("data/todos.json", json.dumps(all_todos, ensure_ascii=False, indent=2))
 
