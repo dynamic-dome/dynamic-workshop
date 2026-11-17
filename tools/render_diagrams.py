@@ -49,7 +49,7 @@ def diagrams(lib):
 def diagram_status(lib, folder=None):
     """(wanted, missing, orphans) for the library: wanted {key: (chapter id, source)}, missing = keys without SVG,
     orphans = SVG keys no Mermaid block asks for. The key hashes the source, so a changed block shows up as
-    one missing plus one orphaned SVG (todo #9991). Shared by --check and build_library.py check."""
+    one missing plus one orphaned SVG. Shared by --check and build_library.py check."""
     wanted = diagrams(lib)
     folder = Path(folder) if folder is not None else lib.root / "diagrams"
     have = {p.stem for p in folder.glob("*.svg")} if folder.exists() else set()

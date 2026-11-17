@@ -15,7 +15,7 @@ Zielgruppe: vor allem Selbstlernende (öffentlich); der Live-Workshop ist ein Pf
 - `resources/claude-code-workshop-ui.html` — Lern-Cockpit, generiert aus `tools/cockpit/template.html`
 - `tools/` — `build_library.py`, `placement.py`, `build_deck.py`, Aktualitäts-Tools, Tests
 - `skills/workshop/`, `agents/workshop-mentor.md` — Tutor-Plugin · `workshop-playground/` — Übungsrepo (5 Schwachstellen)
-- `docs/plans/` (Spec + Plan) · `docs/migration/` (Umzug, Verträge) · `docs/reviews/` (Archive, nicht editieren)
+- `docs/plans/` (Spezifikationen) · `docs/migration/` (Kapitel-Metadaten, Verträge)
 
 ## Regeln
 

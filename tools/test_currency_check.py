@@ -179,7 +179,7 @@ def test_canon_cli_version_missing_in_changelog_is_a_source_error():
 
 
 def test_active_model_inside_the_warning_window_is_only_info():
-    """Review finding on #9957: "Not sooner than" 30 days away with status Active is the same false alarm as a lapsed
+    """Review finding: "Not sooner than" 30 days away with status Active is the same false alarm as a lapsed
     date (Opus 4.6 on 2027-02-05 would turn the monthly run red in Jan and Feb 2027 with no real event)."""
     haiku = ("Claude Haiku 4.5", "claude-haiku-4-5-20251001", "haiku", "Haiku", "Active", "Not sooner than October 15, 2026")
     available = pages(**{BASE + "model-deprecations.md": dep_table([("claude-haiku-4-5-20251001", "Active", "N/A",
@@ -191,14 +191,14 @@ def test_active_model_inside_the_warning_window_is_only_info():
 
 
 def _legacy_haiku(date_text, status="Active"):
-    """Haiku 4.5 as a monitored Legacy row; the Deprecations table says `status` with `date_text` (todo #9957)."""
+    """Haiku 4.5 as a monitored Legacy row; the Deprecations table says `status` with `date_text`."""
     model = ("Claude Haiku 4.5 (Legacy)", "claude-haiku-4-5-20251001", "haiku", "Haiku", "Active", date_text)
     table = dep_table([("claude-haiku-4-5-20251001", status, "N/A", date_text)])
     return run(canon_text=canon(rows=(OPUS, model)), available=pages(**{BASE + "model-deprecations.md": table}))
 
 
 def test_active_model_whose_earliest_retirement_date_has_passed_is_only_info():
-    """Todo #9957: "Not sooner than" is a floor, not an announcement. Status Active plus a lapsed date (Haiku 4.5 on
+    """The "Not sooner than" is a floor, not an announcement. Status Active plus a lapsed date (Haiku 4.5 on
     2026-10-24) was a permanent false red; only a status change on the Deprecations page may turn it red."""
     result = _legacy_haiku("Not sooner than September 1, 2026")
     assert result.exit_code == 0 and levels(result, "rot") == [] and levels(result, "gelb") == []
@@ -264,7 +264,7 @@ def test_changelog_naming_a_course_identifier_is_yellow_keyword_only_is_info():
     "Fixed `opus` resolving to the wrong model",
 ])
 def test_fixed_changelog_entries_naming_a_course_identifier_count_as_info_not_yellow(line):
-    # Owner decision F9 (2026-10-22, todo #9518): before the monthly run, "Fixed" lines are info, not yellow.
+    # Decision F9 (2026-10-22): before the monthly run, "Fixed" lines are info, not yellow.
     result = run(available=pages(**{BASE + "changelog.md": changelog([line])}))
     assert levels(result, "gelb") == []
     assert [f.text for f in levels(result, "info") if f.key.startswith("changelog-fixed")] == [f"2.1.285: {line}"]
@@ -454,7 +454,7 @@ def test_real_canon_is_machine_readable():
     cx.parse_canon_header(text)
     models = cx.parse_canon_models(text)
     assert {m.tier for m in models} == {"Fable", "Opus", "Sonnet", "Haiku"}
-    # Todo #9957: the Legacy models behind the provider aliases stay in the monitored table (status from the Deprecations page).
+    # The Legacy models behind the provider aliases stay in the monitored table (status from the Deprecations page).
     assert {"claude-haiku-4-5-20251001", "claude-sonnet-4-5-20250929", "claude-sonnet-4-6",
             "claude-opus-4-6"} <= {m.model_id for m in models}
     # Sonnet 4.5 is a known deprecation: the canon carries Deprecated plus the fixed date of the Deprecations page.
@@ -587,7 +587,7 @@ def test_retirement_warning_boundary_for_a_deprecated_model_is_59_days_red_60_da
 
 
 def _known_deprecation(days, page_status="Deprecated"):
-    """Canon lists Sonnet 4.5 as Deprecated with a fixed retirement date `days` from today (todo #9957)."""
+    """Canon lists Sonnet 4.5 as Deprecated with a fixed retirement date `days` from today."""
     date = TODAY + dt.timedelta(days=days)
     text = f"{date.strftime('%B')} {date.day}, {date.year}"
     model = ("Claude Sonnet 4.5 (Legacy)", "claude-sonnet-4-5-20250929", "sonnet", "Sonnet", "Deprecated", text)
@@ -620,7 +620,7 @@ def test_known_deprecation_past_its_date_but_still_listed_is_red():
 
 
 def test_live_changelog_format_is_read_and_the_group_decides_fixed_vs_yellow():
-    """Todo #9942: the live changelog has **x.y.z** / **Group** / `* ` bullets; the monthly run must not abort on it, and
+    """The live changelog has **x.y.z** / **Group** / `* ` bullets; the monthly run must not abort on it, and
     the heading decides the type: lines under "N bug fixes" are info (F9), under "Changed" they stay yellow."""
     groups = [("Changed", ["Changed `--max-turns` default", "Removed --max-turns from the picker"]),
               ("2 bug fixes", ["Windows: the --max-turns limit was ignored", "Fixed --max-turns off by one"])]
@@ -645,7 +645,7 @@ def test_real_live_changelog_excerpt_runs_through_the_check():
     assert {f.key.split(":")[1] for f in result.findings if f.key.startswith("changelog")} == {"2.1.293"}
 
 
-# --- Nachprüf-Hook für version-pinned-Zeilen (todo #9518) ---
+# --- Nachprüf-Hook für version-pinned-Zeilen ---
 # `version-pinned: <Grund>` lets a course line name a model generation against the alias rule. Nothing ever looked at
 # those lines again, so a pinned claim could outlive its model. The monthly run now re-reads every pinned line against
 # the Deprecations table: Active = info (list to re-read), Deprecated/Retired/unknown = yellow (the claim needs a look).

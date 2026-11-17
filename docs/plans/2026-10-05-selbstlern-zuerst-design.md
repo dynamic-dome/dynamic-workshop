@@ -1,8 +1,7 @@
 # Selbstlernende zuerst — Entwurf
 
 > Stand: 2026-10-05 · Branch `selbstlern-zuerst` (ab `e693038`) · Größe L (GZIF)
-> Anlass: Durchsicht vom 2026-10-05, Befunde R1 bis R31 in `docs/reviews/2026-10-05-lernbogen-und-fakten.md`.
-> Pakete und ihr Stand: `docs/plans/2026-10-05-selbstlern-zuerst-tickets.md`. Sammel-Todo: DCO #9632.
+> Anlass: Durchsicht vom 2026-10-05, Befunde R1 bis R31.
 
 ## Problem
 
@@ -11,7 +10,7 @@ Sprechpunkte stehen im Lernweg, gut die Hälfte der Lektionen hat keine Übung, 
 kein Pfad hat einen Schluss, und Cockpit wie Tutor führen durch die Kurzfassung. Wer allein lernt, liest viel, tut
 wenig und erfährt nicht, ob er es kann.
 
-## Entscheidungen des Owners (2026-10-05)
+## Entscheidungen des Maintainers (2026-10-05)
 
 | Frage | Entscheidung |
 |---|---|
@@ -71,7 +70,7 @@ Alles Übrige bleibt wie in der Spec vom 2026-09-30.
 - **Der Validator setzt das Zielbild durch**, sobald ein Paket es herstellt: kein „Vorführen“ im Kapitel; Anzahl
   der Auflösungen gleich Anzahl der Abruffragen; Kern-Lektion ohne „Selbst machen“ ist ein Befund.
 - **Fakten nur mit Beleg** aus der offiziellen Doku, Zitat im Commit (Projektregel). Der Doku-Stand vom 2026-10-05
-  liegt in `~/AI/analysis-artifacts/workshop-review-2026-10-05/docs-cache/`.
+  liegt in einem lokalen Cache außerhalb des Repos.
 - **Einstufungsvertrag:** Jede Änderung an Reihenfolge, Stufe oder Kapitelbestand schreibt Vertragskatalog,
   Personas und Golden bewusst neu (HOW-TO-USE §3). Betrifft die Pakete 5 und 6.
 - **Inhaltsarbeit in Menge:** Auftrag je Regal-Paket nach dem Maßstab des Pilotregals; der Schreiber ändert nur
@@ -79,7 +78,7 @@ Alles Übrige bleibt wie in der Spec vom 2026-09-30.
 - **Übungen** sind allein lösbar, kosten nichts extra, dauern fünf bis zehn Minuten in Kern-Lektionen, haben
   Startzustand, Schritte und „Geschafft, wenn“, und laufen unter Windows (Git Bash und PowerShell), macOS und Linux.
 - **Branch:** Alles auf `selbstlern-zuerst`, ein Commit je abgeschlossenem Schritt. Merge nach `main` und Push nur
-  auf Zuruf des Owners.
+  auf Zuruf des Maintainers.
 
 ## Nicht Teil dieses Umbaus
 

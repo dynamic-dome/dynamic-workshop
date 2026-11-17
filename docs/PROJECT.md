@@ -32,9 +32,9 @@ Siehe [CAPABILITIES.md](CAPABILITIES.md). Kurzfassung:
 
 Aus dem Repo nicht belegbar, darum hier nur Verweise:
 
-- Offene Arbeit führt das DCO (Todo-Datenbank), nicht dieses Repo.
-- Der Export des Cockpits auf dynamic-dome.com liegt bei der Owner-Seite im Repo der Website (`HOW-TO-USE.md` §3); der Monatslauf meldet Abweichungen.
-- Lizenz: MIT seit 2026-10-27 (Owner-Entscheid, `LICENSE`); vorher ohne Lizenzdatei.
+- Offene Arbeit führt der Maintainer außerhalb dieses Repos; Kleinigkeiten stehen in `docs/follow-ups.md`.
+- Der Export des Cockpits auf dynamic-dome.com liegt beim Maintainer im Repo der Website (`HOW-TO-USE.md` §3); der Monatslauf meldet Abweichungen.
+- Lizenz: MIT seit 2026-10-27 (Maintainer-Entscheid, `LICENSE`); vorher ohne Lizenzdatei.
 
 ## Abhängigkeiten
 

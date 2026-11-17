@@ -27,7 +27,7 @@ ARTEFACT = ROOT / "resources" / "claude-code-workshop-ui.html"
 REPO_URL = "https://github.com/dynamic-dome/dynamic-workshop/blob/main/"
 DATA_MARKER = "/*@@LIBRARY_DATA@@*/"
 # Single offline file; gzip on the wire is about a seventh (measured 2026-09-30). Raised from 3 MB to 4 MB on 2026-10-24
-# (todo #9925): the artefact sat at 2.99 MB, so every new chapter or diagram would have dropped the diagrams first.
+# The artefact sat at 2.99 MB, so every new chapter or diagram would have dropped the diagrams first.
 # Nothing else depends on the limit (the website embed has no size check). Savings, if 4 MB gets tight again: see
 # docs/plans/2026-09-30-praxisbibliothek-design.md, "Größenregel".
 MAX_BYTES = 4_000_000

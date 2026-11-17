@@ -21,7 +21,7 @@ Leute und Skills vor, die wirklich helfen (Matt Pococks `/teach` ist zugleich Vo
 | Umbau-Tiefe | Bibliothek als Quelle — alte Modul-/Demo-/Übungsdateien werden ersetzt, nicht kopiert |
 | Sprache | Deutsch; Code, Befehle, Dateinamen, Bezeichner Englisch |
 | Einstufung | Cockpit + `/workshop start` + Markdown, eine gemeinsame Regeldatei |
-| Haltepunkte | durchziehen; unabhängiger Prüfer (Codex/Sonnet) statt Owner-Review; Halt nur vor Push und Website-Export |
+| Haltepunkte | durchziehen; unabhängiger Prüfer (Codex/Sonnet) statt Maintainer-Review; Halt nur vor Push und Website-Export |
 | Ressourcen | Workflows/Multi-Agent ausdrücklich erlaubt |
 
 ### Was er gesagt hat vs. was ich annehme
@@ -188,7 +188,7 @@ Quiz-Regel aus `/teach`: Antworten etwa gleich lang (Validator warnt, wenn die r
 
 Begründungen (Paket P10, Fragerunde 2 am 2026-10-06): Unter jeder Antwort steht eingerückt eine Zeile `- Warum: …`
 mit 1 bis 220 Zeichen. Sie nennt den Grund aus dem Kapitel, bei einer falschen Antwort den Denkfehler, und bringt
-keinen Fakt, der nicht im Kapitel steht. Ausnahme (Owner, 2026-10-07): ein Fakt aus einem anderen Kapitel der
+keinen Fakt, der nicht im Kapitel steht. Ausnahme (Maintainer, 2026-10-07): ein Fakt aus einem anderen Kapitel der
 Bibliothek, wenn die Begründung es in Klammern nennt, etwa „(S1.9)“; was in keinem Kapitel steht, bleibt draußen. Ein Quiz hat keine oder vier Begründungen (Befund `quiz-why`); die
 Längenregeln oben gelten nur für die Antworten. Der Katalog trägt sie als `quiz.why`
 (`{"correct": …, "wrong": [… in der Reihenfolge der Antworten]}`), nur wenn alle vier da sind; `validate` zählt
@@ -418,7 +418,7 @@ richtige, Quizfragen würfeln bei jedem Render neu, kein „weiter, wo ich war",
   Mermaid-Stilblöcke als zwei gemeinsame Blöcke statt 61, Geometrie auf zwei Nachkommastellen) und behalten ihre
   natürliche Größe; der Diagramm-Kasten scrollt waagerecht. Über der Grenze fallen zuerst die Diagramme weg
   (Mermaid-Quelltext), erst dann der Volltext („ganzes Kapitel lesen" zeigt auf die GitHub-Fassung).
-  **Nachtrag 2026-10-24 (Todo #9925):** Das Artefakt lag bei 2.987.140 von 3.000.000 Bytes; `MAX_BYTES` in
+  **Nachtrag 2026-10-24:** Das Artefakt lag bei 2.987.140 von 3.000.000 Bytes; `MAX_BYTES` in
   `tools/build_cockpit.py` steht jetzt auf 4 MB (4.000.000). Die Grenze hängt nur am Generator und am Test
   `test_the_shipped_artefact_stays_under_its_size_limit_with_the_light_variant` (warnt unter 5 kB Luft); der Export nach
   dome-dynamics (`public/workshop-cockpit.html`) prüft keine Größe. **Sparoptionen**, falls auch 4 MB eng werden: (1) die breiten
@@ -538,11 +538,11 @@ Fehler** und rät nicht aus dem Modellwissen. Alias-Auflösung: `2.2` → erstes
   Bibliothek, Mein Pfad, Kapitel, Quiz, Tastatur, 390 px Breite; Screenshots im Bericht.
 - Deck als PNG gerendert und angesehen; Mermaid-SVG ohne Renderfehler.
 - Codex-Verifier gegen diese Spec; Befunde an der Quelle geprüft und behoben.
-- Alles lokal auf `praxisbibliothek` committet; Push/Merge/Website-Export = Owner.
+- Alles lokal auf `praxisbibliothek` committet; Push/Merge/Website-Export = Maintainer.
 
 ## 14. Nicht-Ziele und Risiken
 
-- Nicht-Ziele: neue Kursthemen außer X.1/X.2; englische Fassung; Website-Umbau; Monatslauf-Registrierung (#9517).
+- Nicht-Ziele: neue Kursthemen außer X.1/X.2; englische Fassung; Website-Umbau; Monatslauf-Registrierung.
 - Risiko Übersetzung verfälscht Fakten → Ledger + Fakten-Prüfer + Wächter-Tests.
 - Risiko Cockpit-Größe → Größenregel (§8).
 - Risiko Parallel-Session auf `main` → Worktree; vor Merge `git log main` gegenprüfen.

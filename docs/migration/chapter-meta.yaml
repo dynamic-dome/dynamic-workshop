@@ -1,5 +1,5 @@
-# Verbindliche Kapitel-Metadaten für den Umzug (Owner-Entscheid über Spec v3, 2026-09-30).
-# Schreib-Agenten übernehmen diese Felder unverändert ins Frontmatter; Änderungen nur hier und mit neuem Vektorlauf.
+# Verbindliche Kapitel-Metadaten (Entscheid über Spec v3, 2026-09-30).
+# Diese Felder stehen unverändert im Frontmatter der Kapitel; Änderungen nur hier und mit neuem Vektorlauf.
 - id: S0.1
   type: setup
   title: Werkstatt einrichten

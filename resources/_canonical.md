@@ -31,7 +31,7 @@ gegen die Quellen unten abgeglichen hat. `tools/lint_currency.py` warnt nach meh
 | Claude Sonnet 4.5 (Legacy, abgekündigt) | `claude-sonnet-4-5-20250929` | `sonnet` | Sonnet | Deprecated | November 30, 2026 | 200K | 3 | 15 | Legacy, abgekündigt seit 30.09.2026: `sonnet` auf Amazon Bedrock, Google Cloud, Microsoft Foundry |
 | Claude Haiku 4.5 (Legacy) | `claude-haiku-4-5-20251001` | `haiku` | Haiku | Active | Not sooner than October 15, 2026 | 200K | 1 | 5 | Legacy: `haiku` auf Claude Platform on AWS, Amazon Bedrock, Google Cloud, Foundry |
 
-Die vier Legacy-Zeilen stehen in der überwachten Tabelle, weil die Anbieter-Aliase unten noch darauf auflösen (todo #9957): Der Monatslauf prüft ihren Status auf der Deprecations-Seite und meldet rot, sobald einer vom Kanon-Status abweicht (bei Active also bei jeder Abkündigung). Ein verstrichenes „Not sooner than“ bei Status Active ist nur Info (kein Abschaltbeschluss). Sonnet 4.5 steht bewusst mit Status Deprecated und dem festen Abschaltdatum der Deprecations-Seite: Solange Seite und Kanon übereinstimmen, meldet der Monatslauf es ab 60 Tagen vor der Abschaltung gelb als bekannte Abkündigung; wechselt es auf Retired oder verschwindet die Zeile, wird er rot und die Zeile samt Alias-Hinweis ist zu streichen. Kontext der 4.6-Zeilen (1M Tokens) laut Modellseiten opus-4-6 und sonnet-4-6 (nachgesehen am 2026-10-24); die Modellübersicht führt beide nur noch als „Legacy models (still available)“ ohne Werte.
+Die vier Legacy-Zeilen stehen in der überwachten Tabelle, weil die Anbieter-Aliase unten noch darauf auflösen: Der Monatslauf prüft ihren Status auf der Deprecations-Seite und meldet rot, sobald einer vom Kanon-Status abweicht (bei Active also bei jeder Abkündigung). Ein verstrichenes „Not sooner than“ bei Status Active ist nur Info (kein Abschaltbeschluss). Sonnet 4.5 steht bewusst mit Status Deprecated und dem festen Abschaltdatum der Deprecations-Seite: Solange Seite und Kanon übereinstimmen, meldet der Monatslauf es ab 60 Tagen vor der Abschaltung gelb als bekannte Abkündigung; wechselt es auf Retired oder verschwindet die Zeile, wird er rot und die Zeile samt Alias-Hinweis ist zu streichen. Kontext der 4.6-Zeilen (1M Tokens) laut Modellseiten opus-4-6 und sonnet-4-6 (nachgesehen am 2026-10-24); die Modellübersicht führt beide nur noch als „Legacy models (still available)“ ohne Werte.
 
 Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon Bedrock und Google Cloud veröffentlichen eigene (Quellen: model-deprecations.md, models/overview.md).
 
@@ -59,7 +59,7 @@ Die Retirement-Daten in der Tabelle sind Daten der Anthropic-Plattform; Amazon B
 | Amazon Bedrock, Google Cloud | Opus 5.5 | Sonnet 4.5 | Haiku 4.5 |
 | Microsoft Foundry | Opus 4.6 | Sonnet 4.5 | Haiku 4.5 |
 
-Diese Tabelle nennt Legacy-Modelle: Haiku 4.5, Sonnet 4.5, Sonnet 4.6 und Opus 4.6 überwacht der Monatslauf (Zeilen oben). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (Quelle: model-deprecations.md, Modellseite sonnet-4-5, nachgesehen am 2026-10-24). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen. Kurs-Durchsicht 2026-10-25 (todo #10073): Kein Kapitel, keine Übung, Demo, Vorlage und keine Folie nennt `claude-sonnet-4-5-20250929` oder „Sonnet 4.5“ (nur Aliase), es gibt nichts umzustellen; die Zeile samt Alias-Hinweisen wird nach dem 30.11.2026 gestrichen.
+Diese Tabelle nennt Legacy-Modelle: Haiku 4.5, Sonnet 4.5, Sonnet 4.6 und Opus 4.6 überwacht der Monatslauf (Zeilen oben). Sonnet 4.5 ist laut Deprecations-Seite seit dem 30.09.2026 abgekündigt („Deprecated“) und wird auf der Claude API am 30.11.2026 abgeschaltet; empfohlener Ersatz ist Sonnet 5.5 (Quelle: model-deprecations.md, Modellseite sonnet-4-5, nachgesehen am 2026-10-24). Vor dem Einsatz von `sonnet` auf Bedrock, Google Cloud oder Foundry den Lifecycle des Anbieters prüfen. Kurs-Durchsicht 2026-10-25: Kein Kapitel, keine Übung, Demo, Vorlage und keine Folie nennt `claude-sonnet-4-5-20250929` oder „Sonnet 4.5“ (nur Aliase), es gibt nichts umzustellen; die Zeile samt Alias-Hinweisen wird nach dem 30.11.2026 gestrichen.
 
 - `fable` löst auf Fable 5.1 auf (u. a. überschreibbar per `ANTHROPIC_DEFAULT_FABLE_MODEL`), im Claude-apps-Gateway auf Fable 5; `best` = `fable`, wo Fable verfügbar ist, sonst `opus`.
 - Weitere Werte: `opusplan` (Opus im Plan-Modus, dann Sonnet), `sonnet[1m]`, `opus[1m]`.
@@ -102,8 +102,7 @@ Diese Tabelle nennt Legacy-Modelle: Haiku 4.5, Sonnet 4.5, Sonnet 4.6 und Opus 4
   IDs `S0.1`–`S4.10` und `X.1`–`X.4`); Regale, Einstufung und Reihenfolge in `_shelves.yaml` und `_placement.yaml`.
 - Der Live-Workshop ist ein Pfad durch die Bibliothek: Session 0 (Werkstatt), Sessions 1–4 (`S1.*`–`S4.*`); Ablauf
   und Moderation in `resources/paths/live-workshop.md` (generiert) und `resources/moderation/handbuch.md`.
-- Die alten Module, Demos und Übungen (Stand `ba222d2`) sind in die Kapitel umgezogen; ihre Review-Archive liegen
-  unter `docs/reviews/`.
+- Die alten Module, Demos und Übungen (Stand `ba222d2`) sind in die Kapitel umgezogen; ihre Review-Archive sind nicht Teil des Repos.
 
 ## Quellen
 

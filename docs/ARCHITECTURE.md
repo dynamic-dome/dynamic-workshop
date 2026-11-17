@@ -60,7 +60,7 @@ resources/_canonical.md --> tools/lint_currency.py, tools/currency_check.py (Mon
 2. `python tools/build_library.py validate --complete`, danach `build`.
 3. `python -m pytest tools -q` und `python tools/lint_currency.py`.
 4. Bei Änderung der Einstufung: `python tools/catalog_core.py --from-meta`, Personas und Golden-Datei bewusst neu schreiben.
-5. Cockpit-Export auf die Website: Owner-Seite, eigenes Repo.
+5. Cockpit-Export auf die Website: Maintainer, eigenes Repo.
 
 Quelle: `HOW-TO-USE.md` §3.
 

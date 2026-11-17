@@ -523,7 +523,7 @@ def _norm(text: str) -> str:
 
 
 def _diagram_problems(lib) -> list[str]:
-    """Missing or orphaned diagram SVGs (same logic as render_diagrams --check; todo #9991). Rendering needs
+    """Missing or orphaned diagram SVGs (same logic as render_diagrams --check). Rendering needs
     Chromium, so build only reports them and check fails."""
     import render_diagrams as rd
 

@@ -164,7 +164,7 @@ def _diagram_keys(folder):
 
 
 def test_check_reports_a_missing_diagram_svg(lib_dir, capsys):
-    # todo #9991: in October 33 of 62 SVGs were stale unnoticed (a changed Mermaid source has a new key)
+    # In October 33 of 62 SVGs were stale unnoticed (a changed Mermaid source has a new key)
     bl.build(lib_dir, write=True)
     assert bl.build(lib_dir, write=False) == 0
     (key,) = _diagram_keys(lib_dir)

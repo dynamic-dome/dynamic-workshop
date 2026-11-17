@@ -5,7 +5,7 @@ Zwei Regeln (Design: docs/plans/2026-09-29-phase2-aktualhaltung-design.md):
 1. Generationsregel: Modellgenerationen (etwa "Opus 5.5" oder claude-sonnet-5-5) stehen nur in
    resources/_canonical.md. Ausnahme nur mit `version-pinned: <Grund>` in derselben Zeile.
 2. Stale-Gate: das Pruefdatum im Kanon ist hoechstens 90 Tage alt (ab 45 Tagen Warnung).
-Ausgeklammert: docs/ (Pläne, Migration, Review-Archive unter docs/reviews/), .agent-memory, tools/, lokaler Zustand.
+Ausgeklammert: docs/ (Pläne, Migration, Review-Archive), .agent-memory, tools/, lokaler Zustand.
 Exit 0 = sauber, Exit 1 = Drift oder Kanon zu alt/unlesbar.
 
 Aufruf (aus dem Repo-Root):  python tools/lint_currency.py

@@ -1,7 +1,7 @@
 # Selbstlernende zuerst — Maßstab
 
 > Stand: 2026-10-05 · entstanden im Paket P5 am Pilotregal (S0.1, X.2, S1.1 bis S1.9), Commit `359c9db`.
-> Entwurf: `2026-10-05-selbstlern-zuerst-design.md` · Pakete: `2026-10-05-selbstlern-zuerst-tickets.md`.
+> Entwurf: `2026-10-05-selbstlern-zuerst-design.md`.
 > Diese Datei ist der Auftrag für alle, die weitere Kapitel umschreiben (P7). Die elf Pilotkapitel sind das Muster:
 > Lies vor dem Schreiben zwei davon ganz, am besten S1.5 und S1.9.
 
@@ -234,8 +234,7 @@ Zehn Übungen eines Schreibers wurden durchgespielt; neun liefen wie geschrieben
 - **`/context` zählt die Gedächtnis-Dateien, `/context all` nennt sie.**
 - **Anker:** Eine umbenannte Überschrift in S1.17 hinterließ einen toten Link in S4.5. `validate --complete` findet
   das; der Wächter-Test der echten Bibliothek läuft seitdem vollständig.
-- **Bewährt am Auftrag:** je Kapitel ein Commit, Rückmeldung mit Doku-Zitaten, Minuten nur als Meldung. Der Auftrag
-  steht in `docs/plans/2026-10-05-selbstlern-zuerst-tickets.md` beim Abschluss von P7a.
+- **Bewährt am Auftrag:** je Kapitel ein Commit, Rückmeldung mit Doku-Zitaten, Minuten nur als Meldung.
 
 ## Aus P7b und P7c mitzunehmen (S2.1 bis S2.20, Commits `2c9f792`, `b72b648`)
 

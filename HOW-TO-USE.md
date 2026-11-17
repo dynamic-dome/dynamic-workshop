@@ -102,11 +102,11 @@ ein Diagramm-SVG existiert (und keins verwaist ist); fehlende SVGs rendert `pyth
   Community-Kapitel stehen im Kanon als `- Fremdprojekt: <url> (<Kapitel>)`; ändert sich eine dieser Seiten, meldet der
   Lauf das gelb mit Kapitel — dann das Kapitel gegen die Quelle prüfen und sein „Stand:"-Datum erneuern.
   Changelog-Zeilen, die mit „Fixed“ beginnen (auch hinter „[VSCode]“, dem maskierten „\[VSCode]“ der Quelle, „**Security:**“ oder „Windows:“), zählen als Info, nicht als gelb
-  (Owner-Entscheid 22.10.2026); „Removed“, „Changed“, „Added“ und „Deprecated“ mit Kurs-Bezeichner bleiben gelb.
+  (Entscheid 22.10.2026); „Removed“, „Changed“, „Added“ und „Deprecated“ mit Kurs-Bezeichner bleiben gelb.
 - **Deck:** `python tools/build_deck.py` baut den Foliensatz aus dem Katalog.
 - **Diagramme fürs Cockpit** (optional): `python tools/render_diagrams.py`; ohne SVG zeigt das Cockpit den
   Mermaid-Quelltext.
-- **Website:** Das Cockpit wird als eigene Datei auf dynamic-dome.com exportiert — das macht die Owner-Seite
+- **Website:** Das Cockpit wird als eigene Datei auf dynamic-dome.com exportiert — das macht der Maintainer
   (eigenes Repo); der Monatslauf meldet eine Abweichung.
 - Pflege-Abhängigkeiten: `pip install pyyaml markdown python-pptx playwright` und Node für `node --check`. Lernende
   brauchen nur Python (Standardbibliothek) für den Tutor.

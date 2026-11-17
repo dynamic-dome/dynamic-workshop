@@ -36,7 +36,7 @@ RETIREMENT_WARN_DAYS = 60
 CANON_INFO_DAYS, CANON_RED_DAYS = 45, 90
 REQUIRED_DOCS = ("cli-reference.md", "model-deprecations.md", "model-config.md", "permission-modes.md")
 KEYWORDS = re.compile(r"\b(removed|deprecated|renamed|no longer|default)\b", re.I)
-# A bug-fix line, optionally behind "[VSCode]" tags or a "Windows:" label. Owner decision F9 (2026-10-22, todo #9518):
+# A bug-fix line, optionally behind "[VSCode]" tags or a "Windows:" label. Decision F9 (2026-10-22):
 # such lines name course identifiers all the time (~60% of the monthly yellow findings) but rarely change what the
 # course teaches, so they count as info, not yellow. Removed/Changed/Added/Deprecated lines stay yellow.
 # The official changelog escapes tag brackets ("\[VSCode] Fixed ...") and bolds labels ("**Security:** Fixed ...");
@@ -45,7 +45,7 @@ FIXED_LINE = re.compile(
     r"^(?:\\?\[[^\]]{1,30}\]\s*|\*\*[^*]{1,30}:\*\*\s*"
     r"|(?!(?:added|changed|removed|deprecated)\b)[\w .+/-]{1,30}:\s+)*fixed\b", re.I)
 # A model generation named in prose or as an ID ("Haiku 4.5", "claude-haiku-4-5-20251001", "claude-3-5-haiku"); used only to
-# re-read lines that carry a `version-pinned: <Grund>` marker against the Deprecations table (todo #9518).
+# re-read lines that carry a `version-pinned: <Grund>` marker against the Deprecations table.
 PINNED_MODEL = re.compile(
     r"\b(?:claude-)?(?P<family>opus|sonnet|haiku|fable|mythos)[ -]?\(?(?P<version>\d{1,2}(?:[.-]\d{1,2})?)(?!\d)"
     r"|\bclaude-(?P<old_major>\d)(?:-(?P<old_minor>\d))?-(?P<old_family>opus|sonnet|haiku)\b", re.I)
@@ -169,7 +169,7 @@ def _check_canon_models(canon_models, deprecations, today):
             continue
         if row.status != model.status:
             # The canon status is the expected one: Active for current models, Deprecated for a known deprecation
-            # (todo #9957, Sonnet 4.5). Any change on the page against it is red.
+            # (Sonnet 4.5). Any change on the page against it is red.
             expected = "" if model.status == "Active" else f", der Kanon führt {model.status}"
             findings.append(Finding("rot", f"canon-status:{model.model_id}:{row.status}",
                                     f"Kanon-Modell `{model.model_id}` hat Status {row.status}{expected}"))
@@ -179,9 +179,9 @@ def _check_canon_models(canon_models, deprecations, today):
         earliest = cx.parse_date(row.retirement)
         days = (earliest - today).days if earliest else None
         if earliest and row.status == "Active" and days < RETIREMENT_WARN_DAYS:
-            # "Not sooner than" is a floor, not an announcement (todo #9957, Haiku 4.5 on 2026-10-24). An announced
+            # "Not sooner than" is a floor, not an announcement (Haiku 4.5 on 2026-10-24). An announced
             # shutdown flips the status and a notice of at least 60 days applies, which canon-status reports red.
-            # That holds before the date as well as after it, so neither case is more than info (review of #9957).
+            # That holds before the date as well as after it, so neither case is more than info.
             if days <= 0:
                 findings.append(Finding("info", f"retiring-unannounced:{model.model_id}:{earliest}",
                                         f"`{model.model_id}`: frühestes Abschaltdatum {earliest} verstrichen, Status Active, "
@@ -231,7 +231,7 @@ def _pinned_models(line):
 
 
 def _check_pinned(course, deprecations):
-    """Re-read every `version-pinned: <Grund>` course line against the Deprecations table (todo #9518).
+    """Re-read every `version-pinned: <Grund>` course line against the Deprecations table.
 
     The lint lets such a line name a model generation and never looks at it again. Here a pin whose model is no
     longer Active (or unknown to the table) is yellow, because the pinned claim may be stale; an Active model is only

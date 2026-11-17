@@ -99,7 +99,7 @@ code.claude.com/docs/en/changelog.md.
 | Rot | Cockpit der Website (live abgerufen, Redirects gefolgt) weicht vom Kurs-Cockpit ab (sha256 nach Normalisierung: LF, Provenienz-Zeile entfernt). |
 | Rot | Verwaiste Ausnahme (Eintrag kommt im Kurs nicht mehr vor). |
 | Gelb | Changelog-Zeile seit der Kanon-CLI-Version, die einen Kurs-Bezeichner nennt (Kandidat, braucht Urteil). |
-| Gelb | `version-pinned`-Zeile (Nachprüf-Hook, Todo #9518), deren Modell laut Deprecations-Tabelle nicht mehr `Active` oder dort unbekannt ist; Grund „histor…“ ist ausgenommen. |
+| Gelb | `version-pinned`-Zeile (Nachprüf-Hook), deren Modell laut Deprecations-Tabelle nicht mehr `Active` oder dort unbekannt ist; Grund „histor…“ ist ausgenommen. |
 | Info | `version-pinned`-Zeile mit einem aktiven Modell (Liste zum Nachlesen), Rückblicke mit Grund „histor…“. |
 | Info | Changelog-Zeilen mit `removed|deprecated|renamed|no longer|default` ohne Kurs-Bezug; neue Doku-Bezeichner seit dem letzten Lauf (Vorrat für Phase 3); geänderte Seiten (sha256); Redirects mit neuer URL; Kanon-Alter 45–90 Tage. |
 
